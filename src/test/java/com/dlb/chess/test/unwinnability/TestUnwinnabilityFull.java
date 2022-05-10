@@ -3,6 +3,7 @@ package com.dlb.chess.test.unwinnability;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
@@ -47,7 +48,7 @@ public class TestUnwinnabilityFull {
   private static final String START_FROM_PGN_FILE_NAME = "capture_first_move_half_move_clock_100_black_to_move.pgn";
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testAgainstMine() throws Exception {
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {

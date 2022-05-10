@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -82,12 +81,9 @@ public class FindHelpmate {
     // position is unwinnable according to Lemma 5
     if (!MaterialUtility.calculateHasPawn(board.getStaticPosition())
         && MaterialUtility.calculateIsKingAndKnightOnly(color, board.getStaticPosition())) {
-      if (MaterialUtility.calculateNumberOfPieces(color.getOppositeSide(), board.getStaticPosition(),
-          PieceType.KNIGHT) == 0
-          && MaterialUtility.calculateNumberOfPieces(color.getOppositeSide(), board.getStaticPosition(),
-              PieceType.BISHOP) == 0
-          && MaterialUtility.calculateNumberOfPieces(color.getOppositeSide(), board.getStaticPosition(),
-              PieceType.ROOK) == 0) {
+      if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
+          && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), board.getStaticPosition())
+          && MaterialUtility.calculateHasNoRooks(color.getOppositeSide(), board.getStaticPosition())) {
         return false;
       }
     }
@@ -99,10 +95,9 @@ public class FindHelpmate {
       }
       if (!MaterialUtility.calculateHasPawn(board.getStaticPosition())
           && MaterialUtility.calculateIsKingAndBishopsOnly(color, board.getStaticPosition(), squareType)
-          && MaterialUtility.calculateNumberOfPieces(color.getOppositeSide(), board.getStaticPosition(),
-              PieceType.KNIGHT) == 0
-          && MaterialUtility.calculateNumberOfBishops(color, board.getStaticPosition(),
-              squareType.getOppositeSquareType()) == 0) {
+          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
+          && MaterialUtility.calculateHasNoBishops(color, board.getStaticPosition(),
+              squareType.getOppositeSquareType())) {
         return false;
       }
     }

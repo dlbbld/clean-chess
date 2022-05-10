@@ -52,9 +52,9 @@ public class GoingToCorner implements EnumConstants {
     // bishops (and the intended winner does not) then ( -> The target corner is set
     // to be h8)
     Square target;
-    if (MaterialUtility.calculateNumberOfBishops(color, staticPosition, SquareType.DARK_SQUARE) < 1
+    if (MaterialUtility.calculateHasNoBishops(color, staticPosition, SquareType.DARK_SQUARE)
         && (MaterialUtility.calculateNumberOfPieces(color, staticPosition, PieceType.BISHOP) != 0 || MaterialUtility
-            .calculateNumberOfBishops(color.getOppositeSide(), staticPosition, SquareType.LIGHT_SQUARE) < 1)) {
+            .calculateHasNoBishops(color.getOppositeSide(), staticPosition, SquareType.LIGHT_SQUARE))) {
       // 4: set target := if goal = Win then (P.type=K)?h6 : h8 else (P.type =K)?h8 : g8
       target = goal == Goal.WIN ? p.getPieceType() == KING ? H6 : H8 : p.getPieceType() == KING ? H8 : G8;
 

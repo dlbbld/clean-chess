@@ -117,4 +117,37 @@ public class MaterialUtility implements EnumConstants {
     }
     return total;
   }
+
+  public static boolean calculateHasNoRooks(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, PieceType.ROOK) == 0;
+  }
+
+  public static boolean calculateHasNoKnights(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, PieceType.KNIGHT) == 0;
+  }
+
+  public static boolean calculateHasNoBishops(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, PieceType.BISHOP) == 0;
+  }
+
+  public static boolean calculateHasNoBishops(Side side, StaticPosition staticPosition, SquareType squareType) {
+    return calculateNumberOfBishops(side, staticPosition, squareType) == 0;
+  }
+
+  public static boolean calculateHasNoLightSquareBishops(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) == 0;
+  }
+
+  public static boolean calculateHasNoDarkSquareBishops(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) == 0;
+  }
+
+  public static boolean calculateHasNoQueens(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, PieceType.QUEEN) == 0;
+  }
+
+  public static boolean calculateHasNoPawns(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, PieceType.PAWN) == 0;
+  }
+
 }

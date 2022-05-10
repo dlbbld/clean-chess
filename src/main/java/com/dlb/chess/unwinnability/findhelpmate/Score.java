@@ -23,7 +23,8 @@ public class Score {
     if (board.getHavingMove() == color) {
       // 2: if m is a capture or m is a pawn push or Going-to-corner(pos, m, Win) then
 
-      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification()) || legalMove.pieceCaptured() != Piece.NONE || legalMove.movingPiece().getPieceType() == PieceType.PAWN
+      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())
+          || legalMove.pieceCaptured() != Piece.NONE || legalMove.movingPiece().getPieceType() == PieceType.PAWN
           || GoingToCorner.goingToCorner(color, board.getStaticPosition(), legalMove, Goal.WIN)) {
 
         // 3: return Reward
@@ -48,17 +49,13 @@ public class Score {
       // the intended loser does not have knights or bishops of the opposite color
       final var isSecondConditionDarkSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color,
           board.getStaticPosition(), SquareType.DARK_SQUARE)
-          && MaterialUtility.calculateNumberOfPieces(color.getOppositeSide(), board.getStaticPosition(),
-              PieceType.KNIGHT) == 0
-          && MaterialUtility.calculateNumberOfBishops(color.getOppositeSide(), board.getStaticPosition(),
-              SquareType.LIGHT_SQUARE) == 0;
+          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
+          && MaterialUtility.calculateHasNoLightSquareBishops(color.getOppositeSide(), board.getStaticPosition());
 
       final var isSecondConditionLightSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color,
           board.getStaticPosition(), SquareType.LIGHT_SQUARE)
-          && MaterialUtility.calculateNumberOfPieces(color.getOppositeSide(), board.getStaticPosition(),
-              PieceType.KNIGHT) == 0
-          && MaterialUtility.calculateNumberOfBishops(color.getOppositeSide(), board.getStaticPosition(),
-              SquareType.DARK_SQUARE) == 0;
+          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
+          && MaterialUtility.calculateHasNoDarkSquareBishops(color.getOppositeSide(), board.getStaticPosition());
 
       if (isFirstCondition || isSecondConditionDarkSquare || isSecondConditionLightSquare) {
         // 6: if m is a promotion to a queen or rook then return Punish
