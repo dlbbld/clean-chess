@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/if6AKvpb"]
+[Date "2020.03.07"]
+[White "ravi123kirans"]
+[Black "JonasLyng"]
+[Result "0-1"]
+[UTCDate "2020.03.07"]
+[UTCTime "18:47:23"]
+[WhiteElo "1611"]
+[BlackElo "1646"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A06"]
+[Opening "Zukertort Opening: Tennison Gambit"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. Nf3 d5 2. e4 c5 3. exd5 Nf6 4. Nc3 Bg4 5. h3 Bh5 6. Bc4 b5 7. Bxb5+ Nfd7 8. Bxd7+ Qxd7 9. d4 cxd4 10. Qxd4 g6 11. Ne5 Qf5 12. Qf4 Bg7 13. Qxf5 gxf5 14. Nc6 O-O 15. Nxb8 Raxb8 16. Rb1 e6 17. O-O exd5 18. Nxd5 Rbd8 19. Nf4 Bg6 20. Nh5 Bxh5 21. g4 fxg4 22. hxg4 Bxg4 23. f3 Bc8 24. Rf2 Rd6 25. Rg2 Kh8 26. Kh2 Rg8 27. Bf4 Rf6 28. Be5 Re6 29. Bxg7+ Rxg7 30. Rxg7 Kxg7 31. Rg1+ Kf8 32. Rd1 Rh6+ 33. Kg2 Bh3+ 34. Kf2 Bd7 35. Rxd7 Rg6 36. Rd8+ Kg7 37. Rd7 h5 38. Rxa7 Rg5 39. Re7 Rf5 40. c4 Kg6 41. b4 Kg5 42. c5 h4 43. c6 h3 44. c7 h2 45. c8=Q h1=Q 46. Qxf5+ Kxf5 47. Rxf7+ Ke6 48. Rf4 Kd5 49. Re4 Qh2+ 50. Ke3 Qd2+ 0-1
+

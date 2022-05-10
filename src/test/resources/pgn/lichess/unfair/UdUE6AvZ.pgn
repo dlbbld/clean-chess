@@ -1,0 +1,21 @@
+[Event "Hourly HyperBullet Arena"]
+[Site "https://lichess.org/UdUE6AvZ"]
+[Date "2020.03.05"]
+[White "jboez"]
+[Black "MG2020US"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "07:53:31"]
+[WhiteElo "1964"]
+[BlackElo "1950"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "30+0"]
+[ECO "A00"]
+[Opening "Mieses Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d3 d5 2. Nd2 e5 3. Ngf3 d4 4. g3 Nc6 5. Ne4 Bc5 6. Bg2 Bb6 7. c4 Nf6 8. c5 Nxe4 9. cxb6 Nf6 10. bxc7 Qxc7 11. O-O O-O 12. Bg5 Bg4 13. Bxf6 gxf6 14. Nd2 Kh8 15. Ne4 Rg8 16. Nxf6 Rg6 17. Nxg4 Rxg4 18. e4 dxe3 19. Qxg4 exf2+ 20. Rxf2 Rg8 21. Qe4 Nd4 22. Re1 f6 23. Rxf6 Qc5 24. Qxe5 Nf3+ 25. Kh1 Nxe5 26. Rf7 Nxf7 27. Rf1 Qc1 28. h3 Qxf1+ 29. Bxf1 Ne5 30. Be2 Rxg3 31. Kh2 Rxd3 32. Bxd3 Nxd3 33. b3 Nb2 34. Kg2 Na4 35. bxa4 b5 36. Kf3 bxa4 37. Ke4 a3 38. Kd3 Kg7 39. Kc4 Kg6 40. Kb3 Kg5 41. Kxa3 Kh4 42. Kb3 Kxh3 43. Kb4 Kg4 44. Kb5 h5 45. Ka6 h4 46. Kxa7 h3 47. a4 h2 48. a5 h1=Q 49. a6 Qb7+ 0-1
+

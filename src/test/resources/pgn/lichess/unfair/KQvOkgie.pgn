@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/KQvOkgie"]
+[Date "2020.03.01"]
+[White "PUTRU"]
+[Black "abdulrohmani"]
+[Result "1-0"]
+[UTCDate "2020.03.01"]
+[UTCTime "18:18:44"]
+[WhiteElo "1999"]
+[BlackElo "1905"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C00"]
+[Opening "French Defense: Normal Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 e6 2. e4 b6 3. Nf3 Bb7 4. Bd3 Be7 5. O-O c5 6. d5 exd5 7. exd5 d6 8. Re1 Nd7 9. c4 Ngf6 10. Qd2 O-O 11. Qe2 Re8 12. Nc3 Bf8 13. Qd1 Rxe1+ 14. Qxe1 Qc7 15. Ne4 Nxe4 16. Qxe4 Nf6 17. Qf5 Bc8 18. Qf4 Bg4 19. b3 Re8 20. Bb2 Bxf3 21. Bxf6 Bh5 22. Bc3 Qe7 23. Rf1 Bg6 24. Bxg6 fxg6 25. h4 Qe4 26. Qg3 Be7 27. Re1 Qf5 28. Re6 Qf7 29. Qe3 Kf8 30. Re4 Bf6 31. Rxe8+ Qxe8 32. Qxe8+ Kxe8 33. Bxf6 gxf6 34. g4 Kf7 35. f4 f5 36. g5 a5 37. Kf2 Ke7 38. Kf3 Kd7 39. Kg3 Kc7 40. Kh3 Kb7 41. h5 Ka6 42. hxg6 b5 43. Kg2 hxg6 44. Kf2 bxc4 45. bxc4 a4 46. a3 Ka5 47. Ke2 Kb6 48. Kd3 Kc7 49. Kc3 Kd7 50. Kb2 Kc7 51. Ka2 Kb6 52. Ka1 Ka5 53. Kb2 Ka6 54. Kc2 Kb6 55. Kd2 Ka5 56. Ke2 Ka6 57. Kf2 Kb6 58. Kg2 Kc7 59. Kh2 Kd7 60. Kh3 Ke7 61. Kg3 Kf7 62. Kf3 Kg7 63. Ke3 Kf8 64. Kd3 Ke7 65. Kc3 Kf7 66. Kc2 Ke7 67. Kd2 Kd7 68. Ke2 Kc7 69. Kf2 Kb7 70. Kf3 Kb6 71. Kg3 Ka5 72. Kh3 Ka6 73. Kg3 Kb6 74. Kf3 Kb7 75. Ke3 1-0
+

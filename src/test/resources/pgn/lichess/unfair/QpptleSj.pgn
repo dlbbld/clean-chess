@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/QpptleSj"]
+[Date "2020.03.04"]
+[White "Godevgen"]
+[Black "Muugii19"]
+[Result "1-0"]
+[UTCDate "2020.03.04"]
+[UTCTime "06:15:58"]
+[WhiteElo "2340"]
+[BlackElo "2395"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-7"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C45"]
+[Opening "Scotch Game: Classical Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. d4 exd4 3. Nf3 Nc6 4. Nxd4 Bc5 5. Be3 Qf6 6. c3 Nge7 7. Bc4 O-O 8. O-O Bb6 9. Kh1 Ng6 10. f4 d6 11. Nc2 Bxe3 12. Nxe3 Be6 13. Bd3 Bd7 14. Nd5 Qd8 15. f5 Nge5 16. f6 g6 17. Qd2 Kh8 18. Na3 Nxd3 19. Qxd3 Ne5 20. Qe3 c6 21. Ne7 Re8 22. Qh6 Rg8 23. Nxg8 Qxg8 24. Rf4 Be6 25. b3 g5 26. Rff1 Qg6 27. Qxg6 fxg6 28. Nc2 Kg8 29. Nd4 Kf7 30. h3 h6 31. Rad1 Rd8 32. c4 Nd7 33. g4 Nxf6 34. Rf2 Ke7 35. Nxe6 Kxe6 36. e5 Ne4 37. Re2 Ng3+ 38. Kg2 Nxe2 39. Kf3 Nf4 40. exd6 Rxd6 41. Re1+ Kd7 42. h4 Rd3+ 43. Ke4 Rd2 44. hxg5 hxg5 45. a3 Re2+ 46. Rxe2 Nxe2 47. Ke5 Ke7 48. b4 Nc1 49. c5 Nd3+ 50. Kd4 Nf2 51. a4 Nxg4 52. b5 Kd7 53. Ke4 Nf6+ 54. Ke5 Nd5 55. b6 a6 56. Kd4 g4 57. Ke4 g5 58. Kd3 Ke6 59. Ke4 Kf6 60. a5 Ke6 61. Kd3 Ke5 62. Ke2 Kf4 63. Kf2 g3+ 64. Kg2 g4 65. Kh1 Kf3 66. Kg1 Ne3 67. Kh1 g2+ 68. Kh2 Nf1+ 69. Kg1 Ne3 70. Kh2 g3+ 71. Kg1 1-0
+

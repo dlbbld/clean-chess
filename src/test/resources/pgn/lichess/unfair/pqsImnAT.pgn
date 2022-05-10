@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/pqsImnAT"]
+[Date "2020.03.06"]
+[White "Jking789"]
+[Black "hayko888"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "17:05:15"]
+[WhiteElo "1861"]
+[BlackElo "1870"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-9"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B70"]
+[Opening "Sicilian Defense: Dragon Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Bd3 Bg7 7. O-O O-O 8. Be3 Nc6 9. Nde2 Ne5 10. f4 Nxd3 11. cxd3 Ng4 12. Bd2 Qb6+ 13. Kh1 Nf2+ 14. Rxf2 Qxf2 15. h3 Bd7 16. Rb1 Rac8 17. Nd5 Rfe8 18. Be3 Qh4 19. Kh2 b6 20. Ng1 e6 21. Nf3 Qh5 22. g4 Qh6 23. f5 exd5 24. Bxh6 Bxh6 25. g5 Bg7 26. f6 Bf8 27. exd5 Re3 28. Kg3 Rce8 29. Qh1 h6 30. h4 h5 31. Rc1 Bg4 32. Rf1 Rxd3 33. Kg2 Ree3 34. Nh2 Rd2+ 35. Rf2 Bh3+ 36. Kg1 Re1+ 37. Nf1 Rxf2 38. Kxf2 Rxf1+ 39. Qxf1 Bxf1 40. Kxf1 Bg7 41. fxg7 Kxg7 42. Kf2 f6 43. Kf3 fxg5 44. hxg5 Kf7 45. a4 h4 46. b4 h3 47. Kg3 h2 48. Kxh2 a5 49. b5 Ke7 50. Kg3 Kd7 51. Kf2 Ke7 52. Ke3 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/PkZ6qiA6"]
+[Date "2020.03.10"]
+[White "ibrhmrdm"]
+[Black "Sealikon"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "13:10:13"]
+[WhiteElo "1357"]
+[BlackElo "1231"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C46"]
+[Opening "Three Knights Opening: Winawer Defense"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nc6 3. Nc3 f5 4. exf5 d6 5. d4 Bxf5 6. dxe5 Qd7 7. Bd3 O-O-O 8. Bxf5 Qxf5 9. Ng5 Nh6 10. Nf3 Re8 11. Bxh6 gxh6 12. Qd2 Nxe5 13. Nxe5 Rxe5+ 14. Ne2 Rd5 15. Nd4 Qe5+ 16. Kf1 Rxd4 17. Re1 Qb5+ 18. Qe2 Qxe2+ 19. Rxe2 Rd1+ 20. Re1 Rd5 21. Re8+ Kd7 22. Re3 Rg8 23. Ke2 Rxg2 24. Rd1 Rxd1 25. Kxd1 Rxh2 26. Re2 Rh1+ 27. Kd2 Ra1 28. b3 Rxa2 29. Re3 h5 30. Rh3 Bh6+ 31. Ke2 Rxc2+ 32. Kf3 Rc3+ 33. Kg2 Rxh3 34. Kxh3 Bc1 35. Kg3 a5 36. Kf3 b5 37. Ke4 c5 38. Kd5 a4 39. bxa4 bxa4 40. Kc4 a3 41. Kb3 Bb2 42. Ka2 Kc6 43. f4 Kb5 44. f5 h4 45. f6 h3 46. f7 h2 47. f8=Q h1=Q 48. Qe8+ Kc4 49. Qa4+ Kd5 50. Qe4+ Qxe4 51. Kb3 a2 52. Kxa2 c4 53. Kxb2 c3+ 54. Ka1 c2 55. Kb2 h6 56. Kc3 h5 57. Kd2 c1=Q+ 58. Kxc1 Ke5 59. Kd2 Qb1 60. Ke3 h4 61. Kf2 h3 62. Kg3 h2 63. Kf2 h1=Q 64. Kg3 Qbg1# 0-1
+

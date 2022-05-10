@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/r1SzzM60"]
+[Date "2020.03.09"]
+[White "red_brick"]
+[Black "ChhotaBheem24"]
+[Result "1-0"]
+[UTCDate "2020.03.09"]
+[UTCTime "18:57:11"]
+[WhiteElo "1853"]
+[BlackElo "1723"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A00"]
+[Opening "Mieses Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d3 e6 2. f3 d6 3. Bd2 Nd7 4. g4 Ne7 5. h4 g6 6. g5 Bg7 7. Bg2 b6 8. Bc3 Bb7 9. Bxg7 c5 10. Bc3 Rg8 11. h5 gxh5 12. Bd2 Nf5 13. Kf1 Nd4 14. c3 Nf5 15. Kf2 Qc7 16. f4 O-O-O 17. Bxb7+ Kxb7 18. Nf3 Kb8 19. Rxh5 e5 20. Rxh7 exf4 21. Rxf7 Rdf8 22. Rh7 Rh8 23. Rxh8 Rxh8 24. Bxf4 Ne5 25. Nxe5 dxe5 26. Bg3 Nxg3 27. Kxg3 e4+ 28. Kg4 Qd7+ 29. Kf4 Qe6 30. Ke3 exd3+ 31. Kxd3 Rd8+ 32. Kc2 Rxd1 33. Kxd1 Qh3 34. Nd2 Qh1+ 35. Kc2 Qxa1 36. b3 Qxa2+ 37. Kd3 a6 38. e4 a5 39. b4 a4 40. bxc5 bxc5 41. Nc4 a3 42. Nd2 Qb1+ 43. Nxb1 a2 44. Nd2 a1=Q 45. Nc4 Qa8 46. Nd2 Qb7 47. Kc2 Qd7 48. Kd1 Qg7 49. Ke2 Qxg5 50. Kd3 Qe7 51. Kc2 Qd7 52. Nb3 Qe6 53. Nxc5 Qxe4+ 54. Nxe4 Kc7 55. Nc5 Kd6 56. Na4 Ke5 57. Kb3 Kf6 58. c4 Ke7 59. Kb4 Kd7 60. Kb5 Kc7 61. c5 Kc8 62. c6 Kc7 63. Nc5 Kc8 64. Ne6 Kb8 65. Nc5 Kc8 66. c7 1-0
+

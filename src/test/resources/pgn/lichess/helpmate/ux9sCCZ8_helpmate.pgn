@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/ux9sCCZ8"]
+[Date "2020.03.08"]
+[White "no_dokuz"]
+[Black "BeginnerChe55"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "17:50:28"]
+[WhiteElo "1684"]
+[BlackElo "1647"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C01"]
+[Opening "French Defense: Exchange Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e6 2. d4 d5 3. exd5 exd5 4. Nf3 c6 5. Be2 Be6 6. O-O Bd6 7. h3 Ne7 8. Ng5 O-O 9. Nxe6 fxe6 10. Bg4 e5 11. Be6+ Kh8 12. dxe5 Bxe5 13. Qe2 Ng6 14. Bf5 Bf6 15. Bxg6 hxg6 16. g4 Qd6 17. Be3 Nd7 18. Nc3 Ne5 19. f4 Nc4 20. Qd3 Rfe8 21. Rfe1 Nxb2 22. Qd2 Nc4 23. Qd3 Nxe3 24. Rxe3 Rxe3 25. Qxe3 b5 26. f5 b4 27. fxg6 Bxc3 28. Rf1 c5 29. Rf7 Bd4 30. Kf2 Qh2+ 31. Kf3 Qxh3+ 32. Kf4 Qxe3+ 33. Kf5 Re8 34. Rf8+ Rxf8# 0-1
+

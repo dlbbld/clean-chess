@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/XooYe68z"]
+[Date "2020.03.04"]
+[White "edgarchessboy"]
+[Black "Play2win4life"]
+[Result "1-0"]
+[UTCDate "2020.03.04"]
+[UTCTime "04:01:21"]
+[WhiteElo "1286"]
+[BlackElo "1307"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C40"]
+[Opening "King's Pawn Game: Damiano Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 f6 3. d4 d6 4. dxe5 dxe5 5. Qxd8+ Kxd8 6. Nc3 Bg4 7. Be2 Bxf3 8. Bxf3 Nc6 9. Be3 Bb4 10. a3 Bxc3+ 11. bxc3 Kd7 12. Rd1+ Ke6 13. Rd2 Nh6 14. O-O Nf7 15. Bg4+ Ke7 16. Rfd1 Nd6 17. Bc5 Rhd8 18. Bxd6+ cxd6 19. g3 b5 20. f4 Na5 21. fxe5 dxe5 22. Rxd8 Rxd8 23. Rxd8 Kxd8 24. Be6 Nc4 25. Bxc4 bxc4 26. Kf2 Kc7 27. h4 Kb6 28. Ke3 Kc5 29. g4 a5 30. g5 fxg5 31. hxg5 g6 32. Kd2 a4 33. Ke3 Kb5 34. Kd2 Kc5 35. Ke3 Kb5 36. Kd2 h5 37. Ke2 h4 38. Kf2 Kc5 39. Kg2 Kd6 40. Kh3 Ke7 41. Kxh4 Kf7 42. Kg4 Kg7 43. Kf3 Kh7 44. Kg4 Kg7 45. Kf3 Kf7 46. Kg4 Ke6 47. Kf3 Ke7 48. Kg4 Kd6 49. Kf3 Kc5 50. Kg4 Kd6 51. Kf3 Ke6 52. Kg4 Kf7 53. Kf3 Kg7 54. Kg4 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/IT4IGHvQ"]
+[Date "2020.03.08"]
+[White "maragola"]
+[Black "Axolotl2"]
+[Result "1-0"]
+[UTCDate "2020.03.08"]
+[UTCTime "21:44:04"]
+[WhiteElo "1902"]
+[BlackElo "1797"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C88"]
+[Opening "Ruy Lopez: Closed, Rosen Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Ba4 Nf6 5. O-O Be7 6. Re1 b5 7. Bb3 d6 8. d4 Bg4 9. dxe5 Nxe5 10. Nbd2 O-O 11. h3 Bxf3 12. Nxf3 Re8 13. Nxe5 dxe5 14. Qe2 c5 15. Bd5 Nxd5 16. exd5 Qxd5 17. Qxe5 Qxe5 18. Rxe5 Rac8 19. Bf4 Bf6 20. Rxe8+ Rxe8 21. Kf1 g6 22. c3 b4 23. Rc1 bxc3 24. bxc3 Be5 25. Bxe5 Rxe5 26. Rc2 f5 27. f3 Kf7 28. Kf2 Ke6 29. Re2 Rxe2+ 30. Kxe2 Kd5 31. Kd3 c4+ 32. Ke3 g5 33. g3 h5 34. a3 a5 35. a4 Ke5 36. g4 f4+ 37. Ke2 h4 38. Kd2 Kd5 39. Kc2 Kc5 40. Kb2 Kd5 41. Ka3 Kc5 42. Kb2 Kd5 43. Kc2 Kc5 44. Kd1 Kd5 45. Ke2 Kc5 46. Kf2 Kd5 47. Kf1 Kc5 48. Ke2 1-0
+

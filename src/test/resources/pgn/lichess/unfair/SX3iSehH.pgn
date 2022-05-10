@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/SX3iSehH"]
+[Date "2020.03.07"]
+[White "AlphaSubZero"]
+[Black "Truessyx2"]
+[Result "0-1"]
+[UTCDate "2020.03.07"]
+[UTCTime "17:58:20"]
+[WhiteElo "1128"]
+[BlackElo "1038"]
+[WhiteRatingDiff "-7"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. e3 e6 3. Be2 c6 4. Bh5 Nf6 5. Bf3 Bd6 6. Ne2 Nbd7 7. g3 Ne4 8. Nec3 Nxc3 9. Nxc3 f5 10. Bd2 Nf6 11. O-O Ne4 12. Bh5+ g6 13. Bf3 Qa5 14. Nxe4 fxe4 15. Bg2 Qb5 16. Re1 Qxb2 17. a4 Bb4 18. Bxb4 Qxb4 19. Qe2 O-O 20. Reb1 Qc3 21. Bh3 e5 22. Bxc8 Raxc8 23. dxe5 Qxe5 24. f4 Qh5 25. Qxh5 gxh5 26. h3 Kh8 27. Rxb7 Rg8 28. Kf2 Ra8 29. a5 a6 30. Rb6 Rgc8 31. c3 Kg7 32. f5 Kf6 33. g4 hxg4 34. hxg4 Kg5 35. Kg3 h6 36. Rh1 Rab8 37. Rxa6 Rb3 38. Rh5+ Kf6 39. Rxh6+ Ke5 40. Raxc6 Rxc6 41. Rxc6 d4 42. exd4+ Kd5 43. Rc8 Rxc3+ 44. Kf4 Rxc8 45. f6 Rf8 46. g5 Kxd4 47. Kf5 e3 48. g6 e2 49. f7 e1=Q 50. Kf6 Qf1+ 51. Ke7 Qf4 52. Kxf8 Kd5 53. g7 Ke6 54. g8=Q Qxf7+ 0-1
+

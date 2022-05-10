@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/p2ujQM8o"]
+[Date "2020.03.11"]
+[White "irfanbatur"]
+[Black "theraaaj"]
+[Result "1-0"]
+[UTCDate "2020.03.11"]
+[UTCTime "04:01:22"]
+[WhiteElo "1340"]
+[BlackElo "1344"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "C26"]
+[Opening "Vienna Game: Stanley Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Bc4 Nf6 3. Nc3 Bc5 4. h3 O-O 5. Nf3 Nc6 6. O-O h6 7. a4 a6 8. d3 d6 9. Ne2 Nd4 10. Nexd4 exd4 11. c3 c6 12. Nxd4 d5 13. Bb3 dxe4 14. dxe4 Nxe4 15. Qf3 Ng5 16. Qg3 Bxd4 17. cxd4 Qxd4 18. Bxg5 hxg5 19. Qxg5 Be6 20. Bxe6 fxe6 21. b3 Rf5 22. Qe7 Raf8 23. Ra2 b5 24. Qxe6+ R8f7 25. Qxc6 bxa4 26. bxa4 a5 27. Qa6 Kh7 28. Qxa5 Rxa5 29. g4 Rxa4 30. Re2 Ra1 31. Rxa1 Qxa1+ 32. Kg2 Qf6 33. Kg3 Qf3+ 34. Kh2 Qxe2 35. Kg3 Qf3+ 36. Kh4 g6 37. Kg5 Rf5+ 38. Kh4 Kh6 39. g5+ 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/GIwBNz5S"]
+[Date "2020.03.10"]
+[White "midunkedung"]
+[Black "alexrussia"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "23:57:44"]
+[WhiteElo "2030"]
+[BlackElo "2039"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B21"]
+[Opening "Sicilian Defense: McDonnell Attack"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 c5 2. f4 Nc6 3. Nf3 e6 4. c3 a6 5. Bc4 g6 6. O-O Bg7 7. d4 cxd4 8. cxd4 d5 9. exd5 exd5 10. Bb3 Nge7 11. Ng5 O-O 12. h4 Nxd4 13. h5 Qb6 14. Be3 Nef5 15. Bf2 Qc7 16. Nc3 Qxf4 17. h6 Bxh6 18. Nh3 Qd2 19. Nxd5 Qxd1 20. Raxd1 Nxb3 21. axb3 Be6 22. Nf6+ Kg7 23. Ng4 Rad8 24. Bc5 Rxd1 25. Bxf8+ Kxf8 26. Rxd1 Bg7 27. Ng5 Bxb3 28. Rd8+ Ke7 29. Rb8 Bd5 30. Nxh7 Bxb2 31. Ng5 Bd4+ 32. Kf1 Ne3+ 33. Nxe3 Bxe3 34. Nf3 Bxf3 35. gxf3 b6 36. Ke2 Bc5 37. Kd3 a5 38. Kc4 Ke6 39. Re8+ Kf5 40. Ra8 Kf4 41. Ra7 f5 42. Rf7 g5 43. Kb5 Ke5 44. Rg7 Kf6 45. Rg8 Be3 46. Rf8+ Ke5 47. Re8+ Kf4 48. Rf8 Kxf3 49. Rxf5+ Kg2 50. Ka4 g4 51. Rf6 g3 52. Rg6 Bf2 53. Kb5 Kf1 54. Kc4 g2 55. Kd3 g1=Q 56. Rxg1+ Kxg1 57. Kc2 a4 58. Kb1 a3 59. Ka1 a2 60. Kb2 b5 61. Ka1 Kf1 62. Kb2 a1=Q+ 63. Kxa1 Ke1 64. Kb2 Kd1 65. Kc3 Kc1 66. Kd3 Kb2 67. Ke2 Ka3 68. Kxf2 Kb2 69. Ke1 Kc1 70. Kf2 b4 71. Kg1 b3 72. Kf1 b2 73. Ke1 b1=Q 74. Kf2 Qa1 75. Kg1 Qb1 76. Kh1 Kd1 77. Kg1 Ke1 78. Kh2 Kf1 79. Kh1 Qh7# 0-1
+

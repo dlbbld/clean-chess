@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/B3mIj9Su"]
+[Date "2020.03.04"]
+[White "julianegarcia173"]
+[Black "Fatinov"]
+[Result "1-0"]
+[UTCDate "2020.03.04"]
+[UTCTime "16:22:00"]
+[WhiteElo "1742"]
+[BlackElo "1811"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-7"]
+[Variant "Standard"]
+[TimeControl "120+1"]
+[ECO "A50"]
+[Opening "Indian Game: Normal Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 b6 4. e4 Ba6 5. Nf3 Bb4 6. Qc2 O-O 7. Bd3 d6 8. O-O Nbd7 9. a3 Bxc3 10. bxc3 c6 11. Bb2 Rc8 12. e5 dxe5 13. dxe5 Ng4 14. Rfe1 g6 15. h3 Nh6 16. Rad1 Qe7 17. Be4 Nc5 18. Rd6 Bxc4 19. Red1 Bd5 20. Bxd5 cxd5 21. Nd4 Ne4 22. Rc6 Nf5 23. Rxc8 Rxc8 24. g4 Nxd4 25. Rxd4 Qh4 26. Kg2 Qg5 27. Bc1 Qxe5 28. f4 Qc7 29. Bb2 Nxc3 30. Bxc3 Qxc3 31. Qxc3 Rxc3 32. Ra4 Rc4 33. Rxa7 Rxf4 34. Rb7 Ra4 35. Rxb6 Rxa3 36. Rb8+ Kg7 37. Rd8 Kf6 38. h4 h6 39. Rh8 d4 40. Rxh6 d3 41. Rh8 Ra2+ 42. Kf1 Rh2 43. Rd8 d2 44. Kg1 Rxh4 45. Rxd2 Rxg4+ 46. Kf2 Kf5 47. Kf3 Rf4+ 48. Kg3 g5 49. Rd8 f6 50. Re8 e5 51. Rf8 e4 52. Re8 Rf3+ 53. Kg2 Ra3 54. Rf8 Ra5 55. Re8 Re5 56. Rf8 e3 57. Kf1 g4 58. Ke2 g3 59. Rg8 Kf4 60. Rg6 f5 61. Rg5 Re4 62. Rg8 Rd4 63. Rg7 Rd2+ 64. Ke1 g2 65. Rg8 Kf3 66. Rg3+ Kf4 67. Rf3+ Ke4 68. Rf4+ Ke5 69. Re4+ Kf6 70. Re6+ Kg5 71. Rg6+ Kh4 72. Rg4+ Kh3 73. Rg3+ Kh2 74. Rh3+ Kg1 75. Rh1+ 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/RJ6gw7gD"]
+[Date "2020.03.03"]
+[White "pandelosil"]
+[Black "w300"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "18:36:28"]
+[WhiteElo "1902"]
+[BlackElo "1876"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "120+0"]
+[ECO "B00"]
+[Opening "Owen Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 b6 2. g3 Bb7 3. Bg2 e6 4. Ne2 Nf6 5. d3 Be7 6. Nbc3 d5 7. exd5 Nxd5 8. O-O Nxc3 9. Nxc3 Bxg2 10. Kxg2 Bf6 11. Qf3 Nd7 12. Ne4 O-O 13. Re1 Be7 14. Bf4 c5 15. Rad1 Nf6 16. Be5 Nxe4 17. dxe4 Qe8 18. Qg4 f6 19. Bd6 Bxd6 20. Rxd6 e5 21. Red1 Qg6 22. h3 Qxg4 23. hxg4 Rfe8 24. Rd7 Kf8 25. Rb7 Re7 26. Rdd7 Rxd7 27. Rxd7 a6 28. f4 Re8 29. Kf3 Re7 30. Rd6 Rb7 31. f5 Ke7 32. Re6+ Kf7 33. Rc6 Ke7 34. Ke3 Kd7 35. Re6 Rc7 36. c4 Rc6 37. Rxc6 Kxc6 38. b3 b5 39. Kd3 b4 40. Ke3 a5 41. Kf3 Kd6 42. Kg2 Ke7 43. Kh3 Kf7 44. Kh4 g6 45. Kh3 Kg7 46. Kh4 h6 47. Kh3 g5 48. Kg2 Kf7 49. Kf3 Ke7 50. Ke3 Kd6 51. Kf3 Kc6 52. Ke3 Kb6 53. Kd3 Ka6 54. Ke3 a4 55. Kd3 axb3 56. axb3 Kb6 57. Ke3 Kc6 58. Kd3 Kd6 59. Ke3 Ke7 60. Kd3 Kf7 61. Ke3 Kg7 62. Kf3 Kh7 63. Ke3 h5 64. Kf3 hxg4+ 65. Kxg4 Kh6 66. Kh3 Kh5 67. g4+ Kh6 68. Kg3 Kg7 69. Kf3 1-0
+

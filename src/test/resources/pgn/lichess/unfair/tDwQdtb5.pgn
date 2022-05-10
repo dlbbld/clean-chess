@@ -1,0 +1,21 @@
+[Event "Rated Rapid game"]
+[Site "https://lichess.org/tDwQdtb5"]
+[Date "2020.03.08"]
+[White "WeltonGouvea"]
+[Black "pdelobs"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "15:19:21"]
+[WhiteElo "1333"]
+[BlackElo "1305"]
+[WhiteRatingDiff "-9"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "600+0"]
+[ECO "C41"]
+[Opening "Philidor Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 d6 3. Qe2 h6 4. d4 Nd7 5. Qd3 a6 6. Be2 Ngf6 7. a3 Ng4 8. Be3 h5 9. h3 Nxe3 10. Qxe3 b5 11. Nc3 Bb7 12. dxe5 dxe5 13. Rd1 Bc5 14. Qd3 O-O 15. b4 Bd4 16. O-O Qe7 17. Nxb5 c5 18. Nc7 Rac8 19. Nd5 Bxd5 20. exd5 cxb4 21. Qxa6 Nc5 22. d6 Qd7 23. Bb5 Nxa6 24. Bxd7 Rxc2 25. Nxd4 bxa3 26. Ba4 Rc4 27. Bb3 Rxd4 28. d7 Rxd1 29. Rxd1 Rd8 30. Ba4 Nc5 31. Ra1 Nxa4 32. Rxa3 Nc5 33. Ra7 Nxd7 34. Kh2 Nf6 35. f3 g6 36. Ra4 Kg7 37. Rb4 Nd5 38. Rb5 f5 39. Rb7+ Kf6 40. Rb3 Nf4 41. Rb2 Nd3 42. Rb6+ Kg5 43. g3 Rd4 44. h4+ Kh6 45. Rb8 Ne1 46. Rh8+ Kg7 47. Re8 Nxf3+ 48. Kh3 Ng1+ 49. Kg2 Ne2 50. Rxe5 Kf6 51. Rxe2 Re4 52. Ra2 f4 53. Ra6+ Kf5 54. Ra5+ Kg4 55. gxf4 Rxf4 56. Kh2 Rf3 57. Ra2 Rh3+ 58. Kg2 Rxh4 59. Kf2 g5 60. Ra5 Kf4 61. Rd5 g4 62. Kg2 Rh3 63. Kf2 Rf3+ 64. Kg2 h4 65. Rh5 h3+ 66. Kh2 Rf2+ 67. Kg1 Rg2+ 68. Kh1 Kg3 69. Rg5 Kf3 70. Rh5 g3 71. Rxh3 Rh2+ 72. Rxh2 gxh2 0-1
+

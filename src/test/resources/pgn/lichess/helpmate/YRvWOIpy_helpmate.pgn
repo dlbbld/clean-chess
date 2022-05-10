@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/YRvWOIpy"]
+[Date "2020.03.06"]
+[White "mauro35"]
+[Black "passfranx"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "23:06:21"]
+[WhiteElo "1809"]
+[BlackElo "1812"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B00"]
+[Opening "Duras Gambit"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 f5 2. exf5 Nf6 3. d4 d5 4. Nc3 Bxf5 5. Bg5 Qd7 6. Qf3 Nc6 7. Bxf6 gxf6 8. Qxd5 Qxd5 9. Nxd5 O-O-O 10. c4 e6 11. Nxf6 Rxd4 12. g4 Bb4+ 13. Ke2 Bd3+ 14. Kf3 Bxf1 15. Rxf1 Rf8 16. g5 h6 17. h4 Rxc4 18. a3 Be7 19. Ne2 Nd4+ 20. Nxd4 Rxd4 21. Ke3 Bxf6 22. gxf6 Rg4 23. Rc1 Rxf6 24. Rhg1 Rgf4 25. Rg7 Rf3+ 26. Ke4 c6 27. Rd1 Rxf2 28. Rdd7 Rxb2 29. Rc7+ Kd8 30. Rgd7+ Ke8 31. Re7+ Kf8 32. Rh7 Kg8 33. Rhd7 Rbf2 34. Rxb7 Rf7 35. Rd8+ Kg7 36. Rdd7 Rxd7 37. Rxd7+ Rf7 38. Rd6 c5 39. Rxe6 Rc7 40. Kd3 c4+ 41. Kc3 Rc5 42. Ra6 Rc7 43. a4 h5 44. Ra5 Kg6 45. Rg5+ Kh6 46. Ra5 Kh7 47. Rxh5+ Kg6 48. Ra5 Rb7 49. Rc5 Rb3+ 50. Kxc4 Rh3 51. h5+ Kh6 52. a5 Rh4+ 53. Kb5 Rh1 54. Rc7 Rb1+ 55. Ka6 Kxh5 56. Rxa7 Rb6+ 57. axb6 Kg4 58. b7 Kf3 59. b8=Q Ke2 60. Rb7 Kd3 61. Rb1 Kc4 62. Ra1 Kd5 63. Rd1+ Kc6 64. Qb6# 1-0
+

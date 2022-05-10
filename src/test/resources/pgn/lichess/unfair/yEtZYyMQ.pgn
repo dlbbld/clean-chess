@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/yEtZYyMQ"]
+[Date "2020.03.06"]
+[White "malangero"]
+[Black "Thrustme"]
+[Result "0-1"]
+[UTCDate "2020.03.06"]
+[UTCTime "15:54:19"]
+[WhiteElo "1433"]
+[BlackElo "1482"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A18"]
+[Opening "English Opening: Mikenas-Carls Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. c4 Nf6 2. Nc3 e6 3. e4 d5 4. d3 dxc4 5. dxc4 c5 6. Qxd8+ Kxd8 7. Bg5 Be7 8. Nge2 Nc6 9. O-O-O+ Bd7 10. Bxf6 Bxf6 11. f4 Bxc3 12. Nxc3 Kc7 13. e5 Rad8 14. Bd3 b6 15. Be4 Bc8 16. g3 Bb7 17. Bxc6 Bxc6 18. Rxd8 Rxd8 19. Rd1 b5 20. Rxd8 Kxd8 21. b3 b4 22. Ne2 Kc7 23. Kd2 a5 24. Kc2 h6 25. Kb2 Kd8 26. a3 Ke7 27. axb4 axb4 28. Kc2 f6 29. Kd2 fxe5 30. fxe5 Kf7 31. Ke3 Kg6 32. Kf4 h5 33. h3 Kh6 34. g4 g6 35. g5+ Kg7 36. h4 Kf7 37. Ng3 Kg7 38. Ke3 Bb7 39. Ne4 Bxe4 40. Kxe4 Kf7 41. Kf4 Ke7 0-1
+

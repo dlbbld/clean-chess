@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/29moHRC8"]
+[Date "2020.03.09"]
+[White "megablok"]
+[Black "AdityaGupta2003"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "09:25:48"]
+[WhiteElo "1585"]
+[BlackElo "1614"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C46"]
+[Opening "Four Knights Game: Italian Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nf6 3. Bc4 Nc6 4. Nc3 Bb4 5. d3 Bxc3+ 6. bxc3 d6 7. O-O O-O 8. h3 a6 9. Bg5 b5 10. Bb3 Bb7 11. Qd2 Na5 12. Nh4 Nxb3 13. cxb3 h6 14. Bxf6 Qxf6 15. Nf5 Rfe8 16. Qe3 Rad8 17. f4 exf4 18. Qxf4 Bc8 19. Qg3 Bxf5 20. Rxf5 Qg6 21. Qxg6 fxg6 22. Rf3 Rf8 23. Raf1 Rxf3 24. Rxf3 g5 25. Kf2 Rd7 26. g4 Re7 27. Ke3 c5 28. Rf5 Re5 29. Rxe5 dxe5 30. d4 Kf7 31. dxc5 Ke6 32. a3 Kd7 33. b4 Kc6 34. Kd3 a5 35. c4 axb4 36. axb4 bxc4+ 37. Kxc4 Kd7 38. b5 Kc7 39. Kd5 Kb7 40. c6+ Kb6 41. Kd6 Kxb5 42. c7 Kc4 43. c8=Q+ Kd4 44. Qc5+ Kxe4 45. Qc4+ Kf3 46. Qd5+ Kg3 47. Kxe5 Kxh3 48. Qf3+ Kh4 49. Qh1+ Kxg4 50. Ke4 Kg3 51. Qf3+ Kh4 52. Qg4+ Kxg4 53. Kd3 h5 54. Ke2 h4 55. Kf1 h3 56. Ke1 h2 57. Kd1 h1=Q+ 58. Kc2 Kh3 59. Kd3 g4 60. Ke2 g3 61. Ke3 g2 62. Kd2 g1=Q 63. Ke2 Qa1 64. Kf2 Qae1# 0-1
+

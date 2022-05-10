@@ -1,0 +1,21 @@
+[Event "Rated UltraBullet game"]
+[Site "https://lichess.org/W5huoA6x"]
+[Date "2020.03.10"]
+[White "Dauren2004"]
+[Black "Neteoretik90"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "10:25:56"]
+[WhiteElo "1976"]
+[BlackElo "2221"]
+[WhiteRatingDiff "+9"]
+[BlackRatingDiff "-9"]
+[Variant "Standard"]
+[TimeControl "15+0"]
+[ECO "A40"]
+[Opening "Englund Gambit Declined: Reversed Krebs"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. Nf3 e5 2. d4 e4 3. e3 exf3 4. c3 Bb4 5. Qxf3 Nf6 6. Qd1 Be7 7. Nd2 O-O 8. Qc2 d5 9. Bd3 c5 10. e4 cxd4 11. cxd4 dxe4 12. Nxe4 Nxe4 13. Bxe4 f5 14. Bxf5 Bxf5 15. Qb3+ Kh8 16. Qd1 Nc6 17. Qd2 Nxd4 18. O-O Nc2 19. Qxd8 Raxd8 20. Rb1 Nd4 21. Ra1 Ne2+ 22. Kh1 Nf4 23. Bxf4 Bd6 24. Be3 Be7 25. g3 Bf6 26. Kg1 Bg6 27. f3 Be7 28. Bf4 Bd6 29. Be5 Be8 30. Bxd6 Rxd6 31. f4 Rdf6 32. b3 Bc6 33. b4 g5 34. Rae1 gxf4 35. gxf4 Rg6+ 36. Kf2 Rg2+ 37. Ke3 Re8+ 38. Kd4 Rxe1 39. Rxe1 Kg7 40. Re5 Rg6 41. Re7+ Kf6 42. Kc4 Kf5 43. Rc7 Kxf4 44. Rf7+ Ke5 45. Rg7 Kd6 46. Rxg6+ Kc7 47. Kc3 Kb6 48. Rh6 Kb5 49. Rxh7 Kb6 50. Rxb7+ Kxb7 51. a4 Kb6 52. h4 Bb5 53. h5 Bxa4 54. h6 Bc6 55. h7 Be8 56. h8=Q Bg6 57. Qd4+ Kc6 58. Qc5+ Kb7 59. Qd6 Kc8 60. Qf6 Kb8 61. Qxg6 Kb7 62. Qg7+ Ka8 63. Kc4 Kb8 64. Kc5 Ka8 65. b5 Kb8 66. b6 Ka8 67. b7+ Kb8 68. Qf8+ Kxb7 69. Qc8+ Kxc8 70. Kb4 a6 71. Kc3 a5 72. Kd2 a4 73. Ke1 a3 74. Kd1 a2 75. Kc1 a1=Q+ 76. Kd2 Qb1 77. Ke3 Qa1 78. Kf2 Qb1 79. Kg2 Qa2+ 80. Kh1 Kd7 81. Kg1 Ke6 82. Kf1 Kf5 83. Ke1 Kg4 84. Kd1 Kh3 85. Ke1 Qa1+ 86. Kf2 Qa2+ 87. Kg1 Qb2 88. Kh1 Qa1# 0-1
+

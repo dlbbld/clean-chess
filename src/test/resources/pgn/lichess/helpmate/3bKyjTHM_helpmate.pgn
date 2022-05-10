@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/3bKyjTHM"]
+[Date "2020.03.03"]
+[White "Ajedrez_Practico"]
+[Black "gOdLikE_efRe"]
+[Result "0-1"]
+[UTCDate "2020.03.03"]
+[UTCTime "00:26:03"]
+[WhiteElo "2039"]
+[BlackElo "2047"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A40"]
+[Opening "English Defense"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 b6 2. e3 Bb7 3. Nf3 Nf6 4. Be2 e6 5. O-O Be7 6. b3 O-O 7. Bb2 d5 8. c4 c5 9. Nc3 cxd4 10. Nxd4 Nc6 11. Nf3 dxc4 12. Bxc4 Qc7 13. Rc1 Rac8 14. Be2 Qd7 15. Qxd7 Nxd7 16. Rfd1 Nde5 17. Nxe5 Nxe5 18. Nb1 Ng6 19. Nd2 Rfd8 20. Nf3 Rxd1+ 21. Bxd1 Rxc1 22. Bxc1 Bxf3 23. Bxf3 Kf8 24. Kf1 Bc5 25. Ke2 Ke7 26. Bb2 Kd6 27. Kd3 Ne5+ 28. Ke2 Nxf3 29. Kxf3 f6 30. Ke4 g5 31. g3 f5+ 32. Kd3 h5 33. Bd4 a5 34. Bxc5+ Kxc5 35. f3 e5 36. a3 b5 37. Kc3 f4 38. e4 g4 39. fxg4 hxg4 40. gxf4 exf4 41. e5 Kd5 42. Kd3 Kxe5 43. Ke2 Kd4 44. Kf2 Kc3 45. h4 Kxb3 46. h5 Kxa3 47. h6 b4 48. h7 b3 49. h8=Q Ka2 50. Qg8 Ka1 51. Qc4 Ka2 52. Qe2+ b2 53. Qc4+ Ka1 54. Qa2+ Kxa2 55. Ke1 f3 56. Kd1 f2 57. Ke2 g3 58. Kd1 g2 59. Ke2 a4 60. Kd1 a3 61. Ke2 b1=Q 62. Kf3 f1=Q+ 63. Kg4 g1=Q+ 64. Kh5 Qh7# 0-1
+

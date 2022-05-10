@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/a2l4gphm"]
+[Date "2020.03.04"]
+[White "Rupert60"]
+[Black "DrToma15"]
+[Result "0-1"]
+[UTCDate "2020.03.04"]
+[UTCTime "16:13:38"]
+[WhiteElo "1813"]
+[BlackElo "1843"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B00"]
+[Opening "Owen Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 b6 2. d4 Bb7 3. Bd3 g6 4. Qe2 Bg7 5. c3 Bc8 6. f4 Bb7 7. Nf3 a6 8. O-O c6 9. Nbd2 e6 10. e5 Ne7 11. Ne4 O-O 12. Nd6 f6 13. Bd2 Nd5 14. a3 c5 15. Rac1 b5 16. h3 c4 17. Bb1 Nc6 18. Rfe1 Na7 19. Nxb7 Qc7 20. Nd6 Nc8 21. Nxc8 Qxc8 22. Be4 f5 23. Bxd5 exd5 24. e6 d6 25. e7 Re8 26. Qe6+ Qxe6 27. Rxe6 Ra7 28. Rce1 h5 29. Ng5 a5 30. h4 Kh8 31. g3 Kg8 32. Kg2 Kh8 33. Kf3 Kg8 34. R1e2 Kh8 35. Be1 Kg8 36. Bf2 Raxe7 37. Rxe7 Rxe7 38. Rxe7 Kf8 39. Rxg7 Kxg7 40. Ne6+ Kf7 41. g4 Kxe6 42. gxf5+ gxf5 43. Be3 Kf6 44. Bf2 Kg6 45. Bg3 Kf6 46. Bh2 Kg6 47. Bg1 b4 48. Bh2 b3 49. Bg1 Kf6 50. Bh2 Kg7 51. Bg1 Kf8 52. Bh2 Ke8 53. Bg1 Kd7 54. Bh2 Kc7 55. Bg1 Kb6 56. Bh2 a4 57. Bg1 Ka5 58. Bh2 Kb6 59. Bg1 Kc7 60. Bh2 Kd8 61. Bg1 Ke7 62. Bh2 Kf7 63. Bg1 Kg7 64. Bh2 Kf6 65. Bg1 Kf7 66. Bh2 Kf8 0-1
+

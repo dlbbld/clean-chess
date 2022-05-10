@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/N6AYM22R"]
+[Date "2020.03.11"]
+[White "MrThrowdown404"]
+[Black "rashid20"]
+[Result "0-1"]
+[UTCDate "2020.03.11"]
+[UTCTime "03:35:06"]
+[WhiteElo "2025"]
+[BlackElo "2027"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A40"]
+[Opening "Englund Gambit"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 e5 2. c3 exd4 3. cxd4 d5 4. Bf4 c5 5. Nf3 Nf6 6. e3 Bd6 7. Bg5 O-O 8. Be2 h6 9. Bh4 Bf5 10. Bd3 Bg4 11. Be2 Nc6 12. dxc5 Bxc5 13. Nc3 Be7 14. Bg3 a6 15. O-O Rc8 16. Nd4 Bxe2 17. Ndxe2 Bd6 18. Rc1 Bxg3 19. Nxg3 Re8 20. Qf3 Ne5 21. Qd1 Nc6 22. a3 d4 23. exd4 Qxd4 24. Qxd4 Nxd4 25. Rfd1 Nb3 26. Rb1 Rcd8 27. h3 Nd4 28. Kh2 b5 29. Rd3 Nb3 30. Rdd1 Kh7 31. Nf5 Kg6 32. Nh4+ Kh7 33. Nf5 Kg6 34. Ne3 Nd4 35. Kh1 Nf5 36. Nf1 Ne4 37. Nxe4 Rxd1 38. Rxd1 Rxe4 39. f3 Re2 40. Rb1 Rc2 41. Kg1 Nd4 42. Ne3 Re2 43. Nd5 a5 44. b4 axb4 45. Kh2 bxa3 46. Rxb5 Nxb5 47. Kg3 Nd4 48. Kf4 Ne6+ 49. Kg3 Rb2 50. f4 Rd2 51. Kh2 Rxd5 52. Kg3 Nxf4 53. h4 Rd3+ 54. Kh2 Ne2 55. Kh1 Nf4 56. Kg1 Rd2 57. Kh1 Rxg2 58. h5+ Nxh5 59. Kxg2 a2 60. Kf1 f6 61. Kg1 f5 62. Kh1 a1=Q+ 63. Kg2 Ng3 64. Kh3 Nh1 65. Kg2 Qa2+ 66. Kxh1 Kg5 67. Kg1 Kg4 68. Kf1 Kh3 69. Kg1 f4 70. Kh1 f3 71. Kg1 f2+ 72. Kh1 f1=Q# 0-1
+

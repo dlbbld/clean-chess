@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/3jesiit8"]
+[Date "2020.03.07"]
+[White "Itzaman13"]
+[Black "hundatze"]
+[Result "0-1"]
+[UTCDate "2020.03.07"]
+[UTCTime "00:41:05"]
+[WhiteElo "1293"]
+[BlackElo "1255"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C55"]
+[Opening "Italian Game: Two Knights Defense, Modern Bishop's Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. d3 d6 5. Bg5 Be6 6. Bxe6 fxe6 7. O-O Be7 8. Nc3 Qd7 9. Qd2 O-O-O 10. d4 Rhf8 11. dxe5 Kb8 12. exf6 Bxf6 13. Bxf6 gxf6 14. Qh6 Rfe8 15. Rad1 Rf8 16. e5 fxe5 17. Nxe5 dxe5 18. Rxd7 Rxd7 19. Qxf8+ Nd8 20. Qf6 Ka8 21. h3 Kb8 22. Re1 Nc6 23. Qxe6 Ne7 24. Rxe5 Kc8 25. Qg8+ Rd8 26. Qxh7 a6 27. Qxe7 a5 28. Rd5 Rxd5 29. Nb5 Rd8 30. Na7+ Kb8 31. Qxd8+ Kxa7 32. Qxc7 Ka6 33. h4 Ka7 34. h5 Ka6 35. h6 Kb5 36. h7 a4 37. h8=Q a3 38. Qd6 axb2 39. Qc8 Ka4 40. Qd5 Ka3 41. Qcxb7 b1=Q+ 42. Kh2 Qxb7 43. Qa5+ Kb2 44. Qc3+ Kc1 45. Qd4 Kb1 46. Qf4 Kb2 47. Qe5+ Kb1 48. Qf6 Kc1 49. Qf5 Kb1 50. Qf4 Kb2 51. Qe4 Kb1 52. Qd3 Qh7+ 53. Kg1 Qh1+ 0-1
+

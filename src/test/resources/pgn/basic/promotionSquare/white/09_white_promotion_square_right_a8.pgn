@@ -1,0 +1,12 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[SetUp "1"]
+[FEN "rrrrbrrr/PPPPPPPP/8/8/8/8/8/2k1K3 w - - 0 100"]
+
+100. bxa8=Q *
+

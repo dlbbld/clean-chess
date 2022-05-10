@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/GzoCTk46"]
+[Date "2020.03.06"]
+[White "joey11098"]
+[Black "ramin677"]
+[Result "0-1"]
+[UTCDate "2020.03.06"]
+[UTCTime "10:59:38"]
+[WhiteElo "1466"]
+[BlackElo "1487"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B27"]
+[Opening "Sicilian Defense: Hyperaccelerated Dragon"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 g6 3. Nc3 Bg7 4. d4 Nc6 5. dxc5 Qa5 6. Qd5 e6 7. Qg5 Bxc3+ 8. bxc3 Qxc3+ 9. Bd2 Qxa1+ 10. Ke2 Nd4+ 11. Nxd4 Qxd4 12. Be3 Qc4+ 13. Kd2 Qb4+ 14. Ke2 Qxe4 15. f3 Qxc2+ 16. Bd2 Ne7 17. Ke3 O-O 18. Bd3 Nd5+ 19. Ke4 Qxd2 20. Qxd2 b6 21. Bc4 bxc5 22. Bxd5 exd5+ 23. Qxd5 Rb8 24. Qxc5 Bb7+ 25. Kd3 Rfe8 26. Rc1 d6 27. Qc7 Rbc8 28. Qxb7 Rxc1 29. Qxa7 Rec8 30. Qd7 R8c3+ 31. Kd2 R1c2+ 32. Kd1 Rxg2 33. Qxd6 Rxf3 34. Ke1 Ra3 35. Qxa3 Rxh2 36. Qa8+ Kg7 37. Qc6 Rxa2 38. Qc3+ Kh6 39. Qc8 Ra3 40. Qh3+ Kg7 41. Qxa3 Kh6 42. Qc3 Kg5 43. Qe3+ Kf6 44. Qf3+ Kg7 45. Qb7 h6 46. Qb2+ f6 47. Qb7+ Kf8 48. Qb8+ Ke7 49. Qb7+ Ke6 50. Qb3+ Kf5 51. Qe3 g5 52. Qf2+ Kg6 53. Qc2+ f5 54. Qc7 Kh5 55. Qc8 g4 56. Qe8+ Kg5 57. Qe2 Kf4 58. Qe3+ Kxe3 59. Kd1 g3 60. Kc1 g2 61. Kb1 f4 62. Kc1 f3 63. Kb1 f2 64. Ka1 f1=Q+ 65. Ka2 g1=Q 66. Kb3 h5 67. Kc2 Kf4 68. Kc3 Kg3 69. Kb2 Kh3 70. Kc3 h4 71. Kd2 Qa1 72. Ke2 Qac1 73. Kf3 Qce3# 0-1
+

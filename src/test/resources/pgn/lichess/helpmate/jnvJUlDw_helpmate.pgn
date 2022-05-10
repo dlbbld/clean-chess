@@ -1,0 +1,21 @@
+[Event "Hourly Bullet Arena"]
+[Site "https://lichess.org/jnvJUlDw"]
+[Date "2020.03.04"]
+[White "CARLOS256"]
+[Black "tharlam"]
+[Result "0-1"]
+[UTCDate "2020.03.04"]
+[UTCTime "17:43:45"]
+[WhiteElo "1587"]
+[BlackElo "1719"]
+[WhiteRatingDiff "+8"]
+[BlackRatingDiff "-8"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D04"]
+[Opening "Queen's Pawn Game: Colle System"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 Nf6 2. e3 d5 3. Nf3 Nc6 4. Bd3 e5 5. Qe2 e4 6. Bxe4 dxe4 7. Ne5 Nxe5 8. dxe5 Nd7 9. Bd2 Nxe5 10. Nc3 Bd7 11. O-O-O Bd6 12. Be1 O-O 13. f3 exf3 14. gxf3 Qe7 15. f4 Ng6 16. e4 Bxf4+ 17. Kb1 Rae8 18. Bg3 Bxg3 19. hxg3 Qb4 20. a3 Qb6 21. Qh2 h6 22. g4 Bxg4 23. Rdg1 Qe6 24. e5 Nxe5 25. Ne4 Nf3 26. Qf2 Nxg1 27. Ng5 Qe1+ 28. Qxe1 Rxe1+ 29. Ka2 hxg5 30. a4 Nf3 31. Rxe1 Nxe1 32. a5 Nd3 33. b3 a6 34. Ka3 Nc5 35. Kb4 Ne6 36. c4 Rd8 37. Kc3 Rd7 38. b4 Bf5 39. b5 axb5 40. cxb5 Rd5 41. a6 Rxb5 42. Kc4 Ra5 43. axb7 Ra6 44. b8=Q+ Kh7 45. Qb5 Rd6 46. Qxf5+ g6 47. Qxf7+ Kh6 48. Qh7+ Kxh7 49. Kb3 g4 50. Kc2 g3 51. Kb1 g2 52. Ka1 g1=Q+ 53. Ka2 Nd4 54. Ka3 Ne2 55. Ka2 Ng3 56. Kb3 g5 57. Kc2 Nh1 58. Kc3 Kg6 59. Kb2 Kf5 60. Kc3 Rd2 61. Kxd2 g4 62. Ke2 g3 63. Kf3 g2 64. Ke2 Kg4 65. Kd3 Kh3 66. Ke2 Qa1 67. Kf3 g1=Q 68. Ke2 Qad1# 0-1
+

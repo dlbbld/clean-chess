@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/Ew7uTqu0"]
+[Date "2020.03.05"]
+[White "IdontResign"]
+[Black "jfam"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "00:35:34"]
+[WhiteElo "1834"]
+[BlackElo "1820"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "D35"]
+[Opening "Queen's Gambit Declined: Harrwitz Attack"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 d5 2. c4 e6 3. Nc3 Nf6 4. Bf4 Bb4 5. Nf3 O-O 6. e3 Nbd7 7. cxd5 Bxc3+ 8. bxc3 Nxd5 9. Qb3 Nxf4 10. exf4 Nf6 11. Bd3 Nd5 12. g3 b6 13. Ne5 c5 14. dxc5 bxc5 15. Be4 Qc7 16. c4 Rb8 17. Qf3 Nb4 18. a3 Qa5 19. O-O Na6 20. Qh5 h6 21. g4 Bb7 22. Bd3 Qd2 23. Rfd1 Qxf4 24. Re1 Rbd8 25. f3 Rxd3 26. Nxd3 Qxf3 27. Nf4 Qxf4 28. Rf1 Qe4 29. Qh3 Qxc4 30. Rfc1 Qd4+ 31. Kf1 Nc7 32. g5 Ba6+ 33. Kg2 Qg4+ 34. Qxg4 hxg5 35. Qxg5 Nd5 36. Rxc5 Bd3 37. Rxd5 exd5 38. Qxd5 Bg6 39. Rg1 Rc8 40. Kf2 Rc2+ 41. Ke3 Rxh2 42. Qd8+ Kh7 43. Rg3 Rh4 44. Rg4 Rh3+ 45. Kf4 Rxa3 46. Qh8+ Kxh8 47. Rh4+ Kg8 48. Rh8+ Kxh8 49. Kg5 a6 50. Kf4 Bd3 51. Kf3 a5 52. Kg2 a4 53. Kh1 Kh7 54. Kg1 Kg6 55. Kh2 Kf5 56. Kh1 Kg4 57. Kg1 Kh3 58. Kh1 Ra1# 0-1
+

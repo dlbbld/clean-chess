@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/bfJbt6GP"]
+[Date "2020.03.08"]
+[White "cmgn"]
+[Black "PeaceMakesPlenty"]
+[Result "1-0"]
+[UTCDate "2020.03.08"]
+[UTCTime "15:45:31"]
+[WhiteElo "1915"]
+[BlackElo "1894"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B50"]
+[Opening "Sicilian Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 d6 3. e5 Nc6 4. exd6 exd6 5. Qe2+ Be7 6. d4 Nxd4 7. Nxd4 cxd4 8. Bg5 Be6 9. Qb5+ Qd7 10. Qxd7+ Bxd7 11. Bxe7 Nxe7 12. Nd2 O-O 13. Nf3 Rac8 14. O-O-O Bg4 15. h3 Bxf3 16. gxf3 Nf5 17. Bd3 Ne7 18. Rhg1 g6 19. Bc4 Nc6 20. Bb5 Ne5 21. Rxd4 Nxf3 22. Rxd6 Nxg1 23. Rd7 a6 24. Bd3 b5 25. Ra7 Ra8 26. Rb7 Nxh3 27. f4 Nxf4 28. Bf1 Nd5 29. Rd7 Ne3 30. Be2 Nf5 31. Rb7 Nd4 32. Rd7 Nxe2+ 33. Kb1 Nf4 34. b3 Ne6 35. Rb7 Rfb8 36. Re7 Rd8 37. Rd7 Rxd7 38. Kb2 Rd2 39. a4 Rc8 40. axb5 Rcxc2+ 41. Ka3 Rb2 42. Kb4 Rd4+ 43. Kc3 Rdd2 44. Kb4 axb5 45. Kc3 f6 46. Kb4 Kf7 47. Kc3 Ke7 48. Kb4 Kd6 49. Kc3 Kc6 50. Kb4 Kb6 51. Kc3 Kc5 52. b4+ 1-0
+

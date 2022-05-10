@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/odke8ePj"]
+[Date "2020.03.08"]
+[White "Ccards"]
+[Black "albmaster"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "19:16:01"]
+[WhiteElo "2061"]
+[BlackElo "2000"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B06"]
+[Opening "Modern Defense: Two Knights Variation, Suttles Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 g6 2. Nc3 Bg7 3. Nf3 c6 4. d4 d6 5. Bg5 Bg4 6. h3 Bxf3 7. Qxf3 Bxd4 8. Bc4 Nf6 9. O-O Nbd7 10. Rad1 Qb6 11. Bb3 a5 12. a4 O-O 13. Rfe1 Ne5 14. Qe2 Bxc3 15. bxc3 c5 16. Bxf6 exf6 17. Qd2 Rad8 18. Qh6 c4 19. Ba2 Qb2 20. Ra1 Qxc3 21. Reb1 b6 22. Qc1 Rb8 23. Rb5 Nd7 24. Rab1 Kg7 25. Ra1 Rfe8 26. Rab1 Rxe4 27. Ra1 Re2 28. Rab1 Rxc2 29. Qf1 Rxa2 30. R5b2 Rxb2 31. Rc1 Rc2 32. Rd1 Rd2 33. Re1 Qd3 34. Rd1 Qxf1+ 35. Rxf1 c3 36. Rc1 c2 37. Kh2 Rd1 38. Rxc2 Nc5 39. Rd2 Nxa4 40. Rxd1 b5 41. Rxd6 b4 42. Ra6 b3 43. Rxa5 b2 44. Rxa4 b1=Q 45. Ra8 Qf5 46. Rxb8 Qe5+ 47. g3 Qxb8 48. Kg2 Qb6 49. Kg1 Qd4 50. Kg2 f5 51. Kg1 g5 52. Kg2 f4 53. h4 f3+ 54. Kg1 g4 55. Kh2 Qd1 56. h5 Qf1 0-1
+

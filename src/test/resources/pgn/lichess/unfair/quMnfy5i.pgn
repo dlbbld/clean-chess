@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/quMnfy5i"]
+[Date "2020.03.03"]
+[White "SpewWizard"]
+[Black "c5chess"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "07:34:19"]
+[WhiteElo "2361"]
+[BlackElo "2282"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B57"]
+[Opening "Sicilian Defense: Sozin, not Scheveningen"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 d6 6. Bc4 e5 7. Nf5 Bxf5 8. exf5 Be7 9. Bg5 d5 10. Bxf6 dxc4 11. Qxd8+ Rxd8 12. Bxe7 Kxe7 13. O-O Nd4 14. Rfe1 f6 15. Rac1 b5 16. Ne2 Nxe2+ 17. Rxe2 Rd5 18. Kf1 Rhd8 19. g3 a5 20. a3 b4 21. axb4 axb4 22. Re4 Rd1+ 23. Rxd1 Rxd1+ 24. Ke2 Rd4 25. f3 Rxe4+ 26. fxe4 Kd6 27. Ke3 Kc5 28. g4 b3 29. c3 Kd6 30. h4 Ke7 31. Kf3 Kf7 32. Kg3 h6 33. Kf3 Ke7 34. Ke3 Kf7 35. Kf3 Ke7 36. Kg2 Kf7 37. Kh1 Ke7 38. Kh2 Kf7 39. h5 Ke7 40. Kh3 Kf7 41. Kh4 Ke7 42. Kh3 Kf7 43. Kg2 Ke7 44. Kf1 Kf7 45. Ke1 Ke7 46. Ke2 Kf7 47. Kd2 Ke7 48. Ke3 Kf7 49. g5 Ke7 50. gxh6 gxh6 51. Kf3 Kf7 52. Kg3 1-0
+

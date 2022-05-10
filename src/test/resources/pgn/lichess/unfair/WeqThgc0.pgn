@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/WeqThgc0"]
+[Date "2020.03.06"]
+[White "SALEEM015"]
+[Black "Ramannovsky"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "16:34:37"]
+[WhiteElo "1653"]
+[BlackElo "1634"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. e3 Nc6 3. Nf3 e6 4. c4 Nf6 5. Nc3 Bd6 6. Bd2 e5 7. c5 exd4 8. exd4 Be7 9. Qe2 O-O 10. Be3 Bg4 11. Qd3 Re8 12. Be2 Bf8 13. O-O Ne4 14. h3 Bxf3 15. Bxf3 Nxc3 16. Qxc3 g6 17. Rfd1 Bg7 18. Qc2 Ne7 19. Bg5 Qd7 20. Bg4 f5 21. Bf3 Nc6 22. Be3 Ne7 23. Qb3 c6 24. Re1 Kf7 25. Rad1 Ng8 26. Bf4 Nf6 27. Be5 Ne4 28. Bxg7 Kxg7 29. Qc2 Re6 30. Bxe4 Rxe4 31. f3 Rxe1+ 32. Rxe1 Re8 33. Rxe8 Qxe8 34. Kf2 f4 35. Qe2 Qxe2+ 36. Kxe2 Kf6 37. h4 h6 38. Kf2 g5 39. g3 gxh4 40. gxh4 Kf5 41. Kg2 h5 42. Kh3 b6 43. b4 bxc5 44. bxc5 Ke6 45. a4 Kd7 46. a5 Kc7 47. a6 1-0
+

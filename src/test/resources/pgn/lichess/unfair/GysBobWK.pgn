@@ -1,0 +1,21 @@
+[Event "Hourly Bullet Arena"]
+[Site "https://lichess.org/GysBobWK"]
+[Date "2020.03.04"]
+[White "InkedChess"]
+[Black "jacesnace"]
+[Result "0-1"]
+[UTCDate "2020.03.04"]
+[UTCTime "21:03:12"]
+[WhiteElo "1751"]
+[BlackElo "1850"]
+[WhiteRatingDiff "-4"]
+[BlackRatingDiff "+4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A00"]
+[Opening "Hungarian Opening: Sicilian Invitation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. g3 c5 2. Bg2 Nc6 3. Nc3 e6 4. e3 d5 5. d4 Nf6 6. dxc5 Bxc5 7. Bd2 O-O 8. Nge2 a6 9. a3 b5 10. b4 Bb6 11. O-O Ne5 12. f4 Nc4 13. Rb1 Bxe3+ 14. Bxe3 Nxe3 15. Qe1 Nxf1 16. Bxf1 Ne4 17. Nxe4 dxe4 18. Rd1 Qb6+ 19. Kg2 f5 20. Nd4 Bb7 21. c3 e3+ 22. Kg1 Rad8 23. Qxe3 Rxd4 24. cxd4 Be4 25. Bd3 Qc6 26. Bxe4 fxe4 27. Rc1 Qd5 28. Rc5 Qb7 29. Kf2 Rc8 30. Rxc8+ Qxc8 31. Qxe4 Qd7 32. Ke3 Kf7 33. Qe5 Qd5 34. Qxd5 exd5 35. f5 Kf6 36. Kf4 g5+ 37. fxg6 hxg6 38. g4 g5+ 39. Kg3 Ke6 40. h4 Kf6 41. h5 Kg7 42. Kf3 Kh6 43. Ke3 Kg7 44. Kf3 Kf6 45. Kg3 Kg7 46. h6+ Kxh6 47. Kf3 Kg6 48. Kg3 Kf6 49. Kf3 Ke6 50. Kg3 Kd6 51. Kf3 Ke6 52. Ke3 Kd6 53. Kd3 Kc6 54. Ke3 Kb6 55. Kf3 a5 56. Kg3 axb4 57. axb4 Kc6 58. Kf3 Kd6 59. Ke3 Ke6 60. Kd3 Kd6 61. Ke3 Ke6 62. Kf2 Kd6 63. Kg2 Ke6 64. Kg3 Kd6 65. Kf2 Ke6 66. Kf3 Kf6 67. Ke2 Ke6 68. Kd2 Kf6 69. Kd3 Ke6 70. Ke3 Kf6 71. Kf3 Ke6 72. Ke2 Kf6 0-1
+

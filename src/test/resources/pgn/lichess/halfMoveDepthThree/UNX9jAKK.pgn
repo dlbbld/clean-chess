@@ -1,0 +1,22 @@
+[Event "Rated UltraBullet game"]
+[Site "https://lichess.org/UNX9jAKK"]
+[Date "2021.05.16"]
+[White "Ilmiron"]
+[Black "PsychooMAT"]
+[Result "1-0"]
+[UTCDate "2021.05.16"]
+[UTCTime "17:58:22"]
+[WhiteElo "1949"]
+[BlackElo "1978"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[WhiteTitle "FM"]
+[Variant "Standard"]
+[TimeControl "15+0"]
+[ECO "A01"]
+[Opening "Nimzo-Larsen Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. b3 e6 2. Bb2 d5 3. e3 Nf6 4. c4 Be7 5. cxd5 exd5 6. Nf3 O-O 7. Bb5 Bg4 8. Be2 Bxf3 9. Bxf3 c5 10. O-O Nc6 11. d4 cxd4 12. exd4 Ne4 13. Re1 f5 14. Bxe4 fxe4 15. f4 Bh4 16. g3 Bf6 17. Nd2 Nxd4 18. Nf1 Nf3+ 19. Qxf3 exf3 20. Bxf6 Qxf6 21. Nd2 f2+ 22. Kxf2 Rfe8 23. Nf3 Rxe1 24. Rxe1 h6 25. Re5 Qa6 26. Nd4 Qxa2+ 27. Kf3 Qa6 28. Ne2 Qg6 29. Kf2 Qa6 30. Re7 Qb6+ 31. Re3 Qxb3 32. Kf3 Qb6 33. Re7 d4 34. Re8+ Rxe8 35. Nxd4 Qc6+ 36. Nxc6 bxc6 37. f5 Rc8 38. f6 c5 39. f7+ Kxf7 40. Kg4 c4 41. Kh3 c3 42. Kh4 c2 43. Kh3 c1=Q 44. Kh4 Qc5 45. Kh3 Qg5 46. g4 Qc5 47. Kh4 Qc4 48. h3 Qd4 49. Kh5 Rc5+ 50. g5 Rc4 51. g6+ 1-0
+

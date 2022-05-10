@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/KbEG3yK3"]
+[Date "2020.03.03"]
+[White "Beetroot33"]
+[Black "Pantoms"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "16:21:29"]
+[WhiteElo "2094"]
+[BlackElo "2169"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-7"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B01"]
+[Opening "Scandinavian Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 d5 2. e5 f6 3. f4 Nc6 4. d4 e6 5. c3 g6 6. Nf3 Bg7 7. Bd3 Nge7 8. Na3 Nf5 9. Nc2 O-O 10. Ne3 fxe5 11. fxe5 Nxe3 12. Bxe3 Ne7 13. Qd2 c5 14. Bh6 cxd4 15. cxd4 Nf5 16. Bxg7 Kxg7 17. O-O a6 18. Ng5 h6 19. Nh3 b5 20. Nf4 Qh4 21. g3 Qg5 22. Bxf5 gxf5 23. Rad1 Bd7 24. Kg2 Rac8 25. h4 Qg4 26. Qe2 Qxe2+ 27. Nxe2 Rc2 28. Rf2 Rxb2 29. Nf4 Rxf2+ 30. Kxf2 Rc8 31. Rd2 Rc3 32. Nh5+ Kg6 33. Nf6 Bc6 34. h5+ Kg5 35. Kg2 f4 36. gxf4+ Kxf4 37. Rf2+ Kg5 38. Nh7+ Kxh5 39. Nf6+ Kg5 40. Nh7+ Kg6 41. Nf8+ Kg5 42. Nxe6+ Kg4 43. Nf4 Rg3+ 44. Kf1 Rf3 45. Ne2 Rxf2+ 46. Kxf2 Kf5 47. Ng3+ Kf4 48. Nh5+ Ke4 49. e6 Kxd4 50. Nf6 b4 51. e7 Kc3 52. Nxd5+ Bxd5 53. e8=Q Bxa2 54. Qe5+ Kb3 55. Qa5 Kb2 56. Qxa6 b3 57. Qb5 Kb1 58. Qe5 b2 59. Qe4+ Ka1 60. Qe1+ b1=Q 61. Qxb1+ 1-0
+

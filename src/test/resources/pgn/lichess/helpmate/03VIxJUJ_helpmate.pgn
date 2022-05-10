@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/03VIxJUJ"]
+[Date "2020.03.09"]
+[White "nomorefish"]
+[Black "Melkitsedek"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "15:46:44"]
+[WhiteElo "1734"]
+[BlackElo "1659"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D08"]
+[Opening "Queen's Gambit Declined: Albin Countergambit"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 d5 2. c4 e5 3. Nc3 dxc4 4. dxe5 Qxd1+ 5. Nxd1 Nc6 6. e3 Nxe5 7. f4 Nc6 8. Bxc4 f6 9. b3 a6 10. Bb2 Bd6 11. Nf3 Nge7 12. Nf2 Bd7 13. O-O h6 14. Rfd1 O-O-O 15. Nd4 Nxd4 16. Rxd4 Bc5 17. Rd2 Nc6 18. Bc3 Bxe3 19. Rd3 Bxf2+ 20. Kxf2 Na5 21. Rad1 Nxc4 22. bxc4 Rhe8 23. R3d2 Re7 24. Kf3 g5 25. fxg5 fxg5 26. g4 Bc6+ 27. Kg3 Rxd2 28. Rxd2 Re3+ 29. Kf2 Rxc3 30. Re2 Rxc4 31. Re6 Kd7 32. Rxh6 Rxg4 33. Rh5 Rg2+ 34. Kf1 Rxa2 35. Ke1 Ra1+ 36. Kd2 Bf3 37. Rxg5 Ra2+ 38. Kc3 Ra4 39. h4 Bc6 40. Rg3 Ra3+ 41. Kb2 Rxg3 42. h5 Rh3 43. h6 Rh5 44. Kc3 Rb5 45. h7 a5 46. h8=Q a4 47. Qd4+ Kc8 48. Qh8+ Kd7 49. Qh7+ Kd6 50. Qh6+ Kc5 51. Qg5+ Kb6 52. Qg1+ Ka6 53. Qe1 a3 54. Kc2 a2 55. Qa5+ Kxa5 56. Kd3 b6 57. Kc2 a1=Q 58. Kd3 Bh1 59. Ke2 c6 60. Kf2 Bg2 61. Kxg2 Qh1+ 62. Kxh1 Kb4 63. Kg1 Kc3 64. Kf1 Kd2 65. Kg2 c5 66. Kh1 Ke1 67. Kh2 Kf2 68. Kh1 Kg3 69. Kg1 Rb1# 0-1
+

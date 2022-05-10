@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/Sdz1yTzS"]
+[Date "2020.03.10"]
+[White "poczudak"]
+[Black "spasskyd4"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "13:56:50"]
+[WhiteElo "1208"]
+[BlackElo "1263"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B00"]
+[Opening "Pirc Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 d6 2. Bc4 Be6 3. b3 Bxc4 4. bxc4 c6 5. Bb2 c5 6. d4 Nc6 7. dxc5 dxc5 8. Qxd8+ Nxd8 9. Nd2 Nc6 10. O-O-O O-O-O 11. Nb3 e6 12. Nxc5 Bxc5 13. Bxg7 Nf6 14. Bxf6 Rhf8 15. Bxd8 Rxd8 16. Nf3 Rxd1+ 17. Rxd1 Bxf2 18. Ng5 Be3+ 19. Kb2 Bxg5 20. g3 Bf6+ 21. Kc1 h5 22. h4 e5 23. Rf1 Be7 24. Rxf7 Ba3+ 25. Kd2 Nd4 26. Rf8+ Kc7 27. Rf7+ Kb6 28. Rf6+ Kc7 29. Rh6 Bb4+ 30. Ke3 Nxc2+ 31. Kf3 Bc5 32. Rxh5 Nd4+ 33. Kg4 Bd6 34. Rh7+ Kc6 35. h5 Kc5 36. h6 Kxc4 37. Rd7 Nb5 38. Rxd6 Nxd6 39. h7 Nf7 40. h8=Q Nxh8 41. Kf5 Kd4 42. Kf6 Kd3 43. Kg7 Kxe4 44. Kxh8 Ke3 45. Kg7 Kf3 46. Kf7 e4 47. Ke7 e3 48. Kd7 e2 49. Kc7 e1=Q 50. Kxb7 Qc1 51. Kxa7 Qa3+ 52. Kb6 Kf2 53. Kc7 Ke1 54. Kd7 Qc3 55. Ke7 Qd3 56. Kf7 Qe4 57. Kg7 Qf5 58. Kh6 Qg6+ 0-1
+

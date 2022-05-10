@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/l8Wwo7if"]
+[Date "2020.03.08"]
+[White "Nevzet_Spahic"]
+[Black "Izba"]
+[Result "1-0"]
+[UTCDate "2020.03.08"]
+[UTCTime "18:39:17"]
+[WhiteElo "2060"]
+[BlackElo "2049"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "D16"]
+[Opening "Slav Defense: Alapin Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. c4 Nf6 3. Nc3 dxc4 4. Nf3 c6 5. a4 Nd5 6. e3 Nxc3 7. bxc3 Qa5 8. Bd2 Be6 9. Ne5 Nd7 10. Nxc4 Bxc4 11. Bxc4 e6 12. O-O Nb6 13. Bd3 Qg5 14. e4 Qg6 15. Qc2 Be7 16. f4 Bh4 17. f5 exf5 18. Rxf5 O-O 19. Raf1 Qe6 20. e5 g6 21. Bg5 Bxg5 22. Rxg5 Nd5 23. Qd2 Rad8 24. Bc4 b5 25. axb5 cxb5 26. Bxd5 Qxd5 27. Qf4 Qc6 28. Rg3 a5 29. h4 a4 30. h5 a3 31. hxg6 fxg6 32. Qh4 Rxf1+ 33. Kxf1 Rf8+ 34. Kg1 a2 35. Rh3 a1=Q+ 36. Kh2 Qd7 37. e6 Qc7+ 38. Rg3 Qaxc3 39. e7 Q3xg3+ 40. Qxg3 Qxg3+ 41. Kxg3 Re8 42. Kg4 Rxe7 43. Kf4 Kf7 44. d5 Kf6 45. d6 Rd7 46. Ke4 Rxd6 47. Ke3 Rd8 48. Ke2 b4 49. g4 b3 50. Ke3 b2 51. Ke4 b1=Q+ 52. Ke3 Qe1+ 53. Kf3 Rd3+ 54. Kf4 Qg3+ 55. Ke4 Qd6 56. g5+ 1-0
+

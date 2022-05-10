@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/7uopV5nZ"]
+[Date "2020.03.03"]
+[White "Jonnyboy10x10"]
+[Black "AxelMahone"]
+[Result "0-1"]
+[UTCDate "2020.03.03"]
+[UTCTime "19:34:15"]
+[WhiteElo "1701"]
+[BlackElo "1704"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C55"]
+[Opening "Italian Game: Two Knights Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. O-O h6 5. Nc3 Bc5 6. Re1 d6 7. d3 O-O 8. Be3 Bb6 9. Nd5 Nxd5 10. Bxd5 Nd4 11. Nxd4 Bxd4 12. Bxd4 exd4 13. c3 c5 14. cxd4 cxd4 15. Qf3 Be6 16. b3 Bxd5 17. exd5 Re8 18. Rac1 Qd7 19. h3 Re7 20. Rxe7 Qxe7 21. Qg3 Kh7 22. f4 f6 23. Re1 Qd7 24. Qh4 Re8 25. Rxe8 Qxe8 26. Qf2 Qe3 27. Qxe3 dxe3 28. Kf1 g5 29. fxg5 hxg5 30. Ke2 Kg6 31. Kxe3 Kf5 32. g4+ Ke5 33. d4+ Kxd5 34. Kd3 Ke6 35. Ke4 d5+ 36. Kd3 b6 37. a4 a6 38. b4 b5 39. axb5 axb5 40. Kc3 f5 41. Kd3 fxg4 42. hxg4 Kf6 43. Ke3 Kg6 44. Kf3 Kf6 45. Ke3 Ke7 46. Kf3 Kd6 47. Ke3 Kc7 48. Kf3 Kb6 49. Ke3 Ka7 50. Kd3 Kb8 51. Kc3 Kb7 52. Kb3 Kc7 53. Kc3 Kd8 54. Kb3 Ke7 55. Kc3 Kf8 56. Kd3 Kg7 57. Ke3 Kh8 58. Kf3 Kg8 0-1
+

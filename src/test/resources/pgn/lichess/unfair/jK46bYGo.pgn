@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/jK46bYGo"]
+[Date "2020.03.10"]
+[White "micocan"]
+[Black "ibaiondo"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "15:46:02"]
+[WhiteElo "1466"]
+[BlackElo "1512"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C25"]
+[Opening "Vienna Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nc3 d6 3. Nf3 Nc6 4. Bc4 Bg4 5. d3 Nd4 6. h3 Bxf3 7. gxf3 Nf6 8. Be3 Be7 9. Bxd4 exd4 10. Nd5 Nxd5 11. Bxd5 O-O 12. Bxb7 Rb8 13. Bd5 Rxb2 14. h4 Bxh4 15. a4 Rb8 16. e5 dxe5 17. Be4 f5 18. Bc6 Qf6 19. Kd2 Qxc6 20. Rxh4 Rb2 21. Rc1 Qxa4 22. Qh1 h6 23. Qg1 Qd7 24. Rxh6 Rbb8 25. Rh5 e4 26. fxe4 fxe4 27. dxe4 Qe6 28. f3 Qf6 29. Ke2 Qxf3+ 30. Kd2 Qxh5 31. Kd3 Rbd8 32. c3 Qf3+ 33. Kc4 Qf7+ 34. Kd3 Qb3 35. Qh1 dxc3+ 36. Ke3 c2+ 37. Ke2 Qb1 38. Rxb1 cxb1=Q 39. Qxb1 Rb8 40. Qh1 Rfe8 41. Ke3 Rb3+ 42. Kd4 Rb4+ 43. Kc5 Rbxe4 44. Kc6 R4e6+ 45. Kxc7 R6e7+ 46. Kd6 Rf7 47. Kd5 Re6 48. Qh8+ 1-0
+

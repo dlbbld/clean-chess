@@ -1,0 +1,21 @@
+[Event "Rated UltraBullet game"]
+[Site "https://lichess.org/xmpqlKFo"]
+[Date "2020.03.10"]
+[White "miniond"]
+[Black "Thetacticbot1234"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "20:08:11"]
+[WhiteElo "2293"]
+[BlackElo "2293"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "15+0"]
+[ECO "A00"]
+[Opening "Van't Kruijs Opening"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e3 c6 2. d4 d5 3. Nf3 Nf6 4. h3 Bg4 5. hxg4 Nxg4 6. Ne5 Nxe5 7. dxe5 Nd7 8. Rxh7 Rxh7 9. e6 fxe6 10. Bd3 Nf6 11. Bg6+ Kd7 12. Bxh7 Nxh7 13. e4 Nf6 14. exd5 Kc7 15. dxe6 Qxd1+ 16. Kxd1 Rd8+ 17. Ke1 Nd5 18. c3 Nf6 19. Bf4+ Kc8 20. Na3 Nd5 21. Bg3 g5 22. Nc4 Nf4 23. Bxf4 gxf4 24. Ne5 Bg7 25. Nd7 Bf6 26. Nxf6 exf6 27. Rd1 Re8 28. Rd2 Re7 29. Re2 Kc7 30. g3 Kd6 31. gxf4 Rxe6 32. Rxe6+ Kxe6 33. f5+ Kxf5 34. Ke2 Ke5 35. Kd3 c5 36. Kc4 f5 37. Kxc5 b6+ 38. Kc6 Kf4 39. Kb7 Kf3 40. Kxa7 Kxf2 41. Kxb6 f4 42. c4 f3 43. c5 Ke3 44. c6 f2 45. c7 f1=Q 46. c8=Q Qb1 47. Kb7 Kf2 48. Qc5+ Kf1 49. Kc7 Qxb2 50. Qb6 Qg7+ 51. Kb8 Qg6 52. Ka7 Qg7+ 53. Qb7 Qxb7+ 54. Kxb7 Ke1 55. a3 Kd2 56. a4 Kc3 57. a5 Kb4 58. a6 Ka3 59. a7 Ka2 60. a8=Q+ Kb1 61. Ka6 Ka2 62. Qh1 Kb3 63. Qa1 Kc4 64. Qb1 Kd5 65. Qa1 Kc6 66. Ka5 Kb7 67. Qd1 Ka8 68. Ka6 Kb8 69. Qd8# 1-0
+

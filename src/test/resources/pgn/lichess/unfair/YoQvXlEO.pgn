@@ -1,0 +1,21 @@
+[Event "Rated Rapid game"]
+[Site "https://lichess.org/YoQvXlEO"]
+[Date "2020.03.09"]
+[White "NYChessboy"]
+[Black "Ahmed5486"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "17:39:15"]
+[WhiteElo "1619"]
+[BlackElo "1630"]
+[WhiteRatingDiff "-9"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "600+0"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. e3 Qd6 3. Nc3 Bf5 4. Bd3 Bg6 5. Nf3 Nf6 6. Ne5 Bxd3 7. Qxd3 c5 8. Qb5+ Nc6 9. Qxb7 Nd8 10. Qxa8 cxd4 11. exd4 Ne4 12. O-O e6 13. Nc6 Be7 14. Nxd8 Bxd8 15. Qxa7 O-O 16. Qa3 Qb6 17. Nxe4 dxe4 18. Qe3 f5 19. b3 Bf6 20. c3 Qd8 21. Ba3 Rf7 22. Bc5 h6 23. a4 Bg5 24. Qe2 Qb8 25. Qb5 Qc7 26. a5 Qf4 27. a6 Qh4 28. Bd6 f4 29. a7 f3 30. a8=Q+ Kh7 31. Qbe8 Qg4 32. Bg3 Rf6 33. Qh8+ Kg6 34. Qae8+ Kf5 35. Qb5+ Kg6 36. Qbe8+ Kf5 37. Ra5+ e5 38. Qxe5+ Kg6 39. Qee8+ Rf7 40. Ra6+ Bf6 41. Rxf6+ Kxf6 42. Qd8+ Kg6 43. Qd6+ Rf6 44. Qe8+ Kg5 45. Qg8 Kh5 46. Qxf6 fxg2 47. Kxg2 e3 48. Kg1 exf2+ 49. Rxf2 Qd1+ 50. Kg2 Qg4 51. Qgxg7 Qe4+ 52. Rf3 Qe2+ 53. Kh3 Qf1+ 0-1
+

@@ -1,0 +1,24 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[SetUp "1"]
+[FEN "6k1/6p1/1q6/6n1/8/7N/1NPQP3/2K5 b - - 150 100"]
+
+100... Nxh3 101. Qd3 Qb5 102. Qc4+ Kh8 103. Qc5 Qb4 104. Qc6 Qb5 105. Qc7 Qb6
+106. Qc8+ Kh7 107. Qc7 Qb7 108. Qc8 Qb8 109. Kb1 Qb7 110. Qc7 Qb6 111. Qc6 Qb5
+112. Qc5 Qb4 113. Qc4 Qb3 114. Qc3 Qc4 115. Qd4 Qc5 116. Qd5 Qc6 117. Qd6 Qc7
+118. Qd7 Qc8 119. Qd8 Qd7 120. Qe7 Qd6 121. Qe6 Qd5 122. Qe5 Qd4 123. Qe4+ Kg8
+124. Qe3 Qd3 125. Qf4 Qe4 126. Qf5 Qe5 127. Qf6 Qe6 128. Qf7+ Kh7 129. Qf8 Qe8
+130. Ka1 Qe7 131. Qf7 Qe6 132. Qf6 Qe5 133. Qf5+ Kg8 134. Qf4 Qe4 135. Qf3 Qe3
+136. Qe4 Qd4 137. Qe5 Qd5 138. Qe6+ Kh7 139. Qe5 Qd6 140. Qe6 Qd7 141. Qe7 Qd8
+142. Qe8 Ng5 143. Qe7 Qd7 144. Qe6 Qd6 145. Qe5 Qd5 146. Qe4+ Kh6 147. Nc4 Qd4+
+148. Kb1 Qd3 149. Qe3 Qd2 150. Qd4 Qe3 151. Qd5 Qe5 152. Qd6+ Qe6 153. Qd7 Qe7
+154. Qd8 Qe8 155. Qc7 Qd7 156. Qb6+ Qc6 157. Qc5 Qd5 158. Qd4 Qe4 159. Qe3 Qf3
+160. Qf2 Qg2 161. Qg1 Qh1 162. Qf1 Qg1 163. Qe1 Qf1 164. Qd1 Qe1 165. Qc1 Qd1
+166. Kb2 Qd2 167. Qd1 Qe3 168. Qd2 Qf4 169. Qe3 Qe5+ 170. Qd4 Qd6 171. Qe5 Qc7
+172. Qd6+ Kh7 173. Qd8 Qe7 174. Qd6 Qe5+ 175. Qd4 Qe3 *
+

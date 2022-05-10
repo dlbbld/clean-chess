@@ -1,0 +1,26 @@
+[Event "Hengshui IMSA blitz (Women)"]
+[Site "Hengshui"]
+[Date "2019.05.18"]
+[Round "19"]
+[White "Krush, Irina"]
+[Black "Kosteniuk, Alexandra"]
+[Result "1-0"]
+[ECO "E44"]
+[WhiteElo "2422"]
+[BlackElo "2546"]
+[SetUp "1"]
+[FEN "6k1/2p2p1p/2Pp2p1/1P1P4/3bPr2/4n1N1/r3B2P/1R2R2K b - - 0 37"]
+[EventDate "2019.05.17"]
+[EventType "swiss (blitz)"]
+[EventRounds "22"]
+[EventCountry "CHN"]
+[SourceTitle "CBM 190 Extra"]
+[Source "ChessBase"]
+[SourceDate "2019.07.15"]
+[SourceVersion "1"]
+[SourceVersionDate "2019.07.15"]
+[SourceQuality "1"]
+
+37... Bb6 38. Ra1 Rc2 39. Rec1 Rd2 40. Ra6 Ng4 41. Bxg4 Rxg4 42. Rxb6 Rh4 43.
+Rb8+ Kg7 44. Nf1 Rb2 45. b6 g5 46. bxc7 g4 47. Rxb2 1-0
+

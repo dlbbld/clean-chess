@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/D4vIOthl"]
+[Date "2020.03.09"]
+[White "spcb"]
+[Black "docsumit"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "14:05:38"]
+[WhiteElo "1812"]
+[BlackElo "1807"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C41"]
+[Opening "Philidor Defense: Larsen Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 d6 3. d4 exd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be2 Nf6 7. O-O O-O 8. Bg5 Qe8 9. Bd3 a6 10. Qd2 c5 11. Nf3 b5 12. Bh6 b4 13. Bxg7 bxc3 14. Qxc3 Kxg7 15. Rfe1 Nd7 16. e5 dxe5 17. Nxe5 Nxe5 18. Rxe5 Be6 19. Bc4 Rc8 20. Bxe6 fxe6 21. Re3 Kg8 22. Rf3 Nd5 23. Rxf8+ Qxf8 24. Qc4 Qd6 25. a3 Nf4 26. Re1 Rd8 27. g3 Nh3+ 28. Kg2 Ng5 29. h4 Qc6+ 30. Kf1 Nf7 31. b4 Rd4 32. Qxc5 Qh1+ 33. Ke2 Re4+ 34. Kd3 Qxe1 35. Qc8+ Kg7 36. Qc3+ Ne5+ 37. Qxe5+ Rxe5 38. Kc4 Qe4+ 39. Kb3 Qd3+ 40. c3 Re2 41. Ka4 Rxf2 42. Ka5 Qxg3 43. Ka4 Qxh4 44. Kb3 Rf5 45. a4 Qxb4+ 46. cxb4 e5 47. Kc3 e4 48. Kd2 Rd5+ 49. Ke3 h5 50. Kxe4 Rf5 51. Ke3 Kf6 52. Kd3 g5 53. Kc4 g4 54. b5 axb5+ 55. axb5 g3 56. b6 g2 57. b7 Rb5 58. b8=Q Rb7 59. Qc7 Kg5 60. Qc5+ Kh4 61. Qe3 Rc7+ 62. Kd4 Rg7 63. Qe4+ Kg5 64. Qe5+ Kh6 65. Qxg7+ Kxg7 66. Kc3 h4 67. Kd2 h3 68. Kc1 h2 69. Kb1 g1=Q+ 70. Ka2 h1=Q 71. Kb3 Qa1 72. Kc4 Qab1 73. Kd4 Qa1+ 74. Ke3 Qab1 75. Kf2 Qbe1# 0-1
+

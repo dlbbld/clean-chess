@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/pFsUTatm"]
+[Date "2020.03.09"]
+[White "ERFAN_NASROLLAHI"]
+[Black "IlyaKrikun"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "12:04:16"]
+[WhiteElo "2343"]
+[BlackElo "2306"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D35"]
+[Opening "Queen's Gambit Declined: Harrwitz Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 Nf6 2. c4 e6 3. Nc3 d5 4. Bf4 Bd6 5. Bg5 c6 6. e3 Nbd7 7. c5 Bc7 8. f4 h6 9. Bh4 b6 10. b4 a5 11. a3 axb4 12. axb4 Rxa1 13. Qxa1 bxc5 14. bxc5 Bb7 15. Nf3 Qa8 16. Qb2 Ba6 17. Bxa6 Qxa6 18. Kf2 O-O 19. Ra1 Qc8 20. Ra7 Bb8 21. Rb7 Bc7 22. Bxf6 Nxf6 23. h3 Rd8 24. Ne5 Bxe5 25. fxe5 Ne4+ 26. Nxe4 dxe4 27. Rb6 f5 28. exf6 gxf6 29. Qe2 Qd7 30. Qg4+ Kh7 31. Qxe4+ f5 32. Qe5 Rg8 33. Rb8 Rxb8 34. Qxb8 Kg7 35. Qg3+ Kf8 36. Qg6 Qf7 37. Qxh6+ Ke8 38. g4 Kd7 39. gxf5 Qxf5+ 40. Qf4 Qxh3 41. Qd6+ Ke8 42. Qxc6+ Kf7 43. Qc7+ Kf6 44. Qf4+ Ke7 45. Qg3 Qh7 46. Qf4 Qc2+ 47. Kg3 Qc1 48. Qg5+ Kd7 49. Qg7+ Kc6 50. Qe5 Qg1+ 51. Kh4 Qh1+ 52. Kg4 Qg2+ 53. Kh5 Qh3+ 54. Kg6 Qg4+ 55. Kf7 Qf3+ 56. Kxe6 Qf7+ 0-1
+

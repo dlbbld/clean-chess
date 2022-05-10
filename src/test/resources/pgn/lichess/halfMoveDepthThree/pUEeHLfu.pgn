@@ -1,0 +1,21 @@
+[Event "Rated Rapid game"]
+[Site "https://lichess.org/pUEeHLfu"]
+[Date "2021.05.06"]
+[White "raymond993"]
+[Black "ChessDemoness"]
+[Result "0-1"]
+[UTCDate "2021.05.06"]
+[UTCTime "13:08:20"]
+[WhiteElo "1471"]
+[BlackElo "1403"]
+[WhiteRatingDiff "-69"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "600+0"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. f3 Bf5 3. Nc3 Nf6 4. g4 Bg6 5. g5 Ng8 6. e4 e6 7. e5 c5 8. Be3 b6 9. Nb5 Nc6 10. c3 cxd4 11. cxd4 Bb4+ 12. Kf2 Qd7 13. Na3 O-O-O 14. Nc2 Ba5 15. Bb5 Qc7 16. Ba6+ Kb8 17. Na3 Nge7 18. Nb5 Qd7 19. Rc1 f5 20. f4 Nb4 21. Rc7 Qe8 22. Rxa7 Nxa6 23. Rxa6 Qxb5 24. Qe2 Qxa6 25. Qxa6 Nc6 26. a3 Kc7 27. b4 Ra8 28. Qd3 Bxb4 29. axb4 Ra2+ 30. Kg3 Rha8 31. Bc1 Nxb4 32. Qc3+ Kb7 33. Nf3 Nc6 34. Nd2 R2a3 35. Bxa3 b5 36. Bd6 Ra4 37. Nb3 Rc4 38. Qd3 b4 39. Rc1 Rxc1 40. Nxc1 Kb6 41. Na2 b3 42. Qxb3+ Ka6 43. Nb4+ Nxb4 44. Qxb4 h5 45. Qa4+ Kb7 46. Qb5+ Kc8 47. Qe8+ Kb7 48. Qxg6 Kc6 49. Qxe6 Kb5 50. Qxd5+ Ka4 51. Qc6+ Kb3 52. Qb5+ Kc3 53. Qb4+ Kd3 54. Qb3+ Kxd4 55. Qb4+ Kd5 56. Qc5+ Ke6 57. Qc8+ Kd5 58. Qxf5 Kc4 59. Qe6+ Kd4 60. Qc8 g6 61. Qc5+ Ke4 62. Qc4+ Kf5 63. Qd3+ Ke6 64. Qxg6+ Kd5 65. Qf7+ Kd4 66. e6 Kd5 67. e7+ Kxd6 68. e8=Q Kc5 69. Qe5+ Kc6 70. Qfe6+ Kb7 71. Qb5+ Kc7 72. Qec6+ Kd8 73. Qbd5+ Ke7 74. Qce6+ Kf8 75. Qdf5+ Kg7 76. Qeg6+ Kh8 77. Qff7 h4+ 0-1
+

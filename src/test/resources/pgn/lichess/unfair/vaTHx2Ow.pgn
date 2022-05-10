@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/vaTHx2Ow"]
+[Date "2020.03.02"]
+[White "DiLe20"]
+[Black "Vahed_Parnakh"]
+[Result "1-0"]
+[UTCDate "2020.03.02"]
+[UTCTime "19:06:31"]
+[WhiteElo "2027"]
+[BlackElo "2018"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A51"]
+[Opening "Indian Game: Budapest Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 Nf6 2. c4 e5 3. g3 exd4 4. Qxd4 Nc6 5. Qd1 Bb4+ 6. Bd2 O-O 7. Bg2 Bxd2+ 8. Nxd2 d5 9. cxd5 Nxd5 10. Ngf3 Bg4 11. Nc4 Bxf3 12. Bxf3 Nf6 13. Qc2 Nd4 14. Qc3 Nxf3+ 15. Qxf3 Qd5 16. Qxd5 Nxd5 17. O-O b5 18. Ne5 f6 19. Nc6 Rac8 20. e3 Ra8 21. Rfd1 Nb6 22. Rd4 a5 23. Rad1 Rf7 24. Rd8+ Rxd8 25. Rxd8+ Rf8 26. Ne7+ Kf7 27. Rxf8+ Kxf8 28. Nc6 Kf7 29. Nd4 Nc4 30. Kf1 Nxb2 31. Nxb5 c5 32. Nc3 c4 33. Ke2 Nd3 34. f4 Ke6 35. e4 Kd6 36. Ke3 Kc5 37. Na4+ Kb4 38. Nb6 Nc1 39. Kd4 Nxa2 40. Nxc4 a4 41. Nb2 Nc3 42. Kd3 Nb5 43. Nc4 a3 44. Nxa3 Kxa3 45. e5 fxe5 46. fxe5 Kb4 47. Ke4 Kc5 48. Kf5 Kd5 49. g4 Nd4+ 50. Kf4 Ke6 51. Ke4 Nc6 52. h4 Nxe5 53. Kf4 Nd3+ 54. Kg5 Nc5 55. Kh5 Nd7 56. g5 g6+ 57. Kg4 Kf7 58. Kf4 Kg7 59. Ke4 Nf8 60. Kf4 Nd7 61. Ke4 Nc5+ 62. Kf4 Nb3 63. Kg4 Nd2 64. Kf4 Nc4 65. Kg4 Nd6 66. Kg3 Kf7 67. Kg4 Ke6 68. h5 gxh5+ 69. Kxh5 Kf7 70. Kh6 Kg8 71. g6 Ne4 72. gxh7+ Kh8 73. Kg6 Nf6 74. Kxf6 1-0
+

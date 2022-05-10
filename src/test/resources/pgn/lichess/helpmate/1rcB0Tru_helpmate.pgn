@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/1rcB0Tru"]
+[Date "2020.03.07"]
+[White "pemron"]
+[Black "dalila77"]
+[Result "0-1"]
+[UTCDate "2020.03.07"]
+[UTCTime "16:43:20"]
+[WhiteElo "1950"]
+[BlackElo "1935"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "D30"]
+[Opening "Queen's Gambit Declined"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 d5 2. c4 e6 3. Nf3 Bb4+ 4. Nc3 Ne7 5. a3 Bxc3+ 6. bxc3 dxc4 7. e4 b5 8. a4 c6 9. axb5 cxb5 10. Be2 O-O 11. Kf1 Bb7 12. Qc2 a5 13. g3 Nd7 14. Kg2 Nf6 15. e5 Nfd5 16. Rd1 Nf5 17. Kg1 h5 18. Ng5 h4 19. gxh4 g6 20. h5 gxh5 21. Bxh5 Bc6 22. Qe2 Nxc3 23. Qg4 Kh8 24. Re1 Qxd4 25. Nxf7+ Rxf7 26. Qxd4 Rg7+ 27. Bg4 Nxd4 28. h3 Nf3+ 29. Kf1 Nh2+ 30. Kg1 Nxg4 31. hxg4 Rxg4+ 32. Kh2 Rg2+ 33. Kh3 Rag8 34. Be3 Ne4 35. f3 Nf2+ 36. Bxf2 Rxf2 37. Rg1 Rxf3+ 38. Kh4 Rxg1 39. Rxg1 Rf4+ 40. Kh5 Rf5+ 41. Kh6 Rxe5 42. Rg8+ Kxg8 43. Kg6 c3 44. Kh6 c2 45. Kg6 c1=Q 46. Kf6 a4 47. Kxe5 a3 48. Kd4 a2 49. Ke5 a1=Q+ 50. Kxe6 Kg7 51. Ke7 Qf6# 0-1
+

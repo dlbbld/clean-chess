@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/49QwULSR"]
+[Date "2020.03.03"]
+[White "Miguelhuevero"]
+[Black "nimbawop"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "19:58:07"]
+[WhiteElo "1416"]
+[BlackElo "1428"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "120+1"]
+[ECO "B06"]
+[Opening "Modern Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 g6 2. Nf3 Bg7 3. Bc4 Nc6 4. Ng5 e6 5. d4 Nxd4 6. O-O b5 7. Bd3 c5 8. c3 c4 9. cxd4 cxd3 10. Qxd3 a6 11. Qf3 Nh6 12. e5 Rb8 13. Nc3 Bb7 14. Qd1 O-O 15. f4 Nf5 16. d5 h5 17. d6 Qb6+ 18. Kh1 Qc6 19. Rg1 Nh4 20. Nce4 Rfc8 21. Be3 Bh6 22. Rc1 Qd5 23. Rxc8+ Rxc8 24. Qxd5 Bxd5 25. Nf6+ Kg7 26. Nxd7 Bxg5 27. fxg5 Bxg2+ 28. Rxg2 Nxg2 29. Kxg2 Rd8 30. Nf6 a5 31. Bb6 Ra8 32. Bxa5 Rxa5 33. b4 Ra8 34. d7 Rd8 35. Kf2 Kf8 36. h4 Ke7 37. Ke3 Rxd7 38. Nxd7 Kxd7 39. Kd4 Kc6 40. Kc3 Kd5 41. Kb3 Kxe5 42. a4 bxa4+ 43. Kxa4 Kd5 44. b5 Kd6 45. Ka5 Kc7 46. Ka6 Kb8 47. b6 e5 48. Kb5 e4 49. Kc4 Kb7 50. Kd4 Kxb6 51. Kxe4 Kc6 52. Ke5 Kd7 53. Kf6 Ke8 54. Kg7 Ke7 55. Kg8 Ke6 56. Kg7 f5 57. gxf6 Kf5 58. f7 Kg4 59. f8=Q Kxh4 60. Qe7+ g5 61. Qf6 Kg4 62. Qg6 h4 63. Qe4+ Kh3 64. Qg2+ 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/UsN4NLQ4"]
+[Date "2020.03.02"]
+[White "senturk7"]
+[Black "Azduruh"]
+[Result "0-1"]
+[UTCDate "2020.03.02"]
+[UTCTime "08:50:54"]
+[WhiteElo "1391"]
+[BlackElo "1410"]
+[WhiteRatingDiff "-39"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B32"]
+[Opening "Sicilian Defense: Open"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Bf4 Nf6 5. Bd3 g6 6. Nxd4 Nxd4 7. Bb5 Nxb5 8. Nc3 Nxc3 9. bxc3 Bg7 10. O-O O-O 11. h3 d6 12. e5 dxe5 13. Be3 Qxd1 14. Rb1 Bf5 15. Rfxd1 Bxc2 16. Rbc1 Bxd1 17. Rxd1 Rad8 18. Rb1 Rd3 19. Rxb7 e4 20. Rxa7 Rxc3 21. Rxe7 Rd8 22. Ra7 Nd5 23. a4 Nf4 24. Bxf4 Rc1+ 25. Kh2 Rc2 26. a5 Rxf2 27. Bg3 Re2 28. a6 Be5 29. Re7 Bxg3+ 30. Kxg3 Re3+ 31. Kh2 Ra3 32. a7 Ra8 33. Rxe4 R3xa7 34. Rd4 Kg7 35. Rd5 Rd8 36. Rc5 Rad7 37. Rb5 Rd2 38. Rb4 Re2 39. Rg4 Rdd2 40. Rg3 f5 41. Rg5 Kf6 42. Rg3 h5 43. Rg5 Kxg5 44. Kh1 Rxg2 0-1
+

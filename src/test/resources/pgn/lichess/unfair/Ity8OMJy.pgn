@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/Ity8OMJy"]
+[Date "2020.03.06"]
+[White "busonchess2242"]
+[Black "spocks"]
+[Result "0-1"]
+[UTCDate "2020.03.06"]
+[UTCTime "13:30:31"]
+[WhiteElo "1799"]
+[BlackElo "1920"]
+[WhiteRatingDiff "-4"]
+[BlackRatingDiff "+4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Closed, Traditional"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nc3 Nc6 3. Nf3 d6 4. Bb5 a6 5. Bxc6+ bxc6 6. e5 Rb8 7. exd6 exd6 8. O-O Nf6 9. Re1+ Be6 10. d4 Be7 11. d5 cxd5 12. Bg5 d4 13. Ne4 Nxe4 14. Bxe7 Qxe7 15. Rxe4 O-O 16. b3 Qf6 17. Qe2 Rfe8 18. Re1 h6 19. Nd2 Bd7 20. Qd3 Bc6 21. Rxe8+ Rxe8 22. Rxe8+ Bxe8 23. g3 Bc6 24. h4 Bb5 25. Qe4 Qe5 26. Qxe5 dxe5 27. Nf3 e4 28. Ne5 d3 29. cxd3 exd3 30. Kf1 f6 31. Nc4 Kf7 32. Ke1 Ke6 33. Kd2 Bxc4 34. bxc4 Ke5 35. Kxd3 Kf5 36. Ke3 Ke5 37. f4+ Kf5 38. Kf3 g5 39. h5 g4+ 40. Ke3 Ke6 41. Ke4 f5+ 42. Kd3 Kd6 43. a4 Kc6 44. Kc3 Kb6 45. Kb3 Ka5 46. Ka3 Kb6 47. Kb3 a5 48. Ka3 Kc6 49. Kb3 Kd6 50. Kc3 Ke6 51. Kd3 Kf6 52. Ke3 Ke6 0-1
+

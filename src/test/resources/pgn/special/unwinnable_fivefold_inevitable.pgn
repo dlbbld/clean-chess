@@ -1,0 +1,13 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[SetUp "1"]
+[FEN "6Qk/8/2R3K1/8/8/8/8/8 b - - 0 3"]
+
+3... Kxg8 4. Kh6 Kh8 5. Kg6 Kg8 6. Kh6 Kh8 7. Kg6 Kg8 8. Kh6 Kh8 9. Kg6
+Kg8 10. Kh6 Kh8 11. Kg6 *
+

@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/sMv8Hh43"]
+[Date "2020.03.10"]
+[White "jugadordescac"]
+[Black "vladandk"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "16:36:41"]
+[WhiteElo "1853"]
+[BlackElo "1854"]
+[WhiteRatingDiff "+15"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A00"]
+[Opening "Valencia Opening"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d3 e5 2. Nd2 d5 3. g3 f5 4. Bg2 Nf6 5. c4 c6 6. cxd5 cxd5 7. Ngf3 Bd6 8. O-O Nc6 9. a3 O-O 10. Qc2 e4 11. dxe4 fxe4 12. Ne1 Qe8 13. Nb3 Be6 14. Be3 a6 15. Nd4 Rc8 16. Nxc6 bxc6 17. Rc1 Qg6 18. f3 exf3 19. Qxg6 hxg6 20. Nxf3 Rc7 21. Rc2 Rfc8 22. Rfc1 Ne4 23. Nd2 Nxd2 24. Bxd2 Bf5 25. Rc3 Kf7 26. Bf4 Ke6 27. Bxd6 Kxd6 28. Kf2 Be6 29. Bf3 c5 30. b4 cxb4 31. axb4 Rxc3 32. Ra1 R8c6 33. Ra5 Rb3 34. b5 Rxb5 35. Ra4 Rbc5 36. Rg4 Bf5 37. Rf4 Be4 38. Bxe4 dxe4 39. Rxe4 Rf5+ 40. Rf4 Rxf4+ 41. gxf4 a5 42. Kf3 a4 43. e3 a3 44. h4 a2 45. h5 a1=Q 46. hxg6 Ke6 47. Kg4 Kf6 48. Kf3 Qa3 49. Kg4 Rc4 50. Kh5 Qxe3 51. Kg4 Qxf4+ 52. Kh5 Rc5# 0-1
+

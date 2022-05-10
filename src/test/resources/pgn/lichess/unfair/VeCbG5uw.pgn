@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/VeCbG5uw"]
+[Date "2020.03.02"]
+[White "nahya"]
+[Black "SaravanaSS"]
+[Result "0-1"]
+[UTCDate "2020.03.02"]
+[UTCTime "22:45:54"]
+[WhiteElo "1282"]
+[BlackElo "1355"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "C40"]
+[Opening "King's Pawn Game: Busch-Gass Gambit"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Bc5 3. d3 Qf6 4. Be2 Nh6 5. h3 O-O 6. Be3 Bxe3 7. fxe3 d6 8. c3 Qg6 9. Nh4 Qg3+ 10. Kd2 Qxh4 11. Na3 Qg3 12. Qf1 Qg6 13. Qg1 Qe6 14. b3 d5 15. exd5 Qxd5 16. Nc4 Bf5 17. Rf1 e4 18. d4 b5 19. Nb2 c5 20. Rf2 cxd4 21. cxd4 a5 22. g4 Bg6 23. h4 a4 24. h5 axb3 25. axb3 Qxb3 26. hxg6 fxg6 27. Rxf8+ Kxf8 28. Qf1+ Nf7 29. Rxh7 Qxb2+ 30. Ke1 Qc1+ 31. Bd1 Qxe3+ 32. Be2 Qc3+ 33. Kf2 Qxd4+ 34. Kg2 Nc6 35. Rh8+ Ke7 36. Rxa8 Ng5 37. Qf8+ Ke6 38. Qe8+ Ne7 39. Ra6+ Ke5 40. Qxe7+ Kf4 41. Qc7+ Ke3 42. Ra3+ Kxe2 43. Ra2+ Ke3 44. Qc1+ Kd3 45. Rd2+ Ke3 46. Rxd4+ Kxd4 47. Qd1+ Ke3 48. Qc1+ Kd4 49. Qxg5 Kd3 50. Qxg6 Kd4 51. Qxg7+ Ke3 52. Qb7 Kf4 53. Qa7 e3 54. Qa5 e2 55. Qxb5 e1=Q 56. Qb2 Qg3+ 57. Kf1 Qf3+ 58. Qf2 Qxf2+ 0-1
+

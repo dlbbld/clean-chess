@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/xqzt1PdW"]
+[Date "2020.03.04"]
+[White "ElizaCassan"]
+[Black "sridharprabhu"]
+[Result "1-0"]
+[UTCDate "2020.03.04"]
+[UTCTime "06:47:40"]
+[WhiteElo "2020"]
+[BlackElo "1948"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Wing Gambit"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. b4 e6 3. a3 cxb4 4. axb4 Bxb4 5. c3 Be7 6. d4 Nf6 7. Nf3 d5 8. Bd3 dxe4 9. Bxe4 Nxe4 10. Qe2 Nd6 11. Bf4 Qc7 12. O-O Qc6 13. c4 Nxc4 14. Rc1 b5 15. Nbd2 O-O 16. Nxc4 bxc4 17. Rxc4 Qb5 18. Qc2 Ba6 19. Rc7 Bd8 20. Rc3 Bf6 21. Ne5 Nd7 22. h3 Nxe5 23. Bxe5 Bxe5 24. dxe5 Qxe5 25. Rxa6 Rad8 26. Ra1 Rd5 27. Rca3 Rfd8 28. Rxa7 Qh5 29. Qc7 Rd1+ 30. Rxd1 Rxd1+ 31. Kh2 h6 32. Ra8+ Kh7 33. Qc2+ Rd3 34. Qxd3+ Qg6 35. Qxg6+ Kxg6 36. Kg3 Kf6 37. Kf3 e5 38. Ke3 Kg6 39. g3 f6 40. f3 Kf5 41. Rg8 Kg6 42. Re8 Kf7 43. g4 Kxe8 44. Ke4 Kf7 45. Kf5 g6+ 46. Ke4 h5 47. h4 hxg4 48. fxg4 f5+ 49. gxf5 gxf5+ 50. Kxe5 Kg7 51. Kxf5 Kh6 52. Kg4 Kh7 53. h5 Kh8 54. Kg5 Kh7 55. h6 Kh8 56. Kg6 Kg8 57. Kf6 Kh8 58. h7 1-0
+

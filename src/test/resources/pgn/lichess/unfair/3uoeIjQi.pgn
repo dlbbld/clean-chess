@@ -1,0 +1,22 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/3uoeIjQi"]
+[Date "2020.03.10"]
+[White "PORNES"]
+[Black "TheRigos"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "18:51:45"]
+[WhiteElo "2723"]
+[BlackElo "2736"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+5"]
+[BlackTitle "FM"]
+[Variant "Standard"]
+[TimeControl "30+0"]
+[ECO "E60"]
+[Opening "Indian Game: King's Indian Variation, Fianchetto Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. g3 Nf6 2. Bg2 g6 3. c4 Bg7 4. d4 O-O 5. Nf3 d6 6. O-O Nc6 7. Nc3 Na5 8. b3 c5 9. dxc5 dxc5 10. Qc2 Bf5 11. e4 Bg4 12. Bb2 Nc6 13. h3 Bxf3 14. Bxf3 Nd4 15. Qd1 Qc8 16. Bg2 Rd8 17. Nd5 e6 18. Nxf6+ Bxf6 19. Bxd4 Bxd4 20. Rb1 a5 21. Qf3 e5 22. Rbd1 Ra6 23. Rd3 Re8 24. Rfd1 Ree6 25. Qe2 Rf6 26. Kh2 Rxf2 27. Qg4 Qxg4 28. hxg4 h5 29. gxh5 gxh5 30. R1d2 Raf6 31. Kh3 Kg7 32. a4 Rxd2 33. Rxd2 Rh6 34. Rd3 f6 35. Rf3 Rg6 36. Rf5 Rg5 37. Rxg5+ fxg5 38. g4 h4 39. Bf3 Kf6 40. Kg2 Ke6 41. Be2 Kd6 42. Bd3 Kd7 43. Be2 Kc6 44. Bd3 b5 45. Be2 bxa4 46. bxa4 Kb6 47. Bd3 Kc6 48. Be2 Kd6 49. Bd3 Ke6 50. Be2 Kf6 51. Bd3 Be3 52. Be2 Bf4 53. Bd3 Ke6 54. Be2 h3+ 55. Kxh3 Bg3 56. Bd3 Bh4 57. Be2 Kf6 58. Bd3 Kg6 59. Be2 Kf6 60. Bf3 Kg7 61. Be2 Kh6 62. Bf3 Kg7 63. Be2 Kh7 64. Bf3 Kh8 65. Be2 Kg8 66. Bf3 Kf8 67. Be2 Ke8 68. Bf3 Kd8 69. Be2 Kc8 70. Bf3 Kb8 71. Be2 Ka8 72. Bf3 Ka7 73. Be2 Kb7 74. Bf3 Kc7 75. Be2 Kd7 76. Bf3 Kd6 77. Be2 Kc6 78. Bf3 Kb7 79. Be2 Kb6 0-1
+

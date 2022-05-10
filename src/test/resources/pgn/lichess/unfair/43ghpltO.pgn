@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/43ghpltO"]
+[Date "2020.03.10"]
+[White "SISTEMATIC"]
+[Black "LordRNA"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "04:15:02"]
+[WhiteElo "1924"]
+[BlackElo "1933"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A00"]
+[Opening "Mieses Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d3 Nf6 2. c4 e5 3. Nc3 Bc5 4. Nf3 d6 5. e3 Bf5 6. d4 exd4 7. exd4 Bb4 8. Bd3 Bxc3+ 9. bxc3 Qd7 10. O-O O-O 11. h3 Nc6 12. Bg5 Bxd3 13. Qxd3 Ne7 14. Bxf6 gxf6 15. Nh4 Ng6 16. Nf5 Kh8 17. Rfe1 Rae8 18. g3 Rxe1+ 19. Rxe1 Re8 20. Rxe8+ Qxe8 21. Qe3 Qxe3 22. Nxe3 Ne7 23. g4 Kg7 24. f4 Kg6 25. Kg2 f5 26. g5 f6 27. h4 h5 28. Kf3 Kf7 29. Nf1 Ng6 30. Kg3 Ne7 31. Ne3 Kg6 32. gxf6 Kxf6 33. Kf3 Ng6 34. Kg3 Ke6 35. Nd5 c6 36. Ne3 Ne7 37. Kf3 Ng6 38. Kg3 Ne7 39. Nf1 Ng6 40. Nh2 d5 41. c5 Kf6 42. Nf3 Nf8 43. Ne5 Ng6 44. Nxg6 Kxg6 45. Kf3 Kf6 46. Ke3 Ke7 47. Kd3 Kd7 48. c4 Ke6 49. a4 a5 50. Kc3 Kd7 51. Kd3 Ke6 52. Kc3 Kf6 53. Kd3 Kf7 54. cxd5 cxd5 55. Kc3 Ke7 56. Kd3 Kd7 57. Kc3 Kc6 58. Kd3 b6 59. cxb6 Kxb6 60. Kc3 Ka6 61. Kd3 Ka7 62. Kc3 Ka8 63. Kd3 Kb8 64. Kc3 Kc8 65. Kd3 Kd8 66. Kc3 Ke8 67. Kd3 Kf8 68. Kc3 Kg8 69. Kd3 Kh8 70. Kc3 Kh7 0-1
+

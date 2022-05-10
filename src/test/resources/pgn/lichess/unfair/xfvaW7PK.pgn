@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/xfvaW7PK"]
+[Date "2020.03.09"]
+[White "huxl"]
+[Black "ksn555"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "17:09:02"]
+[WhiteElo "1682"]
+[BlackElo "1748"]
+[WhiteRatingDiff "-4"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Napoleon Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Qf3 Nc6 3. Bc4 Nf6 4. Nh3 Nd4 5. Qd3 d6 6. c3 Bxh3 7. gxh3 Nc6 8. Na3 a6 9. b4 Be7 10. b5 axb5 11. Nxb5 O-O 12. a4 Na7 13. Nxa7 Rxa7 14. Ba2 Rxa4 15. c4 Qa8 16. Qb3 Ra6 17. O-O b6 18. d3 Qa7 19. Be3 Ra8 20. c5 Rxa2 21. Rxa2 Qxa2 22. Qxa2 Rxa2 23. cxb6 cxb6 24. Bxb6 d5 25. exd5 Nxd5 26. Be3 Nxe3 27. fxe3 h6 28. d4 exd4 29. exd4 Bf6 30. Rd1 Ra4 31. d5 Kf8 32. d6 Ke8 33. d7+ Kd8 34. Kf2 Ra7 35. Kf3 Rxd7 36. Rxd7+ Kxd7 37. Ke4 Ke6 38. h4 g5 39. hxg5 Bxg5 40. Kf3 f6 41. Kg4 Ke5 42. h3 f5+ 43. Kh5 f4 44. Kg6 f3 45. h4 f2 46. hxg5 f1=Q 47. gxh6 Qg1+ 48. Kh7 Kf6 49. Kh8 Kf7 50. h7 Qg8+ 0-1
+

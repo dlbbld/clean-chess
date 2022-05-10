@@ -1,0 +1,21 @@
+[Event "Hourly SuperBlitz Arena"]
+[Site "https://lichess.org/tn1wmL3G"]
+[Date "2020.03.08"]
+[White "Ayazjamali"]
+[Black "Erukana"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "03:32:25"]
+[WhiteElo "1668"]
+[BlackElo "1873"]
+[WhiteRatingDiff "-3"]
+[BlackRatingDiff "+3"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B23"]
+[Opening "Sicilian Defense: Closed"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nc3 a6 3. f4 Nc6 4. Nf3 g6 5. Be2 Bg7 6. O-O e6 7. d3 Nge7 8. Qe1 O-O 9. Be3 b6 10. Qg3 d5 11. e5 d4 12. Bxd4 Nf5 13. Qh3 Ncxd4 14. Ng5 h6 15. Nf3 Nxc2 16. Rac1 Ncd4 17. Bd1 Bb7 18. Ne4 Bxe4 19. dxe4 Ne3 20. Re1 Nxd1 21. Rcxd1 Qc7 22. Nxd4 cxd4 23. Rxd4 Qc5 24. Rd1 Rad8 25. Qc3 Rxd4 26. Rxd4 Rc8 27. Kh1 Qxc3 28. bxc3 Rxc3 29. h3 Bf8 30. Rd8 Kg7 31. Rb8 Bc5 32. Ra8 a5 33. Rb8 h5 34. Kh2 h4 35. Rb7 Re3 36. f5 Rxe4 37. fxe6 Rxe5 38. Rxf7+ Kg8 39. Rf6 Kg7 40. Rf7+ Kh6 41. e7 Rxe7 42. Rf6 Re2 43. Re6 Rxe6 44. g4 Re2+ 45. Kh1 Rxa2 0-1
+

@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/wuHnMP2q"]
+[Date "2020.03.09"]
+[White "baficico"]
+[Black "alexlt01"]
+[Result "1-0"]
+[UTCDate "2020.03.09"]
+[UTCTime "21:45:27"]
+[WhiteElo "1263"]
+[BlackElo "1560"]
+[WhiteRatingDiff "+10"]
+[BlackRatingDiff "-9"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C21"]
+[Opening "Danish Gambit Accepted: Chigorin Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. d4 exd4 3. c3 dxc3 4. Bc4 cxb2 5. Bxb2 Qe7 6. Nf3 Qb4+ 7. Nfd2 Qxb2 8. Nb3 Bb4+ 9. N1d2 Bxd2+ 10. Nxd2 Nf6 11. Rb1 Qe5 12. Rb5 Qf4 13. O-O O-O 14. g3 Qh6 15. e5 a6 16. Rc5 b6 17. Rxc7 Nh5 18. e6 dxe6 19. Qf3 b5 20. Qxa8 bxc4 21. Qxb8 Qxd2 22. Rxc8 g6 23. Rxf8+ Kg7 24. Rg8+ Kh6 25. Rh8 Qd5 26. h4 Nf6 27. Qf8+ Kh5 28. Qxf7 Kg4 29. f3+ Kh3 30. Qxf6 Qd2 31. Qxe6+ Kxg3 32. Qe5+ Kh3 33. Qh2+ 1-0
+

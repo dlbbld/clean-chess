@@ -1,0 +1,21 @@
+[Event "Hourly SuperBlitz Arena"]
+[Site "https://lichess.org/M9Xic74G"]
+[Date "2020.03.05"]
+[White "ibukuno"]
+[Black "rashad14_14"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "21:06:32"]
+[WhiteElo "1959"]
+[BlackElo "2057"]
+[WhiteRatingDiff "-4"]
+[BlackRatingDiff "+4"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C57"]
+[Opening "Italian Game: Two Knights Defense, Traxler Counterattack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bc4 Nf6 4. Ng5 Bc5 5. O-O O-O 6. d3 h6 7. Nf3 d5 8. exd5 Nxd5 9. h3 Nd4 10. c3 Nxf3+ 11. Qxf3 Nf6 12. Nd2 c6 13. Ne4 Nxe4 14. dxe4 Be6 15. Rd1 Qe7 16. Be2 Rad8 17. Be3 Bxe3 18. Qxe3 Rxd1+ 19. Rxd1 Rd8 20. Rxd8+ Qxd8 21. a3 a6 22. Qd3 Qxd3 23. Bxd3 Kf8 24. h4 Ke7 25. Kf1 Kd6 26. Ke2 Kc5 27. Ke3 Bc4 28. g3 Bxd3 29. Kxd3 b5 30. b3 a5 31. f4 f6 32. fxe5 fxe5 33. b4+ axb4 34. axb4+ Kd6 35. Ke3 Ke6 36. Kf3 Kf6 37. g4 Kg6 38. Kg3 Kf6 39. Kf3 Ke6 40. Ke3 g6 41. Kf3 Kd6 42. Ke3 c5 43. Kd3 Kc6 44. Ke3 Kb6 45. Kd3 Kc7 46. Ke3 cxb4 47. cxb4 Kd7 48. Kd3 Ke6 49. Ke3 Kf6 50. Kf3 h5 51. g5+ Ke7 52. Ke3 Kd8 53. Kd3 Kc7 54. Kc3 Kb8 55. Kd3 Ka8 56. Ke3 Ka7 57. Kd3 Ka6 58. Ke3 Kb6 59. Kf3 Kc6 60. Kg3 Kd6 61. Kf3 Ke6 62. Ke3 Kf7 63. Kf3 Kg7 64. Kg3 Kh7 65. Kf3 Kh8 66. Kg3 Kg8 0-1
+

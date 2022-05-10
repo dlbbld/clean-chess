@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/GH6YBJIu"]
+[Date "2020.03.10"]
+[White "callofktulu"]
+[Black "Inute3"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "11:28:38"]
+[WhiteElo "1586"]
+[BlackElo "1575"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game: Mason Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. Bf4 e6 3. Nf3 Nf6 4. e3 Nc6 5. Bd3 Bd6 6. c3 Bxf4 7. e4 Qe7 8. e5 O-O 9. Nbd2 Bxd2+ 10. Qxd2 Ne4 11. Qe2 f5 12. Bxe4 fxe4 13. Nd2 Rf7 14. O-O Bd7 15. f3 Raf8 16. Rf2 Qg5 17. Raf1 Ne7 18. fxe4 Rxf2 19. Qxf2 Rxf2 20. Rxf2 Qxd2 21. Rxd2 Nc6 22. exd5 exd5 23. Rf2 Be6 24. h3 g6 25. b3 Kg7 26. g4 h6 27. Rf6 Ne7 28. Rxe6 Kf7 29. Rf6+ Kg7 30. Kf2 Ng8 31. Ke3 Nxf6 32. exf6+ Kxf6 33. Kf4 g5+ 34. Kf3 c6 35. a4 a6 36. c4 b5 37. c5 bxa4 38. bxa4 a5 39. Ke3 Ke6 40. Kd3 Kf6 41. Kc3 Ke6 42. Kd3 Kf6 43. Ke3 Ke6 44. Kf3 Kf6 45. Kg3 Ke6 46. h4 Kf6 47. hxg5+ hxg5 48. Kf3 Ke6 49. Ke3 Kf6 50. Kd3 Ke6 51. Kc3 Kf6 52. Kb3 1-0
+

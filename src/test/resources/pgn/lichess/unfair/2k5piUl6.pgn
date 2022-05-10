@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/2k5piUl6"]
+[Date "2020.03.03"]
+[White "paklihin"]
+[Black "Kivy"]
+[Result "0-1"]
+[UTCDate "2020.03.03"]
+[UTCTime "08:20:59"]
+[WhiteElo "1948"]
+[BlackElo "1932"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B08"]
+[Opening "Pirc Defense: Classical Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. Nf3 d6 2. e4 Nf6 3. Nc3 g6 4. d4 Bg7 5. Be3 O-O 6. Qd2 Ng4 7. h3 Nxe3 8. Qxe3 c5 9. O-O-O cxd4 10. Nxd4 Nc6 11. Nxc6 bxc6 12. h4 h5 13. Bc4 Qa5 14. Bb3 e5 15. g3 Be6 16. Kb1 Bxb3 17. axb3 Rfd8 18. f4 Qb6 19. Qxb6 axb6 20. f5 gxf5 21. exf5 d5 22. g4 e4 23. gxh5 d4 24. Nxe4 Re8 25. Rde1 c5 26. f6 Bh6 27. Rhg1+ Kh7 28. Ng5+ Bxg5 29. hxg5 Rg8 30. g6+ fxg6 31. hxg6+ Rxg6 32. Rh1+ Kg8 33. Ref1 Kf7 34. Rh7+ Kg8 35. Rb7 Rf8 36. Rxb6 Rg2 37. Rc6 Rf7 38. Rxc5 Rg6 39. Rc6 Kf8 40. Rd6 Kg8 41. Rd8+ Rf8 42. Rh1 Rxd8 43. f7+ Kxf7 44. Rf1+ Kg7 45. Rd1 Rf8 46. Rxd4 Rgf6 47. Ka2 Ra8+ 48. Ra4 Rf1 49. Rxa8 Ra1+ 0-1
+

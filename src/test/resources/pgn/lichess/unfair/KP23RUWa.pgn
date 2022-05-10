@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/KP23RUWa"]
+[Date "2020.03.05"]
+[White "ManuRafa"]
+[Black "RODRIGOROJASGARCIA1"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "18:16:53"]
+[WhiteElo "1807"]
+[BlackElo "1832"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A00"]
+[Opening "Hungarian Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. g3 b6 2. Bg2 c6 3. Nf3 d5 4. O-O e6 5. c4 Ne7 6. cxd5 exd5 7. d4 Be6 8. Nc3 Nd7 9. Ne5 Nxe5 10. dxe5 Qb8 11. f4 g6 12. e4 Qd8 13. exd5 Bxd5 14. Nxd5 Nxd5 15. Qb3 Bc5+ 16. Kh1 O-O 17. Rd1 h5 18. Bd2 Qc7 19. Bxd5 cxd5 20. Qxd5 Rad8 21. Qg2 h4 22. Bc3 hxg3 23. hxg3 Rxd1+ 24. Rxd1 Rd8 25. Rxd8+ Qxd8 26. Kh2 b5 27. e6 b4 28. exf7+ Kxf7 29. Qb7+ Be7 30. Bxb4 Qh8+ 31. Kg2 Qxb2+ 32. Kh3 Qxb4 33. Qd5+ Kf8 34. f5 g5 35. Qe6 g4+ 36. Kg2 Qd2+ 37. Kf1 Qd1+ 38. Kg2 Qf3+ 39. Kh2 Qf2+ 40. Kh1 Qf1+ 41. Kh2 Qf2+ 42. Kh1 Qxg3 43. Qc8+ Kg7 44. Qe6 Qf3+ 45. Kh2 g3+ 46. Kh3 g2+ 47. Kh2 Bg5 48. Qg6+ Kf8 49. Qxg5 Qf1 50. Qxg2 Qxf5 51. Qa8+ Kf7 52. Qxa7+ Kg6 53. Qg1+ Kf6 54. Qg3 Qf1 55. Qg2 Qa1 56. Qf3+ Ke6 57. Qb3+ Kf6 58. Kh3 Qh1+ 59. Kg4 Qg2+ 60. Kh5 Qh3+ 0-1
+

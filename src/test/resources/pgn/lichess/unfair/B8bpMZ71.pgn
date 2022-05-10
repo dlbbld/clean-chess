@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/B8bpMZ71"]
+[Date "2020.03.10"]
+[White "Slavisa88"]
+[Black "lyubooo"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "11:08:25"]
+[WhiteElo "1655"]
+[BlackElo "1634"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A00"]
+[Opening "Hungarian Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. g3 e5 2. Bg2 Qf6 3. b3 Bc5 4. e3 e4 5. Nc3 Nh6 6. Nxe4 Qxa1 7. Nxc5 Qf6 8. Nxb7 c6 9. Nc5 O-O 10. Ne4 Qf5 11. Qf3 Qe6 12. Ne2 f5 13. Ng5 Qg6 14. h4 d5 15. Nd4 Ng4 16. O-O Nd7 17. Bh3 Nde5 18. Qe2 c5 19. Ndf3 Nxf3+ 20. Qxf3 h6 21. Bxg4 fxg4 22. Qxd5+ Kh8 23. Ne4 Ba6 24. d3 Rad8 25. Qxc5 Qe8 26. Bb2 Kh7 27. Qc7 Rf7 28. Qc5 g5 29. hxg5 hxg5 30. Nxg5+ Kg6 31. Nxf7 Qxf7 32. Qc6+ Kg5 33. Qxa6 Rh8 34. Qb5+ Kg6 35. Bxh8 Qh7 36. Qc6+ Kg5 37. Bf6+ Kg6 38. Be5+ Kh5 39. Bf4 a5 40. Qc5+ Kg6 41. Qxa5 Qh3 42. Qg5+ Kf7 43. c4 Qh7 44. c5 Qxd3 45. Qxg4 Qe4 46. Qh5+ Ke6 47. Bg5 Qd5 48. Qh6+ Kf5 49. Qf6+ Ke4 50. Qf4+ Kd3 51. Qf6 Kc2 52. c6 Kd2 53. c7 Ke2 54. c8=Q Qg2+ 0-1
+

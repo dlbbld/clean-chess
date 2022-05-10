@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/6kfJPvsA"]
+[Date "2020.03.10"]
+[White "Chayetyo"]
+[Black "bacorr1515"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "20:11:10"]
+[WhiteElo "1729"]
+[BlackElo "1706"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A40"]
+[Opening "Horwitz Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 e6 2. c4 c5 3. Nc3 cxd4 4. Nb5 Nc6 5. Nxd4 Bb4+ 6. Bd2 Qa5 7. Nb3 Bxd2+ 8. Qxd2 Qxd2+ 9. Nxd2 Nb4 10. Kd1 Nf6 11. a3 Nc6 12. Ngf3 d5 13. cxd5 Nxd5 14. e3 b6 15. Bb5 Bb7 16. Ne5 Rc8 17. Rc1 Ne7 18. Nb3 f6 19. Nxc6 Bxc6 20. Bxc6+ Rxc6 21. Rxc6 Nxc6 22. Ke2 Ke7 23. Rc1 Rd8 24. Rxc6 Kd7 25. Rc1 Rc8 26. Rxc8 Kxc8 27. Nd4 Kd7 28. f4 e5 29. fxe5 fxe5 30. Nf5 g6 31. Ng3 Ke6 32. e4 Kd6 33. b4 a5 34. Kd2 Kc6 35. Kc3 Kb5 36. bxa5 Kxa5 37. Kb3 Kb5 38. Ne2 Kc5 39. Nc3 Kd4 40. Na4 b5 41. Nb6 Kxe4 42. Nd7 Kd3 43. Nc5+ Kd4 44. Ne6+ Kd5 45. Ng7 e4 46. Ne8 e3 47. Nf6+ Kd4 48. Ng4 Kd3 49. Nxe3 Kd2 50. Kb4 Kxe3 51. Kxb5 Kf2 52. a4 Kxg2 53. a5 Kxh2 54. a6 g5 55. a7 g4 56. a8=Q g3 57. Qh1+ 1-0
+

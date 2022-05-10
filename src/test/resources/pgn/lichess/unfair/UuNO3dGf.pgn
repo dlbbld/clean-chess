@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/UuNO3dGf"]
+[Date "2020.03.03"]
+[White "Prasozder"]
+[Black "albator2100"]
+[Result "0-1"]
+[UTCDate "2020.03.03"]
+[UTCTime "08:53:37"]
+[WhiteElo "1762"]
+[BlackElo "1820"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "B21"]
+[Opening "Sicilian Defense: McDonnell Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. f4 d5 3. exd5 Qxd5 4. Nc3 Qd4 5. Nf3 Qb4 6. d3 h6 7. Be2 Nf6 8. O-O Nc6 9. Ne5 Nd4 10. a3 Nxe2+ 11. Qxe2 Qb6 12. f5 h5 13. Bg5 Ng4 14. Nd5 Qd6 15. Nxg4 hxg4 16. c4 Qxh2+ 17. Kf2 Qd6 18. Bf4 Qd7 19. Nc7+ Kd8 20. Nxa8 Qxf5 21. Ke1 Qd7 22. Kd2 g6 23. Rae1 Qa4 24. Qe5 Qd7 25. Qc7+ Qxc7 26. Nxc7 Bh6 27. Nd5 e6 28. Nf6 Bxf4+ 29. Rxf4 Ke7 30. Ne4 f5 31. Nxc5 g5 32. Rf2 Kf6 33. Rfe2 b6 34. Nb3 Re8 35. Nd4 e5 36. Nc6 e4 37. dxe4 fxe4 38. Rxe4 Rh8 39. Rf1+ Kg6 40. Ne7+ Kg7 41. Nxc8 Rxc8 42. Rfe1 Rd8+ 43. Kc3 a5 44. Re7+ Kf6 45. Rb7 Kf5 46. Rxb6 Kf4 47. Rb5 Kg3 48. Rxg5 Rf8 49. Re3+ Kf4 50. Rge5 Rd8 51. c5 Rd1 52. c6 Rc1+ 53. Kd2 Rxc6 54. R5e4+ Kf5 55. Re5+ Kf4 56. Rxa5 Rd6+ 57. Ke2 Rc6 58. Ra4+ Kf5 59. Rc3 Rd6 60. Kf2 Kg5 61. b4 Kh4 62. b5 Rd2+ 63. Kg1 Rd1+ 64. Kf2 Rd2+ 65. Ke1 Rxg2 66. b6 Rg1+ 67. Kf2 Rg2+ 68. Kf1 Rb2 69. Rxg4+ Kxg4 70. Rc4+ Kf3 71. Rb4 Rb1+ 0-1
+

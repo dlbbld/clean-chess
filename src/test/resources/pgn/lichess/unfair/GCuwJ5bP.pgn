@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/GCuwJ5bP"]
+[Date "2020.03.05"]
+[White "nollat"]
+[Black "ThePerrons"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "08:41:05"]
+[WhiteElo "1716"]
+[BlackElo "1681"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A06"]
+[Opening "Zukertort Opening: Old Indian Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d3 d5 2. Nf3 Nc6 3. e4 dxe4 4. dxe4 Qxd1+ 5. Kxd1 e5 6. Bb5 Bd7 7. Bxc6 Bxc6 8. Nxe5 Bxe4 9. f3 Bf5 10. Bf4 Nf6 11. h3 Bd6 12. g4 Bxe5 13. Bxe5 Be6 14. Bxf6 gxf6 15. f4 Rg8 16. f5 Bd5 17. Re1+ Kd7 18. Nc3 Bc6 19. Ke2 Rae8+ 20. Kf2 Rxe1 21. Rxe1 Re8 22. Rd1+ Ke7 23. Nd5+ Bxd5 24. Rxd5 Rd8 25. Rd3 Rxd3 26. cxd3 Kd6 27. Ke3 Kd5 28. b3 Ke5 29. d4+ Kd5 30. Kd3 b6 31. a3 a5 32. b4 a4 33. b5 h6 34. h4 c6 35. g5 c5 36. gxh6 cxd4 37. h7 Ke5 38. h8=Q Kxf5 39. Qh5+ Ke6 40. Qxf7+ Kxf7 41. h5 Kg7 42. h6+ Kxh6 43. Kxd4 f5 44. Ke5 Kg5 45. Kd6 Kg4 46. Kc6 f4 47. Kxb6 f3 48. Ka5 f2 49. Kxa4 f1=Q 50. Ka5 Qb1 51. a4 Qxb5+ 0-1
+

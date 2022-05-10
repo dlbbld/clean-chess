@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/f7x3bSzh"]
+[Date "2020.03.08"]
+[White "SoraShiro11"]
+[Black "askyakti"]
+[Result "1-0"]
+[UTCDate "2020.03.08"]
+[UTCTime "14:16:53"]
+[WhiteElo "1854"]
+[BlackElo "1957"]
+[WhiteRatingDiff "-4"]
+[BlackRatingDiff "+4"]
+[Variant "Standard"]
+[TimeControl "30+0"]
+[ECO "A40"]
+[Opening "Modern Defense"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 g6 2. c3 Bg7 3. e4 Nf6 4. Bd2 e6 5. Na3 d5 6. Nc2 dxe4 7. f3 e3 8. Bxe3 c5 9. Bd2 cxd4 10. Nxd4 Nc6 11. Nge2 Nxd4 12. Nxd4 Bd7 13. Be2 Qc7 14. Nc2 O-O-O 15. O-O Nd5 16. c4 Nb6 17. b4 Kb8 18. c5 Nd5 19. Qc1 b6 20. g3 bxc5 21. bxc5 Qxc5+ 22. Kh1 Bd4 23. Bf4+ Nxf4 24. Qxf4+ e5 25. Rac1 Bc6 26. Qd2 Qd5 27. Qd1 Be3 28. Rb1+ Ka8 29. Na3 Qxd1 30. Rbxd1 Rxd1 31. Rxd1 e4 32. Rb1 exf3 33. Bb5 f2+ 34. Bxc6# 1-0
+

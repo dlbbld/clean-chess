@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/RvN1zpCB"]
+[Date "2020.03.08"]
+[White "Whostering"]
+[Black "efeozel"]
+[Result "1-0"]
+[UTCDate "2020.03.08"]
+[UTCTime "10:18:38"]
+[WhiteElo "1008"]
+[BlackElo "947"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Mieses-Kotroc Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 d5 2. exd5 Qxd5 3. c4 Qa5 4. Nf3 Bg4 5. h3 Bxf3 6. Qxf3 f6 7. Qxb7 Na6 8. Qxa8+ Kf7 9. Qxa7 e6 10. Nc3 Bb4 11. a3 Bxc3 12. dxc3 Qe5+ 13. Be2 Nc5 14. b4 Nb3 15. Rb1 Na1 16. Rxa1 Qxc3+ 17. Bd2 Qxa1+ 18. Bd1 Qc3 19. O-O Qxd2 20. Qxc7+ Kg6 21. g4 Kh6 22. g5+ Kxg5 23. h4+ Kxh4 24. f3 Kh3 25. Qh2+ 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/s2ZKBPfv"]
+[Date "2020.03.04"]
+[White "YouWin0505"]
+[Black "ce56ggp"]
+[Result "0-1"]
+[UTCDate "2020.03.04"]
+[UTCTime "14:25:03"]
+[WhiteElo "1783"]
+[BlackElo "1753"]
+[WhiteRatingDiff "-7"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "D02"]
+[Opening "Queen's Pawn Game: London System"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. Bf4 Nf6 3. Nf3 Bg4 4. e3 e6 5. Be2 Bd6 6. Ne5 Bxe2 7. Qxe2 O-O 8. O-O Nbd7 9. Nxd7 Qxd7 10. Bxd6 Qxd6 11. Nd2 h6 12. c4 c6 13. c5 Qc7 14. b4 a6 15. a4 Nh7 16. b5 f5 17. b6 Qe7 18. a5 Ng5 19. Nf3 Ne4 20. Ne5 Qg5 21. f3 Nf6 22. Qf2 f4 23. Rae1 Rad8 24. g3 Nh5 25. g4 Nf6 26. h4 fxe3 27. hxg5 exf2+ 28. Rxf2 hxg5 29. Ng6 Rf7 30. Rxe6 Re8 31. Rfe2 Rxe6 32. Rxe6 Kh7 33. Ne5 Kg8 34. Nxf7 Kxf7 35. Rd6 g6 36. Kg2 Ke7 37. Rxf6 Kxf6 38. Kg3 Ke6 39. f4 Kf6 40. fxg5+ Kxg5 41. Kf3 Kf6 42. Kg3 g5 43. Kf3 Kg6 44. Kg3 Kf6 45. Kf3 Ke6 46. Kg3 Ke7 47. Kf3 Kf7 48. Kg3 Kg7 49. Kf3 Kf7 50. Kg3 Ke8 51. Kf3 Kd8 52. Kg3 Kc8 53. Kf3 Kd7 0-1
+

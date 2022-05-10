@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/KQKPJzpe"]
+[Date "2020.03.07"]
+[White "BUR2"]
+[Black "Bnov"]
+[Result "1-0"]
+[UTCDate "2020.03.07"]
+[UTCTime "15:29:55"]
+[WhiteElo "1193"]
+[BlackElo "1123"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C23"]
+[Opening "Bishop's Opening: Khan Gambit"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Bc4 d5 3. Bxd5 Nf6 4. Bc4 Nxe4 5. Qf3 Nf6 6. g4 Be6 7. g5 Bxc4 8. gxf6 Qxf6 9. Qxf6 gxf6 10. Nf3 Nc6 11. d3 Be6 12. Be3 Bg4 13. Ng1 O-O-O 14. f3 Be6 15. Nd2 h5 16. O-O-O Bh6 17. Bxh6 Rxh6 18. Ne2 Rg6 19. Rhg1 Rxg1 20. Rxg1 Nd4 21. Nxd4 exd4 22. Re1 c6 23. Nc4 Bxc4 24. dxc4 f5 25. Rd1 f4 26. h3 h4 27. Re1 Kd7 28. Rg1 b5 29. Rf1 bxc4 30. Re1 a5 31. Rd1 f5 32. Rxd4+ Kc7 33. Rxd8 Kxd8 34. c3 Kd7 35. Kc2 Kd6 36. b3 Kd5 37. bxc4+ Kxc4 38. Kd2 c5 39. Kc2 Kd5 40. a3 a4 41. Kd1 Ke5 42. Kd2 c4 43. Kc2 Kd5 44. Kd2 Kc5 45. Ke1 Kb5 46. Kf1 Kb6 47. Kg1 Ka5 48. Kf2 1-0
+

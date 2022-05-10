@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/w5N015UJ"]
+[Date "2020.03.10"]
+[White "rionon"]
+[Black "EgilsDrups"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "18:51:41"]
+[WhiteElo "1672"]
+[BlackElo "1643"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Napoleon Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Qf3 Nc6 3. c3 Qf6 4. Qe2 d6 5. f3 Be6 6. h3 Qe7 7. g4 f6 8. h4 h6 9. d3 g6 10. Na3 Qg7 11. Nb5 Nge7 12. Nxc7+ Kd7 13. Nxe6 Kxe6 14. f4 exf4 15. e5 fxe5 16. Nf3 g5 17. hxg5 hxg5 18. d4 Rxh1 19. d5+ Nxd5 20. Bd2 Rxf1+ 21. Qxf1 Re8 22. Qc4 Qf7 23. O-O-O Ke7 24. Nxg5 Ne3 25. Qxf7+ Kd8 26. Ne6+ Rxe6 27. Qxe6 Be7 28. Bxe3 fxe3 29. Re1 Kc7 30. Rxe3 a5 31. b4 Bg5 32. Qf5 Bxe3+ 33. Kd1 Bb6 34. Ke2 Kb8 35. bxa5 Ka7 36. axb6+ Kxb6 37. Qe4 Ne7 38. g5 d5 39. Qxe5 Nc6 40. Qf6 d4 41. g6 dxc3 42. Kd3 c2 43. Kxc2 Kb5 44. g7 Nb4+ 45. Kb3 Nd5 46. g8=Q b6 47. Qgg7 Nxf6 48. Qg5+ Ka6 49. Qxf6 Ka5 50. Qxb6+ Kxb6 51. a3 Ka7 52. a4 Kb7 53. Kb4 Ka8 54. a5 Kb8 55. Kb5 Ka7 56. a6 Ka8 57. Kb6 Kb8 58. a7+ Ka8 59. Kc6 1-0
+

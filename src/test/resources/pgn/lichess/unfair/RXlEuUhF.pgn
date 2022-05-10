@@ -1,0 +1,21 @@
+[Event "Hourly SuperBlitz Arena"]
+[Site "https://lichess.org/RXlEuUhF"]
+[Date "2020.03.04"]
+[White "bigote22"]
+[Black "CrazyQ"]
+[Result "0-1"]
+[UTCDate "2020.03.04"]
+[UTCTime "19:55:24"]
+[WhiteElo "2161"]
+[BlackElo "2203"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B40"]
+[Opening "Sicilian Defense: Four Knights Variation, Exchange Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e6 2. Nf3 c5 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 Nf6 6. Nxc6 dxc6 7. Qxd8+ Kxd8 8. Bg5 Be7 9. O-O-O+ Ke8 10. Bc4 h6 11. Bxf6 Bxf6 12. Ne2 b5 13. Bb3 c5 14. c4 b4 15. f4 Bd7 16. e5 Be7 17. Ng3 Bc6 18. Rhe1 a5 19. Ne4 a4 20. Bc2 f5 21. exf6 gxf6 22. Nd6+ Kf8 23. Rxe6 Bxg2 24. Nf5 Re8 25. Rd7 Bh3 26. Rexe7 Rxe7 27. Nxe7 Bxd7 28. Ng6+ Kg8 29. Nxh8 Kxh8 30. Kd2 Kg7 31. Ke3 f5 32. h4 Kf6 33. Bd1 Bc6 34. b3 a3 35. Bc2 Ke6 36. h5 Bg2 37. Bd3 Bh3 38. Be2 Bg2 39. Bf3 Bf1 40. Be2 Bh3 41. Bf3 Bf1 42. Be2 Bg2 43. Bf3 Bxf3 44. Kxf3 Kf6 45. Ke3 Ke6 46. Kf3 Kd6 47. Ke3 Kd7 48. Kf3 Ke6 49. Ke3 Ke7 50. Kf3 Ke8 51. Ke3 Kd8 52. Kf3 Kc7 53. Ke3 Kb6 54. Kf3 Ka6 55. Ke3 Ka7 56. Kf3 Kb7 57. Ke3 Kc6 58. Kf3 Kc7 59. Ke3 Kd8 60. Kf3 Ke8 61. Ke3 Kf8 62. Kf3 Kg8 63. Ke3 Kh8 0-1
+

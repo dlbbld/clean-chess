@@ -1,0 +1,28 @@
+[Event "Hengshui IMSA rapid (Women)"]
+[Site "Hengshui"]
+[Date "2019.05.16"]
+[Round "10"]
+[White "Krush, Irina"]
+[Black "Kosteniuk, Alexandra"]
+[Result "0-1"]
+[ECO "A29"]
+[WhiteElo "2430"]
+[BlackElo "2498"]
+[SetUp "1"]
+[FEN "8/4k1p1/2p5/2N2P1p/3p4/P2P1K2/1P5b/8 w - - 0 43"]
+[EventDate "2019.05.14"]
+[EventType "swiss (rapid)"]
+[EventRounds "11"]
+[EventCountry "CHN"]
+[SourceTitle "CBM 190 Extra"]
+[Source "ChessBase"]
+[SourceDate "2019.07.15"]
+[SourceVersion "1"]
+[SourceVersionDate "2019.07.15"]
+[SourceQuality "1"]
+
+43. Ne6 Be5 44. Ke4 Kd6 45. b4 h4 46. Ng5 Bf6 47. Nh3 Kc7 48. a4 Be7 49. Kxd4
+Bxb4 50. Ke4 Kb6 51. Ng5 Be7 52. Ne6 Bf6 53. Kf4 Ka5 54. Nc5 Kb4 55. Ne4 Bd8
+56. d4 Kc4 57. Kg4 Kxd4 58. Nd6 c5 59. a5 Bxa5 60. Kxh4 c4 61. Kg5 c3 62. Nb5+
+Kc4 63. Na3+ Kb3 64. Nb5 Bd8+ 0-1
+

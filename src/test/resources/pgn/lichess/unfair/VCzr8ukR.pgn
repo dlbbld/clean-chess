@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/VCzr8ukR"]
+[Date "2020.03.09"]
+[White "uwebs"]
+[Black "o0o0ps"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "18:03:25"]
+[WhiteElo "1566"]
+[BlackElo "1561"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+11"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A00"]
+[Opening "Van Geet Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. Nc3 d5 2. e4 d4 3. Nce2 e5 4. Nf3 f6 5. Ng3 c5 6. Bc4 Nc6 7. O-O Nge7 8. d3 g6 9. a4 Bg7 10. Bd2 b6 11. Qe2 Kf8 12. h3 a6 13. Nh2 Ke8 14. f4 Kd7 15. fxe5 fxe5 16. Qg4+ Kc7 17. Be6 Qd6 18. Bxc8 Raxc8 19. Rf7 Rhg8 20. Raf1 Nb4 21. Bxb4 cxb4 22. b3 Kb8 23. R1f2 Rxc2 24. Rxc2 a5 25. Rc4 Ka7 26. Rxe7+ Qxe7 27. Nf3 Ka6 28. h4 h5 29. Qg5 Qxg5 30. Nxg5 Bf6 31. Ne6 Rb8 32. Nf5 Rb7 33. Nd6 Ka7 34. Rc7 Rxc7 35. Nxc7 Be7 36. g3 Bxd6 37. Ne8 Bc7 38. Nxc7 Kb7 39. Nd5 Kc6 40. Nxb6 Kxb6 41. Kf2 Kc5 42. g4 Kd6 43. gxh5 gxh5 0-1
+

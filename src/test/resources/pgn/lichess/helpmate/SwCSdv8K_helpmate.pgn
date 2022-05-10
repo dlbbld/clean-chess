@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/SwCSdv8K"]
+[Date "2020.03.11"]
+[White "Szym3k"]
+[Black "Soverign"]
+[Result "0-1"]
+[UTCDate "2020.03.11"]
+[UTCTime "06:41:57"]
+[WhiteElo "1290"]
+[BlackElo "1310"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Wayward Queen Attack"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. Qh5 Nc6 3. Bc4 g6 4. Qf3 Nf6 5. c3 Bg7 6. d3 O-O 7. Nh3 d6 8. Bg5 Be6 9. Bxe6 fxe6 10. Nd2 Qd7 11. Nc4 d5 12. exd5 exd5 13. Ne3 Rae8 14. O-O-O Ne4 15. dxe4 Rxf3 16. Rxd5 Qe6 17. gxf3 Bf6 18. Bxf6 Qxf6 19. Ng4 Qxf3 20. Rg1 Qxh3 21. Nf6+ Kf7 22. Nxe8 Kxe8 23. b4 Qxh2 24. Rgd1 Qf4+ 25. Kc2 Qxe4+ 26. Kb3 Qe2 27. b5 Na5+ 28. Kb4 Qxa2 29. Rd8+ Kf7 30. R8d7+ Kf6 31. Rxc7 Qb3+ 32. Kxa5 Qxd1 33. Rxb7 Qd8+ 34. Ka6 Qc8 35. Kxa7 Kf5 36. b6 Kf4 37. Rb8 Qd7+ 38. b7 Qa4+ 39. Kb6 Qb3+ 40. Ka7 Qa4+ 41. Kb6 Qb3+ 42. Kc7 Qxc3+ 43. Kd7 Qd2+ 44. Kc7 Qxf2 45. Rf8+ Kg3 46. Rxf2 Kxf2 47. b8=Q e4 48. Kc6 e3 49. Qf4+ Ke2 50. Qh2+ Kd3 51. Qxh7 e2 52. Qh3+ Kd2 53. Qh6+ Ke1 54. Qe3 Kf1 55. Kd5 Ke1 56. Kd4 Kd1 57. Kd3 e1=Q 58. Qxe1+ Kxe1 59. Kc2 g5 60. Kd3 g4 61. Ke4 g3 62. Kd3 g2 63. Kc2 g1=Q 64. Kb1 Kf1 65. Ka1 Kg2+ 66. Ka2 Kh3 67. Kb3 Qa1 68. Kc4 Qb1 69. Kd5 Qa1 70. Ke4 Qb1+ 71. Kf3 Kh4 72. Kg2 Qa2+ 73. Kh1 Kh3 74. Kg1 Qg2# 0-1
+

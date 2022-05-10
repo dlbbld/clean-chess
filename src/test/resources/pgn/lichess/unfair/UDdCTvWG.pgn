@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/UDdCTvWG"]
+[Date "2020.03.06"]
+[White "A_demola"]
+[Black "wertenwer"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "09:49:17"]
+[WhiteElo "2144"]
+[BlackElo "2016"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-3"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A16"]
+[Opening "English Opening: Anglo-Indian Defense, Queen's Knight Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. c4 Nf6 2. Nc3 g6 3. g3 Bg7 4. Bg2 d6 5. d3 Nbd7 6. Nf3 O-O 7. O-O c6 8. a3 Qc7 9. Rb1 a5 10. b4 axb4 11. axb4 b6 12. b5 c5 13. Nd2 Bb7 14. Bb2 Bxg2 15. Kxg2 e6 16. Nce4 d5 17. Nxf6+ Nxf6 18. Qc2 Ra2 19. Qb3 Rfa8 20. Ra1 Rxa1 21. Rxa1 Rxa1 22. Bxa1 Qa7 23. Bb2 Qa5 24. Nf3 dxc4 25. dxc4 Qb4 26. Qxb4 cxb4 27. Ne5 Nd7 28. Nxd7 Bxb2 29. Nxb6 Bd4 30. Na4 b3 31. e3 b2 32. Nxb2 Bxb2 33. b6 Be5 34. c5 Kf8 35. c6 Ke8 36. c7 Kd7 37. f4 Kc8 38. Kf3 Bd6 39. Ke4 f6 40. Kd4 Kb7 41. Kc4 e5 42. Kb5 exf4 43. exf4 Ba3 44. h3 Bc1 45. Kc5 Be3+ 46. Kd6 Bxb6 47. c8=Q+ Kxc8 48. Ke7 Bd4 49. Kf7 f5 50. Kg8 h6 51. Kh7 g5 52. Kxh6 gxf4 53. gxf4 Be3 54. Kg5 Bxf4+ 55. Kxf4 Kd7 56. Kxf5 Ke7 57. Kg6 Kf8 58. h4 Kg8 59. h5 Kh8 60. h6 Kg8 61. h7+ Kh8 62. Kf7 1-0
+

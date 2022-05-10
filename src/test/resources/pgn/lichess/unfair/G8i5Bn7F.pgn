@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/G8i5Bn7F"]
+[Date "2020.03.03"]
+[White "DanielMoreno"]
+[Black "Maxim_Igorevich"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "16:29:19"]
+[WhiteElo "2303"]
+[BlackElo "2383"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-7"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A01"]
+[Opening "Nimzo-Larsen Attack: Indian Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. b3 Nf6 2. Bb2 c5 3. e3 Nc6 4. Nf3 d5 5. Bb5 Bd7 6. Bxc6 Bxc6 7. Ne5 e6 8. d3 Bd6 9. Nd2 Qc7 10. f4 Rd8 11. Ndf3 d4 12. e4 Nd7 13. Nxd7 Qxd7 14. g3 O-O 15. O-O f5 16. e5 Bc7 17. Qe2 Bxf3 18. Rxf3 b5 19. a4 a6 20. axb5 axb5 21. Rff1 Bb6 22. Ra6 Qb7 23. Rfa1 c4 24. Qg2 Qxg2+ 25. Kxg2 Rb8 26. Ba3 Rfc8 27. Bd6 Rb7 28. bxc4 bxc4 29. Ra8 Rxa8 30. Rxa8+ Kf7 31. Rf8+ Kg6 32. Re8 Kf7 33. Rf8+ Kg6 34. Rc8 cxd3 35. cxd3 Ba5 36. Rc2 Rb3 37. h3 Rxd3 38. g4 Rd2+ 39. Rxd2 Bxd2 40. Kf3 fxg4+ 41. hxg4 h5 42. gxh5+ Kxh5 43. Ke4 Be3 44. f5 exf5+ 45. Kxf5 g6+ 46. Ke4 Kg5 47. Be7+ Kh6 48. e6 Bc1 49. Bf6 Ba3 50. Bxd4 Be7 51. Ke5 g5 52. Kf5 g4 53. Bf6 Bxf6 54. Kxf6 g3 55. e7 g2 56. e8=Q Kh7 57. Qh8+ 1-0
+

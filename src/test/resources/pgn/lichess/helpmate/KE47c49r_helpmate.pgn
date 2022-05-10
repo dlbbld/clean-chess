@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/KE47c49r"]
+[Date "2020.03.01"]
+[White "teymoori1984"]
+[Black "nint317"]
+[Result "0-1"]
+[UTCDate "2020.03.01"]
+[UTCTime "06:52:58"]
+[WhiteElo "1319"]
+[BlackElo "1321"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C43"]
+[Opening "Russian Game: Modern Attack, Symmetrical Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nf6 3. d4 Nxe4 4. Bc4 Nd6 5. Nxe5 Nxc4 6. Qe2 Nxe5 7. Qxe5+ Qe7 8. Qxe7+ Bxe7 9. Bf4 Bd6 10. Bxd6 cxd6 11. Nc3 O-O 12. O-O-O b6 13. Nb5 d5 14. Nc7 Bb7 15. Nxa8 Bxa8 16. Rhe1 Nc6 17. c4 dxc4 18. b3 cxb3 19. axb3 Na5 20. Kb2 Bd5 21. Re7 Nxb3 22. Rd3 Na5 23. Ra3 Nc4+ 24. Kb3 Nxa3+ 25. Kxa3 Bxg2 26. Rxd7 Bc6 27. Rxa7 Rd8 28. Kb4 h6 29. Kc3 Rd6 30. Kc4 Bd5+ 31. Kc3 Be6 32. Kd3 Rd5 33. f4 Rh5 34. h3 Rxh3+ 35. Ke4 Rh1 36. Ke5 Re1+ 37. Kd6 Rd1 38. Kc6 Rxd4 39. Kxb6 Kh7 40. Ra8 Rxf4 41. Kc7 Rf6 42. Kd6 Bf5+ 43. Kd5 Bg6 44. Kd4 Re6 45. Kc3 Re4 46. Rh8+ Kxh8 47. Kb2 h5 48. Kc1 h4 49. Kd1 h3 50. Kc1 h2 51. Kb1 h1=Q+ 52. Ka2 Kh7 53. Kb3 f6 54. Kc2 f5 55. Kd3 Re2 56. Kxe2 f4 57. Kf2 f3 58. Kg3 f2 59. Kxf2 Kh6 60. Kg3 Kg5 61. Kf2 Kg4 62. Ke3 Kh3 63. Kf2 Qf3+ 64. Kg1 Qe2 65. Kh1 Qd1# 0-1
+

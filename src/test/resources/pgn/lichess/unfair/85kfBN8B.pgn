@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/85kfBN8B"]
+[Date "2020.03.02"]
+[White "BISTONNNN"]
+[Black "Magnus_101_yes"]
+[Result "1-0"]
+[UTCDate "2020.03.02"]
+[UTCTime "12:27:55"]
+[WhiteElo "1794"]
+[BlackElo "1805"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A01"]
+[Opening "Nimzo-Larsen Attack: Modern Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. b3 e5 2. Bb2 d6 3. d4 Nc6 4. dxe5 Nxe5 5. Bxe5 dxe5 6. Qxd8+ Kxd8 7. Nf3 f6 8. e3 Be6 9. c4 Bd6 10. Be2 Ke7 11. O-O Nh6 12. Rd1 Rhd8 13. Nc3 Kf7 14. Ne4 Be7 15. Rxd8 Rxd8 16. Rd1 Rxd1+ 17. Bxd1 f5 18. Neg5+ Bxg5 19. Nxg5+ Kf6 20. Nxe6 Kxe6 21. Bc2 g5 22. e4 f4 23. f3 Nf7 24. Kf2 h6 25. Ke2 c5 26. Kd3 b6 27. a3 Nd6 28. b4 Nb7 29. Bb3 Kf6 30. a4 Kg6 31. b5 h5 32. h3 g4 33. Bd1 gxf3 34. Bxf3 h4 35. Kc3 Nd6 36. Kb3 Kg5 37. Kc3 Kf6 38. Kd3 Nb7 39. Bg4 Na5 40. Bf3 Nb3 41. Kc3 Nd4 42. Kd3 Ke6 43. Kc3 Kd6 44. Kd3 Kc7 45. Kc3 Kb7 46. Kd3 a6 47. Kc3 axb5 48. axb5 Kc7 49. Kd3 Ne6 50. Kc3 Ng5 51. Kd3 Nxf3 52. gxf3 Kd6 53. Kc3 Ke6 54. Kb3 Kd6 55. Kb2 Ke6 56. Kc2 Kd6 57. Kd2 Ke6 58. Ke2 Kd6 59. Kf2 Ke6 60. Kg2 Kd6 61. Kg1 Ke6 62. Kf1 Kd6 63. Ke1 Ke6 64. Kd1 Kd6 65. Kc1 Ke6 66. Kb1 Kd6 67. Ka1 Ke6 68. Ka2 Kd6 69. Ka3 Ke6 70. Ka4 Ke7 71. Kb3 Kd7 72. Kc2 Kd8 73. Kd1 Kd7 74. Ke2 Kc7 75. Kf1 1-0
+

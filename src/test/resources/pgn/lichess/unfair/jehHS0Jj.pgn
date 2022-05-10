@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/jehHS0Jj"]
+[Date "2020.03.08"]
+[White "JOSE0913"]
+[Black "emrecaslan"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "13:41:27"]
+[WhiteElo "1046"]
+[BlackElo "1029"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "B00"]
+[Opening "Nimzowitsch Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 Nc6 2. Qf3 Nd4 3. Qd3 e5 4. Nf3 c5 5. b4 Nxf3+ 6. gxf3 cxb4 7. a3 a5 8. axb4 b6 9. bxa5 bxa5 10. Ba3 Bxa3 11. Nxa3 Ba6 12. Qe3 Qb8 13. Bxa6 Rxa6 14. O-O Nf6 15. Rab1 Qd6 16. Nb5 Qb6 17. Na3 Qxe3 18. dxe3 Ra8 19. Nb5 O-O 20. Nc7 Rac8 21. Na6 Rxc2 22. Rbc1 Rfc8 23. Rxc2 Rxc2 24. Nb8 d6 25. Ra1 Rc5 26. Na6 Rb5 27. Nc7 Rc5 28. Na6 Rb5 29. Nc7 Rc5 30. Rb1 g6 31. Na6 Rc2 32. Rb8+ Kg7 33. Rb6 Ne8 34. f4 exf4 35. exf4 Re2 36. e5 dxe5 37. fxe5 Rxe5 38. Rc6 a4 39. Nc7 Nxc7 40. Rxc7 a3 41. Rc2 Re1+ 42. Kg2 Ra1 43. Kf3 a2 44. Ke3 Re1+ 45. Kd2 a1=Q 46. Kd3 Qa6+ 47. Rc4 Qa3+ 48. Kd4 Rd1+ 49. Ke5 Re1+ 50. Re4 Rxe4+ 51. Kxe4 Qa4+ 52. Kd5 f5 53. Ke5 h5 54. f4 g5 55. fxg5 h4 56. h3 Qa1+ 57. Kxf5 Qf1+ 58. Kg4 Qd1+ 59. Kxh4 Qd4+ 60. Kh5 Qd8 61. Kh4 Qd4+ 62. Kh5 Qd1+ 63. Kh4 Qd5 64. Kh5 Qxg5+ 0-1
+

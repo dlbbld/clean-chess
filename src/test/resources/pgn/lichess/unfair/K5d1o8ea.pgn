@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/K5d1o8ea"]
+[Date "2020.03.08"]
+[White "sermetto"]
+[Black "Lucsmzn"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "15:25:08"]
+[WhiteElo "1568"]
+[BlackElo "1581"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B22"]
+[Opening "Sicilian Defense: Alapin Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. c3 Nc6 3. Qb3 e6 4. Bc4 Nf6 5. f4 d5 6. exd5 Nxd5 7. Bxd5 exd5 8. Ne2 c4 9. Qc2 Be7 10. f5 O-O 11. Ng3 Re8 12. O-O Bf6 13. Kh1 d4 14. d3 dxc3 15. bxc3 cxd3 16. Qd2 Re2 17. Nxe2 dxe2 18. Qxd8+ Bxd8 19. Re1 Bb6 20. Rxe2 Bxf5 21. Nd2 Nd8 22. Bb2 Kf8 23. Rae1 Ne6 24. Nf3 Re8 25. Nd4 Bxd4 26. cxd4 Nc7 27. d5 Bd7 28. Re3 Nxd5 29. Bxg7+ Kxg7 30. Rxe8 Bxe8 31. Rxe8 Nf4 32. Re7 Nd3 33. Rxb7 Nb4 34. Kg1 Nxa2 35. Rxa7 Nc3 36. Rc7 Ne4 37. Rc4 Nd2 38. Rd4 Nf3+ 39. gxf3 f6 40. Kf2 Kg6 41. Rg4+ Kf5 42. h4 h5 43. Rg3 Kf4 44. Kg2 f5 45. Rh3 Ke3 46. Rh2 f4 47. Kf1 Kxf3 48. Rf2+ Kg4 49. Ra2 Kxh4 50. Ra4 Kg4 51. Rxf4+ Kxf4 52. Kg2 Kg4 53. Kh2 h4 54. Kh1 h3 55. Kh2 Kh4 56. Kh1 Kg3 57. Kg1 Kf3 58. Kh1 Kg3 59. Kg1 h2+ 60. Kh1 Kf2 0-1
+

@@ -1,0 +1,21 @@
+[Event "Hourly Bullet Arena"]
+[Site "https://lichess.org/0xMzcUDT"]
+[Date "2020.03.06"]
+[White "rP9I3HbIe_TpycbI"]
+[Black "AmatoareFlory"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "21:19:54"]
+[WhiteElo "2251"]
+[BlackElo "2137"]
+[WhiteRatingDiff "-8"]
+[BlackRatingDiff "+8"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A03"]
+[Opening "Bird Opening: Dutch Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. f4 d5 2. e3 e6 3. Nf3 Nf6 4. g3 Bd6 5. Bg2 Bd7 6. O-O Qe7 7. h3 Nc6 8. d3 O-O-O 9. g4 h5 10. g5 Ng4 11. hxg4 hxg4 12. Nd4 f5 13. Qe1 g6 14. Qg3 Nxd4 15. exd4 Qh7 16. Nc3 e5 17. dxe5 Bc5+ 18. Be3 Bxe3+ 19. Qxe3 Qh2+ 20. Kf2 g3+ 21. Qxg3 Qh7 22. Rh1 Qe7 23. Rxh8 Rxh8 24. Nxd5 Qc5+ 25. Ne3 Bc6 26. Bxc6 Qxc6 27. Rg1 a5 28. Rg2 a4 29. Rh2 Rd8 30. Rh6 Qb6 31. b3 a3 32. Ke2 Qc5 33. Nc4 b5 34. Ne3 b4 35. Rxg6 c6 36. Rf6 Rh8 37. Rxf5 Qc3 38. g6 Qb2 39. g7 Rg8 40. Rf8+ Kb7 41. Rxg8 Qxa2 42. Rb8+ Kxb8 43. g8=Q+ Kb7 44. Q3g7+ Kb6 45. Qb8+ Kc5 46. Qe7+ Kd4 47. Qb6+ Kc3 48. Qec5+ Kb2 49. Qd4+ Kb1 50. Nd1 Qxc2+ 51. Kf3 Qxd1+ 52. Ke4 a2 53. Kf5 a1=Q 54. Qbc5 Qxd4 55. Qxd4 Qc2 56. Qe4 Qxb3 57. e6 Qc2 58. Qe5 b3 59. Kf6 b2 60. Ke7 Qc5+ 61. Qxc5 Ka1 62. Qe5 Ka2 63. Qc5 b1=Q 64. Qxc6 Qb4+ 65. Kd7 Qd4+ 66. Kc8 Qa7 67. Qc7 Qxc7+ 68. Kxc7 Ka1 69. d4 Ka2 70. d5 Ka3 71. f5 Ka4 72. d6 Ka3 73. f6 Ka2 74. d7 Ka1 75. e7 Kb1 76. f7 Ka1 77. d8=Q Kb1 78. e8=Q Ka1 79. f8=Q Kb1 80. Kb6 Ka1 81. Ka6 Ka2 82. Qd2+ Kb3 83. Qd1+ Kc4 84. Qa1 Kd5 85. Qee1 Kc6 86. Ka5 Kb7 87. Qf4 Ka8 88. Kb6# 1-0
+

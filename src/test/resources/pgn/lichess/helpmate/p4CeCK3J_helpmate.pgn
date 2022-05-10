@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/p4CeCK3J"]
+[Date "2020.03.01"]
+[White "Dragoneer"]
+[Black "Uli001"]
+[Result "1-0"]
+[UTCDate "2020.03.01"]
+[UTCTime "18:19:09"]
+[WhiteElo "2357"]
+[BlackElo "2428"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B34"]
+[Opening "Sicilian Defense: Accelerated Dragon, Modern Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 Nc6 3. d4 cxd4 4. Nxd4 g6 5. Nc3 Bg7 6. Be3 Nf6 7. Nxc6 bxc6 8. e5 Ng8 9. Bd4 Nh6 10. e6 O-O 11. Bxg7 Kxg7 12. Qd4+ f6 13. exd7 Qxd7 14. O-O-O Qxd4 15. Rxd4 Nf5 16. Ra4 e5 17. Ne4 Be6 18. Nc5 Bd5 19. f3 Rf7 20. Ba6 Re7 21. Bb7 Rb8 22. Rxa7 Nd4 23. a4 Ne6 24. Nxe6+ Bxe6 25. Rd1 Rexb7 26. Rxb7+ Rxb7 27. b3 Kf7 28. Rd8 Ke7 29. Rh8 h5 30. Rh7+ Bf7 31. g4 hxg4 32. fxg4 Rd7 33. h4 Rd4 34. h5 Rxg4 35. h6 Rh4 36. a5 g5 37. a6 Rh1+ 38. Kb2 c5 39. a7 Kf8 40. a8=Q+ Be8 41. Qxh1 Kg8 42. Qd5+ Kxh7 43. Qe6 Kg6 44. Qxe8+ Kf5 45. h7 Kf4 46. h8=Q g4 47. Qh7 Kf3 48. Qhg6 g3 49. Qxf6+ Kg2 50. Qfxe5 Kh1 51. Qe4+ g2 52. Qe3 g1=Q 53. Qxc5 Qa1+ 54. Kxa1 Kh2 55. c3 Kg2 56. b4 Kf3 57. Qa4 Ke4 58. Qg1 Kd5 59. Qad1+ Kc6 60. c4 Kb7 61. b5 Ka8 62. b6 Kb8 63. b7 Kc7 64. b8=Q+ Kxb8 65. c5 Ka8 66. c6 Kb8 67. c7+ Kc8 68. Ka2 Kb7 69. c8=Q+ Kxc8 70. Ka3 Kb7 71. Qa1 Ka8 72. Ka4 Kb8 73. Ka5 Kc8 74. Ka6 Kb8 75. Qab1+ Ka8 76. Qb7# 1-0
+

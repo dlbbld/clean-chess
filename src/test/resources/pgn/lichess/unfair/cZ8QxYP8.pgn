@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/cZ8QxYP8"]
+[Date "2020.03.07"]
+[White "YESMPLUS"]
+[Black "AlphaFishCarlsen"]
+[Result "0-1"]
+[UTCDate "2020.03.07"]
+[UTCTime "08:53:47"]
+[WhiteElo "600"]
+[BlackElo "882"]
+[WhiteRatingDiff "+0"]
+[BlackRatingDiff "+3"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A00"]
+[Opening "Ware Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. a4 e5 2. a5 Qf6 3. a6 Bc5 4. axb7 d6 5. bxa8=Q c6 6. Qxb8 Nh6 7. Qxc8+ Ke7 8. Qxh8 Kd7 9. Qxh7 Kc7 10. Qxh6 Kb7 11. Qxg7 Kb6 12. Qxf7 Kb5 13. Qxa7 Kb4 14. Qc7 Kc4 15. Qxc6 Kd4 16. Qxd6+ Kc4 17. Qxe5 Kb5 18. Qe8+ Qc6 19. Qxc6+ Kxc6 20. Ra6+ Kb5 21. Ra5+ Kxa5 22. h4 Bxf2+ 0-1
+

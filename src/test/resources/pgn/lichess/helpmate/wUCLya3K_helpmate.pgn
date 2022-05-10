@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/wUCLya3K"]
+[Date "2020.03.09"]
+[White "BRAHIMIBRAHIMI"]
+[Black "Ayushreeansh"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "14:35:07"]
+[WhiteElo "1771"]
+[BlackElo "1693"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C20"]
+[Opening "King's Pawn Game: Leonardis Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. d3 Nc6 3. c3 Nf6 4. Ne2 Bc5 5. Ng3 d5 6. Qc2 dxe4 7. dxe4 Ng4 8. f3 Nf2 9. Nf5 Bxf5 10. exf5 Nxh1 11. Bc4 Qh4+ 12. g3 Qxc4 13. Nd2 Bf2+ 14. Kd1 O-O-O 15. Qe4 Qxe4 16. fxe4 Be3 17. Kc2 Bxd2 18. Bxd2 Nf2 19. Re1 Ng4 20. h4 Nh2 21. Re2 Nf3 22. Be3 g6 23. f6 Rd6 24. Bg5 Rhd8 25. a3 Rd2+ 26. Rxd2 Rxd2+ 27. Bxd2 Nxd2 28. Kxd2 Kd7 29. g4 Ke6 30. g5 Na5 31. Kd3 Nb3 32. Ke3 Nc1 33. Kf3 Nd3 34. b3 Nc1 35. b4 Nd3 36. Ke3 Nb2 37. Kf3 b6 38. Kg4 c5 39. bxc5 bxc5 40. h5 Na4 41. hxg6 hxg6 42. c4 Nb2 43. Kf3 Nxc4 44. a4 Na3 45. Ke3 c4 46. Kd2 a6 47. Kc3 Kd6 48. Kb4 Nc2+ 49. Kc3 Ne1 50. Kxc4 Ng2 51. a5 Nf4 52. Kb4 Nh3 53. Kc4 Nxg5 54. Kd3 Nxe4 55. Kxe4 Ke6 56. Kd3 Kxf6 57. Kc4 Kf5 58. Kc5 Kf4 59. Kb6 Kf3 60. Kxa6 e4 61. Kb6 e3 62. a6 e2 63. a7 e1=Q 64. a8=Q+ Ke2 65. Qe8+ Kd1 66. Qd7+ Qd2 67. Qxd2+ Kxd2 68. Ka5 g5 69. Kb4 g4 70. Kc5 g3 71. Kb4 g2 72. Ka3 g1=Q 73. Ka2 Ke1 74. Ka1 Kf1 75. Kb1 f6 76. Kc1 f5 77. Kd1 Kg2+ 78. Kc2 Kh3 79. Kd3 f4 80. Ke2 f3+ 81. Kd3 f2 82. Kc2 f1=Q 83. Kd2 Qa1 84. Ke2 Qac1 85. Kf3 Qce3# 0-1
+

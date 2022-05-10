@@ -1,0 +1,32 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2022.03.02"]
+[Round "-"]
+[White "Gwendolus"]
+[Black "danielbaechli"]
+[Result "1/2-1/2"]
+[CurrentPosition "2k1r3/1p6/7R/3p4/1P1Bn3/2P2K2/P7/8 b - -"]
+[Timezone "UTC"]
+[ECO "C02"]
+[ECOUrl "https://www.chess.com/openings/French-Defense-Advance-Paulsen-Euwe-Variation"]
+[UTCDate "2022.03.02"]
+[UTCTime "23:59:01"]
+[WhiteElo "1193"]
+[BlackElo "1227"]
+[TimeControl "300"]
+[Termination "Game drawn by repetition"]
+[StartTime "23:59:01"]
+[EndDate "2022.03.03"]
+[EndTime "00:09:10"]
+[Link "https://www.chess.com/game/live/40004390463"]
+
+1. e4 e6 2. d4 d5 3. e5 c5 4. c3 Nc6 5. Nf3 Bd7 6. Bb5 Nxe5 7. Bxd7+ Nxd7 8. O-O
+h6 9. Be3 cxd4 10. Bxd4 Ngf6 11. h3 Bd6 12. Nbd2 O-O 13. Re1 Qc7 14. g3 Bxg3 15.
+fxg3 Qxg3+ 16. Kf1 Qxh3+ 17. Ke2 Qg2+ 18. Bf2 Qg6 19. Rg1 Qh5 20. Qf1 Ne5 21.
+Qg2 g5 22. Ke1 Nxf3+ 23. Nxf3 Ne4 24. Rh1 Qg6 25. Ne5 Qh7 26. Be3 f6 27. Ng4 h5
+28. Ke2 h4 29. Raf1 Rae8 30. Nxf6+ Nxf6 31. Qxg5+ Qg7 32. Qxh4 Kf7 33. Bd4 e5
+34. Bc5 Rg8 35. Qh5+ Qg6 36. Qxg6+ Rxg6 37. Bxa7 Ke6 38. Bc5 Ne4 39. Bf2 Rg2 40.
+Ke1 Rgg8 41. Rh6+ Kd7 42. Bh4 Kc8 43. Bf6 Rg2 44. Rf5 Rgg8 45. Rxe5 Rg1+ 46. Ke2
+Rxe5 47. Bxe5 Rg2+ 48. Kf3 Rg8 49. b4 Re8 50. Bd4 Rd8 51. Rh5 Re8 52. Rh6 Kd7
+53. Rh7+ Kc8 54. Rh6 1/2-1/2
+

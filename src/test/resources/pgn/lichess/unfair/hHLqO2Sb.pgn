@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/hHLqO2Sb"]
+[Date "2020.03.07"]
+[White "BazBiton"]
+[Black "Don_Migel"]
+[Result "1-0"]
+[UTCDate "2020.03.07"]
+[UTCTime "21:58:33"]
+[WhiteElo "1991"]
+[BlackElo "2005"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "A13"]
+[Opening "English Opening: Agincourt Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. c4 e6 2. Nc3 d5 3. cxd5 exd5 4. d4 c6 5. e3 Bd6 6. Nge2 Ne7 7. Ng3 Ng6 8. Bd3 O-O 9. f4 f5 10. O-O Qh4 11. Qc2 Na6 12. a3 Be6 13. Bxf5 Bxf5 14. Nxf5 Qd8 15. Nxd6 Qxd6 16. Ne2 c5 17. Ng3 cxd4 18. exd4 Rac8 19. Qd3 Nxf4 20. Qb3 Nc7 21. Ne4 Qg6 22. Bxf4 Qxe4 23. Bxc7 Rxf1+ 24. Rxf1 Rxc7 25. Qb4 h6 26. Qf8+ Kh7 27. Qf5+ Qxf5 28. Rxf5 Rd7 29. b4 g6 30. Rf6 Kg7 31. Re6 Kf7 32. Re5 Kf6 33. Kf2 b6 34. Ke3 a5 35. g4 axb4 36. axb4 b5 37. h4 g5 38. Rf5+ Kg6 39. h5+ Kg7 40. Re5 Kf6 41. Re8 Re7+ 42. Rxe7 Kxe7 43. Kd3 Kd6 44. Kc3 Kc7 45. Kd2 Kd8 46. Ke1 Ke7 47. Kf2 Kd7 48. Kg3 Ke8 49. Kg2 Ke7 50. Kf1 Kd7 51. Ke2 Ke8 52. Kd3 Kd8 53. Kc2 Kc7 54. Kb1 Kd8 55. Ka2 Kd7 56. Kb3 Kd6 57. Kc2 Ke6 58. Kd3 Kd7 59. Ke2 Kd6 60. Kd1 Kc6 61. Ke2 Kd6 62. Kf1 Kc6 63. Kg2 Kd6 64. Kh1 Kc6 65. Kh2 Kd6 66. Kg3 Kc6 67. Kf2 1-0
+

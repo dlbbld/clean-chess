@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/W4wkO3cX"]
+[Date "2020.03.08"]
+[White "arman268"]
+[Black "teperto"]
+[Result "1-0"]
+[UTCDate "2020.03.08"]
+[UTCTime "16:04:40"]
+[WhiteElo "1814"]
+[BlackElo "1797"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "B12"]
+[Opening "Caro-Kann Defense: Advance Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c6 2. d4 d5 3. e5 Bf5 4. Bd3 Bg6 5. c3 e6 6. Bxg6 hxg6 7. g3 c5 8. f4 cxd4 9. cxd4 Nc6 10. Nf3 Nge7 11. Be3 Nf5 12. Bf2 Bb4+ 13. Nc3 Qa5 14. Qd2 Kd7 15. O-O Ke7 16. a3 Bxc3 17. bxc3 Qa6 18. a4 Na5 19. Rfb1 Nc4 20. Qe2 Qc6 21. Qe1 b6 22. g4 Nh6 23. h3 f5 24. g5 Nf7 25. h4 Rac8 26. Rc1 Na5 27. Nd2 Nc4 28. Nxc4 Qxc4 29. Qf1 Nd8 30. Qxc4 Rxc4 31. Kg2 Nb7 32. Kg3 Na5 33. Ra3 Rhc8 34. Be1 Nc6 35. Rb1 Na5 36. Rb4 Rxb4 37. cxb4 Nc4 38. Ra2 a6 39. b5 a5 40. Rc2 Kd7 41. Bf2 Na3 42. Rxc8 Kxc8 43. Be1 Nc4 44. Bc3 Kc7 45. Kf3 Kb7 46. Ke2 Na3 47. Kd3 Nc4 48. Ba1 Kc7 49. Bc3 Kb7 50. Ke2 Kc7 51. Kf3 Kb7 52. Kf2 Kc7 53. Ke2 Kb7 54. Kd3 Kc7 55. Ba1 Kb7 56. Ke2 Kc7 57. Bc3 Kb7 58. Kf2 Kc7 59. Kg3 Kb7 60. Kh3 Kc7 61. h5 gxh5 62. g6 Ne3 63. Kh4 Ng2+ 64. Kxh5 Nxf4+ 65. Kg5 Ne2 66. Bd2 f4 67. Bxf4 Nxf4 68. Kxf4 Kd7 69. Kg5 Ke7 70. Kf4 Kf8 71. Ke3 Ke7 72. Kd3 Kf8 73. Kc3 Ke7 74. Kd3 Kd7 75. Ke3 Ke7 76. Kf3 Kf8 77. Kg3 Ke7 78. Kg2 Kd7 79. Kh3 Ke7 80. Kg4 Kf8 81. Kh5 1-0
+

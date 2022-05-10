@@ -1,0 +1,23 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/uBSFb2kx"]
+[Date "2020.03.10"]
+[White "MnIgraqLek"]
+[Black "Ogrilla"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "07:23:18"]
+[WhiteElo "2717"]
+[BlackElo "2936"]
+[WhiteRatingDiff "-3"]
+[BlackRatingDiff "+2"]
+[WhiteTitle "FM"]
+[BlackTitle "GM"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A40"]
+[Opening "Queen's Pawn Game: Anglo-Slav Opening"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 c6 2. c4 d6 3. e4 Nf6 4. Nc3 g6 5. f3 a6 6. Be3 b5 7. b3 Bg7 8. a4 bxc4 9. Bxc4 a5 10. Nge2 Na6 11. O-O O-O 12. Rc1 d5 13. Bd3 Nb4 14. Bb1 dxe4 15. fxe4 Ng4 16. Bf4 Ba6 17. h3 Nf6 18. Re1 Re8 19. Be3 e5 20. dxe5 Rxe5 21. Qxd8+ Rxd8 22. Ng3 Nd3 23. Bxd3 Rxd3 24. Bb6 Nd7 25. Bc7 Re8 26. Nd1 Nc5 27. Rxc5 Rxg3 28. Bxg3 Bd4+ 29. Bf2 Bxc5 30. Bxc5 Rb8 31. Re3 Rd8 32. Nf2 Rd2 33. e5 Bc8 34. Bb6 Rd5 35. Bc7 Be6 36. Ne4 Rd1+ 37. Kh2 Rb1 38. Nc5 Bd5 39. Bxa5 Rb2 40. Rg3 h5 41. h4 Kf8 42. Bb6 Ra2 43. a5 Ke7 44. a6 f6 45. exf6+ Kxf6 46. a7 g5 47. hxg5+ Kg6 48. Kh3 Ra1 49. Re3 Rh1+ 50. Kg3 h4+ 51. Kf2 Ra1 52. Re1 Ra2+ 53. Re2 Ra1 54. Ne6 Kf5 55. Nc7 c5 56. a8=Q Bxa8 57. Nxa8 Rxa8 58. Bxc5 Kxg5 59. b4 Kg4 60. Be3 Rf8+ 61. Kg1 Rb8 62. Rf2 Rxb4 63. Rf1 Rb3 64. Bf2 Rd3 65. Re1 Rd5 66. Re4+ Kg5 67. Rxh4 Kg6 68. Kh2 Rd1 69. Rh3 Rd5 70. Bg3 Rg5 71. Rh4 Rh5 72. Rh3 Rg5 73. Bf4 Rf5 74. Rg3+ Kf7 75. Be3 Rh5+ 76. Kg1 Rd5 77. Rf3+ Ke6 78. Kf2 Rd1 79. Bf4 Rd3 80. Kg3 Rd1 81. Kh2 Rd5 82. Bg3 Ke7 83. Rf4 Kd7 84. Kg1 Rd1+ 85. Kh2 Rd2 86. Rh4 Rd1 87. Rh3 Rh1+ 0-1
+

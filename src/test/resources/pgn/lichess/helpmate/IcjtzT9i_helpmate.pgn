@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/IcjtzT9i"]
+[Date "2020.03.09"]
+[White "Super_hans"]
+[Black "play4play"]
+[Result "1-0"]
+[UTCDate "2020.03.09"]
+[UTCTime "21:47:41"]
+[WhiteElo "1942"]
+[BlackElo "1939"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+8"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "A45"]
+[Opening "Indian Game"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 Nf6 2. Bf4 d6 3. e3 g6 4. Nf3 Bg7 5. c4 O-O 6. Nc3 c6 7. h3 Nbd7 8. Be2 Nh5 9. Bh2 e5 10. O-O f5 11. Re1 e4 12. Nd2 Qe7 13. Bxh5 gxh5 14. Qxh5 Nf6 15. Qd1 Kh8 16. Bf4 d5 17. cxd5 Nxd5 18. Nxd5 cxd5 19. Rc1 Bd7 20. Qb3 Bc6 21. Nb1 Rg8 22. Na3 a6 23. Nc2 Qe6 24. Nb4 Rad8 25. Nxc6 bxc6 26. Qb6 Rc8 27. Qxa6 Bh6 28. Be5+ Bg7 29. Bf4 Bh6 30. Be5+ Bg7 31. Bxg7+ Rxg7 32. Rc5 Rcg8 33. g3 Qh6 34. Kh2 Qh5 35. Rxc6 Qf3 36. Qe2 Rxg3 37. Qxf3 Rxf3 38. Re2 f4 39. exf4 Rxf4 40. Rh6 Rgf8 41. Kg2 Ra8 42. a3 Rg8+ 43. Kf1 Rf3 44. a4 Rd3 45. b4 Rxd4 46. Rb2 Ra8 47. a5 Rb8 48. b5 Ra4 49. a6 Ra5 50. Rd6 Rbxb5 51. Rxb5 Rxb5 52. a7 Ra5 53. Rd8+ Kg7 54. a8=Q Rxa8 55. Rxa8 Kf6 56. Rd8 Ke5 57. Re8+ Kd4 58. Rh8 Kd3 59. Rxh7 Kd2 60. f3 e3 61. Rd7 e2+ 62. Kg2 e1=Q 63. Rxd5+ Kc2 64. Rc5+ Kd3 65. Rd5+ Kc4 66. Rg5 Qe2+ 67. Kg3 Qe1+ 68. Kf4 Qd2+ 69. Kg3 Qe1+ 70. Kf4 Qc1+ 71. Kg4 Qg1+ 72. Kf4 Qh2+ 73. Rg3 Qd2+ 74. Kg4 Qd7+ 75. Kh4 Qd4+ 76. Rg4 Qxg4+ 77. hxg4 Kb3 78. f4 Ka4 79. f5 Ka5 80. g5 Ka6 81. f6 Ka5 82. g6 Ka4 83. f7 Ka3 84. g7 Ka2 85. f8=Q Ka1 86. g8=Q Kb1 87. Kg3 Ka1 88. Kf2 Kb1 89. Ke2 Ka1 90. Kd3 Kb1 91. Kc4 Ka1 92. Kb5 Kb1 93. Ka6 Kc2 94. Qf1 Kc3 95. Qa1+ Kb4 96. Qb1+ Kc5 97. Qa1 Kc6 98. Ka5 Kb7 99. Qg3 Ka8 100. Kb6# 1-0
+

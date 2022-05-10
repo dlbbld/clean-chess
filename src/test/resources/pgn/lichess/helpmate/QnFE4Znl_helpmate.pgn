@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/QnFE4Znl"]
+[Date "2020.03.09"]
+[White "leipzig"]
+[Black "showlx"]
+[Result "1-0"]
+[UTCDate "2020.03.09"]
+[UTCTime "09:15:51"]
+[WhiteElo "1011"]
+[BlackElo "1067"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Mieses-Kotroc Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qd8 4. Nf3 Nc6 5. d4 f6 6. Be2 e5 7. dxe5 fxe5 8. Qxd8+ Kxd8 9. O-O Bb4 10. Bd2 Bxc3 11. Bxc3 Bg4 12. Rfd1+ Ke8 13. Nxe5 Bxe2 14. Rd2 Bg4 15. Nxc6 bxc6 16. Rd4 Nf6 17. Rf4 c5 18. Re1+ Kd8 19. Bxf6+ gxf6 20. Rxg4 f5 21. Rg5 Rf8 22. Rg7 h5 23. h3 h4 24. Kh2 f4 25. Ree7 Kc8 26. Rxc7+ Kd8 27. Rcd7+ Kc8 28. Rdf7 Rxf7 29. Rxf7 Kd8 30. Rf8+ Kc7 31. Rxa8 Kb6 32. Re8 a5 33. Re6+ Kb5 34. Re4 c4 35. Rxf4 a4 36. Rxh4 Kb4 37. Rh5 a3 38. bxa3+ Kxa3 39. Rh4 c3 40. f4 Kxa2 41. f5 Kb2 42. f6 Kxc2 43. Rd4 Kb2 44. f7 c2 45. f8=Q c1=Q 46. Qf1 Qc3 47. Qf3 Qxd4 48. Qg3 Qd1 49. Qf2+ Kc1 50. Qg3 Qg1+ 51. Kxg1 Kb1 52. h4 Ka2 53. Qe1 Kb3 54. g3 Kc4 55. g4 Kd5 56. g5 Kc6 57. h5 Kb7 58. g6 Ka6 59. h6 Kb7 60. g7 Ka6 61. h7 Kb7 62. g8=Q Ka6 63. h8=Q Kb7 64. Kf1 Ka6 65. Ke2 Kb7 66. Kd3 Ka6 67. Kc4 Kb7 68. Kb5 Kc7 69. Qe7# 1-0
+

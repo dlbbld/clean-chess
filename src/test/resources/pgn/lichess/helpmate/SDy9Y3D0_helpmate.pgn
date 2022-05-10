@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/SDy9Y3D0"]
+[Date "2020.03.10"]
+[White "MhoEhsan68"]
+[Black "whaler"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "18:28:12"]
+[WhiteElo "1762"]
+[BlackElo "1749"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B50"]
+[Opening "Sicilian Defense"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 d6 3. Bc4 e6 4. a3 Nc6 5. d3 Nf6 6. Bg5 Be7 7. Nc3 h6 8. Bh4 g5 9. Bg3 Nh5 10. O-O Nxg3 11. fxg3 Bd7 12. d4 cxd4 13. Nxd4 Nxd4 14. Qxd4 Rf8 15. Qg7 Qb6+ 16. Kh1 O-O-O 17. Qxh6 Rh8 18. Qg7 Rhf8 19. Rfd1 Qc5 20. Qd4 Qxd4 21. Rxd4 d5 22. exd5 exd5 23. Nxd5 Bc5 24. Rdd1 Be6 25. Ne7+ Bxe7 26. Bxe6+ fxe6 27. Rxd8+ Rxd8 28. h4 gxh4 29. gxh4 Bxh4 30. Kh2 Rd2 31. Kh3 Bf6 32. Re1 e5 33. Rf1 Be7 34. Re1 Bd6 35. c4 b5 36. cxb5 Kb7 37. a4 Rxb2 38. Ra1 Kb6 39. Rd1 Bb4 40. Rd5 Bc3 41. Rd3 Rb3 42. Re3 Ka5 43. Rd3 Kxa4 44. g4 Kxb5 45. g5 Kb4 46. g6 a5 47. g7 Bd4 48. g8=Q Rxd3+ 49. Kg4 Re3 50. Qb8+ Kc3 51. Qc7+ Kd3 52. Qxa5 Ke4 53. Qa4 Rd3 54. Qxd4+ Rxd4 55. Kh5 Rd1 56. Kg4 Ra1 57. Kg3 Rb1 58. Kg2 Rh1 59. Kxh1 Kf3 60. Kg1 Kg4 61. Kf1 Kh3 62. Kg1 e4 63. Kh1 e3 64. Kg1 e2 65. Kh1 e1=Q# 0-1
+

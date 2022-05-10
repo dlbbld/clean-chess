@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/8sompKsV"]
+[Date "2020.03.07"]
+[White "MobbGrimeyCrimey"]
+[Black "MASTERBALL78"]
+[Result "1-0"]
+[UTCDate "2020.03.07"]
+[UTCTime "16:06:09"]
+[WhiteElo "1845"]
+[BlackElo "1980"]
+[WhiteRatingDiff "+8"]
+[BlackRatingDiff "-18"]
+[Variant "Standard"]
+[TimeControl "30+0"]
+[ECO "A08"]
+[Opening "King's Indian Attack: Sicilian Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. g3 d5 2. Bg2 c5 3. Nf3 Bf5 4. e3 Bxc2 5. Qxc2 Nc6 6. Qd1 Nb4 7. d3 Nc6 8. d4 Nf6 9. Ne5 e6 10. f4 cxd4 11. Nxc6 bxc6 12. exd4 Bb4+ 13. Bd2 Rb8 14. Nc3 Ne4 15. Rc1 Nxd2 16. Qxd2 O-O 17. Qd1 Qf6 18. a3 Bxc3+ 19. Rxc3 Qg6 20. Rf3 Rxb2 21. Rf2 Rb1 22. Ke2 Rxd1 23. Kxd1 Rb8 24. Ke1 Rb1+ 25. Ke2 Rxh1 26. Bxh1 Qc2+ 27. Kf1 Qd3+ 28. Kg2 Qxd4 29. Rf3 h6 30. Rf2 Qc3 31. Rf3 Qb2+ 32. Rf2 Qxa3 33. Rf3 Qc5 34. f5 Qd6 35. Rf4 a5 36. Rh4 a4 37. g4 a3 38. Rh3 a2 39. Ra3 a1=Q 40. Rxa1 Qa3 41. Rxa3 c5 42. Ra8+ Kh7 43. Ra7 h5 44. Ra6 h4 45. Ra7 d4 46. Ra6 d3 47. Ra5 d2 48. Ra1 d1=Q 49. Rxd1 c4 50. Rd2 c3 51. Rd5 c2 52. Rc5 c1=Q 53. Rxc1 e5 54. Rc2 e4 55. Rc3 e3 56. Rxe3 f6 57. Re4 g6 58. Re5 g5 59. Re6 Kh6 60. Re7 1-0
+

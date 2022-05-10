@@ -1,0 +1,13 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[SetUp "1"]
+[FEN "r1b2r2/pp1pk1pp/8/7q/3pP1n1/5N1P/PPQ2PP1/3R1RK1 w - - 0 17"]
+
+Qa4 Rb8  Qc4   Ra8 Qa4 Rg8 Qb3 Rf8 Qa4 Qg5  Qa5 Qh5
+ Qa4 Nh2  Rfe1 Ng4 Rf1 *
+

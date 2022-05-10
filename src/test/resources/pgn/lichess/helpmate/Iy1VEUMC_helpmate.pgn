@@ -1,0 +1,21 @@
+[Event "Charousek Arena"]
+[Site "https://lichess.org/Iy1VEUMC"]
+[Date "2020.03.03"]
+[White "Monil-Mansukhani"]
+[Black "NOTFAIRBM"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "09:20:02"]
+[WhiteElo "1948"]
+[BlackElo "1947"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "15+0"]
+[ECO "A00"]
+[Opening "Van Geet Opening"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. Nc3 b6 2. d4 Bb7 3. e4 Nc6 4. d5 e6 5. dxc6 Bxc6 6. Ba6 b5 7. Bxb5 Bxb5 8. Nxb5 c6 9. Nc3 f5 10. Be3 fxe4 11. Nxe4 Nf6 12. Nc3 Be7 13. Bd4 O-O 14. Bxf6 Bxf6 15. Qxd7 Qxd7 16. Rd1 Qf7 17. Ne4 g6 18. Nxf6+ Qxf6 19. Rd7 Qf7 20. Rxf7 Rxf7 21. f3 Rff8 22. Ne2 Rf7 23. Kf2 Rff8 24. Nd4 Rfe8 25. Nxc6 e5 26. Nxe5 Rxe5 27. f4 Re6 28. g3 Rf6 29. Kf3 Rf7 30. Kg4 Raf8 31. f5 Rf6 32. Kh4 R6f7 33. g4 Rg7 34. fxg6 Rxg6 35. g5 Rh6+ 36. Kg4 Rg6 37. h4 Rg7 38. Kh5 Rff7 39. g6 h6 40. gxf7+ Kxf7 41. Kxh6 Kg8 42. h5 Rh7+ 43. Kg6 Rg7+ 44. Kf5 Rh7 45. Rg1+ Rg7 46. Rg6 Rxg6 47. hxg6 Kf8 48. b4 Kg8 49. b5 Kg7 50. b6 axb6 51. a4 b5 52. c4 b4 53. c5 b3 54. c6 b2 55. c7 b1=Q+ 56. Ke6 Qxg6+ 57. Kd7 Qf7+ 58. Kd8 Qe8+ 59. Kxe8 Kf6 60. a5 Ke5 61. a6 Kd4 62. a7 Kc3 63. a8=Q Kb2 64. c8=Q Kb3 65. Qa1 Kb4 66. Qb1+ Ka3 67. Qa6# 1-0
+

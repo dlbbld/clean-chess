@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/aefWMnIP"]
+[Date "2020.03.10"]
+[White "bob1791"]
+[Black "GR44"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "20:10:14"]
+[WhiteElo "1923"]
+[BlackElo "1917"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A10"]
+[Opening "English Opening: Anglo-Scandinavian Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. c4 d5 2. cxd5 Qxd5 3. Nc3 Qd8 4. Nf3 g6 5. e4 Bg7 6. d4 e6 7. Be3 Ne7 8. Bc4 O-O 9. O-O b6 10. d5 exd5 11. Nxd5 Bb7 12. Nxe7+ Qxe7 13. Bd5 Bxd5 14. exd5 Bxb2 15. Rb1 Bg7 16. Re1 Qd7 17. Bf4 c6 18. Bxb8 Raxb8 19. dxc6 Qxc6 20. Rc1 Qf6 21. Rc7 Rfd8 22. Qb3 a5 23. Ng5 Re8 24. Rxe8+ Rxe8 25. h3 Re1+ 26. Kh2 Qf4+ 27. Qg3 Qxc7 28. Qxc7 Be5+ 29. Qxe5 Rxe5 30. f4 Re2 31. a4 Ra2 32. Ne4 Rxa4 33. Nf6+ Kg7 34. Nd7 Rb4 35. g3 a4 36. Ne5 a3 37. Nd3 Rb3 38. Nc1 Rb2+ 39. Kg1 a2 40. Nxa2 Rxa2 41. h4 Rc2 42. Kf1 b5 43. Ke1 b4 44. Kd1 Rc8 45. Kd2 b3 46. Ke3 b2 47. Kf3 b1=Q 48. Kg4 Qb2 49. Kh3 h5 50. f5 Rc3 51. f6+ 1-0
+

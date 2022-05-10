@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/1TWhVJGR"]
+[Date "2020.03.02"]
+[White "Vitalij11"]
+[Black "Black_Clover13"]
+[Result "1-0"]
+[UTCDate "2020.03.02"]
+[UTCTime "17:30:19"]
+[WhiteElo "1782"]
+[BlackElo "1762"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A56"]
+[Opening "Benoni Defense: Hromádka System"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 c5 2. c4 Nf6 3. d5 d6 4. Nf3 Bf5 5. Nc3 e6 6. e3 exd5 7. cxd5 Be7 8. Bd3 Bxd3 9. Qxd3 O-O 10. O-O Nbd7 11. Re1 a6 12. e4 b5 13. Bf4 b4 14. Ne2 a5 15. b3 Nb6 16. e5 dxe5 17. Nxe5 Qxd5 18. Qxd5 Nbxd5 19. Bg3 Rad8 20. Nf4 Nxf4 21. Bxf4 Bd6 22. Nc6 Bxf4 23. Nxd8 Rxd8 24. g3 Bc7 25. Rac1 Bb6 26. Red1 Rxd1+ 27. Rxd1 g6 28. Rd6 c4 29. bxc4 Bc5 30. Rxf6 a4 31. Rc6 Bf8 32. Rc8 Kg7 33. c5 b3 34. axb3 axb3 35. Rb8 Bxc5 36. Rxb3 Kh6 37. Kg2 Kg7 38. h4 f6 39. Rc3 Bd4 40. Rc7+ Kh6 41. g4 g5 42. h5 f5 43. Kg3 fxg4 44. Kxg4 Bxf2 45. Rc6+ Kg7 46. Kxg5 Be3+ 47. Kf5 h6 48. Rg6+ Kh7 49. Ke4 Bg5 50. Rxg5 hxg5 51. Kf5 Kh6 52. Kg4 Kg7 53. Kxg5 Kg8 54. h6 Kh8 55. Kg6 Kg8 56. Kf6 Kh8 57. Kg5 Kg8 58. Kh5 Kh8 59. Kg6 Kg8 60. h7+ Kh8 61. Kf7 1-0
+

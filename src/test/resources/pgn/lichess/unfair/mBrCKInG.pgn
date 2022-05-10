@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/mBrCKInG"]
+[Date "2020.03.06"]
+[White "Dmozart"]
+[Black "giovmendoza"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "03:13:09"]
+[WhiteElo "1930"]
+[BlackElo "1888"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D11"]
+[Opening "Slav Defense: Modern Line"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 d5 2. c4 c6 3. Nf3 e6 4. e3 Nf6 5. cxd5 cxd5 6. Nc3 Be7 7. Bd3 O-O 8. Bd2 a6 9. O-O Nbd7 10. Qe1 b5 11. Ne2 Bb7 12. Ba5 Rc8 13. Bxd8 Rfxd8 14. Ne5 Nxe5 15. dxe5 Nd7 16. f4 Nc5 17. Bb1 Na4 18. Nc3 Nxb2 19. Qe2 Rxc3 20. Qxb2 Rxe3 21. Qc2 g6 22. Qf2 Rc3 23. Bc2 Bc5 24. Bb3 Bxf2+ 25. Rxf2 d4 26. Rd2 Be4 27. Rad1 d3 28. Kf2 Kg7 29. Ke3 Bf5 30. h3 h5 31. g4 hxg4 32. hxg4 Bxg4 33. Bc2 Bxd1 34. Rxd1 Rxc2 35. Rh1 Rxa2 36. Rd1 d2 37. Ke2 Ra3 38. Rh1 Rc3 39. Rd1 Rc1 40. Ke3 Rxd1 41. f5 Ra1 42. Ke2 d1=Q+ 43. Ke3 Qd2+ 44. Ke4 Ra3 45. f6+ 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/BFfZguIQ"]
+[Date "2020.03.02"]
+[White "hermawan71"]
+[Black "NikolayKZ"]
+[Result "0-1"]
+[UTCDate "2020.03.02"]
+[UTCTime "10:14:11"]
+[WhiteElo "2190"]
+[BlackElo "2096"]
+[WhiteRatingDiff "-7"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "D05"]
+[Opening "Queen's Pawn Game: Colle System"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 e6 2. e3 d5 3. Nf3 Nf6 4. Be2 c5 5. O-O cxd4 6. exd4 Nc6 7. c3 Bd6 8. Bg5 O-O 9. Nbd2 e5 10. dxe5 Nxe5 11. Nxe5 Bxe5 12. Nf3 Bc7 13. Bd3 Bg4 14. h3 Bh5 15. Qc2 Qd6 16. Bxf6 Bxf3 17. Bxh7+ Kh8 18. g3 Qxf6 19. Rfe1 Qh6 20. Bf5 g6 21. Bg4 Bxg4 22. hxg4 Qg5 23. Rad1 Rae8 24. Rxe8 Rxe8 25. Qd3 Qxg4 26. Qxd5 Rd8 27. Qh1+ Kg7 28. Rxd8 Bxd8 29. Qd5 Bb6 30. Kg2 Qe6 31. Qxb7 Qe2 32. Qf3 Qxb2 33. c4 Qxa2 34. Qf4 Qe2 35. c5 Bxc5 36. Qe5+ Qxe5 37. f4 Qe4+ 38. Kh3 Be7 39. g4 g5 40. f5 Qf3+ 41. Kh2 Qxg4 42. Kh1 Bd6 0-1
+

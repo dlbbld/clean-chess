@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/DiKq9jcy"]
+[Date "2020.03.10"]
+[White "SEBASTIAN2015"]
+[Black "calebs411"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "23:27:42"]
+[WhiteElo "2052"]
+[BlackElo "2071"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "D02"]
+[Opening "Queen's Pawn Game: Chigorin Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 d5 2. Nf3 Nc6 3. c4 Nf6 4. Nc3 Be6 5. cxd5 Nxd5 6. e4 Nxc3 7. bxc3 Bg4 8. Bb5 a6 9. Ba4 b5 10. Bb3 e6 11. O-O Be7 12. h3 Bh5 13. Bf4 Na5 14. Qd3 Bxf3 15. Qxf3 Nc4 16. Bxc4 bxc4 17. Qg3 O-O 18. Bxc7 Qd7 19. Be5 f6 20. Bf4 Ra7 21. Rfb1 Qa4 22. Bb8 Rd7 23. Rb4 Qc2 24. Rab1 Bxb4 25. Rxb4 Qxa2 26. Bd6 Rc8 27. e5 f5 28. Qf3 a5 29. Rb7 Qa4 30. g4 f4 31. Rxd7 Qxd7 32. Qxf4 a4 33. Qc1 Ra8 34. Qa3 h6 35. f4 Qc6 36. Kf2 Qe4 37. Qc1 Qd3 38. Bb4 Qg6 39. Kf3 Qe8 40. Qa3 Qc6+ 41. Kg3 Qe4 42. Qc1 g5 43. fxg5 Qd3+ 44. Kh4 Qg6 45. gxh6 Kh7 46. Qg5 Qxh6+ 47. Qxh6+ Kxh6 48. g5+ Kg6 49. Kg4 a3 50. h4 a2 51. h5+ Kh7 52. g6+ Kg8 53. h6 a1=Q 54. d5 Qg1+ 55. Kf4 Ra2 56. h7+ Kg7 57. dxe6 Qf2+ 58. Ke4 Qe2+ 59. Kd5 Qf1 60. e7 Qf3+ 61. Kxc4 Ra6 62. e8=Q Rc6+ 63. Qxc6 Qd1 64. Qd6 Qd5+ 65. Qxd5 Kh8 66. e6 Kg7 67. e7 Kf6 68. g7 Kxg7 69. e8=Q Kf6 70. h8=Q# 1-0
+

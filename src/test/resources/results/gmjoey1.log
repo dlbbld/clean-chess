@@ -1,0 +1,54 @@
+
+Threefold repetition en passant relevant found: file=030706.pgn , result=DRAW, last move=22W, opponents=gmjoey1 - bugsbunny444, moves=22, date=2013.01.13
+-----------------------------------------
+030706
+-----------------------------------------
+Threefold ignoring en passant: yes
+Sequence ignoring en passant: repPos=3: 17...f5 19...Kg8 21...Kg8
+Threefold: yes
+Fivefold: no
+Sequence: repPos=3: 18.Qg6+ 20.Qg6+ 22.Qg6+; repPos=3: 19...Kg8 21...Kg8
+Fifty-move rule: no
+Fifty-move rule sequence: Na
+Seventy-five-move rule: no
+Seventy-five-move rule sequence: Na
+Sequence repetition: not included
+First capture: 18
+Max yawn sequence: 9
+Board result: other
+
+Threefold repetition en passant relevant found: file=072232.pgn , result=DRAW, last move=27B, opponents=gmjoey1 - Tiohoracio, moves=27, date=2015.05.05
+-----------------------------------------
+072232
+-----------------------------------------
+Threefold ignoring en passant: yes
+Sequence ignoring en passant: repPos=3: 22...f5 24...Kg8 26...Kg8
+Threefold: yes
+Fivefold: no
+Sequence: repPos=3: 23.Qh7+ 25.Qh7+ 27.Qh7+; repPos=3: 23...Kf7 25...Kf7 27...Kf7
+Fifty-move rule: no
+Fifty-move rule sequence: Na
+Seventy-five-move rule: no
+Seventy-five-move rule sequence: Na
+Sequence repetition: not included
+First capture: 6
+Max yawn sequence: 10
+Board result: other
+
+Threefold repetition en passant relevant found: file=115421.pgn , result=DRAW, last move=49B, opponents=gmjoey1 - dulerile, moves=49, date=2018.11.12
+-----------------------------------------
+115421
+-----------------------------------------
+Threefold ignoring en passant: yes
+Sequence ignoring en passant: repPos=3: 44...a5 46...Ka8 48...Ka8
+Threefold: yes
+Fivefold: no
+Sequence: repPos=3: 45.Rc8+ 47.Rc8+ 49.Rc8+; repPos=3: 45...Kb7 47...Kb7 49...Kb7; repPos=3: 46...Ka8 48...Ka8
+Fifty-move rule: no
+Fifty-move rule sequence: Na
+Seventy-five-move rule: no
+Seventy-five-move rule sequence: Na
+Sequence repetition: not included
+First capture: 6
+Max yawn sequence: 10
+Board result: other

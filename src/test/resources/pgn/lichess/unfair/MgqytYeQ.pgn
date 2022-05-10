@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/MgqytYeQ"]
+[Date "2020.03.09"]
+[White "silneastro"]
+[Black "mr-safa"]
+[Result "1-0"]
+[UTCDate "2020.03.09"]
+[UTCTime "18:03:07"]
+[WhiteElo "1737"]
+[BlackElo "1740"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-52"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A45"]
+[Opening "Indian Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 Nf6 2. c3 e6 3. c4 c5 4. Nc3 cxd4 5. Qxd4 Nc6 6. Qd1 Bb4 7. Nf3 O-O 8. Bd2 d5 9. e3 Bxc3 10. Bxc3 Ne4 11. Qc2 Nxc3 12. Qxc3 Ne7 13. O-O-O Bd7 14. cxd5 Nxd5 15. Qe5 Rc8+ 16. Kb1 f6 17. Qd6 Qc7 18. Qxc7 Rxc7 19. Bd3 Rfc8 20. e4 Nb6 21. b3 e5 22. Nd2 Be6 23. Rc1 Rxc1+ 24. Rxc1 Rxc1+ 25. Kxc1 Kf7 26. Kb2 Ke7 27. Kc3 Kd6 28. Nc4+ Nxc4 29. Bxc4 Bxc4 30. Kxc4 Kc6 31. b4 b5+ 32. Kc3 a6 33. g3 Kd6 34. f4 Ke6 35. f5+ Kd6 36. h4 g6 37. g4 gxf5 38. gxf5 h5 39. a3 Kc6 40. Kd3 Kd6 41. Kc3 Kc6 42. Kb3 Kd7 43. a4 Kd6 44. axb5 axb5 45. Kc3 Kc6 46. Kd3 Kb6 47. Ke3 Kc6 48. Kf3 Kd6 49. Kg3 Ke7 50. Kh3 Kf7 51. Kg2 Kg7 52. Kf3 1-0
+

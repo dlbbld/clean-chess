@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/YI1t9qvC"]
+[Date "2020.03.07"]
+[White "xonix"]
+[Black "ADekhovich"]
+[Result "1-0"]
+[UTCDate "2020.03.07"]
+[UTCTime "09:21:50"]
+[WhiteElo "2027"]
+[BlackElo "2047"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C02"]
+[Opening "French Defense: Advance Variation, Paulsen Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e6 2. Nf3 d5 3. e5 c5 4. c3 Nc6 5. d4 cxd4 6. cxd4 Qb6 7. Qd2 Bb4 8. Nc3 Nge7 9. a3 Bxc3 10. bxc3 Nf5 11. Bd3 O-O 12. Rb1 Qd8 13. Bxf5 exf5 14. Bb2 Be6 15. a4 Na5 16. Ba3 Nc4 17. Qa2 Nxa3 18. Qxa3 Rc8 19. O-O Qa5 20. Rfc1 b6 21. Qb4 Qxb4 22. cxb4 Rc4 23. Rxc4 dxc4 24. Rd1 Bd5 25. Kf1 Rc8 26. Ke2 Kf8 27. Rc1 Ke7 28. Rc3 Ke6 29. Ke3 f6 30. h3 Bxf3 31. gxf3 fxe5 32. dxe5 Kxe5 33. f4+ Kd5 34. f3 g6 35. Rc1 Rc7 36. Rd1+ Ke6 37. Rc1 a6 38. Kd4 b5 39. axb5 axb5 40. Re1+ Kf6 41. Re5 h6 42. Rc5 c3 43. Kxc3 Rxc5+ 44. bxc5 Ke6 45. Kb4 Kd7 46. Kxb5 Kc7 47. Kc4 g5 48. Kd5 gxf4 49. Ke5 Kc6 50. Kxf4 Kxc5 51. Kxf5 Kd5 52. f4 Kd4 53. Kg6 Ke4 54. f5 Ke5 55. f6 Ke6 56. f7 Ke7 57. f8=Q+ Kxf8 58. Kxh6 Kg8 59. Kg6 Kh8 60. h4 Kg8 61. h5 Kh8 62. Kh6 Kg8 63. Kg6 Kh8 64. Kg5 Kg8 65. Kh4 Kh8 66. h6 Kg8 67. Kh5 Kh8 68. Kg5 Kg8 69. Kg4 Kh8 70. Kg5 Kg8 71. Kf6 Kh8 72. Kg6 Kg8 73. h7+ Kh8 74. Kf7 1-0
+

@@ -1,0 +1,21 @@
+[Event "Rated Rapid game"]
+[Site "https://lichess.org/mf4MFw9v"]
+[Date "2021.03.22"]
+[White "Lamourp"]
+[Black "bajp2009"]
+[Result "0-1"]
+[UTCDate "2021.03.22"]
+[UTCTime "01:55:23"]
+[WhiteElo "1942"]
+[BlackElo "2004"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+13"]
+[Variant "Standard"]
+[TimeControl "300+8"]
+[ECO "A40"]
+[Opening "Queen's Pawn Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 c6 2. c3 d5 3. Nf3 a6 4. Bf4 Bg4 5. e3 Nd7 6. Nbd2 h6 7. h3 Bh5 8. g4 Bg6 9. h4 f6 10. h5 Bf7 11. Bd3 e5 12. dxe5 fxe5 13. Nxe5 Nxe5 14. Bxe5 Be7 15. Bxg7 Bf6 16. Bxh8 Bxh8 17. Qf3 Qd6 18. Qf5 Ne7 19. Qh7 Bf6 20. Qxh6 O-O-O 21. f4 Ng8 22. Qh7 Qf8 23. g5 Be7 24. Qf5+ Kb8 25. g6 Be8 26. Qe5+ Bd6 27. Qh8 Qe7 28. h6 Qxe3+ 29. Be2 Bxf4 30. Qd4 Nxh6 31. g7 Bf7 32. O-O-O Re8 33. Bh5 Bxh5 34. Rxh5 Rg8 35. Qf6 Re8 36. Qf8 Ka7 37. Rh3 Qe6 38. Qc5+ b6 39. Qf2 Bxd2+ 40. Rxd2 Qxh3 41. Qf8 Qh1+ 42. Kc2 Qe4+ 43. Kc1 b5 44. Qc5+ Kb7 45. b3 Ng4 46. Qd6 Qe1+ 47. Rd1 Qe3+ 48. Kb2 Kb6 49. Rc1 Nf2 50. Qg6 Nd3+ 51. Kc2 Nxc1 52. g8=Q Rxg8 53. Qxg8 Nxa2 54. Qb8+ Ka5 55. Qd8+ Qb6 56. Qh4 Nxc3 57. Kxc3 Qc5+ 58. Kb2 d4 59. Qd8+ Kb4 60. Qg8 Qc3+ 61. Ka2 a5 62. Qe6 Qc2+ 63. Ka1 c5 64. Qg4 Qxb3 65. Qxd4+ c4 66. Qd6+ Ka4 67. Qh2 b4 68. Qe2 Ka3 69. Qc2 a4 70. Qd2 c3 71. Qc2 Qb2+ 0-1
+

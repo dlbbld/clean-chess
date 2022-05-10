@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/0ehvDno9"]
+[Date "2020.03.04"]
+[White "Gevorg111"]
+[Black "kunal_tm"]
+[Result "0-1"]
+[UTCDate "2020.03.04"]
+[UTCTime "09:26:26"]
+[WhiteElo "1963"]
+[BlackElo "1956"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B70"]
+[Opening "Sicilian Defense: Dragon Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 d6 3. d4 cxd4 4. Nxd4 Nf6 5. Nc3 g6 6. Nf3 Bg7 7. Bc4 O-O 8. Bg5 Bg4 9. O-O Nc6 10. h3 Bxf3 11. Qxf3 Qa5 12. Bd2 Ne5 13. Qe2 Nxc4 14. Qxc4 Rac8 15. Qb3 Qe5 16. Rae1 h5 17. f4 Qc5+ 18. Be3 Qa5 19. f5 Nd7 20. fxg6 Kh8 21. gxf7 Nc5 22. Qa3 Qxa3 23. bxa3 Bxc3 24. Re2 Bg7 25. Ref2 Nxe4 26. Rf5 Ng3 27. Rg5 Nxf1 28. Rxh5+ Bh6 29. Rxh6+ Kg7 30. Kxf1 Rxf7+ 31. Kg1 Rxc2 32. Rh4 Rc1+ 33. Bxc1 Rf6 34. Bb2 e5 35. Rg4+ Kh6 36. Rb4 Kh5 37. Rxb7 Rf5 38. Rh7+ Kg6 39. Rxa7 d5 40. Rd7 e4 41. Rg7+ Kh5 42. g4+ Kh4 43. gxf5 Kxh3 44. Rd7 e3 45. Rxd5 e2 46. Re5 e1=Q+ 0-1
+

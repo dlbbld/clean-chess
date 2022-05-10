@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/YictG6WZ"]
+[Date "2020.03.11"]
+[White "marlojauregui"]
+[Black "minato_n"]
+[Result "1-0"]
+[UTCDate "2020.03.11"]
+[UTCTime "06:18:45"]
+[WhiteElo "1835"]
+[BlackElo "1842"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A10"]
+[Opening "English Opening: Anglo-Lithuanian Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. c4 Nc6 2. Nf3 e5 3. e3 Nf6 4. d4 Bb4+ 5. Bd2 Bxd2+ 6. Qxd2 exd4 7. Nxd4 O-O 8. Be2 Re8 9. O-O Ne4 10. Qd1 Qf6 11. Nxc6 dxc6 12. Bf3 Bf5 13. Qc1 Rad8 14. Nc3 Nd2 15. Rd1 Nxf3+ 16. gxf3 Bh3 17. Ne2 Qxf3 18. Rxd8 Rxd8 19. Nf4 g5 20. Nxh3 Qxh3 21. Qc3 Rd6 22. Re1 c5 23. e4 Rh6 24. Qxh3 Rxh3 25. Kg2 Rh6 26. Rd1 f6 27. Rd7 Rg6 28. Rxc7 b5 29. Rxc5 bxc4 30. Rxc4 a5 31. Ra4 Rg7 32. Rxa5 Re7 33. b4 Rxe4 34. f3 Rxb4 35. a4 Rb2+ 36. Kg3 Ra2 37. Ra6 Kf7 38. h4 h6 39. Kg4 Rg2+ 40. Kh3 Ra2 41. Kg4 Ra3 42. hxg5 hxg5 43. f4 Kg6 44. fxg5 Rb3 45. Rxf6+ Kg7 46. a5 Ra3 47. Rf4 Rxa5 48. Rf6 Ra6 49. Rf5 Ra4+ 50. Kh5 Rh4+ 51. Kxh4 Kh8 52. g6 Kg7 53. Rf1 Kh8 54. g7+ Kxg7 55. Ra1 Kf6 56. Rb1 Ke5 57. Ra1 Kd5 58. Rb1 Kc6 59. Ra1 Kb7 60. Rb1+ Ka8 61. Kg3 Ka7 62. Kf2 Ka6 63. Ke2 Ka5 64. Kd3 Ka4 65. Kc4 Ka3 66. Kb5 Ka2 67. Ka6 Ka3 68. Ra1+ Kb4 69. Kb7 Kc5 70. Kc8 Kb6 71. Rb1+ Ka7 72. Rc1 Ka8 73. Ra1# 1-0
+

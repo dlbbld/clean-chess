@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/EstAIWqd"]
+[Date "2020.03.08"]
+[White "chris_619"]
+[Black "NEW_MINSK_VAMPIRE"]
+[Result "0-1"]
+[UTCDate "2020.03.08"]
+[UTCTime "23:01:15"]
+[WhiteElo "2184"]
+[BlackElo "2147"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "E60"]
+[Opening "King's Indian Defense: Normal Variation, King's Knight Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 Nf6 2. Nf3 g6 3. c4 Bg7 4. Nc3 O-O 5. e4 d6 6. h4 h5 7. Bg5 Bg4 8. Bxf6 exf6 9. Be2 Re8 10. Qd3 f5 11. O-O-O fxe4 12. Nxe4 Bf5 13. Nfd2 d5 14. cxd5 Qxd5 15. f3 Qxd4 16. Qxd4 Bxd4 17. Bc4 Be3 18. Kb1 Nc6 19. Bb3 Nb4 20. a3 Nd3 21. Ka2 b5 22. Rhf1 c5 23. Bd5 Rab8 24. Bc6 Re6 25. Bd5 Re7 26. Nf6+ Kf8 27. Nde4 Bxe4 28. fxe4 Bd4 29. Nh7+ Kg7 30. Ng5 f6 31. Nf3 Be5 32. Nxe5 Nxe5 33. Rf2 c4 34. Rdf1 Nd3 35. Rxf6 b4 36. Rf7+ Rxf7 37. Rxf7+ Kh6 38. axb4 Nxb4+ 39. Kb1 Nxd5 40. exd5 Rd8 41. Rxa7 Rxd5 42. Rc7 Rd4 43. Rc5 Rxh4 44. g3 Rg4 45. b4 cxb3 46. Kb2 Rxg3 47. Rc6 h4 48. Rc1 h3 49. Rh1 Rg2+ 50. Kxb3 h2 51. Re1 g5 52. Re3 Kh5 53. Rh3+ Kg4 54. Rc3 Kh4 55. Rc4+ g4 56. Rc3 g3 57. Rc8 Kh3 58. Rh8+ Kg4 59. Rg8+ Kf3 60. Rf8+ Ke2 61. Re8+ Kf1 62. Rd8 Kg1 63. Rd7 h1=Q 64. Rd1+ Kh2 65. Rxh1+ Kxh1 66. Kc4 Rg1 67. Kb3 g2 68. Ka2 Kh2 69. Kb3 Ra1 70. Kc4 g1=Q 71. Kb3 Kh3 72. Kc4 Rb1 73. Kd5 Ra1 74. Ke4 Re1+ 75. Kf3 Qf1# 0-1
+

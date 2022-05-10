@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/GgiPdCBU"]
+[Date "2020.03.06"]
+[White "Ruelanghari"]
+[Black "lihkon"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "03:30:03"]
+[WhiteElo "1907"]
+[BlackElo "1819"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A01"]
+[Opening "Nimzo-Larsen Attack: Symmetrical Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. b3 b6 2. Bb2 Bb7 3. e3 Nf6 4. Nf3 g6 5. d4 Bg7 6. Bd3 O-O 7. Nbd2 d6 8. c3 Nbd7 9. Qc2 e5 10. dxe5 dxe5 11. c4 Qe7 12. Ne4 Nxe4 13. Bxe4 Bxe4 14. Qxe4 Rae8 15. O-O Nc5 16. Qc2 c6 17. Rad1 Rd8 18. Ba3 Rxd1 19. Rxd1 Rd8 20. Bxc5 Rxd1+ 21. Qxd1 Qxc5 22. Qd8+ Bf8 23. Ng5 Qe7 24. Qxe7 Bxe7 25. Ne4 f5 26. Nc3 Kf7 27. Kf1 Ke6 28. Ke2 h6 29. f3 g5 30. g3 Bd6 31. g4 f4 32. e4 a5 33. h3 Bb4 34. Kd3 Bxc3 35. Kxc3 Kd6 36. a3 a4 37. b4 c5 38. b5 Ke6 39. Kd3 Kf6 40. Kd2 Kg6 41. Kc2 h5 42. Kd1 hxg4 43. hxg4 Kf6 44. Ke2 Ke6 45. Kf2 Kd6 46. Kg2 Ke6 47. Kg1 Kd6 48. Kf1 1-0
+

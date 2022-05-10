@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/dZhy51vS"]
+[Date "2020.03.03"]
+[White "NguyenPhan"]
+[Black "Mazelk"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "00:14:00"]
+[WhiteElo "2119"]
+[BlackElo "1995"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-4"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A53"]
+[Opening "Old Indian Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 Nf6 2. c4 d6 3. Nc3 Nbd7 4. e4 e5 5. f4 g6 6. Nf3 exd4 7. Nxd4 Bg7 8. Be3 O-O 9. Be2 c6 10. O-O Nc5 11. Bf3 a5 12. Kh1 h5 13. Qd2 Bg4 14. Rae1 Bxf3 15. gxf3 Qd7 16. Rg1 Nh7 17. f5 d5 18. fxg6 fxg6 19. cxd5 cxd5 20. Nxd5 Ne6 21. Nxe6 Qxe6 22. Ref1 Nf6 23. Nxf6+ Qxf6 24. Bg5 Qe6 25. b3 Rae8 26. Qd5 Qxd5 27. exd5 Re2 28. d6 Rc8 29. d7 Ra8 30. d8=Q+ Rxd8 31. Bxd8 Bd4 32. Rg2 Kf7 33. Rxe2 Bf6 34. Kg2 Bxd8 35. f4 Bf6 36. f5 Kg7 37. fxg6 Kxg6 38. Re6 Kf7 39. Rexf6+ Ke8 40. Re6+ Kd7 41. Re2 Kc6 42. Rd1 Kb6 43. Rc2 Ka6 44. a3 b6 45. b4 a4 46. b5+ Ka5 47. Rb1 h4 48. Rc8 1-0
+

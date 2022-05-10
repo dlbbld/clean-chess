@@ -1,0 +1,21 @@
+[Event "Rated Rapid game"]
+[Site "https://lichess.org/om0bCR5w"]
+[Date "2020.03.10"]
+[White "Chiliagonn"]
+[Black "jonny1245"]
+[Result "0-1"]
+[UTCDate "2020.03.10"]
+[UTCTime "19:33:22"]
+[WhiteElo "1172"]
+[BlackElo "1119"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "600+0"]
+[ECO "A41"]
+[Opening "Old Indian Defense"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 d6 2. c4 Nc6 3. Nc3 e5 4. d5 Nd4 5. e3 Nf5 6. Nf3 g6 7. e4 Nh4 8. Nxh4 Qxh4 9. Be2 Nf6 10. Bf3 Ng4 11. Bxg4 Bxg4 12. Qb3 Bg7 13. Qxb7 O-O 14. O-O Rab8 15. Qxc7 Rbc8 16. Qxd6 Qf6 17. Qxf6 Bxf6 18. Bh6 Bg7 19. Bg5 Rxc4 20. Rfe1 f5 21. h3 h6 22. Be7 Re8 23. d6 Bh5 24. exf5 gxf5 25. g4 Bg6 26. Rad1 fxg4 27. d7 Rxe7 28. d8=Q+ Re8 29. Qd5+ Bf7 30. Qd6 gxh3 31. Kh2 Be6 32. f4 Rxf4 33. Rxe5 Rf2+ 34. Kg3 Rg2+ 35. Kf3 Rf8+ 36. Qxf8+ Bxf8 37. Rxe6 Rxb2 38. Rg1+ Bg7 39. Re8+ Kf7 40. Rxg7+ Kxg7 41. Ne2 h2 42. Ng3 Rxa2 43. Kf4 Ra4+ 44. Kf5 Ra3 45. Re7+ Kf8 46. Kf6 Rxg3 47. Rxa7 h1=Q 48. Ra8+ Qxa8 49. Ke5 h5 50. Kd4 Ke7 51. Kc5 Ke6 52. Kb4 Kf5 53. Kc5 h4 54. Kd4 h3 55. Kc5 h2 56. Kb4 h1=Q 57. Kc5 Rg1 58. Kd4 Ra1 59. Ke3 Rb1 60. Kf2 Qe1# 0-1
+

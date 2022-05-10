@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/wCL9HARO"]
+[Date "2020.03.09"]
+[White "soju3bs"]
+[Black "AMRIADI-KBPL"]
+[Result "1-0"]
+[UTCDate "2020.03.09"]
+[UTCTime "15:19:01"]
+[WhiteElo "2255"]
+[BlackElo "2276"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B42"]
+[Opening "Sicilian Defense: Kan Variation, Modern Variation"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 e6 3. d4 cxd4 4. Nxd4 a6 5. Bd3 Qc7 6. Qe2 Nf6 7. e5 Nd5 8. a3 b5 9. c4 bxc4 10. Bxc4 Bb7 11. O-O Bc5 12. Nb3 Be7 13. Rd1 O-O 14. Bxd5 Bxd5 15. Rxd5 exd5 16. Nc3 Qc4 17. Qf3 Qxb3 18. Nxd5 Bc5 19. Qxb3 Nc6 20. Bf4 Rab8 21. Qc3 Bd4 22. Qg3 Rxb2 23. Rf1 Rfb8 24. e6 Rxf2 25. exf7+ Kh8 26. Bxb8 Rxf7+ 27. Rf2 Bxf2+ 28. Qxf2 Rxf2 29. Kxf2 Nxb8 30. Ke3 Kg8 31. Ke4 Kf7 32. Ke5 Ke8 33. Kd6 Kd8 34. a4 Nc6 35. Nb6 Nd4 36. Nxd7 Nf5+ 37. Ke5 Kxd7 38. Kxf5 Kc6 39. Ke6 Kc5 40. Kf7 Kb4 41. Kxg7 Kxa4 42. Kxh7 Kb5 43. g4 a5 44. g5 a4 45. g6 a3 46. g7 a2 47. g8=Q a1=Q 48. Qb8+ Kc4 49. Qc7+ Kd5 50. Qd7+ Ke4 51. Qe6+ Kf3 52. Qf7+ Kg2 53. Qc7 Kh3 54. Kg8 Qg1+ 55. Qg7 Qxg7+ 56. Kxg7 Kg2 57. h3 Kf1 58. Kf6 Ke1 59. Ke5 Kd1 60. Kd4 Kc1 61. Kc4 Kb1 62. Kb5 Ka1 63. Ka6 Ka2 64. h4 Ka3 65. h5 Ka4 66. h6 Ka3 67. h7 Ka2 68. h8=Q Kb3 69. Qa1 Kc4 70. Qb1 Kd5 71. Qa1 Kc6 72. Ka5 Kb7 73. Qd1 Ka8 74. Ka6 Kb8 75. Qd8# 1-0
+

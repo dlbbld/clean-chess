@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/rVN4T4Tz"]
+[Date "2020.03.02"]
+[White "VadimGareev"]
+[Black "Kemalagar"]
+[Result "1-0"]
+[UTCDate "2020.03.02"]
+[UTCTime "10:39:41"]
+[WhiteElo "1392"]
+[BlackElo "1452"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+4"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C00"]
+[Opening "French Defense"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e6 2. Bc4 c5 3. d3 d5 4. exd5 exd5 5. Bb3 c4 6. dxc4 dxc4 7. Bxc4 Qxd1+ 8. Kxd1 Nf6 9. Bb5+ Nc6 10. Nc3 Ng4 11. Nh3 Bd6 12. Re1+ Be6 13. Ke2 O-O 14. Bxc6 bxc6 15. Kf1 Nxh2+ 16. Kg1 Rfe8 17. Bf4 Bxf4 18. Nxf4 Ng4 19. Nxe6 fxe6 20. Ne4 Rad8 21. Rad1 Rxd1 22. Rxd1 Rb8 23. b3 Rb5 24. c4 Re5 25. Nd6 Re2 26. f3 Ne3 27. Rd3 Re1+ 28. Kf2 Nc2 29. Rd2 Rc1 30. Kg3 Ne3 31. a4 Nf5+ 32. Nxf5 exf5 33. Kf4 g6 34. Ke5 Rb1 35. Rd3 a5 36. Kd6 c5 37. Kxc5 Rb2 38. g4 fxg4 39. fxg4 h5 40. gxh5 gxh5 41. Kb5 Rg2 42. Rh3 Rg5+ 43. Kb6 Kg7 44. c5 Rg6+ 45. c6 Rg5 46. Kb7 Rg4 47. c7 Rb4+ 48. Ka7 Rf4 49. c8=Q Kg6 50. Rg3+ Kf6 51. Qf8+ Ke5 52. Qh8+ Ke4 53. Qc3 Kf5 54. Rf3 Rxf3 55. Qxf3+ Kg5 56. Qd5+ Kg4 57. Qxa5 h4 58. b4 h3 59. b5 h2 60. Qb4+ Kg3 61. Qe1+ Kg2 62. Qh1+ Kxh1 63. b6 Kg1 64. b7 h1=Q 65. b8=Q Qh7+ 66. Ka8 Qb1 67. Qb7 Qb6 68. a5 Qxb7+ 69. Kxb7 Kf1 70. a6 Ke1 71. a7 Kd1 72. a8=Q Kc1 73. Qa1+ Kd2 74. Qb1 Ke3 75. Qa1 Ke4 76. Qe1+ Kd5 77. Ka6 Kc6 78. Ka5 Kb7 79. Qd1 Ka8 80. Ka6 Kb8 81. Qd8# 1-0
+

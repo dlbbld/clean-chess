@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/GpCPpsRz"]
+[Date "2020.03.07"]
+[White "Khazeie"]
+[Black "bbbnn"]
+[Result "0-1"]
+[UTCDate "2020.03.07"]
+[UTCTime "11:52:06"]
+[WhiteElo "1755"]
+[BlackElo "1704"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+15"]
+[Variant "Standard"]
+[TimeControl "120+1"]
+[ECO "B21"]
+[Opening "Sicilian Defense: McDonnell Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. f4 g6 3. Nf3 Bg7 4. Be2 d6 5. c3 Nc6 6. d3 e6 7. Be3 Nge7 8. O-O O-O 9. Kh1 b5 10. Nbd2 Bb7 11. a4 b4 12. Qb3 Rb8 13. Nc4 Ba6 14. Qc2 Bxc4 15. dxc4 bxc3 16. bxc3 Qa5 17. Bd2 d5 18. exd5 exd5 19. cxd5 Nxd5 20. Rfc1 Qd8 21. c4 Bxa1 22. Rxa1 Ncb4 23. Qe4 Nf6 24. Qe5 Re8 25. Qc3 Re3 26. Bxe3 Ne4 27. Qe5 Nc2 28. Rc1 Nxe3 29. Qxe4 Nf5 30. g4 Nd6 31. Qd5 Rb2 32. Bf1 Qb6 33. Rd1 Rb1 34. Rxb1 Qxb1 35. Kg2 Qc2+ 36. Qd2 Ne4 37. Qxc2 Nd6 38. Qd3 Nb7 39. g5 Kg7 40. Ne5 Nd6 41. Qxd6 a5 42. Qf6+ Kg8 43. Qxf7+ Kh8 44. Bd3 h5 45. Bxg6 h4 46. Bf5 h3+ 0-1
+

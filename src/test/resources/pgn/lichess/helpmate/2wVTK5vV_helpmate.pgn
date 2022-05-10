@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/2wVTK5vV"]
+[Date "2020.03.06"]
+[White "Florian1313"]
+[Black "havutt"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "08:33:50"]
+[WhiteElo "1915"]
+[BlackElo "1929"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A02"]
+[Opening "Bird Opening"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. f4 e6 2. e3 d5 3. b3 c5 4. Bb2 b5 5. Nf3 c4 6. bxc4 dxc4 7. d3 a5 8. dxc4 b4 9. c3 Qxd1+ 10. Kxd1 Be7 11. cxb4 Nf6 12. bxa5 Rxa5 13. Nc3 Nc6 14. Bd3 Nb4 15. Bb1 Ba6 16. a3 Nc6 17. Bd3 O-O 18. Ke2 Rd8 19. Nb5 Bxb5 20. cxb5 Na7 21. b6 Nc6 22. Ne5 Nxe5 23. Bxe5 Nd7 24. Bc7 Rc8 25. Rhc1 Bd8 26. b7 Rxc7 27. b8=Q Nxb8 28. Rxc7 Bxc7 29. a4 g6 30. Bb5 Na6 31. g3 Nb4 32. Rc1 Bd6 33. Rc8+ Kg7 34. e4 Kf6 35. e5+ Bxe5 36. fxe5+ Kxe5 37. Rc5+ Kf6 38. Rc7 Nd5 39. Rb7 Ra8 40. Kd3 Rd8 41. Ke4 Ne7 42. Kf4 Nd5+ 43. Kg4 Nc3 44. a5 Nxb5 45. Rxb5 Ra8 46. h4 h5+ 47. Kf4 Ke7 48. g4 Kd6 49. gxh5 g5+ 50. Kxg5 Kc6 51. h6 Kxb5 52. h7 Kxa5 53. Kh6 Rh8 54. Kg7 Rxh7+ 55. Kxh7 e5 56. Kg7 e4 57. Kxf7 e3 58. h5 e2 59. h6 e1=Q 60. h7 Qe7+ 61. Kg8 Qf8+ 62. Kxf8 Ka4 63. h8=Q Ka3 64. Qa1+ Kb4 65. Qb1+ Ka5 66. Qa1+ Kb6 67. Qb1+ Ka7 68. Qc1 Ka8 69. Ke7 Ka7 70. Kd6 Ka6 71. Kc5 Ka5 72. Qa1# 1-0
+

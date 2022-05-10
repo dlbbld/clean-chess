@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/RSqLhejA"]
+[Date "2020.03.05"]
+[White "balashir"]
+[Black "kariem2018"]
+[Result "1-0"]
+[UTCDate "2020.03.05"]
+[UTCTime "23:09:46"]
+[WhiteElo "1625"]
+[BlackElo "1576"]
+[WhiteRatingDiff "+14"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "B00"]
+[Opening "Nimzowitsch Defense: Scandinavian Variation, Advance Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 d5 2. e5 Nc6 3. d4 Bf5 4. c3 e6 5. Nf3 Qd7 6. Bd3 Bxd3 7. Qxd3 O-O-O 8. O-O f5 9. b4 Be7 10. a4 h6 11. b5 Na5 12. Bd2 Nc4 13. Na3 Bxa3 14. Bc1 Bxc1 15. Rfxc1 b6 16. Nd2 Na5 17. Rab1 g5 18. Nb3 Nxb3 19. Rxb3 h5 20. Ra3 g4 21. a5 Kb7 22. axb6 axb6 23. Rca1 Rb8 24. c4 Ne7 25. c5 Ra8 26. Qc3 Rxa3 27. Qxa3 Qxb5 28. Qa7+ Kc6 29. cxb6 Qxb6 30. Rc1+ Kd7 31. Qa4+ c6 32. Qd1 Ra8 33. h3 Ng6 34. hxg4 hxg4 35. Qd2 Ra4 36. Qh6 Ne7 37. Qf4 Qxd4 38. Qxd4 Rxd4 39. g3 Re4 40. Ra1 Rxe5 41. Kg2 Re2 42. Kf1 Rc2 43. Ra3 c5 44. f3 gxf3 45. Rxf3 d4 46. Rf4 Kd6 47. g4 Ke5 48. Rf3 fxg4 49. Rg3 Kf4 50. Rb3 c4 51. Rb1 d3 52. Rd1 d2 53. Ke2 g3 54. Rf1+ Kg4 55. Rd1 Kh3 56. Rh1+ Kg2 57. Rd1 Kh2 58. Kf3 g2 59. Kf2 Rc1 60. Rxd2 g1=Q+ 61. Kf3+ Kh3 62. Rh2+ 1-0
+

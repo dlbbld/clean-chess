@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/zIC5NqLC"]
+[Date "2020.03.02"]
+[White "Damianlamy"]
+[Black "Ahich"]
+[Result "0-1"]
+[UTCDate "2020.03.02"]
+[UTCTime "14:42:10"]
+[WhiteElo "2464"]
+[BlackElo "2447"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C00"]
+[Opening "French Defense: Knight Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e6 2. Nf3 d5 3. exd5 exd5 4. d4 Nf6 5. Be2 Bd6 6. O-O h6 7. Bd3 O-O 8. h3 Nbd7 9. c3 c5 10. Qc2 cxd4 11. Nxd4 Nc5 12. Bf5 Bxf5 13. Nxf5 Re8 14. Bxh6 gxh6 15. Nxh6+ Kg7 16. Nf5+ Kg8 17. Nh6+ Kg7 18. Nf5+ Kf8 19. Qd2 Re6 20. Qh6+ Ke8 21. Ng7+ Kd7 22. Nxe6 Nxe6 23. Nd2 Qh8 24. Qxh8 Rxh8 25. Nf3 Nf4 26. Rfd1 Rg8 27. Ne1 Nxh3+ 28. Kf1 Nf4 29. b3 Be5 30. Rac1 Ke6 31. c4 d4 32. Nf3 Ne4 33. Nxd4+ Kf6 34. Nf3 Nxg2 35. Nxe5 Kxe5 36. Rd5+ Kf4 37. Rd7 Nh4 38. Rxf7+ Nf5 39. Rd1 Rh8 40. Rdd7 Rh1+ 41. Ke2 Rh2 42. Rxf5+ Kxf5 43. Rf7+ Ke6 44. Rxb7 Nxf2 45. Ke3 Ng4+ 46. Kd4 Ne5 47. Rxa7 Nc6+ 48. Kc5 Nxa7 49. a4 Ra2 50. b4 Nc8 51. Kb5 Rb2 52. c5 Nd6+ 53. cxd6 Kxd6 54. a5 Kc7 55. Ka6 Kb8 56. b5 Ka8 57. b6 Rb3 0-1
+

@@ -1,0 +1,12 @@
+[Event "?"]
+[Site "?"]
+[Date "????.??.??"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[SetUp "1"]
+[FEN "8/P7/4k1q1/4br1r/8/8/6B1/6K1 b - - 0 100"]
+
+100... Bg3 101. Bc6 Qg8 102. Bb5 Be5# *
+

@@ -1,0 +1,21 @@
+[Event "Hourly SuperBlitz Arena"]
+[Site "https://lichess.org/yxiNrimN"]
+[Date "2020.03.09"]
+[White "Arnigrok"]
+[Black "oshim"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "10:34:11"]
+[WhiteElo "1779"]
+[BlackElo "1701"]
+[WhiteRatingDiff "-7"]
+[BlackRatingDiff "+7"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "B01"]
+[Opening "Scandinavian Defense: Main Line"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 d5 2. exd5 Qxd5 3. Nc3 Qa5 4. Nf3 Bg4 5. h3 Bh5 6. g4 Bg6 7. Bg2 e6 8. a3 Nc6 9. O-O Nge7 10. d3 Nd5 11. Nxd5 Qxd5 12. b4 Qd7 13. Be3 Bd6 14. d4 Be4 15. c4 e5 16. d5 Nb8 17. c5 Be7 18. Nxe5 Qd8 19. f4 Bxg2 20. Kxg2 O-O 21. f5 Bh4 22. Qf3 Nd7 23. Nxd7 Qxd7 24. Bf2 Bxf2 25. Rxf2 Rfe8 26. Rd1 Re5 27. d6 c6 28. Qf4 Rae8 29. Rfd2 h6 30. f6 Re2+ 31. Rxe2 Rxe2+ 32. Kg3 Qe6 33. fxg7 Re3+ 34. Kg2 Re2+ 35. Kg1 Re1+ 36. Rxe1 Qxe1+ 37. Kh2 Qe2+ 38. Kg3 Qd3+ 39. Qf3 Qd4 40. d7 Qxd7 41. Qf5 Qxf5 42. gxf5 Kxg7 43. Kg4 Kf6 44. h4 Kg7 45. h5 f6 46. Kf4 Kf7 47. Ke4 Ke7 48. Kd4 Kd7 49. Kc4 Kc7 50. a4 Kd7 51. b5 Kc7 52. bxc6 bxc6 53. Kb4 Kb7 54. a5 a6 55. Ka4 Kc7 56. Kb4 Kb7 57. Kc4 Kc7 58. Kd4 Kb7 59. Ke4 Kc7 60. Kf4 Kd7 61. Kg4 Ke7 62. Kf3 Kf7 63. Ke4 Ke7 64. Kd4 Kd7 65. Kc4 Kc7 66. Kc3 Kb7 67. Kd3 Ka7 68. Ke4 Ka8 0-1
+

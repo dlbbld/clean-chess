@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/knQsF7R8"]
+[Date "2020.03.02"]
+[White "Georguy"]
+[Black "etheria97"]
+[Result "0-1"]
+[UTCDate "2020.03.02"]
+[UTCTime "13:21:36"]
+[WhiteElo "1659"]
+[BlackElo "1702"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "C68"]
+[Opening "Ruy Lopez: Exchange Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 4. Bxc6 dxc6 5. d4 exd4 6. Qxd4 Qxd4 7. Nxd4 Nf6 8. e5 Ng4 9. Bf4 Bc5 10. c3 O-O 11. h3 Nh6 12. O-O Bxd4 13. cxd4 f6 14. exf6 Rxf6 15. Bxh6 Rxh6 16. Nc3 Be6 17. Rae1 Bc4 18. Ne2 Re6 19. b3 Bxe2 20. Kh2 Rae8 21. Rg1 Rf6 22. g4 Rxf2+ 23. Kg3 Rf3+ 24. Kg2 Ree3 25. Rxe2 Rg3+ 26. Kf2 Rxe2+ 27. Kxg3 Re3+ 28. Kh4 Re2 29. a4 Rb2 30. Re1 Rxb3 31. Re7 Rb4 32. Rxc7 Rxa4 33. Rxb7 Rxd4 34. Rb6 Rd6 35. Rxa6 Kf7 36. Kg5 Ke7 37. h4 Kd7 38. Ra7+ Kd8 39. Rxg7 Rd7 40. Rxd7+ Kxd7 41. Kh6 c5 42. Kxh7 c4 43. Kg7 c3 44. h5 c2 45. h6 c1=Q 46. h7 Qg5+ 47. Kh8 Qe7 48. Kg8 Qf8+ 0-1
+

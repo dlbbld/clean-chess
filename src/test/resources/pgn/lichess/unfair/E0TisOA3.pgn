@@ -1,0 +1,21 @@
+[Event "Hourly SuperBlitz Arena"]
+[Site "https://lichess.org/E0TisOA3"]
+[Date "2020.03.09"]
+[White "bhmoura"]
+[Black "PabloUrug"]
+[Result "0-1"]
+[UTCDate "2020.03.09"]
+[UTCTime "02:54:40"]
+[WhiteElo "1612"]
+[BlackElo "1898"]
+[WhiteRatingDiff "-2"]
+[BlackRatingDiff "+2"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C22"]
+[Opening "Center Game: Hall Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e5 2. d4 exd4 3. Qxd4 Nc6 4. Qc4 d6 5. Nf3 Be6 6. Qb5 Rb8 7. Bc4 a6 8. Qb3 Na5 9. Qa4+ b5 10. Qxa5 Bxc4 11. Qxa6 Nf6 12. Qc6+ Qd7 13. Qa6 Be7 14. Bg5 O-O 15. Nc3 Nxe4 16. Nxe4 Bxg5 17. Nexg5 h6 18. Ne4 Ra8 19. Qb7 Rab8 20. Qa7 Ra8 21. Qd4 f5 22. Nc3 Rfe8+ 23. Kd2 c5 24. Qf4 b4 25. Nd1 Re2+ 26. Kc1 Bb5 27. Re1 Rxe1 28. Nxe1 Re8 29. Nd3 Bxd3 30. cxd3 Re1 31. Qc4+ d5 32. Qxc5 Qe6 33. Qxb4 Qe2 34. Qb8+ Kh7 35. Qb3 Rxd1+ 36. Qxd1 Qxd1+ 37. Kxd1 d4 38. Ke2 g5 39. Rc1 f4 40. Rc7+ Kg6 41. b4 g4 42. b5 f3+ 43. gxf3 gxf3+ 44. Kxf3 Kf5 45. Kg2 h5 46. b6 Kf4 47. b7 Ke5 48. b8=Q Kd5 49. Qb5+ Kd6 50. Rc4 h4 51. Qb6+ Ke5 52. Rc5+ Kf4 53. Qf6+ Kg4 54. Re5 h3+ 0-1
+

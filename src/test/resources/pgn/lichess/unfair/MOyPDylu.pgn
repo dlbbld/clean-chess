@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/MOyPDylu"]
+[Date "2020.03.01"]
+[White "AlexJaraOb"]
+[Black "marciosgt"]
+[Result "1-0"]
+[UTCDate "2020.03.01"]
+[UTCTime "21:00:51"]
+[WhiteElo "1256"]
+[BlackElo "1284"]
+[WhiteRatingDiff "+9"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "300+0"]
+[ECO "A06"]
+[Opening "Zukertort Opening: Tennison Gambit"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 d5 2. Nf3 d4 3. b3 c5 4. Bb2 Nc6 5. c4 e5 6. d3 Bg4 7. Be2 Bxf3 8. Bxf3 Nf6 9. O-O Be7 10. a3 a5 11. Nd2 O-O 12. h3 Qc7 13. Qe2 Rab8 14. Rab1 b5 15. Ba1 b4 16. Bb2 bxa3 17. Bxa3 Nb4 18. Bxb4 axb4 19. Ra1 Ra8 20. Bg4 Rxa1 21. Rxa1 Qb7 22. Bf5 g6 23. Bg4 h5 24. Bf3 Nh7 25. g4 h4 26. Bg2 Bg5 27. Nf3 Bf6 28. Qd2 Qe7 29. Kh2 Ng5 30. Qe2 Nxf3+ 31. Qxf3 Bg5 32. Ra5 Bf4+ 33. Kg1 g5 34. Bf1 Qc7 35. Ra2 Qc6 36. Qe2 Ra8 37. Rxa8+ Qxa8 38. Qb2 Qa3 39. Qb1 Bd2 40. Be2 Bc3 41. Kf1 Qb2 42. Qxb2 Bxb2 43. Bd1 f6 44. f3 Bc3 45. Ke2 Kf7 46. Bc2 Ke7 47. Bd1 Kd7 48. Bc2 Kc7 49. Bd1 Kb6 50. Bc2 Ka5 51. Bd1 Kb6 52. Bc2 Kc6 53. Bd1 Kd7 54. Bc2 Ke6 55. Bd1 Kf7 56. Bc2 Kg6 57. Kd1 Kh7 58. Ke2 Kg7 59. Kd1 Kf7 60. Ke2 Ke7 61. Kf1 Ke6 62. Kg2 Kd7 63. Kf1 Bd2 64. Ke2 Be3 65. Kd1 Ke6 66. Ke2 Kd6 67. Kf1 Kc6 68. Kg2 Kb6 69. Kf1 Bf4 70. Ke2 Bg3 71. Kf1 Ka5 72. Kg2 f5 73. Kf1 fxe4 74. fxe4 Bf4 75. Ke2 Be3 76. Kf3 Bd2 77. Ke2 Bc3 78. Kf3 Bd2 79. Ke2 Be3 80. Kf3 1-0
+

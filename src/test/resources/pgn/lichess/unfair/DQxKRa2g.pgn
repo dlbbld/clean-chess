@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/DQxKRa2g"]
+[Date "2020.03.07"]
+[White "grifoman"]
+[Black "lowpatzer"]
+[Result "1-0"]
+[UTCDate "2020.03.07"]
+[UTCTime "15:46:14"]
+[WhiteElo "1817"]
+[BlackElo "1849"]
+[WhiteRatingDiff "+6"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A01"]
+[Opening "Nimzo-Larsen Attack: Indian Variation"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. b3 Nf6 2. Bb2 e6 3. Nf3 Be7 4. e3 O-O 5. Be2 d5 6. Bxf6 Bxf6 7. c3 c5 8. d4 Nc6 9. O-O cxd4 10. cxd4 Re8 11. Nbd2 e5 12. dxe5 Nxe5 13. Rc1 Bf5 14. Nxe5 Bxe5 15. Nf3 Bf6 16. Nd4 Bg6 17. Bb5 Re7 18. Rc3 a6 19. Bd3 Bxd3 20. Qxd3 Rc7 21. Rfc1 Rac8 22. Rxc7 Rxc7 23. Rxc7 Qxc7 24. Qc2 Qxc2 25. Nxc2 Kf8 26. Nd4 Ke7 27. Kf1 Kd6 28. Ke2 Bxd4 29. exd4 b5 30. Kd3 b4 31. f4 a5 32. g4 Ke6 33. h4 g6 34. Ke3 f6 35. Kf3 f5 36. g5 Kd6 37. Ke3 Kc6 38. Kd3 Kb5 39. Kd2 a4 40. Kc2 a3 41. Kd3 Kc6 42. Ke3 Kd6 43. Kf3 Ke6 44. Kg3 Kd6 45. Kf3 Kc6 46. Kf2 Kd6 47. Ke3 Ke6 48. Ke2 Kd6 49. Kd3 Ke6 50. Kd2 Kd6 51. Ke2 Ke6 52. Kf3 Kd6 53. Kf2 Ke6 54. Kg2 Kd6 55. Kg1 Ke6 56. Kg2 Kd6 57. Kh3 Ke6 58. Kg3 Kd6 59. h5 Ke6 60. hxg6 hxg6 61. Kh4 Kd6 62. Kg3 Ke6 63. Kf3 Kd6 64. Ke3 Kc6 65. Kd3 Kb7 66. Kd2 Kb6 67. Kc2 Ka5 68. Kc1 1-0
+

@@ -1,0 +1,23 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/Lv0hWAvD"]
+[Date "2020.03.06"]
+[White "Siarinho"]
+[Black "HrvojeZagreb"]
+[Result "1-0"]
+[UTCDate "2020.03.06"]
+[UTCTime "22:56:38"]
+[WhiteElo "2360"]
+[BlackElo "2234"]
+[WhiteRatingDiff "+4"]
+[BlackRatingDiff "-4"]
+[WhiteTitle "FM"]
+[BlackTitle "CM"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A00"]
+[Opening "Hungarian Opening: Dutch Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. g3 f5 2. Bg2 Nf6 3. Nf3 d6 4. d4 e6 5. Nc3 Be7 6. Bg5 d5 7. O-O c6 8. Ne5 O-O 9. f3 Nbd7 10. Qd2 c5 11. Nxd7 Bxd7 12. dxc5 Bxc5+ 13. Kh1 h6 14. Be3 Bd6 15. f4 Ne4 16. Nxe4 fxe4 17. c3 Qe7 18. Bd4 Bc6 19. e3 e5 20. fxe5 Bxe5 21. Qe2 a6 22. b3 Rxf1+ 23. Rxf1 Bxd4 24. exd4 Rc8 25. Qe3 Bb5 26. Rf2 Qa3 27. h3 Qa5 28. b4 Qa3 29. Rc2 Bd3 30. Rc1 Rxc3 31. Rxc3 Qxc3 32. Kh2 Qc2 33. g4 Bf1 34. Qg3 Qxg2+ 35. Qxg2 Bxg2 36. Kxg2 g5 37. h4 Kf7 38. h5 Ke6 39. Kf2 Kd6 40. a4 Kc6 41. Ke3 b6 42. Kd2 Kd6 43. Ke3 Kc6 44. Ke2 b5 45. a5 Kd6 46. Kf2 Ke6 47. Ke3 Kf6 48. Kd2 Ke6 49. Ke2 Kf6 50. Ke3 Ke6 51. Kf2 Kf6 52. Kg3 Ke6 53. Kg2 Kf6 54. Kf2 Ke6 55. Kf1 Kf6 56. Ke1 Ke6 57. Ke2 Kf6 58. Kd2 Ke6 59. Kc3 Kf6 60. Kc2 Ke6 61. Kc1 Kf6 62. Kd1 e3 63. Ke1 Ke6 64. Ke2 Kf6 65. Kxe3 Ke6 66. Kd3 Kf6 67. Ke3 1-0
+

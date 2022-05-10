@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/Altbmg1n"]
+[Date "2020.03.07"]
+[White "parohodik65"]
+[Black "Darguns"]
+[Result "1-0"]
+[UTCDate "2020.03.07"]
+[UTCTime "05:54:08"]
+[WhiteElo "1901"]
+[BlackElo "1974"]
+[WhiteRatingDiff "+7"]
+[BlackRatingDiff "-7"]
+[Variant "Standard"]
+[TimeControl "180+2"]
+[ECO "C00"]
+[Opening "French Defense: King's Indian Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 e6 2. d3 d5 3. Nc3 dxe4 4. Nxe4 Nf6 5. f3 Nxe4 6. dxe4 e5 7. Qxd8+ Kxd8 8. Bc4 f6 9. Be3 Bd6 10. O-O-O Ke7 11. Ne2 Be6 12. Bd5 c6 13. Bxe6 Kxe6 14. Rd2 Na6 15. Rhd1 Rad8 16. a3 b6 17. Ng3 Bc7 18. Nf5 g6 19. Nh6 Rxd2 20. Rxd2 Rd8 21. Ng4 Rxd2 22. Kxd2 Nb8 23. Nf2 a6 24. g4 Nd7 25. h4 b5 26. Kd3 a5 27. c4 Bb6 28. cxb5 cxb5 29. Bxb6 Nxb6 30. b3 Nd7 31. Kc3 Kd6 32. Nd3 Nf8 33. b4 a4 34. Nc5 Ne6 35. Nxe6 Kxe6 36. Kd3 h6 37. Ke3 f5 38. Kf2 fxg4 39. fxg4 Kf6 40. Kf3 g5 41. h5 Ke6 42. Ke3 1-0
+

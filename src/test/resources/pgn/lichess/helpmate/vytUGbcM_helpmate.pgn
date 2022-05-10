@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/vytUGbcM"]
+[Date "2020.03.05"]
+[White "Sailor7"]
+[Black "Semiyoda"]
+[Result "1-0"]
+[UTCDate "2020.03.05"]
+[UTCTime "00:14:34"]
+[WhiteElo "2273"]
+[BlackElo "2362"]
+[WhiteRatingDiff "-4"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "C44"]
+[Opening "King's Pawn Game: Tayler Opening, Inverted Hanham"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. e4 e5 2. Nf3 Nf6 3. d3 Nc6 4. Be2 d5 5. Nbd2 Bc5 6. O-O O-O 7. c3 a5 8. Qc2 Qe7 9. b3 d4 10. cxd4 Nxd4 11. Nxd4 Bxd4 12. Bb2 Bxb2 13. Qxb2 c5 14. Nc4 Nd7 15. Rac1 b6 16. Bg4 Rb8 17. Bxd7 Bxd7 18. Qxe5 Qxe5 19. Nxe5 Be8 20. Rcd1 f6 21. Nc4 Bf7 22. Nd6 Rfd8 23. Nxf7 Kxf7 24. Rd2 Rd4 25. Rfd1 Rbd8 26. f3 g5 27. Kf2 Ke6 28. Ke3 Kd6 29. Rc1 Kc6 30. Rc4 b5 31. Rxd4 Rxd4 32. Rc2 a4 33. bxa4 Rxa4 34. g3 Ra3 35. Ke2 Kd6 36. f4 g4 37. Kd2 b4 38. Rb2 h5 39. Ke3 Kc6 40. Rd2 Kb5 41. f5 c4 42. e5 c3 43. Rc2 fxe5 44. f6 Ra7 45. Ke4 Rd7 46. Kxe5 Rxd3 47. f7 Rf3 48. Ke6 Kc4 49. Ke7 Kd3 50. Rc1 c2 51. f8=Q Rxf8 52. Kxf8 Kd2 53. Rxc2+ Kxc2 54. Kg7 Kb2 55. Kh6 Kxa2 56. Kxh5 b3 57. Kxg4 b2 58. h4 b1=Q 59. Kg5 Qc1+ 60. Kg6 Qc2+ 61. Kh5 Qd2 62. g4 Qe2 63. Kg5 Kb3 64. h5 Qe3+ 65. Kg6 Kc4 66. g5 Qe4+ 67. Kg7 Qf4 68. g6 Qe5+ 69. Kh7 Qc7+ 70. g7 Kd5 71. h6 Qe5 72. Kh8 Qe4 73. h7 Qxh7+ 74. Kxh7 Kc4 75. g8=Q+ Kc3 76. Qg1 Kb4 77. Qa1 Kc5 78. Qb1 Kc6 79. Qa1 Kb7 80. Qb1+ Ka8 81. Kg6 Ka7 82. Kf5 Ka6 83. Ke4 Ka5 84. Kd3 Ka4 85. Kc4 Ka3 86. Qa1# 1-0
+

@@ -1,0 +1,21 @@
+[Event "<2000 SuperBlitz Arena"]
+[Site "https://lichess.org/yQOHgRpo"]
+[Date "2020.03.05"]
+[White "tk208"]
+[Black "Freedrick"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "03:24:54"]
+[WhiteElo "1550"]
+[BlackElo "1547"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "A40"]
+[Opening "Queen's Pawn Game"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 c6 2. c4 Qc7 3. Nc3 d6 4. Nf3 e5 5. e3 f5 6. e4 Nf6 7. d5 fxe4 8. Nd2 Bf5 9. g3 Nbd7 10. Bg2 Nc5 11. O-O Be7 12. b4 Nd3 13. Ndxe4 Bxe4 14. Nxe4 Nxb4 15. Nxf6+ Bxf6 16. dxc6 Nxc6 17. Ba3 Be7 18. Qc2 Bf6 19. Rad1 O-O 20. Bd5+ Kh8 21. Bxc6 Qxc6 22. Bxd6 Rfc8 23. c5 b6 24. Rc1 bxc5 25. Bxc5 Be7 26. Bxe7 Qxc2 27. Rxc2 Rxc2 28. Bd6 e4 29. Re1 Re8 30. a3 a5 31. Kg2 a4 32. h4 Rd2 33. Kh3 Rxd6 34. f3 e3 35. Kg2 Rd3 36. Kf1 Rxa3 37. Ke2 Ra2+ 38. Kd3 a3 39. Rxe3 Rxe3+ 40. Kxe3 Rc2 41. Kd3 Rc8 42. Ke2 a2 43. Kf2 a1=Q 44. Kg2 Qa2+ 45. Kh3 Qa8 46. h5 Qxf3 47. Kh4 Rc4+ 48. g4 Qf2+ 49. Kg5 Rc3 50. h6 Qd4 51. Kh5 Qd5+ 52. g5 Rc5 53. Kh4 Qxg5+ 54. Kh3 Rc4 55. Kh2 Qe3 56. Kh1 Rc2 0-1
+

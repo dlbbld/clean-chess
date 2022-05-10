@@ -1,0 +1,21 @@
+[Event "Rated Blitz game"]
+[Site "https://lichess.org/xD85FRxa"]
+[Date "2020.03.03"]
+[White "nimagoli939"]
+[Black "alelopessoares"]
+[Result "1-0"]
+[UTCDate "2020.03.03"]
+[UTCTime "21:22:51"]
+[WhiteElo "1192"]
+[BlackElo "1232"]
+[WhiteRatingDiff "-5"]
+[BlackRatingDiff "+5"]
+[Variant "Standard"]
+[TimeControl "180+0"]
+[ECO "D00"]
+[Opening "Queen's Pawn Game"]
+[Termination "Adjudication"]
+[Round "?"]
+
+1. d4 d5 2. h3 Nc6 3. Nf3 f6 4. a3 e5 5. dxe5 Nxe5 6. c3 Nxf3+ 7. exf3 Qe7+ 8. Be3 Qd6 9. Nd2 Bd7 10. Be2 O-O-O 11. O-O Nh6 12. c4 dxc4 13. Nxc4 Qxd1 14. Raxd1 Nf5 15. Bf4 Bd6 16. Nxd6+ Nxd6 17. Bh2 Nf5 18. Bd3 a6 19. g4 Nd4 20. Be4 Ne2+ 21. Kh1 Bc6 22. Bxc6 bxc6 23. Rfe1 Rxd1 24. Rxd1 Re8 25. Rd2 c5 26. Rc2 Nd4 27. Rxc5 Re7 28. Rd5 Nb5 29. Kg2 Rd7 30. Rxd7 Kxd7 31. h4 Kc6 32. f4 Kd5 33. Kf3 Kd4 34. g5 fxg5 35. fxg5 Kc4 36. h5 Kb3 37. Kf4 Kxb2 38. Kf5 Kxa3 39. g6 hxg6+ 40. hxg6 Nd6+ 41. Ke6 Nf5 42. Kxf5 a5 43. Bxc7 a4 44. Bd6+ Kb3 45. Ke6 Kc4 46. Kf7 Kd5 47. Be7 Ke5 48. Kxg7 Ke6 49. Bg5 a3 50. Kh6 a2 51. g7 a1=Q 52. Kh7 Qb1+ 53. Kh8 Qb8+ 54. g8=Q+ Qxg8+ 55. Kxg8 Kd5 56. f3 Ke6 57. Bc1 Kf6 58. Kh7 Ke6 59. Kh6 Kf7 60. Bb2 Kg8 61. Bh8 Kxh8 62. f4 Kg8 63. f5 Kf7 64. f6 Ke6 65. f7 Kd5 66. f8=Q Kc4 67. Kg5 Kb3 68. Kf4 Ka2 69. Ke3 Ka1 70. Kd3 Kb1 71. Kc4 Ka1 72. Kb5 Kb1 73. Ka6 Ka2 74. Qf1 Kb3 75. Qa1 Kc4 76. Qb1 Kd5 77. Qa1 Kc6 78. Ka5 Kb7 79. Qd1 Ka8 80. Ka6 Kb8 81. Qd8# 1-0
+

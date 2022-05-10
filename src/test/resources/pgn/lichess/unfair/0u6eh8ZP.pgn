@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/0u6eh8ZP"]
+[Date "2020.03.05"]
+[White "Yahya59"]
+[Black "chesster78"]
+[Result "0-1"]
+[UTCDate "2020.03.05"]
+[UTCTime "21:08:09"]
+[WhiteElo "1815"]
+[BlackElo "1799"]
+[WhiteRatingDiff "-6"]
+[BlackRatingDiff "+6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "A40"]
+[Opening "Modern Defense"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. d4 g6 2. Bf4 Bg7 3. Nc3 e6 4. Nb5 Ne7 5. Nxc7+ Kf8 6. Nxa8 d6 7. Nf3 e5 8. dxe5 dxe5 9. Bxe5 Qa5+ 10. Bc3 Qc5 11. Bxg7+ Kxg7 12. Qd4+ Qxd4 13. Nxd4 Nd5 14. O-O-O Rd8 15. e4 Nf4 16. Ne6+ Nxe6 17. Rxd8 Nxd8 18. Nc7 Ndc6 19. Bc4 Nd7 20. Nd5 Nde5 21. b3 a6 22. f4 Ng4 23. h3 Nf2 24. Re1 b5 25. Bd3 Nxd3+ 26. cxd3 Nd4 27. Kd2 Bb7 28. Kc3 Nc6 29. Nb4 Ne7 30. Nd5 Nxd5+ 31. exd5 Bxd5 32. d4 Be6 33. g4 h6 34. Re5 h5 35. f5 gxf5 36. gxf5 Bd7 37. Rd5 Kf6 38. Rxd7 Kxf5 39. Rxf7+ Kg5 40. Rh7 Kh4 41. d5 Kxh3 42. Rxh5+ Kg4 43. Rf5 Kxf5 44. d6 Ke6 45. d7 Kxd7 46. Kb4 Kc6 47. Ka5 Kb7 48. b4 Ka7 49. a4 Kb7 50. axb5 axb5 0-1
+

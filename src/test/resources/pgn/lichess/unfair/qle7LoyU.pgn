@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/qle7LoyU"]
+[Date "2020.03.10"]
+[White "goatdoldan"]
+[Black "ucii"]
+[Result "1-0"]
+[UTCDate "2020.03.10"]
+[UTCTime "22:01:17"]
+[WhiteElo "1561"]
+[BlackElo "1532"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-5"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B30"]
+[Opening "Sicilian Defense: Old Sicilian"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Nf3 Nc6 3. Bc4 d6 4. Nc3 Be6 5. d3 Bxc4 6. dxc4 Nb4 7. a3 Nc6 8. Bf4 e5 9. Be3 Nf6 10. Ne2 Nd4 11. Bxd4 exd4 12. c3 dxc3 13. Nxc3 Qa5 14. Qd2 Be7 15. Nd5 Qxd2+ 16. Nxd2 Nxd5 17. exd5 O-O 18. O-O Rfe8 19. Nf3 f5 20. Rfe1 Rac8 21. b3 Bf6 22. Rab1 Bc3 23. Rxe8+ Rxe8 24. h3 Be5 25. Nxe5 Rxe5 26. a4 Re2 27. Kf1 Re8 28. Re1 Rxe1+ 29. Kxe1 Kf7 30. Ke2 a6 31. Ke3 Kf6 32. g4 g6 33. gxf5 gxf5 34. f4 h5 35. h4 b6 36. Kd3 Ke7 37. Kc3 Kd8 38. b4 Kc7 39. bxc5 bxc5 40. Kd3 Kb6 41. Kc3 Ka5 42. Kb3 Kb6 43. Ka3 a5 44. Kb3 Ka6 45. Ka3 Kb6 46. Kb3 Kc7 47. Kc3 Kb7 48. Kb3 Kb6 49. Kc3 Kc7 50. Kd3 Kd7 51. Ke3 Kd8 52. Kf3 Ke7 53. Ke3 Kf6 54. Kd3 Kf7 55. Ke3 Ke7 56. Kf3 Kd7 57. Ke3 Kc7 58. Kd3 Kb7 59. Ke3 Ka7 60. Kf3 Ka6 61. Ke2 Kb6 62. Kd2 Kb7 63. Kc2 Ka7 64. Kc3 Kb8 65. Kd3 Kb7 66. Kd2 Kc7 67. Kc2 Kc8 68. Kd2 Kb8 69. Ke2 Kb7 70. Kf2 Kc7 71. Kf3 Kc8 72. Kg3 Kb8 73. Kh3 Kb7 74. Kh2 Kb6 75. Kg2 Ka6 76. Kf2 Ka7 77. Kf3 Ka8 78. Ke3 Kb8 79. Kd2 Kb7 80. Kd3 Ka7 81. Kc3 Ka6 82. Kd3 Kb6 83. Kd2 1-0
+

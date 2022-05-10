@@ -1,0 +1,21 @@
+[Event "Rated Bullet game"]
+[Site "https://lichess.org/fPnoYQtW"]
+[Date "2020.03.04"]
+[White "grnmehdi"]
+[Black "Anette94"]
+[Result "1-0"]
+[UTCDate "2020.03.04"]
+[UTCTime "19:38:19"]
+[WhiteElo "1684"]
+[BlackElo "1669"]
+[WhiteRatingDiff "+5"]
+[BlackRatingDiff "-6"]
+[Variant "Standard"]
+[TimeControl "60+0"]
+[ECO "B20"]
+[Opening "Sicilian Defense: Bowdler Attack"]
+[Termination "Time forfeit"]
+[Round "?"]
+
+1. e4 c5 2. Bc4 Nc6 3. Nc3 e6 4. a3 Nge7 5. d3 d5 6. exd5 Nxd5 7. Ba2 Nxc3 8. bxc3 Bd6 9. h3 O-O 10. Ne2 Ne5 11. O-O Ng6 12. Re1 b6 13. Bc4 Bb7 14. d4 Nh4 15. g3 Nf3+ 16. Kf1 Nxe1 17. Kxe1 cxd4 18. Qxd4 Bc5 19. Qxd8 Raxd8 20. Be3 Rd6 21. Bxc5 bxc5 22. Rd1 Rfd8 23. Rxd6 Rxd6 24. Nf4 Bd5 25. Bxd5 exd5 26. Kd2 g5 27. Ne2 f5 28. c4 d4 29. Kd3 h5 30. Nc1 a5 31. Nb3 Rc6 32. Nxa5 Ra6 33. Nb7 Rxa3+ 34. Kd2 Rf3 35. Ke2 Rc3 36. Kd2 Rxc4 37. Nd6 Rc3 38. Nxf5 Kf7 39. Nd6+ Ke6 40. Ne4 Ke5 41. Nxc3 dxc3+ 42. Kxc3 Ke4 43. Kc4 Kf3 44. Kxc5 Kxf2 45. Kb5 Kxg3 46. c4 Kxh3 47. c5 g4 48. c6 g3 49. c7 g2 50. c8=Q+ Kh2 51. Qc7+ Kh1 52. Qh2+ 1-0
+
