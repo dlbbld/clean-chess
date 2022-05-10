@@ -23,7 +23,9 @@ public class GoingToCorner implements EnumConstants {
 
     // 1: let P be moved piece in m and let s be the square P is moving to
 
+    // let P be moved piece in m
     final Piece p;
+    // let s be the square P is moving to
     final Square s;
     final Square fromSquare;
     if (CastlingUtility.calculateIsCastlingMove(m.moveSpecification())) {
@@ -33,12 +35,8 @@ public class GoingToCorner implements EnumConstants {
       s = CastlingUtility.calculateKingCastlingTo(m.moveSpecification());
       fromSquare = CastlingUtility.calculateKingCastlingFrom(m.moveSpecification());
     } else {
-      // let P be moved piece in m
       p = m.movingPiece();
-
-      // let s be the square P is moving to
       s = m.moveSpecification().toSquare();
-
       fromSquare = m.moveSpecification().fromSquare();
     }
 
@@ -53,7 +51,7 @@ public class GoingToCorner implements EnumConstants {
     // to be h8)
     Square target;
     if (MaterialUtility.calculateHasNoBishops(color, staticPosition, SquareType.DARK_SQUARE)
-        && (MaterialUtility.calculateNumberOfPieces(color, staticPosition, PieceType.BISHOP) != 0 || MaterialUtility
+        && (MaterialUtility.calculateHasNoBishops(color, staticPosition) || MaterialUtility
             .calculateHasNoBishops(color.getOppositeSide(), staticPosition, SquareType.LIGHT_SQUARE))) {
       // 4: set target := if goal = Win then (P.type=K)?h6 : h8 else (P.type =K)?h8 : g8
       target = goal == Goal.WIN ? p.getPieceType() == KING ? H6 : H8 : p.getPieceType() == KING ? H8 : G8;

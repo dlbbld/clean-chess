@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -56,15 +57,12 @@ public class FindHelpmate {
   // Output: bool (true if a checkmate sequence was found, false otherwise)
   private boolean findHelpmate(ApiBoard board, int depth, int maxDepth) {
 
-    logger.info(depth + " / " + maxDepth);
-
     // added for in c code
     if (board.isInsufficientMaterial(color)) {
       return false;
     }
 
     // 1: if the intended winner is checkmating their opponent in pos then return true
-
     if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
       return true;
     }
@@ -74,32 +72,13 @@ public class FindHelpmate {
     // receiving checkmate in the position then return false
 
     // if the intended winner has just the king
-    if (MaterialUtility.calculateIsKingOnly(color, board.getStaticPosition())) {
-      return false;
-    }
 
     // position is unwinnable according to Lemma 5
-    if (!MaterialUtility.calculateHasPawn(board.getStaticPosition())
-        && MaterialUtility.calculateIsKingAndKnightOnly(color, board.getStaticPosition())) {
-      if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
-          && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), board.getStaticPosition())
-          && MaterialUtility.calculateHasNoRooks(color.getOppositeSide(), board.getStaticPosition())) {
-        return false;
-      }
-    }
-
     // position is unwinnable according to Lemma 6
-    for (final SquareType squareType : SquareType.values()) {
-      if (squareType == SquareType.NONE) {
-        continue;
-      }
-      if (!MaterialUtility.calculateHasPawn(board.getStaticPosition())
-          && MaterialUtility.calculateIsKingAndBishopsOnly(color, board.getStaticPosition(), squareType)
-          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
-          && MaterialUtility.calculateHasNoBishops(color, board.getStaticPosition(),
-              squareType.getOppositeSquareType())) {
-        return false;
-      }
+    if (MaterialUtility.calculateIsKingOnly(color, board.getStaticPosition())
+        || calculateIsUnwinnableAccordingLemma5(color, board.getStaticPosition())
+        || calculateIsUnwinnableAccordingLemma6(color, board.getStaticPosition())) {
+      return false;
     }
 
     // stalemate
@@ -118,6 +97,9 @@ public class FindHelpmate {
 
     // 4: if cnt > nodesBound or d < 0 then return false (-> The search limits are exceeded)
     if (cnt > NODES_BOUND || d < 0) {
+
+      logger.info("Interrupting: " + depth + " / " + maxDepth);
+
       if (!isInterrupted) {
         isInterrupted = true;
       }
@@ -136,7 +118,7 @@ public class FindHelpmate {
     for (final LegalMove legalMove : board.getLegalMoveSet()) {
 
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
-      final var inc = Score.score(color, board, legalMove).getChangeIncrement();
+      final var inc = Score.score(color, board, legalMove).getIncrement();
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
@@ -155,6 +137,33 @@ public class FindHelpmate {
     if (map.containsKey(dynamicPosition)) {
       final int storedDepth = NonNullWrapperCommon.get(map, dynamicPosition);
       return storedDepth >= d;
+    }
+    return false;
+  }
+
+  private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
+    if (!MaterialUtility.calculateHasPawn(staticPosition)
+        && MaterialUtility.calculateIsKingAndKnightOnly(color, staticPosition)) {
+      if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoRooks(color.getOppositeSide(), staticPosition)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean calculateIsUnwinnableAccordingLemma6(Side color, StaticPosition staticPosition) {
+    for (final SquareType squareType : SquareType.values()) {
+      if (squareType == SquareType.NONE) {
+        continue;
+      }
+      if (!MaterialUtility.calculateHasPawn(staticPosition)
+          && MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition, squareType)
+          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())) {
+        return true;
+      }
     }
     return false;
   }

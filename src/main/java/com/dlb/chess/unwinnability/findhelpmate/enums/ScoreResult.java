@@ -6,14 +6,14 @@ public enum ScoreResult {
   REWARD(1),
   PUNISH(-2);
 
-  private final int changeIncrement;
+  private final int increment;
 
-  ScoreResult(int changeIncrement) {
-    this.changeIncrement = changeIncrement;
+  ScoreResult(int increment) {
+    this.increment = increment;
   }
 
-  public int getChangeIncrement() {
-    return changeIncrement;
+  public int getIncrement() {
+    return increment;
   }
 
 }

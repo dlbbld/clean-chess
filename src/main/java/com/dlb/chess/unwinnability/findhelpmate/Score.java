@@ -22,16 +22,18 @@ public class Score {
     // 1: if it is the intended winner’s turn in pos then
     if (board.getHavingMove() == color) {
       // 2: if m is a capture or m is a pawn push or Going-to-corner(pos, m, Win) then
-
-      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())
-          || legalMove.pieceCaptured() != Piece.NONE || legalMove.movingPiece().getPieceType() == PieceType.PAWN
+      // 3: return Reward
+      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())) {
+        if (GoingToCorner.goingToCorner(color, board.getStaticPosition(), legalMove, Goal.WIN)) {
+          return ScoreResult.REWARD;
+        }
+      } else if (legalMove.pieceCaptured() != Piece.NONE || legalMove.movingPiece().getPieceType() == PieceType.PAWN
           || GoingToCorner.goingToCorner(color, board.getStaticPosition(), legalMove, Goal.WIN)) {
 
-        // 3: return Reward
         return ScoreResult.REWARD;
 
-        // 4: else ( -> It is the intended loser’s turn in pos)
       }
+      // 4: else ( -> It is the intended loser’s turn in pos)
     } else {
 
       // 5: if the intended winner has just a knight and the intended loser has just pawns
