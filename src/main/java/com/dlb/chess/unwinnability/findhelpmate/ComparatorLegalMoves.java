@@ -25,10 +25,6 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
 
   @Override
   public int compare(LegalMove firstLegalMove, LegalMove secondLegalMove) {
-    return -compareReverse(firstLegalMove, secondLegalMove);
-  }
-
-  public int compareReverse(LegalMove firstLegalMove, LegalMove secondLegalMove) {
     final ScoreResult firstScore = Score.score(color, havingMove, staticPosition, firstLegalMove);
     final ScoreResult secondScore = Score.score(color, havingMove, staticPosition, secondLegalMove);
     // preferred reward - normal - punish
