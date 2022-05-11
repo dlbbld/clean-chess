@@ -25,7 +25,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   // @Test
   void testSingle() {
-    final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
+    final Board board = new Board("5NQN/3k4/5B2/8/1P3KP1/B2PP2P/R6P/3Q1B1R b - - 0 50");
 
     assertEquals(UnwinnableFullResult.UNWINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
   }

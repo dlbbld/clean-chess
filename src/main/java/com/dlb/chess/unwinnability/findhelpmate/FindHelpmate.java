@@ -1,6 +1,9 @@
 package com.dlb.chess.unwinnability.findhelpmate;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
@@ -9,7 +12,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
@@ -24,7 +26,7 @@ public class FindHelpmate {
 
   private final Side color;
 
-  private final HashMap<DynamicPosition, Integer> map = new HashMap<>();
+  private final HashMap<StaticPosition, Integer> map = new HashMap<>();
 
   private int cnt = 0;
 
@@ -38,15 +40,18 @@ public class FindHelpmate {
   }
 
   public FindHelpmateResult findHelpmate(ApiBoard board, int maxDepth) {
+
+    logger.info("maxDepth=" + maxDepth);
     this.cnt = 0;
     this.isInterrupted = false;
 
     final var hasHelpmate = findHelpmate(board, 0, maxDepth);
 
+    if (hasHelpmate) {
+      return FindHelpmateResult.TRUE;
+    }
+
     if (!isInterrupted) {
-      if (hasHelpmate) {
-        return FindHelpmateResult.TRUE;
-      }
       return FindHelpmateResult.FALSE;
     }
 
@@ -87,18 +92,23 @@ public class FindHelpmate {
       return false;
     }
 
+    // set d := limits.max-depth - depth
+    final var d = maxDepth - depth;
+
+    // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
+    if (calculateIsInTranspositionTable(board.getStaticPosition(), d)) {
+      return false;
+    }
+
     // 3: increase cnt and set d := limits.max-depth - depth
 
     // increase cnt
     cnt++;
 
-    // set d := limits.max-depth - depth
-    final var d = maxDepth - depth;
-
     // 4: if cnt > nodesBound or d < 0 then return false (-> The search limits are exceeded)
     if (cnt > NODES_BOUND || d < 0) {
 
-      logger.info("Interrupting: " + depth + " / " + maxDepth);
+      // logger.info("Interrupting: " + cnt + " / " + depth + " / " + maxDepth);
 
       if (!isInterrupted) {
         isInterrupted = true;
@@ -106,16 +116,13 @@ public class FindHelpmate {
       return false;
     }
 
-    // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
-    if (calculateIsInTranspositionTable(board.getDynamicPosition(), d)) {
-      return false;
-    }
-
     // 6: store (pos,D) in table
-    map.put(board.getDynamicPosition(), d);
+    map.put(board.getStaticPosition(), d);
 
     // 7: for every legal move m in pos do:
-    for (final LegalMove legalMove : board.getLegalMoveSet()) {
+    final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
+    Collections.sort(legalMoveList);
+    for (final LegalMove legalMove : legalMoveList) {
 
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       final var inc = Score.score(color, board, legalMove).getIncrement();
@@ -133,9 +140,9 @@ public class FindHelpmate {
     return false;
   }
 
-  private boolean calculateIsInTranspositionTable(DynamicPosition dynamicPosition, int d) {
-    if (map.containsKey(dynamicPosition)) {
-      final int storedDepth = NonNullWrapperCommon.get(map, dynamicPosition);
+  private boolean calculateIsInTranspositionTable(StaticPosition staticPosition, int d) {
+    if (map.containsKey(staticPosition)) {
+      final int storedDepth = NonNullWrapperCommon.get(map, staticPosition);
       return storedDepth >= d;
     }
     return false;

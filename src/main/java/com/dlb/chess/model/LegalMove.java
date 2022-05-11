@@ -7,6 +7,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.moves.utility.CastlingUtility;
 
 public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured)
     implements Comparable<LegalMove>, EnumConstants {
@@ -42,6 +43,23 @@ public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, 
 
   @Override
   public int compareTo(LegalMove legalMove) {
+    if (!CastlingUtility.calculateIsCastlingMove(this.moveSpecification)
+        && !CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification)) {
+      if (this.movingPiece().getPieceType() == PAWN && legalMove.movingPiece().getPieceType() != PAWN) {
+        return -1;
+      }
+      if (this.movingPiece().getPieceType() != PAWN && legalMove.movingPiece().getPieceType() == PAWN) {
+        return 1;
+      }
+      if (this.pieceCaptured() != Piece.NONE && legalMove.pieceCaptured() == Piece.NONE
+          || this.pieceCaptured() == Piece.NONE && legalMove.pieceCaptured() != Piece.NONE) {
+        return -1;
+      }
+      if (this.pieceCaptured() == Piece.NONE && legalMove.pieceCaptured() != Piece.NONE
+          || this.pieceCaptured() == Piece.NONE && legalMove.pieceCaptured() != Piece.NONE) {
+        return 1;
+      }
+    }
     return this.moveSpecification().compareTo(legalMove.moveSpecification());
   }
 
