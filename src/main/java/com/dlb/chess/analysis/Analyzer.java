@@ -277,10 +277,8 @@ public class Analyzer extends AnalyzerPrint {
     final List<List<HalfMove>> repetitionListListInitialEnPassantCapture = calculateRepetitionListListInitialEnPassantCapture(
         halfMoveList);
 
-    final List<YawnIndex> indexList = calculateYawnMoveIndex(board);
-
-    final List<List<YawnHalfMove>> yawnMoveListList = calculateYawnMoveRule(board.getInitialFen().havingMove(),
-        board.getInitialFen().fullMoveNumber(), board.getHalfMoveList(), indexList);
+    final List<List<YawnHalfMove>> yawnMoveListList = calculateYawnMoveRule(board,
+        ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
 
     final List<RepeatingSequence> sequenceRepetitionList = calculateSequenceRepetition(halfMoveList);
 
@@ -393,8 +391,19 @@ public class Analyzer extends AnalyzerPrint {
     return false;
   }
 
+  private static List<List<YawnHalfMove>> calculateYawnMoveRule(ApiBoard board, int numberOfHalfMovesThreshold) {
+
+    final List<YawnIndex> indexList = calculateYawnMoveIndex(board, numberOfHalfMovesThreshold);
+    return calculateYawnMoveRule(board.getInitialFen().havingMove(), board.getInitialFen().fullMoveNumber(),
+        board.getHalfMoveList(), indexList, numberOfHalfMovesThreshold);
+  }
+
   private static List<List<YawnHalfMove>> calculateYawnMoveRule(Side havingMoveInitial, int fullMoveNumberInitial,
-      final List<HalfMove> halfMoveList, List<YawnIndex> indexList) {
+      final List<HalfMove> halfMoveList, List<YawnIndex> indexList, int numberOfHalfMovesThreshold) {
+
+    if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      throw new IllegalArgumentException("The threshold cannot be below fifty moves");
+    }
 
     final List<List<YawnHalfMove>> resultList = new ArrayList<>();
 
@@ -411,22 +420,32 @@ public class Analyzer extends AnalyzerPrint {
       }
 
       final var halfMoveClockEnd = sequence.halfMoveClockEnd();
-      if (halfMoveClockEnd < ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      if (halfMoveClockEnd < numberOfHalfMovesThreshold) {
         throw new ProgrammingMistakeException();
       }
 
-      if (halfMoveClockEnd == ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      if (halfMoveClockEnd == numberOfHalfMovesThreshold) {
         // we add the last entry, which also ends the sequence
         {
           final var performedIndex = sequence.endPerformedIndex();
-          final var sequenceLength = ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
+          final var sequenceLength = numberOfHalfMovesThreshold;
           final YawnHalfMove secondEntry = calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
               performedIndex, sequenceLength);
           result.add(secondEntry);
         }
+        // we add the entry reaching the threshold if sequence below fifty moves
+      } else if (halfMoveClockEnd < ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
+          && numberOfHalfMovesThreshold < ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+
+        final var performedIndex = sequence.beginPerformedIndex() + numberOfHalfMovesThreshold - 1;
+        final var sequenceLength = numberOfHalfMovesThreshold;
+        final YawnHalfMove intermediaryEntry = calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial,
+            halfMoveList, performedIndex, sequenceLength);
+        result.add(intermediaryEntry);
+
       } else {
-        // we add the first half move when the fifty-move rule becomes effective (the
-        // 100th)
+
+        // we add the half move when the fifty-move rule becomes effective
         {
           final var performedIndex = sequence.beginPerformedIndex()
               + ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
@@ -548,7 +567,11 @@ public class Analyzer extends AnalyzerPrint {
     return maxHalfMoveClock;
   }
 
-  private static List<YawnIndex> calculateYawnMoveIndex(ApiBoard board) {
+  private static List<YawnIndex> calculateYawnMoveIndex(ApiBoard board, int numberOfHalfMovesThreshold) {
+
+    if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      throw new IllegalArgumentException("The threshold cannot be below fifty moves");
+    }
 
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
@@ -558,7 +581,7 @@ public class Analyzer extends AnalyzerPrint {
     // and begins with a pawn move or catpure, we add the initial sequence here
     if (calculateIsUseInitialFenHalfMoveClockOnly(halfMoveList)) {
       final var halfMoveClockEnd = board.getInitialFen().halfMoveClock();
-      if (halfMoveClockEnd >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      if (halfMoveClockEnd >= numberOfHalfMovesThreshold) {
         final var halfMoveCount = 0;
 
         final var beginHalfMoveNumber = halfMoveCount - halfMoveClockEnd + 1;
@@ -594,7 +617,7 @@ public class Analyzer extends AnalyzerPrint {
       final var halfMoveClock = halfMove.halfMoveClock();
       // we are only interested in sequences of length starting from required length
       // for fifty-move rule
-      if (halfMoveClock >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      if (halfMoveClock >= numberOfHalfMovesThreshold) {
         final var beginPerformedIndex = i - halfMoveClock + 1;
 
         // we check the first move of the sequence if in the PGN
