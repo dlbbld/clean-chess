@@ -4,16 +4,23 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.MaterialUtility;
+import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
@@ -26,14 +33,16 @@ public class FindHelpmate {
 
   private final Side color;
 
-  private final HashMap<StaticPosition, Integer> map = new HashMap<>();
+  private final HashMap<String, Integer> map = new HashMap<>();
 
   private int cnt = 0;
 
   private boolean isInterrupted = false;
 
+  private List<LegalMove> mateList = new ArrayList<>();
+
   // empirically enough
-  private static final int NODES_BOUND = 20000;
+  private static final int NODES_BOUND = 10000;
 
   public FindHelpmate(Side side) {
     this.color = side;
@@ -41,13 +50,22 @@ public class FindHelpmate {
 
   public FindHelpmateResult findHelpmate(ApiBoard board, int maxDepth) {
 
-    logger.info("maxDepth=" + maxDepth);
+    // logger.info("maxDepth=" + maxDepth);
     this.cnt = 0;
     this.isInterrupted = false;
+    this.mateList = new ArrayList<>();
 
     final var hasHelpmate = findHelpmate(board, 0, maxDepth);
 
     if (hasHelpmate) {
+      for (final LegalMove legalMove : mateList) {
+        board.performMove(legalMove.moveSpecification());
+      }
+      if (!board.isCheckmate()) {
+        throw new ProgrammingMistakeException("It is not a checkmate");
+      }
+      logger.info("Checkmate in " + mateList.size() + " half-moves");
+      // System.out.println(PgnCreate.createPgnFileString(board));
       return FindHelpmateResult.TRUE;
     }
 
@@ -96,7 +114,7 @@ public class FindHelpmate {
     final var d = maxDepth - depth;
 
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
-    if (calculateIsInTranspositionTable(board.getStaticPosition(), d)) {
+    if (calculateIsInTranspositionTable(board.getFen(), d)) {
       return false;
     }
 
@@ -113,40 +131,56 @@ public class FindHelpmate {
       if (!isInterrupted) {
         isInterrupted = true;
       }
-      System.out.println(board);
+      // System.out.println(board);
       return false;
     }
 
     // 6: store (pos,D) in table
-    map.put(board.getStaticPosition(), d);
+    store(board.getFen(), d);
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-    Collections.sort(legalMoveList, new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition()));
+    final Set<Square> threatenedSquareSet = AbstractThreatenSquares
+        .calculateThreatenedSquares(board.getStaticPosition(), board.getHavingMove().getOppositeSide());
+    Collections.sort(legalMoveList,
+        new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition(), threatenedSquareSet));
     for (final LegalMove legalMove : legalMoveList) {
+      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification()) || EnPassantCaptureUtility
+          .calculateIsEnPassantCaptureNewMove(board.getStaticPosition(), legalMove.moveSpecification())) {
+        // not interested
+        continue;
+      }
 
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
+      mateList.add(legalMove);
       final var hasHelpmate = findHelpmate(board, depth + 1, maxDepth + inc);
       board.unperformMove();
       if (hasHelpmate) {
         return true;
       }
+      mateList.remove(mateList.size() - 1);
     }
 
     // 10: return false (-> No mate was found after exploring every legal move)
     return false;
   }
 
-  private boolean calculateIsInTranspositionTable(StaticPosition staticPosition, int d) {
-    if (map.containsKey(staticPosition)) {
-      final int storedDepth = NonNullWrapperCommon.get(map, staticPosition);
+  private boolean calculateIsInTranspositionTable(String fen, int d) {
+    final String piecePlacement = FenParserRaw.parsePiecePlacement(fen);
+    if (map.containsKey(piecePlacement)) {
+      final int storedDepth = NonNullWrapperCommon.get(map, piecePlacement);
       return storedDepth >= d;
     }
     return false;
+  }
+
+  private void store(String fen, int d) {
+    final String piecePlacement = FenParserRaw.parsePiecePlacement(fen);
+    map.put(piecePlacement, d);
   }
 
   private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
