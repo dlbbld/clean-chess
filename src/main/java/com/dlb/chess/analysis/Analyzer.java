@@ -34,8 +34,7 @@ import com.google.common.collect.ImmutableList;
 public class Analyzer extends AnalyzerPrint {
 
   public static void main(String[] args) throws Exception {
-    Analyzer.printAnalysis(
-        ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\games\\various",
+    printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\games\\various",
         "Ob5ozxgG.pgn");
   }
 
@@ -274,7 +273,7 @@ public class Analyzer extends AnalyzerPrint {
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
     final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(halfMoveList,
-        EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+        ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
     final List<List<HalfMove>> repetitionListListInitialEnPassantCapture = calculateRepetitionListListInitialEnPassantCapture(
         halfMoveList);
 
@@ -336,7 +335,8 @@ public class Analyzer extends AnalyzerPrint {
   private static List<List<HalfMove>> calculateRepetitionListListInitialEnPassantCapture(List<HalfMove> halfMoveList) {
 
     final List<List<HalfMove>> repetitionListListIgnoringEnPassantCapture = RepetitionUtility
-        .calculateRepetitionListList(halfMoveList, EnPassantCaptureRuleThreefold.DO_IGNORE);
+        .calculateRepetitionListList(halfMoveList, ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD,
+            EnPassantCaptureRuleThreefold.DO_IGNORE);
 
     final List<List<HalfMove>> list = new ArrayList<>();
     for (final List<HalfMove> currentHalfMoveList : repetitionListListIgnoringEnPassantCapture) {
