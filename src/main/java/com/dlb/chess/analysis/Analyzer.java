@@ -15,6 +15,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.constants.ChessConstants;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -30,7 +31,13 @@ import com.dlb.chess.winnable.WinnableUtility;
 import com.dlb.chess.winnable.enums.Winnable;
 import com.google.common.collect.ImmutableList;
 
-public class Analyzer {
+public class Analyzer extends AnalyzerPrint {
+
+  public static void main(String[] args) throws Exception {
+    Analyzer.printAnalysis(
+        ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\games\\various",
+        "Ob5ozxgG.pgn");
+  }
 
   // TODO clean-up sequence repetition
   // not maintained anymore, keep false, including was too slow and not functional anymore
@@ -240,6 +247,7 @@ public class Analyzer {
   }
 
   public static void printAnalysis(String pgn) throws Exception {
+    // delegated to package protected method for class organization
     AnalyzerPrint.printAnalysis(pgn);
   }
 

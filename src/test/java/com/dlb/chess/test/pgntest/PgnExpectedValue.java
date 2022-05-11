@@ -2742,6 +2742,10 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("tal_bronstein_1961.pgn", "", "", "", BLANK_ESRL, 3, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, Winnable.UNKNOWN, "8/5p2/1p2p2p/6pk/r6q/4Q3/5P2/2R3K1 w - - 6 41"));
 
+    // Ambrona 83
+    list.add(new PgnFileTestCase("Ob5ozxgG.pgn", "", "", "", BLANK_ESRL, 5, 83, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, Winnable.NO, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
+
     return new PgnFileTestCaseList(PgnTest.GAMES_VARIOUS, list);
   }
 

@@ -17,23 +17,23 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 //for class organization only, keep methods protected as already used as delegate in main class Analysis
 public class AnalyzerPrint {
 
-  public static void printAnalysis(String pgn) throws Exception {
+  protected static void printAnalysis(String pgn) throws Exception {
 
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
 
     final PgnFile pgnFile = PgnReader.readPgn(lines);
 
     final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
-    Analyzer.printAnalysis(board);
+    printAnalysis(board);
   }
 
-  public static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
+  protected static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
 
     final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
-    Analyzer.printAnalysis(board);
+    printAnalysis(board);
   }
 
-  public static void printAnalysis(ApiBoard board) throws Exception {
+  protected static void printAnalysis(ApiBoard board) throws Exception {
     final Analysis analysis = Analyzer.calculateAnalysis(board);
 
     final List<String> output = new ArrayList<>();
