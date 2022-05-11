@@ -1,11 +1,11 @@
 package com.dlb.chess.unwinnability.findhelpmate;
 
+import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.SquareType;
-import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
@@ -18,17 +18,17 @@ public class Score {
 
   // Inputs: position, legal move in the position
   // Output: Normal, Reward, or Punish (variation score)
-  public static ScoreResult score(Side color, ApiBoard board, LegalMove legalMove) {
+  public static ScoreResult score(Side color, Side havingMove, StaticPosition staticPosition, LegalMove legalMove) {
     // 1: if it is the intended winner’s turn in pos then
-    if (board.getHavingMove() == color) {
+    if (havingMove == color) {
       // 2: if m is a capture or m is a pawn push or Going-to-corner(pos, m, Win) then
       // 3: return Reward
       if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())) {
-        if (GoingToCorner.goingToCorner(color, board.getStaticPosition(), legalMove, Goal.WIN)) {
+        if (GoingToCorner.goingToCorner(color, staticPosition, legalMove, Goal.WIN)) {
           return ScoreResult.REWARD;
         }
       } else if (legalMove.pieceCaptured() != Piece.NONE || legalMove.movingPiece().getPieceType() == PieceType.PAWN
-          || GoingToCorner.goingToCorner(color, board.getStaticPosition(), legalMove, Goal.WIN)) {
+          || GoingToCorner.goingToCorner(color, staticPosition, legalMove, Goal.WIN)) {
 
         return ScoreResult.REWARD;
 
@@ -44,20 +44,18 @@ public class Score {
 
       // if the intended winner has just a knight and the intended loser has just pawns
       // and/or queens
-      final var isFirstCondition = MaterialUtility.calculateIsKingAndKnightOnly(color, board.getStaticPosition())
-          && MaterialUtility.calculateIsKingAndPawnsOrQueensOnly(color.getOppositeSide(), board.getStaticPosition());
+      final var isFirstCondition = MaterialUtility.calculateIsKingAndKnightOnly(color, staticPosition)
+          && MaterialUtility.calculateIsKingAndPawnsOrQueensOnly(color.getOppositeSide(), staticPosition);
 
       // or the intended winner has just bishops of the same square color and
       // the intended loser does not have knights or bishops of the opposite color
-      final var isSecondConditionDarkSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color,
-          board.getStaticPosition(), SquareType.DARK_SQUARE)
-          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
-          && MaterialUtility.calculateHasNoLightSquareBishops(color.getOppositeSide(), board.getStaticPosition());
+      final var isSecondConditionDarkSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition,
+          SquareType.DARK_SQUARE) && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoLightSquareBishops(color.getOppositeSide(), staticPosition);
 
-      final var isSecondConditionLightSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color,
-          board.getStaticPosition(), SquareType.LIGHT_SQUARE)
-          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), board.getStaticPosition())
-          && MaterialUtility.calculateHasNoDarkSquareBishops(color.getOppositeSide(), board.getStaticPosition());
+      final var isSecondConditionLightSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition,
+          SquareType.LIGHT_SQUARE) && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoDarkSquareBishops(color.getOppositeSide(), staticPosition);
 
       if (isFirstCondition || isSecondConditionDarkSquare || isSecondConditionLightSquare) {
         // 6: if m is a promotion to a queen or rook then return Punish
@@ -73,7 +71,7 @@ public class Score {
       }
 
       // 8: if Going-to-corner(pos, m, Lose) then return Reward
-      if (GoingToCorner.goingToCorner(color, board.getStaticPosition(), legalMove, Goal.LOSE)) {
+      if (GoingToCorner.goingToCorner(color, staticPosition, legalMove, Goal.LOSE)) {
         return ScoreResult.REWARD;
       }
 

@@ -33,7 +33,7 @@ public class FindHelpmate {
   private boolean isInterrupted = false;
 
   // empirically enough
-  private static final int NODES_BOUND = 10000;
+  private static final int NODES_BOUND = 20000;
 
   public FindHelpmate(Side side) {
     this.color = side;
@@ -113,6 +113,7 @@ public class FindHelpmate {
       if (!isInterrupted) {
         isInterrupted = true;
       }
+      System.out.println(board);
       return false;
     }
 
@@ -121,11 +122,11 @@ public class FindHelpmate {
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-    Collections.sort(legalMoveList);
+    Collections.sort(legalMoveList, new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition()));
     for (final LegalMove legalMove : legalMoveList) {
 
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
-      final var inc = Score.score(color, board, legalMove).getIncrement();
+      final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());

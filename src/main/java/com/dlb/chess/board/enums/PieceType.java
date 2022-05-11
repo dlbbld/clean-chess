@@ -5,15 +5,16 @@ import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.internationalization.Message;
 
 public enum PieceType {
-  ROOK(ChessConstants.ROOK_LETTER, Message.getString("pieceType.rook.name")),
-  KNIGHT(ChessConstants.KNIGHT_LETTER, Message.getString("pieceType.knight.name")),
-  BISHOP(ChessConstants.BISHOP_LETTER, Message.getString("pieceType.bishop.name")),
-  QUEEN(ChessConstants.QUEEN_LETTER, Message.getString("pieceType.queen.name")),
-  KING(ChessConstants.KING_LETTER, Message.getString("pieceType.king.name")),
-  PAWN(ChessConstants.PAWN_LETTER, Message.getString("pieceType.pawn.name")),
-  NONE(" ", "");
+  ROOK(ChessConstants.ROOK_LETTER, 5, Message.getString("pieceType.rook.name")),
+  KNIGHT(ChessConstants.KNIGHT_LETTER, 3, Message.getString("pieceType.knight.name")),
+  BISHOP(ChessConstants.BISHOP_LETTER, 3, Message.getString("pieceType.bishop.name")),
+  QUEEN(ChessConstants.QUEEN_LETTER, 9, Message.getString("pieceType.queen.name")),
+  KING(ChessConstants.KING_LETTER, Integer.MAX_VALUE, Message.getString("pieceType.king.name")),
+  PAWN(ChessConstants.PAWN_LETTER, 1, Message.getString("pieceType.pawn.name")),
+  NONE(" ", -1, "");
 
   private final String letter;
+  private final int value;
   private final String name;
 
   public String getLetter() {
@@ -21,13 +22,19 @@ public enum PieceType {
     return letter;
   }
 
+  public int getValue() {
+    check();
+    return value;
+  }
+
   public String getName() {
     check();
     return name;
   }
 
-  PieceType(String letter, String name) {
+  PieceType(String letter, int value, String name) {
     this.letter = letter;
+    this.value = value;
     this.name = name;
   }
 

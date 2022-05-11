@@ -23,11 +23,11 @@ public class TestUnwinnabilityFull {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFull.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testSingle() {
-    final Board board = new Board("5NQN/3k4/5B2/8/1P3KP1/B2PP2P/R6P/3Q1B1R b - - 0 50");
+    final Board board = new Board("rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2");
 
-    assertEquals(UnwinnableFullResult.UNWINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFullResult.WINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
@@ -48,7 +48,7 @@ public class TestUnwinnabilityFull {
   private static final String START_FROM_PGN_FILE_NAME = "capture_first_move_half_move_clock_100_black_to_move.pgn";
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testAgainstMine() throws Exception {
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
