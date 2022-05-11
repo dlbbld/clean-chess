@@ -79,14 +79,23 @@ The following game contains a threefold repetition according to [Wikipedia](http
 
 Output:
 ```
-Threefold repetitions and above:
-3-fold: 34...h5 36...Kf8 38...Kf8
+Repetitions from twofold:
+34...h5 (A - 1/3) 35.Qd8+ (B - 1/2) 35...Kg7 (C - 1/2) 36.Qg5+ (D - 1/2) 36...Kf8 (A - 2/3) 37.Qd8+ (B - 2/2) 37...Kg7 (C - 2/2) 38.Qg5+ (D - 2/2) 38...Kf8 (A - 3/3)
 
-Threefold repetitions and above (chronologically):
-34...h5 (pos1, 1/3) 36...Kf8 (pos1, 2/3) 38...Kf8 (pos1, 3/3)
+Threefold repetition:
+Yes
 
-Fifty moves without capture and pawn move and above:
+Fivefold repetition:
+No
+
+Sequences without capture and pawn move starting from 50 half-moves:
 None
+
+Fifty moves without capture and pawn move:
+No
+
+Seventy-five moves without capture and pawn move:
+No
 
 Result per last position:
 Ongoing
@@ -122,11 +131,23 @@ The following game ends with a series above fifty moves without capture and pawn
 
 Output:
 ```
-Threefold repetitions and above:
-None
+Repetitions from twofold:
+32.Qe7 (A - 1/2) 32...Rf7 (B - 1/2) 33.Qe6 (C - 1/2) 33...Rf6 (D - 1/2) 35.Qe7 (A - 2/2) 35...Rf7 (B - 2/2) 36.Qe6 (C - 2/2) 36...Rf6 (D - 2/2) 50.Bxd5 (E - 1/2) 50...Ra5 (F - 1/2) 51.Bc6 (G - 1/2) 51...Ra6 (H - 1/2) 54.Bd5 (E - 2/2) 54...Ra5 (F - 2/2) 55.Bc6 (G - 2/2) 55...Ra6 (H - 2/2)
 
-Fifty moves without capture and pawn move and above:
+Threefold repetition:
+No
+
+Fivefold repetition:
+No
+
+Sequences without capture and pawn move starting from 50 half-moves:
 63...Rg8 (1) 113.Ng5 (100) 114...Rf6+ (103)
+
+Fifty moves without capture and pawn move:
+Yes
+
+Seventy-five moves without capture and pawn move:
+No
 
 Result per last position:
 Ongoing
@@ -218,8 +239,8 @@ You can also read PGN files from the file system.
 
 ```java
   if (FileUtility.exists("C:\\myPgnFolder", "myPgnFile.pgn")) {
-    final PgnFile pgnFile = PgnReader.readPgn("C:\\myPgnFolder", "myPgnFile.pgn");
-    System.out.println(TagUtility.readWhite(pgnFile.tagList())); // prints White player
+    final PgnFile pgnFile = PgnReader.readPgn("C:\\temp\\myPgnFolder", "myPgnFile.pgn");
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
   }
 ```
       
@@ -232,9 +253,7 @@ You can write a board or an imported PGN. The result will comply with the PGN ex
   board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
   final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-  for (final String line : PgnCreate.previewPgnFile(pgnFile)) {
-    System.out.println(line);
-  }
+  System.out.println(PgnCreate.createPgnFileString(pgnFile));
 ```
 
 Output
