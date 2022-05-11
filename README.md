@@ -235,7 +235,7 @@ The PGN reader reads comments and move suffix annotation (like "!!") but will th
   System.out.println(board.getSan()); // SAN of last move, R1c2
 ```
 
-You can also read PGN files from the file system.
+Reading PGN files from the file system:
 
 ```java
   if (FileUtility.exists("C:\\myPgnFolder", "myPgnFile.pgn")) {
