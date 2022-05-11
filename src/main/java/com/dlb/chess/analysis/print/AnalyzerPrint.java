@@ -5,10 +5,15 @@ import java.util.List;
 
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
+import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.DeadPosition;
+import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.enums.ResultTagValue;
@@ -16,6 +21,9 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 
 //for class organization only, keep methods protected as already used as delegate in main class Analysis
 public class AnalyzerPrint {
+
+  private static final int REPETITION_COUNT_THRESHOLD = 2;
+  private static final int YAWN_HALF_MOVE_COUNT_THRESHOLD = 50;
 
   protected static void printAnalysis(String pgn) throws Exception {
 
@@ -39,25 +47,53 @@ public class AnalyzerPrint {
     final List<String> output = new ArrayList<>();
 
     // repetition
-    addMainSection(output, "analysis.threefold.list");
-    if (analysis.repetitionListList().isEmpty()) {
-      output.add(Message.getString("analysis.threefold.none"));
+    final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(
+        board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+    addMainSection(output, "analysis.repetition.sequence.title");
+    if (repetitionListList.isEmpty()) {
+      output.add(Message.getString("analysis.repetition.sequence.none"));
     } else {
-      final var list = RepetitionPrint.calculateOutputRepetition(analysis.repetitionListList());
-      output.addAll(list);
-
-      addMainSection(output, "analysis.threefold.chronic");
-      final var listChronic = RepetitionPrint.calculateOutputRepetitionChronlogically(analysis.repetitionListList());
+      final var listChronic = RepetitionPrint.calculateOutputRepetitionChronlogically(repetitionListList);
       output.add(listChronic);
     }
 
-    // yawn move
-    addMainSection(output, "analysis.yawnmove.list");
-    if (analysis.yawnMoveListList().isEmpty()) {
-      output.add(Message.getString("analysis.yawnmove.none"));
+    addMainSection(output, "analysis.repetition.threefold.title");
+    if (analysis.hasThreefoldRepetition()) {
+      output.add(Message.getString("analysis.repetition.threefold.yes"));
     } else {
-      final var list = YawnPrint.calculateOutputYawnMoveListList(analysis.yawnMoveListList());
+      output.add(Message.getString("analysis.repetition.threefold.no"));
+    }
+
+    addMainSection(output, "analysis.repetition.fivefold.title");
+    if (analysis.hasFivefoldRepetition()) {
+      output.add(Message.getString("analysis.repetition.fivefold.yes"));
+    } else {
+      output.add(Message.getString("analysis.repetition.fivefold.no"));
+    }
+
+    // yawn move
+    final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
+        YAWN_HALF_MOVE_COUNT_THRESHOLD);
+    addMainSection(output, "analysis.yawnmove.sequence.title");
+    if (yawnMoveListList.isEmpty()) {
+      output.add(Message.getString("analysis.yawnmove.sequence.none"));
+    } else {
+      final var list = YawnPrint.calculateOutputYawnMoveListList(yawnMoveListList);
       output.addAll(list);
+    }
+
+    addMainSection(output, "analysis.yawnmove.fiftyMoves.title");
+    if (analysis.hasFiftyMoveRule()) {
+      output.add(Message.getString("analysis.yawnmove.fiftyMoves.yes"));
+    } else {
+      output.add(Message.getString("analysis.yawnmove.fiftyMoves.no"));
+    }
+
+    addMainSection(output, "analysis.yawnmove.seventyFiveMoves.title");
+    if (analysis.hasSeventyFiveMoveRule()) {
+      output.add(Message.getString("analysis.yawnmove.seventyFiveMoves.yes"));
+    } else {
+      output.add(Message.getString("analysis.yawnmove.seventyFiveMoves.no"));
     }
 
     // board result
