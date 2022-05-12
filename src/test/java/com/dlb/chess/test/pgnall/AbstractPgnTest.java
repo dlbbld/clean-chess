@@ -48,8 +48,7 @@ public abstract class AbstractPgnTest {
   }
 
   private static void testYawnMoveRule(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.expectedYawnMoveRule(),
-        YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
+    assertEquals(testCase.expectedYawnMoveRule(), YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
   }
 
   private static void testSequenceRepetition(Analysis analysis, PgnFileTestCase testCase) {
@@ -60,8 +59,7 @@ public abstract class AbstractPgnTest {
       logger.error("Expected sequence repetition for test case " + testCase.pgnFileName() + " was not yet defined");
       throw new IllegalArgumentException("Please define expected values before running the tests");
     }
-    final List<String> calculatedPositionSequenceList = Analyzer
-        .calculateSequenceRepetitionRepresentation(analysis.sequenceRepetitionList());
+    final List<String> calculatedPositionSequenceList = Analyzer.calculateSequenceRepetitionRepresentation(analysis.sequenceRepetitionList());
     assertEquals(testCase.expectedSequenceRepetition().size(), calculatedPositionSequenceList.size());
     for (var i = 0; i < calculatedPositionSequenceList.size(); i++) {
       assertEquals(testCase.expectedSequenceRepetition().get(i), calculatedPositionSequenceList.get(i));
@@ -92,7 +90,6 @@ public abstract class AbstractPgnTest {
 
   private static void testSide(Winnable winnableExpected, Winnable winnableActual) {
     switch (winnableExpected) {
-      case NA:
       case NO:
         assertEquals(winnableExpected, winnableActual);
         break;

@@ -43,8 +43,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
 
   static {
     {
-      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.add(GameStatusAnalysis.STALEMATE);
       set.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_BOTH);
@@ -54,8 +53,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     }
 
     {
-      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.addAll(GAME_DRAW_SET);
       set.add(GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE);
@@ -64,8 +62,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     }
 
     {
-      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.addAll(GAME_DRAW_SET);
       set.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
@@ -77,8 +74,15 @@ public class WinnableUtilityAnalzyeLichessUnfair {
   public static Winnable calculateWinnable(ApiBoard board, Side sideToEvaluate) {
 
     // we need an ongoing game
-    if (board.isCheckmate() || board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
-      return Winnable.NA;
+    if (board.isCheckmate()) {
+      if (sideToEvaluate == board.getHavingMove()) {
+        return Winnable.NO;
+      }
+      return Winnable.YES;
+    }
+
+    if (board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+      return Winnable.NO;
     }
 
     if (board.isInsufficientMaterial(sideToEvaluate)) {
@@ -125,8 +129,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       var isKingOnlyNonFlagging = "na";
       var isKingOnlyFlagging = "na";
       if (numberOfFirstHalfMoves == 1) {
-        final MoveRepresentation moveRepresentation = NonNullWrapperCommon
-            .getFirst(board.getLegalMovesRepresentation());
+        final MoveRepresentation moveRepresentation = NonNullWrapperCommon.getFirst(board.getLegalMovesRepresentation());
         board.performMove(moveRepresentation.moveSpecification());
         if (MaterialUtility.calculateIsKingOnly(board.getHavingMove(), board.getStaticPosition())) {
           isKingOnlyNonFlagging = "yes";
@@ -141,8 +144,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
         board.unperformMove();
       }
 
-      logResult(IS_DEBUG, "first;" + evaluationFirst.numberOfHalfMoves(), winnableFirst, board, sideToEvaluate,
-          isKingOnlyNonFlagging, isKingOnlyFlagging);
+      logResult(IS_DEBUG, "first;" + evaluationFirst.numberOfHalfMoves(), winnableFirst, board, sideToEvaluate, isKingOnlyNonFlagging, isKingOnlyFlagging);
       if (winnableFirst.winnable() == Winnable.UNKNOWN && PawnWallUtility.calculateHasPawnWall(board)) {
         return Winnable.NO;
       }
@@ -167,8 +169,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
 
     // logging winnable status for player not flagging
     if (isReturnSecond) {
-      logResult(IS_DEBUG, "second;" + evaluationSecond.numberOfHalfMoves(), winnableSecond, board, sideToEvaluate, "na",
-          "na");
+      logResult(IS_DEBUG, "second;" + evaluationSecond.numberOfHalfMoves(), winnableSecond, board, sideToEvaluate, "na", "na");
 
       if (winnableSecond.winnable() == Winnable.UNKNOWN && PawnWallUtility.calculateHasPawnWall(board)) {
         return Winnable.NO;
@@ -184,8 +185,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     final WinnableAnalysis winnableForced = calculateWinnableForced(evaluationForced.gameStatus(), sideToEvaluate);
 
     // logging winnable status for player not flagging
-    logResult(IS_DEBUG, "forced;" + evaluationForced.numberOfForcedHalfMoves(), winnableForced, board, sideToEvaluate,
-        "na", "na");
+    logResult(IS_DEBUG, "forced;" + evaluationForced.numberOfForcedHalfMoves(), winnableForced, board, sideToEvaluate, "na", "na");
 
     if (winnableForced.winnable() == Winnable.UNKNOWN && PawnWallUtility.calculateHasPawnWall(board)) {
       return Winnable.NO;
@@ -245,8 +245,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
           throw new IllegalArgumentException();
       }
     }
-    if (sideToEvaluate == Side.WHITE && GAME_WHITE_UNWINNABLE_SET.containsAll(gameStatusSet)
-        || sideToEvaluate == Side.BLACK && GAME_BLACK_UNWINNABLE_SET.containsAll(gameStatusSet)) {
+    if (sideToEvaluate == Side.WHITE && GAME_WHITE_UNWINNABLE_SET.containsAll(gameStatusSet) || sideToEvaluate == Side.BLACK && GAME_BLACK_UNWINNABLE_SET.containsAll(gameStatusSet)) {
       return new WinnableAnalysis(Winnable.NO, gameStatusSet);
     }
     return new WinnableAnalysis(Winnable.UNKNOWN, gameStatusSet);
@@ -405,12 +404,10 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     return GameStatusAnalysis.OTHER;
   }
 
-  private static void logResult(boolean isLogResult, String message, WinnableAnalysis winnable, ApiBoard board,
-      Side sideToEvaluate, String isKingOnlyNonFlagging, String isKingOnlyFlagging) {
+  private static void logResult(boolean isLogResult, String message, WinnableAnalysis winnable, ApiBoard board, Side sideToEvaluate, String isKingOnlyNonFlagging, String isKingOnlyFlagging) {
     // we need the non flagging player for the lichess examples
     if (isLogResult && sideToEvaluate == board.getHavingMove().getOppositeSide()) {
-      logger.printf(Level.INFO, ";%s;%s;%s;%s;%s;%s", message, winnable.winnable(), winnable.gameStatusSet(),
-          board.getFen(), isKingOnlyNonFlagging, isKingOnlyFlagging);
+      logger.printf(Level.INFO, ";%s;%s;%s;%s;%s;%s", message, winnable.winnable(), winnable.gameStatusSet(), board.getFen(), isKingOnlyNonFlagging, isKingOnlyFlagging);
     }
   }
 }

@@ -25,8 +25,7 @@ public class TestUnwinnabilityQuick {
   void testSingle() {
     // final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
     final Board board = new Board("rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8");
-    assertEquals(UnwinnableQuickResult.WINNABLE,
-        UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(UnwinnableQuickResult.WINNABLE, UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -37,8 +36,7 @@ public class TestUnwinnabilityQuick {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      assertEquals(UnwinnableQuickResult.POSSIBLY_WINNABLE,
-          UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+      assertEquals(UnwinnableQuickResult.POSSIBLY_WINNABLE, UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
     }
   }
 
@@ -79,13 +77,9 @@ public class TestUnwinnabilityQuick {
         // not having move
         {
           final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board,
-              board.getHavingMove().getOppositeSide());
+          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide());
 
           switch (winnable) {
-            case NA:
-              // we do not check on terminated games, so no comparison possible
-              break;
             case NO:
               assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
               break;
@@ -105,9 +99,6 @@ public class TestUnwinnabilityQuick {
           final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board, board.getHavingMove());
 
           switch (winnable) {
-            case NA:
-              // we do not check on terminated games, so no comparison possible
-              break;
             case NO:
               assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
               break;

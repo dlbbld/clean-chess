@@ -40,8 +40,7 @@ public class TestUnwinnabilityFull {
 
       logger.info(testCase.pgnFileName());
 
-      assertEquals(UnwinnableFullResult.UNWINNABLE,
-          UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
+      assertEquals(UnwinnableFullResult.UNWINNABLE, UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
     }
   }
 
@@ -80,12 +79,9 @@ public class TestUnwinnabilityFull {
         // not having move
         {
           final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableFullResult unwinnableFull = UnwinnableFull.unwinnableFull(board,
-              board.getHavingMove().getOppositeSide());
+          final UnwinnableFullResult unwinnableFull = UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide());
 
           switch (winnable) {
-            case NA:
-              break;
             case NO:
               assertEquals(UnwinnableFullResult.UNWINNABLE, unwinnableFull);
               break;
@@ -107,8 +103,6 @@ public class TestUnwinnabilityFull {
           final UnwinnableFullResult unwinnableFull = UnwinnableFull.unwinnableFull(board, board.getHavingMove());
 
           switch (winnable) {
-            case NA:
-              break;
             case NO:
               assertEquals(UnwinnableFullResult.UNWINNABLE, unwinnableFull);
               break;

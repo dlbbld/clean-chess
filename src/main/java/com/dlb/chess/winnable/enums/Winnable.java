@@ -2,7 +2,6 @@ package com.dlb.chess.winnable.enums;
 
 public enum Winnable {
 
-  NA("na"),
   NO("no"),
   YES("no"),
   NO_AMBRONA("no ambrona"),

@@ -10,7 +10,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class PrintSinglePgnOutput extends AbstractSinglePgnTest {
 
-  private static final String PGN_FILE_NAME = "12_black_initial_above_fifty_reoccuring_above_seventy_five.pgn";
+  private static final String PGN_FILE_NAME = "threefold_11_1_max_position_repetitions_for_threefold_castling.pgn";
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(PrintSinglePgnOutput.class);
 
