@@ -205,7 +205,7 @@ For more accurate dead position analysis, please visit this [page](https://chaso
 ```
       
 ## PGN reader
-The PGN reader reads comments and move suffix annotation (like "!!") but will throw an exception if variations are encountered.
+The PGN reader supports any PGN's except PGN's with move variations.
 
 ```java
   final var pgn = """
