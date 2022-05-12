@@ -33,9 +33,15 @@ public class Analyzer extends AnalyzerPrint {
   public static void main(String[] args) throws Exception {
     printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\games\\various",
         "Ob5ozxgG.pgn");
+    System.out.println("");
+
+    printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\wikipedia\\threefold",
+        "2_5_korchnoi_portisch_1970_game_4.pgn");
+    System.out.println("");
 
     printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\wikipedia\\threefold",
         "2_3_capablanca_lasker_1921.pgn");
+    System.out.println("");
 
     printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\wikipedia\\fiftyMove",
         "2_2_karpov_kasparov_1991.pgn");

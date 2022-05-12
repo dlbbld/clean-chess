@@ -36,7 +36,17 @@ public class YawnPrint {
   }
 
   private static String calculateOutputYawnMoveIncludingSequenceLength(YawnHalfMove yawnHalfMove) {
-    return calculateOutputYawnMove(yawnHalfMove) + " (" + yawnHalfMove.sequenceLength() + ")";
+    final var sequenceLengthInHalfMoves = yawnHalfMove.sequenceLength();
+    String sequenceLengthInFullMovesStr;
+    if (sequenceLengthInHalfMoves % 2 == 0) {
+      final var sequenceLengthInFullMoves = sequenceLengthInHalfMoves / 2;
+      sequenceLengthInFullMovesStr = String.valueOf(sequenceLengthInFullMoves);
+    } else {
+      final var sequenceLengthInFullMoves = sequenceLengthInHalfMoves / 2.0;
+      sequenceLengthInFullMovesStr = String.valueOf(sequenceLengthInFullMoves);
+
+    }
+    return calculateOutputYawnMove(yawnHalfMove) + " (" + sequenceLengthInFullMovesStr + ")";
   }
 
 }

@@ -60,7 +60,34 @@ dependencies {
 ```
 
 # Threefold repetition and fifty-moves
-## Threefold repetition
+## Threefold repetition claim ahead
+The following game ended with a threefold repetition claim ahead according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Portisch_versus_Korchnoi,_1970):
+
+```java
+  final var pgn = """
+      1. Nf3 c5 2. c4 Nf6 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 e6 6. g3 Qb6 7. Nb3 Ne5 8. e4
+      Bb4 9. Qe2 O-O 10. f4 Nc6 11. e5 Ne8 12. Bd2 f6 13. c5 Qd8 14. a3 Bxc3 15. Bxc3
+      fxe5 16. Bxe5 b6 17. Bg2 Nxe5 18. Bxa8 Nf7 19. Bg2 bxc5 20. Nxc5 Qb6 21. Qf2
+      Qb5 22. Bf1 Qc6 23. Bg2 Qb5 24. Bf1 Qc6 25. Bg2""";
+
+  Analyzer.printAnalysis(pgn);
+```
+
+The report mentions the possible claim ahead:
+```
+Valid threefold claims ahead:
+25... Qb5
+
+Threefolds and beyond:
+None
+
+Sequences without capture and pawn move starting from 25 moves:
+None
+
+Fifty moves without capture and pawn move:
+No
+```
+## Threefold repetition on the board
 The following game contains a threefold repetition according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Capablanca_versus_Lasker,_1921):
 
 ```java
@@ -79,26 +106,18 @@ The following game contains a threefold repetition according to [Wikipedia](http
 
 Output:
 ```
-Repetitions from twofold:
-34...h5 (A - 1/3) 35.Qd8+ (B - 1/2) 35...Kg7 (C - 1/2) 36.Qg5+ (D - 1/2) 36...Kf8 (A - 2/3) 37.Qd8+ (B - 2/2) 37...Kg7 (C - 2/2) 38.Qg5+ (D - 2/2) 38...Kf8 (A - 3/3)
+Valid threefold claims ahead:
+38... Kf8
+39. Qd8+
 
-Threefold repetition:
-Yes
+Threefolds and beyond:
+34...h5 (A - 1/3) 36...Kf8 (A - 2/3) 38...Kf8 (A - 3/3)
 
-Fivefold repetition:
-No
-
-Sequences without capture and pawn move starting from 50 half-moves:
+Sequences without capture and pawn move starting from 25 moves:
 None
 
 Fifty moves without capture and pawn move:
 No
-
-Seventy-five moves without capture and pawn move:
-No
-
-Result per last position:
-Ongoing
 ```
 
 ## Fifty-moves
@@ -131,26 +150,17 @@ The following game ends with a series above fifty moves without capture and pawn
 
 Output:
 ```
-Repetitions from twofold:
-32.Qe7 (A - 1/2) 32...Rf7 (B - 1/2) 33.Qe6 (C - 1/2) 33...Rf6 (D - 1/2) 35.Qe7 (A - 2/2) 35...Rf7 (B - 2/2) 36.Qe6 (C - 2/2) 36...Rf6 (D - 2/2) 50.Bxd5 (E - 1/2) 50...Ra5 (F - 1/2) 51.Bc6 (G - 1/2) 51...Ra6 (H - 1/2) 54.Bd5 (E - 2/2) 54...Ra5 (F - 2/2) 55.Bc6 (G - 2/2) 55...Ra6 (H - 2/2)
+Valid threefold claims ahead:
+None
 
-Threefold repetition:
-No
+Threefolds and beyond:
+None
 
-Fivefold repetition:
-No
-
-Sequences without capture and pawn move starting from 50 half-moves:
-63...Rg8 (1) 113.Ng5 (100) 114...Rf6+ (103)
+Sequences without capture and pawn move starting from 25 moves:
+63...Rg8 (0.5) 113.Ng5 (50) 114...Rf6+ (51.5)
 
 Fifty moves without capture and pawn move:
 Yes
-
-Seventy-five moves without capture and pawn move:
-No
-
-Result per last position:
-Ongoing
 ```
 # Dead position
 The following is a game ending in a dead position not caused by insufficient material according to [Wikipedia](https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position):
