@@ -1,4 +1,4 @@
-package com.dlb.chess.test.unwinnability;
+package com.dlb.chess.test.winnable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -14,28 +14,25 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.test.winnable.enums.Winnable;
 
-public class TestUnwinnabilityQuick {
+public class TestWinnability {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuick.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestWinnability.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableQuickResult.WINNABLE,
-        UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.UNKNOWN, WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableQuickResult.WINNABLE,
-        UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.YES, WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -45,11 +42,12 @@ public class TestUnwinnabilityQuick {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    check(pgnFileTestCase.unwinnableFullResultTest(), board);
+    assertEquals(Winnable.NO, WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    // check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testFolder() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
@@ -61,19 +59,15 @@ public class TestUnwinnabilityQuick {
   }
 
   private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
-    final UnwinnableQuickResult unwinnableQuickResult = UnwinnableQuick.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
+    final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
-        assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuickResult);
+        assertEquals(Winnable.NO, winnable);
         break;
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableQuickResult.WINNABLE, unwinnableQuickResult);
         break;
       case WINNABLE:
-
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuickResult.WINNABLE
-            || unwinnableQuickResult == UnwinnableQuickResult.POSSIBLY_WINNABLE;
+        final var isIncomplete = winnable == Winnable.YES || winnable == Winnable.UNKNOWN;
         assertTrue(isIncomplete);
         break;
       default:

@@ -19,6 +19,14 @@ public class WinnableUtility {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableUtility.class);
 
+  // TODO test cases
+  // ae_10.pgn
+  // we return unwinnable but is winnable. that is a bug.
+
+  // a2l4gphm.pgn
+  // we return unknown but we could see that is is unwinnable. here there is a possible improvement.
+  // we have a problem with an enemy pawn on the same square type as our bishop
+
   public static Winnable calculateWinnable(ApiBoard board, Side side) {
 
     if (board.isCheckmate()) {

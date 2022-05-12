@@ -40,6 +40,8 @@ public class TestUnwinnabilityFull {
 
   // not terminating so far
   // ae_04.pgn
+  // ae_15_QRvIMh3z.pgn
+  // ae_16.pgn
 
   // wrong
   // ae_06.pgn
@@ -47,7 +49,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFile() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("ae_13_OawUhnkq.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("a2l4gphm.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 

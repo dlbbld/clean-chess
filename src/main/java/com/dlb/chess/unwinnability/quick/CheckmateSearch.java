@@ -17,12 +17,12 @@ public class CheckmateSearch {
   public CheckmateSearchResult checkmateSearch(ApiBoard board, Side c) {
     final var hasCheckmate = calculateHasCheckmate(board, c, 0);
 
-    if (isInterrupted) {
-      return CheckmateSearchResult.INTERRUPTED;
-    }
-
     if (hasCheckmate) {
       return CheckmateSearchResult.TRUE;
+    }
+
+    if (isInterrupted) {
+      return CheckmateSearchResult.INTERRUPTED;
     }
 
     return CheckmateSearchResult.FALSE;

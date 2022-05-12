@@ -3730,8 +3730,10 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("9vMq768Z.pgn", "", "", "", BLANK_ESRL, 5, 17, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE, "1rK1k3/2P2R2/4Pp2/5P2/8/8/8/8 w - - 17 66"));
 
-    // TODO this one we don't have for bishops and pawns on different squares
-    // a2l4gphm.pgn
+    list.add(new PgnFileTestCase("a2l4gphm.pgn", "", "", "", BLANK_ESRL, 37, 20, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "5k2/8/3p4/3p1p1p/p1pP1P1P/PpP2K2/1P5B/8 w - - 20 67"));
+
     list.add(new PgnFileTestCase("A4aWYoPF.pgn", "", "", "", BLANK_ESRL, 10, 30, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
         "4k3/8/5p2/p2p1Pp1/P2P2Pp/1K5P/8/8 w - - 30 62"));
@@ -4706,12 +4708,9 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesUnfairNotQuick() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("bKHPqNEw.pgn", "", "", "", BLANK_ESRL, 5, 8, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, "1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41"));
     list.add(new PgnFileTestCase("f6c1lu7R.pgn", "", "", "", BLANK_ESRL, 13, 70, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, "8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83"));
-    list.add(new PgnFileTestCase("FKr42ZRT.pgn", "", "", "", BLANK_ESRL, 17, 16, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, "8/8/7p/5p1P/5p1K/5Pp1/6P1/5kb1 b - - 13 63"));
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83"));
 
     return new PgnFileTestCaseList(PgnTest.UNFAIR_NOT_QUICK, list);
   }
@@ -4748,9 +4747,6 @@ public class PgnExpectedValue {
     // nineth example from Ambrona, file name would become as below, but no such file as not used
     // ae_09.pgn
 
-    // TODO Ambrona sees that the position is winnable for enemy pawn behind pawn
-    // wall, but we see a pawnwall
-    // ae_10.pgn
     list.add(new PgnFileTestCase("ae_10.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 10 100"));
@@ -4762,7 +4758,7 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41"));
     list.add(new PgnFileTestCase("ae_13_OawUhnkq.pgn", "", "", "", BLANK_ESRL, 6, 6, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE, "5rk1/6P1/7K/5q2/8/8/8/8 w - - 1 52"));
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, "5rk1/6P1/7K/5q2/8/8/8/8 w - - 1 52"));
     list.add(new PgnFileTestCase("ae_14.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "k7/B7/2b5/1p1p1p1p/1P1P1P1P/KP6/1P6/8 b - - 0 101"));
