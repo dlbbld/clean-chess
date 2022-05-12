@@ -45,7 +45,7 @@ public class ValidateNewMove implements EnumConstants {
 
     if (havingMove != moveSpecification.havingMove()) {
       throw new InvalidMoveException(moveSpecification.havingMove() + " is not having the move",
-          MoveCheck.BASIC_NOT_HAVING_THE_MOVE);
+          MoveCheck.BASIC_NOT_HAVING_MOVE);
     }
 
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
@@ -124,7 +124,7 @@ public class ValidateNewMove implements EnumConstants {
       case BASIC_MOVING_PIECE_NONE:
       case BASIC_MOVING_PIECE_OPPONENT:
       case BASIC_NON_PAWN_PROMOTION_PIECE_SET:
-      case BASIC_NOT_HAVING_THE_MOVE:
+      case BASIC_NOT_HAVING_MOVE:
       case KING_CAPTURES_GUARDED_PIECE:
       case KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES:
       case KING_MOVES_INTO_CHECK:

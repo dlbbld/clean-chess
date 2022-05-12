@@ -32,7 +32,7 @@ public class BasicOutput {
   private static final String ATTRIBUTE_MAX_YAWN_SEQUENCE = "Max yawn sequence";
   private static final String ATTRIBUTE_BOARD_RESULT_NAME = "Board result";
   private static final String ATTRIBUTE_INSUFFICIENT_MATERIAL = "Insufficient material";
-  private static final String ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_THE_MOVE = "Winnable not having the move";
+  private static final String ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE = "Winnable not having the move";
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
@@ -104,7 +104,7 @@ public class BasicOutput {
   }
 
   private static String calculateOutputWinnableNotHavingMove(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_THE_MOVE, analysis.unwinnableQuickResultNotHavingMove().getDescription());
+    return calculateOutput(ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE, analysis.unwinnableQuickResultNotHavingMove().getDescription());
   }
 
   private static String calculateOutputFirstCapture(Analysis analysis) {
