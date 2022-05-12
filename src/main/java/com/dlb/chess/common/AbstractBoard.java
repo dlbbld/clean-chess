@@ -16,8 +16,8 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.winnable.WinnableUtility;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
 
 public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
@@ -64,14 +64,14 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
   @Override
   public DeadPosition isDeadPosition() {
-    final Winnable winnableWhite = WinnableUtility.calculateWinnable(this, Side.WHITE);
-    final Winnable winnableBlack = WinnableUtility.calculateWinnable(this, Side.BLACK);
+    final UnwinnableQuickResult unwinnableWhite = UnwinnableQuick.unwinnableQuick(this, Side.WHITE);
+    final UnwinnableQuickResult unwinnableBlack = UnwinnableQuick.unwinnableQuick(this, Side.BLACK);
 
-    if (winnableWhite == Winnable.NO && winnableBlack == Winnable.NO) {
+    if (unwinnableWhite == UnwinnableQuickResult.UNWINNABLE && unwinnableBlack == UnwinnableQuickResult.UNWINNABLE) {
       return DeadPosition.YES;
     }
 
-    if (winnableWhite == Winnable.YES || winnableBlack == Winnable.YES) {
+    if (unwinnableWhite == UnwinnableQuickResult.WINNABLE || unwinnableBlack == UnwinnableQuickResult.WINNABLE) {
       return DeadPosition.NO;
     }
 
