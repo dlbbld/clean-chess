@@ -16,7 +16,7 @@ import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractPgnTest {
 
@@ -92,15 +92,15 @@ public abstract class AbstractPgnTest {
   }
 
   private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected,
-      UnwinnableQuickResult unwinnableQuickResult) {
+      UnwinnableQuick unwinnableQuickResult) {
     switch (unwinnableFullResultTestExpected) {
       case UNWINNABLE:
-        assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuickResult);
+        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
         break;
       case UNWINNABLE_NOT_QUICK:
       case WINNABLE:
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuickResult.WINNABLE
-            || unwinnableQuickResult == UnwinnableQuickResult.POSSIBLY_WINNABLE;
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
+            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
         assertTrue(isIncomplete);
         break;
       default:

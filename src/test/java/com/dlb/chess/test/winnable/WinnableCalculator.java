@@ -13,11 +13,11 @@ import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
 import com.dlb.chess.test.winnable.model.GameForced;
 
-public class WinnableUtility {
+public class WinnableCalculator {
 
   public static final int MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE = 10;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableUtility.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableCalculator.class);
 
   // TODO test cases
   // ae_10.pgn

@@ -10,7 +10,7 @@ import com.dlb.chess.test.analysis.output.RepetitionOutput;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
@@ -73,7 +73,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(", ");
 
     final var fen = analysis.fen();
-    final UnwinnableQuickResult unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickResultNotHavingMove();
+    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickResultNotHavingMove();
 
     result.append(UnwinnableFullResultTest.class.getSimpleName());
     result.append(".");

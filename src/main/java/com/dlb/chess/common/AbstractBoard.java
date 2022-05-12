@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.enums.DeadPosition;
+import com.dlb.chess.common.enums.DeadPositionQuick;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveRepresentation;
@@ -16,8 +16,10 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
@@ -63,19 +65,40 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
   }
 
   @Override
-  public DeadPosition isDeadPosition() {
-    final UnwinnableQuickResult unwinnableWhite = UnwinnableQuick.unwinnableQuick(this, Side.WHITE);
-    final UnwinnableQuickResult unwinnableBlack = UnwinnableQuick.unwinnableQuick(this, Side.BLACK);
+  public DeadPositionQuick isDeadPositionQuick() {
+    final UnwinnableQuick unwinnableWhite = UnwinnableQuickCalculator.unwinnableQuick(this, Side.WHITE);
+    final UnwinnableQuick unwinnableBlack = UnwinnableQuickCalculator.unwinnableQuick(this, Side.BLACK);
 
-    if (unwinnableWhite == UnwinnableQuickResult.UNWINNABLE && unwinnableBlack == UnwinnableQuickResult.UNWINNABLE) {
-      return DeadPosition.YES;
+    if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
+      return DeadPositionQuick.YES;
     }
 
-    if (unwinnableWhite == UnwinnableQuickResult.WINNABLE || unwinnableBlack == UnwinnableQuickResult.WINNABLE) {
-      return DeadPosition.NO;
+    if (unwinnableWhite == UnwinnableQuick.WINNABLE && unwinnableBlack == UnwinnableQuick.WINNABLE) {
+      return DeadPositionQuick.NO;
     }
 
-    return DeadPosition.UNKNOWN;
+    return DeadPositionQuick.MAYBE;
+  }
+
+  @Override
+  public boolean isDeadPositionFull() {
+    final UnwinnableFull unwinnableWhite = UnwinnableFullCalculator.unwinnableFull(this, Side.WHITE);
+    if (unwinnableWhite == UnwinnableFull.WINNABLE) {
+      return false;
+    }
+    final UnwinnableFull unwinnableBlack = UnwinnableFullCalculator.unwinnableFull(this, Side.BLACK);
+
+    return unwinnableBlack == UnwinnableFull.UNWINNABLE;
+  }
+
+  @Override
+  public UnwinnableQuick isUnwinnableQuick(Side side) {
+    return UnwinnableQuickCalculator.unwinnableQuick(this, side);
+  }
+
+  @Override
+  public boolean isUnwinnableFull(Side side) {
+    return UnwinnableFullCalculator.unwinnableFull(this, side) == UnwinnableFull.UNWINNABLE;
   }
 
   @Override
@@ -101,7 +124,8 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
   }
 
   private boolean isGameDraw() {
-    return isStalemate() || isDeadPosition() == DeadPosition.YES || isFivefoldRepetition() || isSeventyFiftyMove();
+    return isStalemate() || isDeadPositionQuick() == DeadPositionQuick.YES || isFivefoldRepetition()
+        || isSeventyFiftyMove();
   }
 
   @Override

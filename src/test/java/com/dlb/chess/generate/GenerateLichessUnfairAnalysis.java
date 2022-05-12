@@ -9,7 +9,7 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableUtility;
+import com.dlb.chess.test.winnable.WinnableCalculator;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.model.PgnFileTestCase;
 
@@ -32,8 +32,8 @@ public class GenerateLichessUnfairAnalysis {
         logger.info(pgnFileName + ";" + "pawn wall");
       } else {
         final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
-        final Winnable winnableWhite = WinnableUtility.calculateWinnable(board, Side.WHITE);
-        final Winnable winnableBlack = WinnableUtility.calculateWinnable(board, Side.BLACK);
+        final Winnable winnableWhite = WinnableCalculator.calculateWinnable(board, Side.WHITE);
+        final Winnable winnableBlack = WinnableCalculator.calculateWinnable(board, Side.BLACK);
 
         logger.info("winnable white;" + winnableWhite);
         logger.info("winnable black;" + winnableBlack);

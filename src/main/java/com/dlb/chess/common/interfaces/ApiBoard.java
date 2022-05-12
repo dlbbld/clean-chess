@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.enums.DeadPosition;
+import com.dlb.chess.common.enums.DeadPositionQuick;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
@@ -17,6 +17,7 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public interface ApiBoard {
 
@@ -74,7 +75,13 @@ public interface ApiBoard {
 
   InsufficientMaterial calculateInsufficientMaterial();
 
-  DeadPosition isDeadPosition();
+  DeadPositionQuick isDeadPositionQuick();
+
+  boolean isDeadPositionFull();
+
+  UnwinnableQuick isUnwinnableQuick(Side side);
+
+  boolean isUnwinnableFull(Side side);
 
   boolean isGameEnd();
 

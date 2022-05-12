@@ -8,6 +8,7 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -51,6 +52,8 @@ public class FindHelpmate {
 
   public FindHelpmateResult findHelpmate(ApiBoard board, int maxDepth) {
 
+    final String invariant = board.getFen();
+
     // logger.info("maxDepth=" + maxDepth);
     this.cnt = 0;
     this.isInterrupted = false;
@@ -58,46 +61,53 @@ public class FindHelpmate {
 
     final var hasHelpmate = findHelpmate(board, 0, maxDepth);
 
+    // check the helpmate
     if (hasHelpmate) {
-      for (final LegalMove legalMove : mateList) {
-        board.performMove(legalMove.moveSpecification());
-      }
-      if (!board.isCheckmate()) {
-        throw new ProgrammingMistakeException("It is not a checkmate");
-      }
+      final ApiBoard checkBoard = checkHelpmate(board.getFen(), mateList);
+
       final var numberOfMovesForCheckmate = (int) Math.ceil(mateList.size() / 2.0);
       logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
-      System.out.println(PgnCreate.createPgnFileString(board));
+      System.out.println(PgnCreate.createPgnFileString(checkBoard));
+
+      if (!invariant.equals(board.getFen())) {
+        throw new ProgrammingMistakeException("Board was changed");
+      }
       return FindHelpmateResult.TRUE;
     }
 
     if (!isInterrupted) {
+      if (!invariant.equals(board.getFen())) {
+        throw new ProgrammingMistakeException("Board was changed");
+      }
       return FindHelpmateResult.FALSE;
     }
 
+    if (!invariant.equals(board.getFen())) {
+      throw new ProgrammingMistakeException("Board was changed");
+    }
     return FindHelpmateResult.INTERRUPTED;
   }
 
   // Inputs: position, depth (int), maxDepth (int)
   // Output: bool (true if a checkmate sequence was found, false otherwise)
   private boolean findHelpmate(ApiBoard board, int depth, int maxDepth) {
-
+  
     // added for in c code
     if (board.isInsufficientMaterial(color)) {
       return false;
     }
-
+  
     // 1: if the intended winner is checkmating their opponent in pos then return true
     if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
       return true;
     }
-
+  
     // 2: if the intended winner has just the king or the position is unwinnable according
     // to Lemma 5 or Lemma 6 or the position is stalemate or the intended winner is
     // receiving checkmate in the position then return false
-
+  
     // if the intended winner has just the king
-
+  
     // position is unwinnable according to Lemma 5
     // position is unwinnable according to Lemma 6
     if (MaterialUtility.calculateIsKingOnly(color, board.getStaticPosition())
@@ -105,41 +115,41 @@ public class FindHelpmate {
         || calculateIsUnwinnableAccordingLemma6(color, board.getStaticPosition())) {
       return false;
     }
-
+  
     // stalemate
     // intended winner is receiving checkmate in the position then return false
     if (board.isStalemate() || board.getHavingMove() == color && board.isCheckmate()) {
       return false;
     }
-
+  
     // set d := limits.max-depth - depth
     final var d = maxDepth - depth;
-
+  
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
     if (calculateIsInTranspositionTable(board.getFen(), d)) {
       return false;
     }
-
+  
     // 3: increase cnt and set d := limits.max-depth - depth
-
+  
     // increase cnt
     cnt++;
-
+  
     // 4: if cnt > nodesBound or d < 0 then return false (-> The search limits are exceeded)
     if (cnt > NODES_BOUND || d < 0) {
-
+  
       // logger.info("Interrupting: " + cnt + " / " + depth + " / " + maxDepth);
-
+  
       if (!isInterrupted) {
         isInterrupted = true;
       }
       // System.out.println(board);
       return false;
     }
-
+  
     // 6: store (pos,D) in table
     store(board.getFen(), d);
-
+  
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
     final Set<Square> threatenedSquareSet = AbstractThreatenSquares
@@ -152,10 +162,10 @@ public class FindHelpmate {
         // not interested
         continue;
       }
-
+  
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
-
+  
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
       mateList.add(legalMove);
@@ -166,9 +176,23 @@ public class FindHelpmate {
       }
       mateList.remove(mateList.size() - 1);
     }
-
+  
     // 10: return false (-> No mate was found after exploring every legal move)
     return false;
+  }
+
+  private static ApiBoard checkHelpmate(String fen, List<LegalMove> mateList) {
+
+    final Board boardCheck = new Board(fen);
+
+    for (final LegalMove legalMove : mateList) {
+      boardCheck.performMove(legalMove.moveSpecification());
+    }
+    if (!boardCheck.isCheckmate()) {
+      throw new ProgrammingMistakeException("It is not a checkmate");
+    }
+
+    return boardCheck;
   }
 
   private boolean calculateIsInTranspositionTable(String fen, int d) {

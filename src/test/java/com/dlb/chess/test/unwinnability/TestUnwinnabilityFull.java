@@ -14,10 +14,10 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
-import com.dlb.chess.test.winnable.WinnableUtility;
+import com.dlb.chess.test.winnable.WinnableCalculator;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.full.UnwinnableFull;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFullResult;
+import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class TestUnwinnabilityFull {
 
@@ -27,7 +27,7 @@ public class TestUnwinnabilityFull {
   // @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableFullResult.WINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
@@ -35,7 +35,7 @@ public class TestUnwinnabilityFull {
   void testFen() {
     final var fen = "8/6k1/7p/2p3pP/3r4/2K5/p7/8 w - - 0 55";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFullResult.WINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
   }
 
   // not terminating so far
@@ -103,18 +103,18 @@ public class TestUnwinnabilityFull {
 
         // not having move
         {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableFullResult unwinnableFull = UnwinnableFull.unwinnableFull(board,
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+          final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
               board.getHavingMove().getOppositeSide());
 
           switch (winnable) {
             case NO:
-              assertEquals(UnwinnableFullResult.UNWINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
               break;
             case UNKNOWN:
               break;
             case YES:
-              assertEquals(UnwinnableFullResult.WINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.WINNABLE, unwinnableFull);
               break;
             default:
               throw new IllegalArgumentException();
@@ -123,17 +123,17 @@ public class TestUnwinnabilityFull {
 
         // having move
         {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableFullResult unwinnableFull = UnwinnableFull.unwinnableFull(board, board.getHavingMove());
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
+          final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove());
 
           switch (winnable) {
             case NO:
-              assertEquals(UnwinnableFullResult.UNWINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
               break;
             case UNKNOWN:
               break;
             case YES:
-              assertEquals(UnwinnableFullResult.WINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.WINNABLE, unwinnableFull);
               break;
             default:
               throw new IllegalArgumentException();
@@ -147,12 +147,12 @@ public class TestUnwinnabilityFull {
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableFullResult.UNWINNABLE,
-            UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
+        assertEquals(UnwinnableFull.UNWINNABLE,
+            UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
         break;
       case WINNABLE:
-        assertEquals(UnwinnableFullResult.WINNABLE,
-            UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
+        assertEquals(UnwinnableFull.WINNABLE,
+            UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
         break;
       default:
         throw new IllegalArgumentException();

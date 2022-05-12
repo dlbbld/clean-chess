@@ -13,10 +13,10 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableUtility;
+import com.dlb.chess.test.winnable.WinnableCalculator;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class TestUnwinnabilityQuickAgainstWinnability {
 
@@ -58,8 +58,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         // not having move
         {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board,
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
               board.getHavingMove().getOppositeSide());
 
           checkResult(winnable, unwinnableQuick);
@@ -67,8 +67,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         // having move
         {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board, board.getHavingMove());
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
+          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove());
 
           checkResult(winnable, unwinnableQuick);
         }
@@ -76,13 +76,13 @@ public class TestUnwinnabilityQuickAgainstWinnability {
     }
   }
 
-  private static void checkResult(Winnable winnable, UnwinnableQuickResult unwinnableQuick) {
+  private static void checkResult(Winnable winnable, UnwinnableQuick unwinnableQuick) {
     switch (winnable) {
       case NO:
-        assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
+        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
         break;
       case YES:
-        assertNotEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
+        assertNotEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
         break;
       case UNKNOWN:
         break;

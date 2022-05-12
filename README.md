@@ -3,7 +3,7 @@ clean-chess
 
 clean-chess has the following features:
 * Threefold repetition and fifty-moves report
-* Detects most dead positions
+* Dead position and unwinnability support based on [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess)
 * Java chess API, including PGN support
 
 The name refers to clean code since the code relies on extensive tests as recommended in clean code.
@@ -162,29 +162,57 @@ Sequences without capture and pawn move starting from 25 moves:
 Fifty moves without capture and pawn move:
 Yes
 ```
-# Dead position
+# Dead position and unwinnability
+## Dead position
+### Dead position - quick analysis
 The following is a game ending in a dead position not caused by insufficient material according to [Wikipedia](https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position):
 
 ```java
   final Board board = new Board("8/2b1k3/7p/p1p1p1pP/PpP1P1P1/1P1BK3/8/8 b - - 0 50");
-  System.out.println(board.isDeadPosition()); // YES
+  System.out.println(board.isDeadPositionQuick()); // YES
 ```
 
 The following is a [further example from Lichess](https://lichess.org/r1SzzM60#131). The game can only end in a draw, evaluating the possibilities. The API does also evaluate a few halfmoves.
 
 ```java
   final Board board = new Board("2k5/2P5/8/1KN5/8/8/8/8 b - - 0 66");
-  System.out.println(board.isDeadPosition()); // YES
+  System.out.println(board.isDeadPositionQuick()); // YES
 ```
 
-Attention. The API does not detect all dead positions, but from average games around 99%. The following is an example of a dead position the API does not see, from this [page](https://chasolver.org/analyzer.html?example=3).
+Attention. The method "isDeadPositionQuick" sacrifices accuracy performance. It return "MAYBE" it it is not 100% sure, but only 99.99% if the position is a dead position. So if it return "MAYBE" it is almost always a dead position. There
+are however exception of very rare positions, like the following example (from [here](https://chasolver.org/analyzer.html?example=3)
+where the method returns "MAYBE" but the position is though a dead position.
 
 ```java
   final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-  System.out.println(board.isDeadPosition()); // UNKNOWN
+  System.out.println(board.isDeadPositionQuick()); // MAYBE
 ```
 
-For more accurate dead position analysis, please visit this [page](https://chasolver.org/index.html).
+### Dead position - full analysis
+The "isDeadPositionFull" is always accurate, but can take minutes for exotic positions or for some calculate forever in practical terms. It return yes/no.For more accurate dead position analysis, please visit this [page](https://chasolver.org/index.html).
+
+```java
+  final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
+  System.out.println(board.isDeadPositionFull()); // yes
+```
+
+## Unwinnability
+
+### Unwinnability - quick analysis
+As before use the quick method to determine if the given Side still has a potential mate for 99.99% accurray.
+
+```java
+  final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+```
+
+### Unwinnability - full analysis
+For absolute accuracy use the full method, which however as for the dead position full method has no predictable performance.
+
+```java
+  final Board board = new Board("8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83");
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // true
+```
 
 # Java chess API
 ## Board

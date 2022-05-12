@@ -1,7 +1,7 @@
 package com.dlb.chess.common.enums;
 
-public enum DeadPosition {
+public enum DeadPositionQuick {
   YES,
   NO,
-  UNKNOWN
+  MAYBE
 }

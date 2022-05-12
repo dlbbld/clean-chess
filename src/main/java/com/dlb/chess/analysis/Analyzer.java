@@ -25,8 +25,8 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 import com.google.common.collect.ImmutableList;
 
 public class Analyzer extends AnalyzerPrint {
@@ -311,7 +311,7 @@ public class Analyzer extends AnalyzerPrint {
 
     final CheckmateOrStalemate lastPositionEvaluation = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
-    final UnwinnableQuickResult unwinnableNotHavingMove = UnwinnableQuick.unwinnableQuick(board,
+    final UnwinnableQuick unwinnableNotHavingMove = UnwinnableQuickCalculator.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
 
     final String fen = board.getFen();

@@ -69,21 +69,39 @@ public class ReadMeForRepository {
 
     }
 
-    // dead position
+    // dead position - quick
     // example 1
     {
       final Board board = new Board("8/2b1k3/7p/p1p1p1pP/PpP1P1P1/1P1BK3/8/8 b - - 0 50");
-      System.out.println(board.isDeadPosition());
+      System.out.println(board.isDeadPositionQuick()); // YES
     }
     // example 2
     {
       final Board board = new Board("2k5/2P5/8/1KN5/8/8/8/8 b - - 0 66");
-      System.out.println(board.isDeadPosition());
+      System.out.println(board.isDeadPositionQuick()); // YES
     }
     // example 3
     {
       final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-      System.out.println(board.isDeadPosition());
+      System.out.println(board.isDeadPositionQuick()); // MAYBE
+    }
+
+    // dead position - full
+    {
+      final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
+      System.out.println(board.isDeadPositionFull()); // true
+    }
+
+    // unwinnability - quick
+    {
+      final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+    }
+
+    // unwinnability - full
+    {
+      final Board board = new Board("8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83");
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // true
     }
 
     // Board

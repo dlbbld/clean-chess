@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
     List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<RepeatingSequence> sequenceRepetitionList,
@@ -19,7 +19,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
     boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
     CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial,
-    UnwinnableQuickResult unwinnableQuickResultNotHavingMove, String fen, ApiBoard board) {
+    UnwinnableQuick unwinnableQuickResultNotHavingMove, String fen, ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -124,7 +124,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return insufficientMaterial;
   }
 
-  public UnwinnableQuickResult unwinnableQuickResultNotHavingMove() {
+  public UnwinnableQuick unwinnableQuickResultNotHavingMove() {
     return unwinnableQuickResultNotHavingMove;
   }
 

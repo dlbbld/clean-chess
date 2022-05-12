@@ -24,7 +24,7 @@ public class TestWinnability {
   @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(Winnable.UNKNOWN, WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.UNKNOWN, WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -32,7 +32,7 @@ public class TestWinnability {
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
-    assertEquals(Winnable.YES, WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.YES, WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -42,7 +42,7 @@ public class TestWinnability {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    assertEquals(Winnable.NO, WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.NO, WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
     // check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
 
@@ -59,7 +59,7 @@ public class TestWinnability {
   }
 
   private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
-    final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+    final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide());
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
         assertEquals(Winnable.NO, winnable);
