@@ -30,14 +30,6 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
 
   @Override
   public int compare(LegalMove firstLegalMove, LegalMove secondLegalMove) {
-    final ScoreResult firstScore = Score.score(color, havingMove, staticPosition, firstLegalMove);
-    final ScoreResult secondScore = Score.score(color, havingMove, staticPosition, secondLegalMove);
-    // preferred reward - normal - punish
-    final var compareScore = Integer.compare(-firstScore.getIncrement(), -secondScore.getIncrement());
-
-    if (compareScore != 0) {
-      return compareScore;
-    }
 
     // intended winner is moving
     if (color == havingMove) {
@@ -52,7 +44,19 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
       if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
         final PieceType firstPieceTypeCapture = firstLegalMove.pieceCaptured().getPieceType();
         final PieceType secondPieceTypeCapture = secondLegalMove.pieceCaptured().getPieceType();
-        return Integer.compare(-firstPieceTypeCapture.getValue(), -secondPieceTypeCapture.getValue());
+        final var comparePieceCapturedValue = Integer.compare(-firstPieceTypeCapture.getValue(),
+            -secondPieceTypeCapture.getValue());
+
+        // capturing higher valued pieces preferred
+        if (comparePieceCapturedValue != 0) {
+          return comparePieceCapturedValue;
+        }
+
+        // capturing with higher valued pieces preferred
+        final PieceType firstMovingPiece = firstLegalMove.movingPiece().getPieceType();
+        final PieceType secondMovingPiece = secondLegalMove.movingPiece().getPieceType();
+        final var comparePieceMoving = Integer.compare(-firstMovingPiece.getValue(), -secondMovingPiece.getValue());
+        return comparePieceMoving;
       }
 
       // pawn moves - preferred
@@ -77,30 +81,56 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
               && secondLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE) {
             return 1;
           }
-          // queen promotion most preferred
+          // queen promotion only preferred if no queen
+          // multiple queens give too much legal moves
           if (firstLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE
               && secondLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE) {
             final PromotionPieceType firstPromotionPieceType = firstLegalMove.moveSpecification().promotionPieceType();
             final PromotionPieceType secondPromotionPieceType = secondLegalMove.moveSpecification()
                 .promotionPieceType();
-            return Integer.compare(-firstPromotionPieceType.getPieceType().getValue(),
-                -secondPromotionPieceType.getPieceType().getValue());
+
+            // our algorithm likes knights
+            if (firstPromotionPieceType == PromotionPieceType.KNIGHT
+                && secondPromotionPieceType != PromotionPieceType.KNIGHT) {
+              return -1;
+            }
+            if (firstPromotionPieceType != PromotionPieceType.KNIGHT
+                && secondPromotionPieceType == PromotionPieceType.KNIGHT) {
+              return 1;
+            }
+
+            // our algorithm likes bishops
+            if (firstPromotionPieceType == PromotionPieceType.BISHOP
+                && secondPromotionPieceType != PromotionPieceType.BISHOP) {
+              return -1;
+            }
+            if (firstPromotionPieceType != PromotionPieceType.BISHOP
+                && secondPromotionPieceType == PromotionPieceType.BISHOP) {
+              return 1;
+            }
+
+            // better rooks than queens for the number of legal moves
+            if (firstPromotionPieceType == PromotionPieceType.ROOK
+                && secondPromotionPieceType != PromotionPieceType.ROOK) {
+              return -1;
+            }
+            if (firstPromotionPieceType != PromotionPieceType.ROOK
+                && secondPromotionPieceType == PromotionPieceType.ROOK) {
+              return 1;
+            }
+
+            return 0;
+
           }
 
         }
       }
 
-      // castling moves - avoid as long as possible
-      if (!CastlingUtility.calculateIsCastlingMove(firstLegalMove.moveSpecification())
-          && CastlingUtility.calculateIsCastlingMove(secondLegalMove.moveSpecification())) {
-        return -1;
-      }
-      if (CastlingUtility.calculateIsCastlingMove(firstLegalMove.moveSpecification())
-          && !CastlingUtility.calculateIsCastlingMove(secondLegalMove.moveSpecification())) {
-        return 1;
-      }
-
-      return 0;
+      final ScoreResult firstScore = Score.score(color, havingMove, staticPosition, firstLegalMove);
+      final ScoreResult secondScore = Score.score(color, havingMove, staticPosition, secondLegalMove);
+      // preferred reward - normal - punish
+      final var compareScore = Integer.compare(-firstScore.getIncrement(), -secondScore.getIncrement());
+      return compareScore;
     }
 
     // intended loser is moving
@@ -155,31 +185,55 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
         }
         if (firstLegalMove.moveSpecification().promotionPieceType() == PromotionPieceType.NONE
             && secondLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE) {
-          return -11;
+          return -1;
         }
-        // queen promotion least preferred
 
         if (firstLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE
             && secondLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE) {
           final PromotionPieceType firstPromotionPieceType = firstLegalMove.moveSpecification().promotionPieceType();
           final PromotionPieceType secondPromotionPieceType = secondLegalMove.moveSpecification().promotionPieceType();
-          return Integer.compare(firstPromotionPieceType.getPieceType().getValue(),
-              secondPromotionPieceType.getPieceType().getValue());
+
+          // our algorithm likes knights
+          if (firstPromotionPieceType == PromotionPieceType.KNIGHT
+              && secondPromotionPieceType != PromotionPieceType.KNIGHT) {
+            return -1;
+          }
+          if (firstPromotionPieceType != PromotionPieceType.KNIGHT
+              && secondPromotionPieceType == PromotionPieceType.KNIGHT) {
+            return 1;
+          }
+
+          // our algorithm likes bishops
+          if (firstPromotionPieceType == PromotionPieceType.BISHOP
+              && secondPromotionPieceType != PromotionPieceType.BISHOP) {
+            return -1;
+          }
+          if (firstPromotionPieceType != PromotionPieceType.BISHOP
+              && secondPromotionPieceType == PromotionPieceType.BISHOP) {
+            return 1;
+          }
+
+          // better rooks than queens for the number of legal moves
+          if (firstPromotionPieceType == PromotionPieceType.ROOK
+              && secondPromotionPieceType != PromotionPieceType.ROOK) {
+            return -1;
+          }
+          if (firstPromotionPieceType != PromotionPieceType.ROOK
+              && secondPromotionPieceType == PromotionPieceType.ROOK) {
+            return 1;
+          }
+
+          return 0;
         }
 
       }
     }
 
-    // castling moves - avoid as long as possible
-    if (!CastlingUtility.calculateIsCastlingMove(firstLegalMove.moveSpecification())
-        && CastlingUtility.calculateIsCastlingMove(secondLegalMove.moveSpecification())) {
-      return -1;
-    }
-    if (CastlingUtility.calculateIsCastlingMove(firstLegalMove.moveSpecification())
-        && !CastlingUtility.calculateIsCastlingMove(secondLegalMove.moveSpecification())) {
-      return 1;
-    }
-    return 0;
+    final ScoreResult firstScore = Score.score(color, havingMove, staticPosition, firstLegalMove);
+    final ScoreResult secondScore = Score.score(color, havingMove, staticPosition, secondLegalMove);
+    // preferred reward - normal - punish
+    final var compareScore = Integer.compare(-firstScore.getIncrement(), -secondScore.getIncrement());
+    return compareScore;
   }
 
 }

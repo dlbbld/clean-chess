@@ -9,7 +9,8 @@ public enum PieceType {
   KNIGHT(ChessConstants.KNIGHT_LETTER, 3, Message.getString("pieceType.knight.name")),
   BISHOP(ChessConstants.BISHOP_LETTER, 3, Message.getString("pieceType.bishop.name")),
   QUEEN(ChessConstants.QUEEN_LETTER, 9, Message.getString("pieceType.queen.name")),
-  KING(ChessConstants.KING_LETTER, Integer.MAX_VALUE, Message.getString("pieceType.king.name")),
+  // value is only used for move ordering for unwinnability
+  KING(ChessConstants.KING_LETTER, 0, Message.getString("pieceType.king.name")),
   PAWN(ChessConstants.PAWN_LETTER, 1, Message.getString("pieceType.pawn.name")),
   NONE(" ", -1, "");
 

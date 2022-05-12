@@ -20,6 +20,7 @@ import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 
@@ -64,8 +65,9 @@ public class FindHelpmate {
       if (!board.isCheckmate()) {
         throw new ProgrammingMistakeException("It is not a checkmate");
       }
-      logger.info("Checkmate in " + mateList.size() + " half-moves");
-      // System.out.println(PgnCreate.createPgnFileString(board));
+      final var numberOfMovesForCheckmate = (int) Math.ceil(mateList.size() / 2.0);
+      logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
+      System.out.println(PgnCreate.createPgnFileString(board));
       return FindHelpmateResult.TRUE;
     }
 

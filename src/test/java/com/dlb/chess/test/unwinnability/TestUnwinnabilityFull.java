@@ -45,8 +45,8 @@ public class TestUnwinnabilityFull {
     }
   }
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "capture_first_move_half_move_clock_100_black_to_move.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final String START_FROM_PGN_FILE_NAME = "02_white_rook_knight.pgn";
 
   @SuppressWarnings("static-method")
   @Test
