@@ -9,7 +9,8 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.test.analysis.output.RepetitionOutput;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
@@ -72,12 +73,17 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(", ");
 
     final var fen = analysis.fen();
-    final Winnable winnableNotHavingMove;
-    winnableNotHavingMove = analysis.winnableNotHavingMove();
+    final UnwinnableQuickResult unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickResultNotHavingMove();
 
-    result.append(Winnable.class.getSimpleName());
+    result.append(UnwinnableFullResultTest.class.getSimpleName());
     result.append(".");
-    result.append(winnableNotHavingMove.name());
+    UnwinnableFullResultTest unwinnableFullResultTest = switch (unwinnableQuickResultNotHavingMove) {
+      case UNWINNABLE -> UnwinnableFullResultTest.UNWINNABLE;
+      case WINNABLE -> UnwinnableFullResultTest.WINNABLE;
+      case POSSIBLY_WINNABLE -> UnwinnableFullResultTest.WINNABLE;
+      default -> throw new IllegalArgumentException();
+    };
+    result.append(unwinnableFullResultTest.name());
     result.append(", ");
 
     result.append("\"");

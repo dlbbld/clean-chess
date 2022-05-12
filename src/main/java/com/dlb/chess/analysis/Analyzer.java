@@ -26,8 +26,6 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
-import com.dlb.chess.winnable.WinnableUtility;
-import com.dlb.chess.winnable.enums.Winnable;
 import com.google.common.collect.ImmutableList;
 
 public class Analyzer extends AnalyzerPrint {
@@ -310,7 +308,6 @@ public class Analyzer extends AnalyzerPrint {
 
     final CheckmateOrStalemate lastPositionEvaluation = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
-    final Winnable winnableNotHavingMove = WinnableUtility.calculateWinnableNotHavingMove(board);
     final UnwinnableQuickResult unwinnableNotHavingMove = UnwinnableQuick.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
 
@@ -320,8 +317,7 @@ public class Analyzer extends AnalyzerPrint {
         sequenceRepetitionList, yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture,
         hasFivefoldRepetition, hasFiftyMoveRule, hasSeventyFiveMoveRule, hasThreeSequenceRepetition,
         isGameContinuedOverFivefoldRepetition, isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture,
-        maxYawnSequence, lastPositionEvaluation, insufficientMaterial, winnableNotHavingMove, unwinnableNotHavingMove,
-        fen, board);
+        maxYawnSequence, lastPositionEvaluation, insufficientMaterial, unwinnableNotHavingMove, fen, board);
   }
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {

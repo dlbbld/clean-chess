@@ -11,7 +11,6 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
-import com.dlb.chess.winnable.enums.Winnable;
 
 public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
     List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<RepeatingSequence> sequenceRepetitionList,
@@ -20,7 +19,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
     boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
     CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial,
-    Winnable winnableNotHavingMove, UnwinnableQuickResult unwinnableNotHavingMove, String fen, ApiBoard chessBoard) {
+    UnwinnableQuickResult unwinnableQuickResultNotHavingMove, String fen, ApiBoard chessBoard) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -46,8 +45,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && Objects.equals(repetitionListList, other.repetitionListList)
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
         && Objects.equals(sequenceRepetitionList, other.sequenceRepetitionList)
-        && winnableNotHavingMove == other.winnableNotHavingMove
-        && unwinnableNotHavingMove == other.unwinnableNotHavingMove;
+        && unwinnableQuickResultNotHavingMove == other.unwinnableQuickResultNotHavingMove;
   }
 
   public Side havingMove() {
@@ -126,12 +124,8 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return insufficientMaterial;
   }
 
-  public Winnable winnableNotHavingMove() {
-    return winnableNotHavingMove;
-  }
-
-  public UnwinnableQuickResult unwinnableNotHavingMove() {
-    return unwinnableNotHavingMove;
+  public UnwinnableQuickResult unwinnableQuickResultNotHavingMove() {
+    return unwinnableQuickResultNotHavingMove;
   }
 
   public String fen() {
