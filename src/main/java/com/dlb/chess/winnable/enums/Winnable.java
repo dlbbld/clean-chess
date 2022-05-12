@@ -4,8 +4,6 @@ public enum Winnable {
 
   NO("no"),
   YES("no"),
-  NO_AMBRONA("no ambrona"),
-  YES_AMBRONA("yes ambrona"),
   UNKNOWN("unknown");
 
   private final String description;

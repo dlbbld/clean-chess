@@ -90,8 +90,6 @@ public class TestUnwinnabilityFull {
             case YES:
               assertEquals(UnwinnableFullResult.WINNABLE, unwinnableFull);
               break;
-            case YES_AMBRONA:
-            case NO_AMBRONA:
             default:
               throw new IllegalArgumentException();
           }
@@ -111,8 +109,6 @@ public class TestUnwinnabilityFull {
             case YES:
               assertEquals(UnwinnableFullResult.WINNABLE, unwinnableFull);
               break;
-            case YES_AMBRONA:
-            case NO_AMBRONA:
             default:
               throw new IllegalArgumentException();
           }

@@ -86,8 +86,6 @@ public class TestUnwinnabilityQuick {
             case UNKNOWN:
             case YES:
               break;
-            case YES_AMBRONA:
-            case NO_AMBRONA:
             default:
               throw new IllegalArgumentException();
           }
@@ -105,8 +103,6 @@ public class TestUnwinnabilityQuick {
             case UNKNOWN:
             case YES:
               break;
-            case YES_AMBRONA:
-            case NO_AMBRONA:
             default:
               throw new IllegalArgumentException();
           }

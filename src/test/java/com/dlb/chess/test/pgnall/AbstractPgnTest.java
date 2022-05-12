@@ -15,7 +15,8 @@ import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
 
 public abstract class AbstractPgnTest {
 
@@ -84,29 +85,21 @@ public abstract class AbstractPgnTest {
 
   private static void testWinnableNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
     // at the moment for lichess test cases with Ambrona results we check only against winnable=no
-    testSide(testCase.winnableNotHavingMove(), analysis.winnableNotHavingMove());
+    testSide(testCase.unwinnableFullResultTest(), analysis.unwinnableNotHavingMove());
 
   }
 
-  private static void testSide(Winnable winnableExpected, Winnable winnableActual) {
-    switch (winnableExpected) {
-      case NO:
-        assertEquals(winnableExpected, winnableActual);
+  private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected, UnwinnableQuickResult unwinnableQuickResult) {
+    switch (unwinnableFullResultTestExpected) {
+      case UNWINNABLE:
+        assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuickResult);
         break;
-      case UNKNOWN:
-      case YES: {
-        // we do not calculate at full depth, so we cannot distinguish MAYBE and CHECKMATE
-        final var isCheckOk = winnableActual == Winnable.YES || winnableActual == Winnable.UNKNOWN;
-        assertTrue(isCheckOk);
+      case UNWINNABLE_NOT_QUICK:
+        assertEquals(UnwinnableQuickResult.WINNABLE, unwinnableQuickResult);
         break;
-      }
-      case YES_AMBRONA: {
-        final var isCheckOk = winnableActual == Winnable.UNKNOWN;
-        assertTrue(isCheckOk);
-      }
-        break;
-      case NO_AMBRONA:
-        // the no answers from Ambrona we don't find
+      case WINNABLE:
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuickResult.WINNABLE || unwinnableQuickResult == UnwinnableQuickResult.POSSIBLY_WINNABLE;
+        assertTrue(isIncomplete);
         break;
       default:
         throw new IllegalArgumentException();

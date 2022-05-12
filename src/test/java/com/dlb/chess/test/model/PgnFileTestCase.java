@@ -7,13 +7,9 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 
-public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
-    String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule,
-    List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence,
-    CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial,
-    Winnable winnableNotHavingMove, String fen) {
+public record PgnFileTestCase(String pgnFileName, String expectedRepetition, String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule, List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence, CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial, UnwinnableFullResultTest unwinnableFullResultTest, String fen) {
 
   public String pgnFileName() {
     return pgnFileName;
@@ -51,8 +47,8 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     return insufficientMaterial;
   }
 
-  public Winnable winnableNotHavingMove() {
-    return winnableNotHavingMove;
+  public UnwinnableFullResultTest unwinnableFullResultTest() {
+    return unwinnableFullResultTest;
   }
 
   public String fen() {
@@ -68,14 +64,8 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
       return false;
     }
     final var other = (PgnFileTestCase) obj;
-    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule)
-        && Objects.equals(expectedRepetition, other.expectedRepetition)
-        && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture)
-        && Objects.equals(expectedSequenceRepetition, other.expectedSequenceRepetition)
-        && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
-        && insufficientMaterial == other.insufficientMaterial && lastPositionEvaluation == other.lastPositionEvaluation
-        && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
-        && winnableNotHavingMove == other.winnableNotHavingMove;
+    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule) && Objects.equals(expectedRepetition, other.expectedRepetition) && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture) && Objects.equals(expectedSequenceRepetition, other.expectedSequenceRepetition) && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture && insufficientMaterial == other.insufficientMaterial
+        && lastPositionEvaluation == other.lastPositionEvaluation && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName) && unwinnableFullResultTest == other.unwinnableFullResultTest;
   }
 
 }
