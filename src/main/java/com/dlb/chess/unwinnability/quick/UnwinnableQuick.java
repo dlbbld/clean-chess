@@ -20,16 +20,11 @@ public class UnwinnableQuick {
   public static UnwinnableQuickResult unwinnableQuick(ApiBoard board, Side c) {
 
     // 1: advance the position as long as there is only one legal move
-    var hasOnlyOneLegalMove = board.getLegalMoveSet().size() == 1;
+    var isCheckBoard = true;
     var countHalfmoves = 0;
-    while (hasOnlyOneLegalMove) {
-      final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-      final LegalMove legalMove = NonNullWrapperCommon.getFirst(legalMoveList);
-      board.performMove(legalMove.moveSpecification());
-      countHalfmoves++;
-
+    while (isCheckBoard) {
       if (board.isCheckmate()) {
-        // imported, store before undoing moves!
+        // crucial, store the side before undoing moves, as it can change with undoing moves!!
         final Side sideBeingCheckmated = board.getHavingMove();
         unperformHalfmoves(board, countHalfmoves);
         if (sideBeingCheckmated == c) {
@@ -38,11 +33,19 @@ public class UnwinnableQuick {
         return UnwinnableQuickResult.WINNABLE;
       }
 
-      if (board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+      if (board.isInsufficientMaterial(c) || board.isStalemate() || board.isFivefoldRepetition()
+          || board.isSeventyFiftyMove()) {
         unperformHalfmoves(board, countHalfmoves);
         return UnwinnableQuickResult.UNWINNABLE;
       }
-      hasOnlyOneLegalMove = board.getLegalMoveSet().size() == 1;
+
+      isCheckBoard = board.getLegalMoveSet().size() == 1;
+      if (isCheckBoard) {
+        final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
+        final LegalMove legalMove = NonNullWrapperCommon.getFirst(legalMoveList);
+        board.performMove(legalMove.moveSpecification());
+        countHalfmoves++;
+      }
     }
 
     // 2: perform a depth-first search over the tree of variations of pos and interrupt the

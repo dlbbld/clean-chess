@@ -1,4 +1,4 @@
-package com.dlb.chess.winnable.model;
+package com.dlb.chess.test.winnable.model;
 
 import java.util.Objects;
 import java.util.Set;
@@ -6,7 +6,7 @@ import java.util.Set;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.enums.GameStatusAnalysis;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.winnable.enums.Winnable;
 
 public record WinnableAnalysis(Winnable winnable, Set<GameStatusAnalysis> gameStatusSet) {
 

@@ -1,4 +1,4 @@
-package com.dlb.chess.winnable.model;
+package com.dlb.chess.test.winnable.model;
 
 import org.eclipse.jdt.annotation.Nullable;
 

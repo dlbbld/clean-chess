@@ -13,8 +13,6 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
-import com.dlb.chess.winnable.WinnableUtility;
-import com.dlb.chess.winnable.enums.Winnable;
 
 public class TestUnwinnabilityQuick {
 
@@ -42,75 +40,4 @@ public class TestUnwinnabilityQuick {
     }
   }
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "norgaard_pawn_wall_example_2.pgn";
-
-  @SuppressWarnings("static-method")
-  // @Test
-  void testAgainstMine() throws Exception {
-    var hasFound = false;
-    for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (!hasFound) {
-          if (IS_START_FROM_PGN_FILE) {
-            if (START_FROM_PGN_FILE_NAME.equals(testCase.pgnFileName())) {
-              hasFound = true;
-            }
-          } else {
-            hasFound = true;
-          }
-        }
-        if (!hasFound) {
-          continue;
-        }
-
-        switch (testCase.pgnFileName()) {
-          case "norgaard_pawn_wall_example_2.pgn":
-            continue;
-          default:
-            break;
-        }
-
-        final ApiBoard board = new Board(testCase.fen());
-
-        logger.info(testCase.pgnFileName());
-
-        // not having move
-        {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board,
-              board.getHavingMove().getOppositeSide());
-
-          switch (winnable) {
-            case NO:
-              assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
-              break;
-            case UNKNOWN:
-            case YES:
-              break;
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-
-        // having move
-        {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board, board.getHavingMove());
-
-          switch (winnable) {
-            case NO:
-              assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
-              break;
-            case UNKNOWN:
-            case YES:
-              break;
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-      }
-    }
-  }
 }

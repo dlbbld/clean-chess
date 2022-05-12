@@ -1,4 +1,4 @@
-package com.dlb.chess.winnable.enums;
+package com.dlb.chess.test.winnable.enums;
 
 public enum Winnable {
 

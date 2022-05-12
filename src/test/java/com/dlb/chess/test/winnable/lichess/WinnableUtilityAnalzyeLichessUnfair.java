@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.winnable.lichess;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -17,10 +17,10 @@ import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.PawnWallUtility;
-import com.dlb.chess.winnable.enums.Winnable;
-import com.dlb.chess.winnable.model.GameForcedAnalysis;
-import com.dlb.chess.winnable.model.GameMultipleAnalysis;
-import com.dlb.chess.winnable.model.WinnableAnalysis;
+import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.winnable.model.GameForcedAnalysis;
+import com.dlb.chess.test.winnable.model.GameMultipleAnalysis;
+import com.dlb.chess.test.winnable.model.WinnableAnalysis;
 import com.google.common.collect.ImmutableSet;
 
 public class WinnableUtilityAnalzyeLichessUnfair {

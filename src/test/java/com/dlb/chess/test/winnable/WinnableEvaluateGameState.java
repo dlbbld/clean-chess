@@ -1,4 +1,4 @@
-package com.dlb.chess.winnable;
+package com.dlb.chess.test.winnable;
 
 import java.util.ArrayList;
 import java.util.EnumSet;
@@ -7,7 +7,7 @@ import java.util.Set;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.winnable.enums.Winnable;
 import com.google.common.collect.ImmutableSet;
 
 public class WinnableEvaluateGameState {

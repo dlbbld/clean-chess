@@ -6,10 +6,10 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.pgn.reader.enums.ResultTagValue;
 import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.test.winnable.WinnableUtility;
+import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.utility.PgnUtility;
 import com.dlb.chess.utility.TagUtility;
-import com.dlb.chess.winnable.WinnableUtility;
-import com.dlb.chess.winnable.enums.Winnable;
 
 public abstract class AbstractLichessCheck {
 
@@ -32,7 +32,8 @@ public abstract class AbstractLichessCheck {
       throw new ProgrammingMistakeException("Should not happen");
     }
 
-    final Winnable winnable = WinnableUtility.calculateWinnableNotHavingMove(boardPerLastMove);
+    final Winnable winnable = WinnableUtility.calculateWinnable(boardPerLastMove,
+        boardPerLastMove.getHavingMove().getOppositeSide());
     return winnable == Winnable.NO;
   }
 }

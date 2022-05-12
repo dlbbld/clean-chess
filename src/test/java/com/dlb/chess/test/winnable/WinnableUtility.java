@@ -1,4 +1,4 @@
-package com.dlb.chess.winnable;
+package com.dlb.chess.test.winnable;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -9,9 +9,9 @@ import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.PawnWallUtility;
-import com.dlb.chess.winnable.enums.Winnable;
-import com.dlb.chess.winnable.model.EvaluatePositions;
-import com.dlb.chess.winnable.model.GameForced;
+import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.winnable.model.EvaluatePositions;
+import com.dlb.chess.test.winnable.model.GameForced;
 
 public class WinnableUtility {
 
@@ -20,6 +20,23 @@ public class WinnableUtility {
   private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableUtility.class);
 
   public static Winnable calculateWinnable(ApiBoard board, Side side) {
+
+    if (board.isCheckmate()) {
+      if (side == board.getHavingMove()) {
+        return Winnable.NO;
+      }
+      return Winnable.YES;
+    }
+
+    if (board.isInsufficientMaterial(side) || board.isStalemate() || board.isFivefoldRepetition()
+        || board.isSeventyFiftyMove()) {
+      return Winnable.NO;
+    }
+
+    if (board.getLegalMovesRepresentation().isEmpty()) {
+      throw new ProgrammingMistakeException("At this point we must have at least one legal move");
+    }
+
     if (board.getHavingMove() == side) {
       return calculateWinnableHavingMove(board);
     }
@@ -29,14 +46,6 @@ public class WinnableUtility {
   private static Winnable calculateWinnableHavingMove(ApiBoard board) {
 
     final Side sideToEvaluate = board.getHavingMove();
-
-    if (board.isCheckmate() || board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
-      return Winnable.NO;
-    }
-
-    if (board.getLegalMovesRepresentation().isEmpty()) {
-      throw new ProgrammingMistakeException("At this point we must have at least one legal move");
-    }
 
     {
       final GameForced forced = WinnableCalculateGameState.evaluateForcedLine(board);
@@ -90,16 +99,9 @@ public class WinnableUtility {
     return Winnable.UNKNOWN;
   }
 
-  public static Winnable calculateWinnableNotHavingMove(ApiBoard board) {
+  private static Winnable calculateWinnableNotHavingMove(ApiBoard board) {
+
     final Side sideToEvaluate = board.getHavingMove().getOppositeSide();
-
-    if (board.isCheckmate()) {
-      return Winnable.YES;
-    }
-
-    if (board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
-      return Winnable.NO;
-    }
 
     if (board.getLegalMovesRepresentation().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");

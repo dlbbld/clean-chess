@@ -1,4 +1,4 @@
-package com.dlb.chess.winnable;
+package com.dlb.chess.test.winnable;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -9,8 +9,8 @@ import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.utility.BasicChessUtility;
-import com.dlb.chess.winnable.model.EvaluatePositions;
-import com.dlb.chess.winnable.model.GameForced;
+import com.dlb.chess.test.winnable.model.EvaluatePositions;
+import com.dlb.chess.test.winnable.model.GameForced;
 
 public class WinnableCalculateGameState {
 
