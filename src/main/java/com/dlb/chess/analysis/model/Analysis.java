@@ -19,7 +19,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
     boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
     CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial,
-    UnwinnableQuickResult unwinnableQuickResultNotHavingMove, String fen, ApiBoard chessBoard) {
+    UnwinnableQuickResult unwinnableQuickResultNotHavingMove, String fen, ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -30,7 +30,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
       return false;
     }
     final var other = (Analysis) obj;
-    return Objects.equals(chessBoard, other.chessBoard) && Objects.equals(fen, other.fen)
+    return Objects.equals(board, other.board) && Objects.equals(fen, other.fen)
         && Objects.equals(yawnMoveListList, other.yawnMoveListList) && firstCapture == other.firstCapture
         && Objects.equals(halfMoveList, other.halfMoveList) && hasCapture == other.hasCapture
         && hasFiftyMoveRule == other.hasFiftyMoveRule && hasFivefoldRepetition == other.hasFivefoldRepetition
@@ -132,8 +132,8 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return fen;
   }
 
-  public ApiBoard chessBoard() {
-    return chessBoard;
+  public ApiBoard board() {
+    return board;
   }
 
 }
