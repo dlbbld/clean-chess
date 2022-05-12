@@ -4724,15 +4724,15 @@ public class PgnExpectedValue {
         "5brk/4p1p1/3pP1P1/1B1P2p1/3p2p1/3P4/4K1P1/8 w - - 10 100"));
     list.add(new PgnFileTestCase("ae_02.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
-        "8/1p4p1/1Pp3p1/k1P3p1/1pP3Pb/1P4p1/6P1/7K w - - 10 100"));
+        "8/1p4p1/kPp3p1/2P3p1/1pP3Pb/1P4p1/6P1/6K1 w - - 12 101"));
     list.add(new PgnFileTestCase("ae_03.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 10 100"));
     list.add(new PgnFileTestCase("ae_04.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N7 b - - 10 100"));
     list.add(new PgnFileTestCase("ae_05.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "4K3/8/8/8/8/p1p2p1p/P1pppp1P/bnrqkrnb b - - 10 100"));
     list.add(new PgnFileTestCase("ae_06.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
@@ -4741,8 +4741,8 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "Bb2kb2/bKp1p1p1/1pP1P1P1/pP6/6P1/P7/8/8 b - - 10 100"));
     list.add(new PgnFileTestCase("ae_08.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
-        "Bb2kb2/bKp1p1p1/1pP1P1P1/1P6/p5P1/P7/8/8 b - - 10 100"));
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "Bb1k1b2/bKp1p1p1/1pP1P1P1/1P6/p5P1/P7/8/8 w - - 11 101"));
 
     // cannot use as position illegal (too many white light-squared bishops)
     // nineth example from Ambrona, file name would become as below, but no such file as not used
@@ -4751,6 +4751,30 @@ public class PgnExpectedValue {
     // TODO Ambrona sees that the position is winnable for enemy pawn behind pawn
     // wall, but we see a pawnwall
     // ae_10.pgn
+    list.add(new PgnFileTestCase("ae_10.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
+        "7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 10 100"));
+
+    list.add(new PgnFileTestCase("ae_11_FKr42ZRT.pgn", "", "", "", BLANK_ESRL, 17, 16, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "8/8/7p/5p1P/5p1K/5Pp1/6P1/5kb1 b - - 13 63"));
+    list.add(new PgnFileTestCase("ae_12_bKHPqNEw.pgn", "", "", "", BLANK_ESRL, 5, 8, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41"));
+    list.add(new PgnFileTestCase("ae_13_OawUhnkq.pgn", "", "", "", BLANK_ESRL, 6, 6, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE, "5rk1/6P1/7K/5q2/8/8/8/8 w - - 1 52"));
+    list.add(new PgnFileTestCase("ae_14.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "k7/B7/2b5/1p1p1p1p/1P1P1P1P/KP6/1P6/8 b - - 0 101"));
+    list.add(new PgnFileTestCase("ae_15_QRvIMh3z.pgn", "", "", "", BLANK_ESRL, 16, 46, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
+        "2b5/1p6/pPp3k1/2Pp3p/P2PpBpP/4P1P1/5K2/8 b - - 46 59"));
+    list.add(new PgnFileTestCase("ae_16.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100"));
+    list.add(new PgnFileTestCase("ae_17.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        "rnb1b3/pk1p4/p1pPp1p1/P1P1P1P1/RBP5/P7/5B2/7K w - - 10 100"));
 
     return new PgnFileTestCaseList(PgnTest.UNFAIR_AMBRONA_EXAMPLES, list);
   }

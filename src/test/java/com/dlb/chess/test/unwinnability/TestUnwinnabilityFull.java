@@ -13,6 +13,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.test.winnable.WinnableUtility;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.full.UnwinnableFull;
@@ -24,24 +25,45 @@ public class TestUnwinnabilityFull {
 
   @SuppressWarnings("static-method")
   // @Test
-  void testSingle() {
-    // final Board board = new Board("8/6k1/7p/2p3pP/3r4/2K5/p7/8 w - - 0 55");
+  void testStartPosition() {
     final Board board = new Board();
-
     assertEquals(UnwinnableFullResult.WINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
   // @Test
+  void testFen() {
+    final var fen = "8/6k1/7p/2p3pP/3r4/2K5/p7/8 w - - 0 55";
+    final Board board = new Board(fen);
+    assertEquals(UnwinnableFullResult.WINNABLE, UnwinnableFull.unwinnableFull(board, Side.WHITE));
+  }
+
+  // not terminating so far
+  // ae_04.pgn
+
+  // wrong
+  // ae_06.pgn
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPgnFile() {
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("ae_13_OawUhnkq.pgn");
+    final ApiBoard board = new Board(pgnFileTestCase.fen());
+    logger.info(pgnFileTestCase.pgnFileName());
+
+    check(pgnFileTestCase.unwinnableFullResultTest(), board);
+  }
+
+  @SuppressWarnings("static-method")
+  // @Test
   void testFolder() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_NOT_QUICK);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 
-      assertEquals(UnwinnableFullResult.UNWINNABLE,
-          UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
+      check(testCase.unwinnableFullResultTest(), board);
     }
   }
 
@@ -49,7 +71,7 @@ public class TestUnwinnabilityFull {
   private static final String START_FROM_PGN_FILE_NAME = "02_white_rook_knight.pgn";
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testAgainstMine() throws Exception {
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
@@ -116,6 +138,22 @@ public class TestUnwinnabilityFull {
           }
         }
       }
+    }
+  }
+
+  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
+    switch (unwinnableFullResultTest) {
+      case UNWINNABLE:
+      case UNWINNABLE_NOT_QUICK:
+        assertEquals(UnwinnableFullResult.UNWINNABLE,
+            UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
+        break;
+      case WINNABLE:
+        assertEquals(UnwinnableFullResult.WINNABLE,
+            UnwinnableFull.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
+        break;
+      default:
+        throw new IllegalArgumentException();
     }
   }
 }
