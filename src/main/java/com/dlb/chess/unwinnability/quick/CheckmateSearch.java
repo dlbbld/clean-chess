@@ -12,26 +12,10 @@ public class CheckmateSearch {
   // Database except three were correctly identified by Unwinnablequick.
   private static final int D = 9;
 
-  private boolean isInterrupted = false;
-
-  public CheckmateSearchResult checkmateSearch(ApiBoard board, Side c) {
-    final var hasCheckmate = calculateHasCheckmate(board, c, 0);
-
-    if (hasCheckmate) {
-      return CheckmateSearchResult.TRUE;
-    }
-
-    if (isInterrupted) {
-      return CheckmateSearchResult.INTERRUPTED;
-    }
-
-    return CheckmateSearchResult.FALSE;
-  }
-
-  private boolean calculateHasCheckmate(ApiBoard board, Side c, int currentDepth) {
+  public static CheckmateSearchResult calculateHasCheckmate(ApiBoard board, Side c, int currentDepth) {
     final var isCheckmate = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
     if (isCheckmate) {
-      return true;
+      return CheckmateSearchResult.TRUE;
     }
 
     if (currentDepth < D && !board.isInsufficientMaterial(c)) {
@@ -39,19 +23,24 @@ public class CheckmateSearch {
         board.performMove(legalMove.moveSpecification());
         final var hasCheckmate = calculateHasCheckmate(board, c, currentDepth + 1);
         board.unperformMove();
-        if (hasCheckmate) {
-          return true;
+        switch (hasCheckmate) {
+          case TRUE:
+            return CheckmateSearchResult.TRUE;
+          case INTERRUPTED:
+            return CheckmateSearchResult.INTERRUPTED;
+          case FALSE:
+            // continue
+            break;
+          default:
+            throw new IllegalArgumentException();
         }
       }
     }
-    if (currentDepth == D && !isInterrupted) {
-      // search could have continued
-      isInterrupted = !board.getLegalMoveSet().isEmpty();
-      if (isInterrupted) {
-        return true;
-      }
+    // search could have continued
+    if (currentDepth == D && !board.getLegalMoveSet().isEmpty()) {
+      return CheckmateSearchResult.INTERRUPTED;
     }
-    return false;
+    return CheckmateSearchResult.FALSE;
   }
 
 }

@@ -38,7 +38,7 @@ public class TestWinnability {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFile() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("a2l4gphm.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("Ob5ozxgG.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 

@@ -41,15 +41,17 @@ public class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFile() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("a2l4gphm.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("f6c1lu7R.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    check(pgnFileTestCase.unwinnableFullResultTest(), board);
+    assertEquals(UnwinnableQuickResult.UNWINNABLE,
+        UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    // check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testFolder() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
@@ -68,7 +70,7 @@ public class TestUnwinnabilityQuick {
         assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuickResult);
         break;
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableQuickResult.WINNABLE, unwinnableQuickResult);
+        assertEquals(UnwinnableQuickResult.POSSIBLY_WINNABLE, unwinnableQuickResult);
         break;
       case WINNABLE:
 

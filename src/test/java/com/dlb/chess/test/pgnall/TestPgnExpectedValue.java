@@ -19,7 +19,7 @@ class TestPgnExpectedValue extends AbstractPgnTest {
   private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.BASIC_CAPTURE_WHITE;
 
   private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = true;
-  private static final String CHECK_PGN_FILE_NAME = "anton_guijarro_antipov_2015.pgn";
+  private static final String CHECK_PGN_FILE_NAME = "yu_alekseenko_2018.pgn";
 
   @SuppressWarnings("static-method")
   @Test

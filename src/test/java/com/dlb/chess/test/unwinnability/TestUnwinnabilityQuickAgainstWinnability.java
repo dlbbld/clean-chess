@@ -22,8 +22,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuickAgainstWinnability.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "seventy_five_01_2_end_with_seventy_five.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final String START_FROM_PGN_FILE_NAME = "Ob5ozxgG.pgn";
 
   @SuppressWarnings("static-method")
   @Test

@@ -11,7 +11,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class TestSinglePgn extends AbstractSinglePgnTest {
 
-  private static final String PGN_FILE_NAME = "grischuk_mamedyarov_2017.pgn";
+  private static final String PGN_FILE_NAME = "2_2_3_ponomariov_adams_2005_sofia.pgn";
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestSinglePgn.class);
 

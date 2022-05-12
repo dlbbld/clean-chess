@@ -98,8 +98,6 @@ public abstract class AbstractPgnTest {
         assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuickResult);
         break;
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableQuickResult.WINNABLE, unwinnableQuickResult);
-        break;
       case WINNABLE:
         final var isIncomplete = unwinnableQuickResult == UnwinnableQuickResult.WINNABLE
             || unwinnableQuickResult == UnwinnableQuickResult.POSSIBLY_WINNABLE;

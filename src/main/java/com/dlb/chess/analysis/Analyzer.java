@@ -16,6 +16,7 @@ import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
+import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -277,6 +278,8 @@ public class Analyzer extends AnalyzerPrint {
 
   public static Analysis calculateAnalysis(ApiBoard board) throws Exception {
 
+    final String invariant = board.getFen();
+
     final Side havingMove = board.getHavingMove();
 
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
@@ -312,6 +315,10 @@ public class Analyzer extends AnalyzerPrint {
         board.getHavingMove().getOppositeSide());
 
     final String fen = board.getFen();
+
+    if (!invariant.equals(board.getFen())) {
+      throw new ProgrammingMistakeException("Board was changed");
+    }
 
     return new Analysis(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
         sequenceRepetitionList, yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture,
