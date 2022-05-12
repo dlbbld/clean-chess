@@ -60,9 +60,11 @@ public class WinnableUtility {
 
     if (board.getLegalMovesRepresentation().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
       {
-        final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateSecondHalfMoveNotMadeTheMove(board);
+        final EvaluatePositions evaluatePositions = WinnableCalculateGameState
+            .evaluateSecondHalfMoveNotMadeTheMove(board);
         logger.printf(Level.DEBUG, "second;madeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final Winnable winnable = WinnableEvaluateGameState.calculateWinnableNotMadeTheMove(evaluatePositions.gameStatus());
+        final Winnable winnable = WinnableEvaluateGameState
+            .calculateWinnableNotMadeTheMove(evaluatePositions.gameStatus());
 
         if (winnable != Winnable.UNKNOWN) {
           return winnable;
@@ -72,7 +74,8 @@ public class WinnableUtility {
       {
         final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateThirdHalfMoveMadeTheMove(board);
         logger.printf(Level.DEBUG, "third;madeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final Winnable winnable = WinnableEvaluateGameState.calculateWinnableMadeTheMove(evaluatePositions.gameStatus());
+        final Winnable winnable = WinnableEvaluateGameState
+            .calculateWinnableMadeTheMove(evaluatePositions.gameStatus());
 
         if (winnable != Winnable.UNKNOWN) {
           return winnable;
@@ -115,7 +118,8 @@ public class WinnableUtility {
     {
       final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateFirstHalfMoveNotMadeTheMove(board);
       logger.printf(Level.DEBUG, "first;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-      final Winnable winnable = WinnableEvaluateGameState.calculateWinnableNotMadeTheMove(evaluatePositions.gameStatus());
+      final Winnable winnable = WinnableEvaluateGameState
+          .calculateWinnableNotMadeTheMove(evaluatePositions.gameStatus());
 
       if (winnable != Winnable.UNKNOWN) {
         return winnable;
@@ -126,7 +130,8 @@ public class WinnableUtility {
       {
         final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateSecondHalfMoveMadeTheMove(board);
         logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final Winnable winnable = WinnableEvaluateGameState.calculateWinnableMadeTheMove(evaluatePositions.gameStatus());
+        final Winnable winnable = WinnableEvaluateGameState
+            .calculateWinnableMadeTheMove(evaluatePositions.gameStatus());
 
         if (winnable != Winnable.UNKNOWN) {
           return winnable;
@@ -134,9 +139,11 @@ public class WinnableUtility {
       }
 
       {
-        final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateThirdHalfMoveNotMadeTheMove(board);
+        final EvaluatePositions evaluatePositions = WinnableCalculateGameState
+            .evaluateThirdHalfMoveNotMadeTheMove(board);
         logger.printf(Level.DEBUG, "third;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final Winnable winnable = WinnableEvaluateGameState.calculateWinnableNotMadeTheMove(evaluatePositions.gameStatus());
+        final Winnable winnable = WinnableEvaluateGameState
+            .calculateWinnableNotMadeTheMove(evaluatePositions.gameStatus());
 
         if (winnable != Winnable.UNKNOWN) {
           return winnable;

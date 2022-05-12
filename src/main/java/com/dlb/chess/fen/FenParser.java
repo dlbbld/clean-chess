@@ -615,8 +615,8 @@ public class FenParser implements EnumConstants {
       }
 
       // light square bishops
-      final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE,
-          staticPosition, SquareType.LIGHT_SQUARE);
+      final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
+          SquareType.LIGHT_SQUARE);
       final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
           - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
       if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
@@ -625,8 +625,8 @@ public class FenParser implements EnumConstants {
       }
 
       // dark square bishops
-      final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE,
-          staticPosition, SquareType.DARK_SQUARE);
+      final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
+          SquareType.DARK_SQUARE);
       final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
           - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
       if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
@@ -682,8 +682,8 @@ public class FenParser implements EnumConstants {
       }
 
       // light square bishops
-      final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK,
-          staticPosition, SquareType.LIGHT_SQUARE);
+      final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
+          SquareType.LIGHT_SQUARE);
       final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
           - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
       if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
@@ -692,8 +692,8 @@ public class FenParser implements EnumConstants {
       }
 
       // dark square bishops
-      final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK,
-          staticPosition, SquareType.DARK_SQUARE);
+      final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
+          SquareType.DARK_SQUARE);
       final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
           - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
       if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {

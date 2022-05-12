@@ -49,7 +49,8 @@ public abstract class AbstractPgnTest {
   }
 
   private static void testYawnMoveRule(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.expectedYawnMoveRule(), YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
+    assertEquals(testCase.expectedYawnMoveRule(),
+        YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
   }
 
   private static void testSequenceRepetition(Analysis analysis, PgnFileTestCase testCase) {
@@ -60,7 +61,8 @@ public abstract class AbstractPgnTest {
       logger.error("Expected sequence repetition for test case " + testCase.pgnFileName() + " was not yet defined");
       throw new IllegalArgumentException("Please define expected values before running the tests");
     }
-    final List<String> calculatedPositionSequenceList = Analyzer.calculateSequenceRepetitionRepresentation(analysis.sequenceRepetitionList());
+    final List<String> calculatedPositionSequenceList = Analyzer
+        .calculateSequenceRepetitionRepresentation(analysis.sequenceRepetitionList());
     assertEquals(testCase.expectedSequenceRepetition().size(), calculatedPositionSequenceList.size());
     for (var i = 0; i < calculatedPositionSequenceList.size(); i++) {
       assertEquals(testCase.expectedSequenceRepetition().get(i), calculatedPositionSequenceList.get(i));
@@ -89,7 +91,8 @@ public abstract class AbstractPgnTest {
 
   }
 
-  private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected, UnwinnableQuickResult unwinnableQuickResult) {
+  private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected,
+      UnwinnableQuickResult unwinnableQuickResult) {
     switch (unwinnableFullResultTestExpected) {
       case UNWINNABLE:
         assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuickResult);
@@ -98,7 +101,8 @@ public abstract class AbstractPgnTest {
         assertEquals(UnwinnableQuickResult.WINNABLE, unwinnableQuickResult);
         break;
       case WINNABLE:
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuickResult.WINNABLE || unwinnableQuickResult == UnwinnableQuickResult.POSSIBLY_WINNABLE;
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuickResult.WINNABLE
+            || unwinnableQuickResult == UnwinnableQuickResult.POSSIBLY_WINNABLE;
         assertTrue(isIncomplete);
         break;
       default:

@@ -120,7 +120,8 @@ public class BasicOutput {
   }
 
   private static String calculateOutputThreefoldRepetitionInitialEnPassantCapture(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO, analysis.hasThreefoldRepetitionInitialEnPassantCapture());
+    return calculateOutput(ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
+        analysis.hasThreefoldRepetitionInitialEnPassantCapture());
   }
 
   private static String calculateOutputFivefoldRepetition(Analysis analysis) {
@@ -158,17 +159,21 @@ public class BasicOutput {
   }
 
   private static String calculateOutputThreefoldRepetition(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO, analysis.hasThreefoldRepetition());
+    return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
+        analysis.hasThreefoldRepetition());
   }
 
-  private static String calculateOutputRepetitionType(Analysis analysis, EnPassantCaptureRuleThreefold enPassantCaptureRule) {
+  private static String calculateOutputRepetitionType(Analysis analysis,
+      EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     final String attributeName = calculateRepetitionAttributeSequence(enPassantCaptureRule);
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis, enPassantCaptureRule);
+    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,
+        enPassantCaptureRule);
     if (repetitionList.isEmpty()) {
       return calculateOutput(attributeName, BasicOutput.ATTRIBUTE_VALUE_NA);
     }
-    final String representation = RepetitionOutput.calculateOutputRepetitionListList(repetitionList, enPassantCaptureRule);
+    final String representation = RepetitionOutput.calculateOutputRepetitionListList(repetitionList,
+        enPassantCaptureRule);
     return calculateOutput(attributeName, representation);
   }
 

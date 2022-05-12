@@ -36,7 +36,8 @@ public class RepetitionOutput {
   public static String calculateOutputRepetitionAnalysis(Analysis analysis,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis, enPassantCaptureRule);
+    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,
+        enPassantCaptureRule);
     return calculateOutputRepetitionListList(repetitionList, enPassantCaptureRule);
   }
 
