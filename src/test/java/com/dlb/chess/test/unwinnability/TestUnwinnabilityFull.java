@@ -34,7 +34,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   // @Test
   void testFolder() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.LICHESS_NOT_QUICK);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_NOT_QUICK);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
 
