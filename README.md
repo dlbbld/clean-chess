@@ -3,7 +3,7 @@ clean-chess
 
 clean-chess has the following features:
 * Threefold repetition and fifty-moves report
-* Dead position and unwinnability support based on [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess)
+* Implementation of unwinnability and dead position according to the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess)
 * Java chess API, including PGN support
 
 The name refers to clean code since the code relies on extensive tests as recommended in clean code.
@@ -87,6 +87,9 @@ None
 Fifty moves without capture and pawn move:
 No
 ```
+Black could have claimed a threefold on the 25th move with writing (but not playing) 25... Qb5. Possible claims for White are listed with the move number
+followed by dot (for example 20. Ra2). Possible claims for Black are listed with the move number followed by three dots (for example 25... Qb5).
+
 ## Threefold repetition on the board
 The following game contains a threefold repetition according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Capablanca_versus_Lasker,_1921):
 
@@ -119,6 +122,7 @@ None
 Fifty moves without capture and pawn move:
 No
 ```
+The repetitions are indicated in order as occured on the board. As different positions can repeat, the positions are identified as A, B, C ... in order of first occurrence.
 
 ## Fifty-moves
 The following game ends with a series above fifty moves without capture and pawn move according to [Wikipedia](https://en.wikipedia.org/wiki/Fifty-move_rule#Karpov_vs._Kasparov,_1991). The number of halfmoves without capture and pawn moves are indicated in brackets. (1) for series start, (100) - fifty moves reached, (103) - end of series.
@@ -162,61 +166,135 @@ Sequences without capture and pawn move starting from 25 moves:
 Fifty moves without capture and pawn move:
 Yes
 ```
-# Dead position and unwinnability
-## Dead position
-Dead positions do terminate a game immediately with a draw. As such dead position termination is crucial.
+The numbers in parantheses are the number of fullmoves. So "0.5" is one halfmove, "50" are 100 halfmoves and "51.5" are 103 halfmoves.
+The halfmove series always indicates the first halfmove with (0.5), fifty halfmoves with (50), seventy-five halfmoves if reached as (75) 
+and the last halfmove in the series.
 
-A dead position can be caused by material, for example when KBvK is on the board. That is detected by every chess API. However, there are mainly two types of positions which are dead positions but not due to material. These are pawn walls and positions with a few moves only left, determining the possible results.
+# Unwinnability and dead position
+A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming worst play of the opponent.
+If the position is unwinnable for both players, it's a dead position.
 
-Per the implementation of CHA, this API detects dead positions.
-### Dead position - quick analysis
-The following is a game ending in a dead position not caused by insufficient material according to [Wikipedia](https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position):
+## Methods
+The API provides an implementation of CHA. So for both situations there is a quick and a full method.
+
+The quick method is very fast but not 100% accurate. The full method is 100% accurate but it can also happens that it does not terminate in practical time (after hours).
+
+As such the quick method is suited for game use, the full method only for research or interest use.
+
+### Unwinnability
+The quick method has three return values:
+* UNWINNABLE - the position is not winnable by the player
+* WINNABLE - the position is winnable by the player
+* POSSIBLY_WINNABLE - the position is most likely winnable by the player, but it might also be unwinnable in some rare cases
+
+The full method has two return values:
+* UNWINNABLE - the position is not winnable by the player
+* WINNABLE - the position is winnable by the player
+
+### Dead position
+The quick method has three return values:
+* DEAD_POSITION - the position is a dead position
+* NON_DEAD_POSITION - the position is not a dead position
+* POSSIBLY_NON_DEAD_POSITION - the position is most likely a non dead position, but it might also be a dead position in some rare cases
+
+The full method has two return values:
+* DEAD_POSITION - the position is a dead position
+* NON_DEAD_POSITION - the position is not a dead position
+
+## Examples
+
+### Unwinnable
+
+#### Insufficient material
+The most common situations of unwinnable situations are if one side has insufficient material.
+These are treated correctly by all common chess API's.
+For example White flags with the king and rook against the lone king of Black. Black cannot potentially mate with the king alone.
+[Position](https://lichess.org/analysis/8/8/4k3/3R4/2K5/8/8/8_w_-_-_0_50)
 
 ```java
-  final Board board = new Board("8/2b1k3/7p/p1p1p1pP/PpP1P1P1/1P1BK3/8/8 b - - 0 50");
-  System.out.println(board.isDeadPositionQuick()); // YES
+  final Board board = new Board("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50");
+  System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+  System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
 ```
 
-The following is a [further example from Lichess](https://lichess.org/r1SzzM60#131). The game can only end in a draw, evaluating the possibilities. The API does also evaluate a few halfmoves.
+#### Pawn walls
+In pawn walls both players cannot mate, so they are also dead positions. They are not detected
+by most common chess API's. 
+[Game](https://lichess.org/c3ew66ZV#123)
 
 ```java
-  final Board board = new Board("2k5/2P5/8/1KN5/8/8/8/8 b - - 0 66");
-  System.out.println(board.isDeadPositionQuick()); // YES
+  final Board board = new Board("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62");
+  System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+  System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
 ```
 
-Attention. The method "isDeadPositionQuick" sacrifices accuracy performance. It return "MAYBE" it it is not 100% sure, but only 99.99% if the position is a dead position. So if it return "MAYBE" it is almost always a dead position. There
-are however exception of very rare positions, like the following example (from [here](https://chasolver.org/analyzer.html?example=3)
-where the method returns "MAYBE" but the position is though a dead position.
-
-```java
-  final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-  System.out.println(board.isDeadPositionQuick()); // MAYBE
-```
-
-### Dead position - full analysis
-The "isDeadPositionFull" is always accurate, but can take minutes for exotic positions or for some calculate forever in practical terms. It return yes/no.For more accurate dead position analysis, please visit this [page](https://chasolver.org/index.html).
-
-```java
-  final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-  System.out.println(board.isDeadPositionFull()); // yes
-```
-
-## Unwinnability
-Unwinnability positions are dead positions for one side only, where one side cannot possibly mate. They are relevant to decide the result when one players flags. The other player does not get the win if he cannot possibly mate, that is the position is unwinnable.
-### Unwinnability - quick analysis
-As before use the quick method to determine if the given Side still has a potential mate for 99.99% accurray.
+#### Forced moves
+There are common situations mainly in lower time controls like Bullet, where the game could only continue with a few
+forced moves, and the game outcome is determined. Here Black flags, but there is no game continuation possible where
+White could have won.
+[Game](https://lichess.org/OawUhnkq#101)
 
 ```java
   final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
-  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // YES
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
 ```
 
-### Unwinnability - full analysis
-For absolute accuracy use the full method, which however as for the dead position full method has no predictable performance.
+#### Common positions
+When there are still a lot of pieces on the board, so a mate is very likely, the quick algorithm says POSSIBLE_WINNABLE.
+It makes an educated guess only. The full algorithm calculates an actual mate and is therefore accurate but much slower.
+[Game](https://lichess.org/SCKpvJQX#57)
 
 ```java
-  final Board board = new Board("8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83");
-  System.out.println(board.isUnwinnableFull(Side.WHITE)); // true
+  final Board board = new Board("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29");
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // WINNABLE
+```
+
+#### Positions the quick algorithm does not see
+The following is an example of a position where the quick algorithm says POSSIBLY_WINNABLE but the 
+position is actually winnable.
+
+[Game](https://lichess.org/bKHPqNEw#81)
+
+```java
+  final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
+```
+
+### Dead positions
+Because dead positions are just unwinnable positions for both sides, there is not much more substantially to say.
+
+#### Insufficient material
+The simplest dead position is when one player has already insufficient material and the other player
+also becomes insufficient material due to a capture. Of course that is detected by all chess API's.
+
+[Position](https://lichess.org/analysis/8/8/3kn3/8/2K5/8/8/8_w_-_-_0_50)
+```java
+  final Board board = new Board("8/8/3kn3/8/2K5/8/8/8 w - - 0 50");
+  System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+  System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+```
+
+#### Pawn walls
+Pawn walls are dead positions, here another example.
+[Game](https://lichess.org/V08kX4kz#121)
+
+```java
+  final Board board = new Board("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61");
+  System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+  System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+```
+
+#### Forced moves
+Positions can also often be dead due to forced moves.
+[Game](https://lichess.org/8FUSHxUV#115)
+
+```java
+  final Board board = new Board("k7/P1K5/8/8/8/8/8/8 b - - 2 58");
+  System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+  System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
 ```
 
 # Java chess API

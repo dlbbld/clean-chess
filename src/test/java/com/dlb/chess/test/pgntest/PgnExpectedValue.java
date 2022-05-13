@@ -272,7 +272,7 @@ public class PgnExpectedValue {
         }
       }
     }
-    throw new IllegalArgumentException("No such file exists");
+    throw new IllegalArgumentException("The file " + testPgnFileName + " does not exist");
   }
 
   public static List<PgnFileTestCaseList> getRestrictedTestListList() {
@@ -4748,9 +4748,9 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("ae_07.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "Bb2kb2/bKp1p1p1/1pP1P1P1/pP6/6P1/P7/8/8 b - - 10 100"));
-    list.add(new PgnFileTestCase("ae_08.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
-        "Bb2kb2/bKp1p1p1/1pP1P1P1/1P6/p5P1/P7/8/8 b - - 10 100"));
+    // list.add(new PgnFileTestCase("ae_08.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+    // InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+    // "Bb2kb2/bKp1p1p1/1pP1P1P1/1P6/p5P1/P7/8/8 b - - 10 100"));
 
     // cannot use as position illegal (too many white light-squared bishops)
     // nineth example from Ambrona, file name would become as below, but no such file as not used

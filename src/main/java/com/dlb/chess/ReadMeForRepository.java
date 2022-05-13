@@ -15,6 +15,16 @@ public class ReadMeForRepository {
 
   public static void main(String[] args) throws Exception {
 
+    {
+      final Board board = new Board("k7/Q6r/2b5/1pBp1p1p/1P1P1P1P/KP6/1P6/8 b - - 10 100");
+      System.out.println(board.isDeadPositionQuick()); // POSSIBLY_NON_DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+    }
+
+    if (true) {
+      return;
+    }
+
     // threefold - claim ahead
     {
       final var pgn = """
@@ -69,39 +79,63 @@ public class ReadMeForRepository {
 
     }
 
-    // dead position - quick
-    // example 1
+    // unwinnability
+
+    // insufficient material
     {
-      final Board board = new Board("8/2b1k3/7p/p1p1p1pP/PpP1P1P1/1P1BK3/8/8 b - - 0 50");
-      System.out.println(board.isDeadPositionQuick()); // YES
-    }
-    // example 2
-    {
-      final Board board = new Board("2k5/2P5/8/1KN5/8/8/8/8 b - - 0 66");
-      System.out.println(board.isDeadPositionQuick()); // YES
-    }
-    // example 3
-    {
-      final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-      System.out.println(board.isDeadPositionQuick()); // MOST_LIKELY_WINNABLE
+      final Board board = new Board("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50");
+      System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+      System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
     }
 
-    // dead position - full
+    // pawn wall
     {
-      final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-      System.out.println(board.isDeadPositionFull()); // true
+      final Board board = new Board("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62");
+      System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+      System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
     }
 
-    // unwinnability - quick
+    // forced moves
     {
       final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
-      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // YES
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
     }
 
-    // unwinnability - full
+    // common positions
     {
-      final Board board = new Board("8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83");
-      System.out.println(board.isUnwinnableFull(Side.WHITE)); // true
+      final Board board = new Board("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29");
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // WINNABLE
+    }
+
+    // Example where quick fails
+    {
+      final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
+    }
+
+    // dead position
+    // insufficient material
+    {
+      final Board board = new Board("8/8/3kn3/8/2K5/8/8/8 w - - 0 50");
+      System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+    }
+
+    // pawn walls
+    {
+      final Board board = new Board("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61");
+      System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+    }
+
+    // forced moves
+    {
+      final Board board = new Board("k7/P1K5/8/8/8/8/8/8 b - - 2 58");
+      System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
     }
 
     // Board

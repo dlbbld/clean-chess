@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.pgn.reader.PgnReader;
+import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -38,14 +41,15 @@ public class TestWinnability {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFile() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue
-        .findPgnFileBelongingPgnTestCase("norgaard_pawn_wall_example_2.pgn");
-    final ApiBoard board = new Board(pgnFileTestCase.fen());
-    logger.info(pgnFileTestCase.pgnFileName());
+  void testPgnFileValue() {
+    final var pgnFileName = "norgaard_pawn_wall_example_2.pgn";
+
+    final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
+    final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
+    final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
+    logger.info(pgnFileName);
 
     assertEquals(Winnable.NO, WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
-    // check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
 
   @SuppressWarnings("static-method")

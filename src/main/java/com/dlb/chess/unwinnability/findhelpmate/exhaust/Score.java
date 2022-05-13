@@ -1,4 +1,4 @@
-package com.dlb.chess.unwinnability.findhelpmate;
+package com.dlb.chess.unwinnability.findhelpmate.exhaust;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
@@ -10,8 +10,8 @@ import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.unwinnability.findhelpmate.enums.Goal;
-import com.dlb.chess.unwinnability.findhelpmate.enums.ScoreResult;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
 
 // Figure 12 Score routine used in Figure 5. Algorithm Going-to-corner is defined in Figure 13.
 public class Score {

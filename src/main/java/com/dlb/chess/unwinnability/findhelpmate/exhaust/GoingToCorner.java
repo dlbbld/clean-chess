@@ -1,4 +1,4 @@
-package com.dlb.chess.unwinnability.findhelpmate;
+package com.dlb.chess.unwinnability.findhelpmate.exhaust;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
@@ -12,7 +12,7 @@ import com.dlb.chess.distance.KingDistance;
 import com.dlb.chess.distance.KnightDistance;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.unwinnability.findhelpmate.enums.Goal;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 
 //Figure 13 Going-to-corner routine used in Figure 12.
 public class GoingToCorner implements EnumConstants {

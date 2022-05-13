@@ -2,7 +2,7 @@ package com.dlb.chess.unwinnability.full;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.unwinnability.findhelpmate.FindHelpmate;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.FindHelpmateExhaust;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.mobility.Mobility;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
@@ -24,27 +24,27 @@ public class UnwinnableFullCalculator {
 
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
     if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
-      return UnwinnableFull.YES;
+      return UnwinnableFull.UNWINNABLE;
     }
 
     // we must instantiate the class here to share the transposition table between calls
-    final FindHelpmate findHelpmate = new FindHelpmate(c);
+    final FindHelpmateExhaust findHelpmate = new FindHelpmateExhaust(c);
 
     // 2: for every d in N do ( -> Iterative deepening)
     for (var maxDepth = 0; maxDepth <= Integer.MAX_VALUE; maxDepth++) {
       // 3: set bd Find-Helpmatec(pos, 0, maxDepth = d) (global nodesBound = bound(d))
 
-      final var bd = findHelpmate.findHelpmate(board, maxDepth);
+      final var bd = findHelpmate.calculateHelpmate(board, maxDepth);
 
       switch (bd) {
-        case TRUE:
+        case YES:
           // 4: if bd = true then return Winnable
-          return UnwinnableFull.NO;
-        case FALSE:
+          return UnwinnableFull.WINNABLE;
+        case NO:
           // 5: else if the search was not interrupted (in step 4 of Figure 5) then
           // 6: return Unwinnable
-          return UnwinnableFull.YES;
-        case INTERRUPTED:
+          return UnwinnableFull.UNWINNABLE;
+        case UNKNOWN:
           // the algorithm continues with next depth
           break;
         default:
@@ -52,6 +52,6 @@ public class UnwinnableFullCalculator {
       }
     }
 
-    return UnwinnableFull.YES;
+    return UnwinnableFull.UNWINNABLE;
   }
 }

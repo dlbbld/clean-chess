@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.pgn.reader.PgnReader;
+import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -25,7 +28,7 @@ public class TestUnwinnabilityQuick {
   // @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableQuick.NO,
+    assertEquals(UnwinnableQuick.WINNABLE,
         UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
@@ -34,20 +37,32 @@ public class TestUnwinnabilityQuick {
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableQuick.NO,
+    assertEquals(UnwinnableQuick.WINNABLE,
         UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFile() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("f6c1lu7R.pgn");
+  void testPgnFileValue() {
+    final var pgnFileName = "ae_16.pgn";
+
+    final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
+    final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
+    final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
+    logger.info(pgnFileName);
+
+    assertEquals(UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPgnFileExpected() {
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("25_black_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    assertEquals(UnwinnableQuick.MOST_LIKELY_WINNABLE,
-        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
-    // check(pgnFileTestCase.unwinnableFullResultTest(), board);
+    check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
 
   @SuppressWarnings("static-method")
@@ -67,15 +82,14 @@ public class TestUnwinnabilityQuick {
         board.getHavingMove().getOppositeSide());
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
-        assertEquals(UnwinnableQuick.YES, unwinnableQuickResult);
+        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
         break;
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableQuick.MOST_LIKELY_WINNABLE, unwinnableQuickResult);
+        assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuickResult);
         break;
       case WINNABLE:
-
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.NO
-            || unwinnableQuickResult == UnwinnableQuick.MOST_LIKELY_WINNABLE;
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
+            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
         assertTrue(isIncomplete);
         break;
       default:

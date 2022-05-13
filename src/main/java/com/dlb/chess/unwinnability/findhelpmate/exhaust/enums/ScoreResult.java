@@ -1,4 +1,4 @@
-package com.dlb.chess.unwinnability.findhelpmate.enums;
+package com.dlb.chess.unwinnability.findhelpmate.exhaust.enums;
 
 public enum ScoreResult {
 

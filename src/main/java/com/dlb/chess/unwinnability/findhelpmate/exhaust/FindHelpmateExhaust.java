@@ -1,4 +1,4 @@
-package com.dlb.chess.unwinnability.findhelpmate;
+package com.dlb.chess.unwinnability.findhelpmate.exhaust;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,7 +8,6 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -18,96 +17,87 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
+import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
-import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
 //cnt = 0, and an empty table. The value of maxDepth and nodesBound can be chosen to set the
 //limits of the search. The Score routine is defined in Figure 12 (Appendix A).
-public class FindHelpmate {
+public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(FindHelpmate.class);
-
-  private final Side color;
-
-  private final HashMap<String, Integer> map = new HashMap<>();
-
-  private int cnt = 0;
-
-  private boolean isInterrupted = false;
-
-  private List<LegalMove> mateList = new ArrayList<>();
+  private static final Logger logger = NonNullWrapperCommon.getLogger(FindHelpmateExhaust.class);
 
   // empirically enough
   private static final int NODES_BOUND = 10000;
 
-  public FindHelpmate(Side side) {
+  private final Side color;
+  private final HashMap<String, Integer> transpositionMap = new HashMap<>();
+
+  private int cnt = 0;
+  private boolean isCanExhaust = true;
+  private List<LegalMove> mateList = new ArrayList<>();
+
+  public FindHelpmateExhaust(Side side) {
     this.color = side;
   }
 
-  public FindHelpmateResult findHelpmate(ApiBoard board, int maxDepth) {
+  public FindHelpmateResult calculateHelpmate(ApiBoard board, int maxDepth) {
 
     final String invariant = board.getFen();
 
-    // logger.info("maxDepth=" + maxDepth);
+    if (maxDepth != 0 && maxDepth % 10 == 0) {
+      logger.info("maxDepth=" + maxDepth);
+    }
     this.cnt = 0;
-    this.isInterrupted = false;
+    this.isCanExhaust = true;
     this.mateList = new ArrayList<>();
 
     final var hasHelpmate = findHelpmate(board, 0, maxDepth);
 
-    // check the helpmate
-    if (hasHelpmate) {
-      final ApiBoard checkBoard = checkHelpmate(board.getFen(), mateList);
-
-      final var numberOfMovesForCheckmate = (int) Math.ceil(mateList.size() / 2.0);
-      logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
-      System.out.println(PgnCreate.createPgnFileString(checkBoard));
-
-      if (!invariant.equals(board.getFen())) {
-        throw new ProgrammingMistakeException("Board was changed");
-      }
-      return FindHelpmateResult.TRUE;
-    }
-
-    if (!isInterrupted) {
-      if (!invariant.equals(board.getFen())) {
-        throw new ProgrammingMistakeException("Board was changed");
-      }
-      return FindHelpmateResult.FALSE;
-    }
-
     if (!invariant.equals(board.getFen())) {
       throw new ProgrammingMistakeException("Board was changed");
     }
-    return FindHelpmateResult.INTERRUPTED;
+
+    if (hasHelpmate) {
+      checkHelpmate(board.getFen(), mateList);
+      return FindHelpmateResult.YES;
+    }
+
+    if (isCanExhaust) {
+      return FindHelpmateResult.NO;
+    }
+    return FindHelpmateResult.UNKNOWN;
   }
 
   // Inputs: position, depth (int), maxDepth (int)
   // Output: bool (true if a checkmate sequence was found, false otherwise)
   private boolean findHelpmate(ApiBoard board, int depth, int maxDepth) {
-  
+
     // added for in c code
     if (board.isInsufficientMaterial(color)) {
       return false;
     }
-  
+
     // 1: if the intended winner is checkmating their opponent in pos then return true
     if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
       return true;
     }
-  
+
+    // adding fivefold repetition and seventy-five move rule
+    if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+      return false;
+    }
+
     // 2: if the intended winner has just the king or the position is unwinnable according
     // to Lemma 5 or Lemma 6 or the position is stalemate or the intended winner is
     // receiving checkmate in the position then return false
-  
+
     // if the intended winner has just the king
-  
+
     // position is unwinnable according to Lemma 5
     // position is unwinnable according to Lemma 6
     if (MaterialUtility.calculateIsKingOnly(color, board.getStaticPosition())
@@ -115,57 +105,48 @@ public class FindHelpmate {
         || calculateIsUnwinnableAccordingLemma6(color, board.getStaticPosition())) {
       return false;
     }
-  
+
     // stalemate
     // intended winner is receiving checkmate in the position then return false
     if (board.isStalemate() || board.getHavingMove() == color && board.isCheckmate()) {
       return false;
     }
-  
+
     // set d := limits.max-depth - depth
     final var d = maxDepth - depth;
-  
+
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
     if (calculateIsInTranspositionTable(board.getFen(), d)) {
       return false;
     }
-  
+
     // 3: increase cnt and set d := limits.max-depth - depth
-  
+
     // increase cnt
     cnt++;
-  
+
     // 4: if cnt > nodesBound or d < 0 then return false (-> The search limits are exceeded)
     if (cnt > NODES_BOUND || d < 0) {
-  
-      // logger.info("Interrupting: " + cnt + " / " + depth + " / " + maxDepth);
-  
-      if (!isInterrupted) {
-        isInterrupted = true;
+
+      if (isCanExhaust) {
+        isCanExhaust = false;
       }
-      // System.out.println(board);
       return false;
     }
-  
+
     // 6: store (pos,D) in table
     store(board.getFen(), d);
-  
+
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
     final Set<Square> threatenedSquareSet = AbstractThreatenSquares
         .calculateThreatenedSquares(board.getStaticPosition(), board.getHavingMove().getOppositeSide());
     Collections.sort(legalMoveList,
-        new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition(), threatenedSquareSet));
+        new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition(), threatenedSquareSet, board));
     for (final LegalMove legalMove : legalMoveList) {
-      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification()) || EnPassantCaptureUtility
-          .calculateIsEnPassantCaptureNewMove(board.getStaticPosition(), legalMove.moveSpecification())) {
-        // not interested
-        continue;
-      }
-  
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
-  
+
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
       mateList.add(legalMove);
@@ -176,37 +157,24 @@ public class FindHelpmate {
       }
       mateList.remove(mateList.size() - 1);
     }
-  
+
     // 10: return false (-> No mate was found after exploring every legal move)
     return false;
-  }
 
-  private static ApiBoard checkHelpmate(String fen, List<LegalMove> mateList) {
-
-    final Board boardCheck = new Board(fen);
-
-    for (final LegalMove legalMove : mateList) {
-      boardCheck.performMove(legalMove.moveSpecification());
-    }
-    if (!boardCheck.isCheckmate()) {
-      throw new ProgrammingMistakeException("It is not a checkmate");
-    }
-
-    return boardCheck;
   }
 
   private boolean calculateIsInTranspositionTable(String fen, int d) {
-    final String piecePlacement = FenParserRaw.parsePiecePlacement(fen);
-    if (map.containsKey(piecePlacement)) {
-      final int storedDepth = NonNullWrapperCommon.get(map, piecePlacement);
+    final String positionIdentifier = calculatePositionIdentifier(fen);
+    if (transpositionMap.containsKey(positionIdentifier)) {
+      final int storedDepth = NonNullWrapperCommon.get(transpositionMap, positionIdentifier);
       return storedDepth >= d;
     }
     return false;
   }
 
   private void store(String fen, int d) {
-    final String piecePlacement = FenParserRaw.parsePiecePlacement(fen);
-    map.put(piecePlacement, d);
+    final String positionIdentifier = calculatePositionIdentifier(fen);
+    transpositionMap.put(positionIdentifier, d);
   }
 
   private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
@@ -234,5 +202,14 @@ public class FindHelpmate {
       }
     }
     return false;
+  }
+
+  private static String calculatePositionIdentifier(String fen) {
+    final FenRaw fenRaw = FenParserRaw.parseFenRaw(fen);
+    final StringBuilder result = new StringBuilder();
+    result.append(fenRaw.piecePlacement()).append("*");
+    result.append(fenRaw.castlingRightBothStr()).append("*");
+    result.append(fenRaw.enPassantCaptureTargetSquare());
+    return NonNullWrapperCommon.toString(result);
   }
 }
