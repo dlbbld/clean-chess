@@ -3,5 +3,5 @@ package com.dlb.chess.common.enums;
 public enum DeadPositionQuick {
   YES,
   NO,
-  MAYBE
+  MOST_LIKELY_NO_DEAD_POSITION
 }

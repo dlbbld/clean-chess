@@ -34,9 +34,9 @@ public class UnwinnableQuickCalculator {
           throw new ProgrammingMistakeException("Board was changed");
         }
         if (sideBeingCheckmated == c) {
-          return UnwinnableQuick.UNWINNABLE;
+          return UnwinnableQuick.YES;
         }
-        return UnwinnableQuick.WINNABLE;
+        return UnwinnableQuick.NO;
       }
 
       if (board.isInsufficientMaterial(c) || board.isStalemate() || board.isFivefoldRepetition()
@@ -45,7 +45,7 @@ public class UnwinnableQuickCalculator {
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.UNWINNABLE;
+        return UnwinnableQuick.YES;
       }
 
       isCheckBoard = board.getLegalMoveSet().size() == 1;
@@ -72,14 +72,14 @@ public class UnwinnableQuickCalculator {
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.WINNABLE;
+        return UnwinnableQuick.NO;
       case FALSE:
         // 4: else if the search was not interrupted then return Unwinnable
         unperformHalfmoves(board, countHalfmoves);
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.UNWINNABLE;
+        return UnwinnableQuick.YES;
       case INTERRUPTED:
         break;
       default:
@@ -98,7 +98,7 @@ public class UnwinnableQuickCalculator {
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.UNWINNABLE;
+        return UnwinnableQuick.YES;
       }
     }
 
@@ -107,7 +107,7 @@ public class UnwinnableQuickCalculator {
     if (!invariant.equals(board.getFen())) {
       throw new ProgrammingMistakeException("Board was changed");
     }
-    return UnwinnableQuick.POSSIBLY_WINNABLE;
+    return UnwinnableQuick.MOST_LIKELY_WINNABLE;
   }
 
   private static boolean calculateHasOnlyPawnsBishopsAndKings(StaticPosition staticPosition) {

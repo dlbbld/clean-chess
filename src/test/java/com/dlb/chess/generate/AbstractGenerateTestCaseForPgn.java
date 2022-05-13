@@ -78,9 +78,9 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(UnwinnableFullResultTest.class.getSimpleName());
     result.append(".");
     UnwinnableFullResultTest unwinnableFullResultTest = switch (unwinnableQuickResultNotHavingMove) {
-      case UNWINNABLE -> UnwinnableFullResultTest.UNWINNABLE;
-      case WINNABLE -> UnwinnableFullResultTest.WINNABLE;
-      case POSSIBLY_WINNABLE -> UnwinnableFullResultTest.WINNABLE;
+      case YES -> UnwinnableFullResultTest.UNWINNABLE;
+      case NO -> UnwinnableFullResultTest.WINNABLE;
+      case MOST_LIKELY_WINNABLE -> UnwinnableFullResultTest.WINNABLE;
       default -> throw new IllegalArgumentException();
     };
     result.append(unwinnableFullResultTest.name());

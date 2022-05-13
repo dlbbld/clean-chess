@@ -1,9 +1,9 @@
 package com.dlb.chess.unwinnability.quick.enums;
 
 public enum UnwinnableQuick {
-  UNWINNABLE("unwinnable"),
-  WINNABLE("winnable"),
-  POSSIBLY_WINNABLE("possibly winnable");
+  YES("unwinnable"),
+  NO("winnable"),
+  MOST_LIKELY_WINNABLE("possibly winnable");
 
   private final String description;
 

@@ -24,7 +24,8 @@ public class TestWinnability {
   @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(Winnable.UNKNOWN, WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.UNKNOWN,
+        WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -38,7 +39,8 @@ public class TestWinnability {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFile() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("Ob5ozxgG.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue
+        .findPgnFileBelongingPgnTestCase("norgaard_pawn_wall_example_2.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 

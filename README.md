@@ -164,6 +164,11 @@ Yes
 ```
 # Dead position and unwinnability
 ## Dead position
+Dead positions do terminate a game immediately with a draw. As such dead position termination is crucial.
+
+A dead position can be caused by material, for example when KBvK is on the board. That is detected by every chess API. However, there are mainly two types of positions which are dead positions but not due to material. These are pawn walls and positions with a few moves only left, determining the possible results.
+
+Per the implementation of CHA, this API detects dead positions.
 ### Dead position - quick analysis
 The following is a game ending in a dead position not caused by insufficient material according to [Wikipedia](https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position):
 
@@ -197,13 +202,13 @@ The "isDeadPositionFull" is always accurate, but can take minutes for exotic pos
 ```
 
 ## Unwinnability
-
+Unwinnability positions are dead positions for one side only, where one side cannot possibly mate. They are relevant to decide the result when one players flags. The other player does not get the win if he cannot possibly mate, that is the position is unwinnable.
 ### Unwinnability - quick analysis
 As before use the quick method to determine if the given Side still has a potential mate for 99.99% accurray.
 
 ```java
   final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
-  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // YES
 ```
 
 ### Unwinnability - full analysis

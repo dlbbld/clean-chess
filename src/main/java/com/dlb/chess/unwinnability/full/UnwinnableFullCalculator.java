@@ -24,7 +24,7 @@ public class UnwinnableFullCalculator {
 
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
     if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
-      return UnwinnableFull.UNWINNABLE;
+      return UnwinnableFull.YES;
     }
 
     // we must instantiate the class here to share the transposition table between calls
@@ -39,11 +39,11 @@ public class UnwinnableFullCalculator {
       switch (bd) {
         case TRUE:
           // 4: if bd = true then return Winnable
-          return UnwinnableFull.WINNABLE;
+          return UnwinnableFull.NO;
         case FALSE:
           // 5: else if the search was not interrupted (in step 4 of Figure 5) then
           // 6: return Unwinnable
-          return UnwinnableFull.UNWINNABLE;
+          return UnwinnableFull.YES;
         case INTERRUPTED:
           // the algorithm continues with next depth
           break;
@@ -52,6 +52,6 @@ public class UnwinnableFullCalculator {
       }
     }
 
-    return UnwinnableFull.UNWINNABLE;
+    return UnwinnableFull.YES;
   }
 }

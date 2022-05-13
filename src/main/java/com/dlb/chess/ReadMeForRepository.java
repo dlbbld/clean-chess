@@ -83,7 +83,7 @@ public class ReadMeForRepository {
     // example 3
     {
       final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-      System.out.println(board.isDeadPositionQuick()); // MAYBE
+      System.out.println(board.isDeadPositionQuick()); // MOST_LIKELY_WINNABLE
     }
 
     // dead position - full
@@ -95,7 +95,7 @@ public class ReadMeForRepository {
     // unwinnability - quick
     {
       final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
-      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // YES
     }
 
     // unwinnability - full

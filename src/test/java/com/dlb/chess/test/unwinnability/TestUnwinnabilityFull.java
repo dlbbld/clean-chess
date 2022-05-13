@@ -27,7 +27,7 @@ public class TestUnwinnabilityFull {
   // @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.NO, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
@@ -35,7 +35,7 @@ public class TestUnwinnabilityFull {
   void testFen() {
     final var fen = "8/6k1/7p/2p3pP/3r4/2K5/p7/8 w - - 0 55";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.NO, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
   }
 
   // not terminating so far
@@ -109,12 +109,12 @@ public class TestUnwinnabilityFull {
 
           switch (winnable) {
             case NO:
-              assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.YES, unwinnableFull);
               break;
             case UNKNOWN:
               break;
             case YES:
-              assertEquals(UnwinnableFull.WINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.NO, unwinnableFull);
               break;
             default:
               throw new IllegalArgumentException();
@@ -128,12 +128,12 @@ public class TestUnwinnabilityFull {
 
           switch (winnable) {
             case NO:
-              assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.YES, unwinnableFull);
               break;
             case UNKNOWN:
               break;
             case YES:
-              assertEquals(UnwinnableFull.WINNABLE, unwinnableFull);
+              assertEquals(UnwinnableFull.NO, unwinnableFull);
               break;
             default:
               throw new IllegalArgumentException();
@@ -147,11 +147,11 @@ public class TestUnwinnabilityFull {
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableFull.UNWINNABLE,
+        assertEquals(UnwinnableFull.YES,
             UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
         break;
       case WINNABLE:
-        assertEquals(UnwinnableFull.WINNABLE,
+        assertEquals(UnwinnableFull.NO,
             UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
         break;
       default:

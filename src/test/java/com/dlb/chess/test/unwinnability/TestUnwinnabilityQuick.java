@@ -25,7 +25,7 @@ public class TestUnwinnabilityQuick {
   // @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableQuick.WINNABLE,
+    assertEquals(UnwinnableQuick.NO,
         UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
@@ -34,7 +34,7 @@ public class TestUnwinnabilityQuick {
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableQuick.WINNABLE,
+    assertEquals(UnwinnableQuick.NO,
         UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
@@ -45,7 +45,7 @@ public class TestUnwinnabilityQuick {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    assertEquals(UnwinnableQuick.UNWINNABLE,
+    assertEquals(UnwinnableQuick.MOST_LIKELY_WINNABLE,
         UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
     // check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
@@ -67,15 +67,15 @@ public class TestUnwinnabilityQuick {
         board.getHavingMove().getOppositeSide());
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
-        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
+        assertEquals(UnwinnableQuick.YES, unwinnableQuickResult);
         break;
       case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuickResult);
+        assertEquals(UnwinnableQuick.MOST_LIKELY_WINNABLE, unwinnableQuickResult);
         break;
       case WINNABLE:
 
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
-            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.NO
+            || unwinnableQuickResult == UnwinnableQuick.MOST_LIKELY_WINNABLE;
         assertTrue(isIncomplete);
         break;
       default:

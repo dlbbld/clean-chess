@@ -22,8 +22,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuickAgainstWinnability.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = true;
-  private static final String START_FROM_PGN_FILE_NAME = "Ob5ozxgG.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = false;
+  private static final String START_FROM_PGN_FILE_NAME = "ae_10.pgn";
 
   @SuppressWarnings("static-method")
   @Test
@@ -46,6 +46,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
         }
 
         switch (testCase.pgnFileName()) {
+          // here my tool sees unwinnability but not the quick analysis
+          case "ae_10.pgn":
           case "norgaard_pawn_wall_example_2.pgn":
             continue;
           default:
@@ -58,7 +60,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         // not having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board,
+              board.getHavingMove().getOppositeSide());
           final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
               board.getHavingMove().getOppositeSide());
 
@@ -68,7 +71,8 @@ public class TestUnwinnabilityQuickAgainstWinnability {
         // having move
         {
           final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove());
+          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
+              board.getHavingMove());
 
           checkResult(winnable, unwinnableQuick);
         }
@@ -79,10 +83,10 @@ public class TestUnwinnabilityQuickAgainstWinnability {
   private static void checkResult(Winnable winnable, UnwinnableQuick unwinnableQuick) {
     switch (winnable) {
       case NO:
-        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
+        assertEquals(UnwinnableQuick.YES, unwinnableQuick);
         break;
       case YES:
-        assertNotEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
+        assertNotEquals(UnwinnableQuick.YES, unwinnableQuick);
         break;
       case UNKNOWN:
         break;
@@ -91,13 +95,13 @@ public class TestUnwinnabilityQuickAgainstWinnability {
     }
 
     switch (unwinnableQuick) {
-      case WINNABLE:
+      case NO:
         assertNotEquals(Winnable.NO, winnable);
         break;
-      case UNWINNABLE:
+      case YES:
         assertNotEquals(Winnable.YES, winnable);
         break;
-      case POSSIBLY_WINNABLE:
+      case MOST_LIKELY_WINNABLE:
         break;
       default:
         throw new IllegalArgumentException();
