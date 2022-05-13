@@ -38,7 +38,7 @@ clean-chess dependency can be added via the jitpack repository.
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>0.9</version>
+  <version>1.0</version>
 </dependency>
 ```
 
@@ -54,7 +54,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    compile 'com.github.dlbbld:clean-chess:0.9'
+    compile 'com.github.dlbbld:clean-chess:1.0'
     ...
 }
 ```
@@ -181,7 +181,8 @@ The API provides an implementation of CHA. So for both situations, there is a qu
 
 The quick method is speedy but not 100% accurate. On the other hand, the full method is 100% accurate, but it can also happen that it does not terminate after hours.
 
-The quick method is suited for game use, the full method only for research or interest use.
+The quick method is suited for game use, the full method only for research or interest use. The low performance of the full algorithm is however not due to the
+algorithm itself but due to this is only a very elementary first implementation.
 
 ### Unwinnability
 The quick method has three return values:
@@ -255,9 +256,7 @@ It makes an educated guess only. The full algorithm calculates an actual mate an
 
 #### Positions the quick algorithm does not see
 The following is an example of a position where the quick algorithm says POSSIBLY_WINNABLE but the 
-the position is winnable.
-
-[Game](https://lichess.org/bKHPqNEw#81)
+the position is winnable. [Game](https://lichess.org/bKHPqNEw#81)
 
 ```java
   final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
