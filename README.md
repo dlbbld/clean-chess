@@ -3,7 +3,7 @@ clean-chess
 
 clean-chess has the following features:
 * Threefold repetition and fifty-moves report
-* Implementation of unwinnability and dead position according to the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess)
+* Implementation of [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) in Java (unwinnability and dead position detection)
 * Java chess API, including PGN support
 
 The name refers to clean code since the code relies on extensive tests as recommended in clean code.
@@ -87,8 +87,8 @@ None
 Fifty moves without capture and pawn move:
 No
 ```
-Black could have claimed a threefold on the 25th move with writing (but not playing) 25... Qb5. Possible claims for White are listed with the move number
-followed by dot (for example 20. Ra2). Possible claims for Black are listed with the move number followed by three dots (for example 25... Qb5).
+Black could have claimed a threefold on the 25th move with writing (but not playing) 25... Qb5. White's possible claims are along the move number
+followed by a dot (for example, 20. Ra2). Possible claims for Black are along the move number followed by three dots (for example, 25... Qb5).
 
 ## Threefold repetition on the board
 The following game contains a threefold repetition according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Capablanca_versus_Lasker,_1921):
@@ -122,10 +122,10 @@ None
 Fifty moves without capture and pawn move:
 No
 ```
-The repetitions are indicated in order as occured on the board. As different positions can repeat, the positions are identified as A, B, C ... in order of first occurrence.
+The repetitions are indicated in order as occurred on the board. As different positions can repeat, letters A, B, C etc., indicate the different positions in the order of the first occurrence.
 
 ## Fifty-moves
-The following game ends with a series above fifty moves without capture and pawn move according to [Wikipedia](https://en.wikipedia.org/wiki/Fifty-move_rule#Karpov_vs._Kasparov,_1991). The number of halfmoves without capture and pawn moves are indicated in brackets. (1) for series start, (100) - fifty moves reached, (103) - end of series.
+According to [Wikipedia](https://en.wikipedia.org/wiki/Fifty-move_rule#Karpov_vs._Kasparov,_1991), the next game ends with a series above fifty moves without capture and pawn move. The number of halfmoves without capture and pawn moves are in the brackets. (1) for the series start, (100) - fifty moves reached, (103) - end of series.
 
 ```java
   final var pgn = """
@@ -166,20 +166,22 @@ Sequences without capture and pawn move starting from 25 moves:
 Fifty moves without capture and pawn move:
 Yes
 ```
-The numbers in parantheses are the number of fullmoves. So "0.5" is one halfmove, "50" are 100 halfmoves and "51.5" are 103 halfmoves.
-The halfmove series always indicates the first halfmove with (0.5), fifty halfmoves with (50), seventy-five halfmoves if reached as (75) 
-and the last halfmove in the series.
+The numbers in parentheses are the number of full moves. So "0.5" is one halfmove, "50" is 100 halfmoves and "51.5" is 103 halfmoves.
+The halfmove series always indicates the first halfmove with (0.5), fifty halfmoves with (50), and seventy-five halfmoves if reached as (75) 
+and finally, the last halfmove in the series.
 
 # Unwinnability and dead position
-A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming worst play of the opponent.
+The API implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. All relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which provides an outstanding elaboration on the subject in every aspect.
+
+A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
 If the position is unwinnable for both players, it's a dead position.
 
 ## Methods
-The API provides an implementation of CHA. So for both situations there is a quick and a full method.
+The API provides an implementation of CHA. So for both situations, there is a quick and a full method.
 
-The quick method is very fast but not 100% accurate. The full method is 100% accurate but it can also happens that it does not terminate in practical time (after hours).
+The quick method is speedy but not 100% accurate. On the other hand, the full method is 100% accurate, but it can also happen that it does not terminate after hours.
 
-As such the quick method is suited for game use, the full method only for research or interest use.
+The quick method is suited for game use, the full method only for research or interest use.
 
 ### Unwinnability
 The quick method has three return values:
@@ -195,7 +197,7 @@ The full method has two return values:
 The quick method has three return values:
 * DEAD_POSITION - the position is a dead position
 * NON_DEAD_POSITION - the position is not a dead position
-* POSSIBLY_NON_DEAD_POSITION - the position is most likely a non dead position, but it might also be a dead position in some rare cases
+* POSSIBLY_NON_DEAD_POSITION - the position is most likely a non-dead position, but it might also be a dead position in some rare cases
 
 The full method has two return values:
 * DEAD_POSITION - the position is a dead position
@@ -206,9 +208,9 @@ The full method has two return values:
 ### Unwinnable
 
 #### Insufficient material
-The most common situations of unwinnable situations are if one side has insufficient material.
-These are treated correctly by all common chess API's.
-For example White flags with the king and rook against the lone king of Black. Black cannot potentially mate with the king alone.
+The most common situations of unwinnable are if one side has insufficient material.
+These are treated correctly by all standard chess APIs.
+For example, if White flags with the king and rook against the lone king of Black. Then, Black cannot potentially mate with the king alone.
 [Position](https://lichess.org/analysis/8/8/4k3/3R4/2K5/8/8/8_w_-_-_0_50)
 
 ```java
@@ -218,8 +220,8 @@ For example White flags with the king and rook against the lone king of Black. B
 ```
 
 #### Pawn walls
-In pawn walls both players cannot mate, so they are also dead positions. They are not detected
-by most common chess API's. 
+Both players cannot mate in pawn walls, so they are dead positions. They are not detected
+by most common chess APIs. 
 [Game](https://lichess.org/c3ew66ZV#123)
 
 ```java
@@ -229,7 +231,7 @@ by most common chess API's.
 ```
 
 #### Forced moves
-There are common situations mainly in lower time controls like Bullet, where the game could only continue with a few
+There are everyday situations mainly in lower time controls like Bullet, where the game could only continue with a few
 forced moves, and the game outcome is determined. Here Black flags, but there is no game continuation possible where
 White could have won.
 [Game](https://lichess.org/OawUhnkq#101)
@@ -242,7 +244,7 @@ White could have won.
 
 #### Common positions
 When there are still a lot of pieces on the board, so a mate is very likely, the quick algorithm says POSSIBLE_WINNABLE.
-It makes an educated guess only. The full algorithm calculates an actual mate and is therefore accurate but much slower.
+It makes an educated guess only. The full algorithm calculates an actual mate and is accurate but much slower.
 [Game](https://lichess.org/SCKpvJQX#57)
 
 ```java
@@ -253,7 +255,7 @@ It makes an educated guess only. The full algorithm calculates an actual mate an
 
 #### Positions the quick algorithm does not see
 The following is an example of a position where the quick algorithm says POSSIBLY_WINNABLE but the 
-position is actually winnable.
+the position is winnable.
 
 [Game](https://lichess.org/bKHPqNEw#81)
 
@@ -267,8 +269,8 @@ position is actually winnable.
 Because dead positions are just unwinnable positions for both sides, there is not much more substantially to say.
 
 #### Insufficient material
-The simplest dead position is when one player has already insufficient material and the other player
-also becomes insufficient material due to a capture. Of course that is detected by all chess API's.
+The most straightforward dead position is when one player already has insufficient material, and the other player
+also becomes insufficient due to capture. Of course, all chess APIs detect that..
 
 [Position](https://lichess.org/analysis/8/8/3kn3/8/2K5/8/8/8_w_-_-_0_50)
 ```java
@@ -278,7 +280,7 @@ also becomes insufficient material due to a capture. Of course that is detected 
 ```
 
 #### Pawn walls
-Pawn walls are dead positions, here another example.
+Pawn walls are dead positions, but most common chess APIs do not detect them. Here is another example.
 [Game](https://lichess.org/V08kX4kz#121)
 
 ```java
@@ -316,7 +318,7 @@ Positions can also often be dead due to forced moves.
 ```
       
 ## PGN reader
-The PGN reader supports any PGN's except PGN's with move variations.
+The PGN reader supports any PGNs except PGNs with move variations.
 
 ```java
   final var pgn = """
@@ -367,7 +369,7 @@ Reading PGN files from the file system:
       
 ## PGN creation
 
-You can write a board or an imported PGN. The result will comply with the PGN export format, so will add the required tags, formatting etc. for exported PGN's.
+You can create the PGN for a game played in the API or export an imported PGN. The result will comply with the PGN export format, containing all required tags, formatting etc., for exported PGNs.
 
 ```java
   final Board board = new Board();
