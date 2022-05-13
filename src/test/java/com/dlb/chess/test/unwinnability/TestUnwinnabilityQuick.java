@@ -1,10 +1,8 @@
 package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -16,7 +14,6 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -56,13 +53,16 @@ public class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testPgnFileExpected() {
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("25_black_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    check(pgnFileTestCase.unwinnableFullResultTest(), board);
+    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickCalculator.unwinnableQuick(board,
+        board.getHavingMove().getOppositeSide());
+
+    CheckQuick.check(pgnFileTestCase.unwinnableFullResultTest(), unwinnableQuickResult);
   }
 
   @SuppressWarnings("static-method")
@@ -73,27 +73,10 @@ public class TestUnwinnabilityQuick {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      check(testCase.unwinnableFullResultTest(), board);
-    }
-  }
+      final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
+          board.getHavingMove().getOppositeSide());
 
-  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
-    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickCalculator.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
-    switch (unwinnableFullResultTest) {
-      case UNWINNABLE:
-        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
-        break;
-      case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuickResult);
-        break;
-      case WINNABLE:
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
-            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
-        assertTrue(isIncomplete);
-        break;
-      default:
-        throw new IllegalArgumentException();
+      CheckQuick.check(testCase.unwinnableFullResultTest(), unwinnableQuick);
     }
   }
 }

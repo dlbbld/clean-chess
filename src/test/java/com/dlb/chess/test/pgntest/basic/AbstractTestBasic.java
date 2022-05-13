@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.board.enums.CastlingMove;
-import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
@@ -24,7 +24,7 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-abstract class AbstractTestBasic implements EnumConstants {
+public abstract class AbstractTestBasic implements EnumConstants {
 
   // we check the following, to detect problems with incompleted test creation and later changes to code or file names:
   // 1a) for each JUnit hardcoded file there is a file in the expected value hardcoded file list

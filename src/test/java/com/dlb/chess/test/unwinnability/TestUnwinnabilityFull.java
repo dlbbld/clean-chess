@@ -16,7 +16,6 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
@@ -59,7 +58,10 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    check(pgnFileTestCase.unwinnableFullResultTest(), board);
+    final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
+        board.getHavingMove().getOppositeSide());
+
+    CheckFull.check(pgnFileTestCase.unwinnableFullResultTest(), unwinnableFull);
   }
 
   // not terminating so far
@@ -78,23 +80,10 @@ public class TestUnwinnabilityFull {
 
       logger.info(testCase.pgnFileName());
 
-      check(testCase.unwinnableFullResultTest(), board);
-    }
-  }
+      final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
+          board.getHavingMove().getOppositeSide());
 
-  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
-    switch (unwinnableFullResultTest) {
-      case UNWINNABLE:
-      case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableFull.UNWINNABLE,
-            UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
-        break;
-      case WINNABLE:
-        assertEquals(UnwinnableFull.WINNABLE,
-            UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
-        break;
-      default:
-        throw new IllegalArgumentException();
+      CheckFull.check(testCase.unwinnableFullResultTest(), unwinnableFull);
     }
   }
 }
