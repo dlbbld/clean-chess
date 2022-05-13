@@ -15,7 +15,8 @@ import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractPgnTest {
 
@@ -86,30 +87,21 @@ public abstract class AbstractPgnTest {
 
   private static void testWinnableNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
     // at the moment for lichess test cases with Ambrona results we check only against winnable=no
-    testSide(testCase.winnableNotHavingMove(), analysis.winnableNotHavingMove());
+    testSide(testCase.unwinnableFullResultTest(), analysis.unwinnableQuickResultNotHavingMove());
 
   }
 
-  private static void testSide(Winnable winnableExpected, Winnable winnableActual) {
-    switch (winnableExpected) {
-      case NA:
-      case NO:
-        assertEquals(winnableExpected, winnableActual);
+  private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected,
+      UnwinnableQuick unwinnableQuickResult) {
+    switch (unwinnableFullResultTestExpected) {
+      case UNWINNABLE:
+        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
         break;
-      case UNKNOWN:
-      case YES: {
-        // we do not calculate at full depth, so we cannot distinguish MAYBE and CHECKMATE
-        final var isCheckOk = winnableActual == Winnable.YES || winnableActual == Winnable.UNKNOWN;
-        assertTrue(isCheckOk);
-        break;
-      }
-      case YES_AMBRONA: {
-        final var isCheckOk = winnableActual == Winnable.UNKNOWN;
-        assertTrue(isCheckOk);
-      }
-        break;
-      case NO_AMBRONA:
-        // the no answers from Ambrona we don't find
+      case UNWINNABLE_NOT_QUICK:
+      case WINNABLE:
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
+            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
+        assertTrue(isIncomplete);
         break;
       default:
         throw new IllegalArgumentException();

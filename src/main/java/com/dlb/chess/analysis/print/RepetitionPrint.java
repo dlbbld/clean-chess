@@ -9,6 +9,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.common.utility.PositionIdentifierUtility;
 import com.dlb.chess.internationalization.Message;
 
 public class RepetitionPrint {
@@ -17,7 +18,7 @@ public class RepetitionPrint {
     final List<String> resultList = new ArrayList<>();
     for (final List<HalfMove> list : repetitionList) {
       final var fold = list.size();
-      final String foldStr = Message.getString("analysis.threefold.fold", fold);
+      final String foldStr = Message.getString("analysis.repetition.fold", fold);
 
       final String repetition = BasicUtility.calculateSpaceSeparatedList(calculateMoveNumberAndSanList(list));
 
@@ -48,10 +49,9 @@ public class RepetitionPrint {
 
     result.append(" (");
 
-    final var positionId = Message.getString("analysis.threefold.dynamicPosition.prefix")
-        + repetitionMove.positionId();
-    result.append(positionId);
-    result.append(", ");
+    final String positionIdentifier = PositionIdentifierUtility.calculateIdentifier(repetitionMove.positionId());
+    result.append(positionIdentifier);
+    result.append(" - ");
     result.append(repetitionMove.halfMove().countRepetition());
     result.append("/");
     result.append(repetitionMove.fold());

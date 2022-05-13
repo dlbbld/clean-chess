@@ -9,7 +9,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.HalfMoveListListComparator;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
@@ -112,7 +111,7 @@ public class RepetitionUtility {
   }
 
   public static List<List<HalfMove>> calculateRepetitionListList(List<HalfMove> halfMoveList,
-      EnPassantCaptureRuleThreefold enPassantCaptureRule) {
+      int countRepetitionThreshold, EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
     final List<List<HalfMove>> list = new ArrayList<>();
     final List<DynamicPosition> processed = new ArrayList<>();
@@ -124,7 +123,7 @@ public class RepetitionUtility {
       }
       final var countRepetition = getCountRepetition(searchHalfMoveThreeFold, enPassantCaptureRule);
 
-      if (countRepetition == ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD) {
+      if (countRepetition == countRepetitionThreshold) {
         // if we found a half move which is equal or above the required count, we sample all previous half-moves with
         // the
         // same dynamic position

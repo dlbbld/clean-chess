@@ -77,12 +77,11 @@ public enum PgnTest {
   DGT_LIVE_CHESS(false, "dgt\\liveChess"),
   DGT_CENTAUR(false, "dgt\\centaur"),
 
-  LICHESS_UNFAIR(false, "lichess\\unfair"),
-  LICHESS_HELPMATE(false, "lichess\\helpmate"),
-  LICHESS_HALF_MOVE_DEPTH_THREE(false, "lichess\\halfMoveDepthThree"),
-  LICHESS_NOT_QUICK(false, "lichess\\notQuick"),
-
-  AMBRONA_EXAMPLES(false, "ambronaExamples"),
+  UNFAIR_LICHESS_ANALYSIS_GAMES(false, "unfair\\lichessAnalysis\\games"),
+  UNFAIR_LICHESS_ANALYSIS_HELPMATE(false, "unfair\\\\lichessAnalysis\\helpmate"),
+  UNFAIR_HALF_MOVE_DEPTH_THREE(false, "unfair\\halfMoveDepthThree"),
+  UNFAIR_NOT_QUICK(false, "unfair\\notQuick"),
+  UNFAIR_AMBRONA_EXAMPLES(false, "unfair\\ambronaExamples"),
 
   PAWN_WALL(false, "pawnWall"),
 

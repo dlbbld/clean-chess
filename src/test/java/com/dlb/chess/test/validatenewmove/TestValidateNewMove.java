@@ -17,10 +17,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     MoveSpecification move;
 
     move = new MoveSpecification(BLACK, E2, E4);
-    check(board, move, MoveCheck.BASIC_NOT_HAVING_THE_MOVE);
+    check(board, move, MoveCheck.BASIC_NOT_HAVING_MOVE);
 
     move = new MoveSpecification(BLACK, E7, E8);
-    check(board, move, MoveCheck.BASIC_NOT_HAVING_THE_MOVE);
+    check(board, move, MoveCheck.BASIC_NOT_HAVING_MOVE);
 
     move = new MoveSpecification(WHITE, E3, E4);
     check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);

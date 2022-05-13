@@ -3,7 +3,7 @@ clean-chess
 
 clean-chess has the following features:
 * Threefold repetition and fifty-moves report
-* Detects most dead positions
+* Implementation of [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) in Java (unwinnability and dead position detection)
 * Java chess API, including PGN support
 
 The name refers to clean code since the code relies on extensive tests as recommended in clean code.
@@ -38,7 +38,7 @@ clean-chess dependency can be added via the jitpack repository.
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>0.9</version>
+  <version>1.0</version>
 </dependency>
 ```
 
@@ -54,13 +54,43 @@ repositories {
 ```groovy
 dependencies {
     ...
-    compile 'com.github.dlbbld:clean-chess:0.9'
+    compile 'com.github.dlbbld:clean-chess:1.0'
     ...
 }
 ```
 
 # Threefold repetition and fifty-moves
-## Threefold repetition
+## Threefold repetition claim ahead
+The following game ended with a threefold repetition claim ahead according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Portisch_versus_Korchnoi,_1970):
+
+```java
+  final var pgn = """
+      1. Nf3 c5 2. c4 Nf6 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 e6 6. g3 Qb6 7. Nb3 Ne5 8. e4
+      Bb4 9. Qe2 O-O 10. f4 Nc6 11. e5 Ne8 12. Bd2 f6 13. c5 Qd8 14. a3 Bxc3 15. Bxc3
+      fxe5 16. Bxe5 b6 17. Bg2 Nxe5 18. Bxa8 Nf7 19. Bg2 bxc5 20. Nxc5 Qb6 21. Qf2
+      Qb5 22. Bf1 Qc6 23. Bg2 Qb5 24. Bf1 Qc6 25. Bg2""";
+
+  Analyzer.printAnalysis(pgn);
+```
+
+The report mentions the possible claim ahead:
+```
+Valid threefold claims ahead:
+25... Qb5
+
+Threefolds and beyond:
+None
+
+Sequences without capture and pawn move starting from 25 moves:
+None
+
+Fifty moves without capture and pawn move:
+No
+```
+Black could have claimed a threefold on the 25th move with writing (but not playing) 25... Qb5. White's possible claims are along the move number
+followed by a dot (for example, 20. Ra2). Possible claims for Black are along the move number followed by three dots (for example, 25... Qb5).
+
+## Threefold repetition on the board
 The following game contains a threefold repetition according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Capablanca_versus_Lasker,_1921):
 
 ```java
@@ -79,21 +109,23 @@ The following game contains a threefold repetition according to [Wikipedia](http
 
 Output:
 ```
-Threefold repetitions and above:
-3-fold: 34...h5 36...Kf8 38...Kf8
+Valid threefold claims ahead:
+38... Kf8
+39. Qd8+
 
-Threefold repetitions and above (chronologically):
-34...h5 (pos1, 1/3) 36...Kf8 (pos1, 2/3) 38...Kf8 (pos1, 3/3)
+Threefolds and beyond:
+34...h5 (A - 1/3) 36...Kf8 (A - 2/3) 38...Kf8 (A - 3/3)
 
-Fifty moves without capture and pawn move and above:
+Sequences without capture and pawn move starting from 25 moves:
 None
 
-Result per last position:
-Ongoing
+Fifty moves without capture and pawn move:
+No
 ```
+The repetitions are indicated in order as occurred on the board. As different positions can repeat, letters A, B, C etc., indicate the different positions in the order of the first occurrence.
 
 ## Fifty-moves
-The following game ends with a series above fifty moves without capture and pawn move according to [Wikipedia](https://en.wikipedia.org/wiki/Fifty-move_rule#Karpov_vs._Kasparov,_1991). The number of halfmoves without capture and pawn moves are indicated in brackets. (1) for series start, (100) - fifty moves reached, (103) - end of series.
+According to [Wikipedia](https://en.wikipedia.org/wiki/Fifty-move_rule#Karpov_vs._Kasparov,_1991), the next game ends with a series above fifty moves without capture and pawn move. The number of halfmoves without capture and pawn moves are in the brackets. (1) for the series start, (100) - fifty moves reached, (103) - end of series.
 
 ```java
   final var pgn = """
@@ -122,38 +154,149 @@ The following game ends with a series above fifty moves without capture and pawn
 
 Output:
 ```
-Threefold repetitions and above:
+Valid threefold claims ahead:
 None
 
-Fifty moves without capture and pawn move and above:
-63...Rg8 (1) 113.Ng5 (100) 114...Rf6+ (103)
+Threefolds and beyond:
+None
 
-Result per last position:
-Ongoing
+Sequences without capture and pawn move starting from 25 moves:
+63...Rg8 (0.5) 113.Ng5 (50) 114...Rf6+ (51.5)
+
+Fifty moves without capture and pawn move:
+Yes
 ```
-# Dead position
-The following is a game ending in a dead position not caused by insufficient material according to [Wikipedia](https://en.wikipedia.org/wiki/Rules_of_chess#Dead_position):
+The numbers in parentheses are the number of full moves. So "0.5" is one halfmove, "50" is 100 halfmoves and "51.5" is 103 halfmoves.
+The halfmove series always indicates the first halfmove with (0.5), fifty halfmoves with (50), and seventy-five halfmoves if reached as (75) 
+and finally, the last halfmove in the series.
+
+# Unwinnability and dead position
+The API implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. All relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which provides an outstanding elaboration on the subject in every aspect.
+
+A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
+If the position is unwinnable for both players, it's a dead position.
+
+## Methods
+The API provides an implementation of CHA. So for both situations, there is a quick and a full method.
+
+The quick method is speedy but not 100% accurate. On the other hand, the full method is 100% accurate, but it can also happen that it does not terminate after hours.
+
+The quick method is suited for game use, the full method only for research or interest use. The low performance of the full algorithm is however not due to the
+algorithm itself but due to this is only a very elementary first implementation.
+
+### Unwinnability
+The quick method has three return values:
+* UNWINNABLE - the position is not winnable by the player
+* WINNABLE - the position is winnable by the player
+* POSSIBLY_WINNABLE - the position is most likely winnable by the player, but it might also be unwinnable in some rare cases
+
+The full method has two return values:
+* UNWINNABLE - the position is not winnable by the player
+* WINNABLE - the position is winnable by the player
+
+### Dead position
+The quick method has three return values:
+* DEAD_POSITION - the position is a dead position
+* NON_DEAD_POSITION - the position is not a dead position
+* POSSIBLY_NON_DEAD_POSITION - the position is most likely a non-dead position, but it might also be a dead position in some rare cases
+
+The full method has two return values:
+* DEAD_POSITION - the position is a dead position
+* NON_DEAD_POSITION - the position is not a dead position
+
+## Examples
+
+### Unwinnable
+
+#### Insufficient material
+The most common situations of unwinnable are if one side has insufficient material.
+These are treated correctly by all standard chess APIs.
+For example, if White flags with the king and rook against the lone king of Black. Then, Black cannot potentially mate with the king alone.
+[Position](https://lichess.org/analysis/8/8/4k3/3R4/2K5/8/8/8_w_-_-_0_50)
 
 ```java
-  final Board board = new Board("8/2b1k3/7p/p1p1p1pP/PpP1P1P1/1P1BK3/8/8 b - - 0 50");
-  System.out.println(board.isDeadPosition()); // YES
+  final Board board = new Board("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50");
+  System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+  System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
 ```
 
-The following is a [further example from Lichess](https://lichess.org/r1SzzM60#131). The game can only end in a draw, evaluating the possibilities. The API does also evaluate a few halfmoves.
+#### Pawn walls
+Both players cannot mate in pawn walls, so they are dead positions. They are not detected
+by most common chess APIs. 
+[Game](https://lichess.org/c3ew66ZV#123)
 
 ```java
-  final Board board = new Board("2k5/2P5/8/1KN5/8/8/8/8 b - - 0 66");
-  System.out.println(board.isDeadPosition()); // YES
+  final Board board = new Board("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62");
+  System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+  System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
 ```
 
-Attention. The API does not detect all dead positions, but from average games around 99%. The following is an example of a dead position the API does not see, from this [page](https://chasolver.org/analyzer.html?example=3).
+#### Forced moves
+There are everyday situations mainly in lower time controls like Bullet, where the game could only continue with a few
+forced moves, and the game outcome is determined. Here Black flags, but there is no game continuation possible where
+White could have won.
+[Game](https://lichess.org/OawUhnkq#101)
 
 ```java
-  final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-  System.out.println(board.isDeadPosition()); // UNKNOWN
+  final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
 ```
 
-For more accurate dead position analysis, please visit this [page](https://chasolver.org/index.html).
+#### Common positions
+When there are still a lot of pieces on the board, so a mate is very likely, the quick algorithm says POSSIBLE_WINNABLE.
+It makes an educated guess only. The full algorithm calculates an actual mate and is accurate but much slower.
+[Game](https://lichess.org/SCKpvJQX#57)
+
+```java
+  final Board board = new Board("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29");
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // WINNABLE
+```
+
+#### Positions the quick algorithm does not see
+The following is an example of a position where the quick algorithm says POSSIBLY_WINNABLE but the 
+the position is winnable. [Game](https://lichess.org/bKHPqNEw#81)
+
+```java
+  final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
+  System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+  System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
+```
+
+### Dead positions
+Because dead positions are just unwinnable positions for both sides, there is not much more substantially to say.
+
+#### Insufficient material
+The most straightforward dead position is when one player already has insufficient material, and the other player
+also becomes insufficient due to capture. Of course, all chess APIs detect that..
+
+[Position](https://lichess.org/analysis/8/8/3kn3/8/2K5/8/8/8_w_-_-_0_50)
+```java
+  final Board board = new Board("8/8/3kn3/8/2K5/8/8/8 w - - 0 50");
+  System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+  System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+```
+
+#### Pawn walls
+Pawn walls are dead positions, but most common chess APIs do not detect them. Here is another example.
+[Game](https://lichess.org/V08kX4kz#121)
+
+```java
+  final Board board = new Board("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61");
+  System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+  System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+```
+
+#### Forced moves
+Positions can also often be dead due to forced moves.
+[Game](https://lichess.org/8FUSHxUV#115)
+
+```java
+  final Board board = new Board("k7/P1K5/8/8/8/8/8/8 b - - 2 58");
+  System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+  System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+```
 
 # Java chess API
 ## Board
@@ -174,7 +317,7 @@ For more accurate dead position analysis, please visit this [page](https://chaso
 ```
       
 ## PGN reader
-The PGN reader reads comments and move suffix annotation (like "!!") but will throw an exception if variations are encountered.
+The PGN reader supports any PGNs except PGNs with move variations.
 
 ```java
   final var pgn = """
@@ -214,27 +357,25 @@ The PGN reader reads comments and move suffix annotation (like "!!") but will th
   System.out.println(board.getSan()); // SAN of last move, R1c2
 ```
 
-You can also read PGN files from the file system.
+Reading PGN files from the file system:
 
 ```java
   if (FileUtility.exists("C:\\myPgnFolder", "myPgnFile.pgn")) {
-    final PgnFile pgnFile = PgnReader.readPgn("C:\\myPgnFolder", "myPgnFile.pgn");
-    System.out.println(TagUtility.readWhite(pgnFile.tagList())); // prints White player
+    final PgnFile pgnFile = PgnReader.readPgn("C:\\temp\\myPgnFolder", "myPgnFile.pgn");
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
   }
 ```
       
 ## PGN creation
 
-You can write a board or an imported PGN. The result will comply with the PGN export format, so will add the required tags, formatting etc. for exported PGN's.
+You can create the PGN for a game played in the API or export an imported PGN. The result will comply with the PGN export format, containing all required tags, formatting etc., for exported PGNs.
 
 ```java
   final Board board = new Board();
   board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
   final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-  for (final String line : PgnCreate.previewPgnFile(pgnFile)) {
-    System.out.println(line);
-  }
+  System.out.println(PgnCreate.createPgnFileString(pgnFile));
 ```
 
 Output

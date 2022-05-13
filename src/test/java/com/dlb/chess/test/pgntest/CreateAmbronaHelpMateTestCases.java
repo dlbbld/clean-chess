@@ -51,7 +51,7 @@ public class CreateAmbronaHelpMateTestCases {
     final Map<String, String> havingHelpMate = new TreeMap<>();
     populateHelpMateUci(havingHelpMate);
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.LICHESS_UNFAIR);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final String folderPath = testCaseList.pgnTest().getFolderPath();
       final var analysis = Analyzer.calculateAnalysis(folderPath, testCase.pgnFileName());

@@ -1,20 +1,24 @@
 package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.pgn.reader.PgnReader;
+import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuickResult;
-import com.dlb.chess.winnable.WinnableUtility;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class TestUnwinnabilityQuick {
 
@@ -22,105 +26,74 @@ public class TestUnwinnabilityQuick {
 
   @SuppressWarnings("static-method")
   // @Test
-  void testSingle() {
-    // final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
-    final Board board = new Board("rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8");
-    assertEquals(UnwinnableQuickResult.WINNABLE,
-        UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+  void testStartPosition() {
+    final Board board = new Board();
+    assertEquals(UnwinnableQuick.WINNABLE,
+        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+  }
+
+  @SuppressWarnings("static-method")
+  // @Test
+  void testFen() {
+    final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
+    final Board board = new Board(fen);
+    assertEquals(UnwinnableQuick.WINNABLE,
+        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+  }
+
+  @SuppressWarnings("static-method")
+  // @Test
+  void testPgnFileValue() {
+    final var pgnFileName = "ae_16.pgn";
+
+    final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
+    final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
+    final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
+    logger.info(pgnFileName);
+
+    assertEquals(UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPgnFileExpected() {
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("25_black_king_pawn.pgn");
+    final ApiBoard board = new Board(pgnFileTestCase.fen());
+    logger.info(pgnFileTestCase.pgnFileName());
+
+    check(pgnFileTestCase.unwinnableFullResultTest(), board);
   }
 
   @SuppressWarnings("static-method")
   // @Test
   void testFolder() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.LICHESS_NOT_QUICK);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      assertEquals(UnwinnableQuickResult.POSSIBLY_WINNABLE,
-          UnwinnableQuick.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+      check(testCase.unwinnableFullResultTest(), board);
     }
   }
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "norgaard_pawn_wall_example_2.pgn";
-
-  @SuppressWarnings("static-method")
-  // @Test
-  void testAgainstMine() throws Exception {
-    var hasFound = false;
-    for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (!hasFound) {
-          if (IS_START_FROM_PGN_FILE) {
-            if (START_FROM_PGN_FILE_NAME.equals(testCase.pgnFileName())) {
-              hasFound = true;
-            }
-          } else {
-            hasFound = true;
-          }
-        }
-        if (!hasFound) {
-          continue;
-        }
-
-        switch (testCase.pgnFileName()) {
-          case "norgaard_pawn_wall_example_2.pgn":
-            continue;
-          default:
-            break;
-        }
-
-        final ApiBoard board = new Board(testCase.fen());
-
-        logger.info(testCase.pgnFileName());
-
-        // not having move
-        {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board,
-              board.getHavingMove().getOppositeSide());
-
-          switch (winnable) {
-            case NA:
-              // we do not check on terminated games, so no comparison possible
-              break;
-            case NO:
-              assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
-              break;
-            case UNKNOWN:
-            case YES:
-              break;
-            case YES_AMBRONA:
-            case NO_AMBRONA:
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-
-        // having move
-        {
-          final Winnable winnable = WinnableUtility.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableQuickResult unwinnableQuick = UnwinnableQuick.unwinnableQuick(board, board.getHavingMove());
-
-          switch (winnable) {
-            case NA:
-              // we do not check on terminated games, so no comparison possible
-              break;
-            case NO:
-              assertEquals(UnwinnableQuickResult.UNWINNABLE, unwinnableQuick);
-              break;
-            case UNKNOWN:
-            case YES:
-              break;
-            case YES_AMBRONA:
-            case NO_AMBRONA:
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-      }
+  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
+    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickCalculator.unwinnableQuick(board,
+        board.getHavingMove().getOppositeSide());
+    switch (unwinnableFullResultTest) {
+      case UNWINNABLE:
+        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
+        break;
+      case UNWINNABLE_NOT_QUICK:
+        assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuickResult);
+        break;
+      case WINNABLE:
+        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
+            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
+        assertTrue(isIncomplete);
+        break;
+      default:
+        throw new IllegalArgumentException();
     }
   }
 }

@@ -3,108 +3,118 @@ package com.dlb.chess.analysis.print;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.Analyzer;
-import com.dlb.chess.analysis.model.Analysis;
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.enums.DeadPosition;
+import com.dlb.chess.common.constants.ChessConstants;
+import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.model.ClaimAhead;
+import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
+import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.enums.ResultTagValue;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 
 //for class organization only, keep methods protected as already used as delegate in main class Analysis
 public class AnalyzerPrint {
 
-  public static void printAnalysis(String pgn) throws Exception {
+  private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
+  private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;
+
+  protected static void printAnalysis(String pgn) throws Exception {
 
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
 
     final PgnFile pgnFile = PgnReader.readPgn(lines);
 
     final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
-    Analyzer.printAnalysis(board);
+    printAnalysis(board);
   }
 
-  public static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
+  protected static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
 
     final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
-    Analyzer.printAnalysis(board);
+    printAnalysis(board);
   }
 
-  public static void printAnalysis(ApiBoard board) throws Exception {
-    final Analysis analysis = Analyzer.calculateAnalysis(board);
-
-    final List<String> output = new ArrayList<>();
+  protected static void printAnalysis(ApiBoard board) throws Exception {
+    final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
-    addMainSection(output, "analysis.threefold.list");
-    if (analysis.repetitionListList().isEmpty()) {
-      output.add(Message.getString("analysis.threefold.none"));
+    addFirstMainSection(output, "analysis.repetition.threefold.ahead.title");
+    final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility
+        .calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
+    if (claimAheadListList.isEmpty()) {
+      output.add(Message.getString("analysis.repetition.threefold.ahead.none"));
     } else {
-      final var list = RepetitionPrint.calculateOutputRepetition(analysis.repetitionListList());
-      output.addAll(list);
+      final var claimAheadList = ThreefoldClaimAheadPrint.calculateClaimAheadList(claimAheadListList);
+      output.addAll(claimAheadList);
+    }
 
-      addMainSection(output, "analysis.threefold.chronic");
-      final var listChronic = RepetitionPrint.calculateOutputRepetitionChronlogically(analysis.repetitionListList());
+    final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(
+        board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+    addMainSection(output, "analysis.repetition.threefold.list.title");
+    if (repetitionListList.isEmpty()) {
+      output.add(Message.getString("analysis.repetition.threefold.list.none"));
+    } else {
+      final var listChronic = RepetitionPrint.calculateOutputRepetitionChronlogically(repetitionListList);
       output.add(listChronic);
     }
 
     // yawn move
-    addMainSection(output, "analysis.yawnmove.list");
-    if (analysis.yawnMoveListList().isEmpty()) {
-      output.add(Message.getString("analysis.yawnmove.none"));
+    final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
+        2 * YAWN_FULL_MOVE_COUNT_THRESHOLD);
+    addMainSection(output, "analysis.yawnmove.sequence.title",
+        NonNullWrapperCommon.valueOf(YAWN_FULL_MOVE_COUNT_THRESHOLD));
+    if (yawnMoveListList.isEmpty()) {
+      output.add(Message.getString("analysis.yawnmove.sequence.none"));
     } else {
-      final var list = YawnPrint.calculateOutputYawnMoveListList(analysis.yawnMoveListList());
+      final var list = YawnPrint.calculateOutputYawnMoveListList(yawnMoveListList);
       output.addAll(list);
     }
 
-    // board result
-    addMainSection(output, "analysis.board.result");
-
-    final StringBuilder boardResult = new StringBuilder();
-    if (board.isCheckmate()) {
-      switch (board.getHavingMove()) {
-        case BLACK:
-          boardResult.append(Message.getString("analysis.board.checkmatebyWhite"));
-          appendPoints(boardResult, ResultTagValue.WHITE_WON);
-          break;
-        case WHITE:
-          boardResult.append(Message.getString("analysis.board.checkmatebyBlack"));
-          appendPoints(boardResult, ResultTagValue.BLACK_WON);
-          break;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
-    } else if (board.isStalemate()) {
-      boardResult.append(Message.getString("analysis.board.stalemate"));
-      appendPoints(boardResult, ResultTagValue.DRAW);
-    } else if (board.isFivefoldRepetition()) {
-      boardResult.append(Message.getString("analysis.board.fivefoldRepetition"));
-      appendPoints(boardResult, ResultTagValue.DRAW);
-    } else if (board.isSeventyFiftyMove()) {
-      boardResult.append(Message.getString("analysis.board.seventyFiveMoves"));
-      appendPoints(boardResult, ResultTagValue.DRAW);
-    } else if (board.isInsufficientMaterial()) {
-      boardResult.append(Message.getString("analysis.board.insufficientMaterial"));
-      appendPoints(boardResult, ResultTagValue.DRAW);
-    } else if (board.isDeadPosition() == DeadPosition.YES) {
-      boardResult.append(Message.getString("analysis.board.deadPosition"));
-      appendPoints(boardResult, ResultTagValue.DRAW);
+    addMainSection(output, "analysis.yawnmove.fiftyMoves.title");
+    final var hasFiftyMoveRule = calculateHasFiftyMoveRule(yawnMoveListList);
+    if (hasFiftyMoveRule) {
+      output.add(Message.getString("analysis.yawnmove.fiftyMoves.yes"));
     } else {
-      boardResult.append(Message.getString("analysis.board.ongoing"));
+      output.add(Message.getString("analysis.yawnmove.fiftyMoves.no"));
     }
-    output.add(NonNullWrapperCommon.toString(boardResult));
 
     printList(output);
   }
 
-  private static void appendPoints(StringBuilder result, ResultTagValue resultTagValue) {
-    result.append(" (");
-    result.append(resultTagValue.getValue());
-    result.append(")");
+  private static boolean calculateHasFiftyMoveRule(List<List<YawnHalfMove>> yawnMoveListList) {
+    // add main section
+    for (final List<YawnHalfMove> yawnMoveList : yawnMoveListList) {
+      for (final YawnHalfMove yawnHalfMove : yawnMoveList) {
+        if (yawnHalfMove.sequenceLength() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static void addFirstMainSection(List<String> output, String key) {
+    // add main section
+    final StringBuilder mainSection = new StringBuilder();
+    mainSection.append(Message.getString(key));
+    mainSection.append(":");
+    output.add(NonNullWrapperCommon.toString(mainSection));
+  }
+
+  private static void addFirstMainSection(List<String> output, String key, String placeHolder) {
+    // add main section
+    final StringBuilder mainSection = new StringBuilder();
+    mainSection.append(Message.getString(key, placeHolder));
+    mainSection.append(":");
+    output.add(NonNullWrapperCommon.toString(mainSection));
   }
 
   private static void addMainSection(List<String> output, String key) {
@@ -112,10 +122,15 @@ public class AnalyzerPrint {
     output.add("");
 
     // add main section
-    final StringBuilder mainSection = new StringBuilder();
-    mainSection.append(Message.getString(key));
-    mainSection.append(":");
-    output.add(NonNullWrapperCommon.toString(mainSection));
+    addFirstMainSection(output, key);
+  }
+
+  private static void addMainSection(List<String> output, String key, String placeHolder) {
+    // add empty line before main section
+    output.add("");
+
+    // add main section
+    addFirstMainSection(output, key, placeHolder);
   }
 
   private static void printList(List<String> list) {

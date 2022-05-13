@@ -12,7 +12,7 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 
 public class BasicOutput {
 
-  private static final boolean IS_FULL = false;
+  private static final boolean IS_FULL = true;
 
   private static final String ATTRIBUTE_FEN = "FEN";
   private static final String ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO = "Threefold ignoring en passant";
@@ -32,7 +32,7 @@ public class BasicOutput {
   private static final String ATTRIBUTE_MAX_YAWN_SEQUENCE = "Max yawn sequence";
   private static final String ATTRIBUTE_BOARD_RESULT_NAME = "Board result";
   private static final String ATTRIBUTE_INSUFFICIENT_MATERIAL = "Insufficient material";
-  private static final String ATTRIBUTE_WINNABLE_NOT_HAVING_THE_MOVE = "Winnable not having the move";
+  private static final String ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE = "Unwinnable quick not having the move";
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
@@ -104,7 +104,8 @@ public class BasicOutput {
   }
 
   private static String calculateOutputWinnableNotHavingMove(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_WINNABLE_NOT_HAVING_THE_MOVE, analysis.winnableNotHavingMove().getDescription());
+    return calculateOutput(ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE,
+        analysis.unwinnableQuickResultNotHavingMove().getDescription());
   }
 
   private static String calculateOutputFirstCapture(Analysis analysis) {

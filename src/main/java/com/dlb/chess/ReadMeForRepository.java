@@ -15,7 +15,28 @@ public class ReadMeForRepository {
 
   public static void main(String[] args) throws Exception {
 
-    // threefold
+    {
+      final Board board = new Board("k7/Q6r/2b5/1pBp1p1p/1P1P1P1P/KP6/1P6/8 b - - 10 100");
+      System.out.println(board.isDeadPositionQuick()); // POSSIBLY_NON_DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
+    }
+
+    if (true) {
+      return;
+    }
+
+    // threefold - claim ahead
+    {
+      final var pgn = """
+          1. Nf3 c5 2. c4 Nf6 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 e6 6. g3 Qb6 7. Nb3 Ne5 8. e4
+          Bb4 9. Qe2 O-O 10. f4 Nc6 11. e5 Ne8 12. Bd2 f6 13. c5 Qd8 14. a3 Bxc3 15. Bxc3
+          fxe5 16. Bxe5 b6 17. Bg2 Nxe5 18. Bxa8 Nf7 19. Bg2 bxc5 20. Nxc5 Qb6 21. Qf2
+          Qb5 22. Bf1 Qc6 23. Bg2 Qb5 24. Bf1 Qc6 25. Bg2""";
+
+      Analyzer.printAnalysis(pgn);
+    }
+
+    // threefold - on the board
     {
       final var pgn = """
           1. d4 d5 2. Nf3 Nf6 3. c4 e6 4. Bg5 Nbd7 5. e3 Be7 6. Nc3 O-O 7. Rc1 b6 8. cxd5
@@ -25,7 +46,7 @@ public class ReadMeForRepository {
           Qd8+ Kg7 28. Qd4+ Nf6 29. fxe3 Qe6 30. Rf2 g5 31. h4 gxh4 32. Qxh4 Ng4 33. Qg5+
           Kf8 34. Rf5 h5 35. Qd8+ Kg7 36. Qg5+ Kf8 37. Qd8+ Kg7 38. Qg5+ Kf8 39. b3 Qd6
           40. Qf4 Qd1+ 41. Qf1 Qd7 42. Rxh5 Nxe3 43. Qf3 Qd4 44. Qa8+ Ke7 45. Qb7+ Kf8 46.
-          Qb8+ *""";
+          Qb8+""";
 
       Analyzer.printAnalysis(pgn);
     }
@@ -58,21 +79,63 @@ public class ReadMeForRepository {
 
     }
 
+    // unwinnability
+
+    // insufficient material
+    {
+      final Board board = new Board("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50");
+      System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+      System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
+    }
+
+    // pawn wall
+    {
+      final Board board = new Board("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62");
+      System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
+      System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
+    }
+
+    // forced moves
+    {
+      final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
+    }
+
+    // common positions
+    {
+      final Board board = new Board("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29");
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // WINNABLE
+    }
+
+    // Example where quick fails
+    {
+      final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
+      System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
+      System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
+    }
+
     // dead position
-    // example 1
+    // insufficient material
     {
-      final Board board = new Board("8/2b1k3/7p/p1p1p1pP/PpP1P1P1/1P1BK3/8/8 b - - 0 50");
-      System.out.println(board.isDeadPosition());
+      final Board board = new Board("8/8/3kn3/8/2K5/8/8/8 w - - 0 50");
+      System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
     }
-    // example 2
+
+    // pawn walls
     {
-      final Board board = new Board("2k5/2P5/8/1KN5/8/8/8/8 b - - 0 66");
-      System.out.println(board.isDeadPosition());
+      final Board board = new Board("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61");
+      System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
     }
-    // example 3
+
+    // forced moves
     {
-      final Board board = new Board("8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 0 50");
-      System.out.println(board.isDeadPosition());
+      final Board board = new Board("k7/P1K5/8/8/8/8/8/8 b - - 2 58");
+      System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
+      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
     }
 
     // Board

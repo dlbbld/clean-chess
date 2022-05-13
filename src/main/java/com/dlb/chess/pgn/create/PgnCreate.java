@@ -1,9 +1,9 @@
 package com.dlb.chess.pgn.create;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
@@ -15,9 +15,11 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
+import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.reader.enums.ResultTagValue;
+import com.dlb.chess.pgn.reader.enums.SetUpTagValue;
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.pgn.reader.model.Tag;
@@ -27,6 +29,10 @@ import com.dlb.chess.utility.TagUtility;
 public class PgnCreate {
 
   private static final int LINE_LENGTH = 80;
+
+  public static String createPgnFileString(ApiBoard board) {
+    return createPgnFileString(createPgnFile(board));
+  }
 
   public static String createPgnFileString(PgnFile pgnFile) {
     return BasicUtility
@@ -195,17 +201,23 @@ public class PgnCreate {
     return BasicUtility.calculateWrappedLines(movetext.movetext(), LINE_LENGTH);
   }
 
-  public static PgnFile createPgnFile(Board board, List<Tag> tagList) {
+  public static PgnFile createPgnFile(ApiBoard board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
     return new PgnFile(tagList, board.getInitialFen(), "", halfMoveList);
   }
 
-  public static PgnFile createPgnFile(Board board) {
+  public static PgnFile createPgnFile(ApiBoard board) {
 
     final ResultTagValue resultTagValue = calculateResultTagValue(board);
     final List<Tag> tagList = createBoardPlaceHolderTagList(resultTagValue);
+
+    if (board.getInitialFen() != FenConstants.FEN_INITIAL) {
+      tagList.add(new Tag(StandardTag.SET_UP.getName(), SetUpTagValue.START_FROM_SETUP_POSITION.getValue()));
+      tagList.add(new Tag(StandardTag.FEN.getName(), board.getInitialFen().fen()));
+    }
+    Collections.sort(tagList);
 
     return createPgnFile(board, tagList);
   }

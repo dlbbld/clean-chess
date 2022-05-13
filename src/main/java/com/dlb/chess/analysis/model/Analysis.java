@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.winnable.enums.Winnable;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
     List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<RepeatingSequence> sequenceRepetitionList,
@@ -19,7 +19,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
     boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
     CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial,
-    Winnable winnableNotHavingMove, String fen, ApiBoard chessBoard) {
+    UnwinnableQuick unwinnableQuickResultNotHavingMove, String fen, ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -30,7 +30,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
       return false;
     }
     final var other = (Analysis) obj;
-    return Objects.equals(chessBoard, other.chessBoard) && Objects.equals(fen, other.fen)
+    return Objects.equals(board, other.board) && Objects.equals(fen, other.fen)
         && Objects.equals(yawnMoveListList, other.yawnMoveListList) && firstCapture == other.firstCapture
         && Objects.equals(halfMoveList, other.halfMoveList) && hasCapture == other.hasCapture
         && hasFiftyMoveRule == other.hasFiftyMoveRule && hasFivefoldRepetition == other.hasFivefoldRepetition
@@ -45,7 +45,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && Objects.equals(repetitionListList, other.repetitionListList)
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
         && Objects.equals(sequenceRepetitionList, other.sequenceRepetitionList)
-        && winnableNotHavingMove == other.winnableNotHavingMove;
+        && unwinnableQuickResultNotHavingMove == other.unwinnableQuickResultNotHavingMove;
   }
 
   public Side havingMove() {
@@ -124,16 +124,16 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return insufficientMaterial;
   }
 
-  public Winnable winnableNotHavingMove() {
-    return winnableNotHavingMove;
+  public UnwinnableQuick unwinnableQuickResultNotHavingMove() {
+    return unwinnableQuickResultNotHavingMove;
   }
 
   public String fen() {
     return fen;
   }
 
-  public ApiBoard chessBoard() {
-    return chessBoard;
+  public ApiBoard board() {
+    return board;
   }
 
 }
