@@ -42,7 +42,7 @@ public class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testPgnFileValue() {
     final var pgnFileName = "ae_16.pgn";
 
