@@ -9,7 +9,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
@@ -19,16 +18,14 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
   private final Side color;
   private final Side havingMove;
   private final StaticPosition staticPosition;
-  private final Set<Square> attackedSquaresHavingMove;
-  private final ApiBoard board;
+  private final Set<Square> squaresAttackedByNotHavingMove;
 
   public ComparatorLegalMoves(Side color, Side havingMove, StaticPosition staticPosition,
-      Set<Square> attackedSquaresHavingMove, ApiBoard board) {
+      Set<Square> squaresAttackedByNotHavingMove) {
     this.color = color;
     this.havingMove = havingMove;
     this.staticPosition = staticPosition;
-    this.attackedSquaresHavingMove = attackedSquaresHavingMove;
-    this.board = board;
+    this.squaresAttackedByNotHavingMove = squaresAttackedByNotHavingMove;
   }
 
   @Override
@@ -54,14 +51,6 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
 
     // intended winner is moving
     if (color == havingMove) {
-
-      // checkmating moves have the highest priority
-      if (isCheckmatingMove(firstLegalMove)) {
-        return -1;
-      }
-      if (isCheckmatingMove(secondLegalMove)) {
-        return 1;
-      }
 
       // captures - preferred - and if both are capturing, capturing a higher value piece preferred
       if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
@@ -160,17 +149,17 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
     // intended loser is moving
 
     // losing piece, preferred
-    if (attackedSquaresHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
-        && !attackedSquaresHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+    if (squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && !squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
       return -1;
     }
-    if (!attackedSquaresHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
-        && attackedSquaresHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+    if (!squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
       return 1;
     }
     // the higher value the losing piece, the better
-    if (attackedSquaresHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
-        && attackedSquaresHavingMove.contains(firstLegalMove.moveSpecification().toSquare())) {
+    if (squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())) {
       return Integer.compare(-firstLegalMove.movingPiece().getPieceType().getValue(),
           -secondLegalMove.movingPiece().getPieceType().getValue());
     }
@@ -255,10 +244,4 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
     return compareScore;
   }
 
-  private boolean isCheckmatingMove(LegalMove legalMove) {
-    board.performMove(legalMove.moveSpecification());
-    final var isCheckmate = board.isCheckmate();
-    board.unperformMove();
-    return isCheckmate;
-  }
 }

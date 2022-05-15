@@ -22,6 +22,7 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
@@ -39,7 +40,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private int cnt = 0;
   private boolean isCanExhaust = true;
-  private List<LegalMove> mateList = new ArrayList<>();
+  private List<LegalMove> moveProgressList = new ArrayList<>();
 
   public FindHelpmateExhaust(Side side) {
     this.color = side;
@@ -54,7 +55,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
     this.cnt = 0;
     this.isCanExhaust = true;
-    this.mateList = new ArrayList<>();
+    this.moveProgressList = new ArrayList<>();
 
     final var hasHelpmate = findHelpmate(board, 0, maxDepth);
 
@@ -63,7 +64,12 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     if (hasHelpmate) {
-      checkHelpmate(board.getFen(), mateList);
+      if (ClassicalCheckmate.isClassicalCheckmateMaterial(board.getHavingMove(), board.getStaticPosition())) {
+        final var numberOfMovesForClassicalCheckmatePosition = (int) Math.ceil(moveProgressList.size() / 2.0);
+        logger.info("Classical checkmate position found in " + numberOfMovesForClassicalCheckmatePosition + " moves");
+      } else {
+        checkHelpmate(board.getFen(), moveProgressList);
+      }
       return FindHelpmateResult.YES;
     }
 
@@ -90,6 +96,11 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     // adding fivefold repetition and seventy-five move rule
     if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
       return false;
+    }
+
+    // we add classical checkmate as game end
+    if (ClassicalCheckmate.isClassicalCheckmateMaterial(board.getHavingMove(), board.getStaticPosition())) {
+      return true;
     }
 
     // 2: if the intended winner has just the king or the position is unwinnable according
@@ -139,23 +150,23 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-    final Set<Square> threatenedSquareSet = AbstractThreatenSquares
+    final Set<Square> squaresAttackedByNotHavingMove = AbstractThreatenSquares
         .calculateThreatenedSquares(board.getStaticPosition(), board.getHavingMove().getOppositeSide());
     Collections.sort(legalMoveList,
-        new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition(), threatenedSquareSet, board));
+        new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition(), squaresAttackedByNotHavingMove));
     for (final LegalMove legalMove : legalMoveList) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
-      mateList.add(legalMove);
+      moveProgressList.add(legalMove);
       final var hasHelpmate = findHelpmate(board, depth + 1, maxDepth + inc);
       board.unperformMove();
       if (hasHelpmate) {
         return true;
       }
-      mateList.remove(mateList.size() - 1);
+      moveProgressList.remove(moveProgressList.size() - 1);
     }
 
     // 10: return false (-> No mate was found after exploring every legal move)
