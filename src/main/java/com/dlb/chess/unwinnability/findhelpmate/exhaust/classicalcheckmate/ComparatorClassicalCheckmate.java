@@ -1,7 +1,9 @@
 package com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate;
 
 import java.util.Comparator;
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 import com.dlb.chess.board.StaticPosition;
@@ -11,6 +13,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
@@ -167,68 +170,63 @@ public class ComparatorClassicalCheckmate implements Comparator<LegalMove> {
               final var isHasOneDarkSquareBishopOnly = MaterialUtility.calculateNumberOfBishops(color, staticPosition,
                   SquareType.DARK_SQUARE) == 1;
 
-              final var isBishopFirst = firstLegalMove.movingPiece().getPieceType() == PieceType.BISHOP;
-              final var isBishopSecond = secondLegalMove.movingPiece().getPieceType() == PieceType.BISHOP;
+              final Set<PieceType> affordablePieceTypeSetLightSquare = new TreeSet<>();
+              affordablePieceTypeSetLightSquare.add(PieceType.ROOK);
+              affordablePieceTypeSetLightSquare.add(PieceType.KNIGHT);
+              if (!isHasOneLightSquareBishopOnly) {
+                affordablePieceTypeSetLightSquare.add(PieceType.BISHOP);
+              }
+              affordablePieceTypeSetLightSquare.add(PieceType.QUEEN);
+              affordablePieceTypeSetLightSquare.add(PieceType.PAWN);
 
-              final var isLightSquareBishopFirst = firstLegalMove.movingPiece().getPieceType() == PieceType.BISHOP
-                  && firstLegalMove.moveSpecification().fromSquare().getSquareType() == SquareType.LIGHT_SQUARE;
-              final var isDarkSquareBishopFirst = firstLegalMove.movingPiece().getPieceType() == PieceType.BISHOP
-                  && firstLegalMove.moveSpecification().fromSquare().getSquareType() == SquareType.DARK_SQUARE;
+              final Set<PieceType> affordablePieceTypeSetDarkSquare = new TreeSet<>();
+              affordablePieceTypeSetDarkSquare.add(PieceType.ROOK);
+              affordablePieceTypeSetDarkSquare.add(PieceType.KNIGHT);
+              if (!isHasOneDarkSquareBishopOnly) {
+                affordablePieceTypeSetDarkSquare.add(PieceType.BISHOP);
+              }
+              affordablePieceTypeSetDarkSquare.add(PieceType.QUEEN);
+              affordablePieceTypeSetDarkSquare.add(PieceType.PAWN);
 
-              final var isLightSquareBishopSecond = secondLegalMove.movingPiece().getPieceType() == PieceType.BISHOP
-                  && secondLegalMove.moveSpecification().fromSquare().getSquareType() == SquareType.LIGHT_SQUARE;
-              final var isDarkSquareBishopSecond = secondLegalMove.movingPiece().getPieceType() == PieceType.BISHOP
-                  && secondLegalMove.moveSpecification().fromSquare().getSquareType() == SquareType.DARK_SQUARE;
+              final Map<SquareType, Set<PieceType>> affordablePieceTypeMap = new TreeMap<>();
+              affordablePieceTypeMap.put(SquareType.LIGHT_SQUARE, affordablePieceTypeSetLightSquare);
+              affordablePieceTypeMap.put(SquareType.DARK_SQUARE, affordablePieceTypeSetDarkSquare);
 
-              if (isFirstCanMoveToAttackedSquareSecondNot) {
-                if (!isHasOneLightSquareBishopOnly || !isLightSquareBishopFirst || !isHasOneDarkSquareBishopOnly
-                    || !isDarkSquareBishopFirst) {
-                  return -1;
-                }
+              final PieceType firstMovingPieceType = firstLegalMove.movingPiece().getPieceType();
+              final PieceType secondMovingPieceType = secondLegalMove.movingPiece().getPieceType();
+
+              final SquareType firstFromSquareSquareType = firstLegalMove.moveSpecification().fromSquare()
+                  .getSquareType();
+              final SquareType secondFromSquareSquareType = secondLegalMove.moveSpecification().fromSquare()
+                  .getSquareType();
+
+              if (isFirstCanMoveToAttackedSquareSecondNot && NonNullWrapperCommon
+                  .get(affordablePieceTypeMap, firstFromSquareSquareType).contains(firstMovingPieceType)) {
+                return -1;
               }
 
-              if (isFirstCannotMoveToAttackedSquareButSecond) {
-                if (!isHasOneLightSquareBishopOnly || !isLightSquareBishopSecond || !isHasOneDarkSquareBishopOnly
-                    || !isDarkSquareBishopSecond) {
-                  return 1;
-                }
+              if (isFirstCannotMoveToAttackedSquareButSecond && NonNullWrapperCommon
+                  .get(affordablePieceTypeMap, secondFromSquareSquareType).contains(secondMovingPieceType)) {
+                return 1;
               }
 
               if (isBothCanMoveToAttackedSquare) {
-                if (isHasOneLightSquareBishopOnly && isHasOneDarkSquareBishopOnly) {
-                  if (!isBishopFirst && isBishopSecond) {
-                    return -1;
-                  }
-                  if (isBishopFirst && !isBishopSecond) {
-                    return 1;
-                  }
-                  if (!isBishopFirst && !isBishopSecond) {
-                    return movingPieceHighestFirst;
-                  }
+                if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstFromSquareSquareType)
+                    .contains(firstMovingPieceType)
+                    && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondFromSquareSquareType)
+                        .contains(secondMovingPieceType)) {
+                  return -1;
                 }
-                if (!isHasOneLightSquareBishopOnly && isHasOneDarkSquareBishopOnly) {
-                  if (!isDarkSquareBishopFirst && isDarkSquareBishopSecond) {
-                    return -1;
-                  }
-                  if (isDarkSquareBishopFirst && !isDarkSquareBishopSecond) {
-                    return 1;
-                  }
-                  if (!isBishopFirst && !isBishopSecond) {
-                    return movingPieceHighestFirst;
-                  }
+                if (!NonNullWrapperCommon.get(affordablePieceTypeMap, firstFromSquareSquareType)
+                    .contains(firstMovingPieceType)
+                    && NonNullWrapperCommon.get(affordablePieceTypeMap, secondFromSquareSquareType)
+                        .contains(secondMovingPieceType)) {
+                  return 1;
                 }
-                if (isHasOneLightSquareBishopOnly && !isHasOneDarkSquareBishopOnly) {
-                  if (!isLightSquareBishopFirst && isLightSquareBishopSecond) {
-                    return -1;
-                  }
-                  if (isLightSquareBishopFirst && !isLightSquareBishopSecond) {
-                    return 1;
-                  }
-                  if (!isBishopFirst && !isBishopSecond) {
-                    return movingPieceHighestFirst;
-                  }
-                }
-                if (!isHasOneLightSquareBishopOnly && !isHasOneDarkSquareBishopOnly) {
+                if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstFromSquareSquareType)
+                    .contains(firstMovingPieceType)
+                    && NonNullWrapperCommon.get(affordablePieceTypeMap, secondFromSquareSquareType)
+                        .contains(secondMovingPieceType)) {
                   return movingPieceHighestFirst;
                 }
               }
@@ -335,11 +333,15 @@ public class ComparatorClassicalCheckmate implements Comparator<LegalMove> {
             return 1;
           }
           // higher promotion preferred
-          final PromotionPieceType firstPromotionPieceType = firstLegalMove.moveSpecification().promotionPieceType();
-          final PromotionPieceType secondPromotionPieceType = secondLegalMove.moveSpecification().promotionPieceType();
+          if (firstLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE
+              && secondLegalMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE) {
+            final PromotionPieceType firstPromotionPieceType = firstLegalMove.moveSpecification().promotionPieceType();
+            final PromotionPieceType secondPromotionPieceType = secondLegalMove.moveSpecification()
+                .promotionPieceType();
 
-          return Integer.compare(-firstPromotionPieceType.getPieceType().getValue(),
-              -secondPromotionPieceType.getPieceType().getValue());
+            return Integer.compare(-firstPromotionPieceType.getPieceType().getValue(),
+                -secondPromotionPieceType.getPieceType().getValue());
+          }
         }
       }
       return 0;
