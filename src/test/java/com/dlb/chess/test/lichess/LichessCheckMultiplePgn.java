@@ -11,9 +11,9 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.pgn.reader.PgnReaderStrict;
 import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.utility.TagUtility;
 
 //manual to create multiple pgn file
 //1) open database in chessbase
@@ -85,10 +85,10 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
                     || currentPgnFileString.indexOf("[Result \"0-1\"]") != -1)) {
               final PgnFile pgnFile = PgnReaderStrict.readPgn(currentPgnFileLines);
               if (!AbstractLichessCheck.calculateIsTimeForfeitCandidate(pgnFile)) {
-                final String siteValue = BasicChessUtility.calculateTagValue(pgnFile, "Site");
+                final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
                 logger.printf(Level.INFO, "Invalid parsing of %s", siteValue);
               } else if (AbstractLichessCheck.calculateIsIncorrectResult(pgnFile)) {
-                final String siteValue = BasicChessUtility.calculateTagValue(pgnFile, "Site");
+                final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
                 logger.printf(Level.INFO, "Time forfeit - incorrect result;%s", siteValue);
               } else {
                 // logger.info("Time forfeit - possibly correct result - " + file.getName());

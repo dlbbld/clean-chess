@@ -68,15 +68,6 @@ public class MaterialUtility implements EnumConstants {
     return true;
   }
 
-  public static boolean calculateIsKingAndKnightOnly(Side side, StaticPosition staticPosition) {
-    return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
-        && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 1
-        && calculateNumberOfPieces(side, staticPosition, BISHOP) == 0
-        && calculateNumberOfPieces(side, staticPosition, QUEEN) == 0
-        && calculateNumberOfPieces(side, staticPosition, KING) == 1
-        && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;
-  }
-
   public static boolean calculateIsKingAndBishopsOnly(Side side, StaticPosition staticPosition, SquareType squareType) {
     return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
         && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0
@@ -148,6 +139,45 @@ public class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasNoPawns(Side side, StaticPosition staticPosition) {
     return calculateNumberOfPieces(side, staticPosition, PieceType.PAWN) == 0;
+  }
+
+  public static boolean calculateIsKingAndRookOnly(Side side, StaticPosition staticPosition) {
+    return calculateIsKingAndAnotherPieceOnly(side, ROOK, staticPosition);
+  }
+
+  public static boolean calculateIsKingAndKnightOnly(Side side, StaticPosition staticPosition) {
+    return calculateIsKingAndAnotherPieceOnly(side, KNIGHT, staticPosition);
+  }
+
+  public static boolean calculateIsKingAndBishopOnly(Side side, StaticPosition staticPosition) {
+    return calculateIsKingAndAnotherPieceOnly(side, BISHOP, staticPosition);
+  }
+
+  public static boolean calculateIsKingAndQueenOnly(Side side, StaticPosition staticPosition) {
+    return calculateIsKingAndAnotherPieceOnly(side, QUEEN, staticPosition);
+  }
+
+  private static boolean calculateIsKingAndAnotherPieceOnly(Side side, PieceType anotherPieceType,
+      StaticPosition staticPosition) {
+
+    if (anotherPieceType == KING) {
+      throw new IllegalArgumentException("Checking for king and king makes no sense");
+    }
+
+    var countAnotherPieces = 0;
+    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
+        if (pieceOnSquare.getPieceType() != anotherPieceType) {
+          return false;
+        }
+        countAnotherPieces++;
+        if (countAnotherPieces > 1) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
 }

@@ -44,7 +44,7 @@ public class GeneralUtility {
     }
   }
 
-  public static Board calculateChessBoard(PgnFile pgnFile) {
+  public static Board calculateBoard(PgnFile pgnFile) {
 
     final Board board = new Board(pgnFile.startFen());
 
@@ -56,14 +56,14 @@ public class GeneralUtility {
     return board;
   }
 
-  public static ApiBoard calculateChessBoard(String folderPath, String pgnFileName) throws Exception {
+  public static ApiBoard calculateBoard(String folderPath, String pgnFileName) throws Exception {
 
     final PgnFile pgnFile = PgnReader.readPgn(folderPath, pgnFileName);
 
-    return calculateChessBoard(pgnFile);
+    return calculateBoard(pgnFile);
   }
 
-  public static ApiBoard calculateChessBoard(List<HalfMove> halfMoveList) {
+  public static ApiBoard calculateBoard(List<HalfMove> halfMoveList) {
 
     final var board = new Board();
 

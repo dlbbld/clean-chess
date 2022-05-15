@@ -3,7 +3,6 @@ package com.dlb.chess.test.lichess;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.pgn.reader.enums.ResultTagValue;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.winnable.WinnableCalculator;
@@ -14,7 +13,7 @@ import com.dlb.chess.utility.TagUtility;
 public abstract class AbstractLichessCheck {
 
   static boolean calculateIsTimeForfeitCandidate(PgnFile pgnFile) {
-    final String terminationValue = BasicChessUtility.calculateTagValue(pgnFile, "Termination");
+    final String terminationValue = TagUtility.calculateTagValue(pgnFile, "Termination");
     if (!"Time forfeit".equals(terminationValue)) {
       return false;
     }

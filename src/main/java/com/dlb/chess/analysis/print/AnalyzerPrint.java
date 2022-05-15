@@ -32,13 +32,13 @@ public class AnalyzerPrint {
 
     final PgnFile pgnFile = PgnReader.readPgn(lines);
 
-    final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
+    final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     printAnalysis(board);
   }
 
   protected static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
 
-    final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
+    final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     printAnalysis(board);
   }
 

@@ -272,7 +272,7 @@ public class Analyzer extends AnalyzerPrint {
 
   public static Analysis calculateAnalysis(String folderPath, String pgnFileName) throws Exception {
 
-    final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
+    final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateAnalysis(board);
   }
 

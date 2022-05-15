@@ -1,13 +1,13 @@
-package com.dlb.chess.board;
+package com.dlb.chess.common.utility;
 
+import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.utility.MaterialUtility;
 
-public class InsufficientMaterialCalculator implements EnumConstants {
+public class InsufficientMaterialUtility implements EnumConstants {
 
   public static boolean calculateIsInsufficientMaterial(Side side, StaticPosition staticPosition) {
     final Side oppositeSide = side.getOppositeSide();
@@ -15,7 +15,7 @@ public class InsufficientMaterialCalculator implements EnumConstants {
     if (MaterialUtility.calculateIsKingOnly(side, staticPosition)) {
       return true;
     }
-    if (calculateIsKingAndKnightOnly(side, staticPosition)) {
+    if (MaterialUtility.calculateIsKingAndKnightOnly(side, staticPosition)) {
       return calculateHasZeroOrMultipleQueenOnly(oppositeSide, staticPosition);
     }
     if (calculateHasZeroOrMultipleLightSquareBishopOnly(side, staticPosition)) {
@@ -26,23 +26,6 @@ public class InsufficientMaterialCalculator implements EnumConstants {
     }
 
     return false;
-  }
-
-  public static boolean calculateIsKingAndKnightOnly(Side side, StaticPosition staticPosition) {
-    var countOwnKnights = 0;
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
-      final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
-        if (pieceOnSquare.getPieceType() != KNIGHT) {
-          return false;
-        }
-        countOwnKnights++;
-        if (countOwnKnights > 1) {
-          return false;
-        }
-      }
-    }
-    return true;
   }
 
   private static boolean calculateHasZeroOrMultipleSquareBishopOnlyForSpecifiedColor(Side side,
@@ -109,4 +92,5 @@ public class InsufficientMaterialCalculator implements EnumConstants {
     }
     return false;
   }
+
 }

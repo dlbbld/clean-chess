@@ -16,24 +16,8 @@ import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.Tag;
-import com.dlb.chess.pgn.reader.model.PgnFile;
 
 public class BasicChessUtility {
-
-  public static String calculateTagValue(PgnFile pgnFile, String tagName) {
-    for (final Tag tag : pgnFile.tagList()) {
-      if (tag.name().equals(tagName)) {
-        return tag.value();
-      }
-    }
-    return "NA";
-  }
-
-  public static String calculateTagValue(PgnFile pgnFile, StandardTag sevenTagRoster) {
-    return calculateTagValue(pgnFile, sevenTagRoster.getName());
-  }
 
   public static String calculateSanList(List<HalfMove> halfMoveList) {
     final List<String> sanList = new ArrayList<>();

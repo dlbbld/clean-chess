@@ -1,4 +1,4 @@
-package com.dlb.chess.common.utility;
+package com.dlb.chess.test.winnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,8 +14,10 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.MaterialUtility;
+import com.dlb.chess.common.utility.StaticPositionUtility;
 
-public class PawnWallUtility {
+public class PawnWall {
 
   // TODO own pawns outside pawn wall line
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;
