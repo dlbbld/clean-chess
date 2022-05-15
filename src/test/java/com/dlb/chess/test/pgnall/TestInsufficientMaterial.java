@@ -72,10 +72,10 @@ class TestInsufficientMaterial implements EnumConstants {
   private static boolean calculateIsInsufficientMaterial(StaticPosition staticPosition) {
 
     // KNvK, KvKN
-    if (MaterialUtility.calculateIsKingAndKnightOnly(WHITE, staticPosition)
-        && MaterialUtility.calculateIsKingOnly(BLACK, staticPosition)
-        || MaterialUtility.calculateIsKingOnly(WHITE, staticPosition)
-            && MaterialUtility.calculateIsKingAndKnightOnly(BLACK, staticPosition)) {
+    if (MaterialUtility.calculateHasKingAndKnightOnly(WHITE, staticPosition)
+        && MaterialUtility.calculateHasKingOnly(BLACK, staticPosition)
+        || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
+            && MaterialUtility.calculateHasKingAndKnightOnly(BLACK, staticPosition)) {
       return true;
     }
 

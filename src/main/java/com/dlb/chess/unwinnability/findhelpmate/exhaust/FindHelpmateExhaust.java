@@ -100,7 +100,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // position is unwinnable according to Lemma 5
     // position is unwinnable according to Lemma 6
-    if (MaterialUtility.calculateIsKingOnly(color, board.getStaticPosition())
+    if (MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
         || calculateIsUnwinnableAccordingLemma5(color, board.getStaticPosition())
         || calculateIsUnwinnableAccordingLemma6(color, board.getStaticPosition())) {
       return false;
@@ -179,7 +179,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
     if (!MaterialUtility.calculateHasPawn(staticPosition)
-        && MaterialUtility.calculateIsKingAndKnightOnly(color, staticPosition)) {
+        && MaterialUtility.calculateHasKingAndKnightOnly(color, staticPosition)) {
       if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoRooks(color.getOppositeSide(), staticPosition)) {
@@ -195,7 +195,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
         continue;
       }
       if (!MaterialUtility.calculateHasPawn(staticPosition)
-          && MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition, squareType)
+          && MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
           && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())) {
         return true;

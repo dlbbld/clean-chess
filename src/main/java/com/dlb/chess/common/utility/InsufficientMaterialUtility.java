@@ -12,10 +12,10 @@ public class InsufficientMaterialUtility implements EnumConstants {
   public static boolean calculateIsInsufficientMaterial(Side side, StaticPosition staticPosition) {
     final Side oppositeSide = side.getOppositeSide();
 
-    if (MaterialUtility.calculateIsKingOnly(side, staticPosition)) {
+    if (MaterialUtility.calculateHasKingOnly(side, staticPosition)) {
       return true;
     }
-    if (MaterialUtility.calculateIsKingAndKnightOnly(side, staticPosition)) {
+    if (MaterialUtility.calculateHasKingAndKnightOnly(side, staticPosition)) {
       return calculateHasZeroOrMultipleQueenOnly(oppositeSide, staticPosition);
     }
     if (calculateHasZeroOrMultipleLightSquareBishopOnly(side, staticPosition)) {

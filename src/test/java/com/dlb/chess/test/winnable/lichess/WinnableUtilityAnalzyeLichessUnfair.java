@@ -135,12 +135,12 @@ public class WinnableUtilityAnalzyeLichessUnfair {
         final MoveRepresentation moveRepresentation = NonNullWrapperCommon
             .getFirst(board.getLegalMovesRepresentation());
         board.performMove(moveRepresentation.moveSpecification());
-        if (MaterialUtility.calculateIsKingOnly(board.getHavingMove(), board.getStaticPosition())) {
+        if (MaterialUtility.calculateHasKingOnly(board.getHavingMove(), board.getStaticPosition())) {
           isKingOnlyNonFlagging = "yes";
         } else {
           isKingOnlyNonFlagging = "no";
         }
-        if (MaterialUtility.calculateIsKingOnly(board.getHavingMove().getOppositeSide(), board.getStaticPosition())) {
+        if (MaterialUtility.calculateHasKingOnly(board.getHavingMove().getOppositeSide(), board.getStaticPosition())) {
           isKingOnlyFlagging = "yes";
         } else {
           isKingOnlyFlagging = "no";
