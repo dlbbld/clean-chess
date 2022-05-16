@@ -88,6 +88,7 @@ public interface EnumConstants {
   Piece BLACK_QUEEN = Piece.BLACK_QUEEN;
   Piece BLACK_KING = Piece.BLACK_KING;
   Piece BLACK_PAWN = Piece.BLACK_PAWN;
+  Piece PIECE_NONE = Piece.NONE;
 
   PieceType ROOK = PieceType.ROOK;
   PieceType KNIGHT = PieceType.KNIGHT;

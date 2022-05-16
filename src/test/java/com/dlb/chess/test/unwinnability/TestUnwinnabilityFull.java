@@ -13,6 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.PrintDuration;
@@ -35,9 +36,9 @@ public class TestUnwinnabilityFull {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFen() {
-    final var fen = "8/8/4k3/3R4/2K5/8/8/8 w - - 0 50";
+    final var fen = FenConstants.FEN_INITIAL_STR;
     final Board board = new Board(fen);
     assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
   }
@@ -96,7 +97,7 @@ public class TestUnwinnabilityFull {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testPerformance() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES);
