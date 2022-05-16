@@ -2,7 +2,11 @@ package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -10,6 +14,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -66,17 +71,22 @@ public class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFolder() throws Exception {
+    final List<Long> milliSecondsList = new ArrayList<>();
+
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
+      final var beforeMilliSeconds = System.currentTimeMillis();
       final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
           board.getHavingMove().getOppositeSide());
+      milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 
       CheckQuick.check(testCase.unwinnableFullResultTest(), unwinnableQuick);
     }
+    PrintDuration.printDuration(milliSecondsList, logger);
   }
 }

@@ -2,6 +2,9 @@ package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
@@ -12,6 +15,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -31,7 +35,7 @@ public class TestUnwinnabilityFull {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testFen() {
     final var fen = "8/8/4k3/3R4/2K5/8/8/8 w - - 0 50";
     final Board board = new Board(fen);
@@ -74,16 +78,42 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   // @Test
   void testFolder() throws Exception {
+    final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 
+      final var beforeMilliSeconds = System.currentTimeMillis();
       final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
           board.getHavingMove().getOppositeSide());
+      milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 
       CheckFull.check(testCase.unwinnableFullResultTest(), unwinnableFull);
     }
+    PrintDuration.printDuration(milliSecondsList, logger);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPerformance() throws Exception {
+    final List<Long> milliSecondsList = new ArrayList<>();
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES);
+    for (final PgnFileTestCase testCase : testCaseList.list()) {
+      final ApiBoard board = new Board(testCase.fen());
+
+      logger.info(testCase.pgnFileName());
+
+      final var beforeMilliSeconds = System.currentTimeMillis();
+      final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove());
+      final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
+
+      if (unwinnableFull == UnwinnableFull.WINNABLE) {
+        milliSecondsList.add(durationMilliSeconds);
+      }
+
+    }
+    PrintDuration.printDuration(milliSecondsList, logger);
   }
 }

@@ -1,8 +1,5 @@
 package com.dlb.chess.test.unwinnability;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +10,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.winnable.WinnableCalculator;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
@@ -27,8 +25,6 @@ public class TestUnwinnabilityQuickAgainstWinnability {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    var counter = 0D;
-    var milliSecondsTotal = 0L;
 
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
@@ -62,59 +58,23 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         // not having move
         {
-          // final Winnable winnable = WinnableCalculator.calculateWinnable(board,
-          // board.getHavingMove().getOppositeSide());
-          final var before = System.currentTimeMillis();
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board,
+              board.getHavingMove().getOppositeSide());
           final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
               board.getHavingMove().getOppositeSide());
-          counter = counter + 1;
-          final var duration = System.currentTimeMillis() - before;
-          milliSecondsTotal += duration;
-
-          System.out.println("Average duration: " + milliSecondsTotal / counter + " (" + counter + " positions)");
-          // checkResult(winnable, unwinnableQuick);
+          CheckQuick.check(winnable, unwinnableQuick);
         }
 
         // having move
         {
-          // final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
-          // final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
-          // board.getHavingMove());
-          //
-          // checkResult(winnable, unwinnableQuick);
+          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
+          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
+              board.getHavingMove());
+
+          CheckQuick.check(winnable, unwinnableQuick);
         }
       }
     }
   }
 
-  private static void checkResult(Winnable winnable, UnwinnableQuick unwinnableQuick) {
-    if (true) {
-      return;
-    }
-    switch (winnable) {
-      case NO:
-        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
-        break;
-      case YES:
-        assertNotEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
-        break;
-      case UNKNOWN:
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-
-    switch (unwinnableQuick) {
-      case WINNABLE:
-        assertNotEquals(Winnable.NO, winnable);
-        break;
-      case UNWINNABLE:
-        assertNotEquals(Winnable.YES, winnable);
-        break;
-      case POSSIBLY_WINNABLE:
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
 }

@@ -55,13 +55,14 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
     // intended winner is moving
     if (color == havingMove) {
 
-      // checkmating moves have the highest priority
-      if (isCheckmatingMove(firstLegalMove)) {
-        return -1;
-      }
-      if (isCheckmatingMove(secondLegalMove)) {
-        return 1;
-      }
+      // prioritizing checkmating in one does not seem to bering much performance
+
+      // if (isCheckmatingMove(firstLegalMove)) {
+      // return -1;
+      // }
+      // if (isCheckmatingMove(secondLegalMove)) {
+      // return 1;
+      // }
 
       // captures - preferred - and if both are capturing, capturing a higher value piece preferred
       if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
@@ -255,7 +256,7 @@ public class ComparatorLegalMoves implements Comparator<LegalMove> {
     return compareScore;
   }
 
-  private boolean isCheckmatingMove(LegalMove legalMove) {
+  boolean isCheckmatingMove(LegalMove legalMove) {
     board.performMove(legalMove.moveSpecification());
     final var isCheckmate = board.isCheckmate();
     board.unperformMove();
