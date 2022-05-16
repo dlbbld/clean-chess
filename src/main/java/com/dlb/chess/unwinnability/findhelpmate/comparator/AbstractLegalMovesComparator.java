@@ -2,12 +2,14 @@ package com.dlb.chess.unwinnability.findhelpmate.comparator;
 
 import java.util.Comparator;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 
 public abstract class AbstractLegalMovesComparator implements Comparator<LegalMove> {
 
@@ -17,17 +19,25 @@ public abstract class AbstractLegalMovesComparator implements Comparator<LegalMo
   final Side havingMove;
   final StaticPosition staticPosition;
   final Set<Square> squaresAttackedByNotHavingMove;
+  final Set<Square> emptySquaresAttackedByNotHavingMove;
 
   abstract int compareHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove);
 
   abstract int compareNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove);
 
-  public AbstractLegalMovesComparator(Side color, Side havingMove, StaticPosition staticPosition,
-      Set<Square> squaresAttackedByNotHavingMove) {
+  public AbstractLegalMovesComparator(Side color, Side havingMove, StaticPosition staticPosition) {
     this.color = color;
     this.havingMove = havingMove;
     this.staticPosition = staticPosition;
-    this.squaresAttackedByNotHavingMove = squaresAttackedByNotHavingMove;
+    this.squaresAttackedByNotHavingMove = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,
+        havingMove.getOppositeSide());
+    this.emptySquaresAttackedByNotHavingMove = new TreeSet<>();
+    for (final Square square : squaresAttackedByNotHavingMove) {
+      if (staticPosition.isEmpty(square)) {
+        emptySquaresAttackedByNotHavingMove.add(square);
+      }
+    }
+
   }
 
   @Override

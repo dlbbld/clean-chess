@@ -40,7 +40,7 @@ public abstract class AbstractFindHelpmate {
     for (final LegalMove legalMove : moveProgressList) {
       boardCheck.performMove(legalMove.moveSpecification());
     }
-    if (!ClassicalCheckmate.isClassicalCheckmateMaterial(boardCheck.getHavingMove(), boardCheck.getStaticPosition())) {
+    if (!ClassicalCheckmate.isClassicalCheckmatePosition(boardCheck.getHavingMove(), boardCheck.getStaticPosition())) {
       throw new ProgrammingMistakeException("It is not a classical checkmate position");
     }
 

@@ -10,7 +10,6 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -31,8 +30,8 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.enums
 // winning side: offers affordable pieces for capture
 // loosing side: prefers capture moves if affordable pieces
 // state 2b: losing side has more than king
-// winning side: captures
-// loosing side: offers pieces for capture
+// winning side: captures then sacrifice
+// loosing side: sacrifice then captures
 // state 3
 // winning side has less material than classical checkmate
 // winning side: priorities pawn promotion queen, pawn promotion other, pawn push
@@ -40,15 +39,14 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.enums
 
 public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
 
-  public ComparatorClassicalCheckmate(Side color, Side havingMove, StaticPosition staticPosition,
-      Set<Square> squaresAttackedByNotHavingMove) {
-    super(color, havingMove, staticPosition, squaresAttackedByNotHavingMove);
+  public ComparatorClassicalCheckmate(Side color, Side havingMove, StaticPosition staticPosition) {
+    super(color, havingMove, staticPosition);
   }
 
   @Override
   int compareHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove) {
     // state 1
-    if (ClassicalCheckmate.isClassicalCheckmateMaterial(color, staticPosition)) {
+    if (ClassicalCheckmate.isClassicalCheckmatePosition(color, staticPosition)) {
       throw new ProgrammingMistakeException(
           "Program did not branch earlier as expected for reaching classical checkmate");
     }
@@ -61,30 +59,10 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
       if (MaterialUtility.calculateHasKingOnly(color.getOppositeSide(), staticPosition)) {
         // state 2a
 
-        switch (aboveCheckmateMaterial) {
-          case KING_AND_QUEEN:
-          case KING_AND_ROOK:
-          case KING_AND_KNIGHT_AND_BISHOP: {
-            final Set<PieceType> affordablePieceTypeSet = calculateAffordablePieceTypeSet(color, staticPosition,
-                aboveCheckmateMaterial);
-
-            final var comparePieceSacrifice = comparePieceSacrifice(firstLegalMove, secondLegalMove,
-                affordablePieceTypeSet);
-            if (comparePieceSacrifice != NO_ORDER) {
-              return comparePieceSacrifice;
-            }
-          }
-            break;
-          case KING_AND_OPPOSITE_SQUARES_BISHOP: {
-            final Map<SquareType, Set<PieceType>> affordablePieceTypeMap = calculateOppositeBishopsAffordablePieceTypeMap(
-                color, staticPosition);
-
-            return comparePieceSacrifice(firstLegalMove, secondLegalMove, affordablePieceTypeMap);
-          }
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-
+        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, color,
+            staticPosition, aboveCheckmateMaterial);
+        if (compareSacrificeHavingMove != 0) {
+          return compareSacrificeHavingMove;
         }
       } else {
         // state 2b
@@ -111,6 +89,12 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
 
           // capturing with higher valued pieces preferred
           return compareHigherValuePieceFirst(firstLegalMove.movingPiece(), secondLegalMove.movingPiece());
+        }
+
+        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, color,
+            staticPosition, aboveCheckmateMaterial);
+        if (compareSacrificeHavingMove != 0) {
+          return compareSacrificeHavingMove;
         }
       }
     } else {
@@ -154,143 +138,140 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
     // non intended winner having move
     // case 1
     // state 1
-    if (ClassicalCheckmate.isClassicalCheckmateMaterial(color, staticPosition)) {
+    if (ClassicalCheckmate.isClassicalCheckmatePosition(color, staticPosition)) {
       // intended winner has checkmate material plus additional material
       // capture additional material
-      if (firstLegalMove.pieceCaptured() == Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
-        return -1;
-      }
-      if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
-        return 1;
+      final var comparePreferNoCapture = comparePreferNoCapture(firstLegalMove, secondLegalMove);
+      if (comparePreferNoCapture != 0) {
+        return comparePreferNoCapture;
       }
     } else {
 
       final AboveClassicalCheckmateMaterial aboveCheckmateMaterial = ClassicalCheckmate
           .calculateAboveClassicalCheckmateMaterial(color, staticPosition);
 
-      if (aboveCheckmateMaterial != AboveClassicalCheckmateMaterial.NONE) {
-        // state 2
-        final var isLosingHasKingOnly = MaterialUtility.calculateHasKingOnly(color.getOppositeSide(),
-            staticPosition);
-        // state 2a/2b
-        if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
-          switch (aboveCheckmateMaterial) {
-            case KING_AND_QUEEN:
-            case KING_AND_ROOK:
-            case KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
-                  staticPosition, aboveCheckmateMaterial);
-              if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())) {
-                return -1;
-              }
-              break;
-            case KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(
-                  color.getOppositeSide(), staticPosition);
-              if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
-                  .contains(firstLegalMove.pieceCaptured().getPieceType())) {
-                return -1;
-              }
-              break;
-            case NONE:
-              break;
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-
-        if (firstLegalMove.pieceCaptured() == Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
-          switch (aboveCheckmateMaterial) {
-            case KING_AND_QUEEN:
-            case KING_AND_ROOK:
-            case KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
-                  staticPosition, aboveCheckmateMaterial);
-              if (capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                return 1;
-              }
-              break;
-            case KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(
-                  color.getOppositeSide(), staticPosition);
-              if (NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
-                  .contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                return 1;
-              }
-              break;
-            case NONE:
-              break;
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-
-        if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
-          switch (aboveCheckmateMaterial) {
-            case KING_AND_QUEEN:
-            case KING_AND_ROOK:
-            case KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
-                  staticPosition, aboveCheckmateMaterial);
-              if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
-                  && !capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                return -1;
-              }
-              if (!capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
-                  && capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                return 1;
-              }
-              if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
-                  && capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                if (isLosingHasKingOnly) {
-                  // capture higher value pieces first so king has more space to move and capture
-                  return compareHigherValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
-                }
-                // leave the opponent strong pieces to capture
-                return compareLowerValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
-              }
-
-              break;
-            case KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(
-                  color.getOppositeSide(), staticPosition);
-              if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
-                  .contains(firstLegalMove.pieceCaptured().getPieceType())
-                  && !NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
-                      .contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                return -1;
-              }
-              if (!NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
-                  .contains(firstLegalMove.pieceCaptured().getPieceType())
-                  && NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
-                      .contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                return 1;
-              }
-              if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
-                  .contains(firstLegalMove.pieceCaptured().getPieceType())
-                  && NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
-                      .contains(secondLegalMove.pieceCaptured().getPieceType())) {
-                if (isLosingHasKingOnly) {
-                  // capture higher value pieces first so king has more space to move and capture
-                  return compareHigherValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
-                }
-                // leave the opponent strong pieces to capture
-                return compareLowerValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
-              }
-              break;
-            case NONE:
-              break;
-            default:
-              throw new IllegalArgumentException();
-          }
-        }
-      } else {
+      if (aboveCheckmateMaterial == AboveClassicalCheckmateMaterial.NONE) {
         // state 3
-        if (firstLegalMove.pieceCaptured() == Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
-          return -1;
+        return comparePreferNoCapture(firstLegalMove, secondLegalMove);
+      }
+      // state 2
+      final var isLosingHasKingOnly = MaterialUtility.calculateHasKingOnly(color.getOppositeSide(), staticPosition);
+      // state 2a/2b
+
+      final var compareSacrifice = compareSacrificeNotHavingMove(firstLegalMove, secondLegalMove, false);
+      if (compareSacrifice != 0) {
+        return compareSacrifice;
+      }
+
+      if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
+        switch (aboveCheckmateMaterial) {
+          case KING_AND_QUEEN:
+          case KING_AND_ROOK:
+          case KING_AND_KNIGHT_AND_BISHOP:
+            final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
+                staticPosition, aboveCheckmateMaterial);
+            if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())) {
+              return -1;
+            }
+            break;
+          case KING_AND_OPPOSITE_SQUARES_BISHOP:
+            final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(color,
+                staticPosition);
+            if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
+                .contains(firstLegalMove.pieceCaptured().getPieceType())) {
+              return -1;
+            }
+            break;
+          case NONE:
+            break;
+          default:
+            throw new IllegalArgumentException();
         }
-        if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
-          return 1;
+      }
+
+      if (firstLegalMove.pieceCaptured() == Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
+        switch (aboveCheckmateMaterial) {
+          case KING_AND_QUEEN:
+          case KING_AND_ROOK:
+          case KING_AND_KNIGHT_AND_BISHOP:
+            final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
+                staticPosition, aboveCheckmateMaterial);
+            if (capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              return 1;
+            }
+            break;
+          case KING_AND_OPPOSITE_SQUARES_BISHOP:
+            final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(color,
+                staticPosition);
+            if (NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
+                .contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              return 1;
+            }
+            break;
+          case NONE:
+            break;
+          default:
+            throw new IllegalArgumentException();
+        }
+      }
+
+      if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
+        switch (aboveCheckmateMaterial) {
+          case KING_AND_QUEEN:
+          case KING_AND_ROOK:
+          case KING_AND_KNIGHT_AND_BISHOP:
+            final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
+                staticPosition, aboveCheckmateMaterial);
+            if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
+                && !capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              return -1;
+            }
+            if (!capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
+                && capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              return 1;
+            }
+            if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
+                && capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              if (isLosingHasKingOnly) {
+                // capture higher value pieces first so king has more space to move and capture
+                return compareHigherValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
+              }
+              // leave the opponent strong pieces to capture
+              return compareLowerValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
+            }
+
+            break;
+          case KING_AND_OPPOSITE_SQUARES_BISHOP:
+            final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(color,
+                staticPosition);
+            if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
+                .contains(firstLegalMove.pieceCaptured().getPieceType())
+                && !NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
+                    .contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              return -1;
+            }
+            if (!NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
+                .contains(firstLegalMove.pieceCaptured().getPieceType())
+                && NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
+                    .contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              return 1;
+            }
+            if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
+                .contains(firstLegalMove.pieceCaptured().getPieceType())
+                && NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
+                    .contains(secondLegalMove.pieceCaptured().getPieceType())) {
+              if (isLosingHasKingOnly) {
+                // capture higher value pieces first so king has more space to move and capture
+                return compareHigherValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
+              }
+              // leave the opponent strong pieces to capture
+              return compareLowerValuePieceFirst(firstLegalMove.pieceCaptured(), secondLegalMove.pieceCaptured());
+            }
+            break;
+          case NONE:
+            break;
+          default:
+            throw new IllegalArgumentException();
         }
       }
     }
@@ -304,17 +285,17 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
     final PieceType firstMovingPieceType = firstLegalMove.movingPiece().getPieceType();
     final PieceType secondMovingPieceType = secondLegalMove.movingPiece().getPieceType();
 
-    final var isFirstCanMoveToAttackedSquareSecondNot = squaresAttackedByNotHavingMove
+    final var isFirstCanMoveToAttackedSquareSecondNot = emptySquaresAttackedByNotHavingMove
         .contains(firstLegalMove.moveSpecification().toSquare())
-        && !squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
+        && !emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
 
-    final var isFirstCannotMoveToAttackedSquareButSecond = !squaresAttackedByNotHavingMove
+    final var isFirstCannotMoveToAttackedSquareButSecond = !emptySquaresAttackedByNotHavingMove
         .contains(firstLegalMove.moveSpecification().toSquare())
-        && squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
 
-    final var isBothCanMoveToAttackedSquare = squaresAttackedByNotHavingMove
+    final var isBothCanMoveToAttackedSquare = emptySquaresAttackedByNotHavingMove
         .contains(firstLegalMove.moveSpecification().toSquare())
-        && squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
 
     if (isFirstCanMoveToAttackedSquareSecondNot && affordablePieceTypeSet.contains(firstMovingPieceType)) {
       return -1;
@@ -350,17 +331,17 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
     final SquareType firstFromSquareSquareType = firstLegalMove.moveSpecification().fromSquare().getSquareType();
     final SquareType secondFromSquareSquareType = secondLegalMove.moveSpecification().fromSquare().getSquareType();
 
-    final var isFirstCanMoveToAttackedSquareSecondNot = squaresAttackedByNotHavingMove
+    final var isFirstCanMoveToAttackedSquareSecondNot = emptySquaresAttackedByNotHavingMove
         .contains(firstLegalMove.moveSpecification().toSquare())
-        && !squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
+        && !emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
 
-    final var isFirstCannotMoveToAttackedSquareButSecond = !squaresAttackedByNotHavingMove
+    final var isFirstCannotMoveToAttackedSquareButSecond = !emptySquaresAttackedByNotHavingMove
         .contains(firstLegalMove.moveSpecification().toSquare())
-        && squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
 
-    final var isBothCanMoveToAttackedSquare = squaresAttackedByNotHavingMove
+    final var isBothCanMoveToAttackedSquare = emptySquaresAttackedByNotHavingMove
         .contains(firstLegalMove.moveSpecification().toSquare())
-        && squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare());
 
     if (isFirstCanMoveToAttackedSquareSecondNot
         && NonNullWrapperCommon.get(affordablePieceTypeMap, firstFromSquareSquareType).contains(firstMovingPieceType)) {
@@ -477,5 +458,64 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
 
     return map;
 
+  }
+
+  private int compareSacrificeHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove, Side color,
+      StaticPosition staticPosition, AboveClassicalCheckmateMaterial aboveCheckmateMaterial) {
+    switch (aboveCheckmateMaterial) {
+      case KING_AND_QUEEN:
+      case KING_AND_ROOK:
+      case KING_AND_KNIGHT_AND_BISHOP: {
+        final Set<PieceType> affordablePieceTypeSet = calculateAffordablePieceTypeSet(color, staticPosition,
+            aboveCheckmateMaterial);
+
+        final var comparePieceSacrifice = comparePieceSacrifice(firstLegalMove, secondLegalMove,
+            affordablePieceTypeSet);
+        if (comparePieceSacrifice != NO_ORDER) {
+          return comparePieceSacrifice;
+        }
+      }
+        break;
+      case KING_AND_OPPOSITE_SQUARES_BISHOP: {
+        final Map<SquareType, Set<PieceType>> affordablePieceTypeMap = calculateOppositeBishopsAffordablePieceTypeMap(
+            color, staticPosition);
+
+        return comparePieceSacrifice(firstLegalMove, secondLegalMove, affordablePieceTypeMap);
+      }
+      case NONE:
+      default:
+        throw new IllegalArgumentException();
+    }
+    return 0;
+  }
+
+  private int compareSacrificeNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove,
+      boolean isLoseHigherPieces) {
+    if (emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && !emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+      return -1;
+    }
+    if (!emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+      return 1;
+    }
+    if (emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+      if (isLoseHigherPieces) {
+        return compareHigherValuePieceFirst(firstLegalMove.movingPiece(), secondLegalMove.movingPiece());
+      }
+      return compareLowerValuePieceFirst(firstLegalMove.movingPiece(), secondLegalMove.movingPiece());
+    }
+    return 0;
+  }
+
+  private static int comparePreferNoCapture(LegalMove firstLegalMove, LegalMove secondLegalMove) {
+    if (firstLegalMove.pieceCaptured() == Piece.NONE && secondLegalMove.pieceCaptured() != Piece.NONE) {
+      return -1;
+    }
+    if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
+      return 1;
+    }
+    return 0;
   }
 }

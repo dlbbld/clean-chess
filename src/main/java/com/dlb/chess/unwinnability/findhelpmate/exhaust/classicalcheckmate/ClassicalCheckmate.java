@@ -8,7 +8,7 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.enums
 
 public class ClassicalCheckmate {
 
-  public static boolean isClassicalCheckmateMaterial(Side sideCheckmating, StaticPosition staticPosition) {
+  public static boolean isClassicalCheckmatePosition(Side sideCheckmating, StaticPosition staticPosition) {
     return isClassicalCheckmateMaterialMatingSide(sideCheckmating, staticPosition)
         && MaterialUtility.calculateHasKingOnly(sideCheckmating.getOppositeSide(), staticPosition);
   }
@@ -23,7 +23,7 @@ public class ClassicalCheckmate {
   public static AboveClassicalCheckmateMaterial calculateAboveClassicalCheckmateMaterial(Side sideCheckmating,
       StaticPosition staticPosition) {
 
-    if (isClassicalCheckmateMaterial(sideCheckmating, staticPosition)) {
+    if (isClassicalCheckmatePosition(sideCheckmating, staticPosition)) {
       throw new ProgrammingMistakeException(
           "The method is only designed for the situation when no classical checkmate position is on the board");
     }

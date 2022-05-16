@@ -1,13 +1,10 @@
 package com.dlb.chess.unwinnability.findhelpmate.comparator;
 
-import java.util.Set;
-
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.Score;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
@@ -209,9 +206,8 @@ public class ComparatorCornerMate extends AbstractLegalMovesComparator {
 
   }
 
-  public ComparatorCornerMate(Side color, Side havingMove, StaticPosition staticPosition,
-      Set<Square> squaresAttackedByNotHavingMove) {
-    super(color, havingMove, staticPosition, squaresAttackedByNotHavingMove);
+  public ComparatorCornerMate(Side color, Side havingMove, StaticPosition staticPosition) {
+    super(color, havingMove, staticPosition);
   }
 
 }

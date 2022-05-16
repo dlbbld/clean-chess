@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -19,7 +17,6 @@ import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.comparator.ComparatorClassicalCheckmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
@@ -102,7 +99,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     // we add classical checkmate as game end
-    if (ClassicalCheckmate.isClassicalCheckmateMaterial(board.getHavingMove(), board.getStaticPosition())) {
+    if (ClassicalCheckmate.isClassicalCheckmatePosition(board.getHavingMove(), board.getStaticPosition())) {
       return FindHelpmateRecursionResult.YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION;
     }
 
@@ -153,10 +150,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-    final Set<Square> squaresAttackedByNotHavingMove = AbstractThreatenSquares
-        .calculateThreatenedSquares(board.getStaticPosition(), board.getHavingMove().getOppositeSide());
-    Collections.sort(legalMoveList, new ComparatorClassicalCheckmate(color, board.getHavingMove(),
-        board.getStaticPosition(), squaresAttackedByNotHavingMove));
+    Collections.sort(legalMoveList,
+        new ComparatorClassicalCheckmate(color, board.getHavingMove(), board.getStaticPosition()));
     for (final LegalMove legalMove : legalMoveList) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       // TODO today add again
