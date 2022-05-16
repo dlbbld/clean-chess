@@ -22,7 +22,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
     final ApiBoard boardFromFenInitial = new Board(fen);
     final ApiBoard board = new Board();
 
-    CommonTestUtility.checkChessBoardsAgainstEachOtherExcludeHistory(board, boardFromFenInitial);
+    CommonTestUtility.checkBoardsAgainstEachOtherExcludeHistory(board, boardFromFenInitial);
   }
 
   @SuppressWarnings("static-method")

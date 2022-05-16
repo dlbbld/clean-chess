@@ -8,7 +8,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.utility.PawnWallUtility;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
 import com.dlb.chess.test.winnable.model.GameForced;
@@ -100,7 +99,7 @@ public class WinnableCalculator {
       }
     }
 
-    if (PawnWallUtility.calculateHasPawnWall(board)) {
+    if (PawnWall.calculateHasPawnWall(board)) {
       return Winnable.NO;
     }
 
@@ -161,7 +160,7 @@ public class WinnableCalculator {
       }
     }
 
-    if (PawnWallUtility.calculateHasPawnWall(board)) {
+    if (PawnWall.calculateHasPawnWall(board)) {
       return Winnable.NO;
     }
 

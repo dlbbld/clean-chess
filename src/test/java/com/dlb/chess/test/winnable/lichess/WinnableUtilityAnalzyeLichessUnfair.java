@@ -16,7 +16,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
-import com.dlb.chess.common.utility.PawnWallUtility;
+import com.dlb.chess.test.winnable.PawnWall;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.GameForcedAnalysis;
 import com.dlb.chess.test.winnable.model.GameMultipleAnalysis;
@@ -135,12 +135,12 @@ public class WinnableUtilityAnalzyeLichessUnfair {
         final MoveRepresentation moveRepresentation = NonNullWrapperCommon
             .getFirst(board.getLegalMovesRepresentation());
         board.performMove(moveRepresentation.moveSpecification());
-        if (MaterialUtility.calculateIsKingOnly(board.getHavingMove(), board.getStaticPosition())) {
+        if (MaterialUtility.calculateHasKingOnly(board.getHavingMove(), board.getStaticPosition())) {
           isKingOnlyNonFlagging = "yes";
         } else {
           isKingOnlyNonFlagging = "no";
         }
-        if (MaterialUtility.calculateIsKingOnly(board.getHavingMove().getOppositeSide(), board.getStaticPosition())) {
+        if (MaterialUtility.calculateHasKingOnly(board.getHavingMove().getOppositeSide(), board.getStaticPosition())) {
           isKingOnlyFlagging = "yes";
         } else {
           isKingOnlyFlagging = "no";
@@ -150,7 +150,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
 
       logResult(IS_DEBUG, "first;" + evaluationFirst.numberOfHalfMoves(), winnableFirst, board, sideToEvaluate,
           isKingOnlyNonFlagging, isKingOnlyFlagging);
-      if (winnableFirst.winnable() == Winnable.UNKNOWN && PawnWallUtility.calculateHasPawnWall(board)) {
+      if (winnableFirst.winnable() == Winnable.UNKNOWN && PawnWall.calculateHasPawnWall(board)) {
         return Winnable.NO;
       }
       return winnableFirst.winnable();
@@ -177,7 +177,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       logResult(IS_DEBUG, "second;" + evaluationSecond.numberOfHalfMoves(), winnableSecond, board, sideToEvaluate, "na",
           "na");
 
-      if (winnableSecond.winnable() == Winnable.UNKNOWN && PawnWallUtility.calculateHasPawnWall(board)) {
+      if (winnableSecond.winnable() == Winnable.UNKNOWN && PawnWall.calculateHasPawnWall(board)) {
         return Winnable.NO;
       }
       return winnableSecond.winnable();
@@ -194,7 +194,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     logResult(IS_DEBUG, "forced;" + evaluationForced.numberOfForcedHalfMoves(), winnableForced, board, sideToEvaluate,
         "na", "na");
 
-    if (winnableForced.winnable() == Winnable.UNKNOWN && PawnWallUtility.calculateHasPawnWall(board)) {
+    if (winnableForced.winnable() == Winnable.UNKNOWN && PawnWall.calculateHasPawnWall(board)) {
       return Winnable.NO;
     }
     return winnableForced.winnable();

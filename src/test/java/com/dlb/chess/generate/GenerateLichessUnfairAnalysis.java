@@ -31,7 +31,7 @@ public class GenerateLichessUnfairAnalysis {
       if (isPawnWallAmbrona) {
         logger.info(pgnFileName + ";" + "pawn wall");
       } else {
-        final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
+        final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
         final Winnable winnableWhite = WinnableCalculator.calculateWinnable(board, Side.WHITE);
         final Winnable winnableBlack = WinnableCalculator.calculateWinnable(board, Side.BLACK);
 

@@ -44,16 +44,16 @@ public class Score {
 
       // if the intended winner has just a knight and the intended loser has just pawns
       // and/or queens
-      final var isFirstCondition = MaterialUtility.calculateIsKingAndKnightOnly(color, staticPosition)
-          && MaterialUtility.calculateIsKingAndPawnsOrQueensOnly(color.getOppositeSide(), staticPosition);
+      final var isFirstCondition = MaterialUtility.calculateHasKingAndKnightOnly(color, staticPosition)
+          && MaterialUtility.calculateHasKingAndPawnsOrQueensOnly(color.getOppositeSide(), staticPosition);
 
       // or the intended winner has just bishops of the same square color and
       // the intended loser does not have knights or bishops of the opposite color
-      final var isSecondConditionDarkSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition,
+      final var isSecondConditionDarkSquare = MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition,
           SquareType.DARK_SQUARE) && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoLightSquareBishops(color.getOppositeSide(), staticPosition);
 
-      final var isSecondConditionLightSquare = MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition,
+      final var isSecondConditionLightSquare = MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition,
           SquareType.LIGHT_SQUARE) && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoDarkSquareBishops(color.getOppositeSide(), staticPosition);
 

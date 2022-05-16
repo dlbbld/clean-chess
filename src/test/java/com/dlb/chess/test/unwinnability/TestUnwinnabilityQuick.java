@@ -50,7 +50,7 @@ public class TestUnwinnabilityQuick {
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
-    final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
+    final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
     assertEquals(UnwinnableQuick.UNWINNABLE,

@@ -24,10 +24,11 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
-import com.dlb.chess.fen.FenCalculator;
+import com.dlb.chess.fen.FenBoard;
 import com.dlb.chess.fen.FenParser;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
@@ -433,12 +434,12 @@ public class Board extends AbstractBoard {
 
   @Override
   public boolean isInsufficientMaterial(Side side) {
-    return InsufficientMaterialCalculator.calculateIsInsufficientMaterial(side, getStaticPosition());
+    return InsufficientMaterialUtility.calculateIsInsufficientMaterial(side, getStaticPosition());
   }
 
   @Override
   public String getFen() {
-    return FenCalculator.calculateFen(this);
+    return FenBoard.calculateFen(this);
   }
 
   @Override

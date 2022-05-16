@@ -8,7 +8,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
-public class FenCalculator implements EnumConstants {
+public class FenBoard implements EnumConstants {
 
   public static String calculateFen(ApiBoard board) {
 

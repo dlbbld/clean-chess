@@ -15,10 +15,10 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.utility.PawnWallUtility;
 import com.dlb.chess.fen.constants.FenConstants;
+import com.dlb.chess.test.winnable.PawnWall;
 
-class TestPawnWallUtility extends PawnWallUtility {
+class TestPawnWallUtility extends PawnWall {
 
   // TODO add the pawn walls with also rooks and knight and instead pawn with or without bishops only
 
@@ -50,7 +50,7 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     final Set<Square> expectedSquareSet = new TreeSet<>(Arrays.asList(expectedSquareList));
-    assertEquals(expectedSquareSet, PawnWallUtility.calculateAttackingSquares(board, side));
+    assertEquals(expectedSquareSet, PawnWall.calculateAttackingSquares(board, side));
   }
 
   @SuppressWarnings("static-method")
@@ -68,9 +68,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateIsAllPawnsCanReachPawnAhead(board));
+      assertTrue(PawnWall.calculateIsAllPawnsCanReachPawnAhead(board));
     } else {
-      assertFalse(PawnWallUtility.calculateIsAllPawnsCanReachPawnAhead(board));
+      assertFalse(PawnWall.calculateIsAllPawnsCanReachPawnAhead(board));
     }
   }
 
@@ -97,9 +97,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateIsAllPawnsHavePawnAhead(board));
+      assertTrue(PawnWall.calculateIsAllPawnsHavePawnAhead(board));
     } else {
-      assertFalse(PawnWallUtility.calculateIsAllPawnsHavePawnAhead(board));
+      assertFalse(PawnWall.calculateIsAllPawnsHavePawnAhead(board));
     }
   }
 
@@ -125,9 +125,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
     } else {
-      assertFalse(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
     }
   }
 
@@ -137,21 +137,21 @@ class TestPawnWallUtility extends PawnWallUtility {
     {
       final ApiBoard board = new Board("4k3/8/8/8/p7/8/1P6/4K3 w - - 0 50");
 
-      assertTrue(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
       board.performMove("b4");
-      assertFalse(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
       board.performMove("Ke7");
-      assertTrue(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
     }
 
     {
       final ApiBoard board = new Board("8/5p2/3k4/6P1/8/8/8/4K3 b - - 0 50");
 
-      assertTrue(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
       board.performMove("f5");
-      assertFalse(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
       board.performMove("Ke2");
-      assertTrue(PawnWallUtility.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
     }
 
   }
@@ -173,9 +173,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateIsAllPawnsBlocked(board));
+      assertTrue(PawnWall.calculateIsAllPawnsBlocked(board));
     } else {
-      assertFalse(PawnWallUtility.calculateIsAllPawnsBlocked(board));
+      assertFalse(PawnWall.calculateIsAllPawnsBlocked(board));
     }
   }
 
@@ -229,9 +229,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateHasPawnWallLine(board, side));
+      assertTrue(PawnWall.calculateHasPawnWallLine(board, side));
     } else {
-      assertFalse(PawnWallUtility.calculateHasPawnWallLine(board, side));
+      assertFalse(PawnWall.calculateHasPawnWallLine(board, side));
     }
   }
 
@@ -269,9 +269,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateHasPawnWall(board));
+      assertTrue(PawnWall.calculateHasPawnWall(board));
     } else {
-      assertFalse(PawnWallUtility.calculateHasPawnWall(board));
+      assertFalse(PawnWall.calculateHasPawnWall(board));
     }
   }
 
@@ -610,9 +610,9 @@ class TestPawnWallUtility extends PawnWallUtility {
     final ApiBoard board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWallUtility.calculateHasPawnWall(board));
+      assertTrue(PawnWall.calculateHasPawnWall(board));
     } else {
-      assertFalse(PawnWallUtility.calculateHasPawnWall(board));
+      assertFalse(PawnWall.calculateHasPawnWall(board));
     }
   }
 }

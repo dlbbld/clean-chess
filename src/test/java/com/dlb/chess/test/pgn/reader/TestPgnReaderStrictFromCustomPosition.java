@@ -74,6 +74,6 @@ class TestPgnReaderStrictFromCustomPosition {
       boardFromFirstMove.performMove(nonNullSan);
     }
 
-    CommonTestUtility.checkChessBoardsAgainstEachOtherExcludeHistory(boardFromFirstMove, boardFromFen);
+    CommonTestUtility.checkBoardsAgainstEachOtherExcludeHistory(boardFromFirstMove, boardFromFen);
   }
 }

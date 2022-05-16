@@ -11,11 +11,11 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.utility.TagUtility;
 
 public class PgnInformationUtility {
 
@@ -64,16 +64,16 @@ public class PgnInformationUtility {
       newLine.append(calculateWhiteLastName(pgnFile)).append(";");
       newLine.append(calculateBlackLastName(pgnFile)).append(";");
 
-      final String date = BasicChessUtility.calculateTagValue(pgnFile, StandardTag.DATE);
+      final String date = TagUtility.calculateTagValue(pgnFile, StandardTag.DATE);
       newLine.append(date).append(";");
 
-      final String site = BasicChessUtility.calculateTagValue(pgnFile, StandardTag.SITE);
+      final String site = TagUtility.calculateTagValue(pgnFile, StandardTag.SITE);
       newLine.append(site).append(";");
 
-      final String event = BasicChessUtility.calculateTagValue(pgnFile, "Event");
+      final String event = TagUtility.calculateTagValue(pgnFile, "Event");
       newLine.append(event).append(";");
 
-      final String result = BasicChessUtility.calculateTagValue(pgnFile, StandardTag.RESULT);
+      final String result = TagUtility.calculateTagValue(pgnFile, StandardTag.RESULT);
       newLine.append(result);
 
       lineList.add(NonNullWrapperCommon.toString(newLine));
@@ -84,12 +84,12 @@ public class PgnInformationUtility {
   }
 
   private static String calculateWhiteLastName(PgnFile pgnFile) {
-    final String playerInformation = BasicChessUtility.calculateTagValue(pgnFile, StandardTag.WHITE);
+    final String playerInformation = TagUtility.calculateTagValue(pgnFile, StandardTag.WHITE);
     return calculateLastNameFromChessBasePlayerInformation(playerInformation);
   }
 
   private static String calculateBlackLastName(PgnFile pgnFile) {
-    final String playerInformation = BasicChessUtility.calculateTagValue(pgnFile, StandardTag.BLACK);
+    final String playerInformation = TagUtility.calculateTagValue(pgnFile, StandardTag.BLACK);
     return calculateLastNameFromChessBasePlayerInformation(playerInformation);
   }
 

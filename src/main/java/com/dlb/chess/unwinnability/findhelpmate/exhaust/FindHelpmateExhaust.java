@@ -21,7 +21,10 @@ import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
+import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ComparatorClassicalCheckmate;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
@@ -39,7 +42,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private int cnt = 0;
   private boolean isCanExhaust = true;
-  private List<LegalMove> mateList = new ArrayList<>();
+  private List<LegalMove> moveProgressList = new ArrayList<>();
 
   public FindHelpmateExhaust(Side side) {
     this.color = side;
@@ -54,42 +57,53 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
     this.cnt = 0;
     this.isCanExhaust = true;
-    this.mateList = new ArrayList<>();
+    this.moveProgressList = new ArrayList<>();
 
-    final var hasHelpmate = findHelpmate(board, 0, maxDepth);
+    final var findHelpmate = findHelpmate(board, 0, maxDepth);
 
     if (!invariant.equals(board.getFen())) {
       throw new ProgrammingMistakeException("Board was changed");
     }
 
-    if (hasHelpmate) {
-      checkHelpmate(board.getFen(), mateList);
-      return FindHelpmateResult.YES;
+    switch (findHelpmate) {
+      case TRUE:
+        checkHelpmate(board.getFen(), moveProgressList);
+        return FindHelpmateResult.YES;
+      case CLASSICAL_CHECKMATE_POSITION:
+        checkClassicalCheckmate(board.getFen(), moveProgressList);
+        return FindHelpmateResult.YES;
+      case FALSE:
+        if (isCanExhaust) {
+          return FindHelpmateResult.NO;
+        }
+        return FindHelpmateResult.UNKNOWN;
+      default:
+        throw new IllegalArgumentException();
     }
-
-    if (isCanExhaust) {
-      return FindHelpmateResult.NO;
-    }
-    return FindHelpmateResult.UNKNOWN;
   }
 
   // Inputs: position, depth (int), maxDepth (int)
   // Output: bool (true if a checkmate sequence was found, false otherwise)
-  private boolean findHelpmate(ApiBoard board, int depth, int maxDepth) {
+  private FindHelpmateRecursionResult findHelpmate(ApiBoard board, int depth, int maxDepth) {
 
     // added for in c code
     if (board.isInsufficientMaterial(color)) {
-      return false;
+      return FindHelpmateRecursionResult.FALSE;
     }
 
     // 1: if the intended winner is checkmating their opponent in pos then return true
     if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
-      return true;
+      return FindHelpmateRecursionResult.TRUE;
     }
 
     // adding fivefold repetition and seventy-five move rule
     if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
-      return false;
+      return FindHelpmateRecursionResult.FALSE;
+    }
+
+    // we add classical checkmate as game end
+    if (ClassicalCheckmate.isClassicalCheckmateMaterial(board.getHavingMove(), board.getStaticPosition())) {
+      return FindHelpmateRecursionResult.CLASSICAL_CHECKMATE_POSITION;
     }
 
     // 2: if the intended winner has just the king or the position is unwinnable according
@@ -100,16 +114,16 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // position is unwinnable according to Lemma 5
     // position is unwinnable according to Lemma 6
-    if (MaterialUtility.calculateIsKingOnly(color, board.getStaticPosition())
+    if (MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
         || calculateIsUnwinnableAccordingLemma5(color, board.getStaticPosition())
         || calculateIsUnwinnableAccordingLemma6(color, board.getStaticPosition())) {
-      return false;
+      return FindHelpmateRecursionResult.FALSE;
     }
 
     // stalemate
     // intended winner is receiving checkmate in the position then return false
     if (board.isStalemate() || board.getHavingMove() == color && board.isCheckmate()) {
-      return false;
+      return FindHelpmateRecursionResult.FALSE;
     }
 
     // set d := limits.max-depth - depth
@@ -117,7 +131,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
     if (calculateIsInTranspositionTable(board.getFen(), d)) {
-      return false;
+      return FindHelpmateRecursionResult.FALSE;
     }
 
     // 3: increase cnt and set d := limits.max-depth - depth
@@ -131,7 +145,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       if (isCanExhaust) {
         isCanExhaust = false;
       }
-      return false;
+      return FindHelpmateRecursionResult.FALSE;
     }
 
     // 6: store (pos,D) in table
@@ -139,27 +153,36 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-    final Set<Square> threatenedSquareSet = AbstractThreatenSquares
+    final Set<Square> squaresAttackedByNotHavingMove = AbstractThreatenSquares
         .calculateThreatenedSquares(board.getStaticPosition(), board.getHavingMove().getOppositeSide());
-    Collections.sort(legalMoveList,
-        new ComparatorLegalMoves(color, board.getHavingMove(), board.getStaticPosition(), threatenedSquareSet, board));
+    Collections.sort(legalMoveList, new ComparatorClassicalCheckmate(color, board.getHavingMove(),
+        board.getStaticPosition(), squaresAttackedByNotHavingMove));
     for (final LegalMove legalMove : legalMoveList) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
-      final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
+      // TODO today add again
+      // final var inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
+      final var inc = 0;
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
-      mateList.add(legalMove);
-      final var hasHelpmate = findHelpmate(board, depth + 1, maxDepth + inc);
+      moveProgressList.add(legalMove);
+      final var findHelpmate = findHelpmate(board, depth + 1, maxDepth + inc);
       board.unperformMove();
-      if (hasHelpmate) {
-        return true;
+      switch (findHelpmate) {
+        case TRUE:
+        case CLASSICAL_CHECKMATE_POSITION:
+          return findHelpmate;
+        case FALSE:
+          // continue
+          break;
+        default:
+          throw new IllegalArgumentException();
       }
-      mateList.remove(mateList.size() - 1);
+      moveProgressList.remove(moveProgressList.size() - 1);
     }
 
     // 10: return false (-> No mate was found after exploring every legal move)
-    return false;
+    return FindHelpmateRecursionResult.FALSE;
 
   }
 
@@ -179,7 +202,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
     if (!MaterialUtility.calculateHasPawn(staticPosition)
-        && MaterialUtility.calculateIsKingAndKnightOnly(color, staticPosition)) {
+        && MaterialUtility.calculateHasKingAndKnightOnly(color, staticPosition)) {
       if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoRooks(color.getOppositeSide(), staticPosition)) {
@@ -195,7 +218,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
         continue;
       }
       if (!MaterialUtility.calculateHasPawn(staticPosition)
-          && MaterialUtility.calculateIsKingAndBishopsOnly(color, staticPosition, squareType)
+          && MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
           && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())) {
         return true;

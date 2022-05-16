@@ -46,9 +46,9 @@ public class IllegalMoveSan {
   private static final DetectMovingPiece DETECT_PIECE_MOVEMENT_NA = new DetectMovingPiece(false, Piece.NONE,
       Square.NONE, Square.NONE, Piece.NONE);
 
-  public static GuessMove guessMove(ApiBoard chessBoard, StaticPosition currentPosition) {
+  public static GuessMove guessMove(ApiBoard board, StaticPosition currentPosition) {
 
-    final CheckLegalMove check = checkLegalMove(chessBoard, currentPosition);
+    final CheckLegalMove check = checkLegalMove(board, currentPosition);
 
     if (check.isLegal()) {
       return new GuessMove(true, check.moveRepresentation().san());
@@ -58,34 +58,34 @@ public class IllegalMoveSan {
 
   }
 
-  private static final CheckLegalMove checkLegalMove(ApiBoard chessBoard, StaticPosition currentPosition) {
+  private static final CheckLegalMove checkLegalMove(ApiBoard board, StaticPosition currentPosition) {
 
-    for (final MoveRepresentation moveRepresentation : chessBoard.getLegalMovesRepresentation()) {
+    for (final MoveRepresentation moveRepresentation : board.getLegalMovesRepresentation()) {
       final MoveSpecification moveSpecification = moveRepresentation.moveSpecification();
-      chessBoard.performMove(moveSpecification);
-      if (currentPosition.equals(chessBoard.getStaticPosition())) {
-        chessBoard.unperformMove();
+      board.performMove(moveSpecification);
+      if (currentPosition.equals(board.getStaticPosition())) {
+        board.unperformMove();
         return new CheckLegalMove(true, moveRepresentation);
       }
-      chessBoard.unperformMove();
+      board.unperformMove();
     }
     return CHECK_NA;
   }
 
   // TODO detect if opponent having the move would be a legal position and then if legal opponent move, so potentially
   // move by wrong side, not illegal move by side having the move
-  public static DetectMovement detectMovement(ApiBoard chessBoard, StaticPosition currentPosition) {
+  public static DetectMovement detectMovement(ApiBoard board, StaticPosition currentPosition) {
 
-    final Side havingMove = chessBoard.getHavingMove();
+    final Side havingMove = board.getHavingMove();
 
     // illegal castling
-    final CastlingMove castlingMove = detectCastling(chessBoard, currentPosition);
+    final CastlingMove castlingMove = detectCastling(board, currentPosition);
     if (castlingMove != CastlingMove.NONE) {
       return new DetectMovement(true, Piece.NONE, Square.NONE, Square.NONE, Piece.NONE, castlingMove, false);
     }
 
     // illegal en passant
-    final DetectEnPassantCapture checkEnPassantCapture = detectEnPassantCapture(chessBoard, currentPosition);
+    final DetectEnPassantCapture checkEnPassantCapture = detectEnPassantCapture(board, currentPosition);
     if (checkEnPassantCapture.isDetected()) {
       final MoveSpecification moveSpecification = checkEnPassantCapture.moveSpecification();
       final Piece movingPiece = Piece.calculatePawnPiece(havingMove);
@@ -97,7 +97,7 @@ public class IllegalMoveSan {
     // TOOD detect illegal promotion
 
     // illegal piece movement
-    final DetectMovingPiece movingPiece = detectMovingPiece(chessBoard, currentPosition);
+    final DetectMovingPiece movingPiece = detectMovingPiece(board, currentPosition);
     if (movingPiece.isDetected()) {
       return new DetectMovement(true, movingPiece.movingPiece(), movingPiece.fromSquare(), movingPiece.toSquare(),
           movingPiece.pieceCaptured(), CastlingMove.NONE, true);
@@ -105,10 +105,10 @@ public class IllegalMoveSan {
     return DETECT_MOVEMENT_NA;
   }
 
-  private static final CastlingMove detectCastling(ApiBoard chessBoard, StaticPosition currentPosition) {
+  private static final CastlingMove detectCastling(ApiBoard board, StaticPosition currentPosition) {
 
-    final Side havingMove = chessBoard.getHavingMove();
-    final StaticPosition previousPosition = chessBoard.getStaticPosition();
+    final Side havingMove = board.getHavingMove();
+    final StaticPosition previousPosition = board.getStaticPosition();
 
     switch (havingMove) {
       case WHITE:
@@ -124,7 +124,7 @@ public class IllegalMoveSan {
             updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_KING_SIDE_CASTLING_FROM));
             updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_KING_SIDE_CASTLING_TO, Piece.WHITE_ROOK));
 
-            final StaticPosition previousPositionPlusCastling = chessBoard.getStaticPosition()
+            final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
             if (previousPositionPlusCastling.equals(currentPosition)) {
               return CastlingMove.KING_SIDE;
@@ -141,7 +141,7 @@ public class IllegalMoveSan {
             updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM));
             updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_QUEEN_SIDE_CASTLING_TO, Piece.WHITE_ROOK));
 
-            final StaticPosition previousPositionPlusCastling = chessBoard.getStaticPosition()
+            final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
             if (previousPositionPlusCastling.equals(currentPosition)) {
               return CastlingMove.QUEEN_SIDE;
@@ -162,7 +162,7 @@ public class IllegalMoveSan {
             updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_KING_SIDE_CASTLING_FROM));
             updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_KING_SIDE_CASTLING_TO, Piece.BLACK_ROOK));
 
-            final StaticPosition previousPositionPlusCastling = chessBoard.getStaticPosition()
+            final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
             if (previousPositionPlusCastling.equals(currentPosition)) {
               return CastlingMove.KING_SIDE;
@@ -179,7 +179,7 @@ public class IllegalMoveSan {
             updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM));
             updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_QUEEN_SIDE_CASTLING_TO, Piece.BLACK_ROOK));
 
-            final StaticPosition previousPositionPlusCastling = chessBoard.getStaticPosition()
+            final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
             if (previousPositionPlusCastling.equals(currentPosition)) {
               return CastlingMove.QUEEN_SIDE;
@@ -194,11 +194,11 @@ public class IllegalMoveSan {
     return CastlingMove.NONE;
   }
 
-  private static final DetectEnPassantCapture detectEnPassantCapture(ApiBoard chessBoard,
+  private static final DetectEnPassantCapture detectEnPassantCapture(ApiBoard board,
       StaticPosition currentPosition) {
 
-    final Side havingMove = chessBoard.getHavingMove();
-    final StaticPosition previousPosition = chessBoard.getStaticPosition();
+    final Side havingMove = board.getHavingMove();
+    final StaticPosition previousPosition = board.getStaticPosition();
 
     final Rank enPassantCaptureFromRank = Rank.calculateEnPassantCaptureFromRank(havingMove);
 
@@ -272,9 +272,9 @@ public class IllegalMoveSan {
     return new DetectEnPassantCapture(false, MOVE_SPECIFICATION_NA);
   }
 
-  private static final DetectMovingPiece detectMovingPiece(ApiBoard chessBoard, StaticPosition currentPosition) {
+  private static final DetectMovingPiece detectMovingPiece(ApiBoard board, StaticPosition currentPosition) {
 
-    final StaticPosition previousPosition = chessBoard.getStaticPosition();
+    final StaticPosition previousPosition = board.getStaticPosition();
 
     final ExactlyOnePieceVanished exactlyOnePieceVanished = checkExactlyOnePieceVanished(previousPosition,
         currentPosition);

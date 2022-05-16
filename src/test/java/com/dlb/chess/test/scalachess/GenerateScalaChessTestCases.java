@@ -74,7 +74,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
     // class header
     processScalaChessCodeLine("package chess", counterList, codeLineList);
     processScalaChessCodeLine("", counterList, codeLineList);
-    processScalaChessCodeLine("import com.dlb.chess.board.ChessBoard", counterList, codeLineList);
+    processScalaChessCodeLine("import com.dlb.chess.board.Board", counterList, codeLineList);
     processScalaChessCodeLine("", counterList, codeLineList);
     processScalaChessCodeLine("class TestDaniAgainstScalaChess extends TestDaniAgainstScalaChessSuper {", counterList,
         codeLineList);
@@ -131,7 +131,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         processScalaChessCodeLine("  \"" + testCase.pgnFileName() + "\" should {", counterList, codeLineList);
 
         // initialize variables to use throughout the game
-        processScalaChessCodeLine("    val chessBoard = new ChessBoard()", counterList, codeLineList);
+        processScalaChessCodeLine("    val board = new Board()", counterList, codeLineList);
         processScalaChessCodeLine("    val uciAdaptedList = new java.util.ArrayList[String]()", counterList,
             codeLineList);
 
@@ -155,7 +155,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
           // makes the moves from first until current
           final StringBuilder arguments = new StringBuilder();
 
-          arguments.append("chessBoard");
+          arguments.append("board");
           arguments.append(", ");
           arguments.append("uciAdaptedList");
 
