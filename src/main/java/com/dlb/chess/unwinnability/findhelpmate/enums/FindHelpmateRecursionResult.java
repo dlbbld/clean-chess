@@ -1,7 +1,7 @@
 package com.dlb.chess.unwinnability.findhelpmate.enums;
 
 public enum FindHelpmateRecursionResult {
-  TRUE,
+  YES_CONCRETE_CHECKMATE,
   FALSE,
-  CLASSICAL_CHECKMATE_POSITION
+  YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION
 }

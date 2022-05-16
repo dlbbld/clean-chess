@@ -66,6 +66,18 @@ public class MaterialUtility implements EnumConstants {
     return calculateHasPieceType(side, PieceType.PAWN, staticPosition);
   }
 
+  public static boolean calculateHasKingAndKnightAndBishop(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, KNIGHT) >= 1
+        && calculateNumberOfPieces(side, staticPosition, BISHOP) >= 1
+        && calculateNumberOfPieces(side, staticPosition, KING) == 1;
+  }
+
+  public static boolean calculateHasKingAndOppositeSquaresBishop(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) >= 1
+        && calculateNumberOfBishops(side, staticPosition, SquareType.DARK_SQUARE) >= 1
+        && calculateNumberOfPieces(side, staticPosition, KING) == 1;
+  }
+
   public static boolean calculateIsOwnPieceButNotKing(Side side, Piece pieceOnSquare) {
     return calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() != KING;
   }

@@ -21,10 +21,10 @@ import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
+import com.dlb.chess.unwinnability.findhelpmate.comparator.ComparatorClassicalCheckmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
-import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ComparatorClassicalCheckmate;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
@@ -66,10 +66,10 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     switch (findHelpmate) {
-      case TRUE:
+      case YES_CONCRETE_CHECKMATE:
         checkHelpmate(board.getFen(), moveProgressList);
         return FindHelpmateResult.YES;
-      case CLASSICAL_CHECKMATE_POSITION:
+      case YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION:
         checkClassicalCheckmate(board.getFen(), moveProgressList);
         return FindHelpmateResult.YES;
       case FALSE:
@@ -93,7 +93,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // 1: if the intended winner is checkmating their opponent in pos then return true
     if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
-      return FindHelpmateRecursionResult.TRUE;
+      return FindHelpmateRecursionResult.YES_CONCRETE_CHECKMATE;
     }
 
     // adding fivefold repetition and seventy-five move rule
@@ -103,7 +103,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // we add classical checkmate as game end
     if (ClassicalCheckmate.isClassicalCheckmateMaterial(board.getHavingMove(), board.getStaticPosition())) {
-      return FindHelpmateRecursionResult.CLASSICAL_CHECKMATE_POSITION;
+      return FindHelpmateRecursionResult.YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION;
     }
 
     // 2: if the intended winner has just the king or the position is unwinnable according
@@ -169,8 +169,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       final var findHelpmate = findHelpmate(board, depth + 1, maxDepth + inc);
       board.unperformMove();
       switch (findHelpmate) {
-        case TRUE:
-        case CLASSICAL_CHECKMATE_POSITION:
+        case YES_CONCRETE_CHECKMATE:
+        case YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION:
           return findHelpmate;
         case FALSE:
           // continue
