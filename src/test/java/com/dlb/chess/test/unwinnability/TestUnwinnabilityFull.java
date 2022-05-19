@@ -38,9 +38,9 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    final var fen = FenConstants.FEN_INITIAL_STR;
+    final var fen = "6kR/5pp1/1K2p1p1/3r4/8/8/8/8 b - - 3 48";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")

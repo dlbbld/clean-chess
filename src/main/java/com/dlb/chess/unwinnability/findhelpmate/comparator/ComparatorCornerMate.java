@@ -110,17 +110,17 @@ public class ComparatorCornerMate extends AbstractLegalMovesComparator {
   int compareNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove) {
 
     // losing piece, preferred
-    if (squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
-        && !squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+    if (emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && !emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
       return -1;
     }
-    if (!squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
-        && squaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
+    if (!emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && emptySquaresAttackedByNotHavingMove.contains(secondLegalMove.moveSpecification().toSquare())) {
       return 1;
     }
     // the higher value the losing piece, the better
-    if (squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
-        && squaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())) {
+    if (emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
+        && emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())) {
       return Integer.compare(-firstLegalMove.movingPiece().getPieceType().getValue(),
           -secondLegalMove.movingPiece().getPieceType().getValue());
     }
