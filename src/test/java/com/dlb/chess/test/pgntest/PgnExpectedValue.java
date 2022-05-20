@@ -4718,7 +4718,7 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesUnfairAmbronaExamples() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    // TODO FIXME test cases
+    // TODO improve unwinnability
     // not terminating so far
     // ae_04.pgn
     // ae_15_QRvIMh3z.pgn
@@ -4726,6 +4726,8 @@ public class PgnExpectedValue {
 
     // wrong
     // ae_06.pgn
+
+    // TODO today complete test cases for both side for the open positions
 
     list.add(new PgnFileTestCase("ae_01.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
@@ -4736,7 +4738,7 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("ae_03.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 10 100"));
-    list.add(new PgnFileTestCase("ae_04.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+    list.add(new PgnFileTestCase("ae_04_black_having_move.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N7 b - - 10 100"));
     list.add(new PgnFileTestCase("ae_05.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
