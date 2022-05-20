@@ -1,20 +1,40 @@
 package com.dlb.chess.unwinnability.findhelpmate.exhaust;
 
+import java.util.Set;
+
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
+import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
 
 // Figure 12 Score routine used in Figure 5. Algorithm Going-to-corner is defined in Figure 13.
 public class Score {
+
+  public static ScoreResult scoreClassicalCheckmate(Side havingMove, StaticPosition staticPosition,
+      LegalMove legalMove) {
+    if (legalMove.pieceCaptured() != Piece.NONE) {
+      return ScoreResult.REWARD;
+    }
+    final Set<Square> squaresAttackedByNotHavingMove = AbstractThreatenSquares
+        .calculateThreatenedSquares(staticPosition, havingMove.getOppositeSide());
+
+    if (squaresAttackedByNotHavingMove.contains(legalMove.moveSpecification().toSquare())) {
+      return ScoreResult.REWARD;
+    }
+
+    return ScoreResult.NORMAL;
+
+  }
 
   // Inputs: position, legal move in the position
   // Output: Normal, Reward, or Punish (variation score)

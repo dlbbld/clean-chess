@@ -12,7 +12,7 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
 public class ComparatorCornerMate extends AbstractLegalMovesComparator {
 
   @Override
-  int compareHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove) {
+  int compareIntendedWinnerMoving(LegalMove firstLegalMove, LegalMove secondLegalMove) {
     // captures - preferred - and if both are capturing, capturing a higher value piece preferred
     if (firstLegalMove.pieceCaptured() != Piece.NONE && secondLegalMove.pieceCaptured() == Piece.NONE) {
       return -1;
@@ -98,8 +98,8 @@ public class ComparatorCornerMate extends AbstractLegalMovesComparator {
       }
     }
 
-    final ScoreResult firstScore = Score.score(color, havingMove, staticPosition, firstLegalMove);
-    final ScoreResult secondScore = Score.score(color, havingMove, staticPosition, secondLegalMove);
+    final ScoreResult firstScore = Score.score(sideIntendedWinner, havingMove, staticPosition, firstLegalMove);
+    final ScoreResult secondScore = Score.score(sideIntendedWinner, havingMove, staticPosition, secondLegalMove);
     // preferred reward - normal - punish
     final var compareScore = Integer.compare(-firstScore.getIncrement(), -secondScore.getIncrement());
     return compareScore;
@@ -107,7 +107,7 @@ public class ComparatorCornerMate extends AbstractLegalMovesComparator {
   }
 
   @Override
-  int compareNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove) {
+  int compareIntendedLooserMoving(LegalMove firstLegalMove, LegalMove secondLegalMove) {
 
     // losing piece, preferred
     if (emptySquaresAttackedByNotHavingMove.contains(firstLegalMove.moveSpecification().toSquare())
@@ -198,8 +198,8 @@ public class ComparatorCornerMate extends AbstractLegalMovesComparator {
       }
     }
 
-    final ScoreResult firstScore = Score.score(color, havingMove, staticPosition, firstLegalMove);
-    final ScoreResult secondScore = Score.score(color, havingMove, staticPosition, secondLegalMove);
+    final ScoreResult firstScore = Score.score(sideIntendedWinner, havingMove, staticPosition, firstLegalMove);
+    final ScoreResult secondScore = Score.score(sideIntendedWinner, havingMove, staticPosition, secondLegalMove);
     // preferred reward - normal - punish
     final var compareScore = Integer.compare(-firstScore.getIncrement(), -secondScore.getIncrement());
     return compareScore;

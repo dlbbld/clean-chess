@@ -15,18 +15,18 @@ public abstract class AbstractLegalMovesComparator implements Comparator<LegalMo
 
   static final int NO_ORDER = 111;
 
-  final Side color;
+  final Side sideIntendedWinner;
   final Side havingMove;
   final StaticPosition staticPosition;
   final Set<Square> squaresAttackedByNotHavingMove;
   final Set<Square> emptySquaresAttackedByNotHavingMove;
 
-  abstract int compareHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove);
+  abstract int compareIntendedWinnerMoving(LegalMove firstLegalMove, LegalMove secondLegalMove);
 
-  abstract int compareNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove);
+  abstract int compareIntendedLooserMoving(LegalMove firstLegalMove, LegalMove secondLegalMove);
 
   public AbstractLegalMovesComparator(Side color, Side havingMove, StaticPosition staticPosition) {
-    this.color = color;
+    this.sideIntendedWinner = color;
     this.havingMove = havingMove;
     this.staticPosition = staticPosition;
     this.squaresAttackedByNotHavingMove = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,
@@ -62,10 +62,10 @@ public abstract class AbstractLegalMovesComparator implements Comparator<LegalMo
     // using it would cause exceptions
 
     // intended winner is moving
-    if (color == havingMove) {
-      return compareHavingMove(firstLegalMove, secondLegalMove);
+    if (sideIntendedWinner == havingMove) {
+      return compareIntendedWinnerMoving(firstLegalMove, secondLegalMove);
     }
     // intended loser is moving
-    return compareNotHavingMove(firstLegalMove, secondLegalMove);
+    return compareIntendedLooserMoving(firstLegalMove, secondLegalMove);
   }
 }

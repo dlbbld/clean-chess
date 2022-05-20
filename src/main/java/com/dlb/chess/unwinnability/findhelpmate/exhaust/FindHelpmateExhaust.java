@@ -18,8 +18,8 @@ import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
-import com.dlb.chess.unwinnability.findhelpmate.comparator.ComparatorClassicalCheckmate;
 import com.dlb.chess.unwinnability.findhelpmate.comparator.ComparatorCornerMate;
+import com.dlb.chess.unwinnability.findhelpmate.comparator.ImprovedComparatorClassicalCheckmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
@@ -158,7 +158,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     if (isClassicalCheckmatePosition || ClassicalCheckmate.calculateAboveClassicalCheckmateMaterial(color,
         board.getStaticPosition()) != ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
       Collections.sort(legalMoveList,
-          new ComparatorClassicalCheckmate(color, board.getHavingMove(), board.getStaticPosition()));
+          new ImprovedComparatorClassicalCheckmate(color, board.getHavingMove(), board.getStaticPosition()));
     } else {
       Collections.sort(legalMoveList,
           new ComparatorCornerMate(color, board.getHavingMove(), board.getStaticPosition()));
@@ -171,7 +171,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
           board.getStaticPosition()) == ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
         inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
       } else {
-        inc = 0;
+        inc = Score.scoreClassicalCheckmate(board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
+
       }
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true

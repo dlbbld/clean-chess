@@ -25,17 +25,17 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.enums
 // winning side: exception, should not come here
 // loosing side: make non capturing move
 // state 2
-// winning side has more material than classical checkmate
+// winning side material above classical checkmate
 // state 2a: losing side has only king
-// winning side: offers affordable pieces for capture
-// loosing side: prefers capture moves if affordable pieces
+// winning side: offers non-threatened affordable pieces, moves affordable pieces [so other can be captu
+// loosing side: captures affordable pieces, move to affordable pieces (distinguish king and non-king)
 // state 2b: losing side has more than king
-// winning side: captures then sacrifice
-// loosing side: sacrifice then captures
+// winning side: captures (affordable pieces, non-affordable pieces), offers affordable pieces
+// loosing side: sacrifice, captures affordable pieces
 // state 3
 // winning side has less material than classical checkmate
-// winning side: priorities pawn promotion queen, pawn promotion other, pawn push
-// loosing side: does not capture
+// winning side: pawn promotion, pawn push
+// loosing side: not capturing
 
 public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
 
@@ -44,20 +44,20 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
   }
 
   @Override
-  int compareHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove) {
+  int compareIntendedWinnerMoving(LegalMove firstLegalMove, LegalMove secondLegalMove) {
     // state 1
-    if (ClassicalCheckmate.isClassicalCheckmatePosition(color, staticPosition)) {
+    if (ClassicalCheckmate.isClassicalCheckmatePosition(sideIntendedWinner, staticPosition)) {
       throw new ProgrammingMistakeException(
           "Program did not branch earlier as expected for reaching classical checkmate");
     }
 
     final ClassicalCheckmateSituation aboveCheckmateMaterial = ClassicalCheckmate
-        .calculateAboveClassicalCheckmateMaterial(color, staticPosition);
+        .calculateAboveClassicalCheckmateMaterial(sideIntendedWinner, staticPosition);
 
     if (aboveCheckmateMaterial != ClassicalCheckmateSituation.NO_HAVING_PAWN
         && aboveCheckmateMaterial != ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
       // state 2
-      if (MaterialUtility.calculateHasKingOnly(color.getOppositeSide(), staticPosition)) {
+      if (MaterialUtility.calculateHasKingOnly(sideIntendedWinner.getOppositeSide(), staticPosition)) {
         // state 2a
 
         // pawn moves
@@ -92,7 +92,7 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
           }
         }
 
-        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, color,
+        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, sideIntendedWinner,
             staticPosition, aboveCheckmateMaterial);
         if (compareSacrificeHavingMove != 0) {
           return compareSacrificeHavingMove;
@@ -125,7 +125,7 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
           return compareHigherValuePieceFirst(firstLegalMove.movingPiece(), secondLegalMove.movingPiece());
         }
 
-        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, color,
+        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, sideIntendedWinner,
             staticPosition, aboveCheckmateMaterial);
         if (compareSacrificeHavingMove != 0) {
           return compareSacrificeHavingMove;
@@ -168,11 +168,11 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
   }
 
   @Override
-  int compareNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove) {
+  int compareIntendedLooserMoving(LegalMove firstLegalMove, LegalMove secondLegalMove) {
     // non intended winner having move
     // case 1
     // state 1
-    if (ClassicalCheckmate.isClassicalCheckmatePosition(color, staticPosition)) {
+    if (ClassicalCheckmate.isClassicalCheckmatePosition(sideIntendedWinner, staticPosition)) {
       // intended winner has checkmate material plus additional material
       // capture additional material
       final var comparePreferNoCapture = comparePreferNoCapture(firstLegalMove, secondLegalMove);
@@ -182,7 +182,7 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
     } else {
 
       final ClassicalCheckmateSituation aboveCheckmateMaterial = ClassicalCheckmate
-          .calculateAboveClassicalCheckmateMaterial(color, staticPosition);
+          .calculateAboveClassicalCheckmateMaterial(sideIntendedWinner, staticPosition);
 
       if (aboveCheckmateMaterial == ClassicalCheckmateSituation.NO_HAVING_PAWN
           || aboveCheckmateMaterial == ClassicalCheckmateSituation.NO_HAVING_PAWN) {
@@ -191,7 +191,7 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
       }
 
       // state 2
-      final var isLosingHasKingOnly = MaterialUtility.calculateHasKingOnly(color.getOppositeSide(), staticPosition);
+      final var isLosingHasKingOnly = MaterialUtility.calculateHasKingOnly(sideIntendedWinner.getOppositeSide(), staticPosition);
       // state 2a/2b
 
       if (isLosingHasKingOnly) {
@@ -200,14 +200,14 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
             case ABOVE_KING_AND_QUEEN:
             case ABOVE_KING_AND_ROOK:
             case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
+              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(sideIntendedWinner.getOppositeSide(),
                   staticPosition, aboveCheckmateMaterial);
               if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())) {
                 return -1;
               }
               break;
             case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(color,
+              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(sideIntendedWinner,
                   staticPosition);
               if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
                   .contains(firstLegalMove.pieceCaptured().getPieceType())) {
@@ -226,14 +226,14 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
             case ABOVE_KING_AND_QUEEN:
             case ABOVE_KING_AND_ROOK:
             case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
+              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(sideIntendedWinner.getOppositeSide(),
                   staticPosition, aboveCheckmateMaterial);
               if (capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
                 return 1;
               }
               break;
             case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(color,
+              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(sideIntendedWinner,
                   staticPosition);
               if (NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
                   .contains(secondLegalMove.pieceCaptured().getPieceType())) {
@@ -252,7 +252,7 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
             case ABOVE_KING_AND_QUEEN:
             case ABOVE_KING_AND_ROOK:
             case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(color.getOppositeSide(),
+              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(sideIntendedWinner.getOppositeSide(),
                   staticPosition, aboveCheckmateMaterial);
               if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
                   && !capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
@@ -274,7 +274,7 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
 
               break;
             case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(color,
+              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(sideIntendedWinner,
                   staticPosition);
               if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
                   .contains(firstLegalMove.pieceCaptured().getPieceType())
