@@ -37,8 +37,8 @@ public class ValidateAllTestCase {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateAllTestCase.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = true;
-  private static final String START_FROM_PGN_FILE_NAME = "seventy_five_03_2_last_move_checkmate_by_black_with_capture.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = false;
+  private static final String START_FROM_PGN_FILE_NAME = "ae_03.pgn";
 
   public static void main(String[] args) throws Exception {
 
@@ -255,7 +255,9 @@ public class ValidateAllTestCase {
         final PgnFile pgnFile = PgnReader.readPgn(pgnFolderName, pgnFileName);
         final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
 
-        if (board.isFivefoldRepetition() || board.isSeventyFiftyMove() && !board.isCheckmate()) {
+        if (board.isFivefoldRepetition() || board.isSeventyFiftyMove() && !board.isCheckmate()
+            || "unwinnable_fivefold_inevitable.pgn".equals(pgnFileName)
+            || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(pgnFileName)) {
           assertEquals(UnwinnableFullResultTest.UNWINNABLE, unwinnableFullResultTest);
         } else {
           assertEquals(UnwinnableFullResultTest.WINNABLE, unwinnableFullResultTest);

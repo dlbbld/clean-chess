@@ -3503,8 +3503,8 @@ public class PgnExpectedValue {
         "1bK1kb2/b1p1pBp1/1pP1P1P1/1P4P1/p7/P7/8/8 b - - 1 57"));
 
     list.add(new PgnFileTestCase("norgaard_buchanan_strategems_2002_dead.pgn", "repPos=3: 74.Bc8 84.Bc8 86.Bc8", "", "",
-        BLANK_ESRL, 14, 49, CheckmateOrStalemate.NA, InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
-        "KbB1kb2/b1p1p1p1/1pP1P1P1/1P4P1/p7/P7/8/8 b - - 26 86"));
+        BLANK_ESRL, 14, 49, CheckmateOrStalemate.NA, InsufficientMaterial.NONE,
+        UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK, "KbB1kb2/b1p1p1p1/1pP1P1P1/1P4P1/p7/P7/8/8 b - - 26 86"));
 
     list.add(
         new PgnFileTestCase("forced_checkmate_white_only.pgn", "", "", "", BLANK_ESRL, -1, 0, CheckmateOrStalemate.NA,
@@ -3516,19 +3516,19 @@ public class PgnExpectedValue {
 
     list.add(new PgnFileTestCase("both_kings_blocked_in_a_corner_with_pawns_and_bishop_pawn_moves_not_exhausted.pgn",
         "", "", "", BLANK_ESRL, 24, 19, CheckmateOrStalemate.NA, InsufficientMaterial.NONE,
-        UnwinnableFullResultTest.WINNABLE, "k1b5/1p1p4/1PpP4/8/8/1pPp4/1P1P4/K1B5 w - - 1 36"));
+        UnwinnableFullResultTest.UNWINNABLE, "k1b5/1p1p4/1PpP4/8/8/1pPp4/1P1P4/K1B5 w - - 1 36"));
 
     list.add(new PgnFileTestCase("both_kings_blocked_in_a_corner_with_pawns_and_bishop_pawn_moves_exhausted.pgn", "",
         "", "", BLANK_ESRL, 24, 19, CheckmateOrStalemate.NA, InsufficientMaterial.NONE,
         UnwinnableFullResultTest.UNWINNABLE, "k1b5/1p1p4/1P1P4/2p5/2P5/1p1p4/1P1P4/K1B5 w - - 0 37"));
 
     list.add(new PgnFileTestCase("white_king_blocked_in_a_corner_with_pawns_and_bishop_no_piece_capturable.pgn", "", "",
-        "", BLANK_ESRL, 24, 19, CheckmateOrStalemate.NA, InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
-        "k7/8/8/8/2p5/1pPp4/1P1P4/K1B5 w - - 1 43"));
+        "", BLANK_ESRL, 24, 19, CheckmateOrStalemate.NA, InsufficientMaterial.NONE,
+        UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK, "k7/8/8/8/2p5/1pPp4/1P1P4/K1B5 w - - 1 43"));
 
     list.add(new PgnFileTestCase("white_king_trapped_on_side_with_pawns_capturing_only_piece_stalemates.pgn", "", "",
-        "", BLANK_ESRL, 11, 8, CheckmateOrStalemate.NA, InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
-        "k7/8/1p6/1P6/1Pp5/KpP5/1P6/8 w - - 0 37"));
+        "", BLANK_ESRL, 11, 8, CheckmateOrStalemate.NA, InsufficientMaterial.NONE,
+        UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK, "k7/8/1p6/1P6/1Pp5/KpP5/1P6/8 w - - 0 37"));
 
     // unwinnable due to fivefold or seventy-five-move rule
     list.add(new PgnFileTestCase("unwinnable_fivefold_inevitable.pgn",
@@ -4736,7 +4736,7 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "8/1p4p1/1Pp3p1/k1P3p1/1pP3Pb/1P4p1/6P1/7K w - - 10 100"));
     list.add(new PgnFileTestCase("ae_03.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
         "8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 10 100"));
     list.add(new PgnFileTestCase("ae_04.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
@@ -4774,13 +4774,13 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("ae_13_OawUhnkq.pgn", "", "", "", BLANK_ESRL, 6, 6, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE, "5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51"));
     list.add(new PgnFileTestCase("ae_14.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "k7/Q6r/2b5/1pBp1p1p/1P1P1P1P/KP6/1P6/8 b - - 10 100"));
     list.add(new PgnFileTestCase("ae_15_QRvIMh3z.pgn", "", "", "", BLANK_ESRL, 16, 46, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "2b5/1p6/pPp3k1/2Pp3p/P2PpBpP/4P1P1/5K2/8 b - - 46 59"));
     list.add(new PgnFileTestCase("ae_16.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
-        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
         "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100"));
     list.add(new PgnFileTestCase("ae_17.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
@@ -4887,7 +4887,7 @@ public class PgnExpectedValue {
         "6k1/1p1p1p1p/1P1P1P1P/8/8/4K3/1P1P1P1P/8 w - - 0 39"));
 
     list.add(new PgnFileTestCase("norgaard_pawn_wall_example_2.pgn", "", "", "", BLANK_ESRL, 5, 3,
-        CheckmateOrStalemate.NA, InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
+        CheckmateOrStalemate.NA, InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE,
         "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 0 34"));
 
     // beyond dead position
