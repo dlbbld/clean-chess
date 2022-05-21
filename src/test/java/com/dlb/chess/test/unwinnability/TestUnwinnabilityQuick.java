@@ -67,7 +67,7 @@ public class TestUnwinnabilityQuick {
     final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickCalculator.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
 
-    CheckQuick.check(pgnFileTestCase.unwinnableFullResultTest(), unwinnableQuickResult);
+    CheckQuick.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableQuickResult);
   }
 
   @SuppressWarnings("static-method")
@@ -85,7 +85,7 @@ public class TestUnwinnabilityQuick {
           board.getHavingMove().getOppositeSide());
       milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 
-      CheckQuick.check(testCase.unwinnableFullResultTest(), unwinnableQuick);
+      CheckQuick.check(testCase.unwinnableNotHavingMove(), unwinnableQuick);
     }
     PrintDuration.printDuration(milliSecondsList, logger);
   }

@@ -87,7 +87,7 @@ public abstract class AbstractPgnTest {
 
   private static void testWinnableNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
     // at the moment for lichess test cases with Ambrona results we check only against winnable=no
-    testSide(testCase.unwinnableFullResultTest(), analysis.unwinnableQuickResultNotHavingMove());
+    testSide(testCase.unwinnableNotHavingMove(), analysis.unwinnableQuickResultNotHavingMove());
 
   }
 

@@ -37,8 +37,8 @@ public class ValidateAllTestCase {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateAllTestCase.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "ae_03.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final String START_FROM_PGN_FILE_NAME = "no_move_half_move_clock_99_black_to_move.pgn";
 
   public static void main(String[] args) throws Exception {
 
@@ -51,6 +51,10 @@ public class ValidateAllTestCase {
 
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
+      if (pgnTest == PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES) {
+        // TODO today
+        continue;
+      }
       final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (!hasFound) {
@@ -76,13 +80,27 @@ public class ValidateAllTestCase {
         final UnwinnableQuick quickTestResultWhite = readQuickTestResult(fen, Side.WHITE, bothResult.quickResultList());
         final UnwinnableQuick quickTestResultBlack = readQuickTestResult(fen, Side.BLACK, bothResult.quickResultList());
 
-        switch (fen.havingMove().getOppositeSide()) {
+        switch (fen.havingMove()) {
           case WHITE:
-            ValidateAllTestCase.check(testCase.unwinnableFullResultTest(), fullTestResultWhite, quickTestResultWhite,
+            ValidateAllTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultBlack, quickTestResultBlack,
                 pgnTest.getFolderPath(), testCase.pgnFileName());
             break;
           case BLACK:
-            ValidateAllTestCase.check(testCase.unwinnableFullResultTest(), fullTestResultBlack, quickTestResultBlack,
+            ValidateAllTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultWhite, quickTestResultWhite,
+                pgnTest.getFolderPath(), testCase.pgnFileName());
+            break;
+          case NONE:
+          default:
+            throw new IllegalArgumentException();
+        }
+
+        switch (fen.havingMove()) {
+          case WHITE:
+            ValidateAllTestCase.check(testCase.unwinnableHavingMove(), fullTestResultWhite, quickTestResultWhite,
+                pgnTest.getFolderPath(), testCase.pgnFileName());
+            break;
+          case BLACK:
+            ValidateAllTestCase.check(testCase.unwinnableHavingMove(), fullTestResultBlack, quickTestResultBlack,
                 pgnTest.getFolderPath(), testCase.pgnFileName());
             break;
           case NONE:
@@ -188,7 +206,7 @@ public class ValidateAllTestCase {
     throw new IllegalArgumentException("No quick test result was found");
   }
 
-  private static void validateBothTestResult(ValidateBothResult bothResult) {
+  static void validateBothTestResult(ValidateBothResult bothResult) {
     if (bothResult.fullResultList().size() != bothResult.quickResultList().size()) {
       throw new IllegalArgumentException("Test result list sizes not match for full and quick test");
     }

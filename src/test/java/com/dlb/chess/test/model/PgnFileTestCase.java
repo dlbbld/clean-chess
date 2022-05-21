@@ -13,7 +13,7 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule,
     List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence,
     CheckmateOrStalemate lastPositionEvaluation, InsufficientMaterial insufficientMaterial,
-    UnwinnableFullResultTest unwinnableFullResultTest, String fen) {
+    UnwinnableFullResultTest unwinnableHavingMove, UnwinnableFullResultTest unwinnableNotHavingMove, String fen) {
 
   public String pgnFileName() {
     return pgnFileName;
@@ -51,8 +51,12 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     return insufficientMaterial;
   }
 
-  public UnwinnableFullResultTest unwinnableFullResultTest() {
-    return unwinnableFullResultTest;
+  public UnwinnableFullResultTest unwinnableHavingMove() {
+    return unwinnableHavingMove;
+  }
+
+  public UnwinnableFullResultTest unwinnableNotHavingMove() {
+    return unwinnableNotHavingMove;
   }
 
   public String fen() {
@@ -75,7 +79,8 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
         && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
         && insufficientMaterial == other.insufficientMaterial && lastPositionEvaluation == other.lastPositionEvaluation
         && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
-        && unwinnableFullResultTest == other.unwinnableFullResultTest;
+        && unwinnableHavingMove == other.unwinnableHavingMove
+        && unwinnableNotHavingMove == other.unwinnableNotHavingMove;
   }
 
 }

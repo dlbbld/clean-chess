@@ -60,7 +60,7 @@ public class TestWinnability {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      check(testCase.unwinnableFullResultTest(), board);
+      check(testCase.unwinnableNotHavingMove(), board);
     }
   }
 

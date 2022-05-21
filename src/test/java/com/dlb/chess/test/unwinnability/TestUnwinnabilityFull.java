@@ -65,7 +65,7 @@ public class TestUnwinnabilityFull {
     final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
         board.getHavingMove().getOppositeSide());
 
-    CheckFull.check(pgnFileTestCase.unwinnableFullResultTest(), unwinnableFull);
+    CheckFull.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableFull);
   }
 
   // not terminating so far
@@ -90,7 +90,7 @@ public class TestUnwinnabilityFull {
           board.getHavingMove().getOppositeSide());
       milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 
-      CheckFull.check(testCase.unwinnableFullResultTest(), unwinnableFull);
+      CheckFull.check(testCase.unwinnableNotHavingMove(), unwinnableFull);
     }
     PrintDuration.printDuration(milliSecondsList, logger);
   }
