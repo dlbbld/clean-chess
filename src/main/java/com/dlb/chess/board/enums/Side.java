@@ -59,4 +59,26 @@ public enum Side {
       throw new NonePointerException();
     }
   }
+
+  public static boolean exists(String fenLetter) {
+    for (final Side side : values()) {
+      if (side != NONE && side.getFenLetter().equals(fenLetter)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static Side calculate(String fenLetter) {
+    if (!exists(fenLetter)) {
+      throw new IllegalArgumentException("No piece for this letter exists");
+    }
+    for (final Side side : values()) {
+      if (side != NONE && side.getFenLetter().equals(fenLetter)) {
+        return side;
+      }
+    }
+    // not possible to come here
+    throw new ProgrammingMistakeException();
+  }
 }

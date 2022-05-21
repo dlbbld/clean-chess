@@ -10,7 +10,7 @@ import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class CheckFull {
 
-  static void check(UnwinnableFullResultTest unwinnableFullResultTest, UnwinnableFull unwinnableFull) {
+  public static void check(UnwinnableFullResultTest unwinnableFullResultTest, UnwinnableFull unwinnableFull) {
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
       case UNWINNABLE_NOT_QUICK:
@@ -24,7 +24,7 @@ public class CheckFull {
     }
   }
 
-  static void check(Winnable winnable, UnwinnableFull unwinnableFull) {
+  public static void check(Winnable winnable, UnwinnableFull unwinnableFull) {
     switch (winnable) {
       case NO:
         assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
