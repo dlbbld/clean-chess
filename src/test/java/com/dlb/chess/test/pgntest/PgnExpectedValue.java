@@ -4738,9 +4738,12 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("ae_03.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 10 100"));
-    list.add(new PgnFileTestCase("ae_04_black_having_move.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
+    list.add(new PgnFileTestCase("ae_04.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N7 b - - 10 100"));
+    list.add(new PgnFileTestCase("ae_04_proof_game.pgn", "", "", "", BLANK_ESRL, 4, 10, CheckmateOrStalemate.NA,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
+        "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P1P1K1/N7 b - - 6 56"));
     list.add(new PgnFileTestCase("ae_05.pgn", "", "", "", BLANK_ESRL, -1, 10, CheckmateOrStalemate.NA,
         InsufficientMaterial.NONE, UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK,
         "4K3/8/8/8/8/p1p2p1p/P1pppp1P/bnrqkrnb b - - 10 100"));
