@@ -30,20 +30,52 @@ public class MaterialUtility implements EnumConstants {
     return calculateHasPieceType(PieceType.ROOK, staticPosition);
   }
 
+  public static boolean calculateHasRook(Side side, StaticPosition staticPosition) {
+    return calculateHasPieceType(side, PieceType.ROOK, staticPosition);
+  }
+
   public static boolean calculateHasKnight(StaticPosition staticPosition) {
     return calculateHasPieceType(PieceType.KNIGHT, staticPosition);
+  }
+
+  public static boolean calculateHasKnight(Side side, StaticPosition staticPosition) {
+    return calculateHasPieceType(side, PieceType.KNIGHT, staticPosition);
   }
 
   public static boolean calculateHasBishop(StaticPosition staticPosition) {
     return calculateHasPieceType(PieceType.BISHOP, staticPosition);
   }
 
+  public static boolean calculateHasBishop(Side side, StaticPosition staticPosition) {
+    return calculateHasPieceType(side, PieceType.BISHOP, staticPosition);
+  }
+
   public static boolean calculateHasQueen(StaticPosition staticPosition) {
     return calculateHasPieceType(PieceType.QUEEN, staticPosition);
   }
 
+  public static boolean calculateHasQueen(Side side, StaticPosition staticPosition) {
+    return calculateHasPieceType(side, PieceType.QUEEN, staticPosition);
+  }
+
   public static boolean calculateHasPawn(StaticPosition staticPosition) {
     return calculateHasPieceType(PieceType.PAWN, staticPosition);
+  }
+
+  public static boolean calculateHasPawn(Side side, StaticPosition staticPosition) {
+    return calculateHasPieceType(side, PieceType.PAWN, staticPosition);
+  }
+
+  public static boolean calculateHasKingAndKnightAndBishop(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, KNIGHT) >= 1
+        && calculateNumberOfPieces(side, staticPosition, BISHOP) >= 1
+        && calculateNumberOfPieces(side, staticPosition, KING) == 1;
+  }
+
+  public static boolean calculateHasKingAndOppositeSquaresBishop(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) >= 1
+        && calculateNumberOfBishops(side, staticPosition, SquareType.DARK_SQUARE) >= 1
+        && calculateNumberOfPieces(side, staticPosition, KING) == 1;
   }
 
   public static boolean calculateIsOwnPieceButNotKing(Side side, Piece pieceOnSquare) {
@@ -58,7 +90,7 @@ public class MaterialUtility implements EnumConstants {
     return calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == pieceType;
   }
 
-  public static boolean calculateIsKingOnly(Side side, StaticPosition staticPosition) {
+  public static boolean calculateHasKingOnly(Side side, StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
@@ -68,16 +100,8 @@ public class MaterialUtility implements EnumConstants {
     return true;
   }
 
-  public static boolean calculateIsKingAndKnightOnly(Side side, StaticPosition staticPosition) {
-    return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
-        && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 1
-        && calculateNumberOfPieces(side, staticPosition, BISHOP) == 0
-        && calculateNumberOfPieces(side, staticPosition, QUEEN) == 0
-        && calculateNumberOfPieces(side, staticPosition, KING) == 1
-        && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;
-  }
-
-  public static boolean calculateIsKingAndBishopsOnly(Side side, StaticPosition staticPosition, SquareType squareType) {
+  public static boolean calculateHasKingAndBishopsOnly(Side side, StaticPosition staticPosition,
+      SquareType squareType) {
     return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
         && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0
         && calculateNumberOfBishops(side, staticPosition, squareType) >= 1
@@ -87,7 +111,7 @@ public class MaterialUtility implements EnumConstants {
   }
 
   // TODO unwinnability - what if no pawns and queens
-  public static boolean calculateIsKingAndPawnsOrQueensOnly(Side side, StaticPosition staticPosition) {
+  public static boolean calculateHasKingAndPawnsOrQueensOnly(Side side, StaticPosition staticPosition) {
     return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
         && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0
         && calculateNumberOfPieces(side, staticPosition, BISHOP) == 0
@@ -96,15 +120,16 @@ public class MaterialUtility implements EnumConstants {
             || calculateNumberOfPieces(side, staticPosition, QUEEN) >= 1);
   }
 
-  public static int calculateNumberOfPieces(Side side, StaticPosition staticPosition, PieceType pieceType) {
-    var total = 0;
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
-      final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (calculateIsOwnPieceType(side, pieceOnSquare, pieceType)) {
-        total++;
-      }
-    }
-    return total;
+  public static int calculateNumberOfRooks(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, ROOK);
+  }
+
+  public static int calculateNumberOfKnights(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, KNIGHT);
+  }
+
+  public static int calculateNumberOfBishops(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, BISHOP);
   }
 
   public static int calculateNumberOfBishops(Side side, StaticPosition staticPosition, SquareType squareType) {
@@ -112,6 +137,25 @@ public class MaterialUtility implements EnumConstants {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (calculateIsOwnPieceType(side, pieceOnSquare, PieceType.BISHOP) && boardSquare.getSquareType() == squareType) {
+        total++;
+      }
+    }
+    return total;
+  }
+
+  public static int calculateNumberOfQueens(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, QUEEN);
+  }
+
+  public static int calculateNumberOfPawns(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, PAWN);
+  }
+
+  public static int calculateNumberOfPieces(Side side, StaticPosition staticPosition, PieceType pieceType) {
+    var total = 0;
+    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (calculateIsOwnPieceType(side, pieceOnSquare, pieceType)) {
         total++;
       }
     }
@@ -148,6 +192,64 @@ public class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasNoPawns(Side side, StaticPosition staticPosition) {
     return calculateNumberOfPieces(side, staticPosition, PieceType.PAWN) == 0;
+  }
+
+  public static boolean calculateHasKingAndRookOnly(Side side, StaticPosition staticPosition) {
+    return calculateHasKingAndAnotherPieceOnly(side, ROOK, staticPosition);
+  }
+
+  public static boolean calculateHasKingAndKnightOnly(Side side, StaticPosition staticPosition) {
+    return calculateHasKingAndAnotherPieceOnly(side, KNIGHT, staticPosition);
+  }
+
+  public static boolean calculateHasKingAndBishopOnly(Side side, StaticPosition staticPosition) {
+    return calculateHasKingAndAnotherPieceOnly(side, BISHOP, staticPosition);
+  }
+
+  public static boolean calculateHasKingAndQueenOnly(Side side, StaticPosition staticPosition) {
+    return calculateHasKingAndAnotherPieceOnly(side, QUEEN, staticPosition);
+  }
+
+  public static boolean calculateHasKingAndKnightAndBishopOnly(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
+        && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 1
+        && calculateNumberOfPieces(side, staticPosition, BISHOP) == 1
+        && calculateNumberOfPieces(side, staticPosition, QUEEN) == 0
+        && calculateNumberOfPieces(side, staticPosition, KING) == 1
+        && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;
+  }
+
+  public static boolean calculateHasKingAndOppositeSquaresBishopOnly(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
+        && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0
+        && calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) == 1
+        && calculateNumberOfBishops(side, staticPosition, SquareType.DARK_SQUARE) == 1
+        && calculateNumberOfPieces(side, staticPosition, QUEEN) == 0
+        && calculateNumberOfPieces(side, staticPosition, KING) == 1
+        && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;
+  }
+
+  private static boolean calculateHasKingAndAnotherPieceOnly(Side side, PieceType anotherPieceType,
+      StaticPosition staticPosition) {
+
+    if (anotherPieceType == KING) {
+      throw new IllegalArgumentException("Checking for king and king makes no sense");
+    }
+
+    var countAnotherPieces = 0;
+    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
+        if (pieceOnSquare.getPieceType() != anotherPieceType) {
+          return false;
+        }
+        countAnotherPieces++;
+        if (countAnotherPieces > 1) {
+          return false;
+        }
+      }
+    }
+    return true;
   }
 
 }

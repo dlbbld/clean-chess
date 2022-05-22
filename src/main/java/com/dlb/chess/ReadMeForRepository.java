@@ -15,16 +15,6 @@ public class ReadMeForRepository {
 
   public static void main(String[] args) throws Exception {
 
-    {
-      final Board board = new Board("k7/Q6r/2b5/1pBp1p1p/1P1P1P1P/KP6/1P6/8 b - - 10 100");
-      System.out.println(board.isDeadPositionQuick()); // POSSIBLY_NON_DEAD_POSITION
-      System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
-    }
-
-    if (true) {
-      return;
-    }
-
     // threefold - claim ahead
     {
       final var pgn = """

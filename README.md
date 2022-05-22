@@ -59,6 +59,30 @@ dependencies {
 }
 ```
 
+# Motivation for the API
+Below I write my motivation for programming this chess API.
+
+## Threefold repetition and fifty-moves
+When I want to check a game for occurrence of a threefold repetition or the fifty-moves I could not find any software
+providing a reasonable way to do it.
+
+The only way to check this I found in dozens of chess programs is playing through the game move by move, and the software then announcing threefold for fifty-moves if it occurs.
+
+To check a game for possible threefold claims on the next move, so possibly the player missed a chance to claim threefold I found nothing, nada, nothing at all.
+
+For this reason I implemented a report which shows the the threefolds and fifty-moves in a game.
+
+## Unwinnability and dead position
+The situation with existing chess programs not being able to correctly determine unwinnability and dead positions is very dissatisfying to me.
+Accuracy is a key element of chess. Thus this not affect many games, common chess software sets the result incorrectly for some games.
+The [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) provides an algorithm to overcome this shortcoming
+of existing chess programs and as such I implemented the algorithm in Java.
+
+## Java chess API
+There are several Java chess API but because this chess API is about game deciding situations of having a potential draw or not, I did not
+want to rely on other chess API's, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer along. And because these tests must be accurate, I spent a lot of time making the PGN reader
+accurate for every situation.
+
 # Threefold repetition and fifty-moves
 ## Threefold repetition claim ahead
 The following game ended with a threefold repetition claim ahead according to [Wikipedia](https://en.wikipedia.org/wiki/Threefold_repetition#Portisch_versus_Korchnoi,_1970):

@@ -96,7 +96,7 @@ public class BasicOutput {
   }
 
   private static String calculateOutputLastPositionEvaluation(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_BOARD_RESULT_NAME, analysis.lastPositionEvaluation().getDescription());
+    return calculateOutput(ATTRIBUTE_BOARD_RESULT_NAME, analysis.checkmateOrStalemate().getDescription());
   }
 
   private static String calculateOutputInsufficientMaterial(Analysis analysis) {

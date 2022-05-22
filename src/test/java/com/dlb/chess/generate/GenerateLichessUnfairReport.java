@@ -9,13 +9,13 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableCalculator;
+import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.model.PgnFileTestCase;
 
-public class GenerateLichessUnfairAnalysis {
+public class GenerateLichessUnfairReport {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateLichessUnfairAnalysis.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateLichessUnfairReport.class);
 
   public static void main(String[] args) throws Exception {
     generate(PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES));
@@ -31,9 +31,9 @@ public class GenerateLichessUnfairAnalysis {
       if (isPawnWallAmbrona) {
         logger.info(pgnFileName + ";" + "pawn wall");
       } else {
-        final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
-        final Winnable winnableWhite = WinnableCalculator.calculateWinnable(board, Side.WHITE);
-        final Winnable winnableBlack = WinnableCalculator.calculateWinnable(board, Side.BLACK);
+        final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+        final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
+        final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
 
         logger.info("winnable white;" + winnableWhite);
         logger.info("winnable black;" + winnableBlack);

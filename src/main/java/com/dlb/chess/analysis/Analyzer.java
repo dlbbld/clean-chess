@@ -25,7 +25,7 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 import com.google.common.collect.ImmutableList;
 
@@ -272,7 +272,7 @@ public class Analyzer extends AnalyzerPrint {
 
   public static Analysis calculateAnalysis(String folderPath, String pgnFileName) throws Exception {
 
-    final ApiBoard board = GeneralUtility.calculateChessBoard(folderPath, pgnFileName);
+    final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateAnalysis(board);
   }
 
@@ -311,8 +311,10 @@ public class Analyzer extends AnalyzerPrint {
 
     final CheckmateOrStalemate lastPositionEvaluation = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
-    final UnwinnableQuick unwinnableNotHavingMove = UnwinnableQuickCalculator.unwinnableQuick(board,
+    final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
+    final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+        board.getHavingMove());
 
     final String fen = board.getFen();
 
@@ -324,7 +326,8 @@ public class Analyzer extends AnalyzerPrint {
         sequenceRepetitionList, yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture,
         hasFivefoldRepetition, hasFiftyMoveRule, hasSeventyFiveMoveRule, hasThreeSequenceRepetition,
         isGameContinuedOverFivefoldRepetition, isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture,
-        maxYawnSequence, lastPositionEvaluation, insufficientMaterial, unwinnableNotHavingMove, fen, board);
+        maxYawnSequence, lastPositionEvaluation, insufficientMaterial, unwinnableQuickNotHavingMove,
+        unwinnableQuickHavingMove, fen, board);
   }
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {

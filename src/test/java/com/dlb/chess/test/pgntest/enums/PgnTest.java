@@ -78,7 +78,7 @@ public enum PgnTest {
   DGT_CENTAUR(false, "dgt\\centaur"),
 
   UNFAIR_LICHESS_ANALYSIS_GAMES(false, "unfair\\lichessAnalysis\\games"),
-  UNFAIR_LICHESS_ANALYSIS_HELPMATE(false, "unfair\\\\lichessAnalysis\\helpmate"),
+  UNFAIR_LICHESS_ANALYSIS_HELPMATE(false, "unfair\\lichessAnalysis\\helpmate"),
   UNFAIR_HALF_MOVE_DEPTH_THREE(false, "unfair\\halfMoveDepthThree"),
   UNFAIR_NOT_QUICK(false, "unfair\\notQuick"),
   UNFAIR_AMBRONA_EXAMPLES(false, "unfair\\ambronaExamples"),

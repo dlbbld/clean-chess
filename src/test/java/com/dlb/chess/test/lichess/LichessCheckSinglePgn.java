@@ -8,9 +8,9 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.utility.TagUtility;
 
 public class LichessCheckSinglePgn extends AbstractLichessCheck {
 
@@ -50,7 +50,7 @@ public class LichessCheckSinglePgn extends AbstractLichessCheck {
         pgnFile = PgnStrictCacheForTestCases.getPgn(pngOutFolderPath, NonNullWrapperCommon.getName(file));
         if (calculateIsTimeForfeitCandidate(pgnFile)) {
           if (calculateIsIncorrectResult(pgnFile)) {
-            final String siteValue = BasicChessUtility.calculateTagValue(pgnFile, "Site");
+            final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
             logger.printf(Level.INFO, "Time forfeit - incorrect result;%s;%s", file.getName(), siteValue);
           } else {
             // logger.info("Time forfeit - possibly correct result - " + file.getName());

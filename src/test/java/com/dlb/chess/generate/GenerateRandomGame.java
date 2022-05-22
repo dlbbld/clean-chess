@@ -89,8 +89,9 @@ public class GenerateRandomGame {
             throw new IllegalArgumentException();
 
         }
-        if (!board.isCheckmate() && !board.isStalemate() && board.isDeadPositionQuick() != DeadPositionQuick.DEAD_POSITION
-            && board.getRepetitionCount() == 1 && !board.isFiftyMove()) {
+        if (!board.isCheckmate() && !board.isStalemate()
+            && board.isDeadPositionQuick() != DeadPositionQuick.DEAD_POSITION && board.getRepetitionCount() == 1
+            && !board.isFiftyMove()) {
           moveOptionList.add(moveSpecification);
         }
         board.unperformMove();
@@ -175,8 +176,8 @@ public class GenerateRandomGame {
       moveOptionList = new ArrayList<>();
       for (final MoveSpecification moveSpecification : legalMoveSet) {
         board.performMove(moveSpecification);
-        if (!board.isCheckmate() && !board.isStalemate() && board.isDeadPositionQuick() != DeadPositionQuick.DEAD_POSITION
-            && board.getRepetitionCount() == 1) {
+        if (!board.isCheckmate() && !board.isStalemate()
+            && board.isDeadPositionQuick() != DeadPositionQuick.DEAD_POSITION && board.getRepetitionCount() == 1) {
           moveOptionList.add(moveSpecification);
         }
         board.unperformMove();
@@ -227,8 +228,9 @@ public class GenerateRandomGame {
       moveOptionList = new ArrayList<>();
       for (final MoveSpecification moveSpecification : legalMoveSet) {
         board.performMove(moveSpecification);
-        if (!board.isCheckmate() && !board.isStalemate() && board.isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION
-            && board.getRepetitionCount() == 1 && (!isFiftyReached || board.isFiftyMove())) {
+        if (!board.isCheckmate() && !board.isStalemate()
+            && board.isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION && board.getRepetitionCount() == 1
+            && (!isFiftyReached || board.isFiftyMove())) {
           moveOptionList.add(moveSpecification);
         }
         board.unperformMove();
@@ -309,8 +311,8 @@ public class GenerateRandomGame {
         // means we have no continuation from 3 onwards found
         for (final MoveSpecification moveSpecification : legalMoveSet) {
           board.performMove(moveSpecification);
-          if (!board.isCheckmate() && !board.isStalemate() && board.isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION
-              && !board.isFiftyMove()) {
+          if (!board.isCheckmate() && !board.isStalemate()
+              && board.isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION && !board.isFiftyMove()) {
             moveOptionList.add(moveSpecification);
           }
           board.unperformMove();

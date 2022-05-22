@@ -2,6 +2,9 @@ package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
@@ -12,12 +15,12 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
-import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class TestUnwinnabilityFull {
@@ -25,18 +28,18 @@ public class TestUnwinnabilityFull {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFull.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testFen() {
-    final var fen = "8/8/4k3/3R4/2K5/8/8/8 w - - 0 50";
+    final var fen = "6kR/5pp1/1K2p1p1/3r4/8/8/8/8 b - - 3 48";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -46,10 +49,10 @@ public class TestUnwinnabilityFull {
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
-    final ApiBoard board = GeneralUtility.calculateChessBoard(pgnFile);
+    final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
@@ -59,7 +62,10 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    check(pgnFileTestCase.unwinnableFullResultTest(), board);
+    final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
+        board.getHavingMove().getOppositeSide());
+
+    CheckFull.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableFull);
   }
 
   // not terminating so far
@@ -72,29 +78,42 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   // @Test
   void testFolder() throws Exception {
+    final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 
-      check(testCase.unwinnableFullResultTest(), board);
+      final var beforeMilliSeconds = System.currentTimeMillis();
+      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
+          board.getHavingMove().getOppositeSide());
+      milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+
+      CheckFull.check(testCase.unwinnableNotHavingMove(), unwinnableFull);
     }
+    PrintDuration.printDuration(milliSecondsList, logger);
   }
 
-  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
-    switch (unwinnableFullResultTest) {
-      case UNWINNABLE:
-      case UNWINNABLE_NOT_QUICK:
-        assertEquals(UnwinnableFull.UNWINNABLE,
-            UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
-        break;
-      case WINNABLE:
-        assertEquals(UnwinnableFull.WINNABLE,
-            UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove().getOppositeSide()));
-        break;
-      default:
-        throw new IllegalArgumentException();
+  @SuppressWarnings("static-method")
+  // @Test
+  void testPerformance() throws Exception {
+    final List<Long> milliSecondsList = new ArrayList<>();
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES);
+    for (final PgnFileTestCase testCase : testCaseList.list()) {
+      final ApiBoard board = new Board(testCase.fen());
+
+      logger.info(testCase.pgnFileName());
+
+      final var beforeMilliSeconds = System.currentTimeMillis();
+      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
+      final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
+
+      if (unwinnableFull == UnwinnableFull.WINNABLE) {
+        milliSecondsList.add(durationMilliSeconds);
+      }
+
     }
+    PrintDuration.printDuration(milliSecondsList, logger);
   }
 }

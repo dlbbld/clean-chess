@@ -77,7 +77,7 @@ public class FenParser implements EnumConstants {
         enPassantCaptureTargetSquareStr, havingMove);
 
     final var halfMoveClockStr = fenRaw.halfMoveClock();
-    final var halfMoveClock = validateHalfMoveClock(halfMoveClockStr);
+    final var halfMoveClock = validateHalfMoveClock(halfMoveClockStr, enPassantCaptureTargetSquare);
 
     final var fullMoveNumberStr = fenRaw.fullMoveNumber();
     final var fullMoveNumber = validateFullMoveNumber(fen, havingMove, fullMoveNumberStr);
@@ -400,6 +400,13 @@ public class FenParser implements EnumConstants {
 
   }
 
+  private static int validateHalfMoveClock(String halfMoveClockStr, Square enPassantCaptureTargetSquare)
+      throws FenValidationException {
+    final var halfMoveClock = validateHalfMoveClock(halfMoveClockStr);
+    validateHalfMoveClock(halfMoveClock, enPassantCaptureTargetSquare);
+    return halfMoveClock;
+  }
+
   private static int validateHalfMoveClock(String halfMoveClockStr) throws FenValidationException {
     int halfMoveClock;
     try {
@@ -410,6 +417,15 @@ public class FenParser implements EnumConstants {
     }
 
     return halfMoveClock;
+  }
+
+  private static void validateHalfMoveClock(int halfMoveClock, Square enPassantCaptureTargetSquare)
+      throws FenValidationException {
+    if (enPassantCaptureTargetSquare != Square.NONE && halfMoveClock != 0) {
+      throw new FenValidationException(
+          FenValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET,
+          "the half-move clock is \"" + halfMoveClock + "\" must be zero if en passant target square is set");
+    }
   }
 
   private static int validateFullMoveNumber(String fen, Side havingMove, String fullMoveNumberStr)

@@ -7,12 +7,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.common.utility.AbstractTestMovetextUtility;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.utility.TagUtility;
 
 class TestPgnReaderStrictReadTag extends AbstractTestMovetextUtility {
   private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH + "\\tag";
@@ -23,15 +23,15 @@ class TestPgnReaderStrictReadTag extends AbstractTestMovetextUtility {
     {
       final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_example_white_last_move.pgn");
 
-      assertEquals("Groningen", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.EVENT));
-      assertEquals("Groningen NED", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.SITE));
-      assertEquals("1997.??.??", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.DATE));
-      assertEquals("9", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.ROUND));
-      assertEquals("Pavel Blatny", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.WHITE));
-      assertEquals("Frank Holzke", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.BLACK));
-      assertEquals("1/2-1/2", BasicChessUtility.calculateTagValue(pgnFile, StandardTag.RESULT));
-      assertEquals("A15", BasicChessUtility.calculateTagValue(pgnFile, "ECO"));
-      assertEquals("1997.??.??", BasicChessUtility.calculateTagValue(pgnFile, "EventDate"));
+      assertEquals("Groningen", TagUtility.calculateTagValue(pgnFile, StandardTag.EVENT));
+      assertEquals("Groningen NED", TagUtility.calculateTagValue(pgnFile, StandardTag.SITE));
+      assertEquals("1997.??.??", TagUtility.calculateTagValue(pgnFile, StandardTag.DATE));
+      assertEquals("9", TagUtility.calculateTagValue(pgnFile, StandardTag.ROUND));
+      assertEquals("Pavel Blatny", TagUtility.calculateTagValue(pgnFile, StandardTag.WHITE));
+      assertEquals("Frank Holzke", TagUtility.calculateTagValue(pgnFile, StandardTag.BLACK));
+      assertEquals("1/2-1/2", TagUtility.calculateTagValue(pgnFile, StandardTag.RESULT));
+      assertEquals("A15", TagUtility.calculateTagValue(pgnFile, "ECO"));
+      assertEquals("1997.??.??", TagUtility.calculateTagValue(pgnFile, "EventDate"));
 
       assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
     }

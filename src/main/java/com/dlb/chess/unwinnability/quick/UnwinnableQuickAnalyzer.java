@@ -17,7 +17,7 @@ import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 import com.dlb.chess.unwinnability.quick.utility.SemiOpenFilesUtility;
 import com.dlb.chess.unwinnability.semistatic.UnwinnableSemiStatic;
 
-public class UnwinnableQuickCalculator {
+public class UnwinnableQuickAnalyzer {
 
   public static UnwinnableQuick unwinnableQuick(ApiBoard board, Side c) {
 

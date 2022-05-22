@@ -9,7 +9,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.test.apicarlos.chessboard.ApiCarlosBoard;
+import com.dlb.chess.test.apicarlos.board.ApiCarlosBoard;
 import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -55,16 +55,16 @@ class TestBoardAgainstEachOther {
           continue;
         }
 
-        final ApiBoard chessBoard = new Board();
+        final ApiBoard board = new Board();
         final ApiBoard carlosBoard = new ApiCarlosBoard();
 
         for (final PgnHalfMove pgnFileHalfMove : pgnFile.halfMoveList()) {
 
           final String san = pgnFileHalfMove.san();
-          chessBoard.performMove(san);
+          board.performMove(san);
           carlosBoard.performMove(san);
 
-          CommonTestUtility.checkChessBoardsAgainstEachOtherAll(chessBoard, carlosBoard);
+          CommonTestUtility.checkBoardsAgainstEachOtherAll(board, carlosBoard);
 
         }
       }

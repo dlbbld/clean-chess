@@ -60,7 +60,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(maxYawnSequence);
     result.append(", ");
 
-    final CheckmateOrStalemate lastPositionEvaluation = analysis.lastPositionEvaluation();
+    final CheckmateOrStalemate lastPositionEvaluation = analysis.checkmateOrStalemate();
     result.append(CheckmateOrStalemate.class.getSimpleName());
     result.append(".");
     result.append(lastPositionEvaluation.name());

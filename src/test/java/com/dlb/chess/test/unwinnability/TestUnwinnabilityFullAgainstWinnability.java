@@ -1,9 +1,5 @@
 package com.dlb.chess.test.unwinnability;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
@@ -13,9 +9,9 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableCalculator;
+import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class TestUnwinnabilityFullAgainstWinnability {
@@ -50,49 +46,22 @@ public class TestUnwinnabilityFullAgainstWinnability {
 
         // not having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board,
-              board.getHavingMove().getOppositeSide());
-          final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
+          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
               board.getHavingMove().getOppositeSide());
 
-          checkResult(winnable, unwinnableFull);
+          CheckFull.check(winnable, unwinnableFull);
         }
 
         // having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove());
+          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
+          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
 
-          checkResult(winnable, unwinnableFull);
+          CheckFull.check(winnable, unwinnableFull);
         }
       }
     }
   }
 
-  private static void checkResult(Winnable winnable, UnwinnableFull unwinnableFull) {
-    switch (winnable) {
-      case NO:
-        assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
-        break;
-      case YES:
-        assertNotEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
-        break;
-      case UNKNOWN:
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-
-    switch (unwinnableFull) {
-      case WINNABLE:
-        assertNotEquals(Winnable.NO, winnable);
-        break;
-      case UNWINNABLE:
-        final var isIncomplete = winnable == Winnable.NO || winnable == Winnable.UNKNOWN;
-        assertTrue(isIncomplete);
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
 }

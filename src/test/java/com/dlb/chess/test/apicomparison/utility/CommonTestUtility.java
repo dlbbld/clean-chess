@@ -7,20 +7,19 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 
 public class CommonTestUtility implements EnumConstants {
 
-  public static void checkChessBoardsAgainstEachOtherAll(ApiBoard boardFirst, ApiBoard boardSecond) {
-    checkChessBoardsAgainstEachOther(boardFirst, boardSecond, true);
+  public static void checkBoardsAgainstEachOtherAll(ApiBoard boardFirst, ApiBoard boardSecond) {
+    checkBoardsAgainstEachOther(boardFirst, boardSecond, true);
   }
 
-  public static void checkChessBoardsAgainstEachOtherExcludeHistory(ApiBoard boardFirst, ApiBoard boardSecond) {
-    checkChessBoardsAgainstEachOther(boardFirst, boardSecond, false);
+  public static void checkBoardsAgainstEachOtherExcludeHistory(ApiBoard boardFirst, ApiBoard boardSecond) {
+    checkBoardsAgainstEachOther(boardFirst, boardSecond, false);
   }
 
   // RE must be aligned with board API interface
-  // Must contain all methods in API interface which are not implemented in AbstractChessBoard
-  // that is also crucial performance wise because in AbstractChessBoard there are methods taking very long,
+  // Must contain all methods in API interface which are not implemented in AbstractBoard
+  // that is also crucial performance wise because in AbstractBoard there are methods taking very long,
   // and testing against makes no sense as always true as long board implentation match, what we test here.
-  private static void checkChessBoardsAgainstEachOther(ApiBoard boardFirst, ApiBoard boardSecond,
-      boolean isIncludeHistory) {
+  private static void checkBoardsAgainstEachOther(ApiBoard boardFirst, ApiBoard boardSecond, boolean isIncludeHistory) {
 
     assertEquals(boardFirst.isCheck(), boardSecond.isCheck());
     assertEquals(boardFirst.isCheckmate(), boardSecond.isCheckmate());

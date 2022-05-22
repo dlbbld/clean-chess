@@ -10,8 +10,8 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
 import com.dlb.chess.pgn.reader.enums.ResultTagValue;
+import com.dlb.chess.pgn.reader.enums.StandardTag;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.pgn.reader.model.Tag;
 import com.google.common.collect.ImmutableList;
@@ -190,6 +190,17 @@ public class TagUtility {
 
   public static void removeFenTag(List<Tag> tagList) {
     removeTag(tagList, StandardTag.FEN);
+  }
+
+  public static String calculateTagValue(PgnFile pgnFile, String tagName) {
+    if (!existsTagName(pgnFile.tagList(), tagName)) {
+      return "NA";
+    }
+    return readTagValue(pgnFile.tagList(), tagName);
+  }
+
+  public static String calculateTagValue(PgnFile pgnFile, StandardTag sevenTagRoster) {
+    return calculateTagValue(pgnFile, sevenTagRoster.getName());
   }
 
 }

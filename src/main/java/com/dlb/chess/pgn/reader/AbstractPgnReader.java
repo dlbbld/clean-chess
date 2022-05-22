@@ -25,12 +25,12 @@ public abstract class AbstractPgnReader {
   public static List<MoveSpecification> calculateMoveSpecificationList(PgnFile pgnFile) {
     final Fen startFen = pgnFile.startFen();
 
-    final ApiBoard chessBoard = new Board(startFen);
+    final ApiBoard board = new Board(startFen);
 
     for (final PgnHalfMove pgnHalfMove : pgnFile.halfMoveList()) {
-      chessBoard.performMove(pgnHalfMove.san());
+      board.performMove(pgnHalfMove.san());
     }
-    return chessBoard.getPerformedMoveSpecificationList();
+    return board.getPerformedMoveSpecificationList();
   }
 
   static List<String> readPgnFileLineList(String pgnFolderPath, String pgnFileName)
