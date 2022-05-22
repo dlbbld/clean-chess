@@ -49,8 +49,7 @@ public class ValidateAllTestCase {
 
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
-      if (pgnTest == PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES) {
-        // TODO today
+      if (pgnTest != PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES) {
         continue;
       }
       final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
