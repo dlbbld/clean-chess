@@ -31,9 +31,11 @@ public abstract class AbstractPgnTest {
     testSequenceRepetition(analysis, testCase);
     testFirstCapture(analysis, testCase);
     testMaxYawnSequence(analysis, testCase);
-    testLastPositionEvaluation(analysis, testCase);
+    testCheckmateOrStalemate(analysis, testCase);
+    testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
     testWinnableNotHavingMove(analysis, testCase);
+    testWinnableHavingMove(analysis, testCase);
   }
 
   private static void testFen(String expectedFen, String actualFen) {
@@ -77,8 +79,12 @@ public abstract class AbstractPgnTest {
     assertEquals(testCase.maxYawnSequence(), analysis.maxYawnSequence());
   }
 
-  private static void testLastPositionEvaluation(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.lastPositionEvaluation(), analysis.lastPositionEvaluation());
+  private static void testCheckmateOrStalemate(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.checkmateOrStalemate(), analysis.checkmateOrStalemate());
+  }
+
+  private static void testRepetitionCountFinalPosition(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.repetitionCountFinalPosition(), analysis.board().getRepetitionCount());
   }
 
   private static void testInsufficientMaterial(Analysis analysis, PgnFileTestCase testCase) {
@@ -86,9 +92,11 @@ public abstract class AbstractPgnTest {
   }
 
   private static void testWinnableNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    // at the moment for lichess test cases with Ambrona results we check only against winnable=no
     testSide(testCase.unwinnableNotHavingMove(), analysis.unwinnableQuickResultNotHavingMove());
+  }
 
+  private static void testWinnableHavingMove(Analysis analysis, PgnFileTestCase testCase) {
+    testSide(testCase.unwinnableHavingMove(), analysis.unwinnableQuickResultHavingMove());
   }
 
   private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected,
@@ -97,7 +105,9 @@ public abstract class AbstractPgnTest {
       case UNWINNABLE:
         assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
         break;
-      case UNWINNABLE_NOT_QUICK:
+      case UNWINNABLE_QUICK_DOES_NOT_SEE:
+        assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuickResult);
+        break;
       case WINNABLE:
         final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
             || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;

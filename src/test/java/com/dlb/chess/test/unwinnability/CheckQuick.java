@@ -15,7 +15,7 @@ public class CheckQuick {
       case UNWINNABLE:
         assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
         break;
-      case UNWINNABLE_NOT_QUICK:
+      case UNWINNABLE_QUICK_DOES_NOT_SEE:
         assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuick);
         break;
       case WINNABLE:

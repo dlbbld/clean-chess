@@ -10,9 +10,9 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableCalculator;
+import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class TestUnwinnabilityQuickAgainstWinnability {
@@ -20,7 +20,7 @@ public class TestUnwinnabilityQuickAgainstWinnability {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuickAgainstWinnability.class);
 
   private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "25_black_king_pawn.pgn";
+  private static final String START_FROM_PGN_FILE_NAME = "ae_16.pgn";
 
   @SuppressWarnings("static-method")
   @Test
@@ -46,6 +46,7 @@ public class TestUnwinnabilityQuickAgainstWinnability {
         switch (testCase.pgnFileName()) {
           // here my tool sees unwinnability but not the quick analysis
           case "ae_10.pgn":
+          case "ae_16.pgn":
           case "norgaard_pawn_wall_example_2.pgn":
             continue;
           default:
@@ -58,18 +59,16 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         // not having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board,
-              board.getHavingMove().getOppositeSide());
-          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
+          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+          final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
               board.getHavingMove().getOppositeSide());
           CheckQuick.check(winnable, unwinnableQuick);
         }
 
         // having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
-              board.getHavingMove());
+          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
+          final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove());
 
           CheckQuick.check(winnable, unwinnableQuick);
         }

@@ -10,7 +10,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
 
 public abstract class AbstractFindHelpmate {
@@ -28,9 +27,9 @@ public abstract class AbstractFindHelpmate {
       throw new ProgrammingMistakeException("It is not a checkmate");
     }
 
-    final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
-    logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
-    System.out.println(PgnCreate.createPgnFileString(boardCheck));
+    // final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
+    // logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
+    // System.out.println(PgnCreate.createPgnFileString(boardCheck));
 
     return boardCheck;
   }
@@ -46,9 +45,9 @@ public abstract class AbstractFindHelpmate {
       throw new ProgrammingMistakeException("It is not a classical checkmate position");
     }
 
-    final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
-    logger.info("Classical checkmate position found in " + numberOfMovesForClassicalCheckmatePosition + " moves");
-    System.out.println(PgnCreate.createPgnFileString(boardCheck));
+    // final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
+    // logger.info("Classical checkmate position found in " + numberOfMovesForClassicalCheckmatePosition + " moves");
+    // System.out.println(PgnCreate.createPgnFileString(boardCheck));
 
     return boardCheck;
   }

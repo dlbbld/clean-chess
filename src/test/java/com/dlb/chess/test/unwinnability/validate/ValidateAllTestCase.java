@@ -7,16 +7,14 @@ import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.FenValidationException;
-import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.fen.FenParser;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -37,7 +35,7 @@ public class ValidateAllTestCase {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateAllTestCase.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final boolean IS_START_FROM_PGN_FILE = false;
   private static final String START_FROM_PGN_FILE_NAME = "no_move_half_move_clock_99_black_to_move.pgn";
 
   public static void main(String[] args) throws Exception {
@@ -83,11 +81,11 @@ public class ValidateAllTestCase {
         switch (fen.havingMove()) {
           case WHITE:
             ValidateAllTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultBlack, quickTestResultBlack,
-                pgnTest.getFolderPath(), testCase.pgnFileName());
+                testCase);
             break;
           case BLACK:
             ValidateAllTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultWhite, quickTestResultWhite,
-                pgnTest.getFolderPath(), testCase.pgnFileName());
+                testCase);
             break;
           case NONE:
           default:
@@ -97,11 +95,11 @@ public class ValidateAllTestCase {
         switch (fen.havingMove()) {
           case WHITE:
             ValidateAllTestCase.check(testCase.unwinnableHavingMove(), fullTestResultWhite, quickTestResultWhite,
-                pgnTest.getFolderPath(), testCase.pgnFileName());
+                testCase);
             break;
           case BLACK:
             ValidateAllTestCase.check(testCase.unwinnableHavingMove(), fullTestResultBlack, quickTestResultBlack,
-                pgnTest.getFolderPath(), testCase.pgnFileName());
+                testCase);
             break;
           case NONE:
           default:
@@ -185,10 +183,8 @@ public class ValidateAllTestCase {
   private static UnwinnableFull readFullTestResult(Fen fen, Side sideCheckingForWin,
       List<ValidateFullResult> fullResultList) {
     for (final ValidateFullResult fullResult : fullResultList) {
-      if (fullResult.sideCheckingForWin() == sideCheckingForWin) {
-        if (fullResult.fen().equals(fen)) {
-          return fullResult.unwinnableFull();
-        }
+      if (fullResult.sideCheckingForWin() == sideCheckingForWin && fullResult.fen().equals(fen)) {
+        return fullResult.unwinnableFull();
       }
     }
     throw new IllegalArgumentException("No full test result was found");
@@ -197,10 +193,8 @@ public class ValidateAllTestCase {
   private static UnwinnableQuick readQuickTestResult(Fen fen, Side sideCheckingForWin,
       List<ValidateQuickResult> quickResultList) {
     for (final ValidateQuickResult quickResult : quickResultList) {
-      if (quickResult.sideCheckingForWin() == sideCheckingForWin) {
-        if (quickResult.fen().equals(fen)) {
-          return quickResult.unwinnableQuick();
-        }
+      if (quickResult.sideCheckingForWin() == sideCheckingForWin && quickResult.fen().equals(fen)) {
+        return quickResult.unwinnableQuick();
       }
     }
     throw new IllegalArgumentException("No quick test result was found");
@@ -253,7 +247,7 @@ public class ValidateAllTestCase {
   }
 
   private static void check(UnwinnableFullResultTest unwinnableFullResultTest, UnwinnableFull unwinnableFull,
-      UnwinnableQuick unwinnableQuick, String pgnFolderName, String pgnFileName) {
+      UnwinnableQuick unwinnableQuick, PgnFileTestCase testCase) {
     switch (unwinnableFull) {
       case UNWINNABLE:
         switch (unwinnableQuick) {
@@ -263,19 +257,20 @@ public class ValidateAllTestCase {
           case WINNABLE:
             throw new IllegalArgumentException("Inconsistent data");
           case POSSIBLY_WINNABLE:
-            assertEquals(UnwinnableFullResultTest.UNWINNABLE_NOT_QUICK, unwinnableFullResultTest);
+            assertEquals(UnwinnableFullResultTest.UNWINNABLE_QUICK_DOES_NOT_SEE, unwinnableFullResultTest);
             break;
           default:
             throw new IllegalArgumentException();
         }
         break;
       case WINNABLE:
-        final PgnFile pgnFile = PgnReader.readPgn(pgnFolderName, pgnFileName);
-        final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
+        final Fen fen = FenParser.parseAdvancedFen(testCase.fen());
 
-        if (board.isFivefoldRepetition() || board.isSeventyFiftyMove() && !board.isCheckmate()
-            || "unwinnable_fivefold_inevitable.pgn".equals(pgnFileName)
-            || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(pgnFileName)) {
+        if (testCase.repetitionCountFinalPosition() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD
+            || fen.halfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
+                && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
+            || "unwinnable_fivefold_inevitable.pgn".equals(testCase.pgnFileName())
+            || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
           assertEquals(UnwinnableFullResultTest.UNWINNABLE, unwinnableFullResultTest);
         } else {
           assertEquals(UnwinnableFullResultTest.WINNABLE, unwinnableFullResultTest);

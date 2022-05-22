@@ -16,14 +16,14 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
-import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class TestFindHelpMate {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestFindHelpMate.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final boolean IS_START_FROM_PGN_FILE = false;
   private static final String START_FROM_PGN_FILE_NAME = "m5WDCW16.pgn";
 
   @SuppressWarnings("static-method")
@@ -55,7 +55,7 @@ public class TestFindHelpMate {
         logger.info(testCase.pgnFileName());
 
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove());
+        final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
         milliSecondsList.add(durationMilliSeconds);
         PrintDuration.printDuration(milliSecondsList, logger);

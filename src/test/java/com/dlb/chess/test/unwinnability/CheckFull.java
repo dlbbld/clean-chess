@@ -13,7 +13,7 @@ public class CheckFull {
   public static void check(UnwinnableFullResultTest unwinnableFullResultTest, UnwinnableFull unwinnableFull) {
     switch (unwinnableFullResultTest) {
       case UNWINNABLE:
-      case UNWINNABLE_NOT_QUICK:
+      case UNWINNABLE_QUICK_DOES_NOT_SEE:
         assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
         break;
       case WINNABLE:

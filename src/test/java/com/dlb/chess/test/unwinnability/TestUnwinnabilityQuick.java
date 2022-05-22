@@ -19,7 +19,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class TestUnwinnabilityQuick {
@@ -27,11 +27,11 @@ public class TestUnwinnabilityQuick {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuick.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableQuick.WINNABLE,
-        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -40,7 +40,7 @@ public class TestUnwinnabilityQuick {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
     assertEquals(UnwinnableQuick.WINNABLE,
-        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+        UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -54,7 +54,7 @@ public class TestUnwinnabilityQuick {
     logger.info(pgnFileName);
 
     assertEquals(UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuickCalculator.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+        UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -64,14 +64,14 @@ public class TestUnwinnabilityQuick {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickCalculator.unwinnableQuick(board,
+    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
 
     CheckQuick.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableQuickResult);
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
@@ -81,7 +81,7 @@ public class TestUnwinnabilityQuick {
       logger.info(testCase.pgnFileName());
 
       final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
+      final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
           board.getHavingMove().getOppositeSide());
       milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 

@@ -20,7 +20,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class TestUnwinnabilityFull {
@@ -31,7 +31,7 @@ public class TestUnwinnabilityFull {
   @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
@@ -39,7 +39,7 @@ public class TestUnwinnabilityFull {
   void testFen() {
     final var fen = "6kR/5pp1/1K2p1p1/3r4/8/8/8/8 b - - 3 48";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.BLACK));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -52,7 +52,7 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullCalculator.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE));
   }
 
   @SuppressWarnings("static-method")
@@ -62,7 +62,7 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
+    final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
         board.getHavingMove().getOppositeSide());
 
     CheckFull.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableFull);
@@ -86,7 +86,7 @@ public class TestUnwinnabilityFull {
       logger.info(testCase.pgnFileName());
 
       final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
+      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
           board.getHavingMove().getOppositeSide());
       milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 
@@ -106,7 +106,7 @@ public class TestUnwinnabilityFull {
       logger.info(testCase.pgnFileName());
 
       final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove());
+      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
       final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
       if (unwinnableFull == UnwinnableFull.WINNABLE) {

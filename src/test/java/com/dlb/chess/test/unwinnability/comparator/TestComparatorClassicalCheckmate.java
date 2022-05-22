@@ -2,8 +2,6 @@ package com.dlb.chess.test.unwinnability.comparator;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Test;
-
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
@@ -18,7 +16,7 @@ import com.dlb.chess.unwinnability.findhelpmate.comparator.ComparatorClassicalCh
 public class TestComparatorClassicalCheckmate implements EnumConstants {
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testHavingMoveCapture() {
     final Board board = new Board("8/8/3pk3/8/8/8/3RK3/8 w - - 0 100");
 
@@ -34,7 +32,7 @@ public class TestComparatorClassicalCheckmate implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testHavingMoveSacrifice() {
     final Board board = new Board("8/8/3pk3/8/8/3R4/2R1K3/8 w - - 0 100");
 
@@ -62,7 +60,7 @@ public class TestComparatorClassicalCheckmate implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testHavingMovePawnPush() {
     final Board board = new Board("8/8/4k3/1p6/8/1p1P4/3NK3/8 w - - 0 100");
 
@@ -90,7 +88,7 @@ public class TestComparatorClassicalCheckmate implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testNotHavingMoveCaptureClassicalCheckmate() {
     // KQ
     {
@@ -143,7 +141,7 @@ public class TestComparatorClassicalCheckmate implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testNotHavingMoveNoCaptureIfClassicalCheckmateMaterial() {
     // KQ
     {
@@ -196,7 +194,7 @@ public class TestComparatorClassicalCheckmate implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testNotHavingMoveCaptureRightPieceAboveClassicalCheckmateMaterial() {
     // KQ
     {
@@ -249,7 +247,7 @@ public class TestComparatorClassicalCheckmate implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testHavingMoveSacrificeThenCapture() {
     {
       final Board board = new Board("1k6/1r4P1/q3P3/5B2/8/4N3/3K4/8 b - - 0 100");
