@@ -26,8 +26,6 @@ public class BasicOutput {
   private static final String ATTRIBUTE_YAWN_MOVE_RULE_YES_NO = "Yawn-move rule";
   private static final String ATTRIBUTE_YAWN_MOVE_RULE_SEQUENCE = "Sequence";
 
-  private static final String ATTRIBUTE_SEQUENCE_REPETITION_YES_NO = "Sequence repetition";
-
   private static final String ATTRIBUTE_FIRST_CAPTURE = "First capture";
   private static final String ATTRIBUTE_MAX_YAWN_SEQUENCE = "Max yawn sequence";
   private static final String ATTRIBUTE_BOARD_RESULT_NAME = "Board result";
@@ -71,10 +69,6 @@ public class BasicOutput {
 
     if (analysis.hasFiftyMoveRule()) {
       output.add(calculateOutputYawnMoveRuleSequence(analysis));
-    }
-
-    if (IS_FULL) {
-      output.add(calculateOutputSequenceRepetition(analysis));
     }
 
     if (IS_FULL) {
@@ -148,15 +142,6 @@ public class BasicOutput {
     }
     final String repetition = YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList());
     return calculateOutput(attribute, repetition);
-  }
-
-  private static String calculateOutputSequenceRepetition(Analysis analysis) {
-    final String attribute = ATTRIBUTE_SEQUENCE_REPETITION_YES_NO;
-    if (!Analyzer.IS_CALCULATE_SEQUENCE_REPETITION) {
-      return calculateOutput(attribute, "not included");
-    }
-
-    return calculateOutput(attribute, analysis.hasThreeSequenceRepetition());
   }
 
   private static String calculateOutputThreefoldRepetition(Analysis analysis) {

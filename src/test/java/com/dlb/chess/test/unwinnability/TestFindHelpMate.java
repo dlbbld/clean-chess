@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -27,7 +26,7 @@ public class TestFindHelpMate {
   private static final String START_FROM_PGN_FILE_NAME = "m5WDCW16.pgn";
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
