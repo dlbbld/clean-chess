@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -22,11 +23,11 @@ public class TestFindHelpMate {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestFindHelpMate.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "m5WDCW16.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final String START_FROM_PGN_FILE_NAME = "wuHnMP2q.pgn";
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
@@ -50,8 +51,10 @@ public class TestFindHelpMate {
       }
 
       if (calculateIsHavingHelpmateHavingMove(testCase, testCaseHavingHelpmateList)) {
-        final ApiBoard board = new Board(testCase.fen());
+
         logger.info(testCase.pgnFileName());
+
+        final ApiBoard board = new Board(testCase.fen());
 
         final var beforeMilliSeconds = System.currentTimeMillis();
         final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
