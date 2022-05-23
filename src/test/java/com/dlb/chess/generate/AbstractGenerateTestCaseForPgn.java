@@ -47,11 +47,6 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    // TODO clean up sequence - make ok or remove (then add later and better if needed)!!!
-    final var sequenceRepetition = "BLANK_ESRL";
-    result.append(sequenceRepetition);
-    result.append(", ");
-
     final var firstCapture = analysis.firstCapture();
     result.append(firstCapture);
     result.append(", ");
@@ -77,7 +72,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
 
     result.append(UnwinnableFullResultTest.class.getSimpleName());
     result.append(".");
-    UnwinnableFullResultTest unwinnableFullResultTest = switch (unwinnableQuickResultNotHavingMove) {
+    final var unwinnableFullResultTest = switch (unwinnableQuickResultNotHavingMove) {
       case UNWINNABLE -> UnwinnableFullResultTest.UNWINNABLE;
       case WINNABLE -> UnwinnableFullResultTest.WINNABLE;
       case POSSIBLY_WINNABLE -> UnwinnableFullResultTest.WINNABLE;
