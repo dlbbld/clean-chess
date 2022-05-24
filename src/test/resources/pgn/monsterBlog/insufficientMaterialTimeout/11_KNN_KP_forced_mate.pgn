@@ -1,0 +1,23 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2022.04.13"]
+[Round "?"]
+[White "DonaldDuckTest"]
+[Black "MickeyMouseTest"]
+[Result "1-0"]
+[ECO "A00"]
+[WhiteElo "197"]
+[BlackElo "400"]
+[TimeControl "180+2"]
+[EndTime "10:45:03 PDT"]
+[Termination "DonaldDuckTest won on time"]
+
+1. d3 d6 2. Qd2 Qd7 3. Qe3 Qe6 4. Nd2 h5 5. Ndf3 Qxa2 6. Nh4 Qxa1 7. Ngf3 Qxb2
+8. Ne5 Qxc2 9. Ng4 Qc5 10. Nh6 Qe5 11. Qxa7 Qxh2 12. Qxa8 Qxh1 13. Qxb8 Qxg2 14.
+Qxb7 Qxf1+ 15. Kd2 Qxf2 16. Qxc7 Qxe2+ 17. Kc3 Qxd3+ 18. Kb4 Qc2 19. Qxd6 Qxc1
+20. Qa6 f6 21. Qa3 Bh3 22. Qa5 e5+ 23. Kb5 Ne7 24. Qa3 Nc6 25. Qa5 Bb4 26. Qa3
+Rf8 27. Qxh3 Rf7 28. Qa3 Ra7 29. Qa5 Qa3 30. Qxa3 Kd8 31. Qxb4 Ke8 32. Qa5 Ke7
+33. Qxa7+ Ke8 34. Kxc6 Kd8 35. Qxg7 Ke8 36. Qxf6 e4 37. Qe5+ Kd8 38. Qxe4 Kc8
+39. Qf5+ Kd8 40. Qc8+ Kxc8 41. Ng2 Kd8 42. Nf4 Ke8 43. Ng4 Kf8 44. Nf6 Kg7 45.
+Kd5 Kh8 46. Ke6 Kg7 47. Kf5 Kh8 48. Kg6 h4 49. Kh6 1-0
+

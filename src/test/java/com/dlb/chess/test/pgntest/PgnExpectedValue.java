@@ -171,6 +171,12 @@ public class PgnExpectedValue {
         return createTestCasesWikipediaThreefold();
       case BIZARRE_CHECKMATE:
         return createTestCasesBizarreCheckmate();
+      case MONSTER_BLOG_INSUFFICIENT_MATERIAL:
+        return createTestCasesMonsterBlogInsufficientMaterial();
+      case MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW:
+        return createTestCasesMonsterBlogInsufficientMaterialPredraw();
+      case MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT:
+        return createTestCasesMonsterBlogInsufficientMaterialTimeout();
       default:
         throw new IllegalArgumentException();
     }
@@ -5260,4 +5266,87 @@ public class PgnExpectedValue {
 
     return new PgnFileTestCaseList(PgnTest.BIZARRE_CHECKMATE, list);
   }
+
+  private static PgnFileTestCaseList createTestCasesMonsterBlogInsufficientMaterial() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(new PgnFileTestCase("01_K_K.pgn", "", "", "", 5, 4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BOTH,
+        UnwinnableFullResultTest.UNWINNABLE, UnwinnableFullResultTest.UNWINNABLE, "8/8/6k1/8/5K2/8/8/8 b - - 0 26"));
+    list.add(new PgnFileTestCase("02_KN_K.pgn", "", "", "", 5, 4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BOTH,
+        UnwinnableFullResultTest.UNWINNABLE, UnwinnableFullResultTest.UNWINNABLE, "8/5k2/8/8/8/8/8/1NK5 b - - 0 26"));
+
+    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesMonsterBlogInsufficientMaterialPredraw() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(
+        new PgnFileTestCase("01_KBw_KBb.pgn", "", "", "", 17, 8, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE, "8/3B1k2/7b/8/8/8/5K2/8 b - - 0 29"));
+    list.add(new PgnFileTestCase("02_KN_KB.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "2b5/3k4/8/6K1/8/8/3N4/8 b - - 0 27"));
+    list.add(
+        new PgnFileTestCase("03_KB_KN.pgn", "", "", "", 7, 8, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE, "8/6k1/7n/8/8/7B/5K2/8 b - - 0 30"));
+    list.add(new PgnFileTestCase("04_KNN_K.pgn", "", "", "", 8, 13, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFullResultTest.UNWINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "8/8/7k/8/4N3/3N4/6K1/8 b - - 0 37"));
+    list.add(new PgnFileTestCase("05_KN_KN.pgn", "", "", "", 5, 2, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "1n6/8/1k6/8/3K4/8/8/1N6 b - - 0 24"));
+
+    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesMonsterBlogInsufficientMaterialTimeout() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(new PgnFileTestCase("01_K_more.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.UNWINNABLE,
+        "1nbk1b2/1qpp1p2/8/8/3K4/8/8/8 b - - 3 20"));
+    list.add(new PgnFileTestCase("02_KN_KQ.pgn", "", "", "", 5, 2, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.UNWINNABLE,
+        "8/8/1q6/3k4/8/2N5/8/5K2 b - - 1 26"));
+    list.add(new PgnFileTestCase("03_KN_KNP_forced_mate.pgn", "", "", "", 5, 14, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "3N2nk/4p3/5pKp/6p1/8/8/8/8 b - - 14 36"));
+    list.add(
+        new PgnFileTestCase("04_KN_KP.pgn", "", "", "", 23, 9, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE, "2k5/8/p7/8/8/2N1K3/8/8 b - - 2 37"));
+    list.add(
+        new PgnFileTestCase("05_KN_KR.pgn", "", "", "", 10, 5, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE, "8/2k4N/8/8/8/3r4/4K3/8 b - - 1 29"));
+    list.add(new PgnFileTestCase("06_KB_KR.pgn", "", "", "", 20, 7, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.UNWINNABLE,
+        "7r/2k5/8/8/5B2/8/4K3/8 b - - 1 37"));
+    list.add(new PgnFileTestCase("07_KBw_KRBw.pgn", "", "", "", 17, 15, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.UNWINNABLE,
+        "8/8/2r2k2/3b4/8/8/2BK4/8 b - - 15 40"));
+    list.add(new PgnFileTestCase("08_KB_KNP_forced_mate.pgn", "", "", "", 22, 27, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "knB5/3p4/pKp5/p7/1p6/8/8/8 b - - 12 60"));
+    list.add(new PgnFileTestCase("09_KB_KP.pgn", "", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "8/5p2/8/4k3/1K6/8/8/5B2 b - - 0 28"));
+    list.add(new PgnFileTestCase("10_KBb_KRBw.pgn", "", "", "", 9, 4, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "4r3/3b4/4k3/8/5K2/8/3B4/8 b - - 4 37"));
+    list.add(new PgnFileTestCase("11_KNN_KP_forced_mate.pgn", "", "", "", 10, 15, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "7k/8/5N1K/8/5N1p/8/8/8 b - - 1 49"));
+    list.add(
+        new PgnFileTestCase("12_KNN_KP.pgn", "", "", "", 15, 5, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE, "8/8/8/2kp4/8/8/2NKN3/8 b - - 5 41"));
+    list.add(new PgnFileTestCase("13_KNN_KB.pgn", "", "", "", 25, 17, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "k7/1bKN4/8/1N6/8/8/8/8 b - - 17 51"));
+    list.add(new PgnFileTestCase("14_KNN_KQQQQQQQQQ.pgn", "", "", "", 13, 26, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE, UnwinnableFullResultTest.WINNABLE,
+        "3q4/3N3K/8/5N2/8/7k/8/qqqqqqqq b - - 1 88"));
+
+    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT, list);
+  }
+
 }

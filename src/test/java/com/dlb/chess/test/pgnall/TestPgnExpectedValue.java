@@ -15,8 +15,8 @@ class TestPgnExpectedValue extends AbstractPgnTest {
   private static final boolean IS_CHECK_FROM_PGN_TEST = false;
   private static final PgnTest CHECK_FROM_PGN_TEST = PgnTest.BASIC_CAPTURE_WHITE;
 
-  private static final boolean IS_CHECK_ONLY_PGN_TEST = false;
-  private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.BASIC_CAPTURE_WHITE;
+  private static final boolean IS_CHECK_ONLY_PGN_TEST = true;
+  private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT;
 
   private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = false;
   private static final String CHECK_PGN_FILE_NAME = "sethuraman_guseinov_2017.pgn";

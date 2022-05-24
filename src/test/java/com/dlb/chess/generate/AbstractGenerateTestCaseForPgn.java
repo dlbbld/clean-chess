@@ -61,26 +61,30 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(lastPositionEvaluation.name());
     result.append(", ");
 
+    result.append(analysis.board().getRepetitionCount());
+    result.append(", ");
+
     final InsufficientMaterial insufficientMaterial = analysis.insufficientMaterial();
     result.append(InsufficientMaterial.class.getSimpleName());
     result.append(".");
     result.append(insufficientMaterial.name());
     result.append(", ");
 
-    final var fen = analysis.fen();
-    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickResultNotHavingMove();
-
+    final UnwinnableQuick unwinnableQuickResultHavingMove = analysis.unwinnableQuickResultHavingMove();
     result.append(UnwinnableFullResultTest.class.getSimpleName());
     result.append(".");
-    final var unwinnableFullResultTest = switch (unwinnableQuickResultNotHavingMove) {
-      case UNWINNABLE -> UnwinnableFullResultTest.UNWINNABLE;
-      case WINNABLE -> UnwinnableFullResultTest.WINNABLE;
-      case POSSIBLY_WINNABLE -> UnwinnableFullResultTest.WINNABLE;
-      default -> throw new IllegalArgumentException();
-    };
-    result.append(unwinnableFullResultTest.name());
+    final var unwinnableFullResultTestHavingMove = approximate(unwinnableQuickResultHavingMove);
+    result.append(unwinnableFullResultTestHavingMove.name());
     result.append(", ");
 
+    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickResultNotHavingMove();
+    result.append(UnwinnableFullResultTest.class.getSimpleName());
+    result.append(".");
+    final var unwinnableFullResultTestNotHavingMove = approximate(unwinnableQuickResultNotHavingMove);
+    result.append(unwinnableFullResultTestNotHavingMove.name());
+    result.append(", ");
+
+    final var fen = analysis.fen();
     result.append("\"");
     result.append(fen);
     result.append("\"");
@@ -91,4 +95,16 @@ public abstract class AbstractGenerateTestCaseForPgn {
     return NonNullWrapperCommon.toString(result);
   }
 
+  private static UnwinnableFullResultTest approximate(UnwinnableQuick quickResult) {
+    switch (quickResult) {
+      case UNWINNABLE:
+        return UnwinnableFullResultTest.UNWINNABLE;
+      case WINNABLE:
+        return UnwinnableFullResultTest.WINNABLE;
+      case POSSIBLY_WINNABLE:
+        return UnwinnableFullResultTest.WINNABLE;
+      default:
+        throw new IllegalArgumentException();
+    }
+  }
 }
