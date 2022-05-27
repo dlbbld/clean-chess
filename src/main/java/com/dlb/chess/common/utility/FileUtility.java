@@ -87,19 +87,32 @@ public class FileUtility {
     }
   }
 
+  public static void appendFile(String filePath, String line) {
+
+    final List<String> lineList = new ArrayList<>();
+    lineList.add(line);
+
+    appendFile(filePath, lineList);
+  }
+
   public static void appendFile(String filePath, List<String> lineList) {
 
-    final File file = new File(filePath);
-    if (!file.isFile()) {
-      throw new IllegalArgumentException("\"" + filePath + "\" is not a file");
-    }
-    try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
-        PrintWriter pw = new PrintWriter(w)) {
-      for (final String line : lineList) {
-        pw.println(line);
+    if (!exists(filePath)) {
+      writeFile(filePath, lineList);
+    } else {
+
+      final File file = new File(filePath);
+      if (!file.isFile()) {
+        throw new IllegalArgumentException("\"" + filePath + "\" is not a file");
       }
-    } catch (final IOException ioe) {
-      throw new FileSystemAccessException("File appending to \"" + filePath + "\" failed", ioe);
+      try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
+          PrintWriter pw = new PrintWriter(w)) {
+        for (final String line : lineList) {
+          pw.println(line);
+        }
+      } catch (final IOException ioe) {
+        throw new FileSystemAccessException("File appending to \"" + filePath + "\" failed", ioe);
+      }
     }
   }
 

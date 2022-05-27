@@ -1,4 +1,4 @@
-package com.dlb.chess.test.lichess;
+package com.dlb.chess.test.lichess.pgn;
 
 import java.io.File;
 import java.io.IOException;

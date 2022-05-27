@@ -42,7 +42,7 @@ public class ValidateAllTestCase {
 
   public static void main(String[] args) throws Exception {
 
-    final ValidateBothResult bothResult = readChaResultList();
+    final ValidateBothResult bothResult = readChaResultList(FEN_ANALYSIS_FILE_PATH);
     // validateBothTestResult(bothResult); //ok
     checkTestCasesAgainstCha(bothResult);
   }
@@ -112,14 +112,14 @@ public class ValidateAllTestCase {
     }
   }
 
-  private static ValidateBothResult readChaResultList() throws Exception {
+  public static ValidateBothResult readChaResultList(String fenAnalysisFilePath) throws Exception {
     final List<ValidateFullResult> fullResultList = new ArrayList<>();
     final List<ValidateQuickResult> quickResultList = new ArrayList<>();
 
-    final List<String> fileLineList = FileUtility.readFileLines(FEN_ANALYSIS_FILE_PATH);
+    final List<String> fileLineList = FileUtility.readFileLines(fenAnalysisFilePath);
     for (final String fileLine : fileLineList) {
       final var fileLineItemArray = fileLine.split(";");
-      if (fileLineItemArray.length != 4) {
+      if (fileLineItemArray.length != 5) {
         throw new IllegalArgumentException("Illegal file line, must contain exactly four semicolon separate values");
       }
       final var fileLineItemList = NonNullWrapperCommon.asList(fileLineItemArray);
@@ -132,13 +132,13 @@ public class ValidateAllTestCase {
         throw new IllegalArgumentException("Illegal FEN of \"" + fenStr + "\" for " + fve.getMessage() + " was found");
       }
 
-      final var chaModeStr = NonNullWrapperCommon.get(fileLineItemList, 1);
+      final var chaModeStr = NonNullWrapperCommon.get(fileLineItemList, 2);
       if (!ChaMode.exists(chaModeStr)) {
         throw new IllegalArgumentException("Illegal identifier of \"" + chaModeStr + "\" was found");
       }
       final ChaMode chaMode = ChaMode.calculate(chaModeStr);
 
-      final var sideCheckingForWinStr = NonNullWrapperCommon.get(fileLineItemList, 2);
+      final var sideCheckingForWinStr = NonNullWrapperCommon.get(fileLineItemList, 3);
       if (!Side.exists(sideCheckingForWinStr)) {
         throw new IllegalArgumentException("Illegal winning side of \"" + sideCheckingForWinStr + "\" was found");
       }
@@ -146,7 +146,7 @@ public class ValidateAllTestCase {
 
       switch (chaMode) {
         case FULL: {
-          final var chaFullResultStr = NonNullWrapperCommon.get(fileLineItemList, 3);
+          final var chaFullResultStr = NonNullWrapperCommon.get(fileLineItemList, 4);
           if (!ChaFullResult.exists(chaFullResultStr)) {
             throw new IllegalArgumentException("Illegal full result of \"" + chaFullResultStr + "\" was found");
           }
@@ -155,7 +155,7 @@ public class ValidateAllTestCase {
         }
           break;
         case QUICK: {
-          final var chaQuickResultStr = NonNullWrapperCommon.get(fileLineItemList, 3);
+          final var chaQuickResultStr = NonNullWrapperCommon.get(fileLineItemList, 4);
           if (!ChaQuickResult.exists(chaQuickResultStr)) {
             throw new IllegalArgumentException("Illegal quick result of \"" + chaQuickResultStr + "\" was found");
           }
@@ -206,7 +206,7 @@ public class ValidateAllTestCase {
     throw new IllegalArgumentException("No quick test result was found");
   }
 
-  static void validateBothTestResult(ValidateBothResult bothResult) {
+  public static void validateBothTestResult(ValidateBothResult bothResult) {
     if (bothResult.fullResultList().size() != bothResult.quickResultList().size()) {
       throw new IllegalArgumentException("Test result list sizes not match for full and quick test");
     }
