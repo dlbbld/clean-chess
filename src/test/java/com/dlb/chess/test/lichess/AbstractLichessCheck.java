@@ -1,4 +1,4 @@
-package com.dlb.chess.test.lichess.pgn;
+package com.dlb.chess.test.lichess;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;

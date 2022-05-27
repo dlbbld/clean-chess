@@ -1,7 +1,6 @@
 package com.dlb.chess.unwinnability.findhelpmate.exhaust;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,8 +17,6 @@ import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
-import com.dlb.chess.unwinnability.findhelpmate.comparator.ComparatorCornerMate;
-import com.dlb.chess.unwinnability.findhelpmate.comparator.ImprovedComparatorClassicalCheckmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
@@ -155,14 +152,14 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
 
-    if (isClassicalCheckmatePosition || ClassicalCheckmate.calculateAboveClassicalCheckmateMaterial(color,
-        board.getStaticPosition()) != ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
-      Collections.sort(legalMoveList,
-          new ImprovedComparatorClassicalCheckmate(color, board.getHavingMove(), board.getStaticPosition()));
-    } else {
-      Collections.sort(legalMoveList,
-          new ComparatorCornerMate(color, board.getHavingMove(), board.getStaticPosition()));
-    }
+    // if (isClassicalCheckmatePosition || ClassicalCheckmate.calculateAboveClassicalCheckmateMaterial(color,
+    // board.getStaticPosition()) != ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
+    // Collections.sort(legalMoveList,
+    // new ImprovedComparatorClassicalCheckmate(color, board.getHavingMove(), board.getStaticPosition()));
+    // } else {
+    // Collections.sort(legalMoveList,
+    // new ComparatorCornerMate(color, board.getHavingMove(), board.getStaticPosition()));
+    // }
     for (final LegalMove legalMove : legalMoveList) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
 

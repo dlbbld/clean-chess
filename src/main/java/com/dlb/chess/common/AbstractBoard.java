@@ -15,10 +15,10 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -67,8 +67,8 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
   @Override
   public DeadPositionQuick isDeadPositionQuick() {
-    final UnwinnableQuick unwinnableWhite = UnwinnableQuickCalculator.unwinnableQuick(this, Side.WHITE);
-    final UnwinnableQuick unwinnableBlack = UnwinnableQuickCalculator.unwinnableQuick(this, Side.BLACK);
+    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
+    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
 
     if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
       return DeadPositionQuick.DEAD_POSITION;
@@ -83,11 +83,11 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
   @Override
   public DeadPositionFull isDeadPositionFull() {
-    final UnwinnableFull unwinnableWhite = UnwinnableFullCalculator.unwinnableFull(this, Side.WHITE);
+    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE);
     if (unwinnableWhite == UnwinnableFull.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    final UnwinnableFull unwinnableBlack = UnwinnableFullCalculator.unwinnableFull(this, Side.BLACK);
+    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK);
     if (unwinnableBlack == UnwinnableFull.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
@@ -97,12 +97,12 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
   @Override
   public UnwinnableQuick isUnwinnableQuick(Side side) {
-    return UnwinnableQuickCalculator.unwinnableQuick(this, side);
+    return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
   }
 
   @Override
   public UnwinnableFull isUnwinnableFull(Side side) {
-    return UnwinnableFullCalculator.unwinnableFull(this, side);
+    return UnwinnableFullAnalyzer.unwinnableFull(this, side);
   }
 
   @Override

@@ -9,9 +9,9 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableCalculator;
+import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.full.UnwinnableFullCalculator;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class TestUnwinnabilityFullAgainstWinnability {
@@ -46,9 +46,8 @@ public class TestUnwinnabilityFullAgainstWinnability {
 
         // not having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board,
-              board.getHavingMove().getOppositeSide());
-          final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board,
+          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
+          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
               board.getHavingMove().getOppositeSide());
 
           CheckFull.check(winnable, unwinnableFull);
@@ -56,8 +55,8 @@ public class TestUnwinnabilityFullAgainstWinnability {
 
         // having move
         {
-          final Winnable winnable = WinnableCalculator.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableFull unwinnableFull = UnwinnableFullCalculator.unwinnableFull(board, board.getHavingMove());
+          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
+          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
 
           CheckFull.check(winnable, unwinnableFull);
         }

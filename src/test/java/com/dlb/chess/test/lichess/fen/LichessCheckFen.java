@@ -10,7 +10,7 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickCalculator;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class LichessCheckFen extends AbstractLichessCheckFen {
@@ -69,7 +69,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
       if (isStartAnalysis) {
         final Board board = new Board(fen);
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableQuick unwinnableQuick = UnwinnableQuickCalculator.unwinnableQuick(board,
+        final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
             board.getHavingMove().getOppositeSide());
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
