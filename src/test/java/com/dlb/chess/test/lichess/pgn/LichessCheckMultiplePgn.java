@@ -57,6 +57,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
     }
 
     // test commit
+    // test
 
     try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
       while (myReader.hasNextLine()) {
