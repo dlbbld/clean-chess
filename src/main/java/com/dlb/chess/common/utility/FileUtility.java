@@ -73,6 +73,20 @@ public class FileUtility {
     writeFile(calculateFilePath(folderPath, fileName), lineList);
   }
 
+  public static void writeFile(String folderPath, String fileName, String line) {
+    final List<String> lineList = new ArrayList<>();
+    lineList.add(line);
+
+    writeFile(calculateFilePath(folderPath, fileName), lineList);
+  }
+
+  public static void writeFile(String filePath, String line) {
+    final List<String> lineList = new ArrayList<>();
+    lineList.add(line);
+
+    writeFile(filePath, lineList);
+  }
+
   private static void writeFile(String filePath, List<String> lineList) {
     deleteFile(filePath);
     final var path = Paths.get(filePath);

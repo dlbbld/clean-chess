@@ -1,46 +1,119 @@
 package com.dlb.chess.test.lichess.fen;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.Writer;
+import java.nio.charset.StandardCharsets;
+import java.util.Scanner;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
-import com.dlb.chess.test.unwinnability.validate.ValidateAllTestCase;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(LichessReportCheckFen.class);
 
-  private static final String FEN_FILE_NAME_AMBRONA_RESULT = "lichess-ambrona-out.txt";
+  private static final String FEN_FILE_NAME_AMBRONA_RESULT_QUICK = "lichess-ambrona-out-quick.txt";
+  private static final String FEN_FILE_NAME_MINE_RESULT_QUICK = "lichess-mine-out-quick.txt";
+
+  private static final String FEN_FILE_NAME_COMPARE_QUICK = "lichess-compare-quick.txt";
+  private static final String FEN_FILE_COMPARE_QUICK_HEADER = "fen;lichessGameId;mode;colour;cha;check";
 
   public static void main(String[] args) throws Exception {
 
-    final var fenFilePathAmbronaResult = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_AMBRONA_RESULT;
-
-    final ValidateBothResult bothResult = ValidateAllTestCase.readChaResultList(fenFilePathAmbronaResult);
-    // ValidateAllTestCase.validateBothTestResult(bothResult);
-
-    reportDifferences();
+    reportDifferencesQuick();
   }
 
-  private static void reportDifferences() throws IOException {
+  private static void reportDifferencesQuick() throws IOException {
 
-    final var fenFilePathMineResult = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_MINE_RESULT;
+    final var fenFilePathAmbronaResult = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_AMBRONA_RESULT_QUICK;
+    final var fenFilePathMineResult = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_MINE_RESULT_QUICK;
 
-    final List<String> fenFileListResult = FileUtility.readFileLines(fenFilePathMineResult);
+    final var fenFilePathCompareQuick = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_COMPARE_QUICK;
 
-    logger.printf(Level.INFO, "Total results: %d", fenFileListResult.size());
+    FileUtility.writeFile(fenFilePathCompareQuick, FEN_FILE_COMPARE_QUICK_HEADER);
 
-    for (final String line : fenFileListResult) {
-      final var lineArr = line.split(";");
-      final var fen = lineArr[0];
-      final var lichessGameId = lineArr[1];
+    final File fileAmbrona = new File(fenFilePathAmbronaResult);
+    final File fileMine = new File(fenFilePathMineResult);
+    final File fileReport = new File(fenFilePathCompareQuick);
 
+    var counterAll = 0;
+    var counterDifferences = 0;
+    try (final Scanner readerAmbrona = new Scanner(fileAmbrona, StandardCharsets.ISO_8859_1);
+        final Scanner readerMine = new Scanner(fileMine, StandardCharsets.ISO_8859_1);
+        Writer writerReport = new OutputStreamWriter(new FileOutputStream(fileReport, true),
+            StandardCharsets.UTF_8.name());
+        PrintWriter printWriterReport = new PrintWriter(writerReport)) {
+      while (readerAmbrona.hasNextLine()) {
+        counterAll++;
+        final String lineAmbrona = NonNullWrapperCommon.nextLine(readerAmbrona);
+        final String lineMine = NonNullWrapperCommon.nextLine(readerMine);
+
+        final var lineAmbronaArr = lineAmbrona.split(";");
+        final var ambronaFen = lineAmbronaArr[0];
+        final var ambronaGameId = lineAmbronaArr[1];
+        final var ambronaMode = lineAmbronaArr[2];
+        final var ambronaTestingSide = lineAmbronaArr[3];
+
+        final var lineMineArr = lineMine.split(";");
+        final var mineFen = lineMineArr[0];
+        final var mineGameId = lineMineArr[1];
+        final var mineMode = lineMineArr[2];
+        final var mineTestingSide = lineMineArr[3];
+
+        if (!ambronaFen.equals(mineFen) || !ambronaGameId.equals(mineGameId) || !ambronaMode.equals(mineMode)) {
+          throw new IllegalArgumentException("Test results are not as expected");
+        }
+
+        final var ambronaResult = lineAmbronaArr[4];
+        final var mineResult = lineMineArr[3];
+
+        if (calculateHasDifference(ambronaResult, mineResult)) {
+          counterDifferences++;
+          final StringBuilder outputLine = new StringBuilder();
+          outputLine.append(ambronaFen).append(";");
+          outputLine.append(ambronaGameId).append(";");
+          outputLine.append(ambronaMode).append(";");
+          outputLine.append(ambronaTestingSide).append(";");
+
+          outputLine.append(ambronaResult).append(";");
+          outputLine.append(mineResult).append(";");
+
+          final String outputLineStr = NonNullWrapperCommon.toString(outputLine);
+          printWriterReport.println(outputLineStr);
+          // logger.info(outputLineStr);
+        }
+
+      }
+      logger.printf(Level.INFO, "Processed FEN's: %d", counterAll);
+      logger.printf(Level.INFO, "Differences: %d", counterDifferences);
     }
+  }
+
+  private static boolean calculateHasDifference(String ambronaResult, String mineResult) {
+    switch (ambronaResult) {
+      case "winnable":
+      case "unwinnable":
+        if (mineResult.equals(ambronaResult)) {
+          return true;
+        }
+        break;
+      case "undetermined":
+        if (!mineResult.equals(UnwinnableQuick.POSSIBLY_WINNABLE.getDescription())) {
+          return true;
+        }
+        break;
+      default:
+        throw new IllegalArgumentException();
+    }
+    return false;
 
   }
 

@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
@@ -68,25 +69,26 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
 
       if (isStartAnalysis) {
         final Board board = new Board(fen);
+        final Side testingSide = board.getHavingMove().getOppositeSide();
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-            board.getHavingMove().getOppositeSide());
+        final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, testingSide);
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
         final StringBuilder outputLine = new StringBuilder();
         outputLine.append(fen).append(";");
         outputLine.append(lichessGameId).append(";");
         outputLine.append("quick").append(";");
+        outputLine.append(testingSide.getFenLetter()).append(";");
         outputLine.append(unwinnableQuick.getDescription()).append(";");
         outputLine.append(durationMilliSeconds);
 
         final String outputLineStr = NonNullWrapperCommon.toString(outputLine);
 
-        logger.info(outputLineStr);
         FileUtility.appendFile(fenFilePathOut, outputLineStr);
 
         countProcessed++;
-        if (countProcessed % 10 == 0) {
+        if (countProcessed % 1000 == 0) {
+          logger.info(outputLineStr);
           logger.printf(Level.INFO, "Processed FEN's: %d", countProcessed);
         }
       } else {
