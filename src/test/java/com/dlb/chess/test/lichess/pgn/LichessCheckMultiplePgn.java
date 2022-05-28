@@ -55,6 +55,9 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
     if (!file.isFile()) {
       throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
     }
+
+    // test commit
+
     try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
       while (myReader.hasNextLine()) {
         final String line = NonNullWrapperCommon.nextLine(myReader);
