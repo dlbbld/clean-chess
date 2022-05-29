@@ -5,7 +5,9 @@ import java.util.List;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.UciMove;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.interrupt.enums.FindHelpMateInterruptResult;
@@ -42,8 +44,17 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
     }
 
     if (currentDepth < D && !board.isInsufficientMaterial(c)) {
+
+      final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
+      for (final LegalMove legalMove : legalMoveList) {
+        final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
+        // System.out.println(uciMove.text());
+      }
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());
+        final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
+        System.out.println(uciMove.text());
+
         mateList.add(legalMove);
         final var hasCheckmate = calculateHelpmate(board, c, currentDepth + 1, mateList);
         board.unperformMove();

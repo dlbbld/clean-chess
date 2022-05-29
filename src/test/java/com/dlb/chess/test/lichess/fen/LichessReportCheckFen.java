@@ -101,7 +101,7 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
     switch (ambronaResult) {
       case "winnable":
       case "unwinnable":
-        if (mineResult.equals(ambronaResult)) {
+        if (!mineResult.equals(ambronaResult)) {
           return true;
         }
         break;
