@@ -74,7 +74,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
       }
     }
     // search could have continued
-    if (currentDepth == D && !board.getLegalMoveSet().isEmpty()) {
+    if (currentDepth == D) {
       return FindHelpMateInterruptResult.INTERRUPTED;
     }
     return FindHelpMateInterruptResult.FALSE;

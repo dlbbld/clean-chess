@@ -37,9 +37,9 @@ public class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    final var fen = "r6r/p7/4kbQp/1p3p2/3p4/1P6/P1P2PPP/R5K1 w - - 1 31";
+    final var fen = "8/8/3p4/1p2p2k/pP1pP1p1/P2P2P1/6K1/8 b - - 2 41";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableQuick.WINNABLE,
+    assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
