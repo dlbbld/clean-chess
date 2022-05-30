@@ -84,7 +84,7 @@ class SemiStaticFunctions {
 
     for (final MobilitySolutionVariable entry : ms.calculateEntriesWithValueOne()) {
       if (entry.piecePlacement() == p) {
-        result.add(entry.s());
+        result.add(entry.squareTo());
       }
     }
     return result;

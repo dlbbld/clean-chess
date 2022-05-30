@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -55,6 +56,22 @@ public class MobilitySolution {
     return calculateEntries(VariableState.ONE);
   }
 
+  public Set<Square> calculateSquaresWithValueOne(PiecePlacement piecePlacement) {
+    final Set<Square> squareSet = new TreeSet<>();
+
+    if (!values.containsKey(piecePlacement)) {
+      throw new IllegalArgumentException("No such piece placement");
+    }
+    final Map<Square, VariableState> map = NonNullWrapperCommon.get(values, piecePlacement);
+
+    for (final Square squareCandidate : map.keySet()) {
+      if (NonNullWrapperCommon.get(map, squareCandidate) == VariableState.ONE) {
+        squareSet.add(squareCandidate);
+      }
+    }
+    return squareSet;
+  }
+
   public List<MobilitySolutionVariable> calculateEntries(VariableState binaryValue) {
     final List<MobilitySolutionVariable> result = new ArrayList<>();
     for (final Entry<PiecePlacement, Map<Square, VariableState>> mapEntryMap : values.entrySet()) {
@@ -71,5 +88,26 @@ public class MobilitySolution {
   public Set<PiecePlacement> getPiecePlacementSet() {
     @SuppressWarnings("null") @NonNull final Set<PiecePlacement> keySet = values.keySet();
     return keySet;
+  }
+
+  public void debug() {
+    for (final PiecePlacement piecePlacement : new TreeSet<>(values.keySet())) {
+      final Map<Square, VariableState> valuePlacement = NonNullWrapperCommon.get(values, piecePlacement);
+      final Set<Square> reachable = new TreeSet<>();
+      for (final Square square : valuePlacement.keySet()) {
+        final VariableState stateSquare = NonNullWrapperCommon.get(valuePlacement, square);
+        if (stateSquare == VariableState.ONE) {
+          reachable.add(square);
+        }
+      }
+      final var pieceDescription = new StringBuilder().append(piecePlacement.side().getName()).append(" ")
+          .append(piecePlacement.type().getName());
+      pieceDescription.append(" on ").append(piecePlacement.squareOriginal().getName());
+      final StringBuilder reachableSquareList = new StringBuilder();
+      for (final Square reachableSquare : reachable) {
+        reachableSquareList.append(reachableSquare.getName()).append(" ");
+      }
+      System.out.println(pieceDescription.append(": ").append(reachableSquareList.toString()).toString());
+    }
   }
 }

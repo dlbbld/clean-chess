@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.unwinnability.model.PiecePlacement;
 
-public record MobilitySolutionVariable(PiecePlacement piecePlacement, Square s) {
+public record MobilitySolutionVariable(PiecePlacement piecePlacement, Square squareTo) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -18,7 +18,7 @@ public record MobilitySolutionVariable(PiecePlacement piecePlacement, Square s) 
       return false;
     }
     final var other = (MobilitySolutionVariable) obj;
-    return Objects.equals(piecePlacement, other.piecePlacement) && s == other.s;
+    return Objects.equals(piecePlacement, other.piecePlacement) && squareTo == other.squareTo;
   }
 
 }

@@ -94,7 +94,7 @@ public class MobilityFunctions implements EnumConstants {
     final Set<PiecePlacement> result = new TreeSet<>();
 
     for (final PiecePlacement piecePlacement : piecePlacementList) {
-      if (predecessorsCapture(piecePlacement, s).contains(piecePlacement.sq())) {
+      if (predecessorsCapture(piecePlacement, s).contains(piecePlacement.squareOriginal())) {
         result.add(piecePlacement);
       }
     }

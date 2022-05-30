@@ -57,7 +57,7 @@ public class UnwinnableSemiStatic {
     // require that all intruders (only bishops at this point) be of the same square color)
     final Set<SquareType> squareTypeSet = new TreeSet<>();
     for (final PiecePlacement intruder : intruderSet) {
-      squareTypeSet.add(intruder.sq().getSquareType());
+      squareTypeSet.add(intruder.squareOriginal().getSquareType());
     }
     if (squareTypeSet.size() > 1) {
       return false;

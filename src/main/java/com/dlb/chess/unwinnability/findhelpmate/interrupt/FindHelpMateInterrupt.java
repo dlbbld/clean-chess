@@ -53,7 +53,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());
         final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
-        System.out.println(uciMove.text());
+        // System.out.println(uciMove.text());
 
         mateList.add(legalMove);
         final var hasCheckmate = calculateHelpmate(board, c, currentDepth + 1, mateList);
