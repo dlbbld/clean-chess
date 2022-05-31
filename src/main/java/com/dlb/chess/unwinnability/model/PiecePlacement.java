@@ -6,7 +6,8 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 
-public record PiecePlacement(PieceType type, Side side, Square squareOriginal) implements Comparable<PiecePlacement> {
+public record PiecePlacement(PieceType pieceType, Side side, Square squareOriginal)
+    implements Comparable<PiecePlacement> {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -17,7 +18,7 @@ public record PiecePlacement(PieceType type, Side side, Square squareOriginal) i
       return false;
     }
     final var other = (PiecePlacement) obj;
-    return side == other.side && squareOriginal == other.squareOriginal && type == other.type;
+    return side == other.side && squareOriginal == other.squareOriginal && pieceType == other.pieceType;
   }
 
   @Override
@@ -25,10 +26,12 @@ public record PiecePlacement(PieceType type, Side side, Square squareOriginal) i
     if (this.side != o.side) {
       return this.side.compareTo(o.side);
     }
-    if (this.type != o.type) {
-      return this.type.compareTo(o.type);
-    }
-    return this.squareOriginal.getName().compareTo(o.squareOriginal.getName());
+    return this.squareOriginal.compareTo(o.squareOriginal);
+  }
+
+  @Override
+  public String toString() {
+    return side.getName() + " " + pieceType.getName() + " on " + squareOriginal.getName();
   }
 
 }

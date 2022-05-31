@@ -16,7 +16,7 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 public class MobilityFunctions implements EnumConstants {
 
   public static Set<Square> predecessorsCapture(PiecePlacement p, Square s) {
-    switch (p.type()) {
+    switch (p.pieceType()) {
       case PAWN:
         final Set<Square> result = new TreeSet<>();
         if (Square.calculateHasBehindLeftDiagonalSquare(p.side(), s)) {
@@ -39,7 +39,7 @@ public class MobilityFunctions implements EnumConstants {
   }
 
   static Set<Square> promotion(PiecePlacement p) {
-    switch (p.type()) {
+    switch (p.pieceType()) {
       case PAWN:
         switch (p.side()) {
           case WHITE:
@@ -63,7 +63,7 @@ public class MobilityFunctions implements EnumConstants {
   }
 
   static Set<Square> predecessors(PiecePlacement p, Square s) {
-    switch (p.type()) {
+    switch (p.pieceType()) {
       case PAWN:
         return calculateBehindSquare(p.side(), s);
       case KNIGHT:

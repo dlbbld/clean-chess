@@ -5,7 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -45,7 +47,7 @@ public class TestMobilitySolution implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testBasicAllMaximum() throws Exception {
     // KvK
     checkAllMaximum("8/8/4k3/8/8/2K5/8/8 w - - 0 100");
@@ -98,16 +100,18 @@ public class TestMobilitySolution implements EnumConstants {
     // KvKB''
     checkAllMaximum("7b/8/4k3/8/4K3/8/8/8 w - - 0 100");
     checkAllMaximum("7b/8/4k3/8/4K3/8/8/8 b - - 0 100");
+
+    // special positions
+    checkAllMaximum("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 w - - 0 100");
+    checkAllMaximum("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 100");
+
+    checkAllMaximum("2b5/1p6/pPp3k1/2Pp3p/P2PpBpP/4P1P1/5K2/8 w - - 0 100");
+    checkAllMaximum("2b5/1p6/pPp3k1/2Pp3p/P2PpBpP/4P1P1/5K2/8 b - - 0 100");
+
   }
 
   @SuppressWarnings("static-method")
-  @Test
-  void testBasicBishops() throws Exception {
-
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testPawnWall() throws Exception {
     {
       final List<Square> whiteKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
@@ -150,13 +154,13 @@ public class TestMobilitySolution implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testPseudoPawnWall() throws Exception {
     checkAllMaximum("8/8/3p4/4p2k/4P3/3P4/6K1/8 b - - 2 41");
   }
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testAllLockedButKing() throws Exception {
 
     {
@@ -175,15 +179,105 @@ public class TestMobilitySolution implements EnumConstants {
     {
       final List<Square> whiteKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
           D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5);
-      final List<Square> blackKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, B2, D2, E2,
-          F2, G2, H2, E3, F3, G3, H3, D4, E4, F4, G4, H4, E5, F5, G5, H5, A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7,
-          D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
+      final List<Square> blackKingToSquareList = NonNullWrapperCommon.asList(A8, B8, C8, D8, E8, F8, G7, H7, H8);
 
       checkAllLockedButKing("3k2n1/1p2p3/1P2Pp1p/5P1P/1K6/8/8/8 w - - 0 100", whiteKingToSquareList,
           blackKingToSquareList);
 
       checkAllLockedButKing("3k2n1/1p2p3/1P2Pp1p/5P1P/1K6/8/8/8 b - - 0 100", whiteKingToSquareList,
           blackKingToSquareList);
+    }
+
+    {
+      final List<Square> whiteKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
+          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, D4, E4, F4, G4, H4);
+      final List<Square> blackKingToSquareList = NonNullWrapperCommon.asList(A8, B8, C8, D8, E8, F8, G7, H7, H8);
+
+      checkAllLockedButKing("3k2n1/1p2p3/1Pp1Pp1p/BpP2P1P/1P6/3K4/8/8 w - - 0 100", whiteKingToSquareList,
+          blackKingToSquareList);
+
+      checkAllLockedButKing("3k2n1/1p2p3/1Pp1Pp1p/BpP2P1P/1P6/3K4/8/8 b - - 0 100", whiteKingToSquareList,
+          blackKingToSquareList);
+    }
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testCustom() throws Exception {
+    {
+      final Map<Square, List<Square>> mobilityMap = new HashMap<>();
+
+      final List<Square> whiteKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
+          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, C5, D5, E5, F5, G5,
+          H5, C6, D6, E6, F6, G6, H6, D7, E7, F7, G7, H7, D8, E8, F8, G8, H8);
+      mobilityMap.put(G2, whiteKingToSquareList);
+
+      mobilityMap.put(B5, NonNullWrapperCommon.asList(B5));
+      mobilityMap.put(A6, NonNullWrapperCommon.asList(A6));
+      mobilityMap.put(B6, NonNullWrapperCommon.asList(B6));
+      mobilityMap.put(B7, NonNullWrapperCommon.asList(B7));
+
+      mobilityMap.put(B8, NonNullWrapperCommon.asList(B8));
+
+      checkCustom("1k6/1P6/BP6/1P6/8/8/6K1/8 w - - 0 100", mobilityMap);
+
+      checkCustom("1k6/1P6/BP6/1P6/8/8/6K1/8 b - - 0 100", mobilityMap);
+    }
+
+    {
+      final Map<Square, List<Square>> mobilityMap = new HashMap<>();
+
+      final List<Square> whiteKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
+          D2, E2, F2, G2, H2, A3, B3, C3, A4, B4);
+      mobilityMap.put(F2, whiteKingToSquareList);
+
+      mobilityMap.put(E3, NonNullWrapperCommon.asList(E3));
+      mobilityMap.put(G3, NonNullWrapperCommon.asList(G3));
+
+      mobilityMap.put(D4, NonNullWrapperCommon.asList(D4));
+      mobilityMap.put(E4, NonNullWrapperCommon.asList(E4));
+
+      mobilityMap.put(F4, NonNullWrapperCommon.asList(F4, E5, G5, D6, F6, H6, A7, C7, E7, G7, B8, D8, F8, H8));
+
+      mobilityMap.put(G4, NonNullWrapperCommon.asList(G4));
+      mobilityMap.put(H4, NonNullWrapperCommon.asList(H4));
+
+      mobilityMap.put(A5, NonNullWrapperCommon.asList(A5));
+
+      mobilityMap.put(C5, NonNullWrapperCommon.asList(C5));
+      mobilityMap.put(D5, NonNullWrapperCommon.asList(D5));
+      mobilityMap.put(H5, NonNullWrapperCommon.asList(H5));
+
+      mobilityMap.put(A6, NonNullWrapperCommon.asList(A6));
+      mobilityMap.put(B6, NonNullWrapperCommon.asList(B6));
+      mobilityMap.put(C6, NonNullWrapperCommon.asList(C6));
+
+      final List<Square> blackKingToSquareList = NonNullWrapperCommon.asList(F5, E6, F6, G6, H6, D7, E7, F7, G7, H7, A8,
+          B8, C8, D8, E8, F8, G8, H8);
+      mobilityMap.put(G6, blackKingToSquareList);
+
+      mobilityMap.put(B7, NonNullWrapperCommon.asList(B7));
+
+      mobilityMap.put(C8, NonNullWrapperCommon.asList(F5, E6, G6, D7, F7, H7, C8, E8, G8));
+
+      checkCustom("2b5/1p6/pPp3k1/P1Pp3p/3PpBpP/4P1P1/5K2/8 w - - 0 100", mobilityMap);
+
+      checkCustom("2b5/1p6/pPp3k1/P1Pp3p/3PpBpP/4P1P1/5K2/8 b - - 0 100", mobilityMap);
+
+    }
+  }
+
+  private static void checkCustom(String fen, Map<Square, List<Square>> mobilityMap) {
+    final Board board = new Board(fen);
+    final MobilitySolution mobilitySolution = Mobility.mobility(board);
+
+    for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
+      final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
+      assertTrue(mobilityMap.containsKey(piecePlacement.squareOriginal()));
+      final List<Square> expectedSquareList = NonNullWrapperCommon.get(mobilityMap, piecePlacement.squareOriginal());
+      final Set<Square> expectedSquareSet = new TreeSet<>(expectedSquareList);
+      assertEquals(expectedSquareSet, squaresWithValueOne);
     }
 
   }
@@ -196,7 +290,7 @@ public class TestMobilitySolution implements EnumConstants {
 
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
       final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
-      switch (piecePlacement.type()) {
+      switch (piecePlacement.pieceType()) {
         case PAWN:
         case ROOK:
         case KNIGHT:
@@ -234,7 +328,7 @@ public class TestMobilitySolution implements EnumConstants {
 
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
       final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
-      switch (piecePlacement.type()) {
+      switch (piecePlacement.pieceType()) {
         case PAWN:
           assertEquals(1, squaresWithValueOne.size());
           final Square onlyToSquare = NonNullWrapperCommon.getFirst(new ArrayList<>(squaresWithValueOne));
@@ -274,7 +368,7 @@ public class TestMobilitySolution implements EnumConstants {
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
       final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
 
-      switch (piecePlacement.type()) {
+      switch (piecePlacement.pieceType()) {
         case ROOK:
         case KNIGHT:
         case QUEEN:
@@ -315,7 +409,7 @@ public class TestMobilitySolution implements EnumConstants {
   private static void checkPieces(StaticPosition staticPosition, MobilitySolution mobilitySolution) {
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
       assertFalse(staticPosition.isEmpty(piecePlacement.squareOriginal()));
-      assertEquals(staticPosition.get(piecePlacement.squareOriginal()).getPieceType(), piecePlacement.type());
+      assertEquals(staticPosition.get(piecePlacement.squareOriginal()).getPieceType(), piecePlacement.pieceType());
       assertEquals(staticPosition.get(piecePlacement.squareOriginal()).getSide(), piecePlacement.side());
     }
   }

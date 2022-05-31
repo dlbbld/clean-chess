@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 import com.dlb.chess.unwinnability.model.PiecePlacement;
 
@@ -87,10 +88,15 @@ public class MobilitySolution {
 
   public Set<PiecePlacement> getPiecePlacementSet() {
     @SuppressWarnings("null") @NonNull final Set<PiecePlacement> keySet = values.keySet();
-    return keySet;
+    // treeset for ordering
+    return new TreeSet<>(keySet);
   }
 
   public void debug() {
+
+    System.out.println("");
+    System.out.println("Mobility:");
+
     for (final PiecePlacement piecePlacement : new TreeSet<>(values.keySet())) {
       final Map<Square, VariableState> valuePlacement = NonNullWrapperCommon.get(values, piecePlacement);
       final Set<Square> reachable = new TreeSet<>();
@@ -100,14 +106,12 @@ public class MobilitySolution {
           reachable.add(square);
         }
       }
-      final var pieceDescription = new StringBuilder().append(piecePlacement.side().getName()).append(" ")
-          .append(piecePlacement.type().getName());
-      pieceDescription.append(" on ").append(piecePlacement.squareOriginal().getName());
-      final StringBuilder reachableSquareList = new StringBuilder();
-      for (final Square reachableSquare : reachable) {
-        reachableSquareList.append(reachableSquare.getName()).append(" ");
-      }
-      System.out.println(pieceDescription.append(": ").append(reachableSquareList.toString()).toString());
+      final var pieceDescription = new StringBuilder();
+      pieceDescription.append(piecePlacement.toString());
+      final String squareList = GeneralUtility.calculateSquareList(reachable);
+      pieceDescription.append(": ");
+      pieceDescription.append(squareList);
+      System.out.println(pieceDescription.toString());
     }
   }
 }
