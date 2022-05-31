@@ -121,7 +121,10 @@ public class ValidateAllTestCase {
       }
       final var fileLineItemList = NonNullWrapperCommon.asList(fileLineItemArray);
 
-      final var fenStr = NonNullWrapperCommon.get(fileLineItemList, 0).trim();
+      final String fenStrRaw = NonNullWrapperCommon.get(fileLineItemList, 0);
+
+      final String fenStr = NonNullWrapperCommon.trim(fenStrRaw);
+
       final Fen fen;
       try {
         fen = FenParser.parseAdvancedFen(fenStr);

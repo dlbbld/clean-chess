@@ -8,6 +8,6 @@ public abstract class AbstractLichessCheckFen {
 
   static final String FEN_FILE_NAME_IN = "lichess-in.txt";
 
-  static final String FEN_FILE_NAME_MINE_RESULT = "lichess-mine-out.txt";
+  static final String FEN_FILE_NAME_MINE_RESULT = "lichess-mine-out-quick-2.txt";
 
 }

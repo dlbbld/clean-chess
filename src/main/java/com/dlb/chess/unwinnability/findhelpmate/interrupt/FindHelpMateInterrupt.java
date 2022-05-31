@@ -13,6 +13,9 @@ import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.interrupt.enums.FindHelpMateInterruptResult;
 
 public class FindHelpMateInterrupt extends AbstractFindHelpmate {
+
+  private static final boolean IS_DEBUG = true;
+
   // Our quick algorithm is extremely light, requiring only a few microseconds on average per
   // position. It is also sound, but not complete. However, as we detail in Section 5, with an
   // (empirically chosen) depth bound of D = 9, all unfairly classified games from the Lichess
@@ -47,13 +50,17 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
       final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
       for (final LegalMove legalMove : legalMoveList) {
-        final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
-        // System.out.println(uciMove.text());
+        if (IS_DEBUG) {
+          final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
+          System.out.println(uciMove.text());
+        }
       }
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());
-        final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
-        // System.out.println(uciMove.text());
+        if (IS_DEBUG) {
+          final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
+          System.out.println(uciMove.text());
+        }
 
         mateList.add(legalMove);
         final var hasCheckmate = calculateHelpmate(board, c, currentDepth + 1, mateList);

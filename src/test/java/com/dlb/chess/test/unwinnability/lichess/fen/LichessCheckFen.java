@@ -64,7 +64,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
     for (final String line : fenFileListIn) {
 
       final var sepPos = line.lastIndexOf(" ");
-      final var fen = line.substring(0, sepPos);
+      final var fen = NonNullWrapperCommon.substring(line, 0, sepPos);
       final var lichessGameId = line.substring(sepPos + 1);
 
       if (isStartAnalysis) {

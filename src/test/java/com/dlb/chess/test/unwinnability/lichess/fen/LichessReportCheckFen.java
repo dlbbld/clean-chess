@@ -11,6 +11,7 @@ import java.util.Scanner;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
@@ -21,7 +22,7 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
   private static final Logger logger = NonNullWrapperCommon.getLogger(LichessReportCheckFen.class);
 
   private static final String FEN_FILE_NAME_AMBRONA_RESULT_QUICK = "lichess-ambrona-out-quick.txt";
-  private static final String FEN_FILE_NAME_MINE_RESULT_QUICK = "lichess-mine-out-quick.txt";
+  private static final String FEN_FILE_NAME_MINE_RESULT_QUICK = "lichess-mine-out-quick-2.txt";
 
   private static final String FEN_FILE_NAME_COMPARE_QUICK = "lichess-compare-quick.txt";
   private static final String FEN_FILE_COMPARE_QUICK_HEADER = "fen;lichessGameId;mode;colour;cha;check";
@@ -68,12 +69,13 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
         final var mineMode = lineMineArr[2];
         final var mineTestingSide = lineMineArr[3];
 
-        if (!ambronaFen.equals(mineFen) || !ambronaGameId.equals(mineGameId) || !ambronaMode.equals(mineMode)) {
+        if (!ambronaFen.equals(mineFen) || !ambronaGameId.equals(mineGameId) || !ambronaMode.equals(mineMode)
+            || !ambronaTestingSide.equals(mineTestingSide)) {
           throw new IllegalArgumentException("Test results are not as expected");
         }
 
-        final var ambronaResult = lineAmbronaArr[4];
-        final var mineResult = lineMineArr[3];
+        @SuppressWarnings("null") final @NonNull String ambronaResult = lineAmbronaArr[4];
+        @SuppressWarnings("null") final @NonNull String mineResult = lineMineArr[4];
 
         if (calculateHasDifference(ambronaResult, mineResult)) {
           counterDifferences++;
