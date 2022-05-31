@@ -1,4 +1,4 @@
-package com.dlb.chess.test.lichess.fen;
+package com.dlb.chess.test.unwinnability.lichess.fen;
 
 import java.io.File;
 import java.io.FileOutputStream;

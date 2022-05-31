@@ -1,4 +1,4 @@
-package com.dlb.chess.test.lichess.pgn;
+package com.dlb.chess.test.unwinnability.lichess.pgn;
 
 import java.io.File;
 

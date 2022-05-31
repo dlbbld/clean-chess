@@ -1,4 +1,4 @@
-package com.dlb.chess.test.lichess.fen;
+package com.dlb.chess.test.unwinnability.lichess.fen;
 
 import com.dlb.chess.common.constants.ConfigurationConstants;
 
