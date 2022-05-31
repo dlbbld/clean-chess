@@ -41,25 +41,18 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
   private static FindHelpMateInterruptResult calculateHelpmate(ApiBoard board, Side c, int currentDepth,
       List<LegalMove> mateList) {
-    final var isCheckmate = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
-    if (isCheckmate) {
+    final var isIntendedWinnerHavingCheckmate = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
+    if (isIntendedWinnerHavingCheckmate) {
       return FindHelpMateInterruptResult.TRUE;
     }
 
     if (currentDepth < D && !board.isInsufficientMaterial(c)) {
 
-      final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-      for (final LegalMove legalMove : legalMoveList) {
-        if (IS_DEBUG) {
-          final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
-          System.out.println(uciMove.text());
-        }
-      }
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());
         if (IS_DEBUG) {
           final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
-          System.out.println(uciMove.text());
+          System.out.println(uciMove.text() + " - " + (currentDepth + 1));
         }
 
         mateList.add(legalMove);
