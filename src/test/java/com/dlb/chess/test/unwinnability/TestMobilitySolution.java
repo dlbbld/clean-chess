@@ -205,6 +205,10 @@ public class TestMobilitySolution implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testCustom() throws Exception {
+
+    final Board board = new Board("6k1/p1p1p1P1/6PB/6P1/6p1/6pb/P1P1P1p1/6K1 b - - 0 100");
+    final MobilitySolution mobilitySolution = Mobility.mobility(board);
+
     {
       final Map<Square, List<Square>> mobilityMap = new HashMap<>();
 
@@ -264,8 +268,44 @@ public class TestMobilitySolution implements EnumConstants {
       checkCustom("2b5/1p6/pPp3k1/P1Pp3p/3PpBpP/4P1P1/5K2/8 w - - 0 100", mobilityMap);
 
       checkCustom("2b5/1p6/pPp3k1/P1Pp3p/3PpBpP/4P1P1/5K2/8 b - - 0 100", mobilityMap);
-
     }
+
+    {
+      final Map<Square, List<Square>> mobilityMap = new HashMap<>();
+
+      final List<Square> whiteKingToSquareList = NonNullWrapperCommon.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
+          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5, E5, F5,
+          G5, H5);
+      mobilityMap.put(E1, whiteKingToSquareList);
+
+      mobilityMap.put(A2, NonNullWrapperCommon.asList(A2, A3, A4));
+      mobilityMap.put(C2, NonNullWrapperCommon.asList(C2, C3, C4));
+      mobilityMap.put(E2, NonNullWrapperCommon.asList(E2, E3, E4));
+      mobilityMap.put(G2, NonNullWrapperCommon.asList(G2, G3, G4));
+
+      mobilityMap.put(A5, NonNullWrapperCommon.asList(A5, A4, A3));
+      mobilityMap.put(C5, NonNullWrapperCommon.asList(C5, C4, C3));
+      mobilityMap.put(E5, NonNullWrapperCommon.asList(E5, E4, E3));
+      mobilityMap.put(G5, NonNullWrapperCommon.asList(G5, G4, G3));
+
+      mobilityMap.put(A6, NonNullWrapperCommon.asList(A6));
+      mobilityMap.put(C6, NonNullWrapperCommon.asList(C6));
+      mobilityMap.put(E6, NonNullWrapperCommon.asList(E6));
+      mobilityMap.put(G6, NonNullWrapperCommon.asList(G6));
+
+      mobilityMap.put(A7, NonNullWrapperCommon.asList(A7));
+      mobilityMap.put(C7, NonNullWrapperCommon.asList(C7));
+      mobilityMap.put(E7, NonNullWrapperCommon.asList(E7));
+      mobilityMap.put(G7, NonNullWrapperCommon.asList(G7));
+
+      final List<Square> blackKingToSquareList = NonNullWrapperCommon.asList(A8, B8, C8, D8, E8, F8, G8, H8);
+      mobilityMap.put(B8, blackKingToSquareList);
+
+      checkCustom("1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100", mobilityMap);
+
+      checkCustom("1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 b - - 10 100", mobilityMap);
+    }
+
   }
 
   private static void checkCustom(String fen, Map<Square, List<Square>> mobilityMap) {

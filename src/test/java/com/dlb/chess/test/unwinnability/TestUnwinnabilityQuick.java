@@ -39,7 +39,10 @@ public class TestUnwinnabilityQuick {
   void testFen() {
     // final var fen = "8/8/3p4/1p2p2k/pP1pP1p1/P2P2P1/6K1/8 b - - 2 41";
     // final var fen = "8/8/3p4/4p2k/4P3/3P4/6K1/8 b - - 2 41";
-    final var fen = "7k/p6P/7K/r5P1/5B2/8/8/1q6 b - - 4 66";
+    // final var fen = "7k/p6P/7K/r5P1/5B2/8/8/1q6 b - - 4 66";
+    // final var fen = "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100";
+    // final var fen = "6k1/p1p1p1P1/6PB/6P1/6p1/6pb/P1P1P1p1/6K1 b - - 0 100";
+    final var fen = "8/p1p1p1p1/6Pk/6pB/6Pb/6pK/P1P1P1P1/8 b - - 0 100";
     final Board board = new Board(fen);
     assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));

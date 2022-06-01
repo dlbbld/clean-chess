@@ -22,6 +22,8 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 //Figure 7 Mobility algorithm.
 public class Mobility {
 
+  private static final boolean IS_DEBUG = true;
+
   // Inputs: a position
   // Output: mobility solution {MP!s}P in pos,s in S
   public static MobilitySolution mobility(ApiBoard board) {
@@ -241,8 +243,8 @@ public class Mobility {
           continue;
         }
 
-        if (candidatePieceType == PieceType.KING && candidateSide == Side.BLACK) {
-          // System.out.println("It is a bug");
+        if (IS_DEBUG) {
+          debug(clearance, reachability, mobility);
         }
         mobility.put(candidatePiecePlacement, candidateToSquare, VariableState.ONE);
       }
