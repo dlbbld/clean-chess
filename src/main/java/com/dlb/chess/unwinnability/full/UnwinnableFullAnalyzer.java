@@ -31,7 +31,7 @@ public class UnwinnableFullAnalyzer {
     final FindHelpmateExhaust findHelpmate = new FindHelpmateExhaust(c);
 
     // 2: for every d in N do ( -> Iterative deepening)
-    for (var maxDepth = 0; maxDepth <= Integer.MAX_VALUE; maxDepth++) {
+    for (var maxDepth = 2; maxDepth <= 100; maxDepth++) {
       // 3: set bd Find-Helpmatec(pos, 0, maxDepth = d) (global nodesBound = bound(d))
 
       final var bd = findHelpmate.calculateHelpmate(board, maxDepth);
@@ -52,6 +52,6 @@ public class UnwinnableFullAnalyzer {
       }
     }
 
-    return UnwinnableFull.UNWINNABLE;
+    return UnwinnableFull.UNDETERMINED;
   }
 }

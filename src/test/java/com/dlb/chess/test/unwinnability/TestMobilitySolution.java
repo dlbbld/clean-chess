@@ -275,10 +275,10 @@ public class TestMobilitySolution implements EnumConstants {
           G5, H5);
       mobilityMap.put(E1, whiteKingToSquareList);
 
-      mobilityMap.put(A2, NonNullWrapperCommon.asList(A2, A3, A4));
-      mobilityMap.put(C2, NonNullWrapperCommon.asList(C2, C3, C4));
-      mobilityMap.put(E2, NonNullWrapperCommon.asList(E2, E3, E4));
-      mobilityMap.put(G2, NonNullWrapperCommon.asList(G2, G3, G4));
+      mobilityMap.put(A2, NonNullWrapperCommon.asList(A2, A3, A4, A5));
+      mobilityMap.put(C2, NonNullWrapperCommon.asList(C2, C3, C4, C5));
+      mobilityMap.put(E2, NonNullWrapperCommon.asList(E2, E3, E4, E5));
+      mobilityMap.put(G2, NonNullWrapperCommon.asList(G2, G3, G4, G5));
 
       mobilityMap.put(A5, NonNullWrapperCommon.asList(A5, A4, A3));
       mobilityMap.put(C5, NonNullWrapperCommon.asList(C5, C4, C3));

@@ -14,7 +14,7 @@ import com.dlb.chess.unwinnability.findhelpmate.interrupt.enums.FindHelpMateInte
 
 public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
-  private static final boolean IS_DEBUG = true;
+  private static final boolean IS_DEBUG = false;
 
   // Our quick algorithm is extremely light, requiring only a few microseconds on average per
   // position. It is also sound, but not complete. However, as we detail in Section 5, with an

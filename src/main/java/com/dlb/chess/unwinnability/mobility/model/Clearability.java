@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeSet;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
@@ -70,7 +72,8 @@ public class Clearability {
       pieceDescription.append(piecePlacement.toString());
       pieceDescription.append(": ");
       pieceDescription.append(variableState.getDescription());
-      lineList.add(pieceDescription.toString());
+      @SuppressWarnings("null") @NonNull final String string = pieceDescription.toString();
+      lineList.add(string);
     }
 
     return BasicUtility.convertToString(lineList);

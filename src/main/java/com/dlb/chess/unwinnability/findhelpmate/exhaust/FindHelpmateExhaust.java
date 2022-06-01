@@ -98,10 +98,13 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     // we add classical checkmate as game end
-    final var isClassicalCheckmatePosition = ClassicalCheckmate.isClassicalCheckmatePosition(color,
-        board.getStaticPosition());
-    if (color == board.getHavingMove() && isClassicalCheckmatePosition) {
-      return FindHelpmateRecursionResult.YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION;
+    final var isIgnoreForTestinAgainstCha = true;
+    if (isIgnoreForTestinAgainstCha) {
+      final var isClassicalCheckmatePosition = ClassicalCheckmate.isClassicalCheckmatePosition(color,
+          board.getStaticPosition());
+      if (color == board.getHavingMove() && isClassicalCheckmatePosition) {
+        return FindHelpmateRecursionResult.YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION;
+      }
     }
 
     // 2: if the intended winner has just the king or the position is unwinnable according
@@ -164,12 +167,17 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
 
       int inc;
-      if (!isClassicalCheckmatePosition && ClassicalCheckmate.calculateAboveClassicalCheckmateMaterial(color,
-          board.getStaticPosition()) == ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
+      if (isIgnoreForTestinAgainstCha) {
         inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
       } else {
-        inc = Score.scoreClassicalCheckmate(board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
-
+        final var isClassicalCheckmatePosition = false;
+        if (!isClassicalCheckmatePosition && ClassicalCheckmate.calculateAboveClassicalCheckmateMaterial(color,
+            board.getStaticPosition()) == ClassicalCheckmateSituation.NO_NOT_HAVING_PAWN) {
+          inc = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove).getIncrement();
+        } else {
+          inc = Score.scoreClassicalCheckmate(board.getHavingMove(), board.getStaticPosition(), legalMove)
+              .getIncrement();
+        }
       }
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true

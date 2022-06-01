@@ -114,7 +114,8 @@ public class MobilitySolution {
       final String squareList = GeneralUtility.calculateSquareList(reachable);
       pieceDescription.append(": ");
       pieceDescription.append(squareList);
-      lineList.add(pieceDescription.toString());
+      @SuppressWarnings("null") @NonNull final String string = pieceDescription.toString();
+      lineList.add(string);
     }
 
     return BasicUtility.convertToString(lineList);

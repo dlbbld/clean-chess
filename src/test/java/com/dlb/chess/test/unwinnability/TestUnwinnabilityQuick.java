@@ -49,6 +49,7 @@ public class TestUnwinnabilityQuick {
     // first half-move line has depth 9 and checkmate of winner on last half-move
     // final var fen = "7k/p6P/7K/r5P1/5B2/8/8/1q6 b - - 4 66";
 
+    // norgaard, not winnable but not detected
     // no semi-open files: possibly winnable (intruders), check
     // final var fen = "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100";
 

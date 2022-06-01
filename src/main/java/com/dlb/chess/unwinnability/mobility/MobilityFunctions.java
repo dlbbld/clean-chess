@@ -90,7 +90,7 @@ public class MobilityFunctions implements EnumConstants {
     return result;
   }
 
-  static Set<PiecePlacement> attackers(List<PiecePlacement> piecePlacementList, Square square) {
+  static Set<PiecePlacement> attackers(Set<PiecePlacement> piecePlacementList, Square square) {
     final Set<PiecePlacement> result = new TreeSet<>();
 
     for (final PiecePlacement piecePlacement : piecePlacementList) {
@@ -99,7 +99,10 @@ public class MobilityFunctions implements EnumConstants {
       }
     }
     return result;
+  }
 
+  static Set<PiecePlacement> attackers(List<PiecePlacement> piecePlacementList, Square square) {
+    return attackers(new TreeSet<>(piecePlacementList), square);
   }
 
 }
