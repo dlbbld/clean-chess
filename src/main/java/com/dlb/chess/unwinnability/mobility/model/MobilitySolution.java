@@ -12,6 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 import com.dlb.chess.unwinnability.model.PiecePlacement;
@@ -92,10 +93,12 @@ public class MobilitySolution {
     return new TreeSet<>(keySet);
   }
 
-  public void debug() {
+  public String print() {
 
-    System.out.println("");
-    System.out.println("Mobility:");
+    final List<String> lineList = new ArrayList<>();
+
+    lineList.add("");
+    lineList.add("Mobility:");
 
     for (final PiecePlacement piecePlacement : new TreeSet<>(mobilityMap.keySet())) {
       final Map<Square, VariableState> valuePlacement = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
@@ -111,7 +114,15 @@ public class MobilitySolution {
       final String squareList = GeneralUtility.calculateSquareList(reachable);
       pieceDescription.append(": ");
       pieceDescription.append(squareList);
-      System.out.println(pieceDescription.toString());
+      lineList.add(pieceDescription.toString());
     }
+
+    return BasicUtility.convertToString(lineList);
   }
+
+  @Override
+  public String toString() {
+    return print();
+  }
+
 }

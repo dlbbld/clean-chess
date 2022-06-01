@@ -3,7 +3,9 @@ package com.dlb.chess.unwinnability.mobility;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
+import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
@@ -22,7 +24,7 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 //Figure 7 Mobility algorithm.
 public class Mobility {
 
-  private static final boolean IS_DEBUG = true;
+  private static final boolean IS_DEBUG = false;
 
   // Inputs: a position
   // Output: mobility solution {MP!s}P in pos,s in S
@@ -149,17 +151,47 @@ public class Mobility {
             if (mobility.get(candidatePiecePlacement, predecessor) == VariableState.ONE) {
               // Pawn move. For pawn pushes, we require that a possibly enemy piece on the target
               // square can be cleared first.
-              // Note: we check that we don't move onto own piece in last step
+              // Note: We don't need to check not moving onto own piece. That is checked for all movements in later
+              // step.
 
-              var isNonClearableOpponentPieceAhead = false;
+              var isNonClearableOpponentNonPawnAhead = false;
               for (final PiecePlacement piecePlacement : piecePlacementList) {
                 if (piecePlacement.side() == candidateOppositeSide
                     && piecePlacement.squareOriginal() == candidateToSquare
+                    && piecePlacement.pieceType() != PieceType.PAWN
                     && clearability.get(piecePlacement) == VariableState.ZERO) {
-                  isNonClearableOpponentPieceAhead = true;
+                  isNonClearableOpponentNonPawnAhead = true;
+                  break;
                 }
               }
-              if (!isNonClearableOpponentPieceAhead) {
+
+              final var isNonClearableOpponentPawnAhead = false;
+              // Implemented but not specified condition in the PDF of opponent pawns must be able to leave the file
+              if (!isNonClearableOpponentNonPawnAhead) {
+                // we only need to check if not already blocked by non pawn piece
+                for (final PiecePlacement piecePlacement : piecePlacementList) {
+                  if (piecePlacement.side() == candidateOppositeSide
+                      && piecePlacement.squareOriginal() == candidateToSquare
+                      && piecePlacement.pieceType() == PieceType.PAWN) {
+
+                    // now we check leaving the diagonal
+                    final Set<Square> mobilityOpponentPawn = mobility.calculateSquaresWithValueOne(piecePlacement);
+                    if (!calculateIsCanLeaveFile(mobilityOpponentPawn, candidateToSquare.getFile())
+                        && !calculateIsCanCaptureOpponentPawnIncludingForwardPushes(candidatePiecePlacement,
+                            mobility)) {
+                      isNonClearableOpponentNonPawnAhead = true;
+                      break;
+                    }
+                    for (final MobilitySolutionVariable evaluateCapture : mobility.calculateEntriesWithValueOne()) {
+                      if (evaluateCapture.piecePlacement().side() != candidateSide
+                          && evaluateCapture.toSquare() == piecePlacement.squareOriginal()) {
+                        break;
+                      }
+                    }
+                  }
+                }
+              }
+              if (!isNonClearableOpponentNonPawnAhead && !isNonClearableOpponentPawnAhead) {
                 isValidPawnForwardMove = true;
                 break;
               }
@@ -265,14 +297,58 @@ public class Mobility {
 
   }
 
+  private static boolean calculateIsCanLeaveFile(Set<Square> mobilityOpponentPawn, File file) {
+    for (final Square mobility : mobilityOpponentPawn) {
+      if (mobility.getFile() != file) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean calculateIsCanCaptureOpponentPawnIncludingForwardPushes(PiecePlacement opponentPawn,
+      MobilitySolution mobilitySolution) {
+
+    final Set<Square> pawnSquareAndForwardPushesSet = calculatePawnSquareAndForwardPushes(opponentPawn,
+        mobilitySolution);
+
+    for (final MobilitySolutionVariable evaluateCapture : mobilitySolution.calculateEntriesWithValueOne()) {
+      if (evaluateCapture.piecePlacement().side() != opponentPawn.side()) {
+        // we only check non pawns, because for pawn we would not need to exclude forward pushes
+        // which we can't do as we have no move history
+        if (evaluateCapture.piecePlacement().pieceType() != PieceType.PAWN) {
+          if (opponentPawn.squareOriginal() == evaluateCapture.toSquare()) {
+            return true;
+          }
+        }
+      }
+    }
+    return false;
+  }
+
+  private static Set<Square> calculatePawnSquareAndForwardPushes(PiecePlacement pawn,
+      MobilitySolution mobilitySolution) {
+    final Set<Square> result = new TreeSet<>();
+    result.add(pawn.squareOriginal());
+
+    for (final Square mobilitySquare : mobilitySolution.calculateSquaresWithValueOne(pawn)) {
+      if (mobilitySquare.getFile() == pawn.squareOriginal().getFile()) {
+        result.add(mobilitySquare);
+      }
+
+    }
+    return result;
+  }
+
   private static void debug(Clearability clearability, Reachability reachability, MobilitySolution mobility) {
-    clearability.debug();
-    reachability.debug();
-    mobility.debug();
+    System.out.println(clearability.print());
+    System.out.println(reachability.print());
+    System.out.println(mobility.print());
   }
 
   private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearability cp, Reachability rcs) {
     return cp.calculateVariableCountSetToOne() + rcs.calculateVariableCountSetToOne()
         + mps.calculateVariableCountSetToOne();
   }
+
 }

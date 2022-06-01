@@ -11,6 +11,7 @@ import java.util.TreeSet;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 
@@ -78,19 +79,24 @@ public class Reachability {
     return result;
   }
 
-  public void debug() {
-    final List<ReachabilityVariable> entriesWithValueOneList = calculateEntriesWithValueOne();
+  public String print() {
 
-    System.out.println("");
-    System.out.println("Reachability:");
+    final List<String> lineList = new ArrayList<>();
+
+    lineList.add("");
+    lineList.add("Reachability:");
+
+    final List<ReachabilityVariable> entriesWithValueOneList = calculateEntriesWithValueOne();
 
     final Set<Square> reachableSquareSetWhite = calculateSquareSet(Side.WHITE, entriesWithValueOneList);
     final String squareListWhite = GeneralUtility.calculateSquareList(reachableSquareSetWhite);
-    System.out.println(Side.WHITE.getName() + ": " + squareListWhite);
+    lineList.add(Side.WHITE.getName() + ": " + squareListWhite);
 
     final Set<Square> reachableSquareSetBlack = calculateSquareSet(Side.BLACK, entriesWithValueOneList);
     final String squareListBlack = GeneralUtility.calculateSquareList(reachableSquareSetBlack);
-    System.out.println(Side.BLACK.getName() + ": " + squareListBlack);
+    lineList.add(Side.BLACK.getName() + ": " + squareListBlack);
+
+    return BasicUtility.convertToString(lineList);
   }
 
   private static Set<Square> calculateSquareSet(Side side, List<ReachabilityVariable> entryList) {
@@ -101,5 +107,10 @@ public class Reachability {
       }
     }
     return squareSet;
+  }
+
+  @Override
+  public String toString() {
+    return print();
   }
 }

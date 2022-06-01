@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 import com.dlb.chess.unwinnability.model.PiecePlacement;
 
@@ -55,9 +56,12 @@ public class Clearability {
     return result;
   }
 
-  public void debug() {
-    System.out.println("");
-    System.out.println("Clearability:");
+  public String print() {
+
+    final List<String> lineList = new ArrayList<>();
+
+    lineList.add("");
+    lineList.add("Clearability:");
 
     // TreeSet for ordering
     for (final PiecePlacement piecePlacement : new TreeSet<>(clearabilityMap.keySet())) {
@@ -66,8 +70,15 @@ public class Clearability {
       pieceDescription.append(piecePlacement.toString());
       pieceDescription.append(": ");
       pieceDescription.append(variableState.getDescription());
-      System.out.println(pieceDescription.toString());
+      lineList.add(pieceDescription.toString());
     }
+
+    return BasicUtility.convertToString(lineList);
+  }
+
+  @Override
+  public String toString() {
+    return print();
   }
 
 }
