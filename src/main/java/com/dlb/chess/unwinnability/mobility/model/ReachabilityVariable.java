@@ -5,7 +5,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 
-public record ReachabilityVariable(Side sideWhichCanReach, Square reachableSquare) {
+public record ReachabilityVariable(Side sideWhichCanReach, Square toSquare) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -16,7 +16,7 @@ public record ReachabilityVariable(Side sideWhichCanReach, Square reachableSquar
       return false;
     }
     final var other = (ReachabilityVariable) obj;
-    return sideWhichCanReach == other.sideWhichCanReach && reachableSquare == other.reachableSquare;
+    return sideWhichCanReach == other.sideWhichCanReach && toSquare == other.toSquare;
   }
 
 }

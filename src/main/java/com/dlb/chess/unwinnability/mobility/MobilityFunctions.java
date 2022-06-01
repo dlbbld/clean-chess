@@ -15,15 +15,15 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 
 public class MobilityFunctions implements EnumConstants {
 
-  public static Set<Square> predecessorsCapture(PiecePlacement p, Square s) {
-    switch (p.pieceType()) {
+  public static Set<Square> predecessorsCapture(PiecePlacement piecePlacement, Square square) {
+    switch (piecePlacement.pieceType()) {
       case PAWN:
         final Set<Square> result = new TreeSet<>();
-        if (Square.calculateHasBehindLeftDiagonalSquare(p.side(), s)) {
-          result.add(Square.calculateBehindLeftDiagonalSquare(p.side(), s));
+        if (Square.calculateHasBehindLeftDiagonalSquare(piecePlacement.side(), square)) {
+          result.add(Square.calculateBehindLeftDiagonalSquare(piecePlacement.side(), square));
         }
-        if (Square.calculateHasBehindRightDiagonalSquare(p.side(), s)) {
-          result.add(Square.calculateBehindRightDiagonalSquare(p.side(), s));
+        if (Square.calculateHasBehindRightDiagonalSquare(piecePlacement.side(), square)) {
+          result.add(Square.calculateBehindRightDiagonalSquare(piecePlacement.side(), square));
         }
         return result;
       case KNIGHT:
@@ -31,17 +31,17 @@ public class MobilityFunctions implements EnumConstants {
       case ROOK:
       case KING:
       case QUEEN:
-        return MobilityFunctions.predecessors(p, s);
+        return MobilityFunctions.predecessors(piecePlacement, square);
       case NONE:
       default:
         throw new IllegalArgumentException();
     }
   }
 
-  static Set<Square> promotion(PiecePlacement p) {
-    switch (p.pieceType()) {
+  static Set<Square> promotion(PiecePlacement piecePlacement) {
+    switch (piecePlacement.pieceType()) {
       case PAWN:
-        switch (p.side()) {
+        switch (piecePlacement.side()) {
           case WHITE:
             return new TreeSet<>(Arrays.asList(A8, B8, C8, D8, E8, F8, G8, H8));
           case BLACK:
@@ -62,39 +62,39 @@ public class MobilityFunctions implements EnumConstants {
     }
   }
 
-  static Set<Square> predecessors(PiecePlacement p, Square s) {
-    switch (p.pieceType()) {
+  static Set<Square> predecessors(PiecePlacement piecePlacement, Square square) {
+    switch (piecePlacement.pieceType()) {
       case PAWN:
-        return calculateBehindSquare(p.side(), s);
+        return calculateBehindSquare(piecePlacement.side(), square);
       case KNIGHT:
-        return KnightEmptyBoardSquares.getKnightSquares(s);
+        return KnightEmptyBoardSquares.getKnightSquares(square);
       case BISHOP:
-        return KingDistanceOneFunctions.calculateDiagonalSquares(s);
+        return KingDistanceOneFunctions.calculateDiagonalSquares(square);
       case ROOK:
-        return KingDistanceOneFunctions.calculateOrthogonalSquares(s);
+        return KingDistanceOneFunctions.calculateOrthogonalSquares(square);
       case KING:
       case QUEEN:
-        return KingNonCastlingEmptyBoardSquares.getKingSquares(s);
+        return KingNonCastlingEmptyBoardSquares.getKingSquares(square);
       case NONE:
       default:
         throw new IllegalArgumentException();
     }
   }
 
-  private static Set<Square> calculateBehindSquare(Side side, Square sq) {
-    if (!Square.calculateHasBehindSquare(side, sq)) {
+  private static Set<Square> calculateBehindSquare(Side side, Square square) {
+    if (!Square.calculateHasBehindSquare(side, square)) {
       return new TreeSet<>();
     }
     final Set<Square> result = new TreeSet<>();
-    result.add(Square.calculateBehindSquare(side, sq));
+    result.add(Square.calculateBehindSquare(side, square));
     return result;
   }
 
-  static Set<PiecePlacement> attackers(List<PiecePlacement> piecePlacementList, Square s) {
+  static Set<PiecePlacement> attackers(List<PiecePlacement> piecePlacementList, Square square) {
     final Set<PiecePlacement> result = new TreeSet<>();
 
     for (final PiecePlacement piecePlacement : piecePlacementList) {
-      if (predecessorsCapture(piecePlacement, s).contains(piecePlacement.squareOriginal())) {
+      if (predecessorsCapture(piecePlacement, square).contains(piecePlacement.squareOriginal())) {
         result.add(piecePlacement);
       }
     }

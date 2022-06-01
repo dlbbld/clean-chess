@@ -12,7 +12,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
-import com.dlb.chess.unwinnability.mobility.model.Clearance;
+import com.dlb.chess.unwinnability.mobility.model.Clearability;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolutionVariable;
 import com.dlb.chess.unwinnability.mobility.model.Reachability;
@@ -56,9 +56,9 @@ public class Mobility {
     }
 
     // CP := 0
-    final Clearance clearance = new Clearance();
+    final Clearability clearability = new Clearability();
     for (final PiecePlacement piecePlacement : piecePlacementList) {
-      clearance.put(piecePlacement, VariableState.ZERO);
+      clearability.put(piecePlacement, VariableState.ZERO);
     }
 
     // Rcs := 0
@@ -82,36 +82,36 @@ public class Mobility {
 
     var isNewVariablesAreSetToOne = true;
     while (isNewVariablesAreSetToOne) {
-      final var totalVariableCountSetToOneBefore = calculateTotalVariableCountSetToOne(mobility, clearance,
+      final var totalVariableCountSetToOneBefore = calculateTotalVariableCountSetToOne(mobility, clearability,
           reachability);
       // 3: for every variable V in X_arrow that is still set to 0 do
 
       // 4: if for every rule from Figure 6 of the form “V ) f”, formula f evaluates to true
       // on the current state of variables ~X then set V to 1 in X_arrow
 
-      // Update clearance
+      // Update clearability
       // Clearance. A piece can be cleared from its square by moving or being captured:
-      for (final PiecePlacement candidateClearance : clearance.calculateEntriesWithValueZero()) {
+      for (final PiecePlacement candidateClearability : clearability.calculateEntriesWithValueZero()) {
 
         // clearable by moving
-        var isClearancePossibleByMoving = false;
+        var isClearabilityForMoving = false;
         for (final Square evaluateToSquare : Square.values()) {
-          if (evaluateToSquare == Square.NONE || evaluateToSquare == candidateClearance.squareOriginal()) {
+          if (evaluateToSquare == Square.NONE || evaluateToSquare == candidateClearability.squareOriginal()) {
             continue;
           }
-          if (mobility.get(candidateClearance, evaluateToSquare) == VariableState.ONE) {
-            isClearancePossibleByMoving = true;
-            clearance.put(candidateClearance, VariableState.ONE);
+          if (mobility.get(candidateClearability, evaluateToSquare) == VariableState.ONE) {
+            isClearabilityForMoving = true;
+            clearability.put(candidateClearability, VariableState.ONE);
             break;
           }
         }
 
         // clearable by capturing
-        if (!isClearancePossibleByMoving) {
+        if (!isClearabilityForMoving) {
           for (final MobilitySolutionVariable evaluateCapture : mobility.calculateEntriesWithValueOne()) {
-            if (evaluateCapture.piecePlacement().side() != candidateClearance.side()
-                && evaluateCapture.toSquare() == candidateClearance.squareOriginal()) {
-              clearance.put(candidateClearance, VariableState.ONE);
+            if (evaluateCapture.piecePlacement().side() != candidateClearability.side()
+                && evaluateCapture.toSquare() == candidateClearability.squareOriginal()) {
+              clearability.put(candidateClearability, VariableState.ONE);
               break;
             }
           }
@@ -124,8 +124,8 @@ public class Mobility {
         for (final MobilitySolutionVariable evaluateReachability : mobility.calculateEntriesWithValueOne()) {
           if (evaluateReachability.piecePlacement().side() == candidateReachability.sideWhichCanReach()
               && evaluateReachability.piecePlacement().pieceType() != PieceType.KING
-              && evaluateReachability.toSquare() == candidateReachability.reachableSquare()) {
-            reachability.put(candidateReachability.sideWhichCanReach(), candidateReachability.reachableSquare(),
+              && evaluateReachability.toSquare() == candidateReachability.toSquare()) {
+            reachability.put(candidateReachability.sideWhichCanReach(), candidateReachability.toSquare(),
                 VariableState.ONE);
             break;
           }
@@ -155,7 +155,7 @@ public class Mobility {
               for (final PiecePlacement piecePlacement : piecePlacementList) {
                 if (piecePlacement.side() == candidateOppositeSide
                     && piecePlacement.squareOriginal() == candidateToSquare
-                    && clearance.get(piecePlacement) == VariableState.ZERO) {
+                    && clearability.get(piecePlacement) == VariableState.ZERO) {
                   isNonClearableOpponentPieceAhead = true;
                 }
               }
@@ -216,7 +216,7 @@ public class Mobility {
         // king only
         if (candidatePieceType == PieceType.KING) {
           for (final PiecePlacement attacker : MobilityFunctions.attackers(piecePlacementList, candidateToSquare)) {
-            if (attacker.side() != candidateSide && clearance.get(attacker) != VariableState.ONE) {
+            if (attacker.side() != candidateSide && clearability.get(attacker) != VariableState.ONE) {
               isKingNonMoveIntoCheckRequirementOk = false;
               break;
             }
@@ -233,7 +233,7 @@ public class Mobility {
         for (final PiecePlacement checkPiecePlacement : piecePlacementList) {
           if (checkPiecePlacement != candidatePiecePlacement && checkPiecePlacement.side() == candidateSide
               && checkPiecePlacement.squareOriginal() == candidateToSquare
-              && clearance.get(checkPiecePlacement) == VariableState.ZERO) {
+              && clearability.get(checkPiecePlacement) == VariableState.ZERO) {
             isNotMovingOntoOwnPieceRequirementOk = false;
             break;
           }
@@ -244,13 +244,13 @@ public class Mobility {
         }
 
         if (IS_DEBUG) {
-          debug(clearance, reachability, mobility);
+          debug(clearability, reachability, mobility);
         }
         mobility.put(candidatePiecePlacement, candidateToSquare, VariableState.ONE);
       }
 
       // 5: repeat steps 3 and 4 until no new variables are set to 1
-      final var totalVariableCountSetToOneAfter = calculateTotalVariableCountSetToOne(mobility, clearance,
+      final var totalVariableCountSetToOneAfter = calculateTotalVariableCountSetToOne(mobility, clearability,
           reachability);
       if (totalVariableCountSetToOneBefore > totalVariableCountSetToOneAfter) {
         throw new ProgrammingMistakeException("Variable state was incorrectly set");
@@ -258,20 +258,20 @@ public class Mobility {
       isNewVariablesAreSetToOne = totalVariableCountSetToOneAfter > totalVariableCountSetToOneBefore;
     }
 
-    debug(clearance, reachability, mobility);
+    debug(clearability, reachability, mobility);
 
     // 6: return {MP -> s}P in pos, s in S
     return mobility;
 
   }
 
-  private static void debug(Clearance clearance, Reachability reachability, MobilitySolution mobility) {
-    clearance.debug();
+  private static void debug(Clearability clearability, Reachability reachability, MobilitySolution mobility) {
+    clearability.debug();
     reachability.debug();
     mobility.debug();
   }
 
-  private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearance cp, Reachability rcs) {
+  private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearability cp, Reachability rcs) {
     return cp.calculateVariableCountSetToOne() + rcs.calculateVariableCountSetToOne()
         + mps.calculateVariableCountSetToOne();
   }

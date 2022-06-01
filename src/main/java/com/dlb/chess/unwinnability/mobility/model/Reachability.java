@@ -16,38 +16,38 @@ import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 
 public class Reachability {
 
-  private final Map<Side, Map<Square, VariableState>> values = new HashMap<>();
+  private final Map<Side, Map<Square, VariableState>> reachabilityMap = new HashMap<>();
 
-  public void put(Side c, Square s, VariableState binary) {
+  public void put(Side side, Square toSquare, VariableState reachable) {
     Map<Square, VariableState> map;
-    if (!values.containsKey(c)) {
+    if (!reachabilityMap.containsKey(side)) {
       map = new HashMap<>();
-      values.put(c, map);
+      reachabilityMap.put(side, map);
     } else {
-      map = NonNullWrapperCommon.get(values, c);
+      map = NonNullWrapperCommon.get(reachabilityMap, side);
     }
 
-    map.put(s, binary);
+    map.put(toSquare, reachable);
   }
 
-  public VariableState get(Side c, Square s) {
-    if (!values.containsKey(c)) {
-      throw new IllegalArgumentException("Value is not set for color " + c);
+  public VariableState get(Side side, Square toSquare) {
+    if (!reachabilityMap.containsKey(side)) {
+      throw new IllegalArgumentException("Value is not set for color " + side);
     }
 
-    final Map<Square, VariableState> map = NonNullWrapperCommon.get(values, c);
-    if (!map.containsKey(s)) {
-      throw new IllegalArgumentException("Value is not set for square " + s);
+    final Map<Square, VariableState> map = NonNullWrapperCommon.get(reachabilityMap, side);
+    if (!map.containsKey(toSquare)) {
+      throw new IllegalArgumentException("Value is not set for square " + toSquare);
     }
 
-    return NonNullWrapperCommon.get(map, s);
+    return NonNullWrapperCommon.get(map, toSquare);
   }
 
   // TODO unwinnability - use values two times, that is much easier
   public int calculateVariableCountSetToOne() {
     var count = 0;
-    for (final Entry<Side, Map<Square, VariableState>> mapEntryMap : values.entrySet()) {
-      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(values, mapEntryMap.getKey());
+    for (final Entry<Side, Map<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
+      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == VariableState.ONE) {
           count++;
@@ -65,12 +65,12 @@ public class Reachability {
     return calculateEntries(VariableState.ONE);
   }
 
-  private List<ReachabilityVariable> calculateEntries(VariableState variableState) {
+  private List<ReachabilityVariable> calculateEntries(VariableState reachable) {
     final List<ReachabilityVariable> result = new ArrayList<>();
-    for (final Entry<Side, Map<Square, VariableState>> mapEntryMap : values.entrySet()) {
-      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(values, mapEntryMap.getKey());
+    for (final Entry<Side, Map<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
+      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
-        if (entry.getValue() == variableState) {
+        if (entry.getValue() == reachable) {
           result.add(new ReachabilityVariable(mapEntryMap.getKey(), entry.getKey()));
         }
       }
@@ -97,7 +97,7 @@ public class Reachability {
     final Set<Square> squareSet = new TreeSet<>();
     for (final ReachabilityVariable reachabilityVariable : entryList) {
       if (reachabilityVariable.sideWhichCanReach() == side) {
-        squareSet.add(reachabilityVariable.reachableSquare());
+        squareSet.add(reachabilityVariable.toSquare());
       }
     }
     return squareSet;
