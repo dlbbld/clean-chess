@@ -12,6 +12,8 @@ import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
+// rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2; UNDETERMINED; WINNABLE
+// rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1; UNDETERMINED; WINNABLE
 public class ValidateFull extends AbstractValidateAgainstCha {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateFull.class);
@@ -63,8 +65,8 @@ public class ValidateFull extends AbstractValidateAgainstCha {
         System.out.println(fenStr + "; " + fullMine + "; " + fullCha);
       }
 
-      logger.printf(Level.INFO, "%d differences found", counterDifferences);
     }
+    logger.printf(Level.INFO, "%d differences found", counterDifferences);
   }
 
 }
