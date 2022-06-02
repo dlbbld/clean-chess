@@ -1,14 +1,22 @@
 package com.dlb.chess.test.model;
 
+import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public record PgnFileTestCase(String pgnFileName, String expectedRepetition, String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule, int firstCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial, UnwinnableFullResultTest unwinnableHavingMove, UnwinnableFullResultTest unwinnableNotHavingMove, String fen) {
+public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
+    String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule,
+    List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence,
+    CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
+    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullHavingMove,
+    UnwinnableFull unwinnableFullNotHavingMove, UnwinnableQuick unwinnableQuickHavingMove,
+    UnwinnableQuick unwinnableQuickNotHavingMove, String fen) {
 
   public String pgnFileName() {
     return pgnFileName;
@@ -24,6 +32,10 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition, Str
 
   public String expectedYawnMoveRule() {
     return expectedYawnMoveRule;
+  }
+
+  public List<String> expectedSequenceRepetition() {
+    return expectedSequenceRepetition;
   }
 
   public int firstCapture() {
@@ -42,12 +54,12 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition, Str
     return insufficientMaterial;
   }
 
-  public UnwinnableFullResultTest unwinnableHavingMove() {
-    return unwinnableHavingMove;
+  public UnwinnableFull unwinnableFullHavingMove() {
+    return unwinnableFullHavingMove;
   }
 
-  public UnwinnableFullResultTest unwinnableNotHavingMove() {
-    return unwinnableNotHavingMove;
+  public UnwinnableFull unwinnableFullNotHavingMove() {
+    return unwinnableFullNotHavingMove;
   }
 
   public String fen() {
@@ -63,7 +75,17 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition, Str
       return false;
     }
     final var other = (PgnFileTestCase) obj;
-    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule) && Objects.equals(expectedRepetition, other.expectedRepetition) && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture) && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName) && unwinnableHavingMove == other.unwinnableHavingMove && unwinnableNotHavingMove == other.unwinnableNotHavingMove;
+    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule)
+        && Objects.equals(expectedRepetition, other.expectedRepetition)
+        && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture)
+        && Objects.equals(expectedSequenceRepetition, other.expectedSequenceRepetition)
+        && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
+        && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate
+        && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
+        && unwinnableFullHavingMove == other.unwinnableFullHavingMove
+        && unwinnableFullNotHavingMove == other.unwinnableFullNotHavingMove
+        && unwinnableQuickHavingMove == other.unwinnableQuickHavingMove
+        && unwinnableQuickNotHavingMove == other.unwinnableQuickNotHavingMove;
   }
 
 }

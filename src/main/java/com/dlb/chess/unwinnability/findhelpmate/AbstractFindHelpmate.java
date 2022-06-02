@@ -10,15 +10,18 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
 
 public abstract class AbstractFindHelpmate {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(AbstractFindHelpmate.class);
 
+  private static final boolean IS_DEBUG = false;
+
   protected static ApiBoard checkHelpmate(String fen, List<LegalMove> moveProgressList) {
 
-    final Board boardCheck = new Board(fen);
+    final var boardCheck = new Board(fen);
 
     for (final LegalMove legalMove : moveProgressList) {
       boardCheck.performMove(legalMove.moveSpecification());
@@ -27,16 +30,18 @@ public abstract class AbstractFindHelpmate {
       throw new ProgrammingMistakeException("It is not a checkmate");
     }
 
-    final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
-    logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
-    // System.out.println(PgnCreate.createPgnFileString(boardCheck));
+    if (IS_DEBUG) {
+      final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
+      logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
+      System.out.println(PgnCreate.createPgnFileString(boardCheck));
+    }
 
     return boardCheck;
   }
 
   protected static ApiBoard checkClassicalCheckmate(Side color, String fen, List<LegalMove> moveProgressList) {
 
-    final Board boardCheck = new Board(fen);
+    final var boardCheck = new Board(fen);
 
     for (final LegalMove legalMove : moveProgressList) {
       boardCheck.performMove(legalMove.moveSpecification());
@@ -45,14 +50,16 @@ public abstract class AbstractFindHelpmate {
       throw new ProgrammingMistakeException("It is not a classical checkmate position");
     }
 
-    final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
-    logger.info("Classical checkmate position found in " + numberOfMovesForClassicalCheckmatePosition + " moves");
-    // System.out.println(PgnCreate.createPgnFileString(boardCheck));
+    if (IS_DEBUG) {
+      final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
+      logger.info("Classical checkmate position found in " + numberOfMovesForClassicalCheckmatePosition + " moves");
+      System.out.println(PgnCreate.createPgnFileString(boardCheck));
+    }
 
     return boardCheck;
   }
 
-  static int calculateNumberOfMoves(List<LegalMove> moveProgressList) {
+  private static int calculateNumberOfMoves(List<LegalMove> moveProgressList) {
     return (int) Math.ceil(moveProgressList.size() / 2.0);
   }
 }

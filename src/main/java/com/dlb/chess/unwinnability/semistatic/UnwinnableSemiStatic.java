@@ -48,7 +48,7 @@ public class UnwinnableSemiStatic {
     // intruders be empty or formed entirely by bishops for the position to be unwinnable)
     final Set<PiecePlacement> intruderSet = SemiStaticFunctions.intruders(intendedLoserKing, mobilitySolution);
     for (final PiecePlacement intruder : intruderSet) {
-      if (intruder.type() != PieceType.BISHOP) {
+      if (intruder.pieceType() != PieceType.BISHOP) {
         return false;
       }
     }
@@ -57,7 +57,7 @@ public class UnwinnableSemiStatic {
     // require that all intruders (only bishops at this point) be of the same square color)
     final Set<SquareType> squareTypeSet = new TreeSet<>();
     for (final PiecePlacement intruder : intruderSet) {
-      squareTypeSet.add(intruder.sq().getSquareType());
+      squareTypeSet.add(intruder.squareOriginal().getSquareType());
     }
     if (squareTypeSet.size() > 1) {
       return false;
@@ -103,7 +103,7 @@ public class UnwinnableSemiStatic {
 
   private static PiecePlacement calculateKing(Side c, MobilitySolution mobilitySolution) {
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
-      if (piecePlacement.side() == c && piecePlacement.type() == PieceType.KING) {
+      if (piecePlacement.side() == c && piecePlacement.pieceType() == PieceType.KING) {
         return piecePlacement;
       }
     }

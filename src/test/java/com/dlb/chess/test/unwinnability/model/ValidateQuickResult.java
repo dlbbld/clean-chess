@@ -15,11 +15,23 @@ public record ValidateQuickResult(Fen fen, Side sideCheckingForWin, UnwinnableQu
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final var other = (ValidateQuickResult) obj;
     return Objects.equals(fen, other.fen) && sideCheckingForWin == other.sideCheckingForWin
         && unwinnableQuick == other.unwinnableQuick;
+  }
+
+  public Fen fen() {
+    return fen;
+  }
+
+  public Side sideCheckingForWin() {
+    return sideCheckingForWin;
+  }
+
+  public UnwinnableQuick unwinnableQuick() {
+    return unwinnableQuick;
   }
 }

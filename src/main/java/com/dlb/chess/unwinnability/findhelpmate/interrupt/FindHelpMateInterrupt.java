@@ -5,12 +5,17 @@ import java.util.List;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.UciMove;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.interrupt.enums.FindHelpMateInterruptResult;
 
 public class FindHelpMateInterrupt extends AbstractFindHelpmate {
+
+  private static final boolean IS_DEBUG = false;
+
   // Our quick algorithm is extremely light, requiring only a few microseconds on average per
   // position. It is also sound, but not complete. However, as we detail in Section 5, with an
   // (empirically chosen) depth bound of D = 9, all unfairly classified games from the Lichess
@@ -36,14 +41,20 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
   private static FindHelpMateInterruptResult calculateHelpmate(ApiBoard board, Side c, int currentDepth,
       List<LegalMove> mateList) {
-    final var isCheckmate = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
-    if (isCheckmate) {
+    final var isIntendedWinnerHavingCheckmate = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
+    if (isIntendedWinnerHavingCheckmate) {
       return FindHelpMateInterruptResult.TRUE;
     }
 
     if (currentDepth < D && !board.isInsufficientMaterial(c)) {
+
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());
+        if (IS_DEBUG) {
+          final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
+          System.out.println(uciMove.text() + " - " + (currentDepth + 1));
+        }
+
         mateList.add(legalMove);
         final var hasCheckmate = calculateHelpmate(board, c, currentDepth + 1, mateList);
         board.unperformMove();
@@ -63,7 +74,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
       }
     }
     // search could have continued
-    if (currentDepth == D && !board.getLegalMoveSet().isEmpty()) {
+    if (currentDepth == D) {
       return FindHelpMateInterruptResult.INTERRUPTED;
     }
     return FindHelpMateInterruptResult.FALSE;

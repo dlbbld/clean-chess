@@ -13,13 +13,14 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
-    List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<List<YawnHalfMove>> yawnMoveListList,
-    boolean hasThreefoldRepetition, boolean hasThreefoldRepetitionInitialEnPassantCapture,
-    boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule,
-    boolean isGameContinuedOverFivefoldRepetition, boolean isGameContinuedOverSeventyFiveMove, int firstCapture,
-    boolean hasCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate,
-    InsufficientMaterial insufficientMaterial, UnwinnableQuick unwinnableQuickResultNotHavingMove,
-    UnwinnableQuick unwinnableQuickResultHavingMove, String fen, ApiBoard board) {
+    List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<RepeatingSequence> sequenceRepetitionList,
+    List<List<YawnHalfMove>> yawnMoveListList, boolean hasThreefoldRepetition,
+    boolean hasThreefoldRepetitionInitialEnPassantCapture, boolean hasFivefoldRepetition, boolean hasFiftyMoveRule,
+    boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
+    boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
+    CheckmateOrStalemate checkmateOrStalemate, InsufficientMaterial insufficientMaterial,
+    UnwinnableQuick unwinnableQuickNotHavingMove, UnwinnableQuick unwinnableQuickHavingMove, String fen,
+    ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -35,6 +36,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && Objects.equals(halfMoveList, other.halfMoveList) && hasCapture == other.hasCapture
         && hasFiftyMoveRule == other.hasFiftyMoveRule && hasFivefoldRepetition == other.hasFivefoldRepetition
         && hasSeventyFiveMoveRule == other.hasSeventyFiveMoveRule
+        && hasThreeSequenceRepetition == other.hasThreeSequenceRepetition
         && hasThreefoldRepetition == other.hasThreefoldRepetition
         && hasThreefoldRepetitionInitialEnPassantCapture == other.hasThreefoldRepetitionInitialEnPassantCapture
         && havingMove == other.havingMove && insufficientMaterial == other.insufficientMaterial
@@ -43,8 +45,9 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && checkmateOrStalemate == other.checkmateOrStalemate && maxYawnSequence == other.maxYawnSequence
         && Objects.equals(repetitionListList, other.repetitionListList)
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
-        && unwinnableQuickResultNotHavingMove == other.unwinnableQuickResultNotHavingMove
-        && unwinnableQuickResultHavingMove == other.unwinnableQuickResultHavingMove;
+        && Objects.equals(sequenceRepetitionList, other.sequenceRepetitionList)
+        && unwinnableQuickNotHavingMove == other.unwinnableQuickNotHavingMove
+        && unwinnableQuickHavingMove == other.unwinnableQuickHavingMove;
   }
 
   public Side havingMove() {
@@ -61,6 +64,10 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
 
   public List<List<HalfMove>> repetitionListListInitialEnPassantCapture() {
     return repetitionListListInitialEnPassantCapture;
+  }
+
+  public List<RepeatingSequence> sequenceRepetitionList() {
+    return sequenceRepetitionList;
   }
 
   public List<List<YawnHalfMove>> yawnMoveListList() {
@@ -85,6 +92,10 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
 
   public boolean hasSeventyFiveMoveRule() {
     return hasSeventyFiveMoveRule;
+  }
+
+  public boolean hasThreeSequenceRepetition() {
+    return hasThreeSequenceRepetition;
   }
 
   public boolean isGameContinuedOverFivefoldRepetition() {
@@ -115,12 +126,12 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return insufficientMaterial;
   }
 
-  public UnwinnableQuick unwinnableQuickResultNotHavingMove() {
-    return unwinnableQuickResultNotHavingMove;
+  public UnwinnableQuick unwinnableQuickNotHavingMove() {
+    return unwinnableQuickNotHavingMove;
   }
 
-  public UnwinnableQuick unwinnableQuickResultHavingMove() {
-    return unwinnableQuickResultHavingMove;
+  public UnwinnableQuick unwinnableQuickHavingMove() {
+    return unwinnableQuickHavingMove;
   }
 
   public String fen() {

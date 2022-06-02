@@ -5,7 +5,8 @@ import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public enum ChaFullResult {
   WINNABLE("winnable", UnwinnableFull.WINNABLE),
-  UNWINNABLE("unwinnable", UnwinnableFull.UNWINNABLE);
+  UNWINNABLE("unwinnable", UnwinnableFull.UNWINNABLE),
+  UNDETERMINED("undetermined", UnwinnableFull.UNDETERMINED);
 
   private final String identifier;
   private final UnwinnableFull unwinnableFull;

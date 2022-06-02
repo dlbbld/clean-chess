@@ -94,6 +94,7 @@ public class UnwinnableQuickAnalyzer {
 
       // 6: if true UnwinnableSS(pos, c, Mobility(pos)) then return Unwinnable
       final MobilitySolution mobilitySolution = Mobility.mobility(board);
+      // mobilitySolution.debug();
       if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
         unperformHalfmoves(board, countHalfmoves);
         if (!invariant.equals(board.getFen())) {

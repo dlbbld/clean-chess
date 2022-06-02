@@ -1,5 +1,7 @@
 package com.dlb.chess.test.unwinnability;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +17,6 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
@@ -57,12 +58,13 @@ public class TestFindHelpMate {
         final ApiBoard board = new Board(testCase.fen());
 
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
+        final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer
+            .unwinnableFull(board, board.getHavingMove()).unwinnableFull();
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
         milliSecondsList.add(durationMilliSeconds);
         PrintDuration.printDuration(milliSecondsList, logger);
 
-        CheckFull.check(UnwinnableFullResultTest.WINNABLE, unwinnableFull);
+        assertEquals(UnwinnableFull.WINNABLE, unwinnableFullHavingMove);
       }
     }
   }

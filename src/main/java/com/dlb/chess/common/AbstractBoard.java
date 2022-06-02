@@ -83,16 +83,21 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
   @Override
   public DeadPositionFull isDeadPositionFull() {
-    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE);
+    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
     if (unwinnableWhite == UnwinnableFull.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK);
+
+    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).unwinnableFull();
     if (unwinnableBlack == UnwinnableFull.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
 
-    return DeadPositionFull.DEAD_POSITION;
+    if (unwinnableWhite == UnwinnableFull.UNWINNABLE && unwinnableBlack == UnwinnableFull.UNWINNABLE) {
+      return DeadPositionFull.DEAD_POSITION;
+    }
+
+    return DeadPositionFull.UNDETERMINED;
   }
 
   @Override
@@ -102,7 +107,7 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
   @Override
   public UnwinnableFull isUnwinnableFull(Side side) {
-    return UnwinnableFullAnalyzer.unwinnableFull(this, side);
+    return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
   }
 
   @Override

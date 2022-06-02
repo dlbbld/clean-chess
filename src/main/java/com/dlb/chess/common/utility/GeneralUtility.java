@@ -1,12 +1,15 @@
 package com.dlb.chess.common.utility;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.PgnHalfMove;
@@ -72,5 +75,13 @@ public class GeneralUtility {
     }
 
     return board;
+  }
+
+  public static String calculateSquareList(Set<Square> squareSet) {
+    final List<String> squareList = new ArrayList<>();
+    for (final Square square : squareSet) {
+      squareList.add(square.getName());
+    }
+    return BasicUtility.calculateCommaSeparatedList(squareList);
   }
 }

@@ -194,8 +194,7 @@ public class IllegalMoveSan {
     return CastlingMove.NONE;
   }
 
-  private static final DetectEnPassantCapture detectEnPassantCapture(ApiBoard board,
-      StaticPosition currentPosition) {
+  private static final DetectEnPassantCapture detectEnPassantCapture(ApiBoard board, StaticPosition currentPosition) {
 
     final Side havingMove = board.getHavingMove();
     final StaticPosition previousPosition = board.getStaticPosition();

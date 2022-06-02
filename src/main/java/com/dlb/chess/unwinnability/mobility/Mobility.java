@@ -5,14 +5,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
-import com.dlb.chess.unwinnability.mobility.model.Clearance;
+import com.dlb.chess.unwinnability.mobility.model.Clearability;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolutionVariable;
 import com.dlb.chess.unwinnability.mobility.model.Reachability;
@@ -21,6 +23,8 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 
 //Figure 7 Mobility algorithm.
 public class Mobility {
+
+  private static final boolean IS_DEBUG = false;
 
   // Inputs: a position
   // Output: mobility solution {MP!s}P in pos,s in S
@@ -32,249 +36,361 @@ public class Mobility {
 
     // set MP->s := 0
     final List<PiecePlacement> piecePlacementList = new ArrayList<>();
-    for (final Square sq : Square.values()) {
-      if (sq == Square.NONE) {
+    for (final Square square : Square.values()) {
+      if (square == Square.NONE) {
         continue;
       }
-      if (!board.getStaticPosition().isEmpty(sq)) {
-        final Piece piece = board.getStaticPosition().get(sq);
-        final PiecePlacement p = new PiecePlacement(piece.getPieceType(), piece.getSide(), sq);
+      if (!board.getStaticPosition().isEmpty(square)) {
+        final Piece piece = board.getStaticPosition().get(square);
+        final PiecePlacement p = new PiecePlacement(piece.getPieceType(), piece.getSide(), square);
         piecePlacementList.add(p);
       }
     }
 
-    final MobilitySolution mps = new MobilitySolution();
-    for (final PiecePlacement p : piecePlacementList) {
-      for (final Square s : Square.values()) {
-        if (s == Square.NONE) {
+    final MobilitySolution mobility = new MobilitySolution();
+    for (final PiecePlacement piecePlacement : piecePlacementList) {
+      for (final Square square : Square.values()) {
+        if (square == Square.NONE) {
           continue;
         }
-        mps.put(p, s, VariableState.ZERO);
+        mobility.put(piecePlacement, square, VariableState.ZERO);
       }
     }
 
     // CP := 0
-    final Clearance cp = new Clearance();
-    for (final PiecePlacement p : piecePlacementList) {
-      cp.put(p, VariableState.ZERO);
+    final Clearability clearability = new Clearability();
+    for (final PiecePlacement piecePlacement : piecePlacementList) {
+      clearability.put(piecePlacement, VariableState.ZERO);
     }
 
     // Rcs := 0
-    final Reachability rcs = new Reachability();
-    for (final Side c : Side.values()) {
-      if (c == Side.NONE) {
+    final Reachability reachability = new Reachability();
+    for (final Side side : Side.values()) {
+      if (side == Side.NONE) {
         continue;
       }
-      for (final Square s : Square.values()) {
-        if (s == Square.NONE) {
+      for (final Square square : Square.values()) {
+        if (square == Square.NONE) {
           continue;
         }
-        rcs.put(c, s, VariableState.ZERO);
+        reachability.put(side, square, VariableState.ZERO);
       }
     }
 
     // 2: set MP -> P.sq := 1, for all P in pos ( -> Every piece can “move” to its current square)
-    for (final PiecePlacement p : piecePlacementList) {
-      mps.put(p, p.sq(), VariableState.ONE);
+    for (final PiecePlacement piecePlacement : piecePlacementList) {
+      mobility.put(piecePlacement, piecePlacement.squareOriginal(), VariableState.ONE);
     }
 
     var isNewVariablesAreSetToOne = true;
     while (isNewVariablesAreSetToOne) {
-      final var totalVariableCountSetToOneBefore = calculateTotalVariableCountSetToOne(mps, cp, rcs);
+      final var totalVariableCountSetToOneBefore = calculateTotalVariableCountSetToOne(mobility, clearability,
+          reachability);
       // 3: for every variable V in X_arrow that is still set to 0 do
 
       // 4: if for every rule from Figure 6 of the form “V ) f”, formula f evaluates to true
       // on the current state of variables ~X then set V to 1 in X_arrow
 
-      // Clearance
+      // Update clearability
       // Clearance. A piece can be cleared from its square by moving or being captured:
-      for (final PiecePlacement checkClearancePiece : cp.calculateEntriesWithValueZero()) {
+      for (final PiecePlacement candidateClearability : clearability.calculateEntriesWithValueZero()) {
 
-        // moving
-        var isClearanceSetToOne = false;
-        for (final Square checkClearanceMoving : Square.values()) {
-          if (checkClearanceMoving == Square.NONE || checkClearanceMoving == checkClearancePiece.sq()) {
+        // clearable by moving
+        var isClearabilityForMoving = false;
+        for (final Square evaluateToSquare : Square.values()) {
+          if (evaluateToSquare == Square.NONE || evaluateToSquare == candidateClearability.squareOriginal()) {
             continue;
           }
-          if (mps.get(checkClearancePiece, checkClearanceMoving) == VariableState.ONE) {
-            isClearanceSetToOne = true;
-            cp.put(checkClearancePiece, VariableState.ONE);
+          if (mobility.get(candidateClearability, evaluateToSquare) == VariableState.ONE) {
+            isClearabilityForMoving = true;
+            clearability.put(candidateClearability, VariableState.ONE);
             break;
           }
         }
 
-        // captured
-        if (!isClearanceSetToOne) {
-          for (final MobilitySolutionVariable checkClearanceCapture : mps.calculateEntriesWithValueOne()) {
-            if (checkClearanceCapture.piecePlacement().side() != checkClearancePiece.side()
-                && checkClearanceCapture.s() == checkClearancePiece.sq()) {
-              cp.put(checkClearancePiece, VariableState.ONE);
+        // clearable by capturing
+        if (!isClearabilityForMoving) {
+          for (final MobilitySolutionVariable evaluateCapture : mobility.calculateEntriesWithValueOne()) {
+            if (evaluateCapture.piecePlacement().side() != candidateClearability.side()
+                && evaluateCapture.toSquare() == candidateClearability.squareOriginal()) {
+              clearability.put(candidateClearability, VariableState.ONE);
               break;
             }
           }
         }
       }
 
-      // Reachability
+      // Update reachability
       // Reachability. A square can be reached if some piece can move to it or it is occupied:
-      for (final ReachabilityVariable checkReachability : rcs.calculateEntriesWithValueZero()) {
-        for (final MobilitySolutionVariable checkReaching : mps.calculateEntriesWithValueOne()) {
-          if (checkReaching.piecePlacement().side() == checkReachability.c()
-              && checkReaching.piecePlacement().type() != PieceType.KING
-              && checkReaching.s() == checkReachability.s()) {
-            rcs.put(checkReachability.c(), checkReachability.s(), VariableState.ONE);
+      for (final ReachabilityVariable candidateReachability : reachability.calculateEntriesWithValueZero()) {
+        for (final MobilitySolutionVariable evaluateReachability : mobility.calculateEntriesWithValueOne()) {
+          if (evaluateReachability.piecePlacement().side() == candidateReachability.sideWhichCanReach()
+              && evaluateReachability.piecePlacement().pieceType() != PieceType.KING
+              && evaluateReachability.toSquare() == candidateReachability.toSquare()) {
+            reachability.put(candidateReachability.sideWhichCanReach(), candidateReachability.toSquare(),
+                VariableState.ONE);
             break;
           }
         }
       }
 
-      // Mobility
-      for (final MobilitySolutionVariable mobilitySolutionValueZero : mps.calculateEntriesWithValueZero()) {
-
-        var isFirstCondition = false;
+      // Update mobility
+      for (final MobilitySolutionVariable candidateMobility : mobility.calculateEntriesWithValueZero()) {
         // Move. If a piece can move to square s, it must pass first by a predecessor of s:
         // all pieces except pawns
-        if (mobilitySolutionValueZero.piecePlacement().type() == PieceType.PAWN) {
-          // pawn move, nothing to check
-          isFirstCondition = true;
-        } else {
-          for (final Square predecessor : MobilityFunctions.predecessors(mobilitySolutionValueZero.piecePlacement(),
-              mobilitySolutionValueZero.s())) {
-            if (mps.get(mobilitySolutionValueZero.piecePlacement(), predecessor) == VariableState.ONE) {
-              isFirstCondition = true;
-              break;
-            }
+        final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+        final PieceType candidatePieceType = candidateMobility.piecePlacement().pieceType();
+        final Square candidateToSquare = candidateMobility.toSquare();
+
+        if (candidatePieceType == PieceType.PAWN) {
+          if (!calculateIsPawnMoveConditionOk(candidateMobility, mobility, clearability, reachability)) {
+            continue;
           }
-        }
-        if (!isFirstCondition) {
+        } else if (!calculateIsNonPawnMoveConditionOk(candidateMobility, mobility)) {
           continue;
         }
 
-        var isFirstConditionForPawns = false;
-        if (mobilitySolutionValueZero.piecePlacement().type() == PieceType.PAWN) {
-          for (final Square predecessor : MobilityFunctions.predecessors(mobilitySolutionValueZero.piecePlacement(),
-              mobilitySolutionValueZero.s())) {
-            if (mps.get(mobilitySolutionValueZero.piecePlacement(), predecessor) == VariableState.ONE) {
-              // Pawn push cannot be performed if there is an obstacle in target
-              var isNonClearablePieceAhead = false;
-              for (final PiecePlacement piecePlacement : piecePlacementList) {
-                if (piecePlacement.sq() == mobilitySolutionValueZero.s()
-                    && cp.get(piecePlacement) == VariableState.ZERO) {
-                  isNonClearablePieceAhead = true;
-                }
-              }
-              if (!isNonClearablePieceAhead) {
-                isFirstConditionForPawns = true;
-                break;
-              }
-            }
-          }
-        } else {
-          isFirstConditionForPawns = true;
-        }
-        if (!isFirstConditionForPawns) {
+        if (!calculateIsKingNotMovingIntoCheckConditionOk(candidateMobility, mobility, clearability)
+            || !calculateIsNotMovingOntoOwnPieceConditionOk(candidateMobility, mobility, clearability)) {
           continue;
         }
 
-        var isSecondCondition = false;
-        // Pawn move. For pawn captures we require that the capturing square can be reached
-        // by a (non-king) opponent piece. Pawns that promote may go everywhere:
-        // only pawns
-        if (mobilitySolutionValueZero.piecePlacement().type() == PieceType.PAWN) {
-          // must pass square behind or promotion
-          final Set<Square> predecessorSquareSet = MobilityFunctions
-              .predecessors(mobilitySolutionValueZero.piecePlacement(), mobilitySolutionValueZero.s());
-          final Set<Square> promotionSquareSet = MobilityFunctions
-              .promotion(mobilitySolutionValueZero.piecePlacement());
-
-          final Set<Square> unionSet = new TreeSet<>(predecessorSquareSet);
-          unionSet.addAll(promotionSquareSet);
-
-          for (final Square predecessor : unionSet) {
-            if (mps.get(mobilitySolutionValueZero.piecePlacement(), predecessor) == VariableState.ONE) {
-              isSecondCondition = true;
-              break;
-            }
-          }
-
-          if (!isSecondCondition) {
-            // if condition already hit no need to check further
-            // must have opponent non-king piece for diagonal move
-            final Set<Square> predecessorsCaptureSet = MobilityFunctions
-                .predecessorsCapture(mobilitySolutionValueZero.piecePlacement(), mobilitySolutionValueZero.s());
-
-            for (final Square predecessorCapture : predecessorsCaptureSet) {
-              if (mps.get(mobilitySolutionValueZero.piecePlacement(), predecessorCapture) == VariableState.ONE
-                  && rcs.get(mobilitySolutionValueZero.piecePlacement().side().getOppositeSide(),
-                      mobilitySolutionValueZero.s()) == VariableState.ONE) {
-                isSecondCondition = true;
-                break;
-              }
-            }
-          }
-
-        } else {
-          // not a pawn move, nothing to check
-          isSecondCondition = true;
-        }
-        if (!isSecondCondition) {
-          continue;
-        }
-
-        // because we have logical and, the king case only is enough
-        var isThirdCondition = true;
-        // King attackers. Direct opponent attackers must be cleared before a king can move:
-        // king only
-        if (mobilitySolutionValueZero.piecePlacement().type() == PieceType.KING) {
-          for (final PiecePlacement attacker : MobilityFunctions.attackers(piecePlacementList,
-              mobilitySolutionValueZero.s())) {
-            if (attacker.side() != mobilitySolutionValueZero.piecePlacement().side()
-                && cp.get(attacker) != VariableState.ONE) {
-              isThirdCondition = false;
-              break;
-            }
-          }
-        }
-        if (!isThirdCondition) {
-          continue;
-        }
-
-        var isFourthCondition = true;
-        // Not self-capture. A piece must be cleared from a square before other of the same
-        // color can move to it:
-        // all pieces
-        for (final PiecePlacement checkPiecePlacement : piecePlacementList) {
-          if (checkPiecePlacement != mobilitySolutionValueZero.piecePlacement()
-              && checkPiecePlacement.side() == mobilitySolutionValueZero.piecePlacement().side()
-              && checkPiecePlacement.sq() == mobilitySolutionValueZero.s()
-              && cp.get(checkPiecePlacement) == VariableState.ZERO) {
-            isFourthCondition = false;
-            break;
-          }
-        }
-
-        if (!isFourthCondition) {
-          continue;
-        }
-
-        mps.put(mobilitySolutionValueZero.piecePlacement(), mobilitySolutionValueZero.s(), VariableState.ONE);
+        mobility.put(candidatePiecePlacement, candidateToSquare, VariableState.ONE);
       }
 
       // 5: repeat steps 3 and 4 until no new variables are set to 1
-      final var totalVariableCountSetToOneAfter = calculateTotalVariableCountSetToOne(mps, cp, rcs);
+      final var totalVariableCountSetToOneAfter = calculateTotalVariableCountSetToOne(mobility, clearability,
+          reachability);
       if (totalVariableCountSetToOneBefore > totalVariableCountSetToOneAfter) {
         throw new ProgrammingMistakeException("Variable state was incorrectly set");
       }
       isNewVariablesAreSetToOne = totalVariableCountSetToOneAfter > totalVariableCountSetToOneBefore;
     }
+    if (IS_DEBUG) {
+      debug(clearability, reachability, mobility);
+    }
 
     // 6: return {MP -> s}P in pos, s in S
-    return mps;
+    return mobility;
 
   }
 
-  private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearance cp, Reachability rcs) {
-    return mps.calculateVariableCountSetToOne() + cp.calculateVariableCountSetToOne()
-        + rcs.calculateVariableCountSetToOne();
+  private static boolean calculateIsCanLeaveFile(PiecePlacement checkPawn, MobilitySolution mobility, File file) {
+
+    final Set<Square> mobilityOpponentPawn = mobility.calculateSquaresWithValueOne(checkPawn);
+
+    for (final Square pawnMobility : mobilityOpponentPawn) {
+      if (pawnMobility.getFile() != file) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean calculateIsCanCaptureOpponentPawnWithNonPawn(PiecePlacement opponentPawn,
+      MobilitySolution mobilitySolution) {
+
+    final Set<Square> pawnSquareAndForwardPushesSet = calculatePawnSquareAndForwardPushes(opponentPawn,
+        mobilitySolution);
+
+    for (final MobilitySolutionVariable evaluateCapture : mobilitySolution.calculateEntriesWithValueOne()) {
+      if (evaluateCapture.piecePlacement().side() != opponentPawn.side()
+          && evaluateCapture.piecePlacement().pieceType() != PieceType.PAWN) {
+        // we only check non pawns, because for pawn we would not need to exclude forward pushes
+        // which we can't do as we have no move history
+        if (pawnSquareAndForwardPushesSet.contains(evaluateCapture.toSquare())) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static Set<Square> calculatePawnSquareAndForwardPushes(PiecePlacement pawn,
+      MobilitySolution mobilitySolution) {
+    final Set<Square> result = new TreeSet<>();
+    result.add(pawn.squareOriginal());
+
+    for (final Square mobilitySquare : mobilitySolution.calculateSquaresWithValueOne(pawn)) {
+      if (mobilitySquare.getFile() == pawn.squareOriginal().getFile()) {
+        result.add(mobilitySquare);
+      }
+
+    }
+    return result;
+  }
+
+  private static void debug(Clearability clearability, Reachability reachability, MobilitySolution mobility) {
+    System.out.println(clearability.print());
+    System.out.println(reachability.print());
+    System.out.println(mobility.print());
+  }
+
+  private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearability cp, Reachability rcs) {
+    return cp.calculateVariableCountSetToOne() + rcs.calculateVariableCountSetToOne()
+        + mps.calculateVariableCountSetToOne();
+  }
+
+  private static boolean calculateIsPawnMoveConditionOk(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility, Clearability clearability, Reachability reachability) {
+
+    if (calculateIsPossiblePawnForwardMove(candidateMobility, mobility, clearability)
+        || calculateIsPossiblePawnCapture(candidateMobility, mobility, reachability)
+        || calculateIsPossiblePawnPromotion(candidateMobility, mobility)) {
+      return true;
+    }
+
+    return false;
+  }
+
+  private static boolean calculateIsPossiblePawnForwardMove(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility, Clearability clearability) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    // currently only one predecessor
+    // still by the logic we check as if multiple, "any valid predecessor" returns true
+    for (final Square predecessor : MobilityFunctions.predecessors(candidatePiecePlacement, candidateToSquare)) {
+      if (mobility.get(candidatePiecePlacement, predecessor) == VariableState.ONE) {
+
+        if (!calculateHasBlockingNonPawn(candidateMobility, mobility, clearability)
+            && !calculateHasBlockingPawn(candidateMobility, mobility)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  // Pawn move. For pawn pushes, we require that a possibly enemy piece on the target
+  // square can be cleared first.
+  // Note: We don't need to check not moving onto own piece. That is checked for all movements in later
+  // step.
+  private static boolean calculateHasBlockingNonPawn(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility, Clearability clearability) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final Side candidateSide = candidatePiecePlacement.side();
+    final Side candidateOppositeSide = candidateSide.getOppositeSide();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    for (final PiecePlacement checkNonPawn : mobility.getPiecePlacementSet()) {
+      if (checkNonPawn.side() == candidateOppositeSide && checkNonPawn.squareOriginal() == candidateToSquare
+          && checkNonPawn.pieceType() != PieceType.PAWN && clearability.get(checkNonPawn) == VariableState.ZERO) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // Implemented but not specified condition in the PDF of opponent pawns must be able to leave the file
+  // we only need to check if not already blocked by non pawn piece
+  private static boolean calculateHasBlockingPawn(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final Side candidateSide = candidatePiecePlacement.side();
+    final Side candidateOppositeSide = candidateSide.getOppositeSide();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    for (final PiecePlacement checkPawn : mobility.getPiecePlacementSet()) {
+      if (checkPawn.side() == candidateOppositeSide && checkPawn.squareOriginal() == candidateToSquare
+          && checkPawn.pieceType() == PieceType.PAWN) {
+
+        // now we check leaving the diagonal and capturing
+        if (!calculateIsCanLeaveFile(checkPawn, mobility, candidateToSquare.getFile())
+            && !calculateIsCanCaptureOpponentPawnWithNonPawn(checkPawn, mobility)) {
+          return true;
+        }
+      }
+    }
+    return false;
+  }
+
+  private static boolean calculateIsPossiblePawnCapture(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility, Reachability reachability) {
+
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final Side candidateSide = candidatePiecePlacement.side();
+    final Side candidateOppositeSide = candidateSide.getOppositeSide();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    // Pawn move. For pawn captures we require that the capturing square can be reached
+    // by a (non-king) opponent piece.
+    final Set<Square> predecessorsCaptureSet = MobilityFunctions.predecessorsCapture(candidatePiecePlacement,
+        candidateToSquare);
+
+    for (final Square predecessorCapture : predecessorsCaptureSet) {
+      if (mobility.get(candidatePiecePlacement, predecessorCapture) == VariableState.ONE
+          && reachability.get(candidateOppositeSide, candidateToSquare) == VariableState.ONE) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean calculateIsPossiblePawnPromotion(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+
+    // Pawns that promote may go everywhere:
+    final Set<Square> promotionSquareSet = MobilityFunctions.promotion(candidatePiecePlacement);
+    final Set<Square> squareSetWithValueOne = mobility.calculateSquaresWithValueOne(candidatePiecePlacement);
+
+    final var isValidPawnPromotion = !BasicUtility.calculateIsDisjoint(promotionSquareSet, squareSetWithValueOne);
+
+    return isValidPawnPromotion;
+  }
+
+  private static boolean calculateIsNonPawnMoveConditionOk(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    // now the non pawns
+    for (final Square predecessor : MobilityFunctions.predecessors(candidatePiecePlacement, candidateToSquare)) {
+      if (mobility.get(candidatePiecePlacement, predecessor) == VariableState.ONE) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean calculateIsKingNotMovingIntoCheckConditionOk(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility, Clearability clearability) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final PieceType candidatePieceType = candidateMobility.piecePlacement().pieceType();
+    final Side candidateSide = candidatePiecePlacement.side();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    if (candidatePieceType != PieceType.KING) {
+      return true;
+    }
+
+    for (final PiecePlacement attacker : MobilityFunctions.attackers(mobility.getPiecePlacementSet(),
+        candidateToSquare)) {
+      if (attacker.side() != candidateSide && clearability.get(attacker) != VariableState.ONE) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private static boolean calculateIsNotMovingOntoOwnPieceConditionOk(MobilitySolutionVariable candidateMobility,
+      MobilitySolution mobility, Clearability clearability) {
+    final PiecePlacement candidatePiecePlacement = candidateMobility.piecePlacement();
+    final Side candidateSide = candidatePiecePlacement.side();
+    final Square candidateToSquare = candidateMobility.toSquare();
+
+    // Not self-capture. A piece must be cleared from a square before other of the same
+    // color can move to it:
+    // all pieces
+    for (final PiecePlacement checkPiecePlacement : mobility.getPiecePlacementSet()) {
+      if (checkPiecePlacement != candidatePiecePlacement && checkPiecePlacement.side() == candidateSide
+          && checkPiecePlacement.squareOriginal() == candidateToSquare
+          && clearability.get(checkPiecePlacement) == VariableState.ZERO) {
+        return false;
+      }
+    }
+    return true;
+
   }
 }

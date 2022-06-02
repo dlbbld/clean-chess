@@ -19,7 +19,8 @@ public record ValidateFullResult(Fen fen, Side sideCheckingForWin, UnwinnableFul
       return false;
     }
     final var other = (ValidateFullResult) obj;
-    return Objects.equals(fen, other.fen) && sideCheckingForWin == other.sideCheckingForWin && unwinnableFull == other.unwinnableFull;
+    return Objects.equals(fen, other.fen) && sideCheckingForWin == other.sideCheckingForWin
+        && unwinnableFull == other.unwinnableFull;
   }
 
   public Fen fen() {

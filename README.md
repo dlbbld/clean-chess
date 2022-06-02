@@ -214,9 +214,10 @@ The quick method has three return values:
 * WINNABLE - the position is winnable by the player
 * POSSIBLY_WINNABLE - the position is most likely winnable by the player, but it might also be unwinnable in some rare cases
 
-The full method has two return values:
+The full method has also three return values:
 * UNWINNABLE - the position is not winnable by the player
 * WINNABLE - the position is winnable by the player
+* UNDETERMINED - the search was stopped due to limits in the code
 
 ### Dead position
 The quick method has three return values:
@@ -224,9 +225,10 @@ The quick method has three return values:
 * NON_DEAD_POSITION - the position is not a dead position
 * POSSIBLY_NON_DEAD_POSITION - the position is most likely a non-dead position, but it might also be a dead position in some rare cases
 
-The full method has two return values:
+The full method has also three return values:
 * DEAD_POSITION - the position is a dead position
 * NON_DEAD_POSITION - the position is not a dead position
+* UNDETERMINED - the search was stopped due to limits in the code
 
 ## Examples
 

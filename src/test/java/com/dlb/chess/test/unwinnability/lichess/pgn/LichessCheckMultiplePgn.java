@@ -1,4 +1,4 @@
-package com.dlb.chess.test.lichess;
+package com.dlb.chess.test.unwinnability.lichess.pgn;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +55,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
     if (!file.isFile()) {
       throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
     }
+
     try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
       while (myReader.hasNextLine()) {
         final String line = NonNullWrapperCommon.nextLine(myReader);

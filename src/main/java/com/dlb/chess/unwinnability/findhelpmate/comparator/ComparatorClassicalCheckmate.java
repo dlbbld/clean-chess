@@ -92,8 +92,8 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
           }
         }
 
-        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, sideIntendedWinner,
-            staticPosition, aboveCheckmateMaterial);
+        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove,
+            sideIntendedWinner, staticPosition, aboveCheckmateMaterial);
         if (compareSacrificeHavingMove != 0) {
           return compareSacrificeHavingMove;
         }
@@ -125,8 +125,8 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
           return compareHigherValuePieceFirst(firstLegalMove.movingPiece(), secondLegalMove.movingPiece());
         }
 
-        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove, sideIntendedWinner,
-            staticPosition, aboveCheckmateMaterial);
+        final var compareSacrificeHavingMove = compareSacrificeHavingMove(firstLegalMove, secondLegalMove,
+            sideIntendedWinner, staticPosition, aboveCheckmateMaterial);
         if (compareSacrificeHavingMove != 0) {
           return compareSacrificeHavingMove;
         }
@@ -191,7 +191,8 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
       }
 
       // state 2
-      final var isLosingHasKingOnly = MaterialUtility.calculateHasKingOnly(sideIntendedWinner.getOppositeSide(), staticPosition);
+      final var isLosingHasKingOnly = MaterialUtility.calculateHasKingOnly(sideIntendedWinner.getOppositeSide(),
+          staticPosition);
       // state 2a/2b
 
       if (isLosingHasKingOnly) {
@@ -200,15 +201,15 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
             case ABOVE_KING_AND_QUEEN:
             case ABOVE_KING_AND_ROOK:
             case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(sideIntendedWinner.getOppositeSide(),
-                  staticPosition, aboveCheckmateMaterial);
+              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(
+                  sideIntendedWinner.getOppositeSide(), staticPosition, aboveCheckmateMaterial);
               if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())) {
                 return -1;
               }
               break;
             case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(sideIntendedWinner,
-                  staticPosition);
+              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(
+                  sideIntendedWinner, staticPosition);
               if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
                   .contains(firstLegalMove.pieceCaptured().getPieceType())) {
                 return -1;
@@ -226,15 +227,15 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
             case ABOVE_KING_AND_QUEEN:
             case ABOVE_KING_AND_ROOK:
             case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(sideIntendedWinner.getOppositeSide(),
-                  staticPosition, aboveCheckmateMaterial);
+              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(
+                  sideIntendedWinner.getOppositeSide(), staticPosition, aboveCheckmateMaterial);
               if (capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
                 return 1;
               }
               break;
             case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(sideIntendedWinner,
-                  staticPosition);
+              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(
+                  sideIntendedWinner, staticPosition);
               if (NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())
                   .contains(secondLegalMove.pieceCaptured().getPieceType())) {
                 return 1;
@@ -252,8 +253,8 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
             case ABOVE_KING_AND_QUEEN:
             case ABOVE_KING_AND_ROOK:
             case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
-              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(sideIntendedWinner.getOppositeSide(),
-                  staticPosition, aboveCheckmateMaterial);
+              final Set<PieceType> capturablePieceTypeSet = calculateAffordablePieceTypeSet(
+                  sideIntendedWinner.getOppositeSide(), staticPosition, aboveCheckmateMaterial);
               if (capturablePieceTypeSet.contains(firstLegalMove.pieceCaptured().getPieceType())
                   && !capturablePieceTypeSet.contains(secondLegalMove.pieceCaptured().getPieceType())) {
                 return -1;
@@ -274,8 +275,8 @@ public class ComparatorClassicalCheckmate extends AbstractLegalMovesComparator {
 
               break;
             case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(sideIntendedWinner,
-                  staticPosition);
+              final Map<SquareType, Set<PieceType>> map = calculateOppositeBishopsAffordablePieceTypeMap(
+                  sideIntendedWinner, staticPosition);
               if (NonNullWrapperCommon.get(map, firstLegalMove.moveSpecification().toSquare().getSquareType())
                   .contains(firstLegalMove.pieceCaptured().getPieceType())
                   && !NonNullWrapperCommon.get(map, secondLegalMove.moveSpecification().toSquare().getSquareType())

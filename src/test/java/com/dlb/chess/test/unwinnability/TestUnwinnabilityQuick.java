@@ -27,7 +27,7 @@ public class TestUnwinnabilityQuick {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuick.class);
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testStartPosition() {
     final Board board = new Board();
     assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
@@ -35,11 +35,34 @@ public class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFen() {
-    final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
+    // pseudo pawn wall: possiby winnable, ok
+    // final var fen = "8/8/3p4/1p2p2k/pP1pP1p1/P2P2P1/6K1/8 w - - 2 41";
+
+    // pseudo pawn wall: unwinnable, ok
+    // final var fen = "8/8/8/1p2p2k/pP1pP1p1/P2P2P1/6K1/8 w - - 2 50";
+
+    // two opposite pawns which can possibly promote: possibly winnable, ok
+    // final var fen = "8/8/3p4/4p2k/4P3/3P4/6K1/8 b - - 2 41";
+
+    // first half-move line has depth 9 and checkmate of winner on last half-move
+    // final var fen = "7k/p6P/7K/r5P1/5B2/8/8/1q6 b - - 4 66";
+
+    // norgaard, not winnable but not detected
+    // no semi-open files: possibly winnable (intruders), check
+    // final var fen = "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100";
+
+    // semi-open files: possibly winnable, ok
+    // final var fen = "6k1/p1p1p1P1/6PB/6P1/6p1/6pb/P1P1P1p1/6K1 w - - 0 100";
+
+    // no semi-open files: unwinnable, ok
+    // final var fen = "8/p1p1p1p1/6Pk/6pB/6Pb/6pK/P1P1P1P1/8 w - - 0 100";
+
+    final var fen = "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100";
+
     final Board board = new Board(fen);
-    assertEquals(UnwinnableQuick.WINNABLE,
+    assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
@@ -64,10 +87,14 @@ public class TestUnwinnabilityQuick {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+    final UnwinnableQuick unwinnableQuickResultHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
+    assertEquals(pgnFileTestCase.unwinnableQuickHavingMove(), unwinnableQuickResultHavingMove);
 
-    CheckQuick.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableQuickResult);
+    final UnwinnableQuick unwinnableQuickResultNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+        board.getHavingMove().getOppositeSide());
+    assertEquals(pgnFileTestCase.unwinnableQuickNotHavingMove(), unwinnableQuickResultNotHavingMove);
+
   }
 
   @SuppressWarnings("static-method")
@@ -80,12 +107,22 @@ public class TestUnwinnabilityQuick {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-          board.getHavingMove().getOppositeSide());
-      milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+      {
+        final var beforeMilliSeconds = System.currentTimeMillis();
+        final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+            board.getHavingMove().getOppositeSide());
+        milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+        assertEquals(testCase.unwinnableFullHavingMove(), unwinnableQuickHavingMove);
+      }
 
-      CheckQuick.check(testCase.unwinnableNotHavingMove(), unwinnableQuick);
+      {
+        final var beforeMilliSeconds = System.currentTimeMillis();
+        final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+            board.getHavingMove().getOppositeSide());
+        milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+        assertEquals(testCase.unwinnableFullNotHavingMove(), unwinnableQuickNotHavingMove);
+      }
+
     }
     PrintDuration.printDuration(milliSecondsList, logger);
   }

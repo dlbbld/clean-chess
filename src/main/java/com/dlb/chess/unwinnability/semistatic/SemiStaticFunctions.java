@@ -54,7 +54,7 @@ class SemiStaticFunctions {
 
     final Set<Square> adjacentSet = KingDistanceOneFunctions.calculateOrthogonalSquares(s);
     for (final PiecePlacement piecePlacement : ms.getPiecePlacementSet()) {
-      if (piecePlacement.side() != c && piecePlacement.type() != PieceType.KING) {
+      if (piecePlacement.side() != c && piecePlacement.pieceType() != PieceType.KING) {
         final Set<Square> regionPiece = SemiStaticFunctions.region(piecePlacement, ms);
         if (!BasicUtility.calculateIsDisjoint(regionPiece, adjacentSet)) {
           result.add(piecePlacement);
@@ -84,7 +84,7 @@ class SemiStaticFunctions {
 
     for (final MobilitySolutionVariable entry : ms.calculateEntriesWithValueOne()) {
       if (entry.piecePlacement() == p) {
-        result.add(entry.s());
+        result.add(entry.toSquare());
       }
     }
     return result;
