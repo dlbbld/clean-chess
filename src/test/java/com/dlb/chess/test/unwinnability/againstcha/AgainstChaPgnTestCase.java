@@ -1,4 +1,4 @@
-package com.dlb.chess.test.unwinnability.validateagainstcha;
+package com.dlb.chess.test.unwinnability.againstcha;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,9 +19,9 @@ import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class ValidateTestCase extends AbstractValidateAgainstCha {
+public class AgainstChaPgnTestCase extends AbstractAgainstCha {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateTestCase.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(AgainstChaPgnTestCase.class);
 
   private static final boolean IS_START_FROM_PGN_FILE = false;
   private static final String START_FROM_PGN_FILE_NAME = "no_move_half_move_clock_99_black_to_move.pgn";
@@ -67,11 +67,11 @@ public class ValidateTestCase extends AbstractValidateAgainstCha {
 
         switch (fen.havingMove()) {
           case WHITE:
-            ValidateTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultBlack, quickTestResultBlack,
+            AgainstChaPgnTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultBlack, quickTestResultBlack,
                 testCase);
             break;
           case BLACK:
-            ValidateTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultWhite, quickTestResultWhite,
+            AgainstChaPgnTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultWhite, quickTestResultWhite,
                 testCase);
             break;
           case NONE:
@@ -81,11 +81,11 @@ public class ValidateTestCase extends AbstractValidateAgainstCha {
 
         switch (fen.havingMove()) {
           case WHITE:
-            ValidateTestCase.check(testCase.unwinnableHavingMove(), fullTestResultWhite, quickTestResultWhite,
+            AgainstChaPgnTestCase.check(testCase.unwinnableHavingMove(), fullTestResultWhite, quickTestResultWhite,
                 testCase);
             break;
           case BLACK:
-            ValidateTestCase.check(testCase.unwinnableHavingMove(), fullTestResultBlack, quickTestResultBlack,
+            AgainstChaPgnTestCase.check(testCase.unwinnableHavingMove(), fullTestResultBlack, quickTestResultBlack,
                 testCase);
             break;
           case NONE:

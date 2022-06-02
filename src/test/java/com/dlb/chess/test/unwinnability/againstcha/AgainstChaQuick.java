@@ -1,4 +1,4 @@
-package com.dlb.chess.test.unwinnability.validateagainstcha;
+package com.dlb.chess.test.unwinnability.againstcha;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -15,9 +15,9 @@ import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class ValidateQuick extends AbstractValidateAgainstCha {
+public class AgainstChaQuick extends AbstractAgainstCha {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateQuick.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(AgainstChaQuick.class);
 
   private static final boolean IS_START_FROM_PGN_FILE = false;
   private static final String START_FROM_PGN_FILE_NAME = "no_move_half_move_clock_99_black_to_move.pgn";

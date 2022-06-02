@@ -1,4 +1,4 @@
-package com.dlb.chess.test.unwinnability.validateagainstcha;
+package com.dlb.chess.test.unwinnability.againstcha;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.dlb.chess.test.unwinnability.model.ValidateQuickResult;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public abstract class AbstractValidateAgainstCha {
+public abstract class AbstractAgainstCha {
 
   static final String FEN_MINE = "c:\\temp\\cha\\mine\\myFen.txt";
   static final String FEN_CHA_ANALYSIS_BOTH_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaBothAnalysis.txt";

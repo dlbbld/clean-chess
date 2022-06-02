@@ -1,4 +1,4 @@
-package com.dlb.chess.test.unwinnability.validateagainstcha;
+package com.dlb.chess.test.unwinnability.againstcha;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
@@ -14,9 +14,9 @@ import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 // rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2; UNDETERMINED; WINNABLE
 // rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1; UNDETERMINED; WINNABLE
-public class ValidateFull extends AbstractValidateAgainstCha {
+public class AgainstChaFull extends AbstractAgainstCha {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(ValidateFull.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(AgainstChaFull.class);
 
   private static final boolean IS_START_FROM_FEN = false;
   private static final String START_FROM_FEN = "no_move_half_move_clock_99_black_to_move.pgn";

@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.test.unwinnability.validateagainstcha;
+package com.dlb.chess.test.unwinnability.againstcha;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
