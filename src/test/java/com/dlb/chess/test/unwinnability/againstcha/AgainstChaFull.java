@@ -11,6 +11,7 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
 // rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2; UNDETERMINED; WINNABLE
 // rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1; UNDETERMINED; WINNABLE
@@ -58,11 +59,12 @@ public class AgainstChaFull extends AbstractAgainstCha {
           bothResult.fullResultList());
 
       final Board board = new Board(fen);
-      final UnwinnableFull fullMine = UnwinnableFullAnalyzer.unwinnableFull(board, fen.havingMove().getOppositeSide());
+      final UnwinnableFullAnalysis fullMineAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
+          fen.havingMove().getOppositeSide());
 
-      if (fullCha != fullMine) {
+      if (fullCha != fullMineAnalysis.unwinnableFull()) {
         counterDifferences++;
-        System.out.println(fenStr + "; " + fullMine + "; " + fullCha);
+        System.out.println(fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullCha);
       }
 
     }

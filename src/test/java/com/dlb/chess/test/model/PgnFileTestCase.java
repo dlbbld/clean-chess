@@ -9,7 +9,12 @@ import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 
-public record PgnFileTestCase(String pgnFileName, String expectedRepetition, String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule, List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial, UnwinnableFullResultTest unwinnableHavingMove, UnwinnableFullResultTest unwinnableNotHavingMove, String fen) {
+public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
+    String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule,
+    List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence,
+    CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
+    InsufficientMaterial insufficientMaterial, UnwinnableFullResultTest unwinnableHavingMove,
+    UnwinnableFullResultTest unwinnableNotHavingMove, String fen) {
 
   public String pgnFileName() {
     return pgnFileName;
@@ -68,7 +73,15 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition, Str
       return false;
     }
     final var other = (PgnFileTestCase) obj;
-    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule) && Objects.equals(expectedRepetition, other.expectedRepetition) && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture) && Objects.equals(expectedSequenceRepetition, other.expectedSequenceRepetition) && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName) && unwinnableHavingMove == other.unwinnableHavingMove && unwinnableNotHavingMove == other.unwinnableNotHavingMove;
+    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule)
+        && Objects.equals(expectedRepetition, other.expectedRepetition)
+        && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture)
+        && Objects.equals(expectedSequenceRepetition, other.expectedSequenceRepetition)
+        && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
+        && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate
+        && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
+        && unwinnableHavingMove == other.unwinnableHavingMove
+        && unwinnableNotHavingMove == other.unwinnableNotHavingMove;
   }
 
 }

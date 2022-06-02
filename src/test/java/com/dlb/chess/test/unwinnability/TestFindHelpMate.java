@@ -55,7 +55,8 @@ public class TestFindHelpMate {
         logger.info(testCase.pgnFileName());
 
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
+        final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
+            .unwinnableFull();
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
         milliSecondsList.add(durationMilliSeconds);
         PrintDuration.printDuration(milliSecondsList, logger);

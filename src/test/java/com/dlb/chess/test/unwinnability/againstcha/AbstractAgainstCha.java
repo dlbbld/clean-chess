@@ -122,7 +122,7 @@ public abstract class AbstractAgainstCha {
     throw new IllegalArgumentException("No quick test result was found");
   }
 
-  public static void validateBothTestResult(ValidateBothResult bothResult) {
+  public static void validateChaBothTestResult(ValidateBothResult bothResult) {
     if (bothResult.fullResultList().size() != bothResult.quickResultList().size()) {
       throw new IllegalArgumentException("Test result list sizes not match for full and quick test");
     }
@@ -156,6 +156,19 @@ public abstract class AbstractAgainstCha {
             case WINNABLE:
               // ok
               break;
+            default:
+              throw new IllegalArgumentException();
+          }
+          break;
+        case UNDETERMINED:
+          switch (quickResult) {
+            case POSSIBLY_WINNABLE:
+              // ok
+              break;
+            case UNWINNABLE:
+              throw new IllegalArgumentException("Inconsistent CHA result");
+            case WINNABLE:
+              throw new IllegalArgumentException("Inconsistent CHA result, quick found mate but not full");
             default:
               throw new IllegalArgumentException();
           }

@@ -12,15 +12,18 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.UciMove;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.enums.ClassicalCheckmateSituation;
+import com.dlb.chess.unwinnability.findhelpmate.exhaust.model.FindHelpmateAnalysis;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
@@ -38,13 +41,13 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private int cnt = 0;
   private boolean isCanExhaust = true;
-  private List<LegalMove> moveProgressList = new ArrayList<>();
+  private List<LegalMove> moveEvaluationnList = new ArrayList<>();
 
   public FindHelpmateExhaust(Side side) {
     this.color = side;
   }
 
-  public FindHelpmateResult calculateHelpmate(ApiBoard board, int maxDepth) {
+  public FindHelpmateAnalysis calculateHelpmate(ApiBoard board, int maxDepth) {
 
     final String invariant = board.getFen();
 
@@ -53,7 +56,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
     this.cnt = 0;
     this.isCanExhaust = true;
-    this.moveProgressList = new ArrayList<>();
+    this.moveEvaluationnList = new ArrayList<>();
 
     final var findHelpmate = findHelpmate(board, 0, maxDepth);
 
@@ -63,16 +66,16 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     switch (findHelpmate) {
       case YES_CONCRETE_CHECKMATE:
-        checkHelpmate(board.getFen(), moveProgressList);
-        return FindHelpmateResult.YES;
+        checkHelpmate(board.getFen(), moveEvaluationnList);
+        return new FindHelpmateAnalysis(FindHelpmateResult.YES, convertLegalMoveList(moveEvaluationnList));
       case YES_NONCONCRETE_CHECKMATE_CLASSICAL_CHECKMATE_POSITION:
-        checkClassicalCheckmate(color, board.getFen(), moveProgressList);
-        return FindHelpmateResult.YES;
+        checkClassicalCheckmate(color, board.getFen(), moveEvaluationnList);
+        return new FindHelpmateAnalysis(FindHelpmateResult.YES, new ArrayList<>());
       case FALSE:
         if (isCanExhaust) {
-          return FindHelpmateResult.NO;
+          return new FindHelpmateAnalysis(FindHelpmateResult.NO, new ArrayList<>());
         }
-        return FindHelpmateResult.UNKNOWN;
+        return new FindHelpmateAnalysis(FindHelpmateResult.UNKNOWN, new ArrayList<>());
       default:
         throw new IllegalArgumentException();
     }
@@ -182,7 +185,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
-      moveProgressList.add(legalMove);
+      moveEvaluationnList.add(legalMove);
       final var findHelpmate = findHelpmate(board, depth + 1, maxDepth + inc);
       board.unperformMove();
       switch (findHelpmate) {
@@ -195,7 +198,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
         default:
           throw new IllegalArgumentException();
       }
-      moveProgressList.remove(moveProgressList.size() - 1);
+      moveEvaluationnList.remove(moveEvaluationnList.size() - 1);
     }
 
     // 10: return false (-> No mate was found after exploring every legal move)
@@ -251,5 +254,13 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     result.append(fenRaw.castlingRightBothStr()).append("*");
     result.append(fenRaw.enPassantCaptureTargetSquare());
     return NonNullWrapperCommon.toString(result);
+  }
+
+  private static List<UciMove> convertLegalMoveList(List<LegalMove> moveProgressList) {
+    final List<UciMove> result = new ArrayList<>();
+    for (final LegalMove legalMove : moveProgressList) {
+      result.add(UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()));
+    }
+    return result;
   }
 }

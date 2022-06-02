@@ -47,8 +47,8 @@ public class TestUnwinnabilityFullAgainstWinnability {
         // not having move
         {
           final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
-              board.getHavingMove().getOppositeSide());
+          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
+              .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
 
           CheckFull.check(winnable, unwinnableFull);
         }
@@ -56,7 +56,8 @@ public class TestUnwinnabilityFullAgainstWinnability {
         // having move
         {
           final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
+          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
+              .unwinnableFull();
 
           CheckFull.check(winnable, unwinnableFull);
         }

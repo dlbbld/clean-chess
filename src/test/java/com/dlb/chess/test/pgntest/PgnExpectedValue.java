@@ -1548,7 +1548,7 @@ public class PgnExpectedValue {
         "repPos=3: 40...Bc8 42...Bc8 49...Bc8", "repPos=3: 4...d5 6...Bc8 8...Bc8", "", BLANK_ESRL, -1, 90,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,
         UnwinnableFullResultTest.WINNABLE, "rnbqkbnr/1pp1ppp1/8/p2pP2p/P6P/8/1PPP1PP1/RNBQKBNR w - - 90 50"));
-
+ 
     list.add(new PgnFileTestCase("threefold_max_visual_position_repetition_before_threefold_not_varying_busted.pgn",
         "repPos=3: 40.Rh1 42.Bf1 49.Bf1; repPos=3: 40...Bc8 42...Bc8 49...Bc8", "repPos=3: 4...d5 6...Bc8 8...Bc8", "",
         BLANK_ESRL, -1, 90, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFullResultTest.WINNABLE,

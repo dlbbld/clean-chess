@@ -62,8 +62,8 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
-        board.getHavingMove().getOppositeSide());
+    final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
+        .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
 
     CheckFull.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableFull);
   }
@@ -86,8 +86,8 @@ public class TestUnwinnabilityFull {
       logger.info(testCase.pgnFileName());
 
       final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board,
-          board.getHavingMove().getOppositeSide());
+      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
+          .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
       milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
 
       CheckFull.check(testCase.unwinnableNotHavingMove(), unwinnableFull);
@@ -106,7 +106,8 @@ public class TestUnwinnabilityFull {
       logger.info(testCase.pgnFileName());
 
       final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove());
+      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
+          .unwinnableFull();
       final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
       if (unwinnableFull == UnwinnableFull.WINNABLE) {
