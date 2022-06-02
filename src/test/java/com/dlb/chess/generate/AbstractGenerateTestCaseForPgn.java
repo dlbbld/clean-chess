@@ -9,7 +9,7 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.test.analysis.output.RepetitionOutput;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractGenerateTestCaseForPgn {
@@ -73,17 +73,30 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(", ");
 
     final var fen = analysis.fen();
-    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickResultNotHavingMove();
 
-    result.append(UnwinnableFullResultTest.class.getSimpleName());
+    // we use the quick for the full so it does not take too long
+    // we take into account of introducing some rare errors here
+    // they will be detected on periodic checks
+    final UnwinnableQuick unwinnableQuickResultHavingMove = analysis.unwinnableQuickHavingMove();
+    result.append(UnwinnableFull.class.getSimpleName());
     result.append(".");
-    UnwinnableFullResultTest unwinnableFullResultTest = switch (unwinnableQuickResultNotHavingMove) {
-      case UNWINNABLE -> UnwinnableFullResultTest.UNWINNABLE;
-      case WINNABLE -> UnwinnableFullResultTest.WINNABLE;
-      case POSSIBLY_WINNABLE -> UnwinnableFullResultTest.WINNABLE;
-      default -> throw new IllegalArgumentException();
-    };
-    result.append(unwinnableFullResultTest.name());
+    result.append(approximateFullFromQuick(unwinnableQuickResultHavingMove).name());
+    result.append(", ");
+
+    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickNotHavingMove();
+    result.append(UnwinnableFull.class.getSimpleName());
+    result.append(".");
+    result.append(approximateFullFromQuick(unwinnableQuickResultNotHavingMove).name());
+    result.append(", ");
+
+    result.append(UnwinnableQuick.class.getSimpleName());
+    result.append(".");
+    result.append(unwinnableQuickResultHavingMove.name());
+    result.append(", ");
+
+    result.append(UnwinnableQuick.class.getSimpleName());
+    result.append(".");
+    result.append(unwinnableQuickResultNotHavingMove.name());
     result.append(", ");
 
     result.append("\"");
@@ -96,4 +109,16 @@ public abstract class AbstractGenerateTestCaseForPgn {
     return NonNullWrapperCommon.toString(result);
   }
 
+  private static UnwinnableFull approximateFullFromQuick(UnwinnableQuick quick) {
+    switch (quick) {
+      case UNWINNABLE:
+        return UnwinnableFull.UNWINNABLE;
+      case WINNABLE:
+      case POSSIBLY_WINNABLE:
+        return UnwinnableFull.UNWINNABLE;
+      default:
+        throw new IllegalArgumentException();
+    }
+
+  }
 }

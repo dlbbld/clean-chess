@@ -15,16 +15,16 @@ import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class AgainstChaQuick extends AbstractAgainstCha {
+public class TestAgainstChaQuick extends AbstractAgainstCha {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(AgainstChaQuick.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaQuick.class);
 
   private static final boolean IS_START_FROM_PGN_FILE = false;
   private static final String START_FROM_PGN_FILE_NAME = "no_move_half_move_clock_99_black_to_move.pgn";
 
   public static void main(String[] args) throws Exception {
 
-    final ValidateBothResult bothResult = readChaResultList(FEN_CHA_ANALYSIS_BOTH_FILE_PATH);
+    final ValidateBothResult bothResult = readChaResultList(FEN_CHA_ANALYSIS_QUICK_FILE_PATH);
     // validateBothTestResult(bothResult); //ok
     checkMineQuickAgainstChaQuick(bothResult);
   }

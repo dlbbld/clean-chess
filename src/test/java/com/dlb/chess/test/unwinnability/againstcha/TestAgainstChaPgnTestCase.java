@@ -13,14 +13,13 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class AgainstChaPgnTestCase extends AbstractAgainstCha {
+public class TestAgainstChaPgnTestCase extends AbstractAgainstCha {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(AgainstChaPgnTestCase.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaPgnTestCase.class);
 
   private static final boolean IS_START_FROM_PGN_FILE = false;
   private static final String START_FROM_PGN_FILE_NAME = "no_move_half_move_clock_99_black_to_move.pgn";
@@ -66,7 +65,7 @@ public class AgainstChaPgnTestCase extends AbstractAgainstCha {
                   && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
               || "unwinnable_fivefold_inevitable.pgn".equals(testCase.pgnFileName())
               || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
-            assertEquals(UnwinnableFullResultTest.UNWINNABLE, testCase.unwinnableFullHavingMove());
+            assertEquals(UnwinnableFull.UNWINNABLE, testCase.unwinnableFullHavingMove());
           } else {
             assertEquals(chaFullTestResultHavingMove, testCase.unwinnableFullHavingMove());
           }
@@ -82,7 +81,7 @@ public class AgainstChaPgnTestCase extends AbstractAgainstCha {
                   && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
               || "unwinnable_fivefold_inevitable.pgn".equals(testCase.pgnFileName())
               || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
-            assertEquals(UnwinnableFullResultTest.UNWINNABLE, testCase.unwinnableFullNotHavingMove());
+            assertEquals(UnwinnableFull.UNWINNABLE, testCase.unwinnableFullNotHavingMove());
           } else {
             assertEquals(chaFullTestResultNotHavingMove, testCase.unwinnableFullNotHavingMove());
           }

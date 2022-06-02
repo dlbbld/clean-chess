@@ -1,7 +1,6 @@
 package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -15,8 +14,6 @@ import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractPgnTest {
 
@@ -34,8 +31,9 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    testWinnableNotHavingMove(analysis, testCase);
-    testWinnableHavingMove(analysis, testCase);
+    testUnwinnableQuickHavingMove(analysis, testCase);
+    testUnwinnableQuickNotHavingMove(analysis, testCase);
+    // TODO unwinnable - if full check is faster include
   }
 
   private static void testFen(String expectedFen, String actualFen) {
@@ -91,48 +89,12 @@ public abstract class AbstractPgnTest {
     assertEquals(testCase.insufficientMaterial(), analysis.insufficientMaterial());
   }
 
-  private static void testWinnableNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    testSide(testCase.unwinnableFullNotHavingMove(), analysis.unwinnableQuickResultNotHavingMove());
+  private static void testUnwinnableQuickHavingMove(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.unwinnableQuickHavingMove(), analysis.unwinnableQuickHavingMove());
+  }
+  
+  private static void testUnwinnableQuickNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.unwinnableQuickNotHavingMove(), analysis.unwinnableQuickNotHavingMove());
   }
 
-  private static void testWinnableHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    testSide(testCase.unwinnableFullHavingMove(), analysis.unwinnableQuickResultHavingMove());
-  }
-
-  private static void testSide(UnwinnableFull unwinnableFullResultTest, UnwinnableQuick unwinnableQuickResult) {
-    switch (unwinnableFullResultTest) {
-      case UNWINNABLE: {
-        final var isOk = switch (unwinnableQuickResult) {
-          case UNWINNABLE -> true;
-          case WINNABLE -> false;
-          case POSSIBLY_WINNABLE -> true;
-          default -> throw new IllegalArgumentException();
-        };
-        assertTrue(isOk);
-      }
-        break;
-      case WINNABLE: {
-        final var isOk = switch (unwinnableQuickResult) {
-          case UNWINNABLE -> false;
-          case WINNABLE -> true;
-          case POSSIBLY_WINNABLE -> true;
-          default -> throw new IllegalArgumentException();
-        };
-        assertTrue(isOk);
-      }
-        break;
-      case UNDETERMINED: {
-        final var isOk = switch (unwinnableQuickResult) {
-          case UNWINNABLE -> false;
-          case WINNABLE -> false;
-          case POSSIBLY_WINNABLE -> true;
-          default -> throw new IllegalArgumentException();
-        };
-        assertTrue(isOk);
-      }
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
 }

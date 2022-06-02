@@ -28,18 +28,19 @@ public class TestUnwinnabilityFull {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFull.class);
 
   @SuppressWarnings("static-method")
-  @Test
+  // @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.UNDETERMINED,
+        UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFen() {
     final var fen = "6kR/5pp1/1K2p1p1/3r4/8/8/8/8 b - - 3 48";
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
   }
 
   @SuppressWarnings("static-method")
@@ -52,7 +53,7 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE));
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
   }
 
   @SuppressWarnings("static-method")

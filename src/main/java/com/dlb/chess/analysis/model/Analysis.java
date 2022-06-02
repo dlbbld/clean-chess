@@ -19,7 +19,7 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
     boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
     CheckmateOrStalemate checkmateOrStalemate, InsufficientMaterial insufficientMaterial,
-    UnwinnableQuick unwinnableQuickResultNotHavingMove, UnwinnableQuick unwinnableQuickResultHavingMove, String fen,
+    UnwinnableQuick unwinnableQuickNotHavingMove, UnwinnableQuick unwinnableQuickHavingMove, String fen,
     ApiBoard board) {
 
   @Override
@@ -46,8 +46,8 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && Objects.equals(repetitionListList, other.repetitionListList)
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
         && Objects.equals(sequenceRepetitionList, other.sequenceRepetitionList)
-        && unwinnableQuickResultNotHavingMove == other.unwinnableQuickResultNotHavingMove
-        && unwinnableQuickResultHavingMove == other.unwinnableQuickResultHavingMove;
+        && unwinnableQuickNotHavingMove == other.unwinnableQuickNotHavingMove
+        && unwinnableQuickHavingMove == other.unwinnableQuickHavingMove;
   }
 
   public Side havingMove() {
@@ -126,12 +126,12 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return insufficientMaterial;
   }
 
-  public UnwinnableQuick unwinnableQuickResultNotHavingMove() {
-    return unwinnableQuickResultNotHavingMove;
+  public UnwinnableQuick unwinnableQuickNotHavingMove() {
+    return unwinnableQuickNotHavingMove;
   }
 
-  public UnwinnableQuick unwinnableQuickResultHavingMove() {
-    return unwinnableQuickResultHavingMove;
+  public UnwinnableQuick unwinnableQuickHavingMove() {
+    return unwinnableQuickHavingMove;
   }
 
   public String fen() {

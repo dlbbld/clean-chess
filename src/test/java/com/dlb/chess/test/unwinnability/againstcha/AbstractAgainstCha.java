@@ -27,6 +27,7 @@ public abstract class AbstractAgainstCha {
   static final String FEN_MINE = "c:\\temp\\cha\\mine\\myFen.txt";
   static final String FEN_CHA_ANALYSIS_BOTH_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaBothAnalysis.txt";
   static final String FEN_CHA_ANALYSIS_FULL_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaFullAnalysis.txt";
+  static final String FEN_CHA_ANALYSIS_QUICK_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaQuickAnalysis.txt";
 
   public static ValidateBothResult readChaResultList(String fenAnalysisFilePath) throws Exception {
     final List<ValidateFullResult> fullResultList = new ArrayList<>();
