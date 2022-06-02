@@ -2,18 +2,14 @@ package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.List;
-
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 public abstract class AbstractPgnTest {
 
@@ -25,7 +21,6 @@ public abstract class AbstractPgnTest {
     testRepetition(analysis, testCase);
     testRepetitionInitialEnPassantCapture(analysis, testCase);
     testYawnMoveRule(analysis, testCase);
-    testSequenceRepetition(analysis, testCase);
     testFirstCapture(analysis, testCase);
     testMaxYawnSequence(analysis, testCase);
     testCheckmateOrStalemate(analysis, testCase);
@@ -53,22 +48,6 @@ public abstract class AbstractPgnTest {
         YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
   }
 
-  private static void testSequenceRepetition(Analysis analysis, PgnFileTestCase testCase) {
-    if (!Analyzer.IS_CALCULATE_SEQUENCE_REPETITION) {
-      return;
-    }
-    if (testCase.expectedSequenceRepetition() == PgnTestConstants.SEQUENCE_REPETITION_NOT_DEFINED) {
-      logger.error("Expected sequence repetition for test case " + testCase.pgnFileName() + " was not yet defined");
-      throw new IllegalArgumentException("Please define expected values before running the tests");
-    }
-    final List<String> calculatedPositionSequenceList = Analyzer
-        .calculateSequenceRepetitionRepresentation(analysis.sequenceRepetitionList());
-    assertEquals(testCase.expectedSequenceRepetition().size(), calculatedPositionSequenceList.size());
-    for (var i = 0; i < calculatedPositionSequenceList.size(); i++) {
-      assertEquals(testCase.expectedSequenceRepetition().get(i), calculatedPositionSequenceList.get(i));
-    }
-  }
-
   private static void testFirstCapture(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.firstCapture(), analysis.firstCapture());
   }
@@ -92,7 +71,7 @@ public abstract class AbstractPgnTest {
   private static void testUnwinnableQuickHavingMove(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.unwinnableQuickHavingMove(), analysis.unwinnableQuickHavingMove());
   }
-  
+
   private static void testUnwinnableQuickNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.unwinnableQuickNotHavingMove(), analysis.unwinnableQuickNotHavingMove());
   }

@@ -19,6 +19,7 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -92,12 +93,17 @@ public class Analyzer extends AnalyzerPrint {
 
     final var maxYawnSequence = calculateMaxYawnSequence(board);
 
-    final CheckmateOrStalemate lastPositionEvaluation = GeneralUtility.calculateLastPositionEvaluation(board);
+    final CheckmateOrStalemate checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
-    final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
+
+    // TODO unwinnability - implement when full algorithm faster
+    final var unwinnableFullHavingMove = UnwinnableFull.WINNABLE;
+    final var unwinnableFullNotHavingMove = UnwinnableFull.WINNABLE;
+
     final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         board.getHavingMove());
+    final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+        board.getHavingMove().getOppositeSide());
 
     final String fen = board.getFen();
 
@@ -108,8 +114,9 @@ public class Analyzer extends AnalyzerPrint {
     return new Analysis(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
         yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
         hasFiftyMoveRule, hasSeventyFiveMoveRule, isGameContinuedOverFivefoldRepetition,
-        isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture, maxYawnSequence, lastPositionEvaluation,
-        insufficientMaterial, unwinnableQuickNotHavingMove, unwinnableQuickHavingMove, fen, board);
+        isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
+        insufficientMaterial, unwinnableFullHavingMove, unwinnableFullNotHavingMove, unwinnableQuickHavingMove,
+        unwinnableQuickNotHavingMove, fen, board);
   }
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {
