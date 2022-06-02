@@ -13,13 +13,12 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaBothRead;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaFullRead;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaQuickRead;
 import com.dlb.chess.test.unwinnability.enums.ChaFullResult;
 import com.dlb.chess.test.unwinnability.enums.ChaMode;
 import com.dlb.chess.test.unwinnability.enums.ChaQuickResult;
-import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
-import com.dlb.chess.test.unwinnability.model.ValidateFullResult;
-import com.dlb.chess.test.unwinnability.model.ValidateQuickResult;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractAgainstCha {
@@ -29,16 +28,14 @@ public abstract class AbstractAgainstCha {
   static final String FEN_CHA_ANALYSIS_FULL_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaFullAnalysis.txt";
   static final String FEN_CHA_ANALYSIS_QUICK_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaQuickAnalysis.txt";
 
-  public static ValidateBothResult readChaResultList(String fenAnalysisFilePath) throws Exception {
-    final List<ValidateFullResult> fullResultList = new ArrayList<>();
-    final List<ValidateQuickResult> quickResultList = new ArrayList<>();
+  public static ChaBothRead readChaResultList(String fenAnalysisFilePath) throws Exception {
+    final List<ChaFullRead> fullResultList = new ArrayList<>();
+    final List<ChaQuickRead> quickResultList = new ArrayList<>();
 
     final List<String> fileLineList = FileUtility.readFileLines(fenAnalysisFilePath);
     for (final String fileLine : fileLineList) {
-      final var fileLineItemArray = fileLine.split(";");
-      if (fileLineItemArray.length != 5) {
-        throw new IllegalArgumentException("Illegal file line, must contain exactly four semicolon separate values");
-      }
+      final var fileLineItemArray = NonNullWrapperCommon.split(fileLine, ";");
+
       final var fileLineItemList = NonNullWrapperCommon.asList(fileLineItemArray);
 
       final String fenStrRaw = NonNullWrapperCommon.get(fileLineItemList, 0);
@@ -73,7 +70,10 @@ public abstract class AbstractAgainstCha {
             throw new IllegalArgumentException("Illegal full result of \"" + chaFullResultStr + "\" was found");
           }
           final ChaFullResult chaFullResult = ChaFullResult.calculate(chaFullResultStr);
-          fullResultList.add(new ValidateFullResult(fen, sideCheckingForWin, chaFullResult.getUnwinnableFull()));
+
+          final var checkmateLine = NonNullWrapperCommon.get(fileLineItemList, 5);
+          fullResultList
+              .add(new ChaFullRead(fen, sideCheckingForWin, chaFullResult.getUnwinnableFull(), checkmateLine));
         }
           break;
         case QUICK: {
@@ -82,7 +82,7 @@ public abstract class AbstractAgainstCha {
             throw new IllegalArgumentException("Illegal quick result of \"" + chaQuickResultStr + "\" was found");
           }
           final ChaQuickResult chaQuickResult = ChaQuickResult.calculate(chaQuickResultStr);
-          quickResultList.add(new ValidateQuickResult(fen, sideCheckingForWin, chaQuickResult.getUnwinnableQuick()));
+          quickResultList.add(new ChaQuickRead(fen, sideCheckingForWin, chaQuickResult.getUnwinnableQuick()));
         }
           break;
         default:
@@ -90,7 +90,7 @@ public abstract class AbstractAgainstCha {
       }
     }
 
-    return new ValidateBothResult(fullResultList, quickResultList);
+    return new ChaBothRead(fullResultList, quickResultList);
   }
 
   // list of the FEN of the past position for all PGN test case
@@ -104,18 +104,18 @@ public abstract class AbstractAgainstCha {
     }
   }
 
-  static UnwinnableFull readFullTestResult(Fen fen, Side sideCheckingForWin, List<ValidateFullResult> fullResultList) {
-    for (final ValidateFullResult fullResult : fullResultList) {
+  static ChaFullRead readFullResult(Fen fen, Side sideCheckingForWin, List<ChaFullRead> fullResultList) {
+    for (final ChaFullRead fullResult : fullResultList) {
       if (fullResult.sideCheckingForWin() == sideCheckingForWin && fullResult.fen().equals(fen)) {
-        return fullResult.unwinnableFull();
+        return fullResult;
       }
     }
     throw new IllegalArgumentException("No full test result was found");
   }
 
   static UnwinnableQuick readQuickTestResult(Fen fen, Side sideCheckingForWin,
-      List<ValidateQuickResult> quickResultList) {
-    for (final ValidateQuickResult quickResult : quickResultList) {
+      List<ChaQuickRead> quickResultList) {
+    for (final ChaQuickRead quickResult : quickResultList) {
       if (quickResult.sideCheckingForWin() == sideCheckingForWin && quickResult.fen().equals(fen)) {
         return quickResult.unwinnableQuick();
       }
@@ -123,12 +123,12 @@ public abstract class AbstractAgainstCha {
     throw new IllegalArgumentException("No quick test result was found");
   }
 
-  public static void validateChaBothTestResult(ValidateBothResult bothResult) {
+  public static void validateChaBothTestResult(ChaBothRead bothResult) {
     if (bothResult.fullResultList().size() != bothResult.quickResultList().size()) {
       throw new IllegalArgumentException("Test result list sizes not match for full and quick test");
     }
 
-    for (final ValidateFullResult fullResult : bothResult.fullResultList()) {
+    for (final ChaFullRead fullResult : bothResult.fullResultList()) {
       final UnwinnableQuick quickResult = readQuickTestResult(fullResult.fen(), fullResult.sideCheckingForWin(),
           bothResult.quickResultList());
 
