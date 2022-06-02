@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.fen.FenParser;
@@ -59,77 +58,47 @@ public class AgainstChaPgnTestCase extends AbstractAgainstCha {
 
         final Fen fen = FenParser.parseAdvancedFen(testCase.fen());
 
-        final UnwinnableFull fullTestResultWhite = readFullTestResult(fen, Side.WHITE, bothResult.fullResultList());
-        final UnwinnableFull fullTestResultBlack = readFullTestResult(fen, Side.BLACK, bothResult.fullResultList());
-
-        final UnwinnableQuick quickTestResultWhite = readQuickTestResult(fen, Side.WHITE, bothResult.quickResultList());
-        final UnwinnableQuick quickTestResultBlack = readQuickTestResult(fen, Side.BLACK, bothResult.quickResultList());
-
-        switch (fen.havingMove()) {
-          case WHITE:
-            AgainstChaPgnTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultBlack, quickTestResultBlack,
-                testCase);
-            break;
-          case BLACK:
-            AgainstChaPgnTestCase.check(testCase.unwinnableNotHavingMove(), fullTestResultWhite, quickTestResultWhite,
-                testCase);
-            break;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
+        final UnwinnableFull chaFullTestResultHavingMove = readFullTestResult(fen, fen.havingMove(),
+            bothResult.fullResultList());
+        if (chaFullTestResultHavingMove == UnwinnableFull.WINNABLE) {
+          if (testCase.repetitionCountFinalPosition() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD
+              || fen.halfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
+                  && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
+              || "unwinnable_fivefold_inevitable.pgn".equals(testCase.pgnFileName())
+              || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
+            assertEquals(UnwinnableFullResultTest.UNWINNABLE, testCase.unwinnableFullHavingMove());
+          } else {
+            assertEquals(chaFullTestResultHavingMove, testCase.unwinnableFullHavingMove());
+          }
+        } else {
+          assertEquals(chaFullTestResultHavingMove, testCase.unwinnableFullHavingMove());
         }
 
-        switch (fen.havingMove()) {
-          case WHITE:
-            AgainstChaPgnTestCase.check(testCase.unwinnableHavingMove(), fullTestResultWhite, quickTestResultWhite,
-                testCase);
-            break;
-          case BLACK:
-            AgainstChaPgnTestCase.check(testCase.unwinnableHavingMove(), fullTestResultBlack, quickTestResultBlack,
-                testCase);
-            break;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
+        final UnwinnableFull chaFullTestResultNotHavingMove = readFullTestResult(fen, fen.havingMove(),
+            bothResult.fullResultList());
+        if (chaFullTestResultNotHavingMove == UnwinnableFull.WINNABLE) {
+          if (testCase.repetitionCountFinalPosition() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD
+              || fen.halfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
+                  && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
+              || "unwinnable_fivefold_inevitable.pgn".equals(testCase.pgnFileName())
+              || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
+            assertEquals(UnwinnableFullResultTest.UNWINNABLE, testCase.unwinnableFullNotHavingMove());
+          } else {
+            assertEquals(chaFullTestResultNotHavingMove, testCase.unwinnableFullNotHavingMove());
+          }
+        } else {
+          assertEquals(chaFullTestResultNotHavingMove, testCase.unwinnableFullNotHavingMove());
         }
+
+        final UnwinnableQuick chaQuickTestResultHavingMove = readQuickTestResult(fen, fen.havingMove(),
+            bothResult.quickResultList());
+        assertEquals(chaQuickTestResultHavingMove, testCase.unwinnableQuickHavingMove());
+
+        final UnwinnableQuick chaQuickTestResultNotHavingMove = readQuickTestResult(fen,
+            fen.havingMove().getOppositeSide(), bothResult.quickResultList());
+        assertEquals(chaQuickTestResultNotHavingMove, testCase.unwinnableQuickNotHavingMove());
 
       }
-    }
-  }
-
-  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, UnwinnableFull unwinnableFull,
-      UnwinnableQuick unwinnableQuick, PgnFileTestCase testCase) {
-    switch (unwinnableFull) {
-      case UNWINNABLE:
-        switch (unwinnableQuick) {
-          case UNWINNABLE:
-            assertEquals(UnwinnableFullResultTest.UNWINNABLE, unwinnableFullResultTest);
-            break;
-          case WINNABLE:
-            throw new IllegalArgumentException("Inconsistent data");
-          case POSSIBLY_WINNABLE:
-            assertEquals(UnwinnableFullResultTest.UNWINNABLE_QUICK_DOES_NOT_SEE, unwinnableFullResultTest);
-            break;
-          default:
-            throw new IllegalArgumentException();
-        }
-        break;
-      case WINNABLE:
-        final Fen fen = FenParser.parseAdvancedFen(testCase.fen());
-
-        if (testCase.repetitionCountFinalPosition() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD
-            || fen.halfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
-                && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
-            || "unwinnable_fivefold_inevitable.pgn".equals(testCase.pgnFileName())
-            || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
-          assertEquals(UnwinnableFullResultTest.UNWINNABLE, unwinnableFullResultTest);
-        } else {
-          assertEquals(UnwinnableFullResultTest.WINNABLE, unwinnableFullResultTest);
-        }
-        break;
-      default:
-        throw new IllegalArgumentException();
-
     }
   }
 

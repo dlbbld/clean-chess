@@ -62,10 +62,14 @@ public class TestUnwinnabilityFull {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
-        .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+    final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
+        .unwinnableFull();
+    assertEquals(pgnFileTestCase.unwinnableFullHavingMove(), unwinnableFullHavingMove);
 
-    CheckFull.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableFull);
+    final UnwinnableFull unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
+        .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+    assertEquals(pgnFileTestCase.unwinnableFullNotHavingMove(), unwinnableFullNotHavingMove);
+
   }
 
   // not terminating so far
@@ -85,12 +89,22 @@ public class TestUnwinnabilityFull {
 
       logger.info(testCase.pgnFileName());
 
-      final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
-          .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
-      milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+      {
+        final var beforeMilliSeconds = System.currentTimeMillis();
+        final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer
+            .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+        milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+        assertEquals(testCase.unwinnableFullHavingMove(), unwinnableFullHavingMove);
+      }
 
-      CheckFull.check(testCase.unwinnableNotHavingMove(), unwinnableFull);
+      {
+        final var beforeMilliSeconds = System.currentTimeMillis();
+        final UnwinnableFull unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
+            .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+        milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+        assertEquals(testCase.unwinnableFullNotHavingMove(), unwinnableFullNotHavingMove);
+      }
+
     }
     PrintDuration.printDuration(milliSecondsList, logger);
   }

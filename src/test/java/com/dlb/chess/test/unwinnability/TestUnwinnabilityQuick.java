@@ -87,10 +87,14 @@ public class TestUnwinnabilityQuick {
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableQuick unwinnableQuickResult = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+    final UnwinnableQuick unwinnableQuickResultHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
+    assertEquals(pgnFileTestCase.unwinnableQuickHavingMove(), unwinnableQuickResultHavingMove);
 
-    CheckQuick.check(pgnFileTestCase.unwinnableNotHavingMove(), unwinnableQuickResult);
+    final UnwinnableQuick unwinnableQuickResultNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+        board.getHavingMove().getOppositeSide());
+    assertEquals(pgnFileTestCase.unwinnableQuickNotHavingMove(), unwinnableQuickResultNotHavingMove);
+
   }
 
   @SuppressWarnings("static-method")
@@ -103,12 +107,22 @@ public class TestUnwinnabilityQuick {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-          board.getHavingMove().getOppositeSide());
-      milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+      {
+        final var beforeMilliSeconds = System.currentTimeMillis();
+        final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+            board.getHavingMove().getOppositeSide());
+        milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+        assertEquals(testCase.unwinnableFullHavingMove(), unwinnableQuickHavingMove);
+      }
 
-      CheckQuick.check(testCase.unwinnableNotHavingMove(), unwinnableQuick);
+      {
+        final var beforeMilliSeconds = System.currentTimeMillis();
+        final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+            board.getHavingMove().getOppositeSide());
+        milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
+        assertEquals(testCase.unwinnableFullNotHavingMove(), unwinnableQuickNotHavingMove);
+      }
+
     }
     PrintDuration.printDuration(milliSecondsList, logger);
   }

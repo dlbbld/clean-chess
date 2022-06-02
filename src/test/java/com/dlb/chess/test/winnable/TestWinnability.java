@@ -1,7 +1,6 @@
 package com.dlb.chess.test.winnable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,8 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class TestWinnability {
 
@@ -27,8 +26,7 @@ public class TestWinnability {
   @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(Winnable.UNKNOWN,
-        WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
   }
 
   @SuppressWarnings("static-method")
@@ -60,21 +58,21 @@ public class TestWinnability {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      check(testCase.unwinnableNotHavingMove(), board);
+      check(testCase.unwinnableQuickNotHavingMove(), board);
     }
   }
 
-  private static void check(UnwinnableFullResultTest unwinnableFullResultTest, ApiBoard board) {
+  private static void check(UnwinnableQuick unwinnableQuickNotHavingMove, ApiBoard board) {
     final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-    switch (unwinnableFullResultTest) {
+    switch (unwinnableQuickNotHavingMove) {
       case UNWINNABLE:
         assertEquals(Winnable.NO, winnable);
         break;
-      case UNWINNABLE_QUICK_DOES_NOT_SEE:
-        break;
       case WINNABLE:
-        final var isIncomplete = winnable == Winnable.YES || winnable == Winnable.UNKNOWN;
-        assertTrue(isIncomplete);
+        assertEquals(Winnable.YES, winnable);
+        break;
+      case POSSIBLY_WINNABLE:
+        assertEquals(Winnable.UNKNOWN, winnable);
         break;
       default:
         throw new IllegalArgumentException();

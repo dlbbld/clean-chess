@@ -15,7 +15,7 @@ import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractPgnTest {
@@ -92,26 +92,44 @@ public abstract class AbstractPgnTest {
   }
 
   private static void testWinnableNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    testSide(testCase.unwinnableNotHavingMove(), analysis.unwinnableQuickResultNotHavingMove());
+    testSide(testCase.unwinnableFullNotHavingMove(), analysis.unwinnableQuickResultNotHavingMove());
   }
 
   private static void testWinnableHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    testSide(testCase.unwinnableHavingMove(), analysis.unwinnableQuickResultHavingMove());
+    testSide(testCase.unwinnableFullHavingMove(), analysis.unwinnableQuickResultHavingMove());
   }
 
-  private static void testSide(UnwinnableFullResultTest unwinnableFullResultTestExpected,
-      UnwinnableQuick unwinnableQuickResult) {
-    switch (unwinnableFullResultTestExpected) {
-      case UNWINNABLE:
-        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuickResult);
+  private static void testSide(UnwinnableFull unwinnableFullResultTest, UnwinnableQuick unwinnableQuickResult) {
+    switch (unwinnableFullResultTest) {
+      case UNWINNABLE: {
+        final var isOk = switch (unwinnableQuickResult) {
+          case UNWINNABLE -> true;
+          case WINNABLE -> false;
+          case POSSIBLY_WINNABLE -> true;
+          default -> throw new IllegalArgumentException();
+        };
+        assertTrue(isOk);
+      }
         break;
-      case UNWINNABLE_QUICK_DOES_NOT_SEE:
-        assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE, unwinnableQuickResult);
+      case WINNABLE: {
+        final var isOk = switch (unwinnableQuickResult) {
+          case UNWINNABLE -> false;
+          case WINNABLE -> true;
+          case POSSIBLY_WINNABLE -> true;
+          default -> throw new IllegalArgumentException();
+        };
+        assertTrue(isOk);
+      }
         break;
-      case WINNABLE:
-        final var isIncomplete = unwinnableQuickResult == UnwinnableQuick.WINNABLE
-            || unwinnableQuickResult == UnwinnableQuick.POSSIBLY_WINNABLE;
-        assertTrue(isIncomplete);
+      case UNDETERMINED: {
+        final var isOk = switch (unwinnableQuickResult) {
+          case UNWINNABLE -> false;
+          case WINNABLE -> false;
+          case POSSIBLY_WINNABLE -> true;
+          default -> throw new IllegalArgumentException();
+        };
+        assertTrue(isOk);
+      }
         break;
       default:
         throw new IllegalArgumentException();

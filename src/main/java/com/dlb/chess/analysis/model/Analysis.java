@@ -12,7 +12,15 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList, List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<RepeatingSequence> sequenceRepetitionList, List<List<YawnHalfMove>> yawnMoveListList, boolean hasThreefoldRepetition, boolean hasThreefoldRepetitionInitialEnPassantCapture, boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition, boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, InsufficientMaterial insufficientMaterial, UnwinnableQuick unwinnableQuickResultNotHavingMove, UnwinnableQuick unwinnableQuickResultHavingMove, String fen, ApiBoard board) {
+public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
+    List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<RepeatingSequence> sequenceRepetitionList,
+    List<List<YawnHalfMove>> yawnMoveListList, boolean hasThreefoldRepetition,
+    boolean hasThreefoldRepetitionInitialEnPassantCapture, boolean hasFivefoldRepetition, boolean hasFiftyMoveRule,
+    boolean hasSeventyFiveMoveRule, boolean hasThreeSequenceRepetition, boolean isGameContinuedOverFivefoldRepetition,
+    boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
+    CheckmateOrStalemate checkmateOrStalemate, InsufficientMaterial insufficientMaterial,
+    UnwinnableQuick unwinnableQuickResultNotHavingMove, UnwinnableQuick unwinnableQuickResultHavingMove, String fen,
+    ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -23,8 +31,23 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
       return false;
     }
     final var other = (Analysis) obj;
-    return Objects.equals(board, other.board) && Objects.equals(fen, other.fen) && Objects.equals(yawnMoveListList, other.yawnMoveListList) && firstCapture == other.firstCapture && Objects.equals(halfMoveList, other.halfMoveList) && hasCapture == other.hasCapture && hasFiftyMoveRule == other.hasFiftyMoveRule && hasFivefoldRepetition == other.hasFivefoldRepetition && hasSeventyFiveMoveRule == other.hasSeventyFiveMoveRule && hasThreeSequenceRepetition == other.hasThreeSequenceRepetition && hasThreefoldRepetition == other.hasThreefoldRepetition && hasThreefoldRepetitionInitialEnPassantCapture == other.hasThreefoldRepetitionInitialEnPassantCapture && havingMove == other.havingMove && insufficientMaterial == other.insufficientMaterial && isGameContinuedOverFivefoldRepetition == other.isGameContinuedOverFivefoldRepetition && isGameContinuedOverSeventyFiveMove == other.isGameContinuedOverSeventyFiveMove && checkmateOrStalemate == other.checkmateOrStalemate
-        && maxYawnSequence == other.maxYawnSequence && Objects.equals(repetitionListList, other.repetitionListList) && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture) && Objects.equals(sequenceRepetitionList, other.sequenceRepetitionList) && unwinnableQuickResultNotHavingMove == other.unwinnableQuickResultNotHavingMove && unwinnableQuickResultHavingMove == other.unwinnableQuickResultHavingMove;
+    return Objects.equals(board, other.board) && Objects.equals(fen, other.fen)
+        && Objects.equals(yawnMoveListList, other.yawnMoveListList) && firstCapture == other.firstCapture
+        && Objects.equals(halfMoveList, other.halfMoveList) && hasCapture == other.hasCapture
+        && hasFiftyMoveRule == other.hasFiftyMoveRule && hasFivefoldRepetition == other.hasFivefoldRepetition
+        && hasSeventyFiveMoveRule == other.hasSeventyFiveMoveRule
+        && hasThreeSequenceRepetition == other.hasThreeSequenceRepetition
+        && hasThreefoldRepetition == other.hasThreefoldRepetition
+        && hasThreefoldRepetitionInitialEnPassantCapture == other.hasThreefoldRepetitionInitialEnPassantCapture
+        && havingMove == other.havingMove && insufficientMaterial == other.insufficientMaterial
+        && isGameContinuedOverFivefoldRepetition == other.isGameContinuedOverFivefoldRepetition
+        && isGameContinuedOverSeventyFiveMove == other.isGameContinuedOverSeventyFiveMove
+        && checkmateOrStalemate == other.checkmateOrStalemate && maxYawnSequence == other.maxYawnSequence
+        && Objects.equals(repetitionListList, other.repetitionListList)
+        && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
+        && Objects.equals(sequenceRepetitionList, other.sequenceRepetitionList)
+        && unwinnableQuickResultNotHavingMove == other.unwinnableQuickResultNotHavingMove
+        && unwinnableQuickResultHavingMove == other.unwinnableQuickResultHavingMove;
   }
 
   public Side havingMove() {

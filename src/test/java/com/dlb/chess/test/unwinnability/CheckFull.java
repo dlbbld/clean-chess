@@ -4,25 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.dlb.chess.test.pgntest.enums.UnwinnableFullResultTest;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public class CheckFull {
-
-  public static void check(UnwinnableFullResultTest unwinnableFullResultTest, UnwinnableFull unwinnableFull) {
-    switch (unwinnableFullResultTest) {
-      case UNWINNABLE:
-      case UNWINNABLE_QUICK_DOES_NOT_SEE:
-        assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
-        break;
-      case WINNABLE:
-        assertEquals(UnwinnableFull.WINNABLE, unwinnableFull);
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
 
   public static void check(Winnable winnable, UnwinnableFull unwinnableFull) {
     switch (winnable) {
@@ -45,6 +30,9 @@ public class CheckFull {
       case UNWINNABLE:
         final var isIncomplete = winnable == Winnable.NO || winnable == Winnable.UNKNOWN;
         assertTrue(isIncomplete);
+        break;
+      case UNDETERMINED:
+        assertEquals(Winnable.UNKNOWN, winnable);
         break;
       default:
         throw new IllegalArgumentException();
