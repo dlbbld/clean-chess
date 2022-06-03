@@ -25,7 +25,7 @@ public abstract class AbstractAgainstCha {
 
   static final String FEN_MINE = "c:\\temp\\cha\\mine\\myFen.txt";
   static final String FEN_CHA_ANALYSIS_BOTH_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaBothAnalysis.txt";
-  static final String FEN_CHA_ANALYSIS_FULL_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaFullAnalysis.txt";
+  static final String FEN_CHA_ANALYSIS_FULL_FILE_PATH = "C:\\Users\\danie\\git\\D3-Chess-test\\tests\\myFenChaFullAnalysisNotHavingMove.txt";
   static final String FEN_CHA_ANALYSIS_QUICK_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaQuickAnalysis.txt";
 
   public static ChaBothRead readChaResultList(String fenAnalysisFilePath) throws Exception {
@@ -71,7 +71,13 @@ public abstract class AbstractAgainstCha {
           }
           final ChaFullResult chaFullResult = ChaFullResult.calculate(chaFullResultStr);
 
-          final var checkmateLine = NonNullWrapperCommon.get(fileLineItemList, 5);
+          final String checkmateLine;
+          if (chaFullResult != ChaFullResult.WINNABLE || fileLineItemList.size() == 5) {
+            // checkmate on the board
+            checkmateLine = "";
+          } else {
+            checkmateLine = NonNullWrapperCommon.get(fileLineItemList, 5);
+          }
           fullResultList
               .add(new ChaFullRead(fen, sideCheckingForWin, chaFullResult.getUnwinnableFull(), checkmateLine));
         }
@@ -113,8 +119,7 @@ public abstract class AbstractAgainstCha {
     throw new IllegalArgumentException("No full test result was found");
   }
 
-  static UnwinnableQuick readQuickTestResult(Fen fen, Side sideCheckingForWin,
-      List<ChaQuickRead> quickResultList) {
+  static UnwinnableQuick readQuickTestResult(Fen fen, Side sideCheckingForWin, List<ChaQuickRead> quickResultList) {
     for (final ChaQuickRead quickResult : quickResultList) {
       if (quickResult.sideCheckingForWin() == sideCheckingForWin && quickResult.fen().equals(fen)) {
         return quickResult.unwinnableQuick();

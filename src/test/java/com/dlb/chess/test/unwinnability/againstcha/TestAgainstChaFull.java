@@ -1,22 +1,17 @@
 package com.dlb.chess.test.unwinnability.againstcha;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.fen.FenParser;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.UciMove;
 import com.dlb.chess.test.unwinnability.againstcha.model.ChaBothRead;
 import com.dlb.chess.test.unwinnability.againstcha.model.ChaFullRead;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
 // rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2; UNDETERMINED; WINNABLE
@@ -68,33 +63,23 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
       final UnwinnableFullAnalysis fullMineAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
           fen.havingMove().getOppositeSide());
 
+      final String chaCheckmateLine = fullChaAnalysis.mateLine();
+      final String myCheckmateLine = GeneralUtility.composeCheckmateLine(fullMineAnalysis.mateLine());
+
+      final var out = fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullChaAnalysis.unwinnableFull() + ";"
+          + myCheckmateLine + ";" + chaCheckmateLine;
+
       if (fullChaAnalysis.unwinnableFull() != fullMineAnalysis.unwinnableFull()) {
         counterDifferences++;
-        System.out.println(fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullChaAnalysis.unwinnableFull());
-      }
-
-      if (fullChaAnalysis.unwinnableFull() == UnwinnableFull.WINNABLE) {
-        final String chaCheckmateLine = fullChaAnalysis.checkmateLine();
-        final String myCheckmateLine = composeCheckmateLine(fullMineAnalysis.mateLine());
-        if (chaCheckmateLine.equals(myCheckmateLine)) {
-          counterDifferences++;
-          System.out.println(fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullChaAnalysis.unwinnableFull()
-              + ";" + myCheckmateLine + ";" + chaCheckmateLine);
-        }
+        System.out.println("Difference result: " + out);
+      } else if (!chaCheckmateLine.equals(myCheckmateLine)) {
+        System.out.println("Difference mateline : " + out);
+      } else {
+        System.out.println("Equal : " + out);
       }
 
     }
     logger.printf(Level.INFO, "%d differences found", counterDifferences);
-  }
-
-  private static String composeCheckmateLine(List<UciMove> uciMoveList) {
-    final List<String> uciMoveStrList = new ArrayList<>();
-
-    for (final UciMove uciMove : uciMoveList) {
-      uciMoveStrList.add(uciMove.text());
-    }
-
-    return BasicUtility.calculateSpaceSeparatedList(uciMoveStrList);
   }
 
 }

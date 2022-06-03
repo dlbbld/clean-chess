@@ -15,11 +15,19 @@ public record UnwinnableFullAnalysis(UnwinnableFull unwinnableFull, List<UciMove
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final var other = (UnwinnableFullAnalysis) obj;
     return Objects.equals(mateLine, other.mateLine) && unwinnableFull == other.unwinnableFull;
+  }
+
+  public UnwinnableFull unwinnableFull() {
+    return unwinnableFull;
+  }
+
+  public List<UciMove> mateLine() {
+    return mateLine;
   }
 
 }

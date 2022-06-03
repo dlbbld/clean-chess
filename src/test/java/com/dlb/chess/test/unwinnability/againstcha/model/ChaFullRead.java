@@ -9,7 +9,7 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
 public record ChaFullRead(Fen fen, Side sideCheckingForWin, UnwinnableFull unwinnableFull,
-    String checkmateLine) {
+    String mateLine) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -20,7 +20,7 @@ public record ChaFullRead(Fen fen, Side sideCheckingForWin, UnwinnableFull unwin
       return false;
     }
     final var other = (ChaFullRead) obj;
-    return Objects.equals(checkmateLine, other.checkmateLine) && Objects.equals(fen, other.fen)
+    return Objects.equals(mateLine, other.mateLine) && Objects.equals(fen, other.fen)
         && sideCheckingForWin == other.sideCheckingForWin && unwinnableFull == other.unwinnableFull;
   }
 
@@ -36,8 +36,8 @@ public record ChaFullRead(Fen fen, Side sideCheckingForWin, UnwinnableFull unwin
     return unwinnableFull;
   }
 
-  public String checkmateLine() {
-    return checkmateLine;
+  public String mateLine() {
+    return mateLine;
   }
 
 }
