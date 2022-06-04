@@ -1,0 +1,24 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "????.??.??"]
+[Round "?"]
+[White "DonaldDuckTest"]
+[Black "MickeyMouseTest"]
+[Result "1-0"]
+[TimeControl "180+2"]
+
+1. a3 a6 2. a4 a5 3. Ra3 d5 4. Rc3 Kd7 5. Rc6 h5 6. Ra6 Rh6 7. Rxa8 Ke6 8. Rxb8
+Qd7 9. Rxc8 Kf6 10. Rxf8 Ke6 11. Rxg8 Kd6 12. Rd8 Kc6 13. Rc8 Qd6 14. Rd8 Qxd8
+15. f3 Re6 16. Kf2 Re4 17. Kg3 Rxa4 18. Kh3 g6 19. Kg3 Ra2 20. Kh4 Rxb2 21. Kg5
+Rxc2 22. Kh6 Rxd2 23. Kg7 Rxe2 24. Kh6 Rxg2 25. Kg7 Rxh2 26. Kh6 Rxh1 27. Kg7
+Rh3 28. Kh6 Rxf3 29. Kg7 Rxf1 30. Kh6 Rxd1 31. Kg7 Rxc1 32. Kh6 a4 33. Kg7 a3
+34. Kh6 b5 35. Kg7 Kb7 36. Kh6 c5 37. Kg7 d4 38. Kh6 d3 39. Kg7 d2 40. Kh6 d1=Q
+41. Kh7 a2 42. Kh6 a1=Q 43. Kh7 Rc4 44. Kh6 Ra4 45. Kh7 Ra7 46. Kh6 b4 47. Kh7
+c4 48. Kh6 b3 49. Kh7 c3 50. Na3 c2 51. Nf3 b2 52. Ne5 b1=Q 53. Nd7 e5 54. Nf8
+e4 55. Nd7 e3 56. Nf8 e2 57. Nd7 e1=Q 58. Nf8 f5 59. Nd7 f4 60. Nf8 f3 61. Nd7
+f2 62. Nf8 f1=Q 63. Nd7 g5 64. Nf8 g4 65. Nd7 g3 66. Nf8 g2 67. Nd7 g1=Q 68. Nf8
+h4 69. Nd7 h3 70. Nf8 h2 71. Nd7 Ra6 72. Nf8 Rh6+ 73. Kxh6 Qaa2 74. Kh7 Qaa1 75.
+Nc4 Ka8 76. Ne5 Ka7 77. Ng4 Kb7 78. Nh6 Ka8 79. Nd7 Kb7 80. Nf8 Kc6 81. Nd7 Kd5
+82. Nf8 Ke5 83. Nd7+ Kf4 84. Nf8 Kg3 85. Nd7 Kh3 86. Nf8 c1=Q+ 87. Nf5 h1=Q 88.
+Nd7 1-0
+

@@ -1,0 +1,18 @@
+[Event "Live Chess - chess"]
+[Site "Chess.com"]
+[Date "2022.05.24"]
+[Round "?"]
+[White "DonaldDuckTest"]
+[Black "MickeyMouseTest"]
+[Result "1/2-1/2"]
+[TimeControl "180+2"]
+[WhiteElo "197"]
+[BlackElo "400"]
+[Termination "unterminated"]
+
+1. e4 e5 2. Qh5 Qh4 3. Qxh7 Qxh2 4. Qxh8 Qxh1 5. Qxg7 Qxg2 6. Qxg8 Qxg1 7. Qxf8+
+Kxf8 8. a4 Qxf1+ 9. Kxf1 a5 10. Ra3 Ra6 11. Rb3 Rd6 12. Rxb7 Rd4 13. Rxc7 Rxe4
+14. Rxd7 Rxa4 15. Rb7 Ra2 16. Rxb8 Rxb2 17. Ra8 Rxc2 18. Rxa5 Rxd2 19. Rxe5
+Rxf2+ 20. Ke1 Rc2 21. Rf5 Rxc1+ 22. Kd2 Kg8 23. Rxf7 Bf5 24. Rxf5 Kg7 25. Rf7+
+Kxf7 26. Kxc1 1/2-1/2
+

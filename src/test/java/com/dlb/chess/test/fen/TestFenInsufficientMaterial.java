@@ -2,6 +2,7 @@ package com.dlb.chess.test.fen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -17,6 +18,8 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.FenParser;
 
 class TestFenInsufficientMaterial {
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFenInsufficientMaterial.class);
 
   @SuppressWarnings("static-method")
   @Test
@@ -108,6 +111,68 @@ class TestFenInsufficientMaterial {
 
   private static int calculateKingBishopVersusKing(Side side) {
     return calculateKingPieceVersusKing(side, Piece.WHITE_BISHOP, SquareType.NONE);
+  }
+
+  @SuppressWarnings("static-method")
+  // @Test
+  // not completed run yet, takes maybe hours
+  void testKingBishopVersusBishopSameColourSquare() {
+    assertEquals(193284, calculateKingBishopVersusBishopSameColourSquare(Side.WHITE, SquareType.LIGHT_SQUARE));
+    assertEquals(193284, calculateKingBishopVersusBishopSameColourSquare(Side.BLACK, SquareType.LIGHT_SQUARE));
+  }
+
+  private static int calculateKingBishopVersusBishopSameColourSquare(Side side, SquareType squareType) {
+    var counter = 0;
+
+    StaticPosition staticPositionWork = StaticPosition.EMPTY_POSITION;
+    for (final Square squareFirstKing : Square.BOARD_SQUARE_LIST) {
+      staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing, Piece.WHITE_KING);
+      for (final Square squareFirstBishop : Square.BOARD_SQUARE_LIST) {
+        if (squareFirstBishop == squareFirstKing || squareFirstBishop.getSquareType() != squareType) {
+          continue;
+        }
+        staticPositionWork = staticPositionWork.createChangedPosition(squareFirstBishop, Piece.WHITE_BISHOP);
+        for (final Square squareSecondKing : Square.BOARD_SQUARE_LIST) {
+          if (squareSecondKing == squareFirstBishop || squareSecondKing == squareFirstKing) {
+            continue;
+          }
+          staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing, Piece.BLACK_KING);
+
+          for (final Square squareSecondBishop : Square.BOARD_SQUARE_LIST) {
+            if (squareSecondBishop == squareFirstKing || squareSecondBishop == squareFirstBishop
+                || squareSecondBishop == squareSecondKing || squareSecondBishop.getSquareType() != squareType) {
+              continue;
+            }
+            staticPositionWork = staticPositionWork.createChangedPosition(squareSecondBishop, Piece.BLACK_BISHOP);
+
+            final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
+            final String fen = createFenForPiecePlacement(piecePlacement, side);
+            try {
+              FenParser.parseAdvancedFen(fen);
+              // counting if valid
+              counter++;
+              // we check by the side if we have illegal material
+              final Board board = new Board(fen);
+              if (board.isCheckmate()) {
+                throw new ProgrammingMistakeException(
+                    "We don't have insufficient material. The FEN is \"" + fen + "\".");
+              }
+            } catch (@SuppressWarnings("unused") final FenValidationException fve) {
+              // not counting if invalid
+            }
+            staticPositionWork = staticPositionWork.createChangedPosition(squareSecondBishop);
+          }
+          staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing);
+        }
+        logger.info(counter);
+        staticPositionWork = staticPositionWork.createChangedPosition(squareFirstBishop);
+      }
+      staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing);
+      if (!staticPositionWork.equals(StaticPosition.EMPTY_POSITION)) {
+        throw new ProgrammingMistakeException();
+      }
+    }
+    return counter;
   }
 
   private static int calculateKingPieceVersusKing(Side side, Piece piece, SquareType squareType) {

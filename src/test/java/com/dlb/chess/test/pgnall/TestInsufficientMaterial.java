@@ -75,7 +75,13 @@ class TestInsufficientMaterial implements EnumConstants {
     if (MaterialUtility.calculateHasKingAndKnightOnly(WHITE, staticPosition)
         && MaterialUtility.calculateHasKingOnly(BLACK, staticPosition)
         || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
-            && MaterialUtility.calculateHasKingAndKnightOnly(BLACK, staticPosition)) {
+            && MaterialUtility.calculateHasKingAndKnightOnly(BLACK, staticPosition)
+        || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
+            && MaterialUtility.calculateHasKingAndBishopOnly(BLACK, staticPosition)
+        || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
+            && MaterialUtility.calculateHasKingAndBishopOnly(BLACK, staticPosition)
+
+    ) {
       return true;
     }
 

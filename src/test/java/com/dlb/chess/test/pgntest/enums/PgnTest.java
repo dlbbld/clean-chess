@@ -91,7 +91,11 @@ public enum PgnTest {
   MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxSamePiecePromotion\\black"),
   MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxSamePiecePromotion\\combined"),
 
-  BIZARRE_CHECKMATE(false, "bizarreCheckmate");
+  BIZARRE_CHECKMATE(false, "bizarreCheckmate"),
+
+  MONSTER_BLOG_INSUFFICIENT_MATERIAL(false, "monsterBlog\\insufficientMaterial"),
+  MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW(false, "monsterBlog\\insufficientMaterialPredraw"),
+  MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT(false, "monsterBlog\\insufficientMaterialTimeout");
 
   private final boolean isBasicTest;
   private final String folderPart;
