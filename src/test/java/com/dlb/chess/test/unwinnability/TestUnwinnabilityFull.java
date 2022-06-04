@@ -13,6 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.PrintDuration;
@@ -22,6 +23,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
 public class TestUnwinnabilityFull {
 
@@ -38,9 +40,15 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    final var fen = "6kR/5pp1/1K2p1p1/3r4/8/8/8/8 b - - 3 48";
+    // final var fen = "rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2";
+    final var fen = FenConstants.FEN_INITIAL;
     final Board board = new Board(fen);
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
+    final UnwinnableFullAnalysis fullAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
+        board.getHavingMove().getOppositeSide());
+
+    System.out.println(GeneralUtility.composeCheckmateLine(fullAnalysis.mateLine()));
+
+    assertEquals(UnwinnableFull.WINNABLE, fullAnalysis.unwinnableFull());
   }
 
   @SuppressWarnings("static-method")

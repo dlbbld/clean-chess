@@ -1,6 +1,5 @@
 package com.dlb.chess.test.model;
 
-import java.util.List;
 import java.util.Objects;
 
 import org.eclipse.jdt.annotation.Nullable;
@@ -11,9 +10,8 @@ import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
-    String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule,
-    List<String> expectedSequenceRepetition, int firstCapture, int maxYawnSequence,
-    CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
+    String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule, int firstCapture,
+    int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
     InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullHavingMove,
     UnwinnableFull unwinnableFullNotHavingMove, UnwinnableQuick unwinnableQuickHavingMove,
     UnwinnableQuick unwinnableQuickNotHavingMove, String fen) {
@@ -32,10 +30,6 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
 
   public String expectedYawnMoveRule() {
     return expectedYawnMoveRule;
-  }
-
-  public List<String> expectedSequenceRepetition() {
-    return expectedSequenceRepetition;
   }
 
   public int firstCapture() {
@@ -78,7 +72,6 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule)
         && Objects.equals(expectedRepetition, other.expectedRepetition)
         && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture)
-        && Objects.equals(expectedSequenceRepetition, other.expectedSequenceRepetition)
         && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
         && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate
         && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)

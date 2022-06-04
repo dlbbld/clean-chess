@@ -11,7 +11,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaBothRead;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -24,12 +24,12 @@ public class TestAgainstChaQuick extends AbstractAgainstCha {
 
   public static void main(String[] args) throws Exception {
 
-    final ValidateBothResult bothResult = readChaResultList(FEN_CHA_ANALYSIS_QUICK_FILE_PATH);
+    final ChaBothRead bothResult = readChaResultList(FEN_CHA_ANALYSIS_QUICK_FILE_PATH);
     // validateBothTestResult(bothResult); //ok
     checkMineQuickAgainstChaQuick(bothResult);
   }
 
-  private static void checkMineQuickAgainstChaQuick(ValidateBothResult bothResult) throws Exception {
+  private static void checkMineQuickAgainstChaQuick(ChaBothRead bothResult) throws Exception {
 
     System.out.println("fen;mine;cha");
 

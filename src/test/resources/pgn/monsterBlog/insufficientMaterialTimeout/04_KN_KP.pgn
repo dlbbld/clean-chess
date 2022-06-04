@@ -1,0 +1,21 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2022.04.13"]
+[Round "?"]
+[White "DonaldDuckTest"]
+[Black "MickeyMouseTest"]
+[Result "1/2-1/2"]
+[ECO "A00"]
+[WhiteElo "197"]
+[BlackElo "400"]
+[TimeControl "180+2"]
+[EndTime "8:58:08 PDT"]
+[Termination "Game drawn by timeout vs insufficient material"]
+
+1. h3 a6 2. Rh2 Ra7 3. Rh1 Ra8 4. Rh2 Ra7 5. Rh1 Ra8 6. Rh2 b5 7. Na3 Ra7 8. Nc4
+Rb7 9. Na5 Rb6 10. e3 Rh6 11. Qh5 b4 12. Qxh6 b3 13. Qxh7 bxa2 14. Qxh8 Nc6 15.
+Qxg8 Nd4 16. Qxg7 c6 17. Qg4 Qb6 18. Qxd4 Qxb2 19. Nf3 Qxa1 20. Ne5 Qb2 21. Nxf7
+Qxc2 22. Qa7 Qxc1+ 23. Ke2 Qxd2+ 24. Kf3 Qxf2+ 25. Ke4 Qxg2+ 26. Kd4 Qxh2 27.
+Qa8 Qxh3 28. Qxc8+ Kxf7 29. Qxc6 Qxf1 30. Qxd7 Qf2 31. Qxe7+ Kg8 32. Qxf8+ Kxf8
+33. Nc6 Qxe3+ 34. Kxe3 Ke8 35. Nb4 Kd7 36. Nxa2 Kc8 37. Nc3 1/2-1/2
+

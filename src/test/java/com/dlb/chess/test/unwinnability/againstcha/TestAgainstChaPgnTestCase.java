@@ -13,7 +13,8 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaBothRead;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaFullRead;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -26,12 +27,12 @@ public class TestAgainstChaPgnTestCase extends AbstractAgainstCha {
 
   public static void main(String[] args) throws Exception {
 
-    final ValidateBothResult bothResult = readChaResultList(FEN_CHA_ANALYSIS_BOTH_FILE_PATH);
+    final ChaBothRead bothResult = readChaResultList(FEN_CHA_ANALYSIS_BOTH_FILE_PATH);
     // validateBothTestResult(bothResult); //ok
     checkAllTestCasesAgainstCha(bothResult);
   }
 
-  private static void checkAllTestCasesAgainstCha(ValidateBothResult bothResult) throws Exception {
+  private static void checkAllTestCasesAgainstCha(ChaBothRead bothResult) throws Exception {
 
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
@@ -57,9 +58,8 @@ public class TestAgainstChaPgnTestCase extends AbstractAgainstCha {
 
         final Fen fen = FenParser.parseAdvancedFen(testCase.fen());
 
-        final UnwinnableFull chaFullTestResultHavingMove = readFullTestResult(fen, fen.havingMove(),
-            bothResult.fullResultList());
-        if (chaFullTestResultHavingMove == UnwinnableFull.WINNABLE) {
+        final ChaFullRead chaFullHavingMove = readFullResult(fen, fen.havingMove(), bothResult.fullResultList());
+        if (chaFullHavingMove.unwinnableFull() == UnwinnableFull.WINNABLE) {
           if (testCase.repetitionCountFinalPosition() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD
               || fen.halfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
                   && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
@@ -67,15 +67,15 @@ public class TestAgainstChaPgnTestCase extends AbstractAgainstCha {
               || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
             assertEquals(UnwinnableFull.UNWINNABLE, testCase.unwinnableFullHavingMove());
           } else {
-            assertEquals(chaFullTestResultHavingMove, testCase.unwinnableFullHavingMove());
+            assertEquals(chaFullHavingMove.unwinnableFull(), testCase.unwinnableFullHavingMove());
           }
         } else {
-          assertEquals(chaFullTestResultHavingMove, testCase.unwinnableFullHavingMove());
+          assertEquals(chaFullHavingMove.unwinnableFull(), testCase.unwinnableFullHavingMove());
         }
 
-        final UnwinnableFull chaFullTestResultNotHavingMove = readFullTestResult(fen, fen.havingMove(),
+        final ChaFullRead chaFullNotHavingMove = readFullResult(fen, fen.havingMove(),
             bothResult.fullResultList());
-        if (chaFullTestResultNotHavingMove == UnwinnableFull.WINNABLE) {
+        if (chaFullNotHavingMove.unwinnableFull() == UnwinnableFull.WINNABLE) {
           if (testCase.repetitionCountFinalPosition() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD
               || fen.halfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
                   && testCase.checkmateOrStalemate() != CheckmateOrStalemate.CHECKMATE
@@ -83,10 +83,10 @@ public class TestAgainstChaPgnTestCase extends AbstractAgainstCha {
               || "unwinnable_seventy_five_move_rule_inevitable.pgn".equals(testCase.pgnFileName())) {
             assertEquals(UnwinnableFull.UNWINNABLE, testCase.unwinnableFullNotHavingMove());
           } else {
-            assertEquals(chaFullTestResultNotHavingMove, testCase.unwinnableFullNotHavingMove());
+            assertEquals(chaFullNotHavingMove.unwinnableFull(), testCase.unwinnableFullNotHavingMove());
           }
         } else {
-          assertEquals(chaFullTestResultNotHavingMove, testCase.unwinnableFullNotHavingMove());
+          assertEquals(chaFullNotHavingMove.unwinnableFull(), testCase.unwinnableFullNotHavingMove());
         }
 
         final UnwinnableQuick chaQuickTestResultHavingMove = readQuickTestResult(fen, fen.havingMove(),

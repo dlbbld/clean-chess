@@ -6,11 +6,12 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.fen.FenParser;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.test.unwinnability.model.ValidateBothResult;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaBothRead;
+import com.dlb.chess.test.unwinnability.againstcha.model.ChaFullRead;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
 // rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2; UNDETERMINED; WINNABLE
@@ -24,12 +25,12 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
 
   public static void main(String[] args) throws Exception {
 
-    final ValidateBothResult bothResult = readChaResultList(FEN_CHA_ANALYSIS_FULL_FILE_PATH);
+    final ChaBothRead bothResult = readChaResultList(FEN_CHA_ANALYSIS_FULL_FILE_PATH);
     // validateBothTestResult(bothResult); //ok
     checkMineQuickAgainstChaFull(bothResult);
   }
 
-  private static void checkMineQuickAgainstChaFull(ValidateBothResult bothResult) throws Exception {
+  private static void checkMineQuickAgainstChaFull(ChaBothRead bothResult) throws Exception {
 
     System.out.println("fen;mine;cha");
 
@@ -55,16 +56,26 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
 
       final Fen fen = FenParser.parseAdvancedFen(fenStr);
 
-      final UnwinnableFull fullCha = readFullTestResult(fen, fen.havingMove().getOppositeSide(),
+      final ChaFullRead fullChaAnalysis = readFullResult(fen, fen.havingMove().getOppositeSide(),
           bothResult.fullResultList());
 
       final Board board = new Board(fen);
       final UnwinnableFullAnalysis fullMineAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
           fen.havingMove().getOppositeSide());
 
-      if (fullCha != fullMineAnalysis.unwinnableFull()) {
+      final String chaCheckmateLine = fullChaAnalysis.mateLine();
+      final String myCheckmateLine = GeneralUtility.composeCheckmateLine(fullMineAnalysis.mateLine());
+
+      final var out = fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullChaAnalysis.unwinnableFull() + ";"
+          + myCheckmateLine + ";" + chaCheckmateLine;
+
+      if (fullChaAnalysis.unwinnableFull() != fullMineAnalysis.unwinnableFull()) {
         counterDifferences++;
-        System.out.println(fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullCha);
+        System.out.println("Difference result: " + out);
+      } else if (!chaCheckmateLine.equals(myCheckmateLine)) {
+        System.out.println("Difference mateline : " + out);
+      } else {
+        System.out.println("Equal : " + out);
       }
 
     }

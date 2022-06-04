@@ -13,6 +13,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.PgnHalfMove;
+import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 
@@ -83,5 +84,15 @@ public class GeneralUtility {
       squareList.add(square.getName());
     }
     return BasicUtility.calculateCommaSeparatedList(squareList);
+  }
+
+  public static String composeCheckmateLine(List<UciMove> uciMoveList) {
+    final List<String> uciMoveStrList = new ArrayList<>();
+  
+    for (final UciMove uciMove : uciMoveList) {
+      uciMoveStrList.add(uciMove.text());
+    }
+  
+    return BasicUtility.calculateSpaceSeparatedList(uciMoveStrList);
   }
 }

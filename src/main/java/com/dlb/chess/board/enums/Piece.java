@@ -45,12 +45,48 @@ public enum Piece {
     return side;
   }
 
-  public static Piece calculatePawnPiece(Side side) {
+  public static Piece calculateRookPiece(Side side) {
     switch (side) {
       case BLACK:
-        return BLACK_PAWN;
+        return BLACK_ROOK;
       case WHITE:
-        return WHITE_PAWN;
+        return WHITE_ROOK;
+      case NONE:
+      default:
+        throw new IllegalArgumentException();
+    }
+  }
+
+  public static Piece calculateKnightPiece(Side side) {
+    switch (side) {
+      case BLACK:
+        return BLACK_KNIGHT;
+      case WHITE:
+        return WHITE_KNIGHT;
+      case NONE:
+      default:
+        throw new IllegalArgumentException();
+    }
+  }
+
+  public static Piece calculateBishopPiece(Side side) {
+    switch (side) {
+      case BLACK:
+        return BLACK_BISHOP;
+      case WHITE:
+        return WHITE_BISHOP;
+      case NONE:
+      default:
+        throw new IllegalArgumentException();
+    }
+  }
+
+  public static Piece calculateQueenPiece(Side side) {
+    switch (side) {
+      case BLACK:
+        return BLACK_QUEEN;
+      case WHITE:
+        return WHITE_QUEEN;
       case NONE:
       default:
         throw new IllegalArgumentException();
@@ -69,12 +105,12 @@ public enum Piece {
     }
   }
 
-  public static Piece calculateRookPiece(Side side) {
+  public static Piece calculatePawnPiece(Side side) {
     switch (side) {
       case BLACK:
-        return BLACK_ROOK;
+        return BLACK_PAWN;
       case WHITE:
-        return WHITE_ROOK;
+        return WHITE_PAWN;
       case NONE:
       default:
         throw new IllegalArgumentException();
