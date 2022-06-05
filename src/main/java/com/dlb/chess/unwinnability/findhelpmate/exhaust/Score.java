@@ -6,6 +6,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
+import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
@@ -39,19 +40,15 @@ public class Score {
   // Inputs: position, legal move in the position
   // Output: Normal, Reward, or Punish (variation score)
   public static ScoreResult score(Side color, Side havingMove, StaticPosition staticPosition, LegalMove legalMove) {
+    var variation = ScoreResult.NORMAL;
+
     // 1: if it is the intended winner’s turn in pos then
     if (havingMove == color) {
       // 2: if m is a capture or m is a pawn push or Going-to-corner(pos, m, Win) then
       // 3: return Reward
-      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())) {
-        if (GoingToCorner.goingToCorner(color, staticPosition, legalMove, Goal.WIN)) {
-          return ScoreResult.REWARD;
-        }
-      } else if (legalMove.pieceCaptured() != Piece.NONE || legalMove.movingPiece().getPieceType() == PieceType.PAWN
+      if (calculateIsCapture(legalMove) || calculateIsAdvancedPawnPush(legalMove)
           || GoingToCorner.goingToCorner(color, staticPosition, legalMove, Goal.WIN)) {
-
         return ScoreResult.REWARD;
-
       }
       // 4: else ( -> It is the intended loser’s turn in pos)
     } else {
@@ -62,47 +59,131 @@ public class Score {
       // conditions of Lemma 5 or Lemma 6 apply (ignoring the pawn-freeness condition))
       //
 
-      // if the intended winner has just a knight and the intended loser has just pawns
-      // and/or queens
-      final var isFirstCondition = MaterialUtility.calculateHasKingAndKnightOnly(color, staticPosition)
-          && MaterialUtility.calculateHasKingAndPawnsOrQueensOnly(color.getOppositeSide(), staticPosition);
-
-      // or the intended winner has just bishops of the same square color and
-      // the intended loser does not have knights or bishops of the opposite color
-      final var isSecondConditionDarkSquare = MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition,
-          SquareType.DARK_SQUARE) && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoLightSquareBishops(color.getOppositeSide(), staticPosition);
-
-      final var isSecondConditionLightSquare = MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition,
-          SquareType.LIGHT_SQUARE) && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoDarkSquareBishops(color.getOppositeSide(), staticPosition);
-
-      if (isFirstCondition || isSecondConditionDarkSquare || isSecondConditionLightSquare) {
+      // Note: We are not immediately returning the value when evaluated as in the PDF, but also evaluating the
+      // later condition as in the code. Must be checked what is todot.
+      final var isNeedLoserPromotion = calculateIsNeedLoserPromotion(color, staticPosition);
+      if (isNeedLoserPromotion) {
         // 6: if m is a promotion to a queen or rook then return Punish
-        if (PromotionUtility.calculateIsPromotion(legalMove.moveSpecification())
-            && (legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.QUEEN
-                || legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.ROOK)) {
-          return ScoreResult.PUNISH;
-          // 7: else if m is a pawn move then return Reward
-        }
-        if (legalMove.movingPiece().getPieceType() == PieceType.PAWN) {
-          return ScoreResult.REWARD;
-        }
+        // Note: we implement the code with differences to the PDF for this case
+        final var isHeavyPromotion = calculateIsPromotionToHeavyPiece(legalMove);
+        final var isPawnMove = calculateIsPawnMove(legalMove);
+        // 7: else if m is a pawn move then return Reward
+        // Note: the code does not uphelp this
+        variation = isPawnMove && !isHeavyPromotion ? ScoreResult.REWARD : ScoreResult.PUNISH;
       }
 
       // 8: if Going-to-corner(pos, m, Lose) then return Reward
       if (GoingToCorner.goingToCorner(color, staticPosition, legalMove, Goal.LOSE)) {
-        return ScoreResult.REWARD;
+        variation = ScoreResult.REWARD;
       }
 
       // 9: if m is a capture then return Punish
-      if (legalMove.pieceCaptured() != Piece.NONE) {
-        return ScoreResult.PUNISH;
+      if (calculateIsCapture(legalMove)) {
+        variation = ScoreResult.PUNISH;
       }
     }
 
     // 10: return Normal ( -> The default output if none of the above conditions hold)
-    return ScoreResult.NORMAL;
+    // Note: Not what the code is doing
+    return variation;
+  }
+
+  private static boolean calculateIsCapture(LegalMove legalMove) {
+    return legalMove.pieceCaptured() != Piece.NONE;
+  }
+
+  private static boolean calculateIsAdvancedPawnPush(LegalMove legalMove) {
+
+    if (!calculateIsPawnMove(legalMove)) {
+      return false;
+    }
+
+    return calculateIsAdvancedRank(legalMove.moveSpecification().havingMove(),
+        legalMove.moveSpecification().toSquare().getRank());
+  }
+
+  private static boolean calculateIsPawnMove(LegalMove legalMove) {
+    // in the castling we don't set the king as the moving piece. querying the
+    // moving piece type would trigger an error as the moving piece is not set.
+    // so we must treat it separately, otherwise there is a runtime exception.
+    if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())) {
+      return false;
+    }
+    return legalMove.movingPiece().getPieceType() == PieceType.PAWN;
+  }
+
+  private static boolean calculateIsAdvancedRank(Side side, Rank rank) {
+    switch (side) {
+      case WHITE:
+        switch (rank) {
+          case RANK_1:
+          case RANK_2:
+          case RANK_3:
+          case RANK_4:
+          case RANK_5:
+            return false;
+          case RANK_6:
+          case RANK_7:
+          case RANK_8:
+            return true;
+          case NONE:
+          default:
+            throw new IllegalArgumentException();
+        }
+      case BLACK:
+        switch (rank) {
+          case RANK_1:
+          case RANK_2:
+          case RANK_3:
+            return true;
+          case RANK_4:
+          case RANK_5:
+          case RANK_6:
+          case RANK_7:
+          case RANK_8:
+            return false;
+          case NONE:
+          default:
+            throw new IllegalArgumentException();
+        }
+      case NONE:
+      default:
+        throw new IllegalArgumentException();
+
+    }
+  }
+
+  private static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
+    // if the intended winner has just a knight and the intended loser has just pawns
+    // and/or queens
+    if (MaterialUtility.calculateHasKingAndKnightOnly(winner, staticPosition)
+        && MaterialUtility.calculateHasKingAndPawnsOrQueensOnly(winner.getOppositeSide(), staticPosition)) {
+      return true;
+    }
+    // or the intended winner has just bishops of the same square color and
+    // the intended loser does not have knights or bishops of the opposite color
+    final var isBishopDarkSquareCondition = MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition,
+        SquareType.DARK_SQUARE) && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
+        && MaterialUtility.calculateHasNoLightSquareBishops(winner.getOppositeSide(), staticPosition);
+
+    if (isBishopDarkSquareCondition) {
+      return true;
+    }
+
+    final var isBishopLightSquareCondition = MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition,
+        SquareType.LIGHT_SQUARE) && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
+        && MaterialUtility.calculateHasNoDarkSquareBishops(winner.getOppositeSide(), staticPosition);
+
+    return isBishopLightSquareCondition;
+  }
+
+  private static boolean calculateIsPromotionToHeavyPiece(LegalMove legalMove) {
+    if (PromotionUtility.calculateIsPromotion(legalMove.moveSpecification())
+        && (legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.QUEEN
+            || legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.ROOK)) {
+      return true;
+    }
+    return false;
   }
 
 }

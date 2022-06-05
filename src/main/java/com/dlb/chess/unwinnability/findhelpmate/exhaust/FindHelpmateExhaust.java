@@ -39,6 +39,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
   private final HashMap<String, Integer> transpositionMap = new HashMap<>();
 
   private int cnt = 0;
+  private int evalCounter = 0;
   private boolean isCanExhaust = true;
   private List<LegalMove> moveEvaluationList = new ArrayList<>();
 
@@ -57,7 +58,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     this.isCanExhaust = true;
     this.moveEvaluationList = new ArrayList<>();
 
-    final var findHelpmate = findHelpmate(board, 0, maxDepth, false);
+    final var findHelpmate = findHelpmate(board, 0, maxDepth, 0, false);
 
     if (!invariant.equals(board.getFen())) {
       throw new ProgrammingMistakeException("Board was changed");
@@ -79,20 +80,30 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   // Inputs: position, depth (int), maxDepth (int)
   // Output: bool (true if a checkmate sequence was found, false otherwise)
-  private FindHelpmateRecursionResult findHelpmate(ApiBoard board, int depth, int maxDepth, boolean isPastProgress) {
+  private FindHelpmateRecursionResult findHelpmate(ApiBoard board, int depth, int maxDepth, int actualDepth,
+      boolean isPastProgress) {
 
     // adding fivefold repetition and seventy-five move rule
-    if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
-      return FindHelpmateRecursionResult.FALSE;
-    }
+    // if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+    // return FindHelpmateRecursionResult.FALSE;
+    // }
 
     // 2: if the intended winner has just the king or the position is unwinnable according
     // to Lemma 5 or Lemma 6 or the position is stalemate or the intended winner is
     // receiving checkmate in the position then return false
 
-    if (MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
-        || calculateIsUnwinnableAccordingLemma5(color, board.getStaticPosition())
-        || calculateIsUnwinnableAccordingLemma6(color, board.getStaticPosition())) {
+    // Note: below omitted as not in the C++ code
+    // or the position is stalemate or the intended winner is
+    // receiving checkmate in the position then return false
+
+    // set d := limits.max-depth - depth
+    final var movesLeft = maxDepth - depth;
+
+    // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
+    if (calculateIsInTranspositionTable(board, movesLeft)
+        || MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
+        || MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
+            && calculateIsNeedLoserPromotion(color, board.getStaticPosition())) {
       return FindHelpmateRecursionResult.FALSE;
     }
 
@@ -101,21 +112,13 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       return FindHelpmateRecursionResult.TRUE;
     }
 
-    // set d := limits.max-depth - depth
-    final var d = maxDepth - depth;
-
-    // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
-    if (calculateIsInTranspositionTable(board.getFen(), d)) {
-      return FindHelpmateRecursionResult.FALSE;
-    }
-
     // 3: increase cnt and set d := limits.max-depth - depth
 
     // increase cnt
     cnt++;
 
     // 4: if cnt > nodesBound or d < 0 then return false (-> The search limits are exceeded)
-    if (cnt > NODES_BOUND || d <= 0) {
+    if (cnt > maxDepth * NODES_BOUND || movesLeft <= 0) {
 
       if (isCanExhaust) {
         isCanExhaust = false;
@@ -124,14 +127,23 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     // 6: store (pos,D) in table
-    store(board.getFen(), d);
+    store(board, movesLeft);
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
 
     for (final LegalMove legalMove : legalMoveList) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
-      final ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
+      ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
+
+      if (board.getHavingMove() != color
+          && MaterialUtility.calculateHasQueen(color.getOppositeSide(), board.getStaticPosition())) {
+        score = score == ScoreResult.REWARD ? ScoreResult.NORMAL : score;
+      }
+
+      if (actualDepth > 300) {
+        score = score == ScoreResult.REWARD ? ScoreResult.NORMAL : score;
+      }
 
       var newDepth = depth + 1;
       switch (score) {
@@ -154,11 +166,16 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       board.performMove(legalMove.moveSpecification());
 
       final String uciMoveStr = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()).text();
-      System.out.println(uciMoveStr + " " + newDepth);
+      final var out = uciMoveStr + " " + newDepth;
+      System.out.println(out);
+      evalCounter++;
+      if (evalCounter == 4200) {
+        final var debug = 100;
+      }
 
       moveEvaluationList.add(legalMove);
       final var isProgress = score == ScoreResult.REWARD;
-      final var findHelpmate = findHelpmate(board, newDepth, maxDepth, false);
+      final var findHelpmate = findHelpmate(board, newDepth, maxDepth, actualDepth + 1, isProgress);
       board.unperformMove();
       switch (findHelpmate) {
         case TRUE:
@@ -177,18 +194,18 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   }
 
-  private boolean calculateIsInTranspositionTable(String fen, int d) {
-    final String positionIdentifier = calculatePositionIdentifier(fen);
+  private boolean calculateIsInTranspositionTable(ApiBoard board, int movesLeft) {
+    final String positionIdentifier = calculatePositionIdentifier(board);
     if (transpositionMap.containsKey(positionIdentifier)) {
       final int storedDepth = NonNullWrapperCommon.get(transpositionMap, positionIdentifier);
-      return storedDepth >= d;
+      return storedDepth >= movesLeft;
     }
     return false;
   }
 
-  private void store(String fen, int d) {
-    final String positionIdentifier = calculatePositionIdentifier(fen);
-    transpositionMap.put(positionIdentifier, d);
+  private void store(ApiBoard board, int movesLeft) {
+    final String positionIdentifier = calculatePositionIdentifier(board);
+    transpositionMap.put(positionIdentifier, movesLeft);
   }
 
   private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
@@ -219,12 +236,38 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     return false;
   }
 
-  private static String calculatePositionIdentifier(String fen) {
-    final FenRaw fenRaw = FenParserRaw.parseFenRaw(fen);
+  private static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
+    if (MaterialUtility.calculateHasKingAndKnightOnly(winner, staticPosition)) {
+      if (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoBishops(winner.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoRooks(winner.getOppositeSide(), staticPosition)) {
+        return true;
+      }
+    }
+
+    for (final SquareType squareType : SquareType.values()) {
+      if (squareType == SquareType.NONE) {
+        continue;
+      }
+      if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)) {
+        if (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
+            && MaterialUtility.calculateHasNoBishops(winner, staticPosition, squareType.getOppositeSquareType())) {
+          return true;
+        }
+      }
+    }
+
+    return false;
+  }
+
+  private static String calculatePositionIdentifier(ApiBoard board) {
+    final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
     final StringBuilder result = new StringBuilder();
     result.append(fenRaw.piecePlacement()).append("*");
     result.append(fenRaw.castlingRightBothStr()).append("*");
-    result.append(fenRaw.enPassantCaptureTargetSquare());
+    if (board.isEnPassantCapturePossible()) {
+      result.append(fenRaw.enPassantCaptureTargetSquare());
+    }
     return NonNullWrapperCommon.toString(result);
   }
 
