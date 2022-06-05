@@ -47,7 +47,7 @@ public class Mobility {
       }
     }
 
-    final MobilitySolution mobility = new MobilitySolution();
+    final var mobility = new MobilitySolution();
     for (final PiecePlacement piecePlacement : piecePlacementList) {
       for (final Square square : Square.values()) {
         if (square == Square.NONE) {
@@ -58,13 +58,13 @@ public class Mobility {
     }
 
     // CP := 0
-    final Clearability clearability = new Clearability();
+    final var clearability = new Clearability();
     for (final PiecePlacement piecePlacement : piecePlacementList) {
       clearability.put(piecePlacement, VariableState.ZERO);
     }
 
     // Rcs := 0
-    final Reachability reachability = new Reachability();
+    final var reachability = new Reachability();
     for (final Side side : Side.values()) {
       if (side == Side.NONE) {
         continue;

@@ -60,6 +60,18 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     return fen;
   }
 
+  public int repetitionCountFinalPosition() {
+    return repetitionCountFinalPosition;
+  }
+
+  public UnwinnableQuick unwinnableQuickHavingMove() {
+    return unwinnableQuickHavingMove;
+  }
+
+  public UnwinnableQuick unwinnableQuickNotHavingMove() {
+    return unwinnableQuickNotHavingMove;
+  }
+
   @Override
   public boolean equals(@Nullable Object obj) {
     if (this == obj) {

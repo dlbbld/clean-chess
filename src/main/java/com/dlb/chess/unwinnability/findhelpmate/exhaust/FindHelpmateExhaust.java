@@ -8,16 +8,21 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
+import com.dlb.chess.fen.constants.FenConstants;
+import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
+import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.unwinnability.findhelpmate.AbstractFindHelpmate;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateRecursionResult;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
@@ -40,6 +45,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private int cnt = 0;
   private int evalCounter = 0;
+  private final List<String> evalFenList = new ArrayList<>();
   private boolean isCanExhaust = true;
   private List<LegalMove> moveEvaluationList = new ArrayList<>();
 
@@ -63,6 +69,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     if (!invariant.equals(board.getFen())) {
       throw new ProgrammingMistakeException("Board was changed");
     }
+
+    FileUtility.writeFile("C:\\Users\\danie\\git\\D3-Chess-test\\tests\\fenListMine.txt", evalFenList);
 
     switch (findHelpmate) {
       case TRUE:
@@ -99,8 +107,9 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     // set d := limits.max-depth - depth
     final var movesLeft = maxDepth - depth;
 
+    final String cacheKey = calculateCacheKey(board);
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
-    if (calculateIsInTranspositionTable(board, movesLeft)
+    if (calculateIsInTranspositionTableWithEnoughDepth(cacheKey, movesLeft)
         || MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
         || MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
             && calculateIsNeedLoserPromotion(color, board.getStaticPosition())) {
@@ -127,7 +136,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     // 6: store (pos,D) in table
-    store(board, movesLeft);
+    store(cacheKey, movesLeft);
 
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
@@ -169,9 +178,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       final var out = uciMoveStr + " " + newDepth;
       System.out.println(out);
       evalCounter++;
-      if (evalCounter == 4200) {
-        final var debug = 100;
-      }
+      final String evaluateStockfishFen = calculateStockfishFen(board);
+      evalFenList.add(evaluateStockfishFen);
 
       moveEvaluationList.add(legalMove);
       final var isProgress = score == ScoreResult.REWARD;
@@ -194,21 +202,19 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   }
 
-  private boolean calculateIsInTranspositionTable(ApiBoard board, int movesLeft) {
-    final String positionIdentifier = calculatePositionIdentifier(board);
-    if (transpositionMap.containsKey(positionIdentifier)) {
-      final int storedDepth = NonNullWrapperCommon.get(transpositionMap, positionIdentifier);
+  private boolean calculateIsInTranspositionTableWithEnoughDepth(String cacheKey, int movesLeft) {
+    if (transpositionMap.containsKey(cacheKey)) {
+      final int storedDepth = NonNullWrapperCommon.get(transpositionMap, cacheKey);
       return storedDepth >= movesLeft;
     }
     return false;
   }
 
-  private void store(ApiBoard board, int movesLeft) {
-    final String positionIdentifier = calculatePositionIdentifier(board);
-    transpositionMap.put(positionIdentifier, movesLeft);
+  private void store(String cacheKey, int movesLeft) {
+    transpositionMap.put(cacheKey, movesLeft);
   }
 
-  private static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
+  static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
     if (MaterialUtility.calculateHasKingAndKnightOnly(color, staticPosition)) {
       if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), staticPosition)
@@ -220,7 +226,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     return false;
   }
 
-  private static boolean calculateIsUnwinnableAccordingLemma6(Side color, StaticPosition staticPosition) {
+  static boolean calculateIsUnwinnableAccordingLemma6(Side color, StaticPosition staticPosition) {
     for (final SquareType squareType : SquareType.values()) {
       if (squareType == SquareType.NONE) {
         continue;
@@ -260,22 +266,71 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     return false;
   }
 
-  private static String calculatePositionIdentifier(ApiBoard board) {
-    final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
-    final StringBuilder result = new StringBuilder();
-    result.append(fenRaw.piecePlacement()).append("*");
-    result.append(fenRaw.castlingRightBothStr()).append("*");
-    if (board.isEnPassantCapturePossible()) {
-      result.append(fenRaw.enPassantCaptureTargetSquare());
-    }
-    return NonNullWrapperCommon.toString(result);
-  }
-
   private static List<UciMove> convertLegalMoveList(List<LegalMove> moveProgressList) {
     final List<UciMove> result = new ArrayList<>();
     for (final LegalMove legalMove : moveProgressList) {
       result.add(UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()));
     }
     return result;
+  }
+
+  private static String calculateStockfishFen(ApiBoard board) {
+    return calculateStockfishFenOrCacheKey(board, true);
+  }
+
+  private static String calculateCacheKey(ApiBoard board) {
+    return calculateStockfishFenOrCacheKey(board, false);
+  }
+
+  private static String calculateStockfishFenOrCacheKey(ApiBoard board, boolean isCalculateStockfishFen) {
+    if (board.isFirstMove()) {
+      final Fen initialFen = board.getInitialFen();
+      if (initialFen == FenConstants.FEN_INITIAL) {
+        return initialFen.fen();
+      }
+
+      if (initialFen.enPassantCaptureTargetSquare() != Square.NONE) {
+        final Square pawnTwoAdvanceSquare = Square.calculateAheadSquare(board.getHavingMove().getOppositeSide(),
+            initialFen.enPassantCaptureTargetSquare());
+
+        if (EnPassantCaptureUtility.calculateHasOpponentPawnOnLeftOrRight(pawnTwoAdvanceSquare,
+            board.getStaticPosition())) {
+          return calculateForStockfishFenOrForCacheKey(board.getFen(), isCalculateStockfishFen);
+        }
+      }
+
+      return initialFen.fen();
+    }
+
+    final LegalMove legalMove = board.getLastMove();
+
+    if (!EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(legalMove.movingPiece(),
+        legalMove.moveSpecification())
+        || EnPassantCaptureUtility.calculateHasOpponentPawnOnLeftOrRight(legalMove.moveSpecification().toSquare(),
+            board.getStaticPosition())) {
+      return board.getFen();
+    }
+
+    return calculateForStockfishFenOrForCacheKey(board.getFen(), isCalculateStockfishFen);
+  }
+
+  private static String calculateForStockfishFenOrForCacheKey(String fen, boolean isCalculateForStockfishFen) {
+    final FenRaw fenRaw = FenParserRaw.parseFenRaw(fen);
+
+    final StringBuilder fenChanged = new StringBuilder();
+    fenChanged.append(fenRaw.piecePlacement());
+    fenChanged.append(" ");
+    fenChanged.append(fenRaw.havingMove());
+    fenChanged.append(" ");
+    fenChanged.append(fenRaw.castlingRightBothStr());
+
+    if (isCalculateForStockfishFen) {
+      fenChanged.append(" - ");
+      fenChanged.append(fenRaw.halfMoveClock());
+      fenChanged.append(" ");
+      fenChanged.append(fenRaw.fullMoveNumber());
+    }
+
+    return NonNullWrapperCommon.toString(fenChanged);
   }
 }
