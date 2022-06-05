@@ -1,8 +1,11 @@
 package com.dlb.chess.distance;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.distance.model.DistanceToCell;
 
 //This code contributed by Rajput-Ji
@@ -12,6 +15,30 @@ import com.dlb.chess.distance.model.DistanceToCell;
 public class KnightDistance {
 
   // TODO unwinnability cache
+
+  private static final Map<Square, Map<Square, Integer>> map = new HashMap<>();
+
+  static {
+    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+      for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+        final var distance = KnightDistance.distance(fromSquare, toSquare);
+        Map<Square, Integer> mapToAdd;
+        if (!map.containsKey(fromSquare)) {
+          mapToAdd = new HashMap<>();
+          map.put(fromSquare, mapToAdd);
+        } else {
+          mapToAdd = NonNullWrapperCommon.get(map, fromSquare);
+        }
+        mapToAdd.put(toSquare, distance);
+      }
+    }
+  }
+
+  @SuppressWarnings("null")
+  public static int distanceCache(Square fromSquare, Square toSquare) {
+    return map.get(fromSquare).get(toSquare);
+  }
+
   private static final int BOARD_SIZE = 8;
 
   // Utility method returns true if (x, y) lies
