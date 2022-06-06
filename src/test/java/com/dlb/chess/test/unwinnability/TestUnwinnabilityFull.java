@@ -13,7 +13,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.PrintDuration;
@@ -40,8 +39,8 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    // final var fen = "rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2";
-    final var fen = FenConstants.FEN_INITIAL;
+    final var fen = "8/1k6/8/2B5/8/8/8/1b4K1 b - - 100 196";
+    // final var fen = FenConstants.FEN_INITIAL;
     final Board board = new Board(fen);
     final UnwinnableFullAnalysis fullAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
         board.getHavingMove().getOppositeSide());

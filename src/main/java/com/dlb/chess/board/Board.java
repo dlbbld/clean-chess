@@ -439,6 +439,9 @@ public class Board extends AbstractBoard {
 
   @Override
   public String getFen() {
+    if (isFirstMove()) {
+      return getInitialFen().fen();
+    }
     return FenBoard.calculateFen(this);
   }
 

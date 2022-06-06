@@ -17,8 +17,6 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
-import com.dlb.chess.fen.constants.FenConstants;
-import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
@@ -35,15 +33,18 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.model.FindHelpmateAnalys
 //limits of the search. The Score routine is defined in Figure 12 (Appendix A).
 public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
+  private static final boolean IS_DEBUG = false;
+
   private static final Logger logger = NonNullWrapperCommon.getLogger(FindHelpmateExhaust.class);
 
   // empirically enough
-  private static final int NODES_BOUND = 10000;
+  private static final int LOCAL_NODES_BOUND = 10000;
 
   private final Side color;
   private final HashMap<String, Integer> transpositionMap = new HashMap<>();
 
-  private int cnt = 0;
+  private int localNodeCount = 0;
+
   private int evalCounter = 0;
   private final List<String> evalFenList = new ArrayList<>();
   private boolean isCanExhaust = true;
@@ -60,7 +61,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     if (maxDepth != 0 && maxDepth % 10 == 0) {
       logger.info("maxDepth=" + maxDepth);
     }
-    this.cnt = 0;
+    this.localNodeCount = 0;
     this.isCanExhaust = true;
     this.moveEvaluationList = new ArrayList<>();
 
@@ -70,17 +71,20 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       throw new ProgrammingMistakeException("Board was changed");
     }
 
-    FileUtility.writeFile("C:\\Users\\danie\\git\\D3-Chess-test\\tests\\fenListMine.txt", evalFenList);
+    if (IS_DEBUG) {
+      FileUtility.writeFile("C:\\Users\\danie\\git\\D3-Chess-test\\debug\\fenListMine.txt", evalFenList);
+    }
 
     switch (findHelpmate) {
       case TRUE:
         checkHelpmate(board.getFen(), moveEvaluationList);
-        return new FindHelpmateAnalysis(FindHelpmateResult.YES, convertLegalMoveList(moveEvaluationList));
+        return new FindHelpmateAnalysis(FindHelpmateResult.YES, localNodeCount,
+            convertLegalMoveList(moveEvaluationList));
       case FALSE:
         if (isCanExhaust) {
-          return new FindHelpmateAnalysis(FindHelpmateResult.NO, new ArrayList<>());
+          return new FindHelpmateAnalysis(FindHelpmateResult.NO, localNodeCount, new ArrayList<>());
         }
-        return new FindHelpmateAnalysis(FindHelpmateResult.UNKNOWN, new ArrayList<>());
+        return new FindHelpmateAnalysis(FindHelpmateResult.UNKNOWN, localNodeCount, new ArrayList<>());
       default:
         throw new IllegalArgumentException();
     }
@@ -90,6 +94,11 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
   // Output: bool (true if a checkmate sequence was found, false otherwise)
   private FindHelpmateRecursionResult findHelpmate(ApiBoard board, int depth, int maxDepth, int actualDepth,
       boolean isPastProgress) {
+
+    // 1: if the intended winner is checkmating their opponent in pos then return true
+    if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
+      return FindHelpmateRecursionResult.TRUE;
+    }
 
     // adding fivefold repetition and seventy-five move rule
     // if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
@@ -109,25 +118,12 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     final String cacheKey = calculateCacheKey(board);
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
-    if (calculateIsInTranspositionTableWithEnoughDepth(cacheKey, movesLeft)
-        || MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
-        || MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
-            && calculateIsNeedLoserPromotion(color, board.getStaticPosition())) {
+    if (calculateIsInTranspositionTableWithEnoughDepth(cacheKey, movesLeft)) {
       return FindHelpmateRecursionResult.FALSE;
     }
 
-    // 1: if the intended winner is checkmating their opponent in pos then return true
-    if (board.getHavingMove() == color.getOppositeSide() && board.isCheckmate()) {
-      return FindHelpmateRecursionResult.TRUE;
-    }
-
-    // 3: increase cnt and set d := limits.max-depth - depth
-
-    // increase cnt
-    cnt++;
-
     // 4: if cnt > nodesBound or d < 0 then return false (-> The search limits are exceeded)
-    if (cnt > maxDepth * NODES_BOUND || movesLeft <= 0) {
+    if (localNodeCount > maxDepth * LOCAL_NODES_BOUND || movesLeft <= 0) {
 
       if (isCanExhaust) {
         isCanExhaust = false;
@@ -138,6 +134,12 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     // 6: store (pos,D) in table
     store(cacheKey, movesLeft);
 
+    if (MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
+        || MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
+            && calculateIsNeedLoserPromotion(color, board.getStaticPosition())) {
+      return FindHelpmateRecursionResult.FALSE;
+    }
+
     // 7: for every legal move m in pos do:
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
 
@@ -145,7 +147,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
       ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
 
-      if (board.getHavingMove() != color
+      if (board.getHavingMove() == color.getOppositeSide()
           && MaterialUtility.calculateHasQueen(color.getOppositeSide(), board.getStaticPosition())) {
         score = score == ScoreResult.REWARD ? ScoreResult.NORMAL : score;
       }
@@ -171,18 +173,38 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
           throw new IllegalArgumentException();
       }
 
+      // BEGIN debug code
+      if (IS_DEBUG) {
+        final String uciMoveStr = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()).text();
+        final var out = uciMoveStr + " " + newDepth;
+        System.out.println(out);
+        evalCounter++;
+        final String evaluateStockfishFen = calculateStockfishFen(board);
+
+        if (evaluateStockfishFen.startsWith("r1bqkb1r/pppppppp/8/8/5P2/8/2n3P1/n1K5 w kq")) {
+          final var debug = 100;
+          System.out.println(debug);
+        }
+
+        if (evalCounter == 3527) {
+          final var debug = 100;
+          System.out.println(debug);
+        }
+
+        evalFenList.add(evaluateStockfishFen);
+      }
+      // END debug code
+
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());
 
-      final String uciMoveStr = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()).text();
-      final var out = uciMoveStr + " " + newDepth;
-      System.out.println(out);
-      evalCounter++;
-      final String evaluateStockfishFen = calculateStockfishFen(board);
-      evalFenList.add(evaluateStockfishFen);
-
       moveEvaluationList.add(legalMove);
+
       final var isProgress = score == ScoreResult.REWARD;
+
+      // 3: increase cnt
+      localNodeCount++;
+
       final var findHelpmate = findHelpmate(board, newDepth, maxDepth, actualDepth + 1, isProgress);
       board.unperformMove();
       switch (findHelpmate) {
@@ -242,22 +264,34 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     return false;
   }
 
-  private static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
-    if (MaterialUtility.calculateHasKingAndKnightOnly(winner, staticPosition)) {
-      if (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoBishops(winner.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoRooks(winner.getOppositeSide(), staticPosition)) {
-        return true;
-      }
+  public static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
+    if (calculateIsKnightNeedsPromotion(winner, staticPosition)) {
+      return true;
     }
+
+    return calculateIsBishopNeedsPromotion(winner, staticPosition);
+  }
+
+  private static boolean calculateIsKnightNeedsPromotion(Side winner, StaticPosition staticPosition) {
+    // if the intended winner has just a knight and the intended loser has just pawns
+    // and/or queens
+    return MaterialUtility.calculateHasKingAndKnightOnly(winner, staticPosition)
+        && MaterialUtility.calculateHasNoRooks(winner.getOppositeSide(), staticPosition)
+        && MaterialUtility.calculateHasNoBishops(winner.getOppositeSide(), staticPosition)
+        && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition);
+  }
+
+  private static boolean calculateIsBishopNeedsPromotion(Side winner, StaticPosition staticPosition) {
+    // or the intended winner has just bishops of the same square color and
+    // the intended loser does not have knights or bishops of the opposite color
 
     for (final SquareType squareType : SquareType.values()) {
       if (squareType == SquareType.NONE) {
         continue;
       }
       if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)) {
-        if (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
-            && MaterialUtility.calculateHasNoBishops(winner, staticPosition, squareType.getOppositeSquareType())) {
+        if (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
+            .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType())) {
           return true;
         }
       }
@@ -275,62 +309,72 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
   }
 
   private static String calculateStockfishFen(ApiBoard board) {
-    return calculateStockfishFenOrCacheKey(board, true);
-  }
 
-  private static String calculateCacheKey(ApiBoard board) {
-    return calculateStockfishFenOrCacheKey(board, false);
-  }
-
-  private static String calculateStockfishFenOrCacheKey(ApiBoard board, boolean isCalculateStockfishFen) {
-    if (board.isFirstMove()) {
-      final Fen initialFen = board.getInitialFen();
-      if (initialFen == FenConstants.FEN_INITIAL) {
-        return initialFen.fen();
-      }
-
-      if (initialFen.enPassantCaptureTargetSquare() != Square.NONE) {
-        final Square pawnTwoAdvanceSquare = Square.calculateAheadSquare(board.getHavingMove().getOppositeSide(),
-            initialFen.enPassantCaptureTargetSquare());
-
-        if (EnPassantCaptureUtility.calculateHasOpponentPawnOnLeftOrRight(pawnTwoAdvanceSquare,
-            board.getStaticPosition())) {
-          return calculateForStockfishFenOrForCacheKey(board.getFen(), isCalculateStockfishFen);
-        }
-      }
-
-      return initialFen.fen();
-    }
-
-    final LegalMove legalMove = board.getLastMove();
-
-    if (!EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(legalMove.movingPiece(),
-        legalMove.moveSpecification())
-        || EnPassantCaptureUtility.calculateHasOpponentPawnOnLeftOrRight(legalMove.moveSpecification().toSquare(),
-            board.getStaticPosition())) {
+    if (!calculateIsEraseEnPassantCaptureTargetSquare(board)) {
       return board.getFen();
     }
 
-    return calculateForStockfishFenOrForCacheKey(board.getFen(), isCalculateStockfishFen);
+    final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
+
+    final StringBuilder fenSquareErased = new StringBuilder();
+
+    fenSquareErased.append(fenRaw.piecePlacement());
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append(fenRaw.havingMove());
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append(fenRaw.castlingRightBothStr());
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append("-");
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append(fenRaw.halfMoveClock());
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append(fenRaw.fullMoveNumber());
+
+    return NonNullWrapperCommon.toString(fenSquareErased);
   }
 
-  private static String calculateForStockfishFenOrForCacheKey(String fen, boolean isCalculateForStockfishFen) {
-    final FenRaw fenRaw = FenParserRaw.parseFenRaw(fen);
+  private static String calculateCacheKey(ApiBoard board) {
+    final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
 
-    final StringBuilder fenChanged = new StringBuilder();
-    fenChanged.append(fenRaw.piecePlacement());
-    fenChanged.append(" ");
-    fenChanged.append(fenRaw.havingMove());
-    fenChanged.append(" ");
-    fenChanged.append(fenRaw.castlingRightBothStr());
+    final StringBuilder fenSquareErased = new StringBuilder();
 
-    if (isCalculateForStockfishFen) {
-      fenChanged.append(" - ");
-      fenChanged.append(fenRaw.halfMoveClock());
-      fenChanged.append(" ");
-      fenChanged.append(fenRaw.fullMoveNumber());
+    fenSquareErased.append(fenRaw.piecePlacement());
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append(fenRaw.havingMove());
+    fenSquareErased.append(" ");
+
+    fenSquareErased.append(fenRaw.castlingRightBothStr());
+
+    if (!"-".equals(fenRaw.enPassantCaptureTargetSquare())) {
+      if (!calculateIsEraseEnPassantCaptureTargetSquare(board)) {
+        fenSquareErased.append(" ");
+
+        fenSquareErased.append(fenRaw.enPassantCaptureTargetSquare());
+      }
     }
 
-    return NonNullWrapperCommon.toString(fenChanged);
+    return NonNullWrapperCommon.toString(fenSquareErased);
   }
+
+  private static boolean calculateIsEraseEnPassantCaptureTargetSquare(ApiBoard board) {
+    final Square enPassantCaptureTargetSquare = board.getEnPassantCaptureTargetSquare();
+
+    if (enPassantCaptureTargetSquare == Square.NONE) {
+      return false;
+    }
+
+    final Square pawnTwoAdvanceSquare = Square.calculateAheadSquare(board.getHavingMove().getOppositeSide(),
+        enPassantCaptureTargetSquare);
+
+    return !EnPassantCaptureUtility.calculateHasOpponentPawnOnLeftOrRight(pawnTwoAdvanceSquare,
+        board.getStaticPosition());
+
+  }
+
 }

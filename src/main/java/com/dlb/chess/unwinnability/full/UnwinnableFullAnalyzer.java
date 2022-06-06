@@ -3,7 +3,9 @@ package com.dlb.chess.unwinnability.full;
 import java.util.ArrayList;
 
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.FindHelpmateExhaust;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
@@ -19,12 +21,21 @@ import com.dlb.chess.unwinnability.semistatic.UnwinnableSemiStatic;
 //counter cnt should be initialized to 0 on every base call to Find-Helpmatec in step 3.
 public class UnwinnableFullAnalyzer {
 
+  private static final int MAX_DEPTH = 100;
+  private static final int GLOBAL_NODES_BOUND = 500000;
+
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
   public static UnwinnableFullAnalysis unwinnableFull(ApiBoard board, Side c) {
 
+    // add optimization from code
+    var isForcedMove = board.getLegalMoveSet().size() == 1;
+    while (isForcedMove) {
+      final LegalMove onlyLegalMove = NonNullWrapperCommon.getFirst(new ArrayList<>(board.getLegalMoveSet()));
+      board.performMove(onlyLegalMove.moveSpecification());
+      isForcedMove = board.getLegalMoveSet().size() == 1;
+    }
     // 1: if true UnwinnableSS(pos, c, Mobility(pos)) then return Unwinnable
-
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
     if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
       return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
@@ -34,10 +45,17 @@ public class UnwinnableFullAnalyzer {
     final FindHelpmateExhaust findHelpmate = new FindHelpmateExhaust(c);
 
     // 2: for every d in N do ( -> Iterative deepening)
-    for (var maxDepth = 2; maxDepth <= 100; maxDepth++) {
+    var globalNodeCount = 0;
+    for (var maxDepth = 2; maxDepth <= MAX_DEPTH; maxDepth++) {
       // 3: set bd Find-Helpmatec(pos, 0, maxDepth = d) (global nodesBound = bound(d))
 
       final var helpmateAnalysis = findHelpmate.calculateHelpmate(board, maxDepth);
+
+      globalNodeCount += helpmateAnalysis.localNodesCount();
+
+      if (globalNodeCount > GLOBAL_NODES_BOUND) {
+        return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+      }
 
       switch (helpmateAnalysis.findHelpmateResult()) {
         case YES:

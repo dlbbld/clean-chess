@@ -105,6 +105,7 @@ public class MaterialUtility implements EnumConstants {
     return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
         && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0
         && calculateNumberOfBishops(side, staticPosition, squareType) >= 1
+        && calculateNumberOfBishops(side, staticPosition, squareType.getOppositeSquareType()) == 0
         && calculateNumberOfPieces(side, staticPosition, QUEEN) == 0
         && calculateNumberOfPieces(side, staticPosition, KING) == 1
         && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;

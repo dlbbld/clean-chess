@@ -158,26 +158,26 @@ public class EnPassantCaptureUtility implements EnumConstants {
     }
     final Piece piece = staticPosition.get(pawnSquare);
     if (piece.getPieceType() != PAWN) {
-      throw new IllegalArgumentException("No pawn on square " + pawnSquare.getName());
+      throw new IllegalArgumentException("Piece on square but no pawn on square " + pawnSquare.getName());
     }
 
-    final Side side = piece.getSide();
+    final Side pawnSide = piece.getSide();
 
-    if (Square.calculateHasLeftSquare(side, pawnSquare)) {
-      final Square leftSquare = Square.calculateLeftSquare(side, pawnSquare);
+    if (Square.calculateHasLeftSquare(pawnSide, pawnSquare)) {
+      final Square leftSquare = Square.calculateLeftSquare(pawnSide, pawnSquare);
       if (!staticPosition.isEmpty(leftSquare)) {
         final Piece leftPiece = staticPosition.get(leftSquare);
-        if (leftPiece.getPieceType() == PAWN && leftPiece.getSide() != side) {
+        if (leftPiece.getPieceType() == PAWN && leftPiece.getSide() == pawnSide.getOppositeSide()) {
           return true;
         }
       }
     }
 
-    if (Square.calculateHasRightSquare(side, pawnSquare)) {
-      final Square rightSquare = Square.calculateRightSquare(side, pawnSquare);
+    if (Square.calculateHasRightSquare(pawnSide, pawnSquare)) {
+      final Square rightSquare = Square.calculateRightSquare(pawnSide, pawnSquare);
       if (!staticPosition.isEmpty(rightSquare)) {
         final Piece rightPiece = staticPosition.get(rightSquare);
-        if (rightPiece.getPieceType() == PAWN && rightPiece.getSide() != side) {
+        if (rightPiece.getPieceType() == PAWN && rightPiece.getSide() == pawnSide.getOppositeSide()) {
           return true;
         }
       }

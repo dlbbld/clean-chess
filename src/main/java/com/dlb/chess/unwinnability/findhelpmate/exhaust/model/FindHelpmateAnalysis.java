@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 
-public record FindHelpmateAnalysis(FindHelpmateResult findHelpmateResult, List<UciMove> mateLine) {
+public record FindHelpmateAnalysis(FindHelpmateResult findHelpmateResult, int localNodesCount, List<UciMove> mateLine) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -19,7 +19,8 @@ public record FindHelpmateAnalysis(FindHelpmateResult findHelpmateResult, List<U
       return false;
     }
     final var other = (FindHelpmateAnalysis) obj;
-    return findHelpmateResult == other.findHelpmateResult && Objects.equals(mateLine, other.mateLine);
+    return findHelpmateResult == other.findHelpmateResult && localNodesCount == other.localNodesCount
+        && Objects.equals(mateLine, other.mateLine);
   }
 
   public FindHelpmateResult findHelpmateResult() {

@@ -9,8 +9,6 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.board.enums.SquareType;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
@@ -61,7 +59,7 @@ public class Score {
 
       // Note: We are not immediately returning the value when evaluated as in the PDF, but also evaluating the
       // later condition as in the code. Must be checked what is todot.
-      final var isNeedLoserPromotion = calculateIsNeedLoserPromotion(color, staticPosition);
+      final var isNeedLoserPromotion = FindHelpmateExhaust.calculateIsNeedLoserPromotion(color, staticPosition);
       if (isNeedLoserPromotion) {
         // 6: if m is a promotion to a queen or rook then return Punish
         // Note: we implement the code with differences to the PDF for this case
@@ -151,30 +149,6 @@ public class Score {
         throw new IllegalArgumentException();
 
     }
-  }
-
-  private static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
-    // if the intended winner has just a knight and the intended loser has just pawns
-    // and/or queens
-    if (MaterialUtility.calculateHasKingAndKnightOnly(winner, staticPosition)
-        && MaterialUtility.calculateHasKingAndPawnsOrQueensOnly(winner.getOppositeSide(), staticPosition)) {
-      return true;
-    }
-    // or the intended winner has just bishops of the same square color and
-    // the intended loser does not have knights or bishops of the opposite color
-    final var isBishopDarkSquareCondition = MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition,
-        SquareType.DARK_SQUARE) && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
-        && MaterialUtility.calculateHasNoLightSquareBishops(winner.getOppositeSide(), staticPosition);
-
-    if (isBishopDarkSquareCondition) {
-      return true;
-    }
-
-    final var isBishopLightSquareCondition = MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition,
-        SquareType.LIGHT_SQUARE) && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
-        && MaterialUtility.calculateHasNoDarkSquareBishops(winner.getOppositeSide(), staticPosition);
-
-    return isBishopLightSquareCondition;
   }
 
   private static boolean calculateIsPromotionToHeavyPiece(LegalMove legalMove) {
