@@ -1,6 +1,7 @@
 package com.dlb.chess.test.unwinnability;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -22,7 +23,7 @@ public class TestUnwinnabilityFullAgainstWinnability {
   private static final String START_FROM_PGN_FILE_NAME = "02_white_rook_knight.pgn";
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void test() throws Exception {
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {

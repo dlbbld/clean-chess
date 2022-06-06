@@ -26,9 +26,8 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    testUnwinnableQuickHavingMove(analysis, testCase);
-    testUnwinnableQuickNotHavingMove(analysis, testCase);
-    // TODO unwinnable - if full check is faster include
+    testUnwinnableQuick(analysis, testCase);
+    testUnwinnableFull(analysis, testCase);
   }
 
   private static void testFen(String expectedFen, String actualFen) {
@@ -68,12 +67,14 @@ public abstract class AbstractPgnTest {
     assertEquals(testCase.insufficientMaterial(), analysis.insufficientMaterial());
   }
 
-  private static void testUnwinnableQuickHavingMove(Analysis analysis, PgnFileTestCase testCase) {
+  private static void testUnwinnableQuick(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.unwinnableQuickNotHavingMove(), analysis.unwinnableQuickNotHavingMove());
     assertEquals(testCase.unwinnableQuickHavingMove(), analysis.unwinnableQuickHavingMove());
   }
 
-  private static void testUnwinnableQuickNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableQuickNotHavingMove(), analysis.unwinnableQuickNotHavingMove());
+  private static void testUnwinnableFull(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.unwinnableFullHavingMove(), analysis.unwinnableFullHavingMove());
+    assertEquals(testCase.unwinnableFullNotHavingMove(), analysis.unwinnableFullNotHavingMove());
   }
 
 }

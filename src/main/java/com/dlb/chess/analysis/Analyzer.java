@@ -3,7 +3,6 @@ package com.dlb.chess.analysis;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.analysis.print.AnalyzerPrint;
@@ -19,9 +18,8 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class Analyzer extends AnalyzerPrint {
 
@@ -93,16 +91,16 @@ public class Analyzer extends AnalyzerPrint {
 
     final var maxYawnSequence = calculateMaxYawnSequence(board);
 
-    final CheckmateOrStalemate checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
+    final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
 
-    // TODO unwinnability - implement when full algorithm faster
-    final var unwinnableFullHavingMove = UnwinnableFull.WINNABLE;
-    final var unwinnableFullNotHavingMove = UnwinnableFull.WINNABLE;
+    final var unwinnableFullHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
+        .unwinnableFull();
+    final var unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
+        .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
 
-    final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove());
-    final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+    final var unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove());
+    final var unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         board.getHavingMove().getOppositeSide());
 
     final String fen = board.getFen();

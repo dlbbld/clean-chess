@@ -30,14 +30,21 @@ public class UnwinnableFullAnalyzer {
 
     // add optimization from code
     var isForcedMove = board.getLegalMoveSet().size() == 1;
-    while (isForcedMove) {
+    // to avoid endless loops in positions with each side having one repeating forced move
+    var allowedMoves = 100;
+    var totalForcedMoves = 0;
+    while (isForcedMove && allowedMoves > 0) {
       final LegalMove onlyLegalMove = NonNullWrapperCommon.getFirst(new ArrayList<>(board.getLegalMoveSet()));
       board.performMove(onlyLegalMove.moveSpecification());
       isForcedMove = board.getLegalMoveSet().size() == 1;
+      allowedMoves--;
+      totalForcedMoves++;
     }
+
     // 1: if true UnwinnableSS(pos, c, Mobility(pos)) then return Unwinnable
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
     if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
+      undoForcedMoves(board, totalForcedMoves);
       return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
     }
 
@@ -54,16 +61,18 @@ public class UnwinnableFullAnalyzer {
       globalNodeCount += helpmateAnalysis.localNodesCount();
 
       if (globalNodeCount > GLOBAL_NODES_BOUND) {
-        return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+        return new UnwinnableFullAnalysis(UnwinnableFull.UNDETERMINED, new ArrayList<>());
       }
 
       switch (helpmateAnalysis.findHelpmateResult()) {
         case YES:
           // 4: if bd = true then return Winnable
+          undoForcedMoves(board, totalForcedMoves);
           return new UnwinnableFullAnalysis(UnwinnableFull.WINNABLE, helpmateAnalysis.mateLine());
         case NO:
           // 5: else if the search was not interrupted (in step 4 of Figure 5) then
           // 6: return Unwinnable
+          undoForcedMoves(board, totalForcedMoves);
           return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
         case UNKNOWN:
           // the algorithm continues with next depth
@@ -73,6 +82,13 @@ public class UnwinnableFullAnalyzer {
       }
     }
 
+    undoForcedMoves(board, totalForcedMoves);
     return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+  }
+
+  private static void undoForcedMoves(ApiBoard board, int totalForcedMoves) {
+    for (var i = 1; i <= totalForcedMoves; i++) {
+      board.unperformMove();
+    }
   }
 }

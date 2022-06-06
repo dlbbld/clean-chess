@@ -39,7 +39,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    final var fen = "8/1k6/8/2B5/8/8/8/1b4K1 b - - 100 196";
+    final var fen = "rnb1b3/pk1p4/p1pPp1p1/P1P1P1P1/RBP5/P7/5B2/7K w - - 10 100";
     // final var fen = FenConstants.FEN_INITIAL;
     final Board board = new Board(fen);
     final UnwinnableFullAnalysis fullAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
@@ -47,7 +47,7 @@ public class TestUnwinnabilityFull {
 
     System.out.println(GeneralUtility.composeCheckmateLine(fullAnalysis.mateLine()));
 
-    assertEquals(UnwinnableFull.WINNABLE, fullAnalysis.unwinnableFull());
+    assertEquals(UnwinnableFull.UNDETERMINED, fullAnalysis.unwinnableFull());
   }
 
   @SuppressWarnings("static-method")

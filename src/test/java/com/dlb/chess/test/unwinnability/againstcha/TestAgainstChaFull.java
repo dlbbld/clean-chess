@@ -18,8 +18,8 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaFull.class);
 
-  private static final boolean IS_START_FROM_FEN = false;
-  private static final String START_FROM_FEN = "8/1k6/8/2B5/8/8/8/1b4K1 b - - 100 196";
+  private static final boolean IS_START_FROM_FEN = true;
+  private static final String START_FROM_FEN = "8/6p1/1p3pP1/1P3Ppk/1Pp3p1/KpP3P1/1P6/8 w - - 0 44";
 
   public static void main(String[] args) throws Exception {
 
@@ -80,14 +80,15 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
       }
 
     }
-    final var totalMillisecondsBefore = System.currentTimeMillis() - millisecondsBefore;
+    final var totalMilliseconds = System.currentTimeMillis() - millisecondsBefore;
 
-    final var totalSeconds = totalMillisecondsBefore / 1000;
+    final var totalSeconds = totalMilliseconds / 1000.0;
 
-    final double secondsPerTest = totalSeconds / testCounter;
+    final var secondsPerTest = testCounter == 0 ? 0 : totalSeconds / testCounter;
 
     logger.printf(Level.INFO, "%d differences found", counterDifferences);
-    logger.printf(Level.INFO, "%d tests in %d seconds, %f seconds per test", testCounter, totalSeconds, secondsPerTest);
+    logger.printf(Level.INFO, "%d tests in %d seconds, %f seconds per test", testCounter, Math.round(totalSeconds),
+        secondsPerTest);
   }
 
 }
