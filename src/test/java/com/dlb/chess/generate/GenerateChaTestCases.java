@@ -117,11 +117,6 @@ public class GenerateChaTestCases implements EnumConstants {
     line.append(";");
     line.append(isToReplyInsufficientMaterial);
 
-    // final Winnable winnable = WinnableUtility.calculateWinnable(board,
-    // board.getHavingMove().getOppositeSide());
-    // line.append(";");
-    // line.append(winnable);
-
     return NonNullWrapperCommon.toString(line);
   }
 

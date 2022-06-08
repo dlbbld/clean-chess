@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
@@ -23,6 +25,11 @@ import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractBoard implements ApiBoard, EnumConstants {
+
+  @Override
+  public @NonNull Side getNotHavingMove() {
+    return getHavingMove().getOppositeSide();
+  }
 
   // TODO very slow, must be fast, though now for generating test cases only
   @Override

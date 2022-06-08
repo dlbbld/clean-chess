@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -57,21 +58,14 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         logger.info(testCase.pgnFileName());
 
-        // not having move
-        {
-          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-              board.getHavingMove().getOppositeSide());
-          CheckQuick.check(winnable, unwinnableQuick);
-        }
+        final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
+        final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
+        CheckQuick.check(winnableWhite, unwinnableQuickWhite);
 
-        // having move
-        {
-          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove());
+        final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
+        final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
 
-          CheckQuick.check(winnable, unwinnableQuick);
-        }
+        CheckQuick.check(winnableBlack, unwinnableQuickBlack);
       }
     }
   }
