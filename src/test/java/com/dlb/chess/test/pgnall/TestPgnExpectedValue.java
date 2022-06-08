@@ -1,8 +1,10 @@
 package com.dlb.chess.test.pgnall;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.analysis.Analyzer;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -10,16 +12,18 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestPgnExpectedValue extends AbstractPgnTest {
 
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExpectedValue.class);
+
   // for custom testing
   // order of priority as listed
   private static final boolean IS_CHECK_FROM_PGN_TEST = false;
-  private static final PgnTest CHECK_FROM_PGN_TEST = PgnTest.BASIC_CAPTURE_WHITE;
+  private static final PgnTest CHECK_FROM_PGN_TEST = PgnTest.SPECIAL;
 
   private static final boolean IS_CHECK_ONLY_PGN_TEST = false;
-  private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.BASIC_CAPTURE_WHITE;
+  private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.SPECIAL;
 
   private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = true;
-  private static final String CHECK_PGN_FILE_NAME = "19_black_queen_queen.pgn";
+  private static final String CHECK_PGN_FILE_NAME = "01_K_more.pgn";
 
   @SuppressWarnings("static-method")
   @Test
@@ -45,6 +49,8 @@ class TestPgnExpectedValue extends AbstractPgnTest {
             isPgnFileNameOrAfterPgnFileName)) {
           continue;
         }
+
+        logger.info(testCase.pgnFileName());
 
         testGame(testCaseList, testCase);
       }

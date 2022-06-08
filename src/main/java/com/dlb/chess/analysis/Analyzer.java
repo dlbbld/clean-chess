@@ -19,6 +19,8 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.mobility.Mobility;
+import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 
 public class Analyzer extends AnalyzerPrint {
@@ -94,14 +96,18 @@ public class Analyzer extends AnalyzerPrint {
     final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
 
-    final var unwinnableFullHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
-        .unwinnableFull();
-    final var unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
-        .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+    // for performance we calculate and reuse the mobility solution
+    final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
-    final var unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove());
+    final var unwinnableFullHavingMove = UnwinnableFullAnalyzer
+        .unwinnableFull(board, board.getHavingMove(), true, mobilitySolution).unwinnableFull();
+    final var unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
+        .unwinnableFull(board, board.getHavingMove().getOppositeSide(), true, mobilitySolution).unwinnableFull();
+
+    final var unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove(), true,
+        mobilitySolution);
     final var unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
+        board.getHavingMove().getOppositeSide(), true, mobilitySolution);
 
     final String fen = board.getFen();
 

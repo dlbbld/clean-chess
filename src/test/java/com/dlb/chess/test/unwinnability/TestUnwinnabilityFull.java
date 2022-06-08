@@ -39,28 +39,38 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    final var fen = "rnb1b3/pk1p4/p1pPp1p1/P1P1P1P1/RBP5/P7/5B2/7K w - - 10 100";
+    final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
     // final var fen = FenConstants.FEN_INITIAL;
     final Board board = new Board(fen);
-    final UnwinnableFullAnalysis fullAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
+
+    final UnwinnableFullAnalysis fullAnalysisHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board,
+        board.getHavingMove());
+
+    final UnwinnableFullAnalysis fullAnalysisNotHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board,
         board.getHavingMove().getOppositeSide());
 
-    System.out.println(GeneralUtility.composeCheckmateLine(fullAnalysis.mateLine()));
-
-    assertEquals(UnwinnableFull.UNDETERMINED, fullAnalysis.unwinnableFull());
+    assertEquals(UnwinnableFull.UNWINNABLE, fullAnalysisHavingMove.unwinnableFull());
+    assertEquals(UnwinnableFull.WINNABLE, fullAnalysisNotHavingMove.unwinnableFull());
   }
 
   @SuppressWarnings("static-method")
   // @Test
   void testPgnFileValue() {
-    final var pgnFileName = "ae_16.pgn";
+    final var pgnFileName = "unwinnable_fivefold_inevitable.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
+    final UnwinnableFullAnalysis fullAnalysisHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board,
+        board.getHavingMove());
+
+    final UnwinnableFullAnalysis fullAnalysisNotHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board,
+        board.getHavingMove().getOppositeSide());
+
+    assertEquals(UnwinnableFull.UNWINNABLE, fullAnalysisHavingMove.unwinnableFull());
+    assertEquals(UnwinnableFull.WINNABLE, fullAnalysisNotHavingMove.unwinnableFull());
   }
 
   @SuppressWarnings("static-method")

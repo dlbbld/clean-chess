@@ -59,7 +59,9 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     final String invariant = board.getFen();
 
     if (maxDepth != 0 && maxDepth % 10 == 0) {
-      logger.info("maxDepth=" + maxDepth);
+      if (IS_DEBUG) {
+        logger.info("maxDepth=" + maxDepth);
+      }
     }
     this.localNodeCount = 0;
     this.isCanExhaust = true;
@@ -100,11 +102,6 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       return FindHelpmateRecursionResult.TRUE;
     }
 
-    // adding fivefold repetition and seventy-five move rule
-    // if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
-    // return FindHelpmateRecursionResult.FALSE;
-    // }
-
     // 2: if the intended winner has just the king or the position is unwinnable according
     // to Lemma 5 or Lemma 6 or the position is stalemate or the intended winner is
     // receiving checkmate in the position then return false
@@ -133,6 +130,11 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     // 6: store (pos,D) in table
     store(cacheKey, movesLeft);
+
+    // adding fivefold repetition and seventy-five move rule
+    if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+      return FindHelpmateRecursionResult.FALSE;
+    }
 
     if (MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
         || MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
@@ -173,7 +175,6 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
           throw new IllegalArgumentException();
       }
 
-      // BEGIN debug code
       if (IS_DEBUG) {
         final String uciMoveStr = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()).text();
         final var out = uciMoveStr + " " + newDepth;
@@ -193,7 +194,6 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
         evalFenList.add(evaluateStockfishFen);
       }
-      // END debug code
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
       board.performMove(legalMove.moveSpecification());

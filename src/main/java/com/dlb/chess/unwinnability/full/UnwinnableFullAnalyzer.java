@@ -24,32 +24,45 @@ public class UnwinnableFullAnalyzer {
   private static final int MAX_DEPTH = 100;
   private static final int GLOBAL_NODES_BOUND = 500000;
 
+  public static UnwinnableFullAnalysis unwinnableFull(ApiBoard board, Side winner) {
+    return unwinnableFull(board, winner, false, new MobilitySolution());
+  }
+
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
-  public static UnwinnableFullAnalysis unwinnableFull(ApiBoard board, Side c) {
+  public static UnwinnableFullAnalysis unwinnableFull(ApiBoard board, Side winner, boolean isHasMobilitySolution,
+      MobilitySolution calculatedMobilitySolution) {
 
     // add optimization from code
+    // if position is advanced cannot use the provided mobility solution if any
+    var isCanUseMobilitySolution = true;
     var isForcedMove = board.getLegalMoveSet().size() == 1;
     // to avoid endless loops in positions with each side having one repeating forced move
-    var allowedMoves = 100;
+    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
     var totalForcedMoves = 0;
-    while (isForcedMove && allowedMoves > 0) {
+    while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
+      isCanUseMobilitySolution = false;
       final LegalMove onlyLegalMove = NonNullWrapperCommon.getFirst(new ArrayList<>(board.getLegalMoveSet()));
       board.performMove(onlyLegalMove.moveSpecification());
       isForcedMove = board.getLegalMoveSet().size() == 1;
-      allowedMoves--;
+      isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
       totalForcedMoves++;
     }
 
     // 1: if true UnwinnableSS(pos, c, Mobility(pos)) then return Unwinnable
-    final MobilitySolution mobilitySolution = Mobility.mobility(board);
-    if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
+    final MobilitySolution mobilitySolution;
+    if (isHasMobilitySolution && isCanUseMobilitySolution) {
+      mobilitySolution = calculatedMobilitySolution;
+    } else {
+      mobilitySolution = Mobility.mobility(board);
+    }
+    if (UnwinnableSemiStatic.unwinnableSemiStatic(board, winner, mobilitySolution)) {
       undoForcedMoves(board, totalForcedMoves);
       return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
     }
 
     // we must instantiate the class here to share the transposition table between calls
-    final FindHelpmateExhaust findHelpmate = new FindHelpmateExhaust(c);
+    final FindHelpmateExhaust findHelpmate = new FindHelpmateExhaust(winner);
 
     // 2: for every d in N do ( -> Iterative deepening)
     var globalNodeCount = 0;

@@ -75,23 +75,25 @@ public abstract class AbstractGenerateTestCaseForPgn {
     // we use the quick for the full so it does not take too long
     // we take into account of introducing some rare errors here
     // they will be detected on periodic checks
+    final UnwinnableFull unwinnableFullResultHavingMove = analysis.unwinnableFullHavingMove();
+    result.append(UnwinnableFull.class.getSimpleName());
+    result.append(".");
+    result.append(unwinnableFullResultHavingMove.name());
+    result.append(", ");
+
+    final UnwinnableFull unwinnableFullResultNotHavingMove = analysis.unwinnableFullNotHavingMove();
+    result.append(UnwinnableFull.class.getSimpleName());
+    result.append(".");
+    result.append(unwinnableFullResultNotHavingMove.name());
+    result.append(", ");
+
     final UnwinnableQuick unwinnableQuickResultHavingMove = analysis.unwinnableQuickHavingMove();
-    result.append(UnwinnableFull.class.getSimpleName());
-    result.append(".");
-    result.append(approximateFullFromQuick(unwinnableQuickResultHavingMove).name());
-    result.append(", ");
-
-    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickNotHavingMove();
-    result.append(UnwinnableFull.class.getSimpleName());
-    result.append(".");
-    result.append(approximateFullFromQuick(unwinnableQuickResultNotHavingMove).name());
-    result.append(", ");
-
     result.append(UnwinnableQuick.class.getSimpleName());
     result.append(".");
     result.append(unwinnableQuickResultHavingMove.name());
     result.append(", ");
 
+    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickNotHavingMove();
     result.append(UnwinnableQuick.class.getSimpleName());
     result.append(".");
     result.append(unwinnableQuickResultNotHavingMove.name());
@@ -107,16 +109,4 @@ public abstract class AbstractGenerateTestCaseForPgn {
     return NonNullWrapperCommon.toString(result);
   }
 
-  private static UnwinnableFull approximateFullFromQuick(UnwinnableQuick quick) {
-    switch (quick) {
-      case UNWINNABLE:
-        return UnwinnableFull.UNWINNABLE;
-      case WINNABLE:
-      case POSSIBLY_WINNABLE:
-        return UnwinnableFull.UNWINNABLE;
-      default:
-        throw new IllegalArgumentException();
-    }
-
-  }
 }

@@ -59,9 +59,11 @@ public class TestUnwinnabilityQuick {
     // no semi-open files: unwinnable, ok
     // final var fen = "8/p1p1p1p1/6Pk/6pB/6Pb/6pK/P1P1P1P1/8 w - - 0 100";
 
-    final var fen = "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100";
+    final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
 
     final Board board = new Board(fen);
+    assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
+
     assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
@@ -69,12 +71,15 @@ public class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   // @Test
   void testPgnFileValue() {
-    final var pgnFileName = "ae_16.pgn";
+    final var pgnFileName = "unwinnable_fivefold_inevitable.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
+
+    assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
 
     assertEquals(UnwinnableQuick.UNWINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));

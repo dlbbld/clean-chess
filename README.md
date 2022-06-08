@@ -63,24 +63,22 @@ dependencies {
 Below I write my motivation for programming this chess API.
 
 ## Threefold repetition and fifty-moves
-When I want to check a game for occurrence of a threefold repetition or the fifty-moves I could not find any software
+When I wanted to check a game for the occurrence of a threefold repetition or the fifty moves, I could not find any software
 providing a reasonable way to do it.
 
-The only way to check this I found in dozens of chess programs is playing through the game move by move, and the software then announcing threefold for fifty-moves if it occurs.
+The only way to check this I found in dozens of chess programs is playing through the game move by move, and the software then announces threefold for fifty moves if it occurs.
 
-To check a game for possible threefold claims on the next move, so possibly the player missed a chance to claim threefold I found nothing, nada, nothing at all.
+To check a game for possible threefold claims on the next move, so possibly the player missed a chance to claim threefold, I found nothing, nada, nothing at all.
 
-For this reason I implemented a report which shows the the threefolds and fifty-moves in a game.
+For this reason, I implemented a report which shows the threefolds and fifty moves in a game.
 
 ## Unwinnability and dead position
-The situation with existing chess programs not being able to correctly determine unwinnability and dead positions is very dissatisfying to me.
-Accuracy is a key element of chess. Thus this not affect many games, common chess software sets the result incorrectly for some games.
-The [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) provides an algorithm to overcome this shortcoming
-of existing chess programs and as such I implemented the algorithm in Java.
+Current chess programs cannot correctly determine unwinnability and dead positions for all positions, and as a result, the game result for some games is incorrect.
+The [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) provides an algorithm to close the gap. I implemented the algorithm in Java.
 
 ## Java chess API
-There are several Java chess API but because this chess API is about game deciding situations of having a potential draw or not, I did not
-want to rely on other chess API's, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer along. And because these tests must be accurate, I spent a lot of time making the PGN reader
+There are several Java chess API, but because this chess API is about game-deciding situations of having a potential draw or not, I did not
+want to rely on other chess APIs, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer. And because these tests must be accurate, I spent a lot of time making the PGN reader
 accurate for every situation.
 
 # Threefold repetition and fifty-moves
@@ -195,7 +193,7 @@ The halfmove series always indicates the first halfmove with (0.5), fifty halfmo
 and finally, the last halfmove in the series.
 
 # Unwinnability and dead position
-The API implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. All relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which provides an outstanding elaboration on the subject in every aspect.
+The API implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. Also, all relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which elaborates on the subject in every aspect.
 
 A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
 If the position is unwinnable for both players, it's a dead position.
@@ -203,10 +201,7 @@ If the position is unwinnable for both players, it's a dead position.
 ## Methods
 The API provides an implementation of CHA. So for both situations, there is a quick and a full method.
 
-The quick method is speedy but not 100% accurate. On the other hand, the full method is 100% accurate, but it can also happen that it does not terminate after hours.
-
-The quick method is suited for game use, the full method only for research or interest use. The low performance of the full algorithm is however not due to the
-algorithm itself but due to this is only a very elementary first implementation.
+The quick method is speedy by design but might miss some corrections. The full method is slower but 100% accurate.
 
 ### Unwinnability
 The quick method has three return values:
@@ -214,10 +209,12 @@ The quick method has three return values:
 * WINNABLE - the position is winnable by the player
 * POSSIBLY_WINNABLE - the position is most likely winnable by the player, but it might also be unwinnable in some rare cases
 
-The full method has also three return values:
+The full method also has three return values:
 * UNWINNABLE - the position is not winnable by the player
 * WINNABLE - the position is winnable by the player
-* UNDETERMINED - the search was stopped due to limits in the code
+* UNDETERMINED - the limits in the code interrupted the search
+
+Performance: The limit regarding "UNDETERMINED" is 500'000 positions. It takes around one minute to reach. Most positions evaluate below one second. 
 
 ### Dead position
 The quick method has three return values:
@@ -225,10 +222,12 @@ The quick method has three return values:
 * NON_DEAD_POSITION - the position is not a dead position
 * POSSIBLY_NON_DEAD_POSITION - the position is most likely a non-dead position, but it might also be a dead position in some rare cases
 
-The full method has also three return values:
+The full method also has three return values:
 * DEAD_POSITION - the position is a dead position
 * NON_DEAD_POSITION - the position is not a dead position
-* UNDETERMINED - the search was stopped due to limits in the code
+* UNDETERMINED - the limits in the code interrupted the search
+
+Performance: The comment from the Unwinnablity section for UNDETERMINED applies here. However, it checks both sides so that it can take double the time.
 
 ## Examples
 
@@ -247,7 +246,7 @@ For example, if White flags with the king and rook against the lone king of Blac
 ```
 
 #### Pawn walls
-Both players cannot mate in pawn walls, so they are dead positions. They are not detected
+Pawn walls are blocked positions, both players cannot mate and cannot make progress, so they are dead positions. They are not detected
 by most common chess APIs. 
 [Game](https://lichess.org/c3ew66ZV#123)
 
@@ -281,8 +280,7 @@ It makes an educated guess only. The full algorithm calculates an actual mate an
 ```
 
 #### Positions the quick algorithm does not see
-The following is an example of a position where the quick algorithm says POSSIBLY_WINNABLE but the 
-the position is winnable. [Game](https://lichess.org/bKHPqNEw#81)
+The following is an example of a position where the quick algorithm says POSSIBLY_WINNABLE, but the position is winnable. [Game](https://lichess.org/bKHPqNEw#81)
 
 ```java
   final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
@@ -294,8 +292,7 @@ the position is winnable. [Game](https://lichess.org/bKHPqNEw#81)
 Because dead positions are just unwinnable positions for both sides, there is not much more substantially to say.
 
 #### Insufficient material
-The most straightforward dead position is when one player already has insufficient material, and the other player
-also becomes insufficient due to capture. Of course, all chess APIs detect that..
+The most straightforward dead position is when one player already has insufficient material, and the other becomes insufficient due to capture. All chess APIs detect this case.
 
 [Position](https://lichess.org/analysis/8/8/3kn3/8/2K5/8/8/8_w_-_-_0_50)
 ```java
