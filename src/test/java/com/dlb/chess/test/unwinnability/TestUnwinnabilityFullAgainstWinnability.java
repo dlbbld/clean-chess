@@ -20,8 +20,8 @@ public class TestUnwinnabilityFullAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFullAgainstWinnability.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "02_white_rook_knight.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final String START_FROM_PGN_FILE_NAME = "ae_10.pgn";
 
   @SuppressWarnings("static-method")
   @Test

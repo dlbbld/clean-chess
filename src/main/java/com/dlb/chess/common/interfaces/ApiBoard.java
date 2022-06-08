@@ -108,8 +108,6 @@ public interface ApiBoard {
 
   Side getHavingMove();
 
-  Side getNotHavingMove();
-
   /**
    * Checks if en passant capture possible and legal.
    *

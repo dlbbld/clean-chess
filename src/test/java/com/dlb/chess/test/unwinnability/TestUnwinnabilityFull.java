@@ -50,7 +50,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   // @Test
   void testPgnFileValue() {
-    final var pgnFileName = "unwinnable_fivefold_inevitable.pgn";
+    final var pgnFileName = "ae_10.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
@@ -62,9 +62,11 @@ public class TestUnwinnabilityFull {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testPgnFileExpected() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("ae_10.pgn");
+    final var pgnFileName = "ae_10.pgn";
+
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase(pgnFileName);
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
