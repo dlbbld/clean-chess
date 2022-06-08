@@ -2,10 +2,7 @@ package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.apache.logging.log4j.Logger;
-
 import com.dlb.chess.analysis.model.Analysis;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
@@ -13,10 +10,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 
 public abstract class AbstractPgnTest {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(AbstractPgnTest.class);
-
   public static void testGame(PgnFileTestCase testCase, Analysis analysis) throws Exception {
-    logger.info(testCase.pgnFileName());
     testFen(testCase.fen(), analysis.fen());
     testRepetition(analysis, testCase);
     testRepetitionInitialEnPassantCapture(analysis, testCase);
@@ -26,9 +20,8 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    testUnwinnableQuickHavingMove(analysis, testCase);
-    testUnwinnableQuickNotHavingMove(analysis, testCase);
-    // TODO unwinnable - if full check is faster include
+    testUnwinnableFull(analysis, testCase);
+    testUnwinnableQuick(analysis, testCase);
   }
 
   private static void testFen(String expectedFen, String actualFen) {
@@ -68,12 +61,14 @@ public abstract class AbstractPgnTest {
     assertEquals(testCase.insufficientMaterial(), analysis.insufficientMaterial());
   }
 
-  private static void testUnwinnableQuickHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableQuickHavingMove(), analysis.unwinnableQuickHavingMove());
+  private static void testUnwinnableFull(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.unwinnableFullWhite(), analysis.unwinnableFullWhite());
+    assertEquals(testCase.unwinnableFullBlack(), analysis.unwinnableFullBlack());
   }
 
-  private static void testUnwinnableQuickNotHavingMove(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableQuickNotHavingMove(), analysis.unwinnableQuickNotHavingMove());
+  private static void testUnwinnableQuick(Analysis analysis, PgnFileTestCase testCase) {
+    assertEquals(testCase.unwinnableQuickWhite(), analysis.unwinnableQuickWhite());
+    assertEquals(testCase.unwinnableQuickBlack(), analysis.unwinnableQuickBlack());
   }
 
 }

@@ -87,7 +87,7 @@ public class FileUtility {
     writeFile(filePath, lineList);
   }
 
-  private static void writeFile(String filePath, List<String> lineList) {
+  public static void writeFile(String filePath, List<String> lineList) {
     deleteFile(filePath);
     final var path = Paths.get(filePath);
     try (var writer = Files.newBufferedWriter(path, StandardCharsets.UTF_8)) {

@@ -152,6 +152,40 @@ public class EnPassantCaptureUtility implements EnumConstants {
     return false;
   }
 
+  public static boolean calculateHasOpponentPawnOnLeftOrRight(Square pawnSquare, StaticPosition staticPosition) {
+    if (staticPosition.isEmpty(pawnSquare)) {
+      throw new IllegalArgumentException("No piece on square " + pawnSquare.getName());
+    }
+    final Piece piece = staticPosition.get(pawnSquare);
+    if (piece.getPieceType() != PAWN) {
+      throw new IllegalArgumentException("Piece on square but no pawn on square " + pawnSquare.getName());
+    }
+
+    final Side pawnSide = piece.getSide();
+
+    if (Square.calculateHasLeftSquare(pawnSide, pawnSquare)) {
+      final Square leftSquare = Square.calculateLeftSquare(pawnSide, pawnSquare);
+      if (!staticPosition.isEmpty(leftSquare)) {
+        final Piece leftPiece = staticPosition.get(leftSquare);
+        if (leftPiece.getPieceType() == PAWN && leftPiece.getSide() == pawnSide.getOppositeSide()) {
+          return true;
+        }
+      }
+    }
+
+    if (Square.calculateHasRightSquare(pawnSide, pawnSquare)) {
+      final Square rightSquare = Square.calculateRightSquare(pawnSide, pawnSquare);
+      if (!staticPosition.isEmpty(rightSquare)) {
+        final Piece rightPiece = staticPosition.get(rightSquare);
+        if (rightPiece.getPieceType() == PAWN && rightPiece.getSide() == pawnSide.getOppositeSide()) {
+          return true;
+        }
+      }
+    }
+    return false;
+
+  }
+
   private static List<Square> calculateFromToList(MoveSpecification move) {
     final List<Square> result = new ArrayList<>();
     result.add(move.fromSquare());

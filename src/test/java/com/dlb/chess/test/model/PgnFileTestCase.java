@@ -12,9 +12,9 @@ import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule, int firstCapture,
     int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
-    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullHavingMove,
-    UnwinnableFull unwinnableFullNotHavingMove, UnwinnableQuick unwinnableQuickHavingMove,
-    UnwinnableQuick unwinnableQuickNotHavingMove, String fen) {
+    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite,
+    UnwinnableFull unwinnableFullBlack, UnwinnableQuick unwinnableQuickWhite,
+    UnwinnableQuick unwinnableQuickBlack, String fen) {
 
   public String pgnFileName() {
     return pgnFileName;
@@ -48,16 +48,28 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     return insufficientMaterial;
   }
 
-  public UnwinnableFull unwinnableFullHavingMove() {
-    return unwinnableFullHavingMove;
+  public UnwinnableFull unwinnableFullWhite() {
+    return unwinnableFullWhite;
   }
 
-  public UnwinnableFull unwinnableFullNotHavingMove() {
-    return unwinnableFullNotHavingMove;
+  public UnwinnableFull unwinnableFullBlack() {
+    return unwinnableFullBlack;
   }
 
   public String fen() {
     return fen;
+  }
+
+  public int repetitionCountFinalPosition() {
+    return repetitionCountFinalPosition;
+  }
+
+  public UnwinnableQuick unwinnableQuickWhite() {
+    return unwinnableQuickWhite;
+  }
+
+  public UnwinnableQuick unwinnableQuickBlack() {
+    return unwinnableQuickBlack;
   }
 
   @Override
@@ -75,10 +87,10 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
         && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
         && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate
         && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
-        && unwinnableFullHavingMove == other.unwinnableFullHavingMove
-        && unwinnableFullNotHavingMove == other.unwinnableFullNotHavingMove
-        && unwinnableQuickHavingMove == other.unwinnableQuickHavingMove
-        && unwinnableQuickNotHavingMove == other.unwinnableQuickNotHavingMove;
+        && unwinnableFullWhite == other.unwinnableFullWhite
+        && unwinnableFullBlack == other.unwinnableFullBlack
+        && unwinnableQuickWhite == other.unwinnableQuickWhite
+        && unwinnableQuickBlack == other.unwinnableQuickBlack;
   }
 
 }

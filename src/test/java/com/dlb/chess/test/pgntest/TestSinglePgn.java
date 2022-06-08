@@ -18,6 +18,7 @@ public class TestSinglePgn extends AbstractSinglePgnTest {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFiles() throws Exception {
+    logger.info(PGN_FILE_NAME);
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestHavingTestValuesAlready(PGN_FILE_NAME);
     final SingleOutput testResult = BasicOutput.calculateTestResult(pgnTest.getFolderPath(), PGN_FILE_NAME);

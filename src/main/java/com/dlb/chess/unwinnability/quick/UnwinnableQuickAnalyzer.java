@@ -20,13 +20,22 @@ import com.dlb.chess.unwinnability.semistatic.UnwinnableSemiStatic;
 public class UnwinnableQuickAnalyzer {
 
   public static UnwinnableQuick unwinnableQuick(ApiBoard board, Side c) {
+    return unwinnableQuick(board, c, false, new MobilitySolution());
+  }
+
+  public static UnwinnableQuick unwinnableQuick(ApiBoard board, Side c, boolean isHasMobilitySolution,
+      MobilitySolution calculatedMobilitySolution) {
 
     final String invariant = board.getFen();
 
     // 1: advance the position as long as there is only one legal move
-    var isCheckBoard = true;
+    // if position is advanced cannot use the provided mobility solution if any
+    var isCanUseMobilitySolution = true;
+    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
+    var isForcedMove = true;
     var countHalfmoves = 0;
-    while (isCheckBoard) {
+    while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
+      isCanUseMobilitySolution = false;
       if (board.isCheckmate()) {
         // crucial, store the side before undoing moves, as it can change with undoing moves!!
         final Side sideBeingCheckmated = board.getHavingMove();
@@ -40,8 +49,7 @@ public class UnwinnableQuickAnalyzer {
         return UnwinnableQuick.WINNABLE;
       }
 
-      if (board.isInsufficientMaterial(c) || board.isStalemate() || board.isFivefoldRepetition()
-          || board.isSeventyFiftyMove()) {
+      if (board.isInsufficientMaterial(c) || board.isStalemate()) {
         unperformHalfmoves(board, countHalfmoves);
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
@@ -49,11 +57,12 @@ public class UnwinnableQuickAnalyzer {
         return UnwinnableQuick.UNWINNABLE;
       }
 
-      isCheckBoard = board.getLegalMoveSet().size() == 1;
-      if (isCheckBoard) {
+      isForcedMove = board.getLegalMoveSet().size() == 1;
+      if (isForcedMove) {
         final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
         final LegalMove legalMove = NonNullWrapperCommon.getFirst(legalMoveList);
         board.performMove(legalMove.moveSpecification());
+        isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
         countHalfmoves++;
       }
     }
@@ -93,7 +102,12 @@ public class UnwinnableQuickAnalyzer {
         && !SemiOpenFilesUtility.calculateHasSemiOpenFile(board.getStaticPosition())) {
 
       // 6: if true UnwinnableSS(pos, c, Mobility(pos)) then return Unwinnable
-      final MobilitySolution mobilitySolution = Mobility.mobility(board);
+      final MobilitySolution mobilitySolution;
+      if (isHasMobilitySolution && isCanUseMobilitySolution) {
+        mobilitySolution = calculatedMobilitySolution;
+      } else {
+        mobilitySolution = Mobility.mobility(board);
+      }
       // mobilitySolution.debug();
       if (UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution)) {
         unperformHalfmoves(board, countHalfmoves);

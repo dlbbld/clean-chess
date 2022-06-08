@@ -23,14 +23,31 @@ public abstract class AbstractFindHelpmate {
 
     final var boardCheck = new Board(fen);
 
+    var isFoundFivefold = false;
+    var isFoundSeventyFiveMoves = false;
     for (final LegalMove legalMove : moveProgressList) {
       boardCheck.performMove(legalMove.moveSpecification());
+      if (!isFoundFivefold && boardCheck.isFivefoldRepetition()) {
+        isFoundFivefold = true;
+      }
+
+      if (!isFoundSeventyFiveMoves && boardCheck.isSeventyFiftyMove()) {
+        isFoundSeventyFiveMoves = true;
+      }
     }
     if (!boardCheck.isCheckmate()) {
-      throw new ProgrammingMistakeException("It is not a checkmate");
+      throw new ProgrammingMistakeException("It is not a checkmate line because it does not end in checkmate");
     }
 
     if (IS_DEBUG) {
+      if (isFoundFivefold) {
+        logger.warn("Not a checkmate for fivefold: " + fen);
+      }
+
+      if (isFoundSeventyFiveMoves) {
+        logger.warn("Not a checkmate for seventy-five moves: " + fen);
+      }
+
       final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
       logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
       System.out.println(PgnCreate.createPgnFileString(boardCheck));

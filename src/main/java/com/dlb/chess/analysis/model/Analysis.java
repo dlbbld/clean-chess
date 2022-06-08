@@ -19,9 +19,9 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule,
     boolean isGameContinuedOverFivefoldRepetition, boolean isGameContinuedOverSeventyFiveMove, int firstCapture,
     boolean hasCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate,
-    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullHavingMove,
-    UnwinnableFull unwinnableFullNotHavingMove, UnwinnableQuick unwinnableQuickHavingMove,
-    UnwinnableQuick unwinnableQuickNotHavingMove, String fen, ApiBoard board) {
+    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite,
+    UnwinnableFull unwinnableFullBlack, UnwinnableQuick unwinnableQuickWhite,
+    UnwinnableQuick unwinnableQuickBlack, String fen, ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -45,10 +45,10 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && checkmateOrStalemate == other.checkmateOrStalemate && maxYawnSequence == other.maxYawnSequence
         && Objects.equals(repetitionListList, other.repetitionListList)
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
-        && unwinnableFullHavingMove == other.unwinnableFullHavingMove
-        && unwinnableFullNotHavingMove == other.unwinnableFullNotHavingMove
-        && unwinnableQuickHavingMove == other.unwinnableQuickHavingMove
-        && unwinnableQuickNotHavingMove == other.unwinnableQuickNotHavingMove;
+        && unwinnableFullWhite == other.unwinnableFullWhite
+        && unwinnableFullBlack == other.unwinnableFullBlack
+        && unwinnableQuickWhite == other.unwinnableQuickWhite
+        && unwinnableQuickBlack == other.unwinnableQuickBlack;
   }
 
   public Side havingMove() {
@@ -119,12 +119,12 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     return insufficientMaterial;
   }
 
-  public UnwinnableQuick unwinnableQuickNotHavingMove() {
-    return unwinnableQuickNotHavingMove;
+  public UnwinnableQuick unwinnableQuickBlack() {
+    return unwinnableQuickBlack;
   }
 
-  public UnwinnableQuick unwinnableQuickHavingMove() {
-    return unwinnableQuickHavingMove;
+  public UnwinnableQuick unwinnableQuickWhite() {
+    return unwinnableQuickWhite;
   }
 
   public String fen() {

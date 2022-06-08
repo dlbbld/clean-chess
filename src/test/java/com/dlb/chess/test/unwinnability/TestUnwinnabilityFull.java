@@ -13,7 +13,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.PrintDuration;
@@ -23,70 +22,63 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
 public class TestUnwinnabilityFull {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFull.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(UnwinnableFull.UNDETERMINED,
-        UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
+
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testFen() {
-    // final var fen = "rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2";
-    final var fen = FenConstants.FEN_INITIAL;
+    final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
+    // final var fen = FenConstants.FEN_INITIAL;
     final Board board = new Board(fen);
-    final UnwinnableFullAnalysis fullAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
-        board.getHavingMove().getOppositeSide());
 
-    System.out.println(GeneralUtility.composeCheckmateLine(fullAnalysis.mateLine()));
-
-    assertEquals(UnwinnableFull.WINNABLE, fullAnalysis.unwinnableFull());
+    assertEquals(UnwinnableFull.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
+    assertEquals(UnwinnableFull.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
   }
 
   @SuppressWarnings("static-method")
   // @Test
   void testPgnFileValue() {
-    final var pgnFileName = "ae_16.pgn";
+    final var pgnFileName = "ae_10.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
+    assertEquals(UnwinnableFull.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
+    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testPgnFileExpected() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("ae_10.pgn");
+    final var pgnFileName = "ae_10.pgn";
+
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase(pgnFileName);
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
+    final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .unwinnableFull();
-    assertEquals(pgnFileTestCase.unwinnableFullHavingMove(), unwinnableFullHavingMove);
+    assertEquals(pgnFileTestCase.unwinnableFullWhite(), unwinnableFullWhite);
 
-    final UnwinnableFull unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
-        .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
-    assertEquals(pgnFileTestCase.unwinnableFullNotHavingMove(), unwinnableFullNotHavingMove);
+    final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+        .unwinnableFull();
+    assertEquals(pgnFileTestCase.unwinnableFullBlack(), unwinnableFullBlack);
 
   }
-
-  // not terminating so far
-  // ae_04.pgn
-  // ae_15_QRvIMh3z.pgn
-  // ae_16.pgn
-  // ae_06.pgn
-  // ae_08.pgn
 
   @SuppressWarnings("static-method")
   // @Test
@@ -100,18 +92,18 @@ public class TestUnwinnabilityFull {
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer
-            .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+        final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
+            .unwinnableFull();
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullHavingMove(), unwinnableFullHavingMove);
+        assertEquals(testCase.unwinnableFullWhite(), unwinnableFullWhite);
       }
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
-            .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+        final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+            .unwinnableFull();
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullNotHavingMove(), unwinnableFullNotHavingMove);
+        assertEquals(testCase.unwinnableFullBlack(), unwinnableFullBlack);
       }
 
     }
@@ -129,11 +121,11 @@ public class TestUnwinnabilityFull {
       logger.info(testCase.pgnFileName());
 
       final var beforeMilliSeconds = System.currentTimeMillis();
-      final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
-          .unwinnableFull();
+      final UnwinnableFull unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
+          .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
       final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
-      if (unwinnableFull == UnwinnableFull.WINNABLE) {
+      if (unwinnableFullNotHavingMove == UnwinnableFull.WINNABLE) {
         milliSecondsList.add(durationMilliSeconds);
       }
 

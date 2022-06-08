@@ -14,14 +14,12 @@ import com.dlb.chess.test.unwinnability.againstcha.model.ChaFullRead;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
-// rnbqkbnr/1ppppppp/8/p7/8/P7/RPPPPPPP/1NBQKBNR b Kkq - 1 2; UNDETERMINED; WINNABLE
-// rnbqkbnr/pppppppp/8/8/8/2N5/PPPPPPPP/R1BQKBNR b KQkq - 1 1; UNDETERMINED; WINNABLE
 public class TestAgainstChaFull extends AbstractAgainstCha {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaFull.class);
 
-  private static final boolean IS_START_FROM_FEN = false;
-  private static final String START_FROM_FEN = "no_move_half_move_clock_99_black_to_move.pgn";
+  private static final boolean IS_START_FROM_FEN = true;
+  private static final String START_FROM_FEN = "8/6p1/1p3pP1/1P3Ppk/1Pp3p1/KpP3P1/1P6/8 w - - 0 44";
 
   public static void main(String[] args) throws Exception {
 
@@ -38,6 +36,8 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
 
     var hasFound = false;
 
+    final var millisecondsBefore = System.currentTimeMillis();
+    var testCounter = 0;
     for (final String fenStr : FileUtility.readFileLines(FEN_MINE)) {
       if (!hasFound) {
         if (IS_START_FROM_FEN) {
@@ -51,6 +51,7 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
       if (!hasFound) {
         continue;
       }
+      testCounter++;
 
       // logger.info(testCase.pgnFileName());
 
@@ -79,7 +80,15 @@ public class TestAgainstChaFull extends AbstractAgainstCha {
       }
 
     }
+    final var totalMilliseconds = System.currentTimeMillis() - millisecondsBefore;
+
+    final var totalSeconds = totalMilliseconds / 1000.0;
+
+    final var secondsPerTest = testCounter == 0 ? 0 : totalSeconds / testCounter;
+
     logger.printf(Level.INFO, "%d differences found", counterDifferences);
+    logger.printf(Level.INFO, "%d tests in %d seconds, %f seconds per test", testCounter, Math.round(totalSeconds),
+        secondsPerTest);
   }
 
 }

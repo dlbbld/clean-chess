@@ -105,6 +105,7 @@ public class MaterialUtility implements EnumConstants {
     return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
         && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0
         && calculateNumberOfBishops(side, staticPosition, squareType) >= 1
+        && calculateNumberOfBishops(side, staticPosition, squareType.getOppositeSquareType()) == 0
         && calculateNumberOfPieces(side, staticPosition, QUEEN) == 0
         && calculateNumberOfPieces(side, staticPosition, KING) == 1
         && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;
@@ -178,12 +179,20 @@ public class MaterialUtility implements EnumConstants {
     return calculateNumberOfBishops(side, staticPosition, squareType) == 0;
   }
 
+  public static boolean calculateHasLightSquareBishops(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) > 0;
+  }
+
   public static boolean calculateHasNoLightSquareBishops(Side side, StaticPosition staticPosition) {
-    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) == 0;
+    return !calculateHasLightSquareBishops(side, staticPosition);
+  }
+
+  public static boolean calculateHasDarkSquareBishops(Side side, StaticPosition staticPosition) {
+    return calculateNumberOfBishops(side, staticPosition, SquareType.DARK_SQUARE) > 0;
   }
 
   public static boolean calculateHasNoDarkSquareBishops(Side side, StaticPosition staticPosition) {
-    return calculateNumberOfBishops(side, staticPosition, SquareType.LIGHT_SQUARE) == 0;
+    return !calculateHasDarkSquareBishops(side, staticPosition);
   }
 
   public static boolean calculateHasNoQueens(Side side, StaticPosition staticPosition) {

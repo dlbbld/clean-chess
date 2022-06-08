@@ -1,8 +1,10 @@
 package com.dlb.chess.test.unwinnability;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -18,11 +20,11 @@ public class TestUnwinnabilityFullAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFullAgainstWinnability.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "02_white_rook_knight.pgn";
+  private static final boolean IS_START_FROM_PGN_FILE = true;
+  private static final String START_FROM_PGN_FILE_NAME = "ae_10.pgn";
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void test() throws Exception {
     var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
@@ -44,23 +46,15 @@ public class TestUnwinnabilityFullAgainstWinnability {
         final ApiBoard board = new Board(testCase.fen());
         logger.info(testCase.pgnFileName());
 
-        // not having move
-        {
-          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
-              .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+        final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
+        final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
+            .unwinnableFull();
+        CheckFull.check(winnableWhite, unwinnableFullWhite);
 
-          CheckFull.check(winnable, unwinnableFull);
-        }
-
-        // having move
-        {
-          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
-              .unwinnableFull();
-
-          CheckFull.check(winnable, unwinnableFull);
-        }
+        final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
+        final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+            .unwinnableFull();
+        CheckFull.check(winnableBlack, unwinnableFullBlack);
       }
     }
   }

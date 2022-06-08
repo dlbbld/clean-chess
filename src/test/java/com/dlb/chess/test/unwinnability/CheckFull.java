@@ -15,7 +15,7 @@ public class CheckFull {
         assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
         break;
       case YES:
-        assertNotEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
+        assertNotEquals(UnwinnableFull.WINNABLE, unwinnableFull);
         break;
       case UNKNOWN:
         break;

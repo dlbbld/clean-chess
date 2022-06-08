@@ -3,7 +3,7 @@ package com.dlb.chess.distance;
 import java.util.Vector;
 
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.distance.model.Cell;
+import com.dlb.chess.distance.model.DistanceToCell;
 
 //This code contributed by Rajput-Ji
 
@@ -11,7 +11,6 @@ import com.dlb.chess.distance.model.Cell;
 //specific cell in minimum moves by Knight
 public class KnightDistance {
 
-  // TODO unwinnability cache
   private static final int BOARD_SIZE = 8;
 
   // Utility method returns true if (x, y) lies
@@ -27,7 +26,8 @@ public class KnightDistance {
     final int[] knightPos = { fromSquare.getFile().getNumber(), fromSquare.getRank().getNumber() };
     final int[] targetPos = { toSquare.getFile().getNumber(), toSquare.getRank().getNumber() };
 
-    return minStepToReachTarget(knightPos, targetPos);
+    final var distance = minStepToReachTarget(knightPos, targetPos);
+    return distance;
   }
 
   // Method returns minimum step
@@ -38,12 +38,12 @@ public class KnightDistance {
     final int[] dy = { -1, -2, -2, -1, 1, 2, 2, 1 };
 
     // queue for storing states of knight in board
-    final Vector<Cell> q = new Vector<>();
+    final Vector<DistanceToCell> q = new Vector<>();
 
     // push starting position of knight with 0 distance
-    q.add(new Cell(knightPos[0], knightPos[1], 0));
+    q.add(new DistanceToCell(knightPos[0], knightPos[1], 0));
 
-    Cell t;
+    DistanceToCell t;
     int x;
     int y;
     final var visit = new boolean[BOARD_SIZE + 1][BOARD_SIZE + 1];
@@ -79,7 +79,7 @@ public class KnightDistance {
         // inside board, push that state into queue
         if (isInside(x, y) && !visit[x][y]) {
           visit[x][y] = true;
-          q.add(new Cell(x, y, t.dis() + 1));
+          q.add(new DistanceToCell(x, y, t.dis() + 1));
         }
       }
     }

@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
@@ -26,7 +27,9 @@ public class TestWinnability {
   @Test
   void testStartPosition() {
     final Board board = new Board();
-    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+
+    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
+    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -34,7 +37,9 @@ public class TestWinnability {
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
-    assertEquals(Winnable.YES, WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+
+    assertEquals(Winnable.YES, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
+    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -47,7 +52,8 @@ public class TestWinnability {
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(Winnable.NO, WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(Winnable.NO, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
+    assertEquals(Winnable.NO, WinnableAnalyzer.calculateWinnable(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -58,13 +64,14 @@ public class TestWinnability {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
-      check(testCase.unwinnableQuickNotHavingMove(), board);
+      check(testCase.unwinnableQuickWhite(), Side.WHITE, board);
+      check(testCase.unwinnableQuickBlack(), Side.WHITE, board);
     }
   }
 
-  private static void check(UnwinnableQuick unwinnableQuickNotHavingMove, ApiBoard board) {
-    final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-    switch (unwinnableQuickNotHavingMove) {
+  private static void check(UnwinnableQuick unwinnableQuickSide, Side side, ApiBoard board) {
+    final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, side);
+    switch (unwinnableQuickSide) {
       case UNWINNABLE:
         assertEquals(Winnable.NO, winnable);
         break;

@@ -25,7 +25,7 @@ public abstract class AbstractAgainstCha {
 
   static final String FEN_MINE = "c:\\temp\\cha\\mine\\myFen.txt";
   static final String FEN_CHA_ANALYSIS_BOTH_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaBothAnalysis.txt";
-  static final String FEN_CHA_ANALYSIS_FULL_FILE_PATH = "C:\\Users\\danie\\git\\D3-Chess-test\\tests\\myFenChaFullAnalysisNotHavingMove.txt";
+  static final String FEN_CHA_ANALYSIS_FULL_FILE_PATH = "C:\\Users\\danie\\git\\D3-Chess-test\\debug\\myFenChaFullNotHavingMove.txt";
   static final String FEN_CHA_ANALYSIS_QUICK_FILE_PATH = "c:\\temp\\cha\\mine\\myFenChaQuickAnalysis.txt";
 
   public static ChaBothRead readChaResultList(String fenAnalysisFilePath) throws Exception {

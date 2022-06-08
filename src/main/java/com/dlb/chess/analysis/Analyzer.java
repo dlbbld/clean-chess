@@ -3,7 +3,6 @@ package com.dlb.chess.analysis;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.analysis.print.AnalyzerPrint;
@@ -19,9 +18,10 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.mobility.Mobility;
+import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class Analyzer extends AnalyzerPrint {
 
@@ -93,17 +93,19 @@ public class Analyzer extends AnalyzerPrint {
 
     final var maxYawnSequence = calculateMaxYawnSequence(board);
 
-    final CheckmateOrStalemate checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
+    final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
 
-    // TODO unwinnability - implement when full algorithm faster
-    final var unwinnableFullHavingMove = UnwinnableFull.WINNABLE;
-    final var unwinnableFullNotHavingMove = UnwinnableFull.WINNABLE;
+    // for performance we calculate and reuse the mobility solution
+    final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
-    final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove());
-    final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
+    final var unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE, true, mobilitySolution)
+        .unwinnableFull();
+    final var unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK, true, mobilitySolution)
+        .unwinnableFull();
+
+    final var unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE, true, mobilitySolution);
+    final var unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK, true, mobilitySolution);
 
     final String fen = board.getFen();
 
@@ -115,8 +117,8 @@ public class Analyzer extends AnalyzerPrint {
         yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
         hasFiftyMoveRule, hasSeventyFiveMoveRule, isGameContinuedOverFivefoldRepetition,
         isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
-        insufficientMaterial, unwinnableFullHavingMove, unwinnableFullNotHavingMove, unwinnableQuickHavingMove,
-        unwinnableQuickNotHavingMove, fen, board);
+        insufficientMaterial, unwinnableFullWhite, unwinnableFullBlack, unwinnableQuickWhite, unwinnableQuickBlack, fen,
+        board);
   }
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {
