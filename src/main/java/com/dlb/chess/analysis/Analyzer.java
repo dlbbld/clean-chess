@@ -99,15 +99,13 @@ public class Analyzer extends AnalyzerPrint {
     // for performance we calculate and reuse the mobility solution
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
-    final var unwinnableFullHavingMove = UnwinnableFullAnalyzer
-        .unwinnableFull(board, board.getHavingMove(), true, mobilitySolution).unwinnableFull();
-    final var unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
-        .unwinnableFull(board, board.getHavingMove().getOppositeSide(), true, mobilitySolution).unwinnableFull();
+    final var unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE, true, mobilitySolution)
+        .unwinnableFull();
+    final var unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK, true, mobilitySolution)
+        .unwinnableFull();
 
-    final var unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove(), true,
-        mobilitySolution);
-    final var unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide(), true, mobilitySolution);
+    final var unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE, true, mobilitySolution);
+    final var unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK, true, mobilitySolution);
 
     final String fen = board.getFen();
 
@@ -119,8 +117,8 @@ public class Analyzer extends AnalyzerPrint {
         yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
         hasFiftyMoveRule, hasSeventyFiveMoveRule, isGameContinuedOverFivefoldRepetition,
         isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
-        insufficientMaterial, unwinnableFullHavingMove, unwinnableFullNotHavingMove, unwinnableQuickHavingMove,
-        unwinnableQuickNotHavingMove, fen, board);
+        insufficientMaterial, unwinnableFullWhite, unwinnableFullBlack, unwinnableQuickWhite, unwinnableQuickBlack, fen,
+        board);
   }
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {

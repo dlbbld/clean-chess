@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
@@ -62,10 +63,9 @@ public class TestUnwinnabilityQuick {
     final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
 
     final Board board = new Board(fen);
-    assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
 
-    assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE));
+    assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -86,19 +86,17 @@ public class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testPgnFileExpected() {
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("25_black_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
-    final UnwinnableQuick unwinnableQuickResultHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
-    assertEquals(pgnFileTestCase.unwinnableQuickHavingMove(), unwinnableQuickResultHavingMove);
+    final UnwinnableQuick unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
+    assertEquals(pgnFileTestCase.unwinnableQuickWhite(), unwinnableQuickResultWhite);
 
-    final UnwinnableQuick unwinnableQuickResultNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-        board.getHavingMove().getOppositeSide());
-    assertEquals(pgnFileTestCase.unwinnableQuickNotHavingMove(), unwinnableQuickResultNotHavingMove);
+    final UnwinnableQuick unwinnableQuickResultBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
+    assertEquals(pgnFileTestCase.unwinnableQuickBlack(), unwinnableQuickResultBlack);
 
   }
 
@@ -114,18 +112,16 @@ public class TestUnwinnabilityQuick {
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableQuick unwinnableQuickHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-            board.getHavingMove().getOppositeSide());
+        final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullHavingMove(), unwinnableQuickHavingMove);
+        assertEquals(testCase.unwinnableFullWhite(), unwinnableQuickWhite);
       }
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableQuick unwinnableQuickNotHavingMove = UnwinnableQuickAnalyzer.unwinnableQuick(board,
-            board.getHavingMove().getOppositeSide());
+        final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullNotHavingMove(), unwinnableQuickNotHavingMove);
+        assertEquals(testCase.unwinnableFullBlack(), unwinnableQuickBlack);
       }
 
     }

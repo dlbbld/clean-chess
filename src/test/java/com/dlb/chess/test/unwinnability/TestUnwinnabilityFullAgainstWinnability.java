@@ -4,6 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -45,23 +46,15 @@ public class TestUnwinnabilityFullAgainstWinnability {
         final ApiBoard board = new Board(testCase.fen());
         logger.info(testCase.pgnFileName());
 
-        // not having move
-        {
-          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove().getOppositeSide());
-          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer
-              .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+        final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
+        final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
+            .unwinnableFull();
+        CheckFull.check(winnableWhite, unwinnableFullWhite);
 
-          CheckFull.check(winnable, unwinnableFull);
-        }
-
-        // having move
-        {
-          final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, board.getHavingMove());
-          final UnwinnableFull unwinnableFull = UnwinnableFullAnalyzer.unwinnableFull(board, board.getHavingMove())
-              .unwinnableFull();
-
-          CheckFull.check(winnable, unwinnableFull);
-        }
+        final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
+        final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+            .unwinnableFull();
+        CheckFull.check(winnableBlack, unwinnableFullBlack);
       }
     }
   }

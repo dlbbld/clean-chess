@@ -62,13 +62,13 @@ public abstract class AbstractPgnTest {
   }
 
   private static void testUnwinnableFull(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableFullHavingMove(), analysis.unwinnableFullHavingMove());
-    assertEquals(testCase.unwinnableFullNotHavingMove(), analysis.unwinnableFullNotHavingMove());
+    assertEquals(testCase.unwinnableFullWhite(), analysis.unwinnableFullWhite());
+    assertEquals(testCase.unwinnableFullBlack(), analysis.unwinnableFullBlack());
   }
 
   private static void testUnwinnableQuick(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableQuickHavingMove(), analysis.unwinnableQuickHavingMove());
-    assertEquals(testCase.unwinnableQuickNotHavingMove(), analysis.unwinnableQuickNotHavingMove());
+    assertEquals(testCase.unwinnableQuickWhite(), analysis.unwinnableQuickWhite());
+    assertEquals(testCase.unwinnableQuickBlack(), analysis.unwinnableQuickBlack());
   }
 
 }

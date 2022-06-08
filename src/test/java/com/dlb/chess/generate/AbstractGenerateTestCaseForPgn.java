@@ -75,28 +75,28 @@ public abstract class AbstractGenerateTestCaseForPgn {
     // we use the quick for the full so it does not take too long
     // we take into account of introducing some rare errors here
     // they will be detected on periodic checks
-    final UnwinnableFull unwinnableFullResultHavingMove = analysis.unwinnableFullHavingMove();
+    final UnwinnableFull unwinnableFullResultWhite = analysis.unwinnableFullWhite();
     result.append(UnwinnableFull.class.getSimpleName());
     result.append(".");
-    result.append(unwinnableFullResultHavingMove.name());
+    result.append(unwinnableFullResultWhite.name());
     result.append(", ");
 
-    final UnwinnableFull unwinnableFullResultNotHavingMove = analysis.unwinnableFullNotHavingMove();
+    final UnwinnableFull unwinnableFullResultBlack = analysis.unwinnableFullBlack();
     result.append(UnwinnableFull.class.getSimpleName());
     result.append(".");
-    result.append(unwinnableFullResultNotHavingMove.name());
+    result.append(unwinnableFullResultBlack.name());
     result.append(", ");
 
-    final UnwinnableQuick unwinnableQuickResultHavingMove = analysis.unwinnableQuickHavingMove();
+    final UnwinnableQuick unwinnableQuickResultWhite = analysis.unwinnableQuickWhite();
     result.append(UnwinnableQuick.class.getSimpleName());
     result.append(".");
-    result.append(unwinnableQuickResultHavingMove.name());
+    result.append(unwinnableQuickResultWhite.name());
     result.append(", ");
 
-    final UnwinnableQuick unwinnableQuickResultNotHavingMove = analysis.unwinnableQuickNotHavingMove();
+    final UnwinnableQuick unwinnableQuickResultBlack = analysis.unwinnableQuickBlack();
     result.append(UnwinnableQuick.class.getSimpleName());
     result.append(".");
-    result.append(unwinnableQuickResultNotHavingMove.name());
+    result.append(unwinnableQuickResultBlack.name());
     result.append(", ");
 
     result.append("\"");
