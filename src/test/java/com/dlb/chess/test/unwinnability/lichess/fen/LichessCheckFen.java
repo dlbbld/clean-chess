@@ -79,7 +79,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
         outputLine.append(lichessGameId).append(";");
         outputLine.append("quick").append(";");
         outputLine.append(testingSide.getFenLetter()).append(";");
-        outputLine.append(unwinnableQuick.getDescription()).append(";");
+        outputLine.append(unwinnableQuick.getIdentifier()).append(";");
         outputLine.append(durationMilliSeconds);
 
         final String outputLineStr = NonNullWrapperCommon.toString(outputLine);

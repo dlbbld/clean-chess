@@ -98,8 +98,7 @@ public class BasicOutput {
   }
 
   private static String calculateOutputWinnableNotHavingMove(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE,
-        analysis.unwinnableQuickBlack().getDescription());
+    return calculateOutput(ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE, analysis.unwinnableQuickBlack().getIdentifier());
   }
 
   private static String calculateOutputFirstCapture(Analysis analysis) {

@@ -1,5 +1,8 @@
 package com.dlb.chess.test.unwinnability.againstcha;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
@@ -7,88 +10,113 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.fen.FenParser;
-import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.test.unwinnability.againstcha.model.ChaBothRead;
-import com.dlb.chess.test.unwinnability.againstcha.model.ChaFullRead;
+import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
+import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
+import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
-public class TestAgainstChaFull extends AbstractAgainstCha {
+public class TestAgainstChaFull extends AbstractTestAgainstCha {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaFull.class);
 
-  private static final boolean IS_START_FROM_FEN = true;
-  private static final String START_FROM_FEN = "8/6p1/1p3pP1/1P3Ppk/1Pp3p1/KpP3P1/1P6/8 w - - 0 44";
+  // format: fen;lichessGameId;mode;side;result;mateLine
+  private static final String CHA_FULL_RESULT = "C:\\Users\\danie\\git\\D3-Chess-test\\debug\\chaFullResult.txt";
+  // format: fen;lichessGameId;mode;side;result;mateLine
+  private static final String MINE_OUT = "c:\\temp\\cha\\mine\\mineFullResult.txt";
 
   public static void main(String[] args) throws Exception {
-
-    final ChaBothRead bothResult = readChaResultList(FEN_CHA_ANALYSIS_FULL_FILE_PATH);
-    // validateBothTestResult(bothResult); //ok
-    checkMineQuickAgainstChaFull(bothResult);
+    checkMineFullAgainstChaFull();
   }
 
-  private static void checkMineQuickAgainstChaFull(ChaBothRead bothResult) throws Exception {
+  public static List<UnwinnabilityFullRead> readFullResultList(String path) throws Exception {
+    final List<UnwinnabilityFullRead> resultList = new ArrayList<>();
 
-    System.out.println("fen;mine;cha");
+    final List<UnwinnabilityRawRead> chaRawResultList = readChaRawResultList(path);
+    for (final UnwinnabilityRawRead rawResult : chaRawResultList) {
+      if (rawResult.mode() != UnwinnabilityMode.FULL) {
+        throw new IllegalArgumentException("Invalid testing line, expected full result");
+      }
+      final UnwinnableFull unwinnableFull = UnwinnableFull.calculate(rawResult.result());
+      final UnwinnabilityFullRead chaFullRead = new UnwinnabilityFullRead(rawResult.fen(), rawResult.lichessGameId(),
+          rawResult.winner(), unwinnableFull, rawResult.mateLine());
+      resultList.add(chaFullRead);
+    }
+    return resultList;
 
-    var counterDifferences = 0;
+  }
 
-    var hasFound = false;
+  private static void checkMineFullAgainstChaFull() throws Exception {
 
-    final var millisecondsBefore = System.currentTimeMillis();
+    final List<UnwinnabilityFullRead> chaFullResultList = readFullResultList(CHA_FULL_RESULT);
+
+    final List<UnwinnabilityFullRead> mineFullResultList;
+    if (FileUtility.exists(MINE_OUT)) {
+      mineFullResultList = readFullResultList(MINE_OUT);
+    } else {
+      mineFullResultList = new ArrayList<>();
+    }
+
+    logger.printf(Level.INFO, "%d positions to test", chaFullResultList.size());
+    logger.printf(Level.INFO, "%d positions already tested", mineFullResultList.size());
+
+    final var remaining = chaFullResultList.size() - mineFullResultList.size();
+    logger.printf(Level.INFO, "%d positions remaining to test", remaining);
+
+    if (remaining == 0) {
+      logger.info("Testing completed");
+      return;
+    }
+
+    final int startIndex;
+    if (mineFullResultList.size() > 0) {
+      final var lastProcessedIndex = mineFullResultList.size() - 1;
+
+      final UnwinnabilityFullRead lastChaResult = NonNullWrapperCommon.get(chaFullResultList, lastProcessedIndex);
+      final UnwinnabilityFullRead lastMineResult = NonNullWrapperCommon.get(mineFullResultList, lastProcessedIndex);
+
+      if (lastChaResult.fen() == lastMineResult.fen()
+          || !lastChaResult.lichessGameId().equals(lastMineResult.lichessGameId())) {
+        throw new IllegalArgumentException("The test results lists are not in sync");
+      }
+      startIndex = lastProcessedIndex + 1;
+    } else {
+      startIndex = 0;
+    }
+
     var testCounter = 0;
-    for (final String fenStr : FileUtility.readFileLines(FEN_MINE)) {
-      if (!hasFound) {
-        if (IS_START_FROM_FEN) {
-          if (START_FROM_FEN.equals(fenStr)) {
-            hasFound = true;
-          }
-        } else {
-          hasFound = true;
-        }
-      }
-      if (!hasFound) {
-        continue;
-      }
+    for (var i = startIndex; i < chaFullResultList.size(); i++) {
       testCounter++;
 
-      // logger.info(testCase.pgnFileName());
+      final UnwinnabilityFullRead fullChaResult = NonNullWrapperCommon.get(chaFullResultList, i);
 
-      final Fen fen = FenParser.parseAdvancedFen(fenStr);
+      final Board board = new Board(fullChaResult.fen());
+      final UnwinnableFullAnalysis fullMineResult = UnwinnableFullAnalyzer.unwinnableFull(board,
+          fullChaResult.winner());
 
-      final ChaFullRead fullChaAnalysis = readFullResult(fen, fen.havingMove().getOppositeSide(),
-          bothResult.fullResultList());
+      final StringBuilder mineOut = new StringBuilder();
+      mineOut.append(fullChaResult.fen().fen()).append(";");
+      mineOut.append(fullChaResult.lichessGameId()).append(";");
+      mineOut.append(UnwinnabilityMode.FULL.getIdentifier()).append(";");
+      mineOut.append(fullChaResult.winner().getFenLetter()).append(";");
+      mineOut.append(fullMineResult.unwinnableFull().getIdentifier()).append(";");
+      final String mateLine = GeneralUtility.composeCheckmateLine(fullMineResult.mateLine());
+      mineOut.append(mateLine);
 
-      final Board board = new Board(fen);
-      final UnwinnableFullAnalysis fullMineAnalysis = UnwinnableFullAnalyzer.unwinnableFull(board,
-          fen.havingMove().getOppositeSide());
+      final String mineOutStr = NonNullWrapperCommon.toString(mineOut);
 
-      final String chaCheckmateLine = fullChaAnalysis.mateLine();
-      final String myCheckmateLine = GeneralUtility.composeCheckmateLine(fullMineAnalysis.mateLine());
+      FileUtility.appendFile(MINE_OUT, mineOutStr);
 
-      final var out = fenStr + "; " + fullMineAnalysis.unwinnableFull() + "; " + fullChaAnalysis.unwinnableFull() + ";"
-          + myCheckmateLine + ";" + chaCheckmateLine;
-
-      if (fullChaAnalysis.unwinnableFull() != fullMineAnalysis.unwinnableFull()) {
-        counterDifferences++;
-        System.out.println("Difference result: " + out);
-      } else if (!chaCheckmateLine.equals(myCheckmateLine)) {
-        System.out.println("Difference mateline : " + out);
-      } else {
-        System.out.println("Equal : " + out);
+      if (fullChaResult.unwinnableFull() != fullMineResult.unwinnableFull()) {
+        System.out.println("Difference found:");
+        System.out.println("CHA: " + fullChaResult.unwinnableFull().getIdentifier() + ", mine: "
+            + fullMineResult.unwinnableFull().getIdentifier());
+        System.out.println(mineOutStr);
       }
 
+      logger.printf(Level.INFO, "Processed %d / %d", testCounter, remaining);
     }
-    final var totalMilliseconds = System.currentTimeMillis() - millisecondsBefore;
-
-    final var totalSeconds = totalMilliseconds / 1000.0;
-
-    final var secondsPerTest = testCounter == 0 ? 0 : totalSeconds / testCounter;
-
-    logger.printf(Level.INFO, "%d differences found", counterDifferences);
-    logger.printf(Level.INFO, "%d tests in %d seconds, %f seconds per test", testCounter, Math.round(totalSeconds),
-        secondsPerTest);
   }
 
 }
