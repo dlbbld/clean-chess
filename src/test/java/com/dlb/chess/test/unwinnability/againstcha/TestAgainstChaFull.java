@@ -19,6 +19,12 @@ import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
 public class TestAgainstChaFull extends AbstractTestAgainstCha {
 
+  // lichess 30k
+  // Difference found:
+  // CHA: winnable, mine: undetermined
+  // 8/6bk/8/1Q6/3P4/8/PP3PPP/3R2K1 b - - 0 36;eSHrCMEQ;full;b;undetermined;
+  // 60'000 positions in 7 hours, about 0.4 seconds per position
+
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaFull.class);
 
   // format: fen;lichessGameId;mode;side;result;mateLine
@@ -115,7 +121,9 @@ public class TestAgainstChaFull extends AbstractTestAgainstCha {
         System.out.println(mineOutStr);
       }
 
-      logger.printf(Level.INFO, "Processed %d / %d", testCounter, remaining);
+      if (testCounter % 50 == 0) {
+        logger.printf(Level.INFO, "Processed %d / %d", testCounter, remaining);
+      }
     }
   }
 
