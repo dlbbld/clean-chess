@@ -22,8 +22,8 @@ class TestPgnExpectedValue extends AbstractPgnTest {
   private static final boolean IS_CHECK_ONLY_PGN_TEST = false;
   private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.SPECIAL;
 
-  private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = false;
-  private static final String CHECK_PGN_FILE_NAME = "01_K_more.pgn";
+  private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = true;
+  private static final String CHECK_PGN_FILE_NAME = "01_initial_ep_two_repetitions_end_with_yes.pgn";
 
   @SuppressWarnings("static-method")
   @Test

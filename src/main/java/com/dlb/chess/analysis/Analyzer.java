@@ -19,11 +19,16 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.mobility.Mobility;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
+import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class Analyzer extends AnalyzerPrint {
+
+  // we set to false for faster testing runs
+  public static boolean IS_CALCULATE_UNWINNABLE = false;
 
   public static void main(String[] args) throws Exception {
     printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\games\\various",
@@ -99,13 +104,27 @@ public class Analyzer extends AnalyzerPrint {
     // for performance we calculate and reuse the mobility solution
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
-    final var unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE, true, mobilitySolution)
-        .unwinnableFull();
-    final var unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK, true, mobilitySolution)
-        .unwinnableFull();
+    final UnwinnableFull unwinnableFullWhite;
+    final UnwinnableFull unwinnableFullBlack;
 
-    final var unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE, true, mobilitySolution);
-    final var unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK, true, mobilitySolution);
+    final UnwinnableQuick unwinnableQuickWhite;
+    final UnwinnableQuick unwinnableQuickBlack;
+
+    if (IS_CALCULATE_UNWINNABLE) {
+      unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE, true, mobilitySolution)
+          .unwinnableFull();
+      unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK, true, mobilitySolution)
+          .unwinnableFull();
+
+      unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE, true, mobilitySolution);
+      unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK, true, mobilitySolution);
+    } else {
+      unwinnableFullWhite = UnwinnableFull.UNDETERMINED;
+      unwinnableFullBlack = UnwinnableFull.UNDETERMINED;
+
+      unwinnableQuickWhite = UnwinnableQuick.POSSIBLY_WINNABLE;
+      unwinnableQuickBlack = UnwinnableQuick.POSSIBLY_WINNABLE;
+    }
 
     final String fen = board.getFen();
 

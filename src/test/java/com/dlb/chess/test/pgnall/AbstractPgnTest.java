@@ -2,6 +2,7 @@ package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.YawnOutput;
@@ -20,8 +21,10 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    testUnwinnableFull(analysis, testCase);
-    testUnwinnableQuick(analysis, testCase);
+    if (Analyzer.IS_CALCULATE_UNWINNABLE) {
+      testUnwinnableFull(analysis, testCase);
+      testUnwinnableQuick(analysis, testCase);
+    }
   }
 
   private static void testFen(String expectedFen, String actualFen) {
