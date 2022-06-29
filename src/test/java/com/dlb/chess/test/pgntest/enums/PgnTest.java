@@ -40,7 +40,7 @@ public enum PgnTest {
   BASIC_FROM_FEN_YAWN_WHITE(true, "basic\\fromFenYawn\\white"),
   BASIC_FROM_FEN_YAWN_BLACK(true, "basic\\fromFenYawn\\black"),
 
-  CAPTURE_AND_MAX_YAWN(false, "captureAndMaxYawn"),
+  CAPTURE_AND_MAX_YAWN(false, "captureLastMove"),
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
@@ -87,15 +87,15 @@ public enum PgnTest {
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "lastMoveAddedAccidentally"),
 
-  MAX_SAME_PIECE_PROMOTION_WHITE(false, "maxSamePiecePromotion\\white"),
-  MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxSamePiecePromotion\\black"),
-  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxSamePiecePromotion\\combined"),
+  MAX_SAME_PIECE_PROMOTION_WHITE(false, "maxPiece\\white"),
+  MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxPiece\\black"),
+  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxPiece\\combined"),
 
   BIZARRE_CHECKMATE(false, "bizarreCheckmate"),
 
-  MONSTER_BLOG_INSUFFICIENT_MATERIAL(false, "monsterBlog\\insufficientMaterial"),
-  MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW(false, "monsterBlog\\insufficientMaterialPredraw"),
-  MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT(false, "monsterBlog\\insufficientMaterialTimeout");
+  MONSTER_BLOG_INSTANT(false, "blog\\instant"),
+  MONSTER_BLOG_PREDRAW(false, "blog\\predraw"),
+  MONSTER_BLOG_TIMEOUT(false, "blog\\timeout");
 
   private final boolean isBasicTest;
   private final String folderPart;

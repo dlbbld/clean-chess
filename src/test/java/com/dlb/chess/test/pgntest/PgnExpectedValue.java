@@ -172,12 +172,12 @@ public class PgnExpectedValue {
         return createTestCasesWikipediaThreefold();
       case BIZARRE_CHECKMATE:
         return createTestCasesBizarreCheckmate();
-      case MONSTER_BLOG_INSUFFICIENT_MATERIAL:
-        return createTestCasesMonsterBlogInsufficientMaterial();
-      case MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW:
-        return createTestCasesMonsterBlogInsufficientMaterialPredraw();
-      case MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT:
-        return createTestCasesMonsterBlogInsufficientMaterialTimeout();
+      case MONSTER_BLOG_INSTANT:
+        return createTestCasesBlogInstant();
+      case MONSTER_BLOG_PREDRAW:
+        return createTestCasesBlogPredraw();
+      case MONSTER_BLOG_TIMEOUT:
+        return createTestCasesBlogTimeout();
       default:
         throw new IllegalArgumentException();
     }
@@ -2778,7 +2778,7 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesLong() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("nikolic_arsovic_1989.pgn",
+    list.add(new PgnFileTestCase("long_nikolic_arsovic_1989.pgn",
         "repPos=3: 96.Rf5 98.Kd1 102.Kd1; repPos=3: 96...Rh1+ 98...Rh1+ 102...Rh1+; repPos=3: 145...Ra8 147...Ra8 151...Ra8; repPos=3: 203...Rf6+ 205...Rf6+ 207...Rf6+",
         "", "112.Rh8 (1) 161...Rc8 (100) 166...Rb5 (110); 167...Rb4+ (1) 217.Rh7 (100) 242.Kc3 (150) 269...Rg7 (205)",
         33, 205, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
@@ -2831,13 +2831,13 @@ public class PgnExpectedValue {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     // longest possible game seventy-five-move rule
-    list.add(new PgnFileTestCase("longest_game_seventy_five_move_rule_murphy.pgn", "", "",
+    list.add(new PgnFileTestCase("longest_possible_seventy_five_move_rule_murphy.pgn", "", "",
         "1.Na3 (1) 50...Ng6 (100) 75.Nf3 (149); 76.Ne5 (1) 125...Qd8 (100) 150.Nc3 (149); 151.Ng5 (1) 200...Ne5 (100) 225.Ne5 (149); 226.Nb5 (1) 275...Bf5 (100) 300.Nd5 (149); 301.Ng6 (1) 350...Nf4 (100) 375.Nc4 (149); 376.Nb4 (1) 425...Nb4 (100) 450.Nf4 (149); 451.Rg1 (1) 500...Ne4 (100) 525.Rg1 (149); 526.Rh1 (1) 575...Ng3 (100) 600.Rh1 (149); 601.Rg1 (1) 650...Be4 (100) 675.Rg1 (149); 676.Rh1 (1) 725...Bd3 (100) 750.Rh1 (149); 751.Rg1 (1) 800...Qd8 (100) 824...Qd8 (148); 825...Nh6 (1) 875.Be5 (100) 899...Nc6 (149); 900...Ba6 (1) 950.Bf6 (100) 974...Nd4 (149); 975...Qb6 (1) 1025.Qb2 (100) 1049...Nb3 (149); 1050...Bg7 (1) 1100.Qb1 (100) 1124...Bb7 (149); 1125...Qb8 (1) 1175.Qc2 (100) 1199...Rc8 (149); 1200...Bc6 (1) 1250.Qd3 (100) 1274...Rc6 (149); 1275...Rf6 (1) 1325.Qb2 (100) 1349...Rd6 (149); 1350...Nh6 (1) 1400.Rh1 (100) 1424...Re6 (149); 1425...Nh6 (1) 1475.Qb2 (100) 1499...Rd6 (149); 1500...Qc7 (1) 1550.Qg3 (100) 1574...Re6 (149); 1575...Bh6 (1) 1625.Qc1 (100) 1649...Nh6 (149); 1650...Rg6 (1) 1700.Qe5 (100) 1724...Bh6 (149); 1725...Re3 (1) 1775.Bb2 (100) 1799...Kf8 (149); 1800...Ke8 (1) 1850.Qd5 (100) 1874...Ke8 (149); 1875...Re5 (1) 1925.Na5 (100) 1949...Ke8 (149); 1950...Rg8 (1) 2000.Qc2 (100) 2024...Kf8 (149); 2025...Nf6 (1) 2075.Bc1 (100) 2099...Ke8 (149); 2100...Rg8 (1) 2150.Qg3 (100) 2174...Bg5 (149); 2175...Kf7 (1) 2225.Qe5 (100) 2249...Bh4 (149); 2250...Bg3 (1) 2300.Qf8+ (100) 2324...Bg3 (149); 2325...Rg6 (1) 2375.Nd8 (100) 2399...Qc8 (149); 2400...Rh6 (1) 2450.Qb3 (100) 2474...Kc7 (149); 2475...Kd8 (1) 2525.Qg7 (100) 2549...Kb6 (149); 2550...Qa5 (1) 2600.Nb3 (100) 2624...Rf6 (149); 2625...Qa5 (1) 2675.Qge5 (100) 2699...Re6 (149); 2700...Kb5 (1) 2750.Rh6 (100) 2774...Rf6 (149); 2775...Rh6 (1) 2825.Qgg6 (100) 2849...Re6 (149); 2850...Re4 (1) 2900.Qcc3 (100) 2924...Rf6 (149); 2925...Qa4 (1) 2975.Qf6 (100) 2999...Rf6 (149); 3000...Rc6 (1) 3050.Qe5 (100) 3074...Rg8 (149); 3075...Rgg6 (1) 3125.Nc6 (100) 3149...Rgg6 (149); 3150...Rde6 (1) 3200.Ng7 (100) 3224...Rge6 (149); 3225...Rd3 (1) 3275.Nf6 (100) 3299...Rf6 (149); 3300...Rd3 (1) 3350.Nb4 (100) 3374...Rc6 (149); 3375...Rc8 (1) 3425.Qh8 (100) 3449...Qa6 (149); 3450...Qa5 (1) 3500.Rg1 (100) 3524...Qa5 (149); 3525...Qa2 (1) 3575.Ng4 (100) 3599...Qa6 (149); 3600...Kc7 (1) 3650.Qf7 (100) 3674...Qa5 (149); 3675...Rh6 (1) 3725.Qe4 (100) 3749...Qa6 (149); 3750...Kc7 (1) 3800.Nb4 (100) 3824...Qa5 (149); 3825...Rd6 (1) 3875.Qc2 (100) 3899...Qa6 (149); 3900...Qa5 (1) 3950.Rg1 (100) 3974...Qa6 (149); 3975...Qa3 (1) 4025.Qc3 (100) 4049...Qa5 (149); 4050...Rg6 (1) 4100.Ng7 (100) 4124...Qa6 (149); 4125...Rf7 (1) 4175.Qh3 (100) 4199...Qa5 (149); 4200...Qa6 (1) 4250.Qd1 (100) 4274...Qa5 (149); 4275...Qa3 (1) 4325.Nb8 (100) 4349...Qa5 (149); 4350...Kb7 (1) 4400.Qh3 (100) 4424...Qa3 (149); 4425...Kc7 (1) 4475.Qf3+ (100) 4499.Ra3 (148); 4500.Qg5 (1) 4549...Kc6 (100) 4574.Kh2 (149); 4575.Ne3 (1) 4624...Kb6 (100) 4649.Bd3 (149); 4650.Rc3 (1) 4699...Kb5 (100) 4724.Qf4 (149); 4725.Ne4 (1) 4774...Rd4 (100) 4799.Ng7 (149); 4800.Nb1 (1) 4849...Kb5 (100) 4874.Be4 (149); 4875.Qe3 (1) 4924...Rg5 (100) 4949.Ne6 (149); 4950.Rc3 (1) 4999...Re2 (100) 5024.Nf6 (149); 5025.Ra6+ (1) 5074...Ra6 (100) 5099.Ng8 (149); 5100.Ra1 (1) 5149...Ra4 (100) 5174.Nf6 (149); 5175.Re3 (1) 5224...Rh4 (100) 5249.Rd3 (149); 5250.Re1 (1) 5299...Bd1 (100) 5324.Bb2 (149); 5325.Nf1 (1) 5374...Bf5 (100) 5399.Bc3 (149); 5400.Qh4 (1) 5449...Bg2 (100) 5474.Bb2 (149); 5475.Qf1 (1) 5524...Kb5 (100) 5549.Bc3 (149); 5550.Qf1 (1) 5599...Re1+ (100) 5624.Bb2 (149); 5625.Nd8 (1) 5674...Be4 (100) 5699.Bc3 (149); 5700.Nb2 (1) 5749...Kc7 (100) 5774.Ba5+ (149); 5775.Nb2 (1) 5824...Rf1 (100) 5849.Nf4 (149); 5850.Qf5 (1) 5899...Rb4 (100) 5924.Ne2 (149); 5925.Qh4 (1) 5974...Kb6 (100) 5999.Nf4 (149); 6000.Qg7 (1) 6049...Re2 (100) 6074.Ne2 (149); 6075.Rd8 (1) 6124...Ra5 (100) 6149.Ng4 (149); 6150.Nb1 (1) 6199...Ra1 (100) 6224.Nge3 (149); 6225.Rg1 (1) 6274...Rg4 (100) 6299.Nf5 (149); 6300.Qd4+ (1) 6349...Kd6 (100) 6374.Nfe3 (149); 6375.Qh5 (1) 6424...Be4 (100) 6449.Re1 (149); 6450.Nb1 (1) 6499...Bf5 (100) 6524.Qf3 (149); 6525.Qd4+ (1) 6574...Rac3 (100) 6599.Kg2 (149); 6600.Kf2 (1) 6649...Bd3 (100) 6674.Re1 (149); 6675.Rd8 (1) 6724...Bd3 (100) 6749.Qfh5 (149); 6750.Nc2 (1) 6799...Bd3 (100) 6824.Ng4 (149); 6825.Rd8 (1) 6874...Rg2+ (100) 6899.Nc4+ (149); 6900.Q8h7 (1) 6949...Ka4 (100) 6974.Nb2 (149); 6975.Ra8 (1) 7024...Rg8 (100) 7049.Rg1 (149); 7050.Q8e5 (1) 7099...Re6 (100) 7124.Rg2 (149); 7125.Qc5+ (1) 7174...Ne2 (100) 7199.Kf3 (149); 7200.Kf2 (1) 7249...Rd4 (100) 7274.Kf2 (149); 7275.Qf7 (1) 7324...Rhh4 (100) 7349.Qh2 (149); 7350.Rg3 (1) 7399...Rc1 (100) 7424.Kf3 (149); 7425.Q8h6 (1) 7474...Rf1+ (100) 7499.Kf4 (149); 7500.Kf5 (1) 7549...Rhh1 (100) 7574.Qh2 (149); 7575.Q8e5 (1) 7624...Na2 (100) 7649.Kf6 (149); 7650.Q8h5 (1) 7699...Nc3 (100) 7724.Rg3 (149); 7725.Qg2 (1) 7774...Rcc1 (100) 7799.Rg2 (149); 7800.Q2h5 (1) 7849...Bc4 (100) 7874.Nd3 (149); 7875.Rf2 (1) 7924...Kb5 (100) 7949.Rg1 (149); 7950.Re4 (1) 7999...Rgg1 (100) 8024.Q8h3 (149); 8025.Rf7 (1) 8074...Rgd1 (100) 8099.Ra8 (149); 8100.Qd6+ (1) 8149...Rh8 (100) 8174.Rb8+ (149); 8175.Qf2+ (1) 8224...Bc4 (100) 8248...Qe1 (148); 8249...Kc6 (1) 8299.Qf6 (100) 8323...Bf7 (149); 8324...Kb6 (1) 8374.Kf5 (100) 8398...Rg5 (149); 8399...Rf3+ (1) 8449.Qc1 (100) 8473...Ka6 (149); 8474...Bd5 (1) 8524.Qa7+ (100) 8548...Kb6 (149); 8549...Ka7 (1) 8599.Ke5 (100) 8623...Kc5 (149); 8624...Rgg1 (1) 8674.Qa5 (100) 8698...Kc6 (149); 8699...Kb6 (1) 8749.Qe5 (100) 8773...Rg7 (149); 8774...Kd8 (1) 8824.Qd2+ (100) 8849.Qd7# (150)",
         750, 150, CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
         "3k4/3Q4/4K3/8/8/8/8/8 b - - 150 8849"));
     // longest possible game fifty-five-move rule
-    list.add(new PgnFileTestCase("longest_game_fifty_move_rule_labelle.pgn", "", "",
+    list.add(new PgnFileTestCase("longest_possible_fifty_move_rule_labelle.pgn", "", "",
         "1.Nf3 (1) 50...Nf4 (100) 75.Rh1 (149); 76.Nc4 (1) 125...Qg4 (100) 150.Rg1 (149); 151.Nh3 (1) 200...Rf8 (100) 225.Nf6 (149); 226.Rg1 (1) 275...Rdb8 (100) 300.Nc4 (149); 301.Nf4 (1) 350...Rh8 (100) 375.Rh1 (149); 376.Ne6 (1) 425...Rd7 (100) 450.Ng3 (149); 451.Nf5 (1) 500...Ra8 (100) 525.Ne8 (149); 526.Nec7 (1) 575...Ne6 (100) 600.Nf5 (149); 601.Ng3 (1) 650...Qe5 (100) 675.Ra1 (149); 676.Nf5 (1) 725...Rg4 (100) 750.Rg1 (149); 751.Ng3 (1) 800...Re8 (100) 825.Nf3 (149); 826.Nf4 (1) 875...Ka4 (100) 900.N8c7 (149); 901.Rb1 (1) 950...Rh4 (100) 975.Na3 (149); 976.Nc4 (1) 1025...Bg7 (100) 1049...Rh8 (148); 1050...Re8 (1) 1100.Nge4 (100) 1124...Ne5 (149); 1125...Bd8 (1) 1175.Kg2 (100) 1199...Nd5 (149); 1200...Bb5 (1) 1250.Bb2 (100) 1274...Bg7 (149); 1275...Rg8 (1) 1325.Rf1 (100) 1349...Bg5 (149); 1350...Re4 (1) 1400.Bd5 (100) 1424...Re4 (149); 1425...Rg8 (1) 1475.Bd5 (100) 1499...Na3 (149); 1500...Bb1 (1) 1550.Qd8 (100) 1574...Ka6 (149); 1575...Bf7 (1) 1625.Rh1 (100) 1649...Nc4 (149); 1650...Na3 (1) 1700.Rg2 (100) 1724...Rd8 (149); 1725...Rg4 (1) 1775.Qg7 (100) 1799...Bc6 (149); 1800...Rh1 (1) 1850.Ne1 (100) 1874...Qc6 (149); 1875...Bd5 (1) 1925.Rab1 (100) 1949...Qg8 (149); 1950...Bd6 (1) 2000.Kb2 (100) 2024...Kb8 (149); 2025...Qc6 (1) 2075.Rh2 (100) 2099...Rh8 (149); 2100...Re8 (1) 2150.Ra4 (100) 2174...Bc6 (149); 2175...Bf4 (1) 2225.Qf3 (100) 2249...Be4 (149); 2250...Bg3 (1) 2300.Rg1 (100) 2324...Re1 (149); 2325...Qg3 (1) 2375.Rc1 (100) 2399...Be7 (149); 2400...Rf3 (1) 2450.Nh6 (100) 2474...Bb7 (149); 2475...Bd5 (1) 2525.Rc1 (100) 2549...Rh2 (149); 2550...Be5 (1) 2600.Nd6 (100) 2624...Bf6 (149); 2625...Qe7 (1) 2675.Nh6 (100) 2699...Re8 (149); 2700...Rd8 (1) 2750.Nf6 (100) 2774...Rc8 (149); 2775...Ng8 (1) 2825.Bb2 (100) 2849...Rc8 (149); 2850...Ne4 (1) 2900.Bb4 (100) 2924...Rc8 (149); 2925...Kf8 (1) 2975.Bb4 (100) 2999...Rh2 (149); 3000...Kf8 (1) 3050.Ne4 (100) 3074...Rh1 (149); 3075...Rh3 (1) 3125.Ncd2 (100) 3149...Qc6 (149); 3150...Rg3 (1) 3200.Qba1 (100) 3224...Kg7 (149); 3225...Qg2 (1) 3275.Qb8 (100) 3299...Rf2 (149); 3300...Qe1 (1) 3350.Qdc6 (100) 3374...Rd8 (149); 3375...Rc1 (1) 3425.Qbb4 (100) 3449...Qd6 (149); 3450...Re8 (1) 3500.Qab2 (100) 3524...Rb8 (149); 3525...Kf8 (1) 3575.Ka2 (100) 3599...Qd6 (149); 3600...Re8 (1) 3650.Bf2 (100) 3674...Qb7 (149); 3675...Rg8 (1) 3725.Q4g3 (100) 3749...Qd6 (149); 3750...Qe5 (1) 3800.Qab2 (100) 3824...Qb8 (149); 3825...Ke8 (1) 3875.Rg5 (100) 3899...Qg8 (149); 3900...Qd8 (1) 3950.Bb4 (100) 3974...Qc6 (149); 3975...Ke7 (1) 4025.Bc2 (100) 4049...Kf6 (149); 4050...Kf7 (1) 4100.Qfg2 (100) 4124...Kg7 (149); 4125...Kf6 (1) 4175.Ra2 (100) 4199.Qge1 (148); 4200.Qeg1 (1) 4249...Kf8 (100) 4274.Qf4 (149); 4275.Qc2 (1) 4324...Kg7 (100) 4349.Rf2 (149); 4350.Bg3 (1) 4399...Kg7 (100) 4424.Qgg2 (149); 4425.Qbb1 (1) 4474...Kg7 (100) 4499.Qge4 (149); 4500.Q4d3 (1) 4549...Qe8 (100) 4574.Nf2 (149); 4575.Q2a1 (1) 4624...Qd5 (100) 4649.Q2e3 (149); 4650.Qd6 (1) 4699...Kf7 (100) 4724.Qed1 (149); 4725.Qgb3 (1) 4774...Kg8 (100) 4799.Q4b2 (149); 4800.Qb1c1 (1) 4849...Qf6 (100) 4874.Qhh1 (149); 4875.Bf6 (1) 4924...Qd6 (100) 4949.Qgf3 (149); 4950.Qfd6 (1) 4999...Kg7 (100) 5024.Rb4 (149); 5025.Qcc5 (1) 5074...Qf7 (100) 5099.Qec7 (149); 5100.Qdd6 (1) 5149...Qe5 (100) 5174.Qbc5 (149); 5175.Qa8 (1) 5224...Qc4 (100) 5249.Q2h1 (149); 5250.Q5a2 (1) 5299...Qb1 (100) 5324.Qca3 (149); 5325.Qhd6 (1) 5374...Qh4 (100) 5399.Bd6 (149); 5400.Qac1 (1) 5449...Qef7 (100) 5474.Qc8 (149); 5475.Qbd4 (1) 5524...Qfe7 (100) 5549.Qbb1 (149); 5550.Q8e5 (1) 5599...Qh4 (100) 5624.Qeg7 (149); 5625.Qgc7 (1) 5674...Qae3 (100) 5699.Q3d2 (149); 5700.Nf7 (1) 5749...Qc5 (100) 5774.Qad4 (149); 5775.Qdd5 (1) 5824...Qh8 (100) 5849.Qed8 (149); 5850.Q7e7 (1) 5899...Qaf3 (100) 5924.Qcc1 (149); 5925.Q3c2 (1) 5974...Qee8 (100) 5999.Qbb5 (149); 6000.Qgd3 (1) 6049...Qc2 (100) 6074.Be3 (149); 6075.Bd2 (1) 6124...Qd3 (100) 6149.Qdf8 (149); 6150.Rc1 (1) 6199...Q4b4 (100) 6224.Ne3 (149); 6225.Qbd1 (1) 6274...Q6e6 (100) 6299.Q6f5 (149); 6300.Qff8 (1) 6349...Qfh4 (100) 6374.Qdd1 (149); 6375.Qed6 (1) 6424...Qc1 (100) 6449.Qda3 (149); 6450.Bh2 (1) 6499...Qfd5 (100) 6524.Qdb3 (149); 6525.Qff2 (1) 6574...Qcc4 (100) 6599.Qgd8 (149); 6600.Qbb8 (1) 6649...Qdc5 (100) 6674.Qhh6 (149); 6675.Q2d2 (1) 6724...Qhe1 (100) 6749.Qd2 (149); 6750.Qfe8 (1) 6799...Q4d4 (100) 6824.Qde5 (149); 6825.Qff6 (1) 6874...Qfg1 (100) 6899.Qed8 (149); 6900.Qbe8 (1) 6949...Qff6 (100) 6974.Qd7 (149); 6975.Qff6 (1) 7024...Qgh6 (100) 7049.Qce6 (149); 7050.Qg4 (1) 7099...Q8h5 (100) 7124.Qb6b7 (149); 7125.Qf8 (1) 7174...Qhf7 (100) 7199.Qbc8 (149); 7200.Qf2 (1) 7249...Qcd2 (100) 7274.Qdd1 (149); 7275.Qd2 (1) 7324...Qef4 (100) 7349.Qdb7 (149); 7350.Qbc2 (1) 7399...Qgf2 (100) 7424.Qg5 (149); 7425.Qb1 (1) 7474...Qda1 (100) 7499.Qaa5 (149); 7500.Qf6 (1) 7549...Qg6 (100) 7574.Qc4 (149); 7575.Qc7 (1) 7624...Qdd1 (100) 7649.Kb8 (149); 7650.Qb5 (1) 7699...Kh4 (100) 7724.Qf6+ (149); 7725.Kc7 (1) 7774...Qee5+ (100) 7798...Qff5 (148); 7799...Qfc2 (1) 7849.Kb8 (100) 7873...Kd6 (149); 7874...Qfc1 (1) 7924.Kc8 (100) 7948...Qhd2 (149); 7949...Qgg1 (1) 7999.Ka7 (100) 8023...Qdf2 (149); 8024...Q2e2 (1) 8074.Kf7 (100) 8098...Qaa1 (149); 8099...Qe1e4 (1) 8149.Kg8 (100) 8173...Q3b1 (149); 8174...Qf2 (1) 8224.Qe4 (100) 8248...Qab8 (149); 8249...Q1d2 (1) 8299.Qf6 (100) 8323...Qh7+ (149); 8324...Qba2 (1) 8374.Qd8 (100) 8398...Qee1 (149); 8399...Qgc5 (1) 8449.Qd6 (100) 8473...Qb2 (149); 8474...Qba1 (1) 8524.Qb5 (100) 8548...Qa7 (149); 8549...Qf6 (1) 8599.Qc7 (100) 8623...Qga8 (149); 8624...Qc4 (1) 8674.Qf5 (100) 8698...Qf5 (149); 8699...Kh4 (1) 8749.Kc5 (100) 8773...Qe1 (149); 8774...Kg7 (1) 8824.Qf3+ (100) 8849.Qg4# (150)",
         4199, 150, CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
@@ -2849,24 +2849,24 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesRandomNoRepetition() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("no_repetition_1.pgn", "", "",
+    list.add(new PgnFileTestCase("01_random_no_repetition.pgn", "", "",
         "162.Rd3 (1) 211...Kh8 (100) 236...Ka8 (150) 1145...Ka1 (1968)", 10, 1968, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "7K/8/8/8/8/1R6/8/k7 w - - 1968 1146"));
-    list.add(new PgnFileTestCase("no_repetition_2.pgn", "", "",
+    list.add(new PgnFileTestCase("02_random_no_repetition.pgn", "", "",
         "180...Ke8 (1) 230.Ka8 (100) 255.Kg6 (150) 880.Kh1 (1400)", 10, 1400, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/1k6/8/4r3/7K b - - 1400 880"));
-    list.add(new PgnFileTestCase("no_repetition_3.pgn", "", "",
+    list.add(new PgnFileTestCase("03_random_no_repetition.pgn", "", "",
         "106.Rg5 (1) 155...Kg1 (100) 180...Kd7 (150) 457...Kh8 (704)", 14, 704, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "7k/3K4/8/8/8/6R1/8/8 w - - 704 458"));
-    list.add(new PgnFileTestCase("no_repetition_4.pgn", "", "",
+    list.add(new PgnFileTestCase("04_random_no_repetition.pgn", "", "",
         "122...Kc7 (1) 172.Rd1 (100) 189.Re2 (134); 190.Re6+ (1) 239...Kf4 (100) 246.Rd8 (113); 247.Kb3 (1) 296...Ka5 (100) 321...Kg1 (150) 324...Kh1 (156)",
         27, 156, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/8/8/8/4K3/8/4R3/7k w - - 156 325"));
-    list.add(new PgnFileTestCase("no_repetition_5.pgn", "", "", "", 18, 79, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("05_random_no_repetition.pgn", "", "", "", 18, 79, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4k3/8/3B4/8/8/8/4q3/K7 b - - 79 182"));
 
@@ -2875,19 +2875,19 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesRandomCheckmate() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("random_checkmate_1.pgn", "", "", "", 5, 3, CheckmateOrStalemate.CHECKMATE, 1,
+    list.add(new PgnFileTestCase("01_random_checkmate.pgn", "", "", "", 5, 3, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
         UnwinnableQuick.UNWINNABLE, "3qkbnr/pb1pp2p/p1r2p2/2p1P1pQ/7P/2P4N/PPNP1PP1/1RB1K2R b k - 3 12"));
-    list.add(new PgnFileTestCase("random_checkmate_2.pgn", "", "", "", 9, 15, CheckmateOrStalemate.CHECKMATE, 1,
+    list.add(new PgnFileTestCase("02_random_checkmate.pgn", "", "", "", 9, 15, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
         UnwinnableQuick.UNWINNABLE, "5k1Q/R4P2/8/p7/7P/4p2N/7K/3r4 b - - 2 82"));
-    list.add(new PgnFileTestCase("random_checkmate_3.pgn", "", "", "", 19, 64, CheckmateOrStalemate.CHECKMATE, 1,
+    list.add(new PgnFileTestCase("03_random_checkmate.pgn", "", "", "", 19, 64, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.WINNABLE, "2b5/8/K7/2q4p/5k2/8/8/8 w - - 13 180"));
-    list.add(new PgnFileTestCase("random_checkmate_4.pgn", "", "", "", 4, 17, CheckmateOrStalemate.CHECKMATE, 1,
+    list.add(new PgnFileTestCase("04_random_checkmate.pgn", "", "", "", 4, 17, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.WINNABLE, "5k2/8/1b6/7K/4p3/3R2q1/p6r/8 w - - 7 119"));
-    list.add(new PgnFileTestCase("random_checkmate_5.pgn", "", "", "", 15, 89, CheckmateOrStalemate.CHECKMATE, 1,
+    list.add(new PgnFileTestCase("05_random_checkmate.pgn", "", "", "", 15, 89, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.WINNABLE, "4K3/4q3/3k4/8/8/7N/8/8 w - - 8 215"));
 
@@ -2896,19 +2896,19 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesRandomStalemate() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("random_stalemate_1.pgn", "", "", "", 13, 93, CheckmateOrStalemate.STALEMATE, 1,
+    list.add(new PgnFileTestCase("01_random_stalemate.pgn", "", "", "", 13, 93, CheckmateOrStalemate.STALEMATE, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "K7/8/1q4k1/8/8/8/8/8 w - - 93 233"));
-    list.add(new PgnFileTestCase("random_stalemate_2.pgn", "", "", "", 21, 92, CheckmateOrStalemate.STALEMATE, 1,
+    list.add(new PgnFileTestCase("02_random_stalemate.pgn", "", "", "", 21, 92, CheckmateOrStalemate.STALEMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "k7/8/1Q6/3K4/p7/P1B5/8/8 b - - 92 191"));
-    list.add(new PgnFileTestCase("random_stalemate_3.pgn", "", "", "", 14, 40, CheckmateOrStalemate.STALEMATE, 1,
+    list.add(new PgnFileTestCase("03_random_stalemate.pgn", "", "", "", 14, 40, CheckmateOrStalemate.STALEMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "5K2/3k1P2/p7/6r1/8/8/8/8 w - - 1 122"));
-    list.add(new PgnFileTestCase("random_stalemate_4.pgn", "", "", "", 13, 9, CheckmateOrStalemate.STALEMATE, 1,
+    list.add(new PgnFileTestCase("04_random_stalemate.pgn", "", "", "", 13, 9, CheckmateOrStalemate.STALEMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "6k1/6P1/p3N2P/P1p5/2P1B3/N2K4/7P/R4R2 b - - 2 46"));
-    list.add(new PgnFileTestCase("random_stalemate_5.pgn", "", "", "", 16, 93, CheckmateOrStalemate.STALEMATE, 1,
+    list.add(new PgnFileTestCase("05_random_stalemate.pgn", "", "", "", 16, 93, CheckmateOrStalemate.STALEMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/8/6p1/3b2P1/8/8/2k5/K7 w - - 72 250"));
 
@@ -2917,19 +2917,19 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesRandomInsufficientMaterial() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("random_insufficient_material_1.pgn", "", "", "", 16, 38, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("01_random_insufficient_material.pgn", "", "", "", 16, 38, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/5k2/8/8/8/8/8/2K5 b - - 0 153"));
-    list.add(new PgnFileTestCase("random_insufficient_material_2.pgn", "", "", "", 19, 66, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("02_random_insufficient_material.pgn", "", "", "", 19, 66, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/7k/8/8/8/8/6K1/8 b - - 0 191"));
-    list.add(new PgnFileTestCase("random_insufficient_material_3.pgn", "", "", "", 10, 95, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("03_random_insufficient_material.pgn", "", "", "", 10, 95, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/1K6/5k2 w - - 0 177"));
-    list.add(new PgnFileTestCase("random_insufficient_material_4.pgn", "", "", "", 16, 82, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("04_random_insufficient_material.pgn", "", "", "", 16, 82, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/8/4K3/8/5k2/8/8/8 w - - 0 232"));
-    list.add(new PgnFileTestCase("random_insufficient_material_5.pgn", "", "", "", 10, 95, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("05_random_insufficient_material.pgn", "", "", "", 10, 95, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/6k1/8/4N3/8/8/2K5/8 b - - 0 204"));
 
@@ -2938,19 +2938,19 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesRandomFifty() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("random_fifty_1.pgn", "", "", "146...Ke8 (1) 196.Kg1 (100)", 9, 100,
+    list.add(new PgnFileTestCase("01_random_fifty.pgn", "", "", "146...Ke8 (1) 196.Kg1 (100)", 9, 100,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/1k6/8/2B5/8/8/8/1b4K1 b - - 100 196"));
-    list.add(new PgnFileTestCase("random_fifty_2.pgn", "", "", "164.Rc3+ (1) 213...Kf2 (100)", 11, 100,
+    list.add(new PgnFileTestCase("02_random_fifty.pgn", "", "", "164.Rc3+ (1) 213...Kf2 (100)", 11, 100,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/n7/3K4/3R4/8/5k2/8 w - - 100 214"));
-    list.add(new PgnFileTestCase("random_fifty_3.pgn", "", "", "126.Kh6 (1) 175...Qb1 (100)", 26, 100,
+    list.add(new PgnFileTestCase("03_random_fifty.pgn", "", "", "126.Kh6 (1) 175...Qb1 (100)", 26, 100,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/2K5/6k1/8/8/8/8/1q6 w - - 100 176"));
-    list.add(new PgnFileTestCase("random_fifty_4.pgn", "", "", "179.Kh4 (1) 228...Ka7 (100)", 26, 100,
+    list.add(new PgnFileTestCase("04_random_fifty.pgn", "", "", "179.Kh4 (1) 228...Ka7 (100)", 26, 100,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/k7/8/5N2/8/7K/6N1/8 w - - 100 229"));
-    list.add(new PgnFileTestCase("random_fifty_5.pgn", "", "", "137.Kb5 (1) 186...Nd2 (100)", 8, 100,
+    list.add(new PgnFileTestCase("05_random_fifty.pgn", "", "", "137.Kb5 (1) 186...Nd2 (100)", 8, 100,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/5k2/8/K7/8/8/1B1n4/8 w - - 100 187"));
 
@@ -2961,41 +2961,41 @@ public class PgnExpectedValue {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(
-        new PgnFileTestCase("random_seventy_five_1.pgn", "", "", "176.Bf7 (1) 225...Kd6 (100) 250...Kd6 (150)", 8, 150,
+        new PgnFileTestCase("01_random_seventy_five.pgn", "", "", "176.Bf7 (1) 225...Kd6 (100) 250...Kd6 (150)", 8, 150,
             CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
             UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/5B2/K2k4/7p/7P/8/8/8 w - - 150 251"));
-    list.add(new PgnFileTestCase("random_seventy_five_2.pgn", "", "", "198.Re8 (1) 247...Kg2 (100) 272...Ka1 (150)", 15,
-        150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("02_random_seventy_five.pgn", "", "", "198.Re8 (1) 247...Kg2 (100) 272...Ka1 (150)",
+        15, 150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/8/K7/8/8/8/5R2/k7 w - - 150 273"));
-    list.add(new PgnFileTestCase("random_seventy_five_3.pgn", "", "", "162.Kb2 (1) 211...Ke4 (100) 236...Kh6 (150)", 20,
-        150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("03_random_seventy_five.pgn", "", "", "162.Kb2 (1) 211...Ke4 (100) 236...Kh6 (150)",
+        20, 150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/8/3q3k/8/8/8/8/2K5 w - - 150 237"));
-    list.add(
-        new PgnFileTestCase("random_seventy_five_4.pgn", "", "", "132.Kg8 (1) 181...Ng2 (100) 206...Kc2 (150)", 22, 150,
-            CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "2K5/2N5/8/8/8/8/2kn4/8 w - - 150 207"));
+    list.add(new PgnFileTestCase("04_random_seventy_five.pgn", "", "", "132.Kg8 (1) 181...Ng2 (100) 206...Kc2 (150)",
+        22, 150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "2K5/2N5/8/8/8/8/2kn4/8 w - - 150 207"));
 
     return new PgnFileTestCaseList(PgnTest.RANDOM_SEVENTY_FIVE, list);
   }
 
   private static PgnFileTestCaseList createTestCasesRandomThreefold() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("random_threefold_1.pgn", "repPos=3: 110...Bf2 114...Bf2 119...Bf2", "", "", 16, 27,
+    list.add(new PgnFileTestCase("01_random_threefold.pgn", "repPos=3: 110...Bf2 114...Bf2 119...Bf2", "", "", 16, 27,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/7K/k7/p6p/P6P/5p2/5b2/8 w - - 27 120"));
-    list.add(new PgnFileTestCase("random_threefold_2.pgn", "repPos=3: 197.Kf7 199.Kf7 201.Kf7", "", "", 13, 99,
+    list.add(new PgnFileTestCase("02_random_threefold.pgn", "repPos=3: 197.Kf7 199.Kf7 201.Kf7", "", "", 13, 99,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/5K2/2k5/1p6/pP6/P7/8/8 b - - 99 201"));
-    list.add(new PgnFileTestCase("random_threefold_3.pgn", "repPos=3: 158.Ke3 162.Ke3 171.Ke3", "", "", 36, 40,
+    list.add(new PgnFileTestCase("03_random_threefold.pgn", "repPos=3: 158.Ke3 162.Ke3 171.Ke3", "", "", 36, 40,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/8/8/P7/8/4K3/8/8 b - - 40 171"));
-    list.add(new PgnFileTestCase("random_threefold_4.pgn", "repPos=3: 188.Kg4 190.Rf5 193.Rf5", "", "", 32, 96,
+    list.add(new PgnFileTestCase("04_random_threefold.pgn", "repPos=3: 188.Kg4 190.Rf5 193.Rf5", "", "", 32, 96,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/6k1/8/5R2/6K1/8/8/8 b - - 96 193"));
-    list.add(new PgnFileTestCase("random_threefold_5.pgn", "repPos=3: 198...Ke3 200...Ke3 202...Ke3", "", "", 11, 38,
+    list.add(new PgnFileTestCase("05_random_threefold.pgn", "repPos=3: 198...Ke3 200...Ke3 202...Ke3", "", "", 11, 38,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/1K6/8/4k3/7p/8 w - - 26 203"));
 
@@ -3004,12 +3004,12 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesRandomFivefold() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("random_fivefold_1.pgn",
+    list.add(new PgnFileTestCase("01_random_fivefold.pgn",
         "repPos=3: 149.Kxd3 165.Kd3 171.Kd3; repPos=4: 156.Kb2 173.Kb2 183.Kb2 193.Kb2; repPos=4: 156...Kc8 158...Kc8 160...Kc8 183...Kc8; repPos=3: 172...Kb7 189...Kb7 192...Kb7; repPos=5: 173...Ka6 175...Ka6 186...Ka6 188...Ka6 193...Ka6; repPos=3: 175.Kb2 186.Kb2 188.Kb2",
         "", "", 22, 89, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/8/k7/p7/P7/8/1K6/8 w - - 89 194"));
-    list.add(new PgnFileTestCase("random_fivefold_2.pgn",
+    list.add(new PgnFileTestCase("02_random_fivefold.pgn",
         "repPos=3: 136.Nd7 138.Kb4 140.Kb4; repPos=3: 212...Rd3 214...Rd3 216...Rd3; repPos=5: 251...Kb7 255...Rc8 257...Rc8 259...Rc8 261...Rc8; repPos=3: 254...Rc5 258...Rc5 260...Rc5; repPos=4: 255.Kb2 257.Kb2 259.Kb2 261.Kb2",
         "", "", 13, 92, CheckmateOrStalemate.NA, 5, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
@@ -3020,157 +3020,162 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesGamesVarious() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("almtwali_vs_danielbaechli_2020.pgn", "", "", "", 14, 91, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "6k1/4P2p/5K1P/8/8/8/8/8 b - - 0 114"));
-    list.add(new PgnFileTestCase("krush_zatonski_2008.pgn", "", "", "", 13, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "6rk/1p1R1pqp/p1p4p/6rP/P7/5QP1/1P3P2/4R1K1 b - - 3 33"));
-    list.add(new PgnFileTestCase("krush_zatonski_2008_reconstructed.pgn", "", "", "", 13, 11, CheckmateOrStalemate.NA,
+    list.add(new PgnFileTestCase("games_various_almtwali_vs_danielbaechli_2020.pgn", "", "", "", 14, 91,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "6k1/4P2p/5K1P/8/8/8/8/8 b - - 0 114"));
+    list.add(new PgnFileTestCase("games_various_krush_zatonski_2008.pgn", "", "", "", 13, 10, CheckmateOrStalemate.NA,
         1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "6rk/1p1R1pqp/p1p4p/6rP/P7/5QP1/1P3P2/4R1K1 b - - 3 33"));
+    list.add(new PgnFileTestCase("games_various_krush_zatonski_2008_reconstructed.pgn", "", "", "", 13, 11,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r5qk/1R2Rprp/5Q1p/p6P/P7/2P3P1/5P2/6K1 w - - 11 47"));
-    list.add(new PgnFileTestCase("rikikits_vs_demchenko_2016_amended.pgn",
+    list.add(new PgnFileTestCase("games_various_rikikits_vs_demchenko_2016_amended.pgn",
         "repPos=3: 48.Kc7 50.Kc7 52.Kc7; repPos=3: 48...Bd5 50...Bd5 52...Bd5; repPos=3: 49.Kd6 51.Kd6 53.Kd6; repPos=3: 49...Be6 51...Be6 53...Be6; repPos=4: 73.Kf4 75.Kf4 81.Kf4 85.Kf4; repPos=3: 76...Kb5 80...Be6 86...Kb5",
         "", "112.Kd2 (1) 161...Bb5 (100) 163.Bh8 (103)", 7, 103, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "7B/5p2/2k5/K3P3/1P6/3b4/8/8 b - - 103 163"));
-    list.add(new PgnFileTestCase("demchenko_vs_verdenotte_2018_amended.pgn", "", "",
+    list.add(new PgnFileTestCase("games_various_demchenko_vs_verdenotte_2018_amended.pgn", "", "",
         "88...Rb3 (1) 138.Ra1 (100) 141...Rb6 (107)", 6, 107, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/1r6/3B4/1k1K4/8/R7/8 w - - 107 142"));
-    list.add(new PgnFileTestCase("demchenko_vs_chesspanda123_2017_amended.pgn", "", "",
+    list.add(new PgnFileTestCase("games_various_demchenko_vs_chesspanda123_2017_amended.pgn", "", "",
         "61...Re1+ (1) 111.Kc5 (100) 136.Rg8+ (150)", 39, 150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "6R1/8/8/8/4B3/4K3/5r2/6k1 b - - 150 136"));
-    list.add(new PgnFileTestCase("savic_vs_bueble_2020.pgn",
+    list.add(new PgnFileTestCase("games_various_savic_vs_bueble_2020.pgn",
         "repPos=3: 76.Rb6 80.Kh6 84.Rb6; repPos=3: 76...Ra8 80...Ra8 84...Ra8", "", "", 12, 31, CheckmateOrStalemate.NA,
         1, InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "5k2/8/6K1/8/8/8/8/8 w - - 0 92"));
-    list.add(new PgnFileTestCase("blatny_holzke_1997.pgn", "", "repPos=3: 47...f5 49...Kd6 51...Kd6", "", 8, 24,
-        CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("games_various_blatny_holzke_1997.pgn", "", "repPos=3: 47...f5 49...Kd6 51...Kd6", "",
+        8, 24, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/3R2bp/4n1p1/1p1k1pP1/5P1P/1K2P3/8/8 b - - 24 64"));
-    list.add(new PgnFileTestCase("gvetadze_milliet_2014.pgn", "repPos=3: 25.Qg6+ 27.Qg6+ 29.Qg6+",
+    list.add(new PgnFileTestCase("games_various_gvetadze_milliet_2014.pgn", "repPos=3: 25.Qg6+ 27.Qg6+ 29.Qg6+",
         "repPos=3: 24...f5 26...Kg8 28...Kg8", "", 10, 9, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "2q2rk1/2r1b3/1p2p1Q1/4Pp2/8/3B4/1P3PPP/3R2K1 b - - 9 29"));
     // O-O-O+ was played in this game!!!
-    list.add(new PgnFileTestCase("hikaru_vs_penguingm1_2014.pgn", "", "", "", 11, 7, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "2k5/1pp1r3/p5pp/2P5/1P6/P2pP1PP/4PK2/8 w - - 0 36"));
+    list.add(new PgnFileTestCase("games_various_hikaru_vs_penguingm1_2014.pgn", "", "", "", 11, 7,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "2k5/1pp1r3/p5pp/2P5/1P6/P2pP1PP/4PK2/8 w - - 0 36"));
 
     // "threefold repetition" with initial en passant
-    list.add(new PgnFileTestCase("gmjoey1_vs_bugsbunny444_2013.pgn", "repPos=3: 18.Qg6+ 20.Qg6+ 22.Qg6+",
+    list.add(new PgnFileTestCase("games_various_gmjoey1_vs_bugsbunny444_2013.pgn", "repPos=3: 18.Qg6+ 20.Qg6+ 22.Qg6+",
         "repPos=3: 17...f5 19...Kg8 21...Kg8", "", 18, 9, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "rn1q1rk1/pp1b4/4p1Q1/bN1pPp2/3P4/PpPB4/5PPP/R3K2R b KQ - 9 22"));
-    list.add(new PgnFileTestCase("gmjoey1_vs_tiohoracio_2015.pgn",
+    list.add(new PgnFileTestCase("games_various_gmjoey1_vs_tiohoracio_2015.pgn",
         "repPos=3: 23.Qh7+ 25.Qh7+ 27.Qh7+; repPos=3: 23...Kf7 25...Kf7 27...Kf7",
         "repPos=3: 22...f5 24...Kg8 26...Kg8", "", 6, 10, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.WINNABLE,
         "r1b2r2/1p3kpQ/4p3/4Pp2/p6R/2q5/P5PP/1R5K w - - 10 28"));
-    list.add(new PgnFileTestCase("gmjoey1_vs_dulerile_2018.pgn",
+    list.add(new PgnFileTestCase("games_various_gmjoey1_vs_dulerile_2018.pgn",
         "repPos=3: 45.Rc8+ 47.Rc8+ 49.Rc8+; repPos=3: 45...Kb7 47...Kb7 49...Kb7",
         "repPos=3: 44...a5 46...Ka8 48...Ka8", "", 6, 10, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "2R5/1k3p2/1p4p1/pP1b3p/P4B1P/6P1/1r6/5K2 w - - 10 50"));
 
     // checkmating with castling
-    list.add(new PgnFileTestCase("lasker_vs_alan_thomas_1912.pgn", "", "", "", 9, 6, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "rn3r2/pbppq1p1/1p2pN2/8/3P2NP/6P1/PPP1BP1R/2KR2k1 b - - 6 18"));
+    list.add(new PgnFileTestCase("games_various_lasker_vs_alan_thomas_1912.pgn", "", "", "", 9, 6,
+        CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        "rn3r2/pbppq1p1/1p2pN2/8/3P2NP/6P1/PPP1BP1R/2KR2k1 b - - 6 18"));
 
     // fooling around as long as I could
-    list.add(new PgnFileTestCase("mickeymousetest_donaldducktest_2021.pgn", "", "", "339.Qd6 (1) 388...Ne3 (100)", 49,
-        100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "rnbq1b1r/4k3/8/7N/4P2p/4n3/8/R1BQKBNR w - - 100 389"));
+    list.add(new PgnFileTestCase("games_various_mickeymousetest_donaldducktest_2021.pgn", "", "",
+        "339.Qd6 (1) 388...Ne3 (100)", 49, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "rnbq1b1r/4k3/8/7N/4P2p/4n3/8/R1BQKBNR w - - 100 389"));
 
-    list.add(new PgnFileTestCase("jobava_so_2017.pgn", "repPos=3: 37.Rxa7+ 39.Ra7+ 41.Ra7+", "", "", 5, 8,
+    list.add(new PgnFileTestCase("games_various_jobava_so_2017.pgn", "repPos=3: 37.Rxa7+ 39.Ra7+ 41.Ra7+", "", "", 5, 8,
         CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/R3k3/8/6N1/5p1P/P1Pr4/1P2r3/2K5 b - - 8 41"));
 
     // fifty-move claim but only 67 half-moves
-    list.add(new PgnFileTestCase("gunina_harika_2019.pgn", "", "", "", 15, 67, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("games_various_gunina_harika_2019.pgn", "", "", "", 15, 67, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "R7/1n6/2K5/8/8/8/2k5/8 b - - 67 101"));
 
     // knight-bishop checkmate in blitz unsuccessful
-    list.add(new PgnFileTestCase("drozdova_tan_2018.pgn", "", "",
+    list.add(new PgnFileTestCase("games_various_drozdova_tan_2018.pgn", "", "",
         "72.Kf4 (1) 121...Nd5 (100) 146...Ne4 (150) 155...Bh3 (168)", 8, 168, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/3n1k1b/8/6K1 w - - 168 156"));
 
     // 75-move-rule exceeded by 116.5 full moves - no arbiter call
-    list.add(new PgnFileTestCase("anikonov_zhigalko_2018.pgn", "", "", "104.Ra8 (1) 153...Ke5 (100) 166...Kb5 (126)", 8,
-        126, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "2R5/4r3/8/1k1n4/8/5K2/8/8 w - - 126 167"));
+    list.add(new PgnFileTestCase("games_various_anikonov_zhigalko_2018.pgn", "", "",
+        "104.Ra8 (1) 153...Ke5 (100) 166...Kb5 (126)", 8, 126, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "2R5/4r3/8/1k1n4/8/5K2/8/8 w - - 126 167"));
 
     // KRvKRB played over fifty moves, under seventy-five moves
-    list.add(new PgnFileTestCase("kevlishvili_zhigalko_2018.pgn",
+    list.add(new PgnFileTestCase("games_various_kevlishvili_zhigalko_2018.pgn",
         "repPos=4: 95.Kd3 101.Nf5 144.Nf5 166.Kd3; repPos=3: 95...Nd4 99...Nd4 132...Nd4; repPos=3: 96.Ne7 100.Ne7 133.Ne7; repPos=3: 96...Nc6 131...Nc6 133...Nc6; repPos=3: 97.Nf5 132.Nf5 134.Nf5; repPos=3: 101...Kc6 144...Kc6 166...Kc6; repPos=3: 102.Ne7+ 145.Ne7+ 167.Ne7+; repPos=3: 102...Kd7 145...Kd7 167...Kd7; repPos=3: 103.Nf5 146.Nf5 168.Nf5; repPos=3: 103...Nc5+ 146...Nc5+ 168...Nc5+; repPos=3: 104.Ke3 147.Ke3 169.Ke3; repPos=3: 104...Ke6 147...Ke6 169...Ke6; repPos=3: 105.Ng3 148.Ng3 170.Ng3; repPos=3: 106.Ne2 108.Ne2 171.Ne2",
         "", "64.Nd5 (1) 113...Kc6 (100) 138...Nf6 (150) 180.Kc4 (233)", 6, 233, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/8/5N1n/4K3/8/3k4 b - - 0 192"));
 
     // KRvKRN - white about being mated lost on time
-    list.add(new PgnFileTestCase("harikrishna_hovhannisyan_2018.pgn", "", "", "", 32, 91, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.WINNABLE, "8/K1k5/3n1R2/8/7r/8/8/8 w - - 91 128"));
+    list.add(new PgnFileTestCase("games_various_harikrishna_hovhannisyan_2018.pgn", "", "", "", 32, 91,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.WINNABLE, "8/K1k5/3n1R2/8/7r/8/8/8 w - - 91 128"));
 
     // KvKNN - unclear why game was stopped
-    list.add(new PgnFileTestCase("bazeev_riazantsev_2018.pgn", "", "", "59.Ke3 (1) 108...Ng6+ (100) 109...Nf8+ (102)",
-        8, 102, CheckmateOrStalemate.NA, 1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "5n2/5k1K/8/8/6n1/8/8/8 w - - 102 110"));
+    list.add(new PgnFileTestCase("games_various_bazeev_riazantsev_2018.pgn", "", "",
+        "59.Ke3 (1) 108...Ng6+ (100) 109...Nf8+ (102)", 8, 102, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "5n2/5k1K/8/8/6n1/8/8/8 w - - 102 110"));
 
     // Blitz, was it fivefold? No, only threefold
-    list.add(new PgnFileTestCase("khademalsharieh_bodnaruk_2018.pgn", "repPos=3: 77...Re1 79...Kg7 83...Kg7", "", "",
-        21, 49, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "4Q3/3K4/6k1/8/5R2/8/8/4r3 b - - 0 109"));
+    list.add(new PgnFileTestCase("games_various_khademalsharieh_bodnaruk_2018.pgn",
+        "repPos=3: 77...Re1 79...Kg7 83...Kg7", "", "", 21, 49, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "4Q3/3K4/6k1/8/5R2/8/8/4r3 b - - 0 109"));
 
     // we need more skillful arbiters
-    list.add(new PgnFileTestCase("grischuk_mamedyarov_2017.pgn", "repPos=4: 61.Rb2 63.Kg2 65.Kg2 67.Rb2", "", "", 7, 25,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/8/4p3/4Bk1K/5Pr1/8 w - - 2 88"));
+    list.add(new PgnFileTestCase("games_various_grischuk_mamedyarov_2017.pgn", "repPos=4: 61.Rb2 63.Kg2 65.Kg2 67.Rb2",
+        "", "", 7, 25, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "8/8/8/8/4p3/4Bk1K/5Pr1/8 w - - 2 88"));
 
     // youtube video - why savic so angry?
-    list.add(new PgnFileTestCase("pranav_savic_2021_incomplete_speculative.pgn", "", "", "", 7, 73,
+    list.add(new PgnFileTestCase("games_various_pranav_savic_2021_incomplete_speculative.pgn", "", "", "", 7, 73,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 101"));
 
     // repetition after promotion
-    list.add(new PgnFileTestCase("keres_fischer_1962.pgn", "", "", "", 20, 17, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("games_various_keres_fischer_1962.pgn", "", "", "", 20, 17, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/p4Q1k/1p6/1P6/8/7K/8/6q1 b - - 5 77"));
-    list.add(new PgnFileTestCase("keres_fischer_1962_changed.pgn", "repPos=3: 76.Qf8+ 78.Qf8+ 80.Qf8+", "", "", 20, 17,
-        CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+    list.add(new PgnFileTestCase("games_various_keres_fischer_1962_changed.pgn", "repPos=3: 76.Qf8+ 78.Qf8+ 80.Qf8+",
+        "", "", 20, 17, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "5Q1k/p7/1p6/1P6/8/7K/8/6q1 b - - 11 80"));
 
     // Lichess issue - game import
-    list.add(new PgnFileTestCase("swiercz_karjakin_2015.pgn", "repPos=3: 42.Rf8+ 44.Rf8+ 46.Rf8+", "", "", 24, 11,
-        CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("games_various_swiercz_karjakin_2015.pgn", "repPos=3: 42.Rf8+ 44.Rf8+ 46.Rf8+", "", "",
+        24, 11, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "5R2/p3r3/P1R1pkp1/5p1p/5P1P/r5P1/4PK2/8 b - - 9 46"));
 
     // the threefold I did not see
-    list.add(new PgnFileTestCase("gwendolus_vs_danielbaechli_2022.pgn", "repPos=3: 50.Bd4 52.Rh6 54.Rh6", "", "", 12,
-        15, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+    list.add(new PgnFileTestCase("games_various_gwendolus_vs_danielbaechli_2022.pgn", "repPos=3: 50.Bd4 52.Rh6 54.Rh6",
+        "", "", 12, 15, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "2k1r3/1p6/7R/3p4/1P1Bn3/2P2K2/P7/8 b - - 10 54"));
 
     // import on Lichess did not work
-    list.add(new PgnFileTestCase("tal_bronstein_1961.pgn", "", "", "", 3, 10, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("games_various_tal_bronstein_1961.pgn", "", "", "", 3, 10, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/5p2/1p2p2p/6pk/r6q/4Q3/5P2/2R3K1 w - - 6 41"));
 
     // Ambrona 83
-    list.add(new PgnFileTestCase("Ob5ozxgG.pgn", "", "", "", 5, 83, CheckmateOrStalemate.NA, 2,
+    list.add(new PgnFileTestCase("games_various_Ob5ozxgG.pgn", "", "", "", 5, 83, CheckmateOrStalemate.NA, 2,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
 
@@ -3180,59 +3185,59 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesGamesWcc201() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("round_01_nepomniachtchi_carlsen_2021_wcc.pgn", "", "", "", 17, 14,
+    list.add(new PgnFileTestCase("wcc_2021_round_01_nepomniachtchi_carlsen.pgn", "", "", "", 17, 14,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/4r2p/p2rnkp1/2p2p2/2N4P/2PP1P2/2K2P2/R3R3 b - - 14 45"));
-    list.add(new PgnFileTestCase("round_01_nepomniachtchi_carlsen_2021_wcc_amended.pgn",
+    list.add(new PgnFileTestCase("wcc_2021_round_01_nepomniachtchi_carlsen_amended.pgn",
         "repPos=3: 41...Re7 43...Rc6 45...Rc6", "", "", 17, 15, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/4r2p/p1r1nkp1/2p2p2/2N4P/2PP1P2/2K2P2/R3R3 w - - 15 46"));
-    list.add(new PgnFileTestCase("round_02_carlsen_nepomniachtchi_2021_wcc.pgn", "", "", "", 12, 9,
+    list.add(new PgnFileTestCase("wcc_2021_round_02_carlsen_nepomniachtchi.pgn", "", "", "", 12, 9,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/6kp/7R/6Pp/r4P2/8/5K2/8 w - - 9 59"));
-    list.add(new PgnFileTestCase("round_03_nepomniachtchi_carlsen_2021_wcc.pgn", "", "", "", 28, 6,
+    list.add(new PgnFileTestCase("wcc_2021_round_03_nepomniachtchi_carlsen.pgn", "", "", "", 28, 6,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/3b4/7p/p1p1k3/P1p2p1P/2P2P2/2B2KP1/8 b - - 6 41"));
-    list.add(new PgnFileTestCase("round_04_carlsen_nepomniachtchi_2021_wcc.pgn", "", "", "", 5, 7,
+    list.add(new PgnFileTestCase("wcc_2021_round_04_carlsen_nepomniachtchi.pgn", "", "", "", 5, 7,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r4nk1/4Rp1p/1p3Np1/1P1P2P1/8/p2r4/5P1P/R5K1 b - - 7 33"));
-    list.add(new PgnFileTestCase("round_04_carlsen_nepomniachtchi_2021_wcc_amended.pgn",
+    list.add(new PgnFileTestCase("wcc_2021_round_04_carlsen_nepomniachtchi_amended.pgn",
         "repPos=3: 29...a3 31...Kg7 33...Kg7", "", "", 5, 8, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "r4n2/4Rpkp/1p3Np1/1P1P2P1/8/p2r4/5P1P/R5K1 w - - 8 34"));
-    list.add(new PgnFileTestCase("round_05_nepomniachtchi_carlsen_2021_wcc.pgn", "", "", "", 17, 14,
+    list.add(new PgnFileTestCase("wcc_2021_round_05_nepomniachtchi_carlsen.pgn", "", "", "", 17, 14,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "4kb2/2p3p1/4np1p/4pN1P/4P1P1/2P1BP2/4K3/r2R4 b - - 14 43"));
-    list.add(new PgnFileTestCase("round_05_nepomniachtchi_carlsen_2021_wcc_amended.pgn",
+    list.add(new PgnFileTestCase("wcc_2021_round_05_nepomniachtchi_carlsen_amended.pgn",
         "repPos=3: 39...Ra2+ 41...Ra2+ 43...Ra2+", "", "", 17, 15, CheckmateOrStalemate.NA, 3,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4kb2/2p3p1/4np1p/4pN1P/4P1P1/2P1BP2/r3K3/3R4 w - - 15 44"));
-    list.add(new PgnFileTestCase("round_06_carlsen_nepomniachtchi_2021_wcc.pgn", "", "", "", 13, 55,
+    list.add(new PgnFileTestCase("wcc_2021_round_06_carlsen_nepomniachtchi.pgn", "", "", "", 13, 55,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "3k4/5RN1/4P3/5P2/7K/8/8/6q1 b - - 2 136"));
-    list.add(new PgnFileTestCase("round_07_nepomniachtchi_carlsen_2021_wcc.pgn",
+    list.add(new PgnFileTestCase("wcc_2021_round_07_nepomniachtchi_carlsen.pgn",
         "repPos=3: 34...Kg7 36...Kg7 38...Kg7; repPos=3: 35.Ra5 37.Ra5 39.Ra5; repPos=3: 35...Kf6 37...Kf6 39...Kf6",
         "", "", 17, 15, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/R4pk1/6p1/7p/7P/2r3P1/5PK1/8 b - - 15 41"));
-    list.add(new PgnFileTestCase("round_08_carlsen_nepomniachtchi_2021_wcc.pgn", "", "", "", 6, 12,
+    list.add(new PgnFileTestCase("wcc_2021_round_08_carlsen_nepomniachtchi.pgn", "", "", "", 6, 12,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/7k/8/3P4/6P1/1P2qQ1p/6P1/7K b - - 1 46"));
-    list.add(new PgnFileTestCase("round_09_nepomniachtchi_carlsen_2021_wcc.pgn", "", "", "", 18, 6,
+    list.add(new PgnFileTestCase("wcc_2021_round_09_nepomniachtchi_carlsen.pgn", "", "", "", 18, 6,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r3b1k1/P4pp1/4p3/2N1P2p/7P/5Pn1/8/R5K1 w - - 1 40"));
-    list.add(new PgnFileTestCase("round_10_carlsen_nepomniachtchi_2021_wcc.pgn", "", "", "", 5, 12,
+    list.add(new PgnFileTestCase("wcc_2021_round_10_carlsen_nepomniachtchi.pgn", "", "", "", 5, 12,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/pp6/2pk1n2/3pN3/3P4/2P1K3/PP6/8 b - - 1 41"));
-    list.add(new PgnFileTestCase("round_11_nepomniachtchi_carlsen_2021_wcc.pgn", "", "", "", 20, 7,
+    list.add(new PgnFileTestCase("wcc_2021_round_11_nepomniachtchi_carlsen.pgn", "", "", "", 20, 7,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "K7/5pk1/1R4p1/P1q5/5P2/4P3/8/8 w - - 7 50"));
@@ -3240,55 +3245,20 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.GAMES_WCC2021, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesFivefoldCorrect() {
-    final List<PgnFileTestCase> list = new ArrayList<>();
-
-    list.add(new PgnFileTestCase("akshat_li_2018.pgn", "repPos=5: 60...Rc1 62...Rc1 68...Rc1 73...Rc1 75...Rc1", "", "",
-        19, 32, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/Pk6/5P2/1K1p3p/3Bp2P/4P3/8/2r5 w - - 32 76"));
-
-    list.add(new PgnFileTestCase("miton_yakubboev_2018.pgn",
-        "repPos=5: 38...Rd5+ 40...Rd5+ 42...Rd5+ 44...Rd5+ 46...Rd5+; repPos=4: 39.Ke4 41.Ke4 43.Ke4 45.Ke4; repPos=3: 39...Re5+ 43...Re5+ 45...Re5+; repPos=3: 40.Kd4 44.Kd4 46.Kd4",
-        "", "", 25, 23, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/p7/1p2k2p/1P1r4/P1pK4/4P2P/8/2R5 w - - 23 47"));
-    list.add(new PgnFileTestCase("potapov_adly_2018.pgn", "repPos=5: 43.Qf5+ 45.Qf5+ 47.Qf5+ 49.Qf5+ 51.Qf5+", "", "",
-        20, 24, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/6rk/7p/p4Q2/8/Pr5P/3n1P2/3N3K b - - 24 51"));
-    list.add(new PgnFileTestCase("sethuraman_guseinov_2017.pgn",
-        "repPos=5: 51.Rxf7+ 53.Rf7+ 55.Rf7+ 57.Rf7+ 59.Rf7+; repPos=4: 51...Kg6 53...Kg6 55...Kg6 57...Kg6; repPos=4: 52.Rf6+ 54.Rf6+ 56.Rf6+ 58.Rf6+; repPos=4: 52...Kg7 54...Kg7 56...Kg7 58...Kg7",
-        "", "", 14, 19, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "1r6/1P3Rkp/3Np3/4P3/1r4p1/8/7P/7K b - - 16 59"));
-    list.add(new PgnFileTestCase("paichadze_ter-sahakyan_2019.pgn",
-        "repPos=5: 58...Re4+ 60...Re4+ 62...Re4+ 64...Re4+ 66...Re4+; repPos=4: 59.Kf2 61.Kf2 63.Kf2 65.Kf2; repPos=4: 59...Rf4 61...Rf4 63...Rf4 65...Rf4; repPos=4: 60.Ke3 62.Ke3 64.Ke3 66.Ke3",
-        "", "", 5, 18, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/8/8/4k3/4r3/4KR2/8/8 w - - 18 67"));
-    list.add(new PgnFileTestCase("robson_moranda_2019.pgn",
-        "repPos=5: 34...Kf8 36...Kf8 38...Kf8 40...Kf8 42...Kf8; repPos=4: 35.Raf7+ 37.Raf7+ 39.Raf7+ 41.Raf7+; repPos=4: 35...Ke8 37...Ke8 39...Ke8 41...Ke8; repPos=4: 36.Ra7 38.Ra7 40.Ra7 42.Ra7",
-        "", "", 6, 17, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "5k2/R5R1/3pp2p/4p3/4P2P/1r1r2PK/8/8 w - - 17 43"));
-    return new PgnFileTestCaseList(PgnTest.FIVEFOLD_CORRECT, list);
-  }
-
   private static PgnFileTestCaseList createTestCasesFivefoldBeyond() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("savchenko_yu_y2017.pgn",
+    list.add(new PgnFileTestCase("fivefold_beyond_savchenko_yu_y2017.pgn",
         "repPos=3: 68.Rf6 70.Kf3 72.Kf3; repPos=5: 75.Kf3 77.Kf3 79.Rf6 83.Rf6 85.Rf6; repPos=3: 78.Rh6 80.Rh6 82.Kf3",
         "", "", 20, 43, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/8/1k2K3/1P2p3/2n1P3/8/8/3n4 w - - 0 96"));
-    list.add(new PgnFileTestCase("wang_yu_2017.pgn",
+    list.add(new PgnFileTestCase("fivefold_beyond_wang_yu_2017.pgn",
         "repPos=4: 40.f4 42.Kd5 46.Kd5 56.Kd5; repPos=5: 40...Kc7 42...Kc7 44...Kc7 46...Kc7 48...Kc7; repPos=3: 41.Kc5 45.Kc5 49.Kc5; repPos=4: 41...Kd7 45...Kd7 49...Kd7 57...Bg7",
         "", "", 17, 36, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/5p2/8/4N1P1/8/b2P1pk1/3K4/8 w - - 0 69"));
-    list.add(new PgnFileTestCase("yu_alekseenko_2018.pgn",
+    list.add(new PgnFileTestCase("fivefold_beyond_yu_alekseenko_2018.pgn",
         "repPos=4: 68...Qe3+ 72...Qe3+ 76...Qe3+ 78...Qe3+; repPos=4: 69.Kg2 73.Kg2 77.Kg2 79.Kg2; repPos=3: 69...Qe2+ 73...Qe2+ 75...Qe2+; repPos=3: 70.Kg3 74.Kg3 76.Kg3; repPos=7: 83.Qa8+ 85.Qa8+ 87.Qa8+ 89.Qa8+ 91.Qa8+ 93.Qa8+ 95.Qa8+; repPos=4: 83...Kb6 85...Kb6 87...Kb6 91...Kb6; repPos=4: 84.Qb8+ 86.Qb8+ 88.Qb8+ 92.Qb8+; repPos=4: 84...Kc6 86...Kc6 88...Kc6 92...Kc6",
         "", "", 4, 32, CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
@@ -3296,80 +3266,120 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.FIVEFOLD_BEYOND, list);
   }
 
+  private static PgnFileTestCaseList createTestCasesFivefoldCorrect() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(new PgnFileTestCase("fivefold_correct_akshat_li_2018.pgn",
+        "repPos=5: 60...Rc1 62...Rc1 68...Rc1 73...Rc1 75...Rc1", "", "", 19, 32, CheckmateOrStalemate.NA, 5,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/Pk6/5P2/1K1p3p/3Bp2P/4P3/8/2r5 w - - 32 76"));
+
+    list.add(new PgnFileTestCase("fivefold_correct_miton_yakubboev_2018.pgn",
+        "repPos=5: 38...Rd5+ 40...Rd5+ 42...Rd5+ 44...Rd5+ 46...Rd5+; repPos=4: 39.Ke4 41.Ke4 43.Ke4 45.Ke4; repPos=3: 39...Re5+ 43...Re5+ 45...Re5+; repPos=3: 40.Kd4 44.Kd4 46.Kd4",
+        "", "", 25, 23, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "8/p7/1p2k2p/1P1r4/P1pK4/4P2P/8/2R5 w - - 23 47"));
+    list.add(new PgnFileTestCase("fivefold_correct_potapov_adly_2018.pgn",
+        "repPos=5: 43.Qf5+ 45.Qf5+ 47.Qf5+ 49.Qf5+ 51.Qf5+", "", "", 20, 24, CheckmateOrStalemate.NA, 5,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/6rk/7p/p4Q2/8/Pr5P/3n1P2/3N3K b - - 24 51"));
+    list.add(new PgnFileTestCase("fivefold_correct_sethuraman_guseinov_2017.pgn",
+        "repPos=5: 51.Rxf7+ 53.Rf7+ 55.Rf7+ 57.Rf7+ 59.Rf7+; repPos=4: 51...Kg6 53...Kg6 55...Kg6 57...Kg6; repPos=4: 52.Rf6+ 54.Rf6+ 56.Rf6+ 58.Rf6+; repPos=4: 52...Kg7 54...Kg7 56...Kg7 58...Kg7",
+        "", "", 14, 19, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "1r6/1P3Rkp/3Np3/4P3/1r4p1/8/7P/7K b - - 16 59"));
+    list.add(new PgnFileTestCase("fivefold_correct_paichadze_ter-sahakyan_2019.pgn",
+        "repPos=5: 58...Re4+ 60...Re4+ 62...Re4+ 64...Re4+ 66...Re4+; repPos=4: 59.Kf2 61.Kf2 63.Kf2 65.Kf2; repPos=4: 59...Rf4 61...Rf4 63...Rf4 65...Rf4; repPos=4: 60.Ke3 62.Ke3 64.Ke3 66.Ke3",
+        "", "", 5, 18, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "8/8/8/4k3/4r3/4KR2/8/8 w - - 18 67"));
+    list.add(new PgnFileTestCase("fivefold_correct_robson_moranda_2019.pgn",
+        "repPos=5: 34...Kf8 36...Kf8 38...Kf8 40...Kf8 42...Kf8; repPos=4: 35.Raf7+ 37.Raf7+ 39.Raf7+ 41.Raf7+; repPos=4: 35...Ke8 37...Ke8 39...Ke8 41...Ke8; repPos=4: 36.Ra7 38.Ra7 40.Ra7 42.Ra7",
+        "", "", 6, 17, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "5k2/R5R1/3pp2p/4p3/4P2P/1r1r2PK/8/8 w - - 17 43"));
+    return new PgnFileTestCaseList(PgnTest.FIVEFOLD_CORRECT, list);
+  }
+
   private static PgnFileTestCaseList createTestCasesFiftyGeneral() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("adly_flores_2016.pgn",
+    list.add(new PgnFileTestCase("fifty_general_adly_flores_2016.pgn",
         "repPos=3: 112.Rh5 114.Kc6 116.Rh5; repPos=3: 112...Nc3 114...Nc3 116...Nc3", "",
         "92...Nb3+ (1) 142.Ke6 (100) 143...Nb8 (103)", 26, 103, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
         UnwinnableQuick.UNWINNABLE, "1R2k3/8/4K3/8/8/8/8/8 b - - 0 144"));
-    list.add(new PgnFileTestCase("cheparinov_anand_2018.pgn", "", "", "61...Kb5 (1) 111.Ra7 (100) 130.Rb1 (138)", 11,
-        138, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/2KB4/k7/r7/8/1R6 b - - 138 130"));
-    list.add(new PgnFileTestCase("giri_grischuk_2014.pgn",
+    list.add(new PgnFileTestCase("fifty_general_cheparinov_anand_2018.pgn", "", "",
+        "61...Kb5 (1) 111.Ra7 (100) 130.Rb1 (138)", 11, 138, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "8/8/8/2KB4/k7/r7/8/1R6 b - - 138 130"));
+    list.add(new PgnFileTestCase("fifty_general_giri_grischuk_2014.pgn",
         "repPos=3: 86...Kc5 114...Kc5 116...Kc5; repPos=3: 87.Ka4 115.Ka4 117.Ka4; repPos=4: 87...Kb6 89...Nc6 115...Kb6 117...Kb6",
         "", "85.Rc8 (1) 134...Kc5 (100) 146...Nc6 (124)", 6, 124, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/3P1k2/3K4/8/8/8/8 b - - 1 156"));
-    list.add(new PgnFileTestCase("carlsen_liem_2014.pgn", "", "", "52...Kc7 (1) 102.Bb7 (100) 103.Ba6 (102)", 11, 102,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "8/5p2/Bp2pP1k/1p2P3/2b2K2/P1P5/8/8 b - - 102 103"));
-    list.add(new PgnFileTestCase("pruijssers_inarkiev_2015.pgn", "", "", "59.Rb8 (1) 108...Ra2 (100)", 37, 100,
-        CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("fifty_general_carlsen_liem_2014.pgn", "", "",
+        "52...Kc7 (1) 102.Bb7 (100) 103.Ba6 (102)", 11, 102, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "8/5p2/Bp2pP1k/1p2P3/2b2K2/P1P5/8/8 b - - 102 103"));
+    list.add(new PgnFileTestCase("fifty_general_pruijssers_inarkiev_2015.pgn", "", "", "59.Rb8 (1) 108...Ra2 (100)", 37,
+        100, CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "8/8/8/7P/8/6Pk/6r1/2R2K1r w - - 11 128"));
-    list.add(new PgnFileTestCase("riazantsev_levin_2016.pgn",
+    list.add(new PgnFileTestCase("fifty_general_riazantsev_levin_2016.pgn",
         "repPos=3: 61...Kg7 64...Qa2 81...Qa2; repPos=3: 77...Qd5 87...Qd5 96...Kg7; repPos=3: 152...Qg1+ 154...Qg1+ 156...Qg1+",
         "", "46...Qe4 (1) 96.Rf4 (100) 113...Qd5 (135)", 10, 135, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "5Rqk/8/6PP/8/5P2/5NK1/8/8 b - - 4 181"));
-    list.add(new PgnFileTestCase("radjabov_deac_2016.pgn", "", "", "69...Kf5 (1) 119.Rh2 (100) 126...Ke5 (115)", 17,
-        115, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "8/8/8/4k3/4pP2/4P1K1/r6R/8 b - f3 0 127"));
-    list.add(new PgnFileTestCase("alekseenko_grachev_2017.pgn", "repPos=3: 64.Rf2 66.Bh5 70.Rf2", "",
+    list.add(new PgnFileTestCase("fifty_general_radjabov_deac_2016.pgn", "", "",
+        "69...Kf5 (1) 119.Rh2 (100) 126...Ke5 (115)", 17, 115, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/4k3/4pP2/4P1K1/r6R/8 b - f3 0 127"));
+    list.add(new PgnFileTestCase("fifty_general_alekseenko_grachev_2017.pgn", "repPos=3: 64.Rf2 66.Bh5 70.Rf2", "",
         "55...Rg8 (1) 105.Kf4 (100) 117...Rh3 (125)", 18, 125, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/2kB1K2/4P3/4P3/4p3/2P5/1P3q2/8 w - - 2 126"));
-    list.add(new PgnFileTestCase("vaisser_karpov_2017.pgn", "", "", "82...Kd7 (1) 132.Ke4 (100) 152.Bc3+ (140)", 11,
-        140, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "6r1/8/7R/k7/2K5/2B5/8/8 b - - 140 152"));
-    list.add(new PgnFileTestCase("yu_korobov_2017.pgn", "", "", "60...Bc7 (1) 110.Ra4+ (100) 123.Rb2 (126)", 17, 126,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/1R3b2/8 b - - 126 123"));
-    list.add(new PgnFileTestCase("yu_shimanov_2018.pgn", "repPos=3: 128.Ra1 130.Ra1 132.Ra1", "",
+    list.add(new PgnFileTestCase("fifty_general_vaisser_karpov_2017.pgn", "", "",
+        "82...Kd7 (1) 132.Ke4 (100) 152.Bc3+ (140)", 11, 140, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "6r1/8/7R/k7/2K5/2B5/8/8 b - - 140 152"));
+    list.add(new PgnFileTestCase("fifty_general_yu_korobov_2017.pgn", "", "",
+        "60...Bc7 (1) 110.Ra4+ (100) 123.Rb2 (126)", 17, 126, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/1R3b2/8 b - - 126 123"));
+    list.add(new PgnFileTestCase("fifty_general_yu_shimanov_2018.pgn", "repPos=3: 128.Ra1 130.Ra1 132.Ra1", "",
         "88.Ra2+ (1) 137...Kg7 (100) 155...Rc1 (136)", 9, 136, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/8/8/5k2/6p1/6K1 w - - 0 163"));
-    list.add(new PgnFileTestCase("ju_sebenik_2018.pgn", "", "", "64.Rg3+ (1) 113...Kb7 (100) 128.Rf2 (129)", 19, 129,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/8/k7/6Kp/5R1P/5b2 b - - 129 128"));
-    list.add(new PgnFileTestCase("wang_wen_2018.pgn",
+    list.add(new PgnFileTestCase("fifty_general_ju_sebenik_2018.pgn", "", "",
+        "64.Rg3+ (1) 113...Kb7 (100) 128.Rf2 (129)", 19, 129, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/8/k7/6Kp/5R1P/5b2 b - - 129 128"));
+    list.add(new PgnFileTestCase("fifty_general_wang_wen_2018.pgn",
         "repPos=3: 131.Ra2 137.Ke3 139.Ra2; repPos=4: 131...Kg1 137...Kg1 139...Kg1 141...Rf8; repPos=3: 133...Kf1 135...Kf1 143...Kf1",
         "", "95...Kb5 (1) 145.Be4 (100) 169.Rc1 (148)", 12, 148, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/8/8/8/4BK2/1r6/7k/2R5 b - - 148 169"));
-    list.add(new PgnFileTestCase("meier_dominguez_2018.pgn",
+    list.add(new PgnFileTestCase("fifty_general_meier_dominguez_2018.pgn",
         "repPos=4: 89...Rd3 91...Rd3 93...Kg8 95...Rd3; repPos=3: 98...Rd1 100...Rd1 104...Rd1", "",
         "46...Kf7 (1) 96.Ra7 (100) 106...Rd1 (121)", 12, 121, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "5R2/5P1k/3B3p/3K3P/8/8/8/8 b - - 0 115"));
-    list.add(new PgnFileTestCase("bindrich_kovalev_2018.pgn", "", "", "57...Ra3+ (1) 107.Kg2 (100) 118.Kf3 (122)", 15,
-        122, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/6k1/1B5p/5K1P/7r/8 b - - 3 121"));
-    list.add(new PgnFileTestCase("jobava_salem_2018.pgn", "", "", "36.Ne1 (1) 85...Nb4 (100) 92...Nb4 (114)", 13, 114,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "4k3/1q1b4/2p1p3/2p1Pp2/1BPp1Pp1/1PbP2Pp/2NN3P/2KQ4 b - - 0 93"));
-    list.add(new PgnFileTestCase("sarana_chirila_2019.pgn",
+    list.add(new PgnFileTestCase("fifty_general_bindrich_kovalev_2018.pgn", "", "",
+        "57...Ra3+ (1) 107.Kg2 (100) 118.Kf3 (122)", 15, 122, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/6k1/1B5p/5K1P/7r/8 b - - 3 121"));
+    list.add(new PgnFileTestCase("fifty_general_jobava_salem_2018.pgn", "", "",
+        "36.Ne1 (1) 85...Nb4 (100) 92...Nb4 (114)", 13, 114, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "4k3/1q1b4/2p1p3/2p1Pp2/1BPp1Pp1/1PbP2Pp/2NN3P/2KQ4 b - - 0 93"));
+    list.add(new PgnFileTestCase("fifty_general_sarana_chirila_2019.pgn",
         "repPos=3: 68.Ne3 76.Ne3 104.Ne3; repPos=3: 68...Bd3 76...Bd3 104...Bd3; repPos=3: 69.Nd1 77.Nd1 105.Nd1; repPos=3: 69...Bc2 77...Bc2 105...Bc2",
         "", "63...Bd3 (1) 113.Ke3 (100) 116...Kf7 (107)", 10, 107, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/7p/4k3/3NPb1P/3K4/8/8/8 b - - 66 150"));
-    list.add(new PgnFileTestCase("topalov_dominguez_2019.pgn", "", "", "38...Qc3 (1) 88.Kg3 (100) 90.Kg3 (104)", 22,
-        104, CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
+    list.add(new PgnFileTestCase("fifty_general_topalov_dominguez_2019.pgn", "", "",
+        "38...Qc3 (1) 88.Kg3 (100) 90.Kg3 (104)", 22, 104, CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE,
+        UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "8/4p3/3p1k2/3P4/2P2pQ1/5P1K/8/7q w - - 15 109"));
     return new PgnFileTestCaseList(PgnTest.FIFTY_GENERAL, list);
   }
@@ -3379,66 +3389,66 @@ public class PgnExpectedValue {
 
     // because below 100 not displayed
     // 55.Nc4 (1) 103...Kh5 (98)
-    list.add(new PgnFileTestCase("98_start_white_demchenko_martinez_2019.pgn", "repPos=3: 70...Ng5 83...Kh5 103...Kh5",
-        "", "", 29, 98, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
-        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "8/8/4p3/6nk/6p1/4N1P1/5PK1/8 w - - 98 104"));
+    list.add(new PgnFileTestCase("fifty_pattern_098_start_white_demchenko_martinez_2019.pgn",
+        "repPos=3: 70...Ng5 83...Kh5 103...Kh5", "", "", 29, 98, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/4p3/6nk/6p1/4N1P1/5PK1/8 w - - 98 104"));
 
     // because below 100 not displayed
     // 68...Rh2 (1) 117.Kd3 (98)
-    list.add(new PgnFileTestCase("98_start_black_sjugirov_inarkiev_2019.pgn", "", "", "", 4, 98,
+    list.add(new PgnFileTestCase("fifty_pattern_098_start_black_sjugirov_inarkiev_2019.pgn", "", "", "", 4, 98,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/8/r7/3K4/1R3N2/6k1 b - - 98 117"));
 
     // because below 100 not displayed
     // 115.Kg2 (1) 163...Kc5 (98); 164.Kh1 (99)
-    list.add(new PgnFileTestCase("99_start_white_so_nakamura_2018.pgn",
+    list.add(new PgnFileTestCase("fifty_pattern_099_start_white_so_nakamura_2018.pgn",
         "repPos=3: 145...Kb2 153...Kb2 157...Kb2; repPos=3: 146.Kh1 154.Kh1 158.Kh1", "", "", 15, 99,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/2k1b3/8/8/7p/7K b - - 99 164"));
 
     // because below 100 not displayed
     // 59...Bg6 (1) 108.Nb5 (98); 108...Bh5 (99)
-    list.add(new PgnFileTestCase("99_start_black_naroditsky_boruchovsky_2018.pgn",
+    list.add(new PgnFileTestCase("fifty_pattern_099_start_black_naroditsky_boruchovsky_2018.pgn",
         "repPos=3: 72...Ke6 90...Ke6 92...Be8; repPos=3: 75.Nd4+ 97.Nd4+ 107.Nd4+; repPos=3: 75...Ke5 97...Ke5 107...Ke5; repPos=3: 76.Nb5 98.Nb5 108.Nb5; repPos=4: 76...Bh5 98...Bh5 102...Bh5 108...Bh5; repPos=3: 84...Ke6 96...Ke6 106...Ke6",
         "", "", 27, 99, CheckmateOrStalemate.NA, 4, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/6K1/5P2/1N2k2b/8/8/8/8 w - - 99 109"));
 
-    list.add(new PgnFileTestCase("100_start_white_baryshpolets_steingrimsson_2019.pgn",
+    list.add(new PgnFileTestCase("fifty_pattern_100_start_white_baryshpolets_steingrimsson_2019.pgn",
         "repPos=3: 77...Qg7+ 83...Qg7+ 95...Qg7+; repPos=3: 78.Kb6 84.Kb6 96.Kb6; repPos=3: 78...Qd4+ 84...Qd4+ 96...Qd4+; repPos=3: 79.Ka6 85.Ka6 97.Ka6",
         "", "77.Kc7 (1) 126...Nf4+ (100)", 8, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1k6/4K3/6Q1/4q3/5n2/8/8/8 w - - 100 127"));
 
-    list.add(new PgnFileTestCase("100_start_black_nakamura_radjabov_2014.pgn", "repPos=3: 68...Ref8 70...Be6 72...Be6",
-        "", "27...Rh5 (1) 77.Rd3 (100)", 8, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
-        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+    list.add(new PgnFileTestCase("fifty_pattern_100_start_black_nakamura_radjabov_2014.pgn",
+        "repPos=3: 68...Ref8 70...Be6 72...Be6", "", "27...Rh5 (1) 77.Rd3 (100)", 8, 100, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1kbb1r1r/2p2pp1/1p6/p1pNPn2/P1P2P1p/1P1R1N1P/5BPK/3R4 b - - 100 77"));
 
-    list.add(new PgnFileTestCase("101_start_white_nakamura_vachier-lagrave_2018.pgn",
+    list.add(new PgnFileTestCase("fifty_pattern_101_start_white_nakamura_vachier-lagrave_2018.pgn",
         "repPos=3: 111.Kf6 119.Kf6 121.Kf6; repPos=3: 111...Kf1 119...Kf1 121...Kf1", "",
         "72.Bf4 (1) 121...Kf1 (100) 122.Kf7 (101)", 5, 101, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/5K2/8/6Bp/4p2P/4Pb2/8/5k2 b - - 101 122"));
 
-    list.add(new PgnFileTestCase("101_start_black_sevian_andriasian_2019.pgn", "", "",
+    list.add(new PgnFileTestCase("fifty_pattern_101_start_black_sevian_andriasian_2019.pgn", "", "",
         "74...Kd5 (1) 124.Kc6 (100) 124...Rc1+ (101)", 10, 101, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "2k5/7R/2K5/4N3/8/8/8/2r5 w - - 101 125"));
 
-    list.add(new PgnFileTestCase("101_start_black_grischuk_vachier-lagrave_2017.pgn",
+    list.add(new PgnFileTestCase("fifty_pattern_101_start_black_grischuk_vachier-lagrave_2017.pgn",
         "repPos=3: 67...Kd6 75...Kd6 86...Kd6; repPos=4: 68.Rh8 74.Rh8 76.Rh8 87.Rh8; repPos=3: 68...Kc6 76...Kc6 87...Kc6; repPos=4: 69.Rc8+ 73.Rc8+ 77.Rc8+ 88.Rc8+",
         "", "39...Kf6 (1) 89.Ra8 (100) 89...Kd6 (101)", 3, 101, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "R7/8/3kp3/3p4/3Pr3/3KP3/8/8 w - - 101 90"));
 
-    list.add(new PgnFileTestCase("102_start_white_harikrishna_yu_2017.pgn", "", "",
+    list.add(new PgnFileTestCase("fifty_pattern_102_start_white_harikrishna_yu_2017.pgn", "", "",
         "52.Rf3+ (1) 101...Rg1 (100) 102...Ke5 (102)", 17, 102, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/1R1b3K/4k3/8/8/8/6r1 w - - 102 103"));
 
-    list.add(new PgnFileTestCase("102_start_black_riazantsev_deac_2017.pgn", "", "",
+    list.add(new PgnFileTestCase("fifty_pattern_102_start_black_riazantsev_deac_2017.pgn", "", "",
         "91...Ne3 (1) 141.Ke3 (100) 142.Kf3 (102)", 7, 102, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/3nk3/R7/5K2/8/8 b - - 102 142"));
@@ -3492,22 +3502,22 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesEarlyDraw() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("grischuk_giri_2019.pgn", "repPos=3: 18.Kf1 20.Kf1 22.Kf1", "", "", 11, 10,
-        CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("01_early_draw_grischuk_giri_2019.pgn", "repPos=3: 18.Kf1 20.Kf1 22.Kf1", "", "", 11,
+        10, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r4rk1/p4pp1/np2p3/q5N1/3PP3/P7/5P1P/R2Q1KR1 b - - 10 22"));
-    list.add(new PgnFileTestCase("karjakin_nepomniachtchi_2019.pgn", "repPos=3: 17.Nb5 19.Nb5 21.Nb5", "", "", 18, 13,
-        CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+    list.add(new PgnFileTestCase("02_early_draw_karjakin_nepomniachtchi_2019.pgn", "repPos=3: 17.Nb5 19.Nb5 21.Nb5", "",
+        "", 18, 13, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "rn1r2k1/1pqbppbp/2p2np1/pN6/8/4BNP1/PPQ1PPBP/R2R2K1 b - - 13 21"));
-    list.add(new PgnFileTestCase("vachier-lagrave_aronian_2019.pgn", "repPos=3: 21.Ra1 23.Nc4 25.Nc4", "", "", 21, 13,
-        CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+    list.add(new PgnFileTestCase("03_early_draw_vachier-lagrave_aronian_2019.pgn", "repPos=3: 21.Ra1 23.Nc4 25.Nc4", "",
+        "", 21, 13, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "5rk1/1np1q1pp/p1n1p3/Pr2p3/1pNpP3/1N1P3P/1PP2PP1/R2QR1K1 b - - 13 25"));
-    list.add(new PgnFileTestCase("vachier-lagrave_ding_liren_2019.pgn", "repPos=3: 16...Qg6 18...Qg6 20...Qg6", "", "",
-        19, 19, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "r4rk1/bpp1n1pp/p2pp1q1/4p3/PP2Pn2/N1PPBN1P/R4PPK/3QR3 w - - 19 21"));
+    list.add(new PgnFileTestCase("04_early_draw_vachier-lagrave_ding_liren_2019.pgn",
+        "repPos=3: 16...Qg6 18...Qg6 20...Qg6", "", "", 19, 19, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "r4rk1/bpp1n1pp/p2pp1q1/4p3/PP2Pn2/N1PPBN1P/R4PPK/3QR3 w - - 19 21"));
     return new PgnFileTestCaseList(PgnTest.EARLY_DRAW, list);
   }
 
@@ -3690,7 +3700,7 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesCapture() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("01_no_capture.pgn", "", "", "", -1, 4, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("01_capture_last_move_none.pgn", "", "", "", -1, 4, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE,
         "r1bq1rk1/1pp2p2/pbnp1n1p/3Np1p1/1PB1P1P1/P2P1N1P/2P2P2/R1BQK2R w KQ - 2 11"));
@@ -3810,11 +3820,11 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesDgtLiveChess() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("01_threefold_fails_castle_right.pgn", "repPos=3: 3...Nb8 5...Nb8 7...Ng8", "", "", -1,
-        12, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "rnbqkbnr/ppppppp1/7p/8/8/7P/PPPPPPP1/RNBQKBNR w Qkq - 12 8"));
-    list.add(new PgnFileTestCase("02_fivefold_fails_too_early.pgn",
+    list.add(new PgnFileTestCase("01_dgt_livechess_threefold_fails_castle_right.pgn",
+        "repPos=3: 3...Nb8 5...Nb8 7...Ng8", "", "", -1, 12, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
+        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "rnbqkbnr/ppppppp1/7p/8/8/7P/PPPPPPP1/RNBQKBNR w Qkq - 12 8"));
+    list.add(new PgnFileTestCase("02_dgt_livechess_fivefold_fails_too_early.pgn",
         "repPos=6: 1...e5 3...Nb8 5...Nb8 7...Bf8 9...Ng8 11...Ng8", "", "", -1, 20, CheckmateOrStalemate.NA, 6,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 20 12"));
@@ -3823,34 +3833,34 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesDgtCentaur() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("black_insufficient_material_KQ_KN.pgn", "", "", "", 3, 20, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("01_dgt_centaur_black_insufficient_material_KQ_KN.pgn", "", "", "", 3, 20,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/QK3n2/6k1 w - - 1 43"));
-    list.add(new PgnFileTestCase("black_insufficient_material_KQ_KB.pgn", "", "", "", 6, 13, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("02_dgt_centaur_black_insufficient_material_KQ_KB.pgn", "", "", "", 6, 13,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/5b2/QK6/6k1 w - - 1 35"));
-    list.add(new PgnFileTestCase("black_insufficient_material_KR_KB.pgn", "", "", "", 5, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("03_dgt_centaur_black_insufficient_material_KR_KB.pgn", "", "", "", 5, 10,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/QK4kb/8 w - - 1 44"));
 
-    list.add(new PgnFileTestCase("centaur_blunders.pgn", "", "", "45.Kc2 (1) 94...Nc2 (100)", 5, 100,
+    list.add(new PgnFileTestCase("04_dgt_centaur_blunders.pgn", "", "", "45.Kc2 (1) 94...Nc2 (100)", 5, 100,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/2k1K3/8/8/2n5/2R5 w - - 100 95"));
 
-    list.add(new PgnFileTestCase("fifty_move_rule_reached_by_human_move.pgn", "", "", "42...Kf4 (1) 92.Kd3 (100)", 5,
-        100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/8/3k4/8/2B5/3K4/5B2/8 b - - 100 92"));
-    list.add(new PgnFileTestCase("fifty_move_rule_reached_by_computer_move.pgn", "", "", "66.Ke4 (1) 115...Kh6 (100)",
-        5, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/5B2/7k/5K2/3B4/8/8/8 w - - 100 116"));
+    list.add(new PgnFileTestCase("05_dgt_centaur_fifty_move_rule_reached_by_human_move.pgn", "", "",
+        "42...Kf4 (1) 92.Kd3 (100)", 5, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY,
+        UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/3k4/8/2B5/3K4/5B2/8 b - - 100 92"));
+    list.add(new PgnFileTestCase("06_dgt_centaur_fifty_move_rule_reached_by_computer_move.pgn", "", "",
+        "66.Ke4 (1) 115...Kh6 (100)", 5, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY,
+        UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/5B2/7k/5K2/3B4/8/8/8 w - - 100 116"));
 
-    list.add(new PgnFileTestCase("threefold_repetition_reached_by_human_move.pgn", "repPos=3: 42.Kxe3 44.Ke3 46.Ke3",
-        "", "", 6, 18, CheckmateOrStalemate.NA, 3, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/8/8/8/8/4K3/5R2/7k b - - 8 46"));
-    list.add(new PgnFileTestCase("threefold_repetition_reached_by_computer_move.pgn",
+    list.add(new PgnFileTestCase("07_dgt_centaur_threefold_repetition_reached_by_human_move.pgn",
+        "repPos=3: 42.Kxe3 44.Ke3 46.Ke3", "", "", 6, 18, CheckmateOrStalemate.NA, 3, InsufficientMaterial.BLACK_ONLY,
+        UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/4K3/5R2/7k b - - 8 46"));
+    list.add(new PgnFileTestCase("08_dgt_centaur_threefold_repetition_reached_by_computer_move.pgn",
         "repPos=3: 35...Kxh1 37...Kh1 39...Kh1", "", "", 5, 15, CheckmateOrStalemate.NA, 3,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/4K3/5R2/7k w - - 8 40"));
@@ -5435,22 +5445,22 @@ public class PgnExpectedValue {
 
     // norgaard
     // dead position
-    list.add(new PgnFileTestCase("norgaard_pawn_wall_example_1.pgn", "", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_example_1.pgn", "", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "6k1/1p1p1p1p/1P1P1P1P/8/8/4K3/1P1P1P1P/8 w - - 0 39"));
 
     // TODO today c code quick sees unwinnable
-    list.add(new PgnFileTestCase("norgaard_pawn_wall_example_2.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_example_2.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNDETERMINED, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 0 34"));
 
     // beyond dead position
-    list.add(new PgnFileTestCase("norgaard_beyond_pawn_wall_example_1.pgn", "", "", "638...Kg8 (1) 688.Ka3 (100)", 5,
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_beyond_example_1.pgn", "", "", "638...Kg8 (1) 688.Ka3 (100)", 5,
         100, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "7k/1p1p1p1p/1P1P1P1P/1P1P1P1P/8/K7/8/8 b - - 100 688"));
 
-    list.add(new PgnFileTestCase("norgaard_beyond_pawn_wall_example_2.pgn", "", "", "833...Kb8 (1) 883.Kg2 (100)", 5,
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_beyond_example_2.pgn", "", "", "833...Kb8 (1) 883.Kg2 (100)", 5,
         100, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "k7/p1p1p1p1/P1P1P1P1/P1P1P1P1/8/8/6K1/8 b - - 100 883"));
@@ -5461,17 +5471,18 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesLastMoveAddedAccidentally() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_result_white_win_last_move_white_draws.pgn", "", "", "", 27, 21,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/6Pk/2b5/2P1K3/8/8/8/8 b - - 2 87"));
-    list.add(new PgnFileTestCase("02_result_draw_one_move_in_KvK.pgn", "", "", "", 22, 13, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "8/8/8/8/4K3/8/k7/8 b - - 1 69"));
-    list.add(new PgnFileTestCase("03_result_draw_black_last_move_loses.pgn", "", "", "", 7, 18, CheckmateOrStalemate.NA,
-        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("01_last_move_added_accidentally_result_white_win_last_move_white_draws.pgn", "", "",
+        "", 27, 21, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "8/6Pk/2b5/2P1K3/8/8/8/8 b - - 2 87"));
+    list.add(new PgnFileTestCase("02_last_move_added_accidentally_result_draw_one_move_in_KvK.pgn", "", "", "", 22, 13,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/4K3/8/k7/8 b - - 1 69"));
+    list.add(new PgnFileTestCase("03_last_move_added_accidentally_result_draw_black_last_move_loses.pgn", "", "", "", 7,
+        18, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/4k1pP/6K1/8/8/8 w - - 2 69"));
-    list.add(new PgnFileTestCase("04_result_draw_black_last_move_loses.pgn", "", "", "", 8, 13, CheckmateOrStalemate.NA,
-        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("04_last_move_added_accidentally_result_draw_black_last_move_loses.pgn", "", "", "", 8,
+        13, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/P1R5/7p/4kppP/6P1/8/1K6/r7 w - - 10 66"));
 
@@ -5481,23 +5492,25 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesMaxSamePiecePromotionWhite() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_white_ten_rooks.pgn", "", "", "", 47, 48, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+    list.add(new PgnFileTestCase("01_white_max_piece_ten_rooks.pgn", "", "", "", 47, 48, CheckmateOrStalemate.CHECKMATE,
+        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
         UnwinnableQuick.UNWINNABLE, "1R6/1R6/2R1kbR1/8/R7/2NB1N2/3BKR2/3Q4 b - - 0 85"));
-    list.add(new PgnFileTestCase("02_white_ten_knights.pgn", "", "", "", 47, 34, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "8/kN6/NNN2b1p/2N5/N1N4R/2N5/n1QB1KB1/1R6 b - - 0 75"));
-    list.add(new PgnFileTestCase("03_white_ten_bishops_nine_light_squared.pgn", "", "", "", 47, 11,
+    list.add(
+        new PgnFileTestCase("02_white_max_piece_ten_knights.pgn", "", "", "", 47, 34, CheckmateOrStalemate.CHECKMATE, 1,
+            InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+            UnwinnableQuick.UNWINNABLE, "8/kN6/NNN2b1p/2N5/N1N4R/2N5/n1QB1KB1/1R6 b - - 0 75"));
+    list.add(new PgnFileTestCase("03_white_max_piece_ten_bishops_nine_light_squared.pgn", "", "", "", 47, 11,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "6Br/2k4p/4B3/3B2N1/5b2/1B1B1B2/4B1B1/2qK1B1R w - - 0 67"));
-    list.add(new PgnFileTestCase("04_white_ten_bishops_nine_darks_squared.pgn", "", "", "", 47, 11,
+    list.add(new PgnFileTestCase("04_white_max_piece_ten_bishops_nine_darks_squared.pgn", "", "", "", 47, 11,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "6Br/2k4p/4B3/3B2N1/5b2/1B1B1B2/4B1B1/2qK1B1R w - - 0 67"));
-    list.add(new PgnFileTestCase("05_white_nine_queens.pgn", "", "", "", 47, 16, CheckmateOrStalemate.STALEMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "2Q2Q2/k7/bn5B/1Q6/3QQQ1K/Q7/8/5BNR b - - 4 72"));
+    list.add(
+        new PgnFileTestCase("05_white_max_piece_nine_queens.pgn", "", "", "", 47, 16, CheckmateOrStalemate.STALEMATE, 1,
+            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+            UnwinnableQuick.UNWINNABLE, "2Q2Q2/k7/bn5B/1Q6/3QQQ1K/Q7/8/5BNR b - - 4 72"));
 
     return new PgnFileTestCaseList(PgnTest.MAX_SAME_PIECE_PROMOTION_WHITE, list);
   }
@@ -5505,23 +5518,25 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesMaxSamePiecePromotionBlack() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_black_ten_rooks.pgn", "", "", "", 56, 63, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+    list.add(new PgnFileTestCase("01_black_max_piece_ten_rooks.pgn", "", "", "", 56, 63, CheckmateOrStalemate.CHECKMATE,
+        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
         UnwinnableQuick.UNWINNABLE, "2rk3r/2rbQ1b1/6r1/1n3r2/KB3r1r/nN6/3r3r/8 b - - 0 118"));
-    list.add(new PgnFileTestCase("02_black_ten_knights.pgn", "", "", "", 42, 42, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.WINNABLE, "r1bB1b1K/1BR1n1r1/Q3nnn1/1q3Nkn/1N1n2nn/nn6/8/2R5 w - - 42 130"));
-    list.add(new PgnFileTestCase("03_black_ten_bishops_nine_light_squared.pgn", "", "", "", 56, 27,
+    list.add(
+        new PgnFileTestCase("02_black_max_piece_ten_knights.pgn", "", "", "", 42, 42, CheckmateOrStalemate.CHECKMATE, 1,
+            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+            UnwinnableQuick.WINNABLE, "r1bB1b1K/1BR1n1r1/Q3nnn1/1q3Nkn/1N1n2nn/nn6/8/2R5 w - - 42 130"));
+    list.add(new PgnFileTestCase("03_black_max_piece_ten_bishops_nine_light_squared.pgn", "", "", "", 56, 27,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "1nb2bn1/5b2/5k2/3b1b2/1Rb3b1/2Pb4/r3b1b1/2K4r w - - 2 102"));
-    list.add(new PgnFileTestCase("04_black_ten_bishops_nine_dark_squared.pgn", "", "", "", 56, 32,
+    list.add(new PgnFileTestCase("04_black_max_piece_ten_bishops_nine_dark_squared.pgn", "", "", "", 56, 32,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "4kb2/8/2n2n2/3b2b1/3b1b2/P1b1b2r/1b3bR1/7K w - - 0 96"));
-    list.add(new PgnFileTestCase("05_black_nine_queens.pgn", "", "", "", 42, 35, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.WINNABLE, "r1b1qb1K/1n4r1/8/2n2k2/2Bq4/8/8/7q w - - 0 139"));
+    list.add(
+        new PgnFileTestCase("05_black_max_piece_nine_queens.pgn", "", "", "", 42, 35, CheckmateOrStalemate.CHECKMATE, 1,
+            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+            UnwinnableQuick.WINNABLE, "r1b1qb1K/1n4r1/8/2n2k2/2Bq4/8/8/7q w - - 0 139"));
 
     return new PgnFileTestCaseList(PgnTest.MAX_SAME_PIECE_PROMOTION_BLACK, list);
   }
@@ -5529,18 +5544,22 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesMaxSamePiecePromotionByCombined() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_twenty_rooks.pgn", "", "", "", 5, 28, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.WINNABLE, "8/5k2/1r6/8/8/3r4/2r5/1r3K2 w - - 1 114"));
-    list.add(new PgnFileTestCase("02_twenty_knights.pgn", "", "", "", 7, 34, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.WINNABLE, "7k/8/3n4/4n3/3n4/nn1n4/8/1KnN4 w - - 6 126"));
-    list.add(new PgnFileTestCase("03_twenty_bishops.pgn", "", "", "", 7, 22, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "2B1B3/3B2kR/4BrB1/2B5/B7/6K1/2B3B1/8 b - - 4 98"));
-    list.add(new PgnFileTestCase("04_eighteen_queens.pgn", "", "", "", 7, 35, CheckmateOrStalemate.CHECKMATE, 1,
-        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/5KQk/8 b - - 14 110"));
+    list.add(
+        new PgnFileTestCase("01_combined_max_piece_twenty_rooks.pgn", "", "", "", 5, 28, CheckmateOrStalemate.CHECKMATE,
+            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
+            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/5k2/1r6/8/8/3r4/2r5/1r3K2 w - - 1 114"));
+    list.add(new PgnFileTestCase("02_combined_max_piece_twenty_knights.pgn", "", "", "", 7, 34,
+        CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        "7k/8/3n4/4n3/3n4/nn1n4/8/1KnN4 w - - 6 126"));
+    list.add(new PgnFileTestCase("03_combined_max_piece_twenty_bishops.pgn", "", "", "", 7, 22,
+        CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        "2B1B3/3B2kR/4BrB1/2B5/B7/6K1/2B3B1/8 b - - 4 98"));
+    list.add(new PgnFileTestCase("04_combined_max_piece_eighteen_queens.pgn", "", "", "", 7, 35,
+        CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE,
+        UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        "8/8/8/8/8/8/5KQk/8 b - - 14 110"));
 
     return new PgnFileTestCaseList(PgnTest.MAX_SAME_PIECE_PROMOTION_COMBINED, list);
   }
@@ -5568,88 +5587,90 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.BIZARRE_CHECKMATE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesMonsterBlogInsufficientMaterial() {
+  private static PgnFileTestCaseList createTestCasesBlogInstant() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_K_K.pgn", "", "", "", 5, 4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BOTH,
-        UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/8/6k1/8/5K2/8/8/8 b - - 0 26"));
-    list.add(new PgnFileTestCase("02_KN_K.pgn", "", "", "", 5, 4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BOTH,
-        UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/5k2/8/8/8/8/8/1NK5 b - - 0 26"));
+    list.add(new PgnFileTestCase("01_blog_instant_K_K.pgn", "", "", "", 5, 4, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/6k1/8/5K2/8/8/8 b - - 0 26"));
+    list.add(new PgnFileTestCase("02_blog_instant_KN_K.pgn", "", "", "", 5, 4, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/5k2/8/8/8/8/8/1NK5 b - - 0 26"));
 
-    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL, list);
+    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSTANT, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesMonsterBlogInsufficientMaterialPredraw() {
+  private static PgnFileTestCaseList createTestCasesBlogPredraw() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_KBw_KBb.pgn", "", "", "", 17, 8, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("01_blog_predraw_KBw_KBb.pgn", "", "", "", 17, 8, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/3B1k2/7b/8/8/8/5K2/8 b - - 0 29"));
-    list.add(new PgnFileTestCase("02_KN_KB.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("02_blog_predraw_KN_KB.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "2b5/3k4/8/6K1/8/8/3N4/8 b - - 0 27"));
-    list.add(new PgnFileTestCase("03_KB_KN.pgn", "", "", "", 7, 8, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("03_blog_predraw_KB_KN.pgn", "", "", "", 7, 8, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/6k1/7n/8/8/7B/5K2/8 b - - 0 30"));
-    list.add(new PgnFileTestCase("04_KNN_K.pgn", "", "", "", 8, 13, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("04_blog_predraw_KNN_K.pgn", "", "", "", 8, 13, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/7k/8/4N3/3N4/6K1/8 b - - 0 37"));
-    list.add(new PgnFileTestCase("05_KN_KN.pgn", "", "", "", 5, 2, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("05_blog_predraw_KN_KN.pgn", "", "", "", 5, 2, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1n6/8/1k6/8/3K4/8/8/1N6 b - - 0 24"));
 
-    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW, list);
+    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_PREDRAW, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesMonsterBlogInsufficientMaterialTimeout() {
+  private static PgnFileTestCaseList createTestCasesBlogTimeout() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_K_more.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("01_blog_timeout_K_more.pgn", "", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1nbk1b2/1qpp1p2/8/8/3K4/8/8/8 b - - 3 20"));
-    list.add(new PgnFileTestCase("02_KN_KQ.pgn", "", "", "", 5, 2, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("02_blog_timeout_KN_KQ.pgn", "", "", "", 5, 2, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/1q6/3k4/8/2N5/8/5K2 b - - 1 26"));
-    list.add(new PgnFileTestCase("03_KN_KNP_forced_mate.pgn", "", "", "", 5, 14, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "3N2nk/4p3/5pKp/6p1/8/8/8/8 b - - 14 36"));
-    list.add(new PgnFileTestCase("04_KN_KP.pgn", "", "", "", 23, 9, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("03_blog_timeout_KN_KNP_forced_mate.pgn", "", "", "", 5, 14, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "3N2nk/4p3/5pKp/6p1/8/8/8/8 b - - 14 36"));
+    list.add(new PgnFileTestCase("04_blog_timeout_KN_KP.pgn", "", "", "", 23, 9, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "2k5/8/p7/8/8/2N1K3/8/8 b - - 2 37"));
-    list.add(new PgnFileTestCase("05_KN_KR.pgn", "", "", "", 10, 5, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("05_blog_timeout_KN_KR.pgn", "", "", "", 10, 5, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/2k4N/8/8/8/3r4/4K3/8 b - - 1 29"));
-    list.add(new PgnFileTestCase("06_KB_KR.pgn", "", "", "", 20, 7, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("06_blog_timeout_KB_KR.pgn", "", "", "", 20, 7, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "7r/2k5/8/8/5B2/8/4K3/8 b - - 1 37"));
-    list.add(new PgnFileTestCase("07_KBw_KRBw.pgn", "", "", "", 17, 15, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("07_blog_timeout_KBw_KRBw.pgn", "", "", "", 17, 15, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/2r2k2/3b4/8/8/2BK4/8 b - - 15 40"));
-    list.add(new PgnFileTestCase("08_KB_KNP_forced_mate.pgn", "", "", "", 22, 27, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "knB5/3p4/pKp5/p7/1p6/8/8/8 b - - 12 60"));
-    list.add(new PgnFileTestCase("09_KB_KP.pgn", "", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("08_blog_timeout_KB_KNP_forced_mate.pgn", "", "", "", 22, 27, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "knB5/3p4/pKp5/p7/1p6/8/8/8 b - - 12 60"));
+    list.add(new PgnFileTestCase("09_blog_timeout_KB_KP.pgn", "", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/5p2/8/4k3/1K6/8/8/5B2 b - - 0 28"));
-    list.add(new PgnFileTestCase("10_KBb_KRBw.pgn", "", "", "", 9, 4, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("10_blog_timeout_KBb_KRBw.pgn", "", "", "", 9, 4, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4r3/3b4/4k3/8/5K2/8/3B4/8 b - - 4 37"));
-    list.add(new PgnFileTestCase("11_KNN_KP_forced_mate.pgn", "", "", "", 10, 15, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "7k/8/5N1K/8/5N1p/8/8/8 b - - 1 49"));
-    list.add(new PgnFileTestCase("12_KNN_KP.pgn", "", "", "", 15, 5, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("11_blog_timeout_KNN_KP_forced_mate.pgn", "", "", "", 10, 15, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "7k/8/5N1K/8/5N1p/8/8/8 b - - 1 49"));
+    list.add(new PgnFileTestCase("12_blog_timeout_KNN_KP.pgn", "", "", "", 15, 5, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/2kp4/8/8/2NKN3/8 b - - 5 41"));
-    list.add(new PgnFileTestCase("13_KNN_KB.pgn", "", "", "", 25, 17, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("13_blog_timeout_KNN_KB.pgn", "", "", "", 25, 17, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "k7/1bKN4/8/1N6/8/8/8/8 b - - 17 51"));
-    list.add(new PgnFileTestCase("14_KNN_KQQQQQQQQQ.pgn", "", "", "", 13, 26, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("14_blog_timeout_KNN_KQQQQQQQQQ.pgn", "", "", "", 13, 26, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "3q4/3N3K/8/5N2/8/7k/8/qqqqqqqq b - - 1 88"));
 
-    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT, list);
+    return new PgnFileTestCaseList(PgnTest.MONSTER_BLOG_TIMEOUT, list);
   }
 
 }
