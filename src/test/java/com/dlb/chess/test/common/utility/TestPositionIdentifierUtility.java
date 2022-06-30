@@ -1,4 +1,4 @@
-package com.dlb.chess.test.utility;
+package com.dlb.chess.test.common.utility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

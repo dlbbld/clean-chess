@@ -1,4 +1,4 @@
-package com.dlb.chess.test.utility;
+package com.dlb.chess.generate;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -17,9 +17,9 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
 import com.dlb.chess.utility.TagUtility;
 
-public class PgnInformationUtility {
+public class GeneratePgnInformationUtility {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(PgnInformationUtility.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePgnInformationUtility.class);
 
   public static void main(String[] args) throws Exception {
     createInformation("C:\\temp\\candidates", ConfigurationConstants.TEMP_FOLDER_PATH, "candidates_information.txt");

@@ -60,8 +60,8 @@ public enum PgnTest {
   RANDOM_THREEFOLD(false, "random\\threefold"),
   RANDOM_FIVEFOLD(false, "random\\fivefold"),
 
-  GAMES_VARIOUS(false, "games\\various"),
-  GAMES_WCC2021(false, "games\\wcc2021"),
+  VARIOUS(false, "various"),
+  WCC2021(false, "wcc2021"),
   FIVEFOLD_CORRECT(false, "fivefold\\correct"),
   FIVEFOLD_BEYOND(false, "fivefold\\beyond"),
   FIFTY_GENERAL(false, "fifty\\general"),
