@@ -5756,7 +5756,7 @@ public class PgnExpectedValue {
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "2rkr3/r7/3K4/r7/2n5/4B3/7b/8 w - - 1 101"));
 
-    return new PgnFileTestCaseList(PgnTest.DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE, list);
+    return new PgnFileTestCaseList(PgnTest.DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesBlogInstant() {
