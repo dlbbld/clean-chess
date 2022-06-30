@@ -88,7 +88,8 @@ public class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileExpected() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("25_black_king_pawn.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue
+        .findPgnFileBelongingPgnTestCase("25_black_capture_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 

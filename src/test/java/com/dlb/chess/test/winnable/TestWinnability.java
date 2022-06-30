@@ -45,7 +45,7 @@ public class TestWinnability {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileValue() {
-    final var pgnFileName = "norgaard_pawn_wall_example_2.pgn";
+    final var pgnFileName = "pawn_wall_norgaard_example_2.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);

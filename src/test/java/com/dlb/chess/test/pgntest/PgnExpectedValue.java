@@ -170,8 +170,10 @@ public class PgnExpectedValue {
         return createTestCasesWikipediaFiftyMove();
       case WIKIPEDIA_THREEFOLD:
         return createTestCasesWikipediaThreefold();
-      case BIZARRE_CHECKMATE:
-        return createTestCasesBizarreCheckmate();
+      case DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE:
+        return createTestCasesDoubleCheckCheckmateBizarreWhite();
+      case DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK:
+        return createTestCasesDoubleCheckCheckmateBizarreBlack();
       case MONSTER_BLOG_INSTANT:
         return createTestCasesBlogInstant();
       case MONSTER_BLOG_PREDRAW:
@@ -5727,27 +5729,34 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.MAX_SAME_PIECE_PROMOTION_COMBINED, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBizarreCheckmate() {
+  private static PgnFileTestCaseList createTestCasesDoubleCheckCheckmateBizarreWhite() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_white_checkmates_double_check_one_empty_square.pgn", "", "", "", -1, 1,
+    list.add(new PgnFileTestCase("01_white_double_check_checkmate_bizarre_one_empty_square.pgn", "", "", "", -1, 1,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/2B5/4NN2/2bNkN2/2NNNN2/8/8/4K3 b - - 1 100"));
-    list.add(new PgnFileTestCase("02_white_checkmates_double_check_all_empty_squares.pgn", "", "", "", -1, 1,
+    list.add(new PgnFileTestCase("02_white_double_check_checkmate_bizarre_all_empty_squares.pgn", "", "", "", -1, 1,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/2B2N2/7R/2b1k3/1R6/8/3R1R2/4K3 b - - 1 100"));
-    list.add(new PgnFileTestCase("03_black_checkmates_double_check_one_empty_square.pgn", "", "", "", -1, 1,
+
+    return new PgnFileTestCaseList(PgnTest.DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesDoubleCheckCheckmateBizarreBlack() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(new PgnFileTestCase("01_black_double_check_checkmate_bizarre_one_empty_square.pgn", "", "", "", -1, 1,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "1k6/3b4/nn2B3/nKn5/nnnn4/8/8/8 w - - 1 101"));
-    list.add(new PgnFileTestCase("04_black_checkmates_double_check_all_empty_squares.pgn", "", "", "", -1, 1,
+    list.add(new PgnFileTestCase("02_black_double_check_checkmate_bizarre_all_empty_squares.pgn", "", "", "", -1, 1,
         CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
         "2rkr3/r7/3K4/r7/2n5/4B3/7b/8 w - - 1 101"));
 
-    return new PgnFileTestCaseList(PgnTest.BIZARRE_CHECKMATE, list);
+    return new PgnFileTestCaseList(PgnTest.DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE, list);
   }
 
   private static PgnFileTestCaseList createTestCasesBlogInstant() {

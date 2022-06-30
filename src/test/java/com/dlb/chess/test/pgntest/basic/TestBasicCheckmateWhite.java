@@ -21,21 +21,21 @@ class TestBasicCheckmateWhite extends AbstractTestBasic {
   static {
     final List<String> pgnFileNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_rook_checkmate_direct_adjacent.pgn");
-    pgnFileNameList.add("02_white_rook_checkmate_direct_range.pgn");
-    pgnFileNameList.add("03_white_rook_checkmate_discover.pgn");
-    pgnFileNameList.add("04_white_knight_checkmate_direct.pgn");
-    pgnFileNameList.add("05_white_knight_checkmate_discover_orthogonal.pgn");
-    pgnFileNameList.add("06_white_knight_checkmate_discover_diagonal.pgn");
-    pgnFileNameList.add("07_white_bishop_checkmate_direct_adjacent.pgn");
-    pgnFileNameList.add("08_white_bishop_checkmate_direct_range.pgn");
-    pgnFileNameList.add("09_white_bishop_checkmate_discover.pgn");
-    pgnFileNameList.add("10_white_queen_checkmate_direct_orthogonal_adjacent.pgn");
-    pgnFileNameList.add("11_white_queen_checkmate_direct_orthogonal_range.pgn");
-    pgnFileNameList.add("12_white_queen_checkmate_direct_diagonal_adjacent.pgn");
-    pgnFileNameList.add("13_white_queen_checkmate_direct_diagonal_range.pgn");
-    pgnFileNameList.add("14_white_king_checkmate_discover_orthogonal.pgn");
-    pgnFileNameList.add("15_white_king_checkmate_discover_diagonal.pgn");
+    pgnFileNameList.add("01_white_checkmate_rook_direct_adjacent.pgn");
+    pgnFileNameList.add("02_white_checkmate_rook_direct_range.pgn");
+    pgnFileNameList.add("03_white_checkmate_rook_discover.pgn");
+    pgnFileNameList.add("04_white_checkmate_knight_direct.pgn");
+    pgnFileNameList.add("05_white_checkmate_knight_discover_orthogonal.pgn");
+    pgnFileNameList.add("06_white_checkmate_knight_discover_diagonal.pgn");
+    pgnFileNameList.add("07_white_checkmate_bishop_direct_adjacent.pgn");
+    pgnFileNameList.add("08_white_checkmate_bishop_direct_range.pgn");
+    pgnFileNameList.add("09_white_checkmate_bishop_discover.pgn");
+    pgnFileNameList.add("10_white_checkmate_queen_direct_orthogonal_adjacent.pgn");
+    pgnFileNameList.add("11_white_checkmate_queen_direct_orthogonal_range.pgn");
+    pgnFileNameList.add("12_white_checkmate_queen_direct_diagonal_adjacent.pgn");
+    pgnFileNameList.add("13_white_checkmate_queen_direct_diagonal_range.pgn");
+    pgnFileNameList.add("14_white_checkmate_king_discover_orthogonal.pgn");
+    pgnFileNameList.add("15_white_checkmate_king_discover_diagonal.pgn");
 
     checkTestFolder(pgnFileNameList, PgnTest.BASIC_CHECKMATE_WHITE);
   }
@@ -51,49 +51,49 @@ class TestBasicCheckmateWhite extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_white_rook_checkmate_direct_adjacent.pgn":
+        case "01_white_checkmate_rook_direct_adjacent.pgn":
           checkNonCaptureCheckmate(WHITE, D7, D8, WHITE_ROOK, board);
           break;
-        case "02_white_rook_checkmate_direct_range.pgn":
+        case "02_white_checkmate_rook_direct_range.pgn":
           checkNonCaptureCheckmate(WHITE, H7, H8, WHITE_ROOK, board);
           break;
-        case "03_white_rook_checkmate_discover.pgn":
+        case "03_white_checkmate_rook_discover.pgn":
           checkNonCaptureCheckmate(WHITE, D7, H7, WHITE_ROOK, board);
           break;
-        case "04_white_knight_checkmate_direct.pgn":
+        case "04_white_checkmate_knight_direct.pgn":
           checkNonCaptureCheckmate(WHITE, B4, C6, WHITE_KNIGHT, board);
           break;
-        case "05_white_knight_checkmate_discover_orthogonal.pgn":
+        case "05_white_checkmate_knight_discover_orthogonal.pgn":
           checkNonCaptureCheckmate(WHITE, D5, F6, WHITE_KNIGHT, board);
           break;
-        case "06_white_knight_checkmate_discover_diagonal.pgn":
+        case "06_white_checkmate_knight_discover_diagonal.pgn":
           checkNonCaptureCheckmate(WHITE, F6, G8, WHITE_KNIGHT, board);
           break;
-        case "07_white_bishop_checkmate_direct_adjacent.pgn":
+        case "07_white_checkmate_bishop_direct_adjacent.pgn":
           checkNonCaptureCheckmate(WHITE, B3, C4, WHITE_BISHOP, board);
           break;
-        case "08_white_bishop_checkmate_direct_range.pgn":
+        case "08_white_checkmate_bishop_direct_range.pgn":
           checkNonCaptureCheckmate(WHITE, E2, F3, WHITE_BISHOP, board);
           break;
-        case "09_white_bishop_checkmate_discover.pgn":
+        case "09_white_checkmate_bishop_discover.pgn":
           checkNonCaptureCheckmate(WHITE, E5, C7, WHITE_BISHOP, board);
           break;
-        case "10_white_queen_checkmate_direct_orthogonal_adjacent.pgn":
+        case "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn":
           checkNonCaptureCheckmate(WHITE, F6, C6, WHITE_QUEEN, board);
           break;
-        case "11_white_queen_checkmate_direct_orthogonal_range.pgn":
+        case "11_white_checkmate_queen_direct_orthogonal_range.pgn":
           checkNonCaptureCheckmate(WHITE, D8, A5, WHITE_QUEEN, board);
           break;
-        case "12_white_queen_checkmate_direct_diagonal_adjacent.pgn":
+        case "12_white_checkmate_queen_direct_diagonal_adjacent.pgn":
           checkNonCaptureCheckmate(WHITE, B6, B7, WHITE_QUEEN, board);
           break;
-        case "13_white_queen_checkmate_direct_diagonal_range.pgn":
+        case "13_white_checkmate_queen_direct_diagonal_range.pgn":
           checkNonCaptureCheckmate(WHITE, C2, B3, WHITE_QUEEN, board);
           break;
-        case "14_white_king_checkmate_discover_orthogonal.pgn":
+        case "14_white_checkmate_king_discover_orthogonal.pgn":
           checkNonCaptureCheckmate(WHITE, G7, H6, WHITE_KING, board);
           break;
-        case "15_white_king_checkmate_discover_diagonal.pgn":
+        case "15_white_checkmate_king_discover_diagonal.pgn":
           checkNonCaptureCheckmate(WHITE, B6, B7, WHITE_KING, board);
           break;
         default:

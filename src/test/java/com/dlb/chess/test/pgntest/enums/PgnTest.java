@@ -91,7 +91,8 @@ public enum PgnTest {
   MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxPiece\\black"),
   MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxPiece\\combined"),
 
-  BIZARRE_CHECKMATE(false, "bizarreCheckmate"),
+  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "doubleCheckCheckmateBizarre\\white"),
+  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "doubleCheckCheckmateBizarre\\black"),
 
   MONSTER_BLOG_INSTANT(false, "blog\\instant"),
   MONSTER_BLOG_PREDRAW(false, "blog\\predraw"),

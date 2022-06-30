@@ -64,7 +64,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileExpected() {
-    final var pgnFileName = "ae_10.pgn";
+    final var pgnFileName = "unfair_ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase(pgnFileName);
     final ApiBoard board = new Board(pgnFileTestCase.fen());

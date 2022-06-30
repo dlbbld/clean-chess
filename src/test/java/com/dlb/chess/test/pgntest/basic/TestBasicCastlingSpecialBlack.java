@@ -15,23 +15,23 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-class TestBasicCastlingBlack extends AbstractTestBasic {
+class TestBasicCastlingSpecialBlack extends AbstractTestBasic {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBasicCastlingBlack.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBasicCastlingSpecialBlack.class);
 
   static {
     final List<String> pgnFileNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_black_kingside_check.pgn");
-    pgnFileNameList.add("02_black_kingside_checkmate.pgn");
-    pgnFileNameList.add("03_black_kingside_fifty_move.pgn");
-    pgnFileNameList.add("04_black_kingside_seventy_five_move.pgn");
-    pgnFileNameList.add("05_black_kingside_stalemate.pgn");
-    pgnFileNameList.add("06_black_queenside_check.pgn");
-    pgnFileNameList.add("07_black_queenside_checkmate.pgn");
-    pgnFileNameList.add("08_black_queenside_fifty_move.pgn");
-    pgnFileNameList.add("09_black_queenside_seventy_five_move.pgn");
-    pgnFileNameList.add("10_black_queenside_stalemate.pgn");
+    pgnFileNameList.add("01_black_castling_special_kingside_check.pgn");
+    pgnFileNameList.add("02_black_castling_special_kingside_checkmate.pgn");
+    pgnFileNameList.add("03_black_castling_special_kingside_fifty_move.pgn");
+    pgnFileNameList.add("04_black_castling_special_kingside_seventy_five_move.pgn");
+    pgnFileNameList.add("05_black_castling_special_kingside_stalemate.pgn");
+    pgnFileNameList.add("06_black_castling_special_queenside_check.pgn");
+    pgnFileNameList.add("07_black_castling_special_queenside_checkmate.pgn");
+    pgnFileNameList.add("08_black_castling_special_queenside_fifty_move.pgn");
+    pgnFileNameList.add("09_black_castling_special_queenside_seventy_five_move.pgn");
+    pgnFileNameList.add("10_black_castling_special_queenside_stalemate.pgn");
 
     checkTestFolder(pgnFileNameList, PgnTest.BASIC_CASTLING_SPECIAL_BLACK);
   }
@@ -47,34 +47,34 @@ class TestBasicCastlingBlack extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_black_kingside_check.pgn":
+        case "01_black_castling_special_kingside_check.pgn":
           checkCastle(BLACK, CastlingMove.KING_SIDE, board);
           break;
-        case "02_black_kingside_checkmate.pgn":
+        case "02_black_castling_special_kingside_checkmate.pgn":
           checkCastle(BLACK, CastlingMove.KING_SIDE, board);
           break;
-        case "03_black_kingside_fifty_move.pgn":
+        case "03_black_castling_special_kingside_fifty_move.pgn":
           checkCastle(BLACK, CastlingMove.KING_SIDE, board);
           break;
-        case "04_black_kingside_seventy_five_move.pgn":
+        case "04_black_castling_special_kingside_seventy_five_move.pgn":
           checkCastle(BLACK, CastlingMove.KING_SIDE, board);
           break;
-        case "05_black_kingside_stalemate.pgn":
+        case "05_black_castling_special_kingside_stalemate.pgn":
           checkCastle(BLACK, CastlingMove.KING_SIDE, board);
           break;
-        case "06_black_queenside_check.pgn":
+        case "06_black_castling_special_queenside_check.pgn":
           checkCastle(BLACK, CastlingMove.QUEEN_SIDE, board);
           break;
-        case "07_black_queenside_checkmate.pgn":
+        case "07_black_castling_special_queenside_checkmate.pgn":
           checkCastle(BLACK, CastlingMove.QUEEN_SIDE, board);
           break;
-        case "08_black_queenside_fifty_move.pgn":
+        case "08_black_castling_special_queenside_fifty_move.pgn":
           checkCastle(BLACK, CastlingMove.QUEEN_SIDE, board);
           break;
-        case "09_black_queenside_seventy_five_move.pgn":
+        case "09_black_castling_special_queenside_seventy_five_move.pgn":
           checkCastle(BLACK, CastlingMove.QUEEN_SIDE, board);
           break;
-        case "10_black_queenside_stalemate.pgn":
+        case "10_black_castling_special_queenside_stalemate.pgn":
           checkCastle(BLACK, CastlingMove.QUEEN_SIDE, board);
           break;
         default:
