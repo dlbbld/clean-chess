@@ -34,7 +34,7 @@ abstract class AbstractTestAmbronaExamplesHavingMove extends AbstractTestBasic {
 
     final List<String> pgnFileNameList = new ArrayList<>(map.keySet());
 
-    checkTestFolder(pgnFileNameList, PgnTest.UNFAIR_AMBRONA_EXAMPLES);
+    checkTestFolder(pgnFileNameList, PgnTest.UNFAIR_AMBRONA);
   }
 
 }

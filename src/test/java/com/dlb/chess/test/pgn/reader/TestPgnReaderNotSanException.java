@@ -6,7 +6,7 @@ import com.dlb.chess.pgn.reader.enums.PgnReaderValidationProblem;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderNotSanException extends AbstractTestPgnReaderException {
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_TEST_ROOT_FOLDER_PATH
+  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH
       + "\\exception\\notSan";
 
   @SuppressWarnings("static-method")

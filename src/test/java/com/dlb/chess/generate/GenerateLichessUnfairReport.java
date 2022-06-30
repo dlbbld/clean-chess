@@ -18,7 +18,7 @@ public class GenerateLichessUnfairReport {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateLichessUnfairReport.class);
 
   public static void main(String[] args) throws Exception {
-    generate(PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES));
+    generate(PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES));
   }
 
   private static void generate(PgnFileTestCaseList testCaseList) throws Exception {

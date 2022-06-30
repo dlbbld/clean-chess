@@ -22,8 +22,8 @@ public enum PgnTest {
   BASIC_CHECKMATE_BLACK(true, "basic\\checkmate\\black"),
   BASIC_CHECKMATE_VARIOUS_WHITE(false, "basic\\checkmateVarious\\white"),
   BASIC_CHECKMATE_VARIOUS_BLACK(false, "basic\\checkmateVarious\\black"),
-  BASIC_CHECKMATE_DOUBLE_CHECK_WHITE(true, "basic\\checkmateDoubleCheck\\white"),
-  BASIC_CHECKMATE_DOUBLE_CHECK_BLACK(true, "basic\\checkmateDoubleCheck\\black"),
+  BASIC_CHECKMATE_DOUBLE_CHECK_WHITE(true, "basic\\doubleCheckCheckmate\\white"),
+  BASIC_CHECKMATE_DOUBLE_CHECK_BLACK(true, "basic\\doubleCheckCheckmate\\black"),
   BASIC_STALEMATE(true, "basic\\stalemate"),
   BASIC_INSUFFICIENT_MATERIAL(true, "basic\\insufficientMaterial"),
   BASIC_THREEFOLD(true, "basic\\threefold"),
@@ -77,11 +77,11 @@ public enum PgnTest {
   DGT_LIVE_CHESS(false, "dgt\\liveChess"),
   DGT_CENTAUR(false, "dgt\\centaur"),
 
-  UNFAIR_LICHESS_ANALYSIS_GAMES(false, "unfair\\lichessAnalysis\\games"),
-  UNFAIR_LICHESS_ANALYSIS_HELPMATE(false, "unfair\\lichessAnalysis\\helpmate"),
-  UNFAIR_HALF_MOVE_DEPTH_THREE(false, "unfair\\halfMoveDepthThree"),
+  UNFAIR_LICHESS_EXAMPLES(false, "unfair\\lichess\\examples"),
+  UNFAIR_LICHESS_HELPMATE(false, "unfair\\lichess\\helpmate"),
+  UNFAIR_DEPTH_THREE(false, "unfair\\depthThree"),
   UNFAIR_NOT_QUICK(false, "unfair\\notQuick"),
-  UNFAIR_AMBRONA_EXAMPLES(false, "unfair\\ambronaExamples"),
+  UNFAIR_AMBRONA(false, "unfair\\ambrona"),
 
   PAWN_WALL(false, "pawnWall"),
 

@@ -34,9 +34,9 @@ public class TestFindHelpMate {
 
     var hasFound = false;
     final PgnFileTestCaseList testCaseHavingHelpmateList = PgnExpectedValue
-        .getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_HELPMATE);
+        .getTestList(PgnTest.UNFAIR_LICHESS_HELPMATE);
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       if (!hasFound) {
         if (IS_START_FROM_PGN_FILE) {

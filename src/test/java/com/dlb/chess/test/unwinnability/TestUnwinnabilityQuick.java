@@ -105,7 +105,7 @@ public class TestUnwinnabilityQuick {
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
