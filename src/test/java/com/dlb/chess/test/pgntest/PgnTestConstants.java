@@ -19,13 +19,13 @@ public abstract class PgnTestConstants {
   public static final String PGN_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
       + "\\src\\test\\resources\\pgn";
 
-  public static final String PGN_READER_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgnReaderTest";
+  public static final String PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
+      + "\\src\\test\\resources\\pgnReader\\nonStrict";
 
   public static final String PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgnReaderStrictTest";
+      + "\\src\\test\\resources\\pgnReader\\strict";
 
-  public static final String PGN_Export_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgnExportTest";
+  public static final String PGN_EXPORT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
+      + "\\src\\test\\resources\\pgnExport";
 
 }

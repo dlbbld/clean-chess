@@ -6,7 +6,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 public class GenerateTestCaseForPgnFile extends AbstractGenerateTestCaseForPgn {
 
   // we assume for convenience the file is in one of the provided folders
-  private static final String PGN_FILE_NAME = "ae_04_proof_game.pgn";
+  private static final String PGN_FILE_NAME = "threefold_10_1_multiple_threefolds_end_with_last.pgn";
 
   public static void main(String[] args) throws Exception {
     generateTestCaseForPgnFile(PGN_FILE_NAME);

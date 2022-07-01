@@ -88,7 +88,8 @@ public class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileExpected() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase("25_black_king_pawn.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue
+        .findPgnFileBelongingPgnTestCase("25_black_capture_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
@@ -105,7 +106,7 @@ public class TestUnwinnabilityQuick {
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());

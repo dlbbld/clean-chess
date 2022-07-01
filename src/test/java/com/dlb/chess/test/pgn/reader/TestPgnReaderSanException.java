@@ -13,7 +13,7 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderSanException extends AbstractTestMovetextUtility {
 
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_TEST_ROOT_FOLDER_PATH
+  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH
       + "\\exception\\san";
 
   @SuppressWarnings("static-method")

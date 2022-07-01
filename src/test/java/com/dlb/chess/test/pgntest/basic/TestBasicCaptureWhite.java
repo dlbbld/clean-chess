@@ -21,31 +21,31 @@ class TestBasicCaptureWhite extends AbstractTestBasic {
   static {
     final List<String> pgnFileNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_rook_rook.pgn");
-    pgnFileNameList.add("02_white_rook_knight.pgn");
-    pgnFileNameList.add("03_white_rook_bishop.pgn");
-    pgnFileNameList.add("04_white_rook_queen.pgn");
-    pgnFileNameList.add("05_white_rook_pawn.pgn");
-    pgnFileNameList.add("06_white_knight_rook.pgn");
-    pgnFileNameList.add("07_white_knight_knight.pgn");
-    pgnFileNameList.add("08_white_knight_bishop.pgn");
-    pgnFileNameList.add("09_white_knight_queen.pgn");
-    pgnFileNameList.add("10_white_knight_pawn.pgn");
-    pgnFileNameList.add("11_white_bishop_rook.pgn");
-    pgnFileNameList.add("12_white_bishop_knight.pgn");
-    pgnFileNameList.add("13_white_bishop_bishop.pgn");
-    pgnFileNameList.add("14_white_bishop_queen.pgn");
-    pgnFileNameList.add("15_white_bishop_pawn.pgn");
-    pgnFileNameList.add("16_white_queen_rook.pgn");
-    pgnFileNameList.add("17_white_queen_knight.pgn");
-    pgnFileNameList.add("18_white_queen_bishop.pgn");
-    pgnFileNameList.add("19_white_queen_queen.pgn");
-    pgnFileNameList.add("20_white_queen_pawn.pgn");
-    pgnFileNameList.add("21_white_king_rook.pgn");
-    pgnFileNameList.add("22_white_king_knight.pgn");
-    pgnFileNameList.add("23_white_king_bishop.pgn");
-    pgnFileNameList.add("24_white_king_queen.pgn");
-    pgnFileNameList.add("25_white_king_pawn.pgn");
+    pgnFileNameList.add("01_white_capture_rook_rook.pgn");
+    pgnFileNameList.add("02_white_capture_rook_knight.pgn");
+    pgnFileNameList.add("03_white_capture_rook_bishop.pgn");
+    pgnFileNameList.add("04_white_capture_rook_queen.pgn");
+    pgnFileNameList.add("05_white_capture_rook_pawn.pgn");
+    pgnFileNameList.add("06_white_capture_knight_rook.pgn");
+    pgnFileNameList.add("07_white_capture_knight_knight.pgn");
+    pgnFileNameList.add("08_white_capture_knight_bishop.pgn");
+    pgnFileNameList.add("09_white_capture_knight_queen.pgn");
+    pgnFileNameList.add("10_white_capture_knight_pawn.pgn");
+    pgnFileNameList.add("11_white_capture_bishop_rook.pgn");
+    pgnFileNameList.add("12_white_capture_bishop_knight.pgn");
+    pgnFileNameList.add("13_white_capture_bishop_bishop.pgn");
+    pgnFileNameList.add("14_white_capture_bishop_queen.pgn");
+    pgnFileNameList.add("15_white_capture_bishop_pawn.pgn");
+    pgnFileNameList.add("16_white_capture_queen_rook.pgn");
+    pgnFileNameList.add("17_white_capture_queen_knight.pgn");
+    pgnFileNameList.add("18_white_capture_queen_bishop.pgn");
+    pgnFileNameList.add("19_white_capture_queen_queen.pgn");
+    pgnFileNameList.add("20_white_capture_queen_pawn.pgn");
+    pgnFileNameList.add("21_white_capture_king_rook.pgn");
+    pgnFileNameList.add("22_white_capture_king_knight.pgn");
+    pgnFileNameList.add("23_white_capture_king_bishop.pgn");
+    pgnFileNameList.add("24_white_capture_king_queen.pgn");
+    pgnFileNameList.add("25_white_capture_king_pawn.pgn");
 
     checkTestFolder(pgnFileNameList, PgnTest.BASIC_CAPTURE_WHITE);
   }
@@ -61,79 +61,79 @@ class TestBasicCaptureWhite extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_white_rook_rook.pgn":
+        case "01_white_capture_rook_rook.pgn":
           checkCapture(WHITE, B3, B6, WHITE_ROOK, BLACK_ROOK, board);
           break;
-        case "02_white_rook_knight.pgn":
+        case "02_white_capture_rook_knight.pgn":
           checkCapture(WHITE, E3, E5, WHITE_ROOK, BLACK_KNIGHT, board);
           break;
-        case "03_white_rook_bishop.pgn":
+        case "03_white_capture_rook_bishop.pgn":
           checkCapture(WHITE, H3, A3, WHITE_ROOK, BLACK_BISHOP, board);
           break;
-        case "04_white_rook_queen.pgn":
+        case "04_white_capture_rook_queen.pgn":
           checkCapture(WHITE, H1, H4, WHITE_ROOK, BLACK_QUEEN, board);
           break;
-        case "05_white_rook_pawn.pgn":
+        case "05_white_capture_rook_pawn.pgn":
           checkCapture(WHITE, B3, B5, WHITE_ROOK, BLACK_PAWN, board);
           break;
-        case "06_white_knight_rook.pgn":
+        case "06_white_capture_knight_rook.pgn":
           checkCapture(WHITE, B6, A8, WHITE_KNIGHT, BLACK_ROOK, board);
           break;
-        case "07_white_knight_knight.pgn":
+        case "07_white_capture_knight_knight.pgn":
           checkCapture(WHITE, D5, F6, WHITE_KNIGHT, BLACK_KNIGHT, board);
           break;
-        case "08_white_knight_bishop.pgn":
+        case "08_white_capture_knight_bishop.pgn":
           checkCapture(WHITE, E4, D6, WHITE_KNIGHT, BLACK_BISHOP, board);
           break;
-        case "09_white_knight_queen.pgn":
+        case "09_white_capture_knight_queen.pgn":
           checkCapture(WHITE, D5, F6, WHITE_KNIGHT, BLACK_QUEEN, board);
           break;
-        case "10_white_knight_pawn.pgn":
+        case "10_white_capture_knight_pawn.pgn":
           checkCapture(WHITE, C3, D5, WHITE_KNIGHT, BLACK_PAWN, board);
           break;
-        case "11_white_bishop_rook.pgn":
+        case "11_white_capture_bishop_rook.pgn":
           checkCapture(WHITE, B2, H8, WHITE_BISHOP, BLACK_ROOK, board);
           break;
-        case "12_white_bishop_knight.pgn":
+        case "12_white_capture_bishop_knight.pgn":
           checkCapture(WHITE, G5, F6, WHITE_BISHOP, BLACK_KNIGHT, board);
           break;
-        case "13_white_bishop_bishop.pgn":
+        case "13_white_capture_bishop_bishop.pgn":
           checkCapture(WHITE, B2, G7, WHITE_BISHOP, BLACK_BISHOP, board);
           break;
-        case "14_white_bishop_queen.pgn":
+        case "14_white_capture_bishop_queen.pgn":
           checkCapture(WHITE, B2, F6, WHITE_BISHOP, BLACK_QUEEN, board);
           break;
-        case "15_white_bishop_pawn.pgn":
+        case "15_white_capture_bishop_pawn.pgn":
           checkCapture(WHITE, G5, E7, WHITE_BISHOP, BLACK_PAWN, board);
           break;
-        case "16_white_queen_rook.pgn":
+        case "16_white_capture_queen_rook.pgn":
           checkCapture(WHITE, F3, A8, WHITE_QUEEN, BLACK_ROOK, board);
           break;
-        case "17_white_queen_knight.pgn":
+        case "17_white_capture_queen_knight.pgn":
           checkCapture(WHITE, A4, C6, WHITE_QUEEN, BLACK_KNIGHT, board);
           break;
-        case "18_white_queen_bishop.pgn":
+        case "18_white_capture_queen_bishop.pgn":
           checkCapture(WHITE, F3, G4, WHITE_QUEEN, BLACK_BISHOP, board);
           break;
-        case "19_white_queen_queen.pgn":
+        case "19_white_capture_queen_queen.pgn":
           checkCapture(WHITE, H5, H4, WHITE_QUEEN, BLACK_QUEEN, board);
           break;
-        case "20_white_queen_pawn.pgn":
+        case "20_white_capture_queen_pawn.pgn":
           checkCapture(WHITE, H5, H7, WHITE_QUEEN, BLACK_PAWN, board);
           break;
-        case "21_white_king_rook.pgn":
+        case "21_white_capture_king_rook.pgn":
           checkCapture(WHITE, E3, D3, WHITE_KING, BLACK_ROOK, board);
           break;
-        case "22_white_king_knight.pgn":
+        case "22_white_capture_king_knight.pgn":
           checkCapture(WHITE, D3, D4, WHITE_KING, BLACK_KNIGHT, board);
           break;
-        case "23_white_king_bishop.pgn":
+        case "23_white_capture_king_bishop.pgn":
           checkCapture(WHITE, C4, B4, WHITE_KING, BLACK_BISHOP, board);
           break;
-        case "24_white_king_queen.pgn":
+        case "24_white_capture_king_queen.pgn":
           checkCapture(WHITE, E2, E3, WHITE_KING, BLACK_QUEEN, board);
           break;
-        case "25_white_king_pawn.pgn":
+        case "25_white_capture_king_pawn.pgn":
           checkCapture(WHITE, D3, D4, WHITE_KING, BLACK_PAWN, board);
           break;
         default:

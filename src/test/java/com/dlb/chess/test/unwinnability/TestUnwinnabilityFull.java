@@ -64,7 +64,7 @@ public class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileExpected() {
-    final var pgnFileName = "ae_10.pgn";
+    final var pgnFileName = "unfair_ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase(pgnFileName);
     final ApiBoard board = new Board(pgnFileTestCase.fen());
@@ -84,7 +84,7 @@ public class TestUnwinnabilityFull {
   // @Test
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
 
@@ -114,7 +114,7 @@ public class TestUnwinnabilityFull {
   // @Test
   void testPerformance() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_ANALYSIS_GAMES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ApiBoard board = new Board(testCase.fen());
 

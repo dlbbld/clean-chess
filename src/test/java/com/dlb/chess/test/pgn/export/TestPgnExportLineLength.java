@@ -17,7 +17,7 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnExportLineLength {
 
-  private static final String TEST_FOLDER_PATH = PgnTestConstants.PGN_Export_TEST_ROOT_FOLDER_PATH + "\\lineLength80";
+  private static final String TEST_FOLDER_PATH = PgnTestConstants.PGN_EXPORT_TEST_ROOT_FOLDER_PATH + "\\lineLength80";
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineLength.class);
 

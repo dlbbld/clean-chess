@@ -22,8 +22,8 @@ public enum PgnTest {
   BASIC_CHECKMATE_BLACK(true, "basic\\checkmate\\black"),
   BASIC_CHECKMATE_VARIOUS_WHITE(false, "basic\\checkmateVarious\\white"),
   BASIC_CHECKMATE_VARIOUS_BLACK(false, "basic\\checkmateVarious\\black"),
-  BASIC_CHECKMATE_DOUBLE_CHECK_WHITE(true, "basic\\checkmateDoubleCheck\\white"),
-  BASIC_CHECKMATE_DOUBLE_CHECK_BLACK(true, "basic\\checkmateDoubleCheck\\black"),
+  BASIC_CHECKMATE_DOUBLE_CHECK_WHITE(true, "basic\\doubleCheckCheckmate\\white"),
+  BASIC_CHECKMATE_DOUBLE_CHECK_BLACK(true, "basic\\doubleCheckCheckmate\\black"),
   BASIC_STALEMATE(true, "basic\\stalemate"),
   BASIC_INSUFFICIENT_MATERIAL(true, "basic\\insufficientMaterial"),
   BASIC_THREEFOLD(true, "basic\\threefold"),
@@ -40,7 +40,7 @@ public enum PgnTest {
   BASIC_FROM_FEN_YAWN_WHITE(true, "basic\\fromFenYawn\\white"),
   BASIC_FROM_FEN_YAWN_BLACK(true, "basic\\fromFenYawn\\black"),
 
-  CAPTURE_AND_MAX_YAWN(false, "captureAndMaxYawn"),
+  CAPTURE_AND_MAX_YAWN(false, "captureLastMove"),
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
@@ -60,8 +60,8 @@ public enum PgnTest {
   RANDOM_THREEFOLD(false, "random\\threefold"),
   RANDOM_FIVEFOLD(false, "random\\fivefold"),
 
-  GAMES_VARIOUS(false, "games\\various"),
-  GAMES_WCC2021(false, "games\\wcc2021"),
+  VARIOUS(false, "various"),
+  WCC2021(false, "wcc2021"),
   FIVEFOLD_CORRECT(false, "fivefold\\correct"),
   FIVEFOLD_BEYOND(false, "fivefold\\beyond"),
   FIFTY_GENERAL(false, "fifty\\general"),
@@ -77,25 +77,26 @@ public enum PgnTest {
   DGT_LIVE_CHESS(false, "dgt\\liveChess"),
   DGT_CENTAUR(false, "dgt\\centaur"),
 
-  UNFAIR_LICHESS_ANALYSIS_GAMES(false, "unfair\\lichessAnalysis\\games"),
-  UNFAIR_LICHESS_ANALYSIS_HELPMATE(false, "unfair\\lichessAnalysis\\helpmate"),
-  UNFAIR_HALF_MOVE_DEPTH_THREE(false, "unfair\\halfMoveDepthThree"),
+  UNFAIR_LICHESS_EXAMPLES(false, "unfair\\lichess\\examples"),
+  UNFAIR_LICHESS_HELPMATE(false, "unfair\\lichess\\helpmate"),
+  UNFAIR_DEPTH_THREE(false, "unfair\\depthThree"),
   UNFAIR_NOT_QUICK(false, "unfair\\notQuick"),
-  UNFAIR_AMBRONA_EXAMPLES(false, "unfair\\ambronaExamples"),
+  UNFAIR_AMBRONA(false, "unfair\\ambrona"),
 
   PAWN_WALL(false, "pawnWall"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "lastMoveAddedAccidentally"),
 
-  MAX_SAME_PIECE_PROMOTION_WHITE(false, "maxSamePiecePromotion\\white"),
-  MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxSamePiecePromotion\\black"),
-  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxSamePiecePromotion\\combined"),
+  MAX_SAME_PIECE_PROMOTION_WHITE(false, "maxPiece\\white"),
+  MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxPiece\\black"),
+  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxPiece\\combined"),
 
-  BIZARRE_CHECKMATE(false, "bizarreCheckmate"),
+  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "doubleCheckCheckmateBizarre\\white"),
+  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "doubleCheckCheckmateBizarre\\black"),
 
-  MONSTER_BLOG_INSUFFICIENT_MATERIAL(false, "monsterBlog\\insufficientMaterial"),
-  MONSTER_BLOG_INSUFFICIENT_MATERIAL_PREDRAW(false, "monsterBlog\\insufficientMaterialPredraw"),
-  MONSTER_BLOG_INSUFFICIENT_MATERIAL_TIMEOUT(false, "monsterBlog\\insufficientMaterialTimeout");
+  MONSTER_BLOG_INSTANT(false, "blog\\instant"),
+  MONSTER_BLOG_PREDRAW(false, "blog\\predraw"),
+  MONSTER_BLOG_TIMEOUT(false, "blog\\timeout");
 
   private final boolean isBasicTest;
   private final String folderPart;

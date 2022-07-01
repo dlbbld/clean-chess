@@ -46,9 +46,9 @@ public class TestUnwinnabilityQuickAgainstWinnability {
 
         switch (testCase.pgnFileName()) {
           // here my tool sees unwinnability but not the quick analysis
-          case "ae_10.pgn":
-          case "ae_16.pgn":
-          case "norgaard_pawn_wall_example_2.pgn":
+          case "unfair_ambrona_10.pgn":
+          case "unfair_ambrona_16.pgn":
+          case "pawn_wall_norgaard_example_2.pgn":
             continue;
           default:
             break;
