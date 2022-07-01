@@ -20,7 +20,7 @@ class TestPgnExpectedValue extends AbstractPgnTest {
   private static final PgnTest CHECK_FROM_PGN_TEST = PgnTest.SPECIAL;
 
   private static final boolean IS_CHECK_ONLY_PGN_TEST = true;
-  private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.BASIC_THREEFOLD;
+  private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.BASIC_FIFTY;
 
   private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = false;
   private static final String CHECK_PGN_FILE_NAME = "unfair_lichess_helpmate_zmelXKvA.pgn";
