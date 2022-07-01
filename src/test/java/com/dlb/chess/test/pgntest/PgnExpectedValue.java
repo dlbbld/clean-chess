@@ -1873,11 +1873,11 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList createTestCasesBasicSeventyFive() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("01_seventy_five_one_before_first_seventy_five.pgn", "", "",
+    list.add(new PgnFileTestCase("01_seventy_five_end_with_half_move_clock_149.pgn", "", "",
         "7.Ba6 (1) 56...Nd6 (100) 81.Rb3 (149)", -1, 149, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.WINNABLE,
         "1r1n2r1/2pk1ppR/1pbn4/p2pp2p/P1B1P2P/1RKP1Q1N/1PP1NPP1/1qB3b1 b - - 149 81"));
-    list.add(new PgnFileTestCase("02_seventy_five_end_with_first_seventy_five.pgn", "", "",
+    list.add(new PgnFileTestCase("02_seventy_five_end_with_half_move_clock_150.pgn", "", "",
         "7.Ba6 (1) 56...Nd6 (100) 81...Kc8 (150)", -1, 150, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
         UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "1rkn2r1/2p2ppR/1pbn4/p2pp2p/P1B1P2P/1RKP1Q1N/1PP1NPP1/1qB3b1 w - - 150 82"));
