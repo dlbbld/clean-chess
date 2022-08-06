@@ -3209,6 +3209,11 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
 
+    list.add(new PgnFileTestCase("various_gundavaa_tari_2022.pgn", "", "", "", 8, 13, CheckmateOrStalemate.NA, 2,
+        InsufficientMaterial.NONE, UnwinnableFull.UNDETERMINED, UnwinnableFull.UNDETERMINED,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "R7/2q2p2/5k1Q/pp2r3/2p1P1P1/7P/6K1/8 b - - 13 42"));
+
     return new PgnFileTestCaseList(PgnTest.VARIOUS, list);
   }
 
