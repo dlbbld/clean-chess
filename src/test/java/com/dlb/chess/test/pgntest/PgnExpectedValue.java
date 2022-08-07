@@ -3632,11 +3632,11 @@ public class PgnExpectedValue {
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "3N2k1/8/8/pPn4p/1p5P/8/6P1/6K1 w - - 1 64"));
-    list.add(new PgnFileTestCase("wikipedia_threefold_2_5_korchnoi_portisch_1970_game_4.pgn", "", "", "", 8, 10,
+    list.add(new PgnFileTestCase("wikipedia_threefold_2_5_portisch_korchnoi_1970_game_4.pgn", "", "", "", 8, 10,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "2b1nrk1/p2p1npp/2q1p3/2N5/5P2/P5P1/1P3QBP/R3K2R b KQ - 10 25"));
-    list.add(new PgnFileTestCase("wikipedia_threefold_2_5_korchnoi_portisch_1970_game_4_changed.pgn",
+    list.add(new PgnFileTestCase("wikipedia_threefold_2_5_portisch_korchnoi_1970_game_4_changed.pgn",
         "repPos=3: 21...Qb5 23...Qb5 25...Qb5", "", "", 8, 11, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "2b1nrk1/p2p1npp/4p3/1qN5/5P2/P5P1/1P3QBP/R3K2R w KQ - 11 26"));
