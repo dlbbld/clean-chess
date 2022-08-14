@@ -1,0 +1,12 @@
+[Event "?"]
+[Site "?"]
+[Date "?"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[FEN "3k4/8/2pK4/2P5/8/8/8/8 w - - 10 70"]
+[SetUp "1"]
+
+70. Kxc6 Kc8 71. Kd6 Kd8 72. Kc6 Kc8 73. Kd6 Kd8 74. Kc6 *
+
