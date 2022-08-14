@@ -22,7 +22,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "????.??.??"]
+          [Date "?"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -46,7 +46,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "????.??.??"]
+          [Date "?"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -72,7 +72,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "Zuerich Open"]
           [Site "?"]
-          [Date "????.??.??"]
+          [Date "?"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -133,7 +133,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "????.??.??"]
+          [Date "?"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -162,7 +162,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "????.??.??"]
+          [Date "?"]
           [Round "?"]
           [White "Donald Duck"]
           [Black "Mickey Mouse"]
@@ -198,7 +198,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "????.??.??"]
+          [Date "?"]
           [Round "?"]
           [White "?"]
           [Black "?"]

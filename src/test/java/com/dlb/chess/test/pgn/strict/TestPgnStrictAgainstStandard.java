@@ -27,7 +27,7 @@ class TestPgnStrictAgainstStandard {
 
         logger.info(pgnFileName);
 
-        // if (!"2_4_2_lasker_alekhine_1914.pgn".equals(pgnFileName)) {
+        // if (!"03_claim_for_own_move_incorrect_castling_right_lost_for_king_move.pgn".equals(pgnFileName)) {
         // continue;
         // }
 
