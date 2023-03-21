@@ -88,11 +88,11 @@ public class GeneralUtility {
 
   public static String composeCheckmateLine(List<UciMove> uciMoveList) {
     final List<String> uciMoveStrList = new ArrayList<>();
-  
+
     for (final UciMove uciMove : uciMoveList) {
       uciMoveStrList.add(uciMove.text());
     }
-  
+
     return BasicUtility.calculateSpaceSeparatedList(uciMoveStrList);
   }
 }

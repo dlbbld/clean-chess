@@ -19,9 +19,8 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
     boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule,
     boolean isGameContinuedOverFivefoldRepetition, boolean isGameContinuedOverSeventyFiveMove, int firstCapture,
     boolean hasCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate,
-    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite,
-    UnwinnableFull unwinnableFullBlack, UnwinnableQuick unwinnableQuickWhite,
-    UnwinnableQuick unwinnableQuickBlack, String fen, ApiBoard board) {
+    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite, UnwinnableFull unwinnableFullBlack,
+    UnwinnableQuick unwinnableQuickWhite, UnwinnableQuick unwinnableQuickBlack, String fen, ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -45,10 +44,8 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && checkmateOrStalemate == other.checkmateOrStalemate && maxYawnSequence == other.maxYawnSequence
         && Objects.equals(repetitionListList, other.repetitionListList)
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
-        && unwinnableFullWhite == other.unwinnableFullWhite
-        && unwinnableFullBlack == other.unwinnableFullBlack
-        && unwinnableQuickWhite == other.unwinnableQuickWhite
-        && unwinnableQuickBlack == other.unwinnableQuickBlack;
+        && unwinnableFullWhite == other.unwinnableFullWhite && unwinnableFullBlack == other.unwinnableFullBlack
+        && unwinnableQuickWhite == other.unwinnableQuickWhite && unwinnableQuickBlack == other.unwinnableQuickBlack;
   }
 
   public Side havingMove() {

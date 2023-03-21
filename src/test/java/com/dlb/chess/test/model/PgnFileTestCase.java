@@ -12,9 +12,8 @@ import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     String expectedRepetitionInitialEnPassantCapture, String expectedYawnMoveRule, int firstCapture,
     int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
-    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite,
-    UnwinnableFull unwinnableFullBlack, UnwinnableQuick unwinnableQuickWhite,
-    UnwinnableQuick unwinnableQuickBlack, String fen) {
+    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite, UnwinnableFull unwinnableFullBlack,
+    UnwinnableQuick unwinnableQuickWhite, UnwinnableQuick unwinnableQuickBlack, String fen) {
 
   public String pgnFileName() {
     return pgnFileName;
@@ -87,10 +86,8 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
         && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
         && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate
         && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
-        && unwinnableFullWhite == other.unwinnableFullWhite
-        && unwinnableFullBlack == other.unwinnableFullBlack
-        && unwinnableQuickWhite == other.unwinnableQuickWhite
-        && unwinnableQuickBlack == other.unwinnableQuickBlack;
+        && unwinnableFullWhite == other.unwinnableFullWhite && unwinnableFullBlack == other.unwinnableFullBlack
+        && unwinnableQuickWhite == other.unwinnableQuickWhite && unwinnableQuickBlack == other.unwinnableQuickBlack;
   }
 
 }
