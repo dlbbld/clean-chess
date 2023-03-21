@@ -3,8 +3,8 @@ package com.dlb.chess.moves.utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;

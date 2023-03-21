@@ -2,9 +2,9 @@ package com.dlb.chess.san.validate.statically.strict.calculate;
 
 import java.util.Map;
 
-import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
+import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
