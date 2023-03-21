@@ -1,0 +1,12 @@
+[Event "?"]
+[Site "?"]
+[Date "?"]
+[Round "?"]
+[White "?"]
+[Black "?"]
+[Result "*"]
+[FEN "8/pp3p1k/2p2q1p/3r1P1Q/5R2/7P/P1P1pP2/7K w - - 10 70"]
+[SetUp "1"]
+
+70. Qxe2 Qe5 71. Qh5 Qf6 72. Qe2 Re5 73. Qd3 Rd5 *
+

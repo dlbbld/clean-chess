@@ -9,7 +9,6 @@ import com.dlb.chess.analysis.print.AnalyzerPrint;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -29,23 +28,6 @@ public class Analyzer extends AnalyzerPrint {
 
   // we set to false for faster testing runs
   public static boolean IS_CALCULATE_UNWINNABLE = false;
-
-  public static void main(String[] args) throws Exception {
-    printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\games\\various",
-        "Ob5ozxgG.pgn");
-    System.out.println("");
-
-    printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\wikipedia\\threefold",
-        "2_5_korchnoi_portisch_1970_game_4.pgn");
-    System.out.println("");
-
-    printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\wikipedia\\threefold",
-        "2_3_capablanca_lasker_1921.pgn");
-    System.out.println("");
-
-    printAnalysis(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\src\\test\\resources\\pgn\\wikipedia\\fiftyMove",
-        "2_2_karpov_kasparov_1991.pgn");
-  }
 
   public static void printAnalysis(String pgn) throws Exception {
     // delegated to package protected method for class organization

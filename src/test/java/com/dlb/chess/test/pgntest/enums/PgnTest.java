@@ -96,7 +96,10 @@ public enum PgnTest {
 
   MONSTER_BLOG_INSTANT(false, "blog\\instant"),
   MONSTER_BLOG_PREDRAW(false, "blog\\predraw"),
-  MONSTER_BLOG_TIMEOUT(false, "blog\\timeout");
+  MONSTER_BLOG_TIMEOUT(false, "blog\\timeout"),
+
+  REPETITION_QUIZ_ONE(false, "repetitionQuiz\\one"),
+  REPETITION_QUIZ_TWO(false, "repetitionQuiz\\two");
 
   private final boolean isBasicTest;
   private final String folderPart;

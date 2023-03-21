@@ -7,7 +7,7 @@ public class TagPlaceHolderUtility {
 
   private static final Tag TAG_EVENT = new Tag(StandardTag.EVENT.getName(), "?");
   private static final Tag TAG_SITE = new Tag(StandardTag.SITE.getName(), "?");
-  private static final Tag TAG_DATE = new Tag(StandardTag.DATE.getName(), "????.??.??");
+  private static final Tag TAG_DATE = new Tag(StandardTag.DATE.getName(), "?");
   private static final Tag TAG_ROUND = new Tag(StandardTag.ROUND.getName(), "?");
   private static final Tag TAG_WHITE = new Tag(StandardTag.WHITE.getName(), "?");
   private static final Tag TAG_BLACK = new Tag(StandardTag.BLACK.getName(), "?");
