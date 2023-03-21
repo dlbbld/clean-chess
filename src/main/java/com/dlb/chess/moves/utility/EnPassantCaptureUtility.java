@@ -139,15 +139,12 @@ public class EnPassantCaptureUtility implements EnumConstants {
   // we check if the moving piece is a pawn and the move itself
   public static boolean calculateIsPawnTwoSquareAdvanceMove(Piece movingPiece, MoveSpecification move) {
     if (movingPiece != Piece.NONE && movingPiece.getPieceType() == PAWN) {
-      switch (move.havingMove()) {
-        case WHITE:
-          return Square.WHITE_PAWN_TWO_SQUARE_ADVANCE.contains(calculateFromToList(move));
-        case BLACK:
-          return Square.BLACK_PAWN_TWO_SQUARE_ADVANCE.contains(calculateFromToList(move));
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (move.havingMove()) {
+        case WHITE -> Square.WHITE_PAWN_TWO_SQUARE_ADVANCE.contains(calculateFromToList(move));
+        case BLACK -> Square.BLACK_PAWN_TWO_SQUARE_ADVANCE.contains(calculateFromToList(move));
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
     }
     return false;
   }

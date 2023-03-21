@@ -175,38 +175,20 @@ public class WinnableAnalyzer {
   }
 
   private static Winnable calculateWinnableForcedMadeLastMove(GameStatus gameStatusFinal) {
-    switch (gameStatusFinal) {
-      case CHECKMATE:
-        return Winnable.YES;
-      case STALEMATE:
-      case INSUFFICIENT_MATERIAL_BOTH:
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-      case FIVE_FOLD_REPETITION_RULE:
-      case SEVENTY_FIVE_MOVE_RULE:
-        return Winnable.NO;
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-      case OTHER:
-        return Winnable.UNKNOWN;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (gameStatusFinal) {
+      case CHECKMATE -> Winnable.YES;
+      case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
+      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static Winnable calculateWinnableForcedNotMadeLastMove(GameStatus gameStatusFinal) {
-    switch (gameStatusFinal) {
-      case CHECKMATE:
-      case STALEMATE:
-      case INSUFFICIENT_MATERIAL_BOTH:
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-      case FIVE_FOLD_REPETITION_RULE:
-      case SEVENTY_FIVE_MOVE_RULE:
-        return Winnable.NO;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-      case OTHER:
-        return Winnable.UNKNOWN;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (gameStatusFinal) {
+      case CHECKMATE, STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
+      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

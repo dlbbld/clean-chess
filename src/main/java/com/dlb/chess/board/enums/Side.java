@@ -43,15 +43,12 @@ public enum Side {
 
   // cannot define in constructor as cannot reference an enum befor it is defined
   public Side getOppositeSide() {
-    switch (this) {
-      case WHITE:
-        return BLACK;
-      case BLACK:
-        return WHITE;
-      case NONE:
-      default:
-        throw new ProgrammingMistakeException("The non side has no opposite side");
-    }
+    return switch (this) {
+      case WHITE -> BLACK;
+      case BLACK -> WHITE;
+      case NONE -> throw new ProgrammingMistakeException("The non side has no opposite side");
+      default -> throw new ProgrammingMistakeException("The non side has no opposite side");
+    };
   }
 
   private void check() {

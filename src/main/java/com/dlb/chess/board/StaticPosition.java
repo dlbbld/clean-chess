@@ -531,277 +531,145 @@ public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8, Piece e8, P
   }
 
   public Piece get(Square square) {
-    switch (square) {
-      case A8:
-        return a8;
-      case B8:
-        return b8;
-      case C8:
-        return c8;
-      case D8:
-        return d8;
-      case E8:
-        return e8;
-      case F8:
-        return f8;
-      case G8:
-        return g8;
-      case H8:
-        return h8;
-      case A7:
-        return a7;
-      case B7:
-        return b7;
-      case C7:
-        return c7;
-      case D7:
-        return d7;
-      case E7:
-        return e7;
-      case F7:
-        return f7;
-      case G7:
-        return g7;
-      case H7:
-        return h7;
-      case A6:
-        return a6;
-      case B6:
-        return b6;
-      case C6:
-        return c6;
-      case D6:
-        return d6;
-      case E6:
-        return e6;
-      case F6:
-        return f6;
-      case G6:
-        return g6;
-      case H6:
-        return h6;
-      case A5:
-        return a5;
-      case B5:
-        return b5;
-      case C5:
-        return c5;
-      case D5:
-        return d5;
-      case E5:
-        return e5;
-      case F5:
-        return f5;
-      case G5:
-        return g5;
-      case H5:
-        return h5;
-      case A4:
-        return a4;
-      case B4:
-        return b4;
-      case C4:
-        return c4;
-      case D4:
-        return d4;
-      case E4:
-        return e4;
-      case F4:
-        return f4;
-      case G4:
-        return g4;
-      case H4:
-        return h4;
-      case A3:
-        return a3;
-      case B3:
-        return b3;
-      case C3:
-        return c3;
-      case D3:
-        return d3;
-      case E3:
-        return e3;
-      case F3:
-        return f3;
-      case G3:
-        return g3;
-      case H3:
-        return h3;
-      case A2:
-        return a2;
-      case B2:
-        return b2;
-      case C2:
-        return c2;
-      case D2:
-        return d2;
-      case E2:
-        return e2;
-      case F2:
-        return f2;
-      case G2:
-        return g2;
-      case H2:
-        return h2;
-      case A1:
-        return a1;
-      case B1:
-        return b1;
-      case C1:
-        return c1;
-      case D1:
-        return d1;
-      case E1:
-        return e1;
-      case F1:
-        return f1;
-      case G1:
-        return g1;
-      case H1:
-        return h1;
-      case NONE:
-        throw new IllegalArgumentException("The none square does not belong to the board)");
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (square) {
+      case A8 -> a8;
+      case B8 -> b8;
+      case C8 -> c8;
+      case D8 -> d8;
+      case E8 -> e8;
+      case F8 -> f8;
+      case G8 -> g8;
+      case H8 -> h8;
+      case A7 -> a7;
+      case B7 -> b7;
+      case C7 -> c7;
+      case D7 -> d7;
+      case E7 -> e7;
+      case F7 -> f7;
+      case G7 -> g7;
+      case H7 -> h7;
+      case A6 -> a6;
+      case B6 -> b6;
+      case C6 -> c6;
+      case D6 -> d6;
+      case E6 -> e6;
+      case F6 -> f6;
+      case G6 -> g6;
+      case H6 -> h6;
+      case A5 -> a5;
+      case B5 -> b5;
+      case C5 -> c5;
+      case D5 -> d5;
+      case E5 -> e5;
+      case F5 -> f5;
+      case G5 -> g5;
+      case H5 -> h5;
+      case A4 -> a4;
+      case B4 -> b4;
+      case C4 -> c4;
+      case D4 -> d4;
+      case E4 -> e4;
+      case F4 -> f4;
+      case G4 -> g4;
+      case H4 -> h4;
+      case A3 -> a3;
+      case B3 -> b3;
+      case C3 -> c3;
+      case D3 -> d3;
+      case E3 -> e3;
+      case F3 -> f3;
+      case G3 -> g3;
+      case H3 -> h3;
+      case A2 -> a2;
+      case B2 -> b2;
+      case C2 -> c2;
+      case D2 -> d2;
+      case E2 -> e2;
+      case F2 -> f2;
+      case G2 -> g2;
+      case H2 -> h2;
+      case A1 -> a1;
+      case B1 -> b1;
+      case C1 -> c1;
+      case D1 -> d1;
+      case E1 -> e1;
+      case F1 -> f1;
+      case G1 -> g1;
+      case H1 -> h1;
+      case NONE -> throw new IllegalArgumentException("The none square does not belong to the board)");
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public boolean isEmpty(Square square) {
-    switch (square) {
-      case A8:
-        return a8 == Piece.NONE;
-      case B8:
-        return b8 == Piece.NONE;
-      case C8:
-        return c8 == Piece.NONE;
-      case D8:
-        return d8 == Piece.NONE;
-      case E8:
-        return e8 == Piece.NONE;
-      case F8:
-        return f8 == Piece.NONE;
-      case G8:
-        return g8 == Piece.NONE;
-      case H8:
-        return h8 == Piece.NONE;
-      case A7:
-        return a7 == Piece.NONE;
-      case B7:
-        return b7 == Piece.NONE;
-      case C7:
-        return c7 == Piece.NONE;
-      case D7:
-        return d7 == Piece.NONE;
-      case E7:
-        return e7 == Piece.NONE;
-      case F7:
-        return f7 == Piece.NONE;
-      case G7:
-        return g7 == Piece.NONE;
-      case H7:
-        return h7 == Piece.NONE;
-      case A6:
-        return a6 == Piece.NONE;
-      case B6:
-        return b6 == Piece.NONE;
-      case C6:
-        return c6 == Piece.NONE;
-      case D6:
-        return d6 == Piece.NONE;
-      case E6:
-        return e6 == Piece.NONE;
-      case F6:
-        return f6 == Piece.NONE;
-      case G6:
-        return g6 == Piece.NONE;
-      case H6:
-        return h6 == Piece.NONE;
-      case A5:
-        return a5 == Piece.NONE;
-      case B5:
-        return b5 == Piece.NONE;
-      case C5:
-        return c5 == Piece.NONE;
-      case D5:
-        return d5 == Piece.NONE;
-      case E5:
-        return e5 == Piece.NONE;
-      case F5:
-        return f5 == Piece.NONE;
-      case G5:
-        return g5 == Piece.NONE;
-      case H5:
-        return h5 == Piece.NONE;
-      case A4:
-        return a4 == Piece.NONE;
-      case B4:
-        return b4 == Piece.NONE;
-      case C4:
-        return c4 == Piece.NONE;
-      case D4:
-        return d4 == Piece.NONE;
-      case E4:
-        return e4 == Piece.NONE;
-      case F4:
-        return f4 == Piece.NONE;
-      case G4:
-        return g4 == Piece.NONE;
-      case H4:
-        return h4 == Piece.NONE;
-      case A3:
-        return a3 == Piece.NONE;
-      case B3:
-        return b3 == Piece.NONE;
-      case C3:
-        return c3 == Piece.NONE;
-      case D3:
-        return d3 == Piece.NONE;
-      case E3:
-        return e3 == Piece.NONE;
-      case F3:
-        return f3 == Piece.NONE;
-      case G3:
-        return g3 == Piece.NONE;
-      case H3:
-        return h3 == Piece.NONE;
-      case A2:
-        return a2 == Piece.NONE;
-      case B2:
-        return b2 == Piece.NONE;
-      case C2:
-        return c2 == Piece.NONE;
-      case D2:
-        return d2 == Piece.NONE;
-      case E2:
-        return e2 == Piece.NONE;
-      case F2:
-        return f2 == Piece.NONE;
-      case G2:
-        return g2 == Piece.NONE;
-      case H2:
-        return h2 == Piece.NONE;
-      case A1:
-        return a1 == Piece.NONE;
-      case B1:
-        return b1 == Piece.NONE;
-      case C1:
-        return c1 == Piece.NONE;
-      case D1:
-        return d1 == Piece.NONE;
-      case E1:
-        return e1 == Piece.NONE;
-      case F1:
-        return f1 == Piece.NONE;
-      case G1:
-        return g1 == Piece.NONE;
-      case H1:
-        return h1 == Piece.NONE;
-      case NONE:
-        throw new IllegalArgumentException("The none square does not belong to the board)");
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (square) {
+      case A8 -> a8 == Piece.NONE;
+      case B8 -> b8 == Piece.NONE;
+      case C8 -> c8 == Piece.NONE;
+      case D8 -> d8 == Piece.NONE;
+      case E8 -> e8 == Piece.NONE;
+      case F8 -> f8 == Piece.NONE;
+      case G8 -> g8 == Piece.NONE;
+      case H8 -> h8 == Piece.NONE;
+      case A7 -> a7 == Piece.NONE;
+      case B7 -> b7 == Piece.NONE;
+      case C7 -> c7 == Piece.NONE;
+      case D7 -> d7 == Piece.NONE;
+      case E7 -> e7 == Piece.NONE;
+      case F7 -> f7 == Piece.NONE;
+      case G7 -> g7 == Piece.NONE;
+      case H7 -> h7 == Piece.NONE;
+      case A6 -> a6 == Piece.NONE;
+      case B6 -> b6 == Piece.NONE;
+      case C6 -> c6 == Piece.NONE;
+      case D6 -> d6 == Piece.NONE;
+      case E6 -> e6 == Piece.NONE;
+      case F6 -> f6 == Piece.NONE;
+      case G6 -> g6 == Piece.NONE;
+      case H6 -> h6 == Piece.NONE;
+      case A5 -> a5 == Piece.NONE;
+      case B5 -> b5 == Piece.NONE;
+      case C5 -> c5 == Piece.NONE;
+      case D5 -> d5 == Piece.NONE;
+      case E5 -> e5 == Piece.NONE;
+      case F5 -> f5 == Piece.NONE;
+      case G5 -> g5 == Piece.NONE;
+      case H5 -> h5 == Piece.NONE;
+      case A4 -> a4 == Piece.NONE;
+      case B4 -> b4 == Piece.NONE;
+      case C4 -> c4 == Piece.NONE;
+      case D4 -> d4 == Piece.NONE;
+      case E4 -> e4 == Piece.NONE;
+      case F4 -> f4 == Piece.NONE;
+      case G4 -> g4 == Piece.NONE;
+      case H4 -> h4 == Piece.NONE;
+      case A3 -> a3 == Piece.NONE;
+      case B3 -> b3 == Piece.NONE;
+      case C3 -> c3 == Piece.NONE;
+      case D3 -> d3 == Piece.NONE;
+      case E3 -> e3 == Piece.NONE;
+      case F3 -> f3 == Piece.NONE;
+      case G3 -> g3 == Piece.NONE;
+      case H3 -> h3 == Piece.NONE;
+      case A2 -> a2 == Piece.NONE;
+      case B2 -> b2 == Piece.NONE;
+      case C2 -> c2 == Piece.NONE;
+      case D2 -> d2 == Piece.NONE;
+      case E2 -> e2 == Piece.NONE;
+      case F2 -> f2 == Piece.NONE;
+      case G2 -> g2 == Piece.NONE;
+      case H2 -> h2 == Piece.NONE;
+      case A1 -> a1 == Piece.NONE;
+      case B1 -> b1 == Piece.NONE;
+      case C1 -> c1 == Piece.NONE;
+      case D1 -> d1 == Piece.NONE;
+      case E1 -> e1 == Piece.NONE;
+      case F1 -> f1 == Piece.NONE;
+      case G1 -> g1 == Piece.NONE;
+      case H1 -> h1 == Piece.NONE;
+      case NONE -> throw new IllegalArgumentException("The none square does not belong to the board)");
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public boolean isOwnPiece(Square square, Side havingMove) {

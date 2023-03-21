@@ -46,75 +46,57 @@ public enum Piece {
   }
 
   public static Piece calculateRookPiece(Side side) {
-    switch (side) {
-      case BLACK:
-        return BLACK_ROOK;
-      case WHITE:
-        return WHITE_ROOK;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> BLACK_ROOK;
+      case WHITE -> WHITE_ROOK;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Piece calculateKnightPiece(Side side) {
-    switch (side) {
-      case BLACK:
-        return BLACK_KNIGHT;
-      case WHITE:
-        return WHITE_KNIGHT;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> BLACK_KNIGHT;
+      case WHITE -> WHITE_KNIGHT;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Piece calculateBishopPiece(Side side) {
-    switch (side) {
-      case BLACK:
-        return BLACK_BISHOP;
-      case WHITE:
-        return WHITE_BISHOP;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> BLACK_BISHOP;
+      case WHITE -> WHITE_BISHOP;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Piece calculateQueenPiece(Side side) {
-    switch (side) {
-      case BLACK:
-        return BLACK_QUEEN;
-      case WHITE:
-        return WHITE_QUEEN;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> BLACK_QUEEN;
+      case WHITE -> WHITE_QUEEN;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Piece calculateKingPiece(Side side) {
-    switch (side) {
-      case BLACK:
-        return BLACK_KING;
-      case WHITE:
-        return WHITE_KING;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> BLACK_KING;
+      case WHITE -> WHITE_KING;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Piece calculatePawnPiece(Side side) {
-    switch (side) {
-      case BLACK:
-        return BLACK_PAWN;
-      case WHITE:
-        return WHITE_PAWN;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> BLACK_PAWN;
+      case WHITE -> WHITE_PAWN;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static boolean exists(String letter) {

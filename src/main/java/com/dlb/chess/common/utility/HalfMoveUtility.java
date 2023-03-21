@@ -49,16 +49,12 @@ public class HalfMoveUtility {
   }
 
   public static int calculateHalfMoveCount(int fullMoveNumber, Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return (fullMoveNumber - 1) * 2 + 1;
-      case WHITE:
-        return (fullMoveNumber - 1) * 2;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-
-    }
+    return switch (havingMove) {
+      case BLACK -> (fullMoveNumber - 1) * 2 + 1;
+      case WHITE -> (fullMoveNumber - 1) * 2;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static int calculateNumberOfMovesGame(List<HalfMove> halfMoveList) {
@@ -103,15 +99,12 @@ public class HalfMoveUtility {
 
   private static String calculateFullMoveNumberInitial(int initialFullMoveNumber, Side havingMove, AddSpace addSpace) {
 
-    switch (havingMove) {
-      case WHITE:
-        return initialFullMoveNumber + "." + addSpace.getValue();
-      case BLACK:
-        return initialFullMoveNumber + "..." + addSpace.getValue();
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case WHITE -> initialFullMoveNumber + "." + addSpace.getValue();
+      case BLACK -> initialFullMoveNumber + "..." + addSpace.getValue();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

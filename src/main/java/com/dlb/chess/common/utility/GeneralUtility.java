@@ -31,15 +31,12 @@ public class GeneralUtility {
   }
 
   public static boolean calculateIsWhite(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return false;
-      case WHITE:
-        return true;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> false;
+      case WHITE -> true;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static void logLines(Logger logger, List<String> list) {

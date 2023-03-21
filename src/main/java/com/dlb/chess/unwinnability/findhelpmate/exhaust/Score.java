@@ -113,37 +113,19 @@ public class Score {
   private static boolean calculateIsAdvancedRank(Side side, Rank rank) {
     switch (side) {
       case WHITE:
-        switch (rank) {
-          case RANK_1:
-          case RANK_2:
-          case RANK_3:
-          case RANK_4:
-          case RANK_5:
-            return false;
-          case RANK_6:
-          case RANK_7:
-          case RANK_8:
-            return true;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (rank) {
+          case RANK_1, RANK_2, RANK_3, RANK_4, RANK_5 -> false;
+          case RANK_6, RANK_7, RANK_8 -> true;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case BLACK:
-        switch (rank) {
-          case RANK_1:
-          case RANK_2:
-          case RANK_3:
-            return true;
-          case RANK_4:
-          case RANK_5:
-          case RANK_6:
-          case RANK_7:
-          case RANK_8:
-            return false;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (rank) {
+          case RANK_1, RANK_2, RANK_3 -> true;
+          case RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 -> false;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case NONE:
       default:
         throw new IllegalArgumentException();

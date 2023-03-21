@@ -48,43 +48,34 @@ public class SanValidateStaticallyStrict implements EnumConstants {
   }
 
   public static boolean exists(String san, Side side) {
-    switch (side) {
-      case WHITE:
-        return SAN_VALIDATION_WHITE_MAP.containsKey(san);
-      case BLACK:
-        return SAN_VALIDATION_BLACK_MAP.containsKey(san);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> SAN_VALIDATION_WHITE_MAP.containsKey(san);
+      case BLACK -> SAN_VALIDATION_BLACK_MAP.containsKey(san);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static SanParse getChecked(String san, Side side) {
     if (!exists(san, side)) {
       throw new IllegalArgumentException("The SAN does not exist");
     }
-    switch (side) {
-      case WHITE:
-        return NonNullWrapperCommon.get(SAN_VALIDATION_WHITE_MAP, san);
-      case BLACK:
-        return NonNullWrapperCommon.get(SAN_VALIDATION_BLACK_MAP, san);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> NonNullWrapperCommon.get(SAN_VALIDATION_WHITE_MAP, san);
+      case BLACK -> NonNullWrapperCommon.get(SAN_VALIDATION_BLACK_MAP, san);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   // for performance reasons
   public static @Nullable SanParse get(String san, Side side) {
-    switch (side) {
-      case WHITE:
-        return SAN_VALIDATION_WHITE_MAP.get(san);
-      case BLACK:
-        return SAN_VALIDATION_BLACK_MAP.get(san);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> SAN_VALIDATION_WHITE_MAP.get(san);
+      case BLACK -> SAN_VALIDATION_BLACK_MAP.get(san);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

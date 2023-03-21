@@ -27,25 +27,19 @@ public abstract class AbstractToSquares implements EnumConstants {
     }
     switch (piece.getSide()) {
       case BLACK:
-        switch (havingMove) {
-          case BLACK:
-            return SquareOccupation.OWN_PIECE;
-          case WHITE:
-            return SquareOccupation.OPPONENT_PIECE;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (havingMove) {
+          case BLACK -> SquareOccupation.OWN_PIECE;
+          case WHITE -> SquareOccupation.OPPONENT_PIECE;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case WHITE:
-        switch (havingMove) {
-          case BLACK:
-            return SquareOccupation.OPPONENT_PIECE;
-          case WHITE:
-            return SquareOccupation.OWN_PIECE;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (havingMove) {
+          case BLACK -> SquareOccupation.OPPONENT_PIECE;
+          case WHITE -> SquareOccupation.OWN_PIECE;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case NONE:
         // we filtered this case before
         throw new ProgrammingMistakeException();

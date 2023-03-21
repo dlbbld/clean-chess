@@ -209,25 +209,19 @@ public class WinnableUtilityAnalzyeLichessUnfair {
 
       switch (singleGameStatus) {
         case WHITE_DELIVERS_CHECKMATE:
-          switch (sideToEvaluate) {
-            case WHITE:
-              return new WinnableAnalysis(Winnable.UNKNOWN, gameStatusSet);
-            case BLACK:
-              return new WinnableAnalysis(Winnable.NO, gameStatusSet);
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToEvaluate) {
+            case WHITE -> new WinnableAnalysis(Winnable.UNKNOWN, gameStatusSet);
+            case BLACK -> new WinnableAnalysis(Winnable.NO, gameStatusSet);
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         case BLACK_DELIVERS_CHECKMATE:
-          switch (sideToEvaluate) {
-            case WHITE:
-              return new WinnableAnalysis(Winnable.NO, gameStatusSet);
-            case BLACK:
-              return new WinnableAnalysis(Winnable.UNKNOWN, gameStatusSet);
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToEvaluate) {
+            case WHITE -> new WinnableAnalysis(Winnable.NO, gameStatusSet);
+            case BLACK -> new WinnableAnalysis(Winnable.UNKNOWN, gameStatusSet);
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         case STALEMATE:
           return new WinnableAnalysis(Winnable.NO, gameStatusSet);
         case INSUFFICIENT_MATERIAL_BOTH:
@@ -262,25 +256,19 @@ public class WinnableUtilityAnalzyeLichessUnfair {
   private static WinnableAnalysis calculateWinnableForced(GameStatusAnalysis status, Side sideToEvaluate) {
     switch (status) {
       case WHITE_DELIVERS_CHECKMATE:
-        switch (sideToEvaluate) {
-          case WHITE:
-            return createWinnableAnalysis(Winnable.UNKNOWN, status);
-          case BLACK:
-            return createWinnableAnalysis(Winnable.NO, status);
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (sideToEvaluate) {
+          case WHITE -> createWinnableAnalysis(Winnable.UNKNOWN, status);
+          case BLACK -> createWinnableAnalysis(Winnable.NO, status);
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case BLACK_DELIVERS_CHECKMATE:
-        switch (sideToEvaluate) {
-          case WHITE:
-            return createWinnableAnalysis(Winnable.NO, status);
-          case BLACK:
-            return createWinnableAnalysis(Winnable.UNKNOWN, status);
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (sideToEvaluate) {
+          case WHITE -> createWinnableAnalysis(Winnable.NO, status);
+          case BLACK -> createWinnableAnalysis(Winnable.UNKNOWN, status);
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case STALEMATE:
         return createWinnableAnalysis(Winnable.NO, status);
       case INSUFFICIENT_MATERIAL_BOTH:
@@ -399,15 +387,12 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       return GameStatusAnalysis.SEVENTY_FIVE_MOVE_RULE;
     }
     if (board.isInsufficientMaterial(sideToEvaluate)) {
-      switch (sideToEvaluate) {
-        case WHITE:
-          return GameStatusAnalysis.INSUFFICIENT_MATERIAL_WHITE_ONLY;
-        case BLACK:
-          return GameStatusAnalysis.INSUFFICIENT_MATERIAL_BLACK_ONLY;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (sideToEvaluate) {
+        case WHITE -> GameStatusAnalysis.INSUFFICIENT_MATERIAL_WHITE_ONLY;
+        case BLACK -> GameStatusAnalysis.INSUFFICIENT_MATERIAL_BLACK_ONLY;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
     }
     return GameStatusAnalysis.OTHER;
   }

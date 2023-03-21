@@ -303,34 +303,26 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
   private static String calculateScalaMovePromotionPiece(MoveSpecification moveSpecification) {
     if (PromotionUtility.calculateIsPromotion(moveSpecification)) {
-      switch (moveSpecification.promotionPieceType()) {
-        case BISHOP:
-          return "Option(Bishop)";
-        case KNIGHT:
-          return "Option(Knight)";
-        case QUEEN:
-          return "Option(Queen)";
-        case ROOK:
-          return "Option(Rook)";
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (moveSpecification.promotionPieceType()) {
+        case BISHOP -> "Option(Bishop)";
+        case KNIGHT -> "Option(Knight)";
+        case QUEEN -> "Option(Queen)";
+        case ROOK -> "Option(Rook)";
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
     }
     return "None";
   }
 
   public static String convertMoveSpecificationToUciForScala(MoveSpecification moveSpecification) {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      switch (moveSpecification.castlingMove()) {
-        case KING_SIDE:
-          return CastlingConstants.SAN_CASTLING_KING_SIDE;
-        case QUEEN_SIDE:
-          return CastlingConstants.SAN_CASTLING_QUEEN_SIDE;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (moveSpecification.castlingMove()) {
+        case KING_SIDE -> CastlingConstants.SAN_CASTLING_KING_SIDE;
+        case QUEEN_SIDE -> CastlingConstants.SAN_CASTLING_QUEEN_SIDE;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
     }
 
     return UciMoveUtility.convertMoveSpecificationToUci(moveSpecification).text();

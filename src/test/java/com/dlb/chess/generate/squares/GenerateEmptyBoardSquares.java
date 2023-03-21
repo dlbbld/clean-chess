@@ -120,20 +120,13 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     final List<String> variableNamesBoth = new ArrayList<>(variableNamesOrthogonal);
     variableNamesBoth.addAll(variableNamesDiagonal);
 
-    switch (pieceType) {
-      case BISHOP:
-        return variableNamesDiagonal;
-      case QUEEN:
-        return variableNamesBoth;
-      case ROOK:
-        return variableNamesOrthogonal;
-      case KNIGHT:
-      case KING:
-      case PAWN:
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pieceType) {
+      case BISHOP -> variableNamesDiagonal;
+      case QUEEN -> variableNamesBoth;
+      case ROOK -> variableNamesOrthogonal;
+      case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static void generateRookCode() {

@@ -163,14 +163,11 @@ public class BasicOutput {
   }
 
   private static String calculateRepetitionAttributeSequence(EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    switch (enPassantCaptureRule) {
-      case DO_IGNORE:
-        return ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE;
-      case DO_NOT_IGNORE:
-        return ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (enPassantCaptureRule) {
+      case DO_IGNORE -> ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE;
+      case DO_NOT_IGNORE -> ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static String calculateOutput(String attributeName, String attributeValue) {

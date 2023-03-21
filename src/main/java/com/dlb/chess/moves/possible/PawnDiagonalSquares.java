@@ -688,16 +688,12 @@ public class PawnDiagonalSquares implements EnumConstants {
   // END generated code
 
   public static Set<Square> getPawnDiagonalSquares(Side havingMove, Square fromSquare) {
-    switch (havingMove) {
-      case BLACK:
-        return NonNullWrapperCommon.get(PAWN_BLACK_SQUARES, fromSquare);
-      case WHITE:
-        return NonNullWrapperCommon.get(PAWN_WHITE_SQUARES, fromSquare);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-
-    }
+    return switch (havingMove) {
+      case BLACK -> NonNullWrapperCommon.get(PAWN_BLACK_SQUARES, fromSquare);
+      case WHITE -> NonNullWrapperCommon.get(PAWN_WHITE_SQUARES, fromSquare);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

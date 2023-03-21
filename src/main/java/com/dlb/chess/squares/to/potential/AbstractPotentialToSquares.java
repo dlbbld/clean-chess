@@ -27,24 +27,16 @@ public abstract class AbstractPotentialToSquares extends AbstractToSquares {
 
     final Piece pieceOnFromSquare = staticPosition.get(fromSquare);
 
-    switch (pieceOnFromSquare.getPieceType()) {
-      case ROOK:
-      case BISHOP:
-      case QUEEN:
-        return AbstractRangeSquares.calculateRangeSquare(staticPosition, havingMove, fromSquare, false);
-      case KING:
-        return KingNonCastlingPotentialToSquares.calculateKingNonCastlingPotentialToSquares(staticPosition, fromSquare,
-            havingMove);
-      case KNIGHT:
-        return KnightPotentialToSquares.calculateKnightPotentialToSquares(staticPosition, fromSquare, havingMove);
-      case NONE:
-        return new TreeSet<>();
-      case PAWN:
-        return PawnPotentialToSquares.calculatePawnPotentialToSquares(staticPosition, enPassantCaptureTargetSquare,
-            fromSquare, havingMove);
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pieceOnFromSquare.getPieceType()) {
+      case ROOK, BISHOP, QUEEN -> AbstractRangeSquares.calculateRangeSquare(staticPosition, havingMove, fromSquare, false);
+      case KING -> KingNonCastlingPotentialToSquares.calculateKingNonCastlingPotentialToSquares(staticPosition, fromSquare,
+                  havingMove);
+      case KNIGHT -> KnightPotentialToSquares.calculateKnightPotentialToSquares(staticPosition, fromSquare, havingMove);
+      case NONE -> new TreeSet<>();
+      case PAWN -> PawnPotentialToSquares.calculatePawnPotentialToSquares(staticPosition, enPassantCaptureTargetSquare,
+                  fromSquare, havingMove);
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   // knight or non castling king

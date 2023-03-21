@@ -191,39 +191,30 @@ public enum Square implements Comparable<Square> {
   public static final ImmutableList<Square> BLACK_LEFT_FILE = constructListSquare(H8, H7, H6, H5, H4, H3, H2, H1);
 
   public static List<Square> getLeftFile(Side side) {
-    switch (side) {
-      case WHITE:
-        return WHITE_LEFT_FILE;
-      case BLACK:
-        return BLACK_LEFT_FILE;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> WHITE_LEFT_FILE;
+      case BLACK -> BLACK_LEFT_FILE;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static boolean calculateIsLeftMostFile(Square square, Side side) {
-    switch (side) {
-      case WHITE:
-        return square.getFile() == File.FILE_A;
-      case BLACK:
-        return square.getFile() == File.FILE_H;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> square.getFile() == File.FILE_A;
+      case BLACK -> square.getFile() == File.FILE_H;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static boolean calculateIsRightMostFile(Square square, Side side) {
-    switch (side) {
-      case WHITE:
-        return square.getFile() == File.FILE_H;
-      case BLACK:
-        return square.getFile() == File.FILE_A;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> square.getFile() == File.FILE_H;
+      case BLACK -> square.getFile() == File.FILE_A;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final ImmutableList<Square> WHITE_PROMOTION_RANK = constructListSquare(A8, B8, C8, D8, E8, F8, G8, H8);
@@ -231,15 +222,12 @@ public enum Square implements Comparable<Square> {
   public static final ImmutableList<Square> BLACK_PROMOTION_RANK = constructListSquare(A1, B1, C1, D1, E1, F1, G1, H1);
 
   public static List<Square> getPromotionRank(Side side) {
-    switch (side) {
-      case WHITE:
-        return WHITE_PROMOTION_RANK;
-      case BLACK:
-        return BLACK_PROMOTION_RANK;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> WHITE_PROMOTION_RANK;
+      case BLACK -> BLACK_PROMOTION_RANK;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final ImmutableList<Square> WHITE_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST = constructListSquare(A6,
@@ -383,39 +371,30 @@ public enum Square implements Comparable<Square> {
   }
 
   public static Square calculateKingOriginalSquare(Side side) {
-    switch (side) {
-      case BLACK:
-        return E8;
-      case WHITE:
-        return E1;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> E8;
+      case WHITE -> E1;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Square calculateQueenSideRookOriginalSquare(Side side) {
-    switch (side) {
-      case BLACK:
-        return A8;
-      case WHITE:
-        return A1;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> A8;
+      case WHITE -> A1;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Square calculateKingSideRookOriginalSquare(Side side) {
-    switch (side) {
-      case BLACK:
-        return H8;
-      case WHITE:
-        return H1;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> H8;
+      case WHITE -> H1;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Square calculateRightSquare(Side havingMove, Square square) {
@@ -471,15 +450,12 @@ public enum Square implements Comparable<Square> {
   }
 
   public static List<Square> calculateEnPassantCaptureTargetSquareList(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST;
-      case WHITE:
-        return WHITE_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST;
+      case WHITE -> WHITE_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final ImmutableList<ImmutableList<Square>> WHITE_PAWN_TWO_SQUARE_ADVANCE;

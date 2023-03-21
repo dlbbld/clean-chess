@@ -107,15 +107,12 @@ public class PgnCreate {
 
     switch (gameStatus) {
       case CHECKMATE:
-        switch (board.getHavingMove()) {
-          case WHITE:
-            return ResultTagValue.BLACK_WON;
-          case BLACK:
-            return ResultTagValue.WHITE_WON;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (board.getHavingMove()) {
+          case WHITE -> ResultTagValue.BLACK_WON;
+          case BLACK -> ResultTagValue.WHITE_WON;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case FIVE_FOLD_REPETITION_RULE:
       case INSUFFICIENT_MATERIAL_BOTH:
         return ResultTagValue.DRAW;

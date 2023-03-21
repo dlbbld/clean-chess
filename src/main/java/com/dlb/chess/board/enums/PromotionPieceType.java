@@ -23,33 +23,23 @@ public enum PromotionPieceType {
   public static Piece calculate(Side havingMove, PromotionPieceType pieceType) {
     switch (havingMove) {
       case BLACK:
-        switch (pieceType) {
-          case BISHOP:
-            return Piece.BLACK_BISHOP;
-          case KNIGHT:
-            return Piece.BLACK_KNIGHT;
-          case QUEEN:
-            return Piece.BLACK_QUEEN;
-          case ROOK:
-            return Piece.BLACK_ROOK;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (pieceType) {
+          case BISHOP -> Piece.BLACK_BISHOP;
+          case KNIGHT -> Piece.BLACK_KNIGHT;
+          case QUEEN -> Piece.BLACK_QUEEN;
+          case ROOK -> Piece.BLACK_ROOK;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case WHITE:
-        switch (pieceType) {
-          case BISHOP:
-            return Piece.WHITE_BISHOP;
-          case KNIGHT:
-            return Piece.WHITE_KNIGHT;
-          case QUEEN:
-            return Piece.WHITE_QUEEN;
-          case ROOK:
-            return Piece.WHITE_ROOK;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
+        return switch (pieceType) {
+          case BISHOP -> Piece.WHITE_BISHOP;
+          case KNIGHT -> Piece.WHITE_KNIGHT;
+          case QUEEN -> Piece.WHITE_QUEEN;
+          case ROOK -> Piece.WHITE_ROOK;
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
       case NONE:
       default:
         throw new IllegalArgumentException();

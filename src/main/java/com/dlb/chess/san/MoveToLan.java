@@ -15,15 +15,12 @@ public class MoveToLan extends AbstractSan {
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     // if castling we can return the LAN here already
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      switch (moveSpecification.castlingMove()) {
-        case KING_SIDE:
-          return CastlingConstants.SAN_CASTLING_KING_SIDE;
-        case QUEEN_SIDE:
-          return CastlingConstants.SAN_CASTLING_QUEEN_SIDE;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (moveSpecification.castlingMove()) {
+        case KING_SIDE -> CastlingConstants.SAN_CASTLING_KING_SIDE;
+        case QUEEN_SIDE -> CastlingConstants.SAN_CASTLING_QUEEN_SIDE;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
     }
 
     final Piece movingPiece = lastMove.movingPiece();

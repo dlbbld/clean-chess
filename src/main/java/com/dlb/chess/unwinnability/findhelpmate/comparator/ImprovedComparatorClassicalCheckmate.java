@@ -332,24 +332,19 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
   private static Map<SquareType, Set<PieceType>> calculateAffordablePieceTypeMap(Side sideCheckmating,
       StaticPosition staticPosition, ClassicalCheckmateSituation aboveCheckmateMaterial) {
 
-    switch (aboveCheckmateMaterial) {
-      case ABOVE_KING_AND_QUEEN:
-      case ABOVE_KING_AND_ROOK:
-      case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
+    return switch (aboveCheckmateMaterial) {
+      case ABOVE_KING_AND_QUEEN, ABOVE_KING_AND_ROOK, ABOVE_KING_AND_KNIGHT_AND_BISHOP -> {
         final Set<PieceType> affordablePieceTypeSet = calculateAffordablePieceTypeSet(sideCheckmating, staticPosition,
             aboveCheckmateMaterial);
         final Map<SquareType, Set<PieceType>> map = new TreeMap<>();
         map.put(SquareType.LIGHT_SQUARE, affordablePieceTypeSet);
         map.put(SquareType.DARK_SQUARE, affordablePieceTypeSet);
-
-        return map;
-      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-        return calculateAffordablePieceTypeMapOppositeBishops(sideCheckmating, staticPosition);
-      case NO_HAVING_PAWN:
-      case NO_NOT_HAVING_PAWN:
-      default:
-        throw new IllegalArgumentException();
-    }
+        yield map;
+      }
+      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP -> calculateAffordablePieceTypeMapOppositeBishops(sideCheckmating, staticPosition);
+      case NO_HAVING_PAWN, NO_NOT_HAVING_PAWN -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
 
   }
 
@@ -426,28 +421,22 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
 
   private int compareSacrificeHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove, Side color,
       StaticPosition staticPosition, ClassicalCheckmateSituation aboveCheckmateMaterial) {
-    switch (aboveCheckmateMaterial) {
-      case ABOVE_KING_AND_QUEEN:
-      case ABOVE_KING_AND_ROOK:
-      case ABOVE_KING_AND_KNIGHT_AND_BISHOP: {
+    return switch (aboveCheckmateMaterial) {
+      case ABOVE_KING_AND_QUEEN, ABOVE_KING_AND_ROOK, ABOVE_KING_AND_KNIGHT_AND_BISHOP -> {
         final Set<PieceType> affordablePieceTypeSet = calculateAffordablePieceTypeSet(color, staticPosition,
             aboveCheckmateMaterial);
-
         final var comparePieceSacrifice = comparePieceSacrifice(firstLegalMove, secondLegalMove,
             affordablePieceTypeSet);
-        return comparePieceSacrifice;
+        yield comparePieceSacrifice;
       }
-      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP: {
+      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP -> {
         final Map<SquareType, Set<PieceType>> affordablePieceTypeMap = calculateAffordablePieceTypeMapOppositeBishops(
             color, staticPosition);
-
-        return comparePieceSacrifice(firstLegalMove, secondLegalMove, affordablePieceTypeMap);
+        yield comparePieceSacrifice(firstLegalMove, secondLegalMove, affordablePieceTypeMap);
       }
-      case NO_HAVING_PAWN:
-      case NO_NOT_HAVING_PAWN:
-      default:
-        throw new IllegalArgumentException();
-    }
+      case NO_HAVING_PAWN, NO_NOT_HAVING_PAWN -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private int compareSacrificeNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove,

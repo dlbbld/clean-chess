@@ -76,14 +76,11 @@ public class BasicChessUtility {
   }
 
   public static Side calculateSideHavingMoveForSide(String side) {
-    switch (side) {
-      case "b":
-        return Side.BLACK;
-      case "w":
-        return Side.WHITE;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case "b" -> Side.BLACK;
+      case "w" -> Side.WHITE;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Side calculateSideMoved(Side havingMoveInitial, int halfMoveCount) {
@@ -107,15 +104,12 @@ public class BasicChessUtility {
 
   public static int calculateFullMoveNumber(Side havingMoveInitial, int fullMoveNumberInitial,
       int performedHalfMoveCount) {
-    switch (havingMoveInitial) {
-      case BLACK:
-        return fullMoveNumberInitial + (int) StrictMath.floor(performedHalfMoveCount / 2.0);
-      case WHITE:
-        return fullMoveNumberInitial + (int) StrictMath.floor((performedHalfMoveCount - 1) / 2.0);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMoveInitial) {
+      case BLACK -> fullMoveNumberInitial + (int) StrictMath.floor(performedHalfMoveCount / 2.0);
+      case WHITE -> fullMoveNumberInitial + (int) StrictMath.floor((performedHalfMoveCount - 1) / 2.0);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static GameStatus calculateGameStatus(ApiBoard board) {

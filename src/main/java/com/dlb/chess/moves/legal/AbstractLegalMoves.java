@@ -39,24 +39,17 @@ public abstract class AbstractLegalMoves implements EnumConstants {
   public static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition,
       Square enPassantCaptureTargetSquare, CastlingRight castlingRight, Side havingMove, Square fromSquare) {
     final PieceType pieceType = staticPosition.get(fromSquare).getPieceType();
-    switch (pieceType) {
-      case BISHOP:
-        return BishopLegalMoves.calculateBishopLegalMoves(staticPosition, havingMove, fromSquare);
-      case KING:
-        return KingLegalMoves.calculateKingLegalMoves(staticPosition, castlingRight, havingMove, fromSquare);
-      case KNIGHT:
-        return KnightLegalMoves.calculateKnightLegalMoves(staticPosition, havingMove, fromSquare);
-      case QUEEN:
-        return QueenLegalMoves.calculateQueenLegalMoves(staticPosition, havingMove, fromSquare);
-      case ROOK:
-        return RookLegalMoves.calculateRookLegalMoves(staticPosition, havingMove, fromSquare);
-      case PAWN:
-        return PawnLegalMoves.calculatePawnLegalMoves(staticPosition, enPassantCaptureTargetSquare, havingMove,
-            fromSquare);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pieceType) {
+      case BISHOP -> BishopLegalMoves.calculateBishopLegalMoves(staticPosition, havingMove, fromSquare);
+      case KING -> KingLegalMoves.calculateKingLegalMoves(staticPosition, castlingRight, havingMove, fromSquare);
+      case KNIGHT -> KnightLegalMoves.calculateKnightLegalMoves(staticPosition, havingMove, fromSquare);
+      case QUEEN -> QueenLegalMoves.calculateQueenLegalMoves(staticPosition, havingMove, fromSquare);
+      case ROOK -> RookLegalMoves.calculateRookLegalMoves(staticPosition, havingMove, fromSquare);
+      case PAWN -> PawnLegalMoves.calculatePawnLegalMoves(staticPosition, enPassantCaptureTargetSquare, havingMove,
+                  fromSquare);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition, Side havingMove,
