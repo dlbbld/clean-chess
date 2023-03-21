@@ -34,7 +34,7 @@ public class TestAnalyzer {
     Analyzer.printAnalysis(pgnString);
   }
 
-  private static void printAnalysis(String pgnFileName) throws Exception {
+  static void printAnalysis(String pgnFileName) throws Exception {
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
     System.out.println(pgnFileName);
     Analyzer.printAnalysis(pgnTest.getFolderPath(), pgnFileName);
