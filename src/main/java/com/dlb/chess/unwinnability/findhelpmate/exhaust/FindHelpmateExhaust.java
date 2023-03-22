@@ -58,9 +58,10 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     final String invariant = board.getFen();
 
-    if ((maxDepth != 0 && maxDepth % 10 == 0) && IS_DEBUG) {
-      logger.info("maxDepth=" + maxDepth);
+    if (maxDepth != 0 && maxDepth % 10 == 0) {
+      logger.debug("maxDepth=" + maxDepth);
     }
+
     this.localNodeCount = 0;
     this.isCanExhaust = true;
     this.moveEvaluationList = new ArrayList<>();
@@ -252,9 +253,9 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
         continue;
       }
       if (MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
-          && (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
-              && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
-              && MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), staticPosition))) {
+          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
+          && MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), staticPosition)) {
         return true;
       }
     }
@@ -287,8 +288,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
         continue;
       }
       if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)
-          && (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
-              .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType()))) {
+          && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
+              .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType())) {
         return true;
       }
     }

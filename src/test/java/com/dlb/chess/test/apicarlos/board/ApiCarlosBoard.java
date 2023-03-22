@@ -68,7 +68,7 @@ public class ApiCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public boolean performMove(@NonNull String san) {
+  public boolean performMove(String san) {
 
     final var result = board.doMove(san);
     final MoveSpecification lastMoveSpecification = calculateLastMoveSpecification();
