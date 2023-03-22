@@ -176,7 +176,7 @@ public class NonNullWrapperCommon {
     return checkResult(Sets.newEnumSet(iterable, elementType));
   }
 
-  public static <K extends Enum<K>, V extends @NonNull Object> EnumMap<K, V> newEnumMap(Class<K> type) {
+  public static <K extends Enum<K>, V> EnumMap<K, V> newEnumMap(Class<K> type) {
     return checkResult(Maps.newEnumMap(type));
   }
 

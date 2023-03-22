@@ -150,14 +150,11 @@ public class GenerateUciMove implements EnumConstants {
   }
 
   public static List<Square> getRankBeforePromotionRank(Side side) {
-    switch (side) {
-      case WHITE:
-        return Square.SEVENTH_RANK;
-      case BLACK:
-        return Square.SECOND_RANK;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> Square.SEVENTH_RANK;
+      case BLACK -> Square.SECOND_RANK;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 }

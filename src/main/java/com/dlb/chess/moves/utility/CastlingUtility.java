@@ -59,27 +59,21 @@ public class CastlingUtility implements EnumConstants {
       F8, G8);
 
   private static List<Square> calculateQueenSideCastlingRequiredEmptySquareList(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_QUEEN_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
-      case WHITE:
-        return WHITE_QUEEN_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_QUEEN_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
+      case WHITE -> WHITE_QUEEN_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static List<Square> calculateKingSideCastlingRequiredEmptySquareList(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_KING_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
-      case WHITE:
-        return WHITE_KING_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_KING_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
+      case WHITE -> WHITE_KING_SIDE_CASTLING_REQUIRED_EMPTY_SQUARE_LIST;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static final Square WHITE_QUEEN_SIDE_TRAVEL_OVER_SQUARE = D1;
@@ -89,63 +83,48 @@ public class CastlingUtility implements EnumConstants {
   private static final Square BLACK_KING_SIDE_TRAVEL_OVER_SQUARE = F8;
 
   private static Square calculateKingOriginalSquare(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_KING_FROM;
-      case WHITE:
-        return WHITE_KING_FROM;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_KING_FROM;
+      case WHITE -> WHITE_KING_FROM;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static Square calculateQueenSideKingTravelOverSquare(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_QUEEN_SIDE_TRAVEL_OVER_SQUARE;
-      case WHITE:
-        return WHITE_QUEEN_SIDE_TRAVEL_OVER_SQUARE;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_QUEEN_SIDE_TRAVEL_OVER_SQUARE;
+      case WHITE -> WHITE_QUEEN_SIDE_TRAVEL_OVER_SQUARE;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static Square calculateKingSideKingTravelOverSquare(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_KING_SIDE_TRAVEL_OVER_SQUARE;
-      case WHITE:
-        return WHITE_KING_SIDE_TRAVEL_OVER_SQUARE;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_KING_SIDE_TRAVEL_OVER_SQUARE;
+      case WHITE -> WHITE_KING_SIDE_TRAVEL_OVER_SQUARE;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static Square calculateQueenSideKingDestinationSquare(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_KING_QUEEN_SIDE_CASTLING_TO;
-      case WHITE:
-        return WHITE_KING_QUEEN_SIDE_CASTLING_TO;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_KING_QUEEN_SIDE_CASTLING_TO;
+      case WHITE -> WHITE_KING_QUEEN_SIDE_CASTLING_TO;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static Square calculateKingSideKingDestinationSquare(Side havingMove) {
-    switch (havingMove) {
-      case BLACK:
-        return BLACK_KING_KING_SIDE_CASTLING_TO;
-      case WHITE:
-        return WHITE_KING_KING_SIDE_CASTLING_TO;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> BLACK_KING_KING_SIDE_CASTLING_TO;
+      case WHITE -> WHITE_KING_KING_SIDE_CASTLING_TO;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static MoveCheck calculateQueenSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
@@ -410,29 +389,21 @@ public class CastlingUtility implements EnumConstants {
   }
 
   private static boolean calculateIsCastlingQueenSide(MoveSpecification moveSpecification) {
-    switch (moveSpecification.castlingMove()) {
-      case NONE:
-        return false;
-      case KING_SIDE:
-        return false;
-      case QUEEN_SIDE:
-        return true;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (moveSpecification.castlingMove()) {
+      case NONE -> false;
+      case KING_SIDE -> false;
+      case QUEEN_SIDE -> true;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static boolean calculateIsCastlingKingSide(MoveSpecification moveSpecification) {
-    switch (moveSpecification.castlingMove()) {
-      case NONE:
-        return false;
-      case KING_SIDE:
-        return true;
-      case QUEEN_SIDE:
-        return false;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (moveSpecification.castlingMove()) {
+      case NONE -> false;
+      case KING_SIDE -> true;
+      case QUEEN_SIDE -> false;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static boolean calculateIsCastlingMove(MoveSpecification moveSpecification) {
@@ -595,62 +566,37 @@ public class CastlingUtility implements EnumConstants {
       case NONE -> throw new IllegalArgumentException();
     };
 
-    switch (castlingRightWhite) {
-      case KING_AND_QUEEN_SIDE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_KQ_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_KQ_K;
-          case NONE:
-            return CastlingConstants.CASTLING_KQ_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_KQ_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      case KING_SIDE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_K_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_K_K;
-          case NONE:
-            return CastlingConstants.CASTLING_K_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_K_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      case NONE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_NONE_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_NONE_K;
-          case NONE:
-            return CastlingConstants.CASTLING_NONE_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_NONE_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      case QUEEN_SIDE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_Q_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_Q_K;
-          case NONE:
-            return CastlingConstants.CASTLING_Q_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_Q_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (castlingRightWhite) {
+      case KING_AND_QUEEN_SIDE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_KQ_K;
+        case NONE -> CastlingConstants.CASTLING_KQ_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      case KING_SIDE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_K_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_K_K;
+        case NONE -> CastlingConstants.CASTLING_K_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_K_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_NONE_K;
+        case NONE -> CastlingConstants.CASTLING_NONE_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      case QUEEN_SIDE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_Q_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_Q_K;
+        case NONE -> CastlingConstants.CASTLING_Q_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_Q_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static MoveCheck calculateQueenSideCastlingCheck(StaticPosition staticPosition, Side havingMove,
@@ -725,74 +671,52 @@ public class CastlingUtility implements EnumConstants {
     if (!calculateIsCastlingMove(moveSpecification)) {
       throw new IllegalArgumentException();
     }
-    switch (moveSpecification.castlingMove()) {
-      case KING_SIDE:
-        switch (moveSpecification.havingMove()) {
-          case BLACK:
-            return CastlingUtility.BLACK_KING_FROM;
-          case WHITE:
-            return CastlingUtility.WHITE_KING_FROM;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      case QUEEN_SIDE:
-        switch (moveSpecification.havingMove()) {
-          case BLACK:
-            return CastlingUtility.BLACK_KING_FROM;
-          case WHITE:
-            return CastlingUtility.WHITE_KING_FROM;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (moveSpecification.castlingMove()) {
+      case KING_SIDE -> switch (moveSpecification.havingMove()) {
+        case BLACK -> CastlingUtility.BLACK_KING_FROM;
+        case WHITE -> CastlingUtility.WHITE_KING_FROM;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case QUEEN_SIDE -> switch (moveSpecification.havingMove()) {
+        case BLACK -> CastlingUtility.BLACK_KING_FROM;
+        case WHITE -> CastlingUtility.WHITE_KING_FROM;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Square calculateKingCastlingTo(MoveSpecification moveSpecification) {
     if (!calculateIsCastlingMove(moveSpecification)) {
       throw new IllegalArgumentException();
     }
-    switch (moveSpecification.castlingMove()) {
-      case KING_SIDE:
-        switch (moveSpecification.havingMove()) {
-          case BLACK:
-            return CastlingUtility.BLACK_KING_KING_SIDE_CASTLING_TO;
-          case WHITE:
-            return CastlingUtility.WHITE_KING_KING_SIDE_CASTLING_TO;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      case QUEEN_SIDE:
-        switch (moveSpecification.havingMove()) {
-          case BLACK:
-            return CastlingUtility.BLACK_KING_QUEEN_SIDE_CASTLING_TO;
-          case WHITE:
-            return CastlingUtility.WHITE_KING_QUEEN_SIDE_CASTLING_TO;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (moveSpecification.castlingMove()) {
+      case KING_SIDE -> switch (moveSpecification.havingMove()) {
+        case BLACK -> CastlingUtility.BLACK_KING_KING_SIDE_CASTLING_TO;
+        case WHITE -> CastlingUtility.WHITE_KING_KING_SIDE_CASTLING_TO;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case QUEEN_SIDE -> switch (moveSpecification.havingMove()) {
+        case BLACK -> CastlingUtility.BLACK_KING_QUEEN_SIDE_CASTLING_TO;
+        case WHITE -> CastlingUtility.WHITE_KING_QUEEN_SIDE_CASTLING_TO;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static CastlingRight getCastlingRight(CastlingRightBoth castlingRightBoth, Side side) {
-    switch (side) {
-      case WHITE:
-        return castlingRightBoth.castlingRightWhite();
-      case BLACK:
-        return castlingRightBoth.castlingRightBlack();
-      default:
-      case NONE:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> castlingRightBoth.castlingRightWhite();
+      case BLACK -> castlingRightBoth.castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+    };
   }
 
 }

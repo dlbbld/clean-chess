@@ -26,17 +26,15 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
     final List<LegalMove> mateList = new ArrayList<>();
     final FindHelpMateInterruptResult result = calculateHelpmate(board, c, 0, mateList);
 
-    switch (result) {
-      case TRUE:
+    return switch (result) {
+      case TRUE -> {
         checkHelpmate(board.getFen(), mateList);
-        return FindHelpmateResult.YES;
-      case FALSE:
-        return FindHelpmateResult.NO;
-      case INTERRUPTED:
-        return FindHelpmateResult.UNKNOWN;
-      default:
-        throw new IllegalArgumentException();
-    }
+        yield FindHelpmateResult.YES;
+      }
+      case FALSE -> FindHelpmateResult.NO;
+      case INTERRUPTED -> FindHelpmateResult.UNKNOWN;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static FindHelpMateInterruptResult calculateHelpmate(ApiBoard board, Side c, int currentDepth,

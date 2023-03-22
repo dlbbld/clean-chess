@@ -68,7 +68,7 @@ public class ApiCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public boolean performMove(@NonNull String san) {
+  public boolean performMove(String san) {
 
     final var result = board.doMove(san);
     final MoveSpecification lastMoveSpecification = calculateLastMoveSpecification();
@@ -380,62 +380,37 @@ public class ApiCarlosBoard extends AbstractBoard {
 
     // because we have object comparison (for performance!) we lookup here the statically defined castling right
     // generating a new castling right map would not work!!
-    switch (castlingRightWhite) {
-      case KING_AND_QUEEN_SIDE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_KQ_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_KQ_K;
-          case NONE:
-            return CastlingConstants.CASTLING_KQ_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_KQ_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      case KING_SIDE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_K_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_K_K;
-          case NONE:
-            return CastlingConstants.CASTLING_K_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_K_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      case NONE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_NONE_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_NONE_K;
-          case NONE:
-            return CastlingConstants.CASTLING_NONE_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_NONE_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      case QUEEN_SIDE:
-        switch (castlingRightBlack) {
-          case KING_AND_QUEEN_SIDE:
-            return CastlingConstants.CASTLING_Q_KQ;
-          case KING_SIDE:
-            return CastlingConstants.CASTLING_Q_K;
-          case NONE:
-            return CastlingConstants.CASTLING_Q_NONE;
-          case QUEEN_SIDE:
-            return CastlingConstants.CASTLING_Q_Q;
-          default:
-            throw new IllegalArgumentException();
-        }
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (castlingRightWhite) {
+      case KING_AND_QUEEN_SIDE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_KQ_K;
+        case NONE -> CastlingConstants.CASTLING_KQ_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      case KING_SIDE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_K_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_K_K;
+        case NONE -> CastlingConstants.CASTLING_K_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_K_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_NONE_K;
+        case NONE -> CastlingConstants.CASTLING_NONE_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      case QUEEN_SIDE -> switch (castlingRightBlack) {
+        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_Q_KQ;
+        case KING_SIDE -> CastlingConstants.CASTLING_Q_K;
+        case NONE -> CastlingConstants.CASTLING_Q_NONE;
+        case QUEEN_SIDE -> CastlingConstants.CASTLING_Q_Q;
+        default -> throw new IllegalArgumentException();
+      };
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   @Override
@@ -591,44 +566,26 @@ public class ApiCarlosBoard extends AbstractBoard {
     final Move move = NonNullWrapperApiCarlos.getMove(moveBackup);
     final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperApiCarlos.getMovingPiece(moveBackup);
 
-    switch (movingPiece.getPieceSide()) {
-      case WHITE:
-        switch (move.getTo().getRank()) {
-          case RANK_1:
-            // would be illegal for a white pawn, but we are not checking here
-          case RANK_2:
-          case RANK_3:
-          case RANK_4:
-          case RANK_5:
-          case RANK_6:
-          case RANK_7:
-            return false;
-          case RANK_8:
-            return true;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      case BLACK:
-        switch (move.getTo().getRank()) {
-          case RANK_1:
-            return true;
-          case RANK_2:
-          case RANK_3:
-          case RANK_4:
-          case RANK_5:
-          case RANK_6:
-          case RANK_7:
-          case RANK_8:
-            // would be illegal for a white pawn, but we are not checking here
-            return false;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (movingPiece.getPieceSide()) {
+      case WHITE -> switch (move.getTo().getRank()) {
+        case RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7 -> false;
+        case RANK_8 -> true;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case BLACK -> switch (move.getTo().getRank()) {
+        case RANK_1 -> true;
+        case RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 -> /*
+                                                                        * would be illegal for a white pawn, but we are
+                                                                        * not checking here
+                                                                        */ false;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      }; /*
+          * would be illegal for a white pawn, but we are not checking here
+          */
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public void loadFromFen(String fen) {

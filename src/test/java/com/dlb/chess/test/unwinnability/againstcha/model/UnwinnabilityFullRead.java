@@ -8,7 +8,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
-public record UnwinnabilityFullRead(Fen fen, String lichessGameId, Side winner, UnwinnableFull unwinnableFull, String mateLine) {
+public record UnwinnabilityFullRead(Fen fen, String lichessGameId, Side winner, UnwinnableFull unwinnableFull,
+    String mateLine) {
 
   @Override
   public int hashCode() {
@@ -20,10 +21,7 @@ public record UnwinnabilityFullRead(Fen fen, String lichessGameId, Side winner, 
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if ((obj == null) || (getClass() != obj.getClass())) {
       return false;
     }
     final var other = (UnwinnabilityFullRead) obj;

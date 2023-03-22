@@ -6,8 +6,8 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;

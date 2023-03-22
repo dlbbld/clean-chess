@@ -130,8 +130,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       throws SanValidationException {
 
     final Side havingMove = board.getHavingMove();
-    final SanType sanType = sanParse.sanType();
-    final SanConversion sanConversion = sanParse.sanConversion();
+    final var sanType = sanParse.sanType();
+    final var sanConversion = sanParse.sanConversion();
     final SanFormat sanFormat = sanType.getSanFormat();
 
     validateMovingOntoOwnPiece(havingMove, sanFormat, sanConversion, board.getStaticPosition());
@@ -349,7 +349,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
   }
 
   private static Set<LegalMove> filterLegalMovesForValidation(ApiBoard board, Side havingMove, SanParse sanParse) {
-    final SanType sanType = sanParse.sanType();
+    final var sanType = sanParse.sanType();
     final SanFormat sanFormat = sanType.getSanFormat();
 
     // for castling we need to filter the castling moves

@@ -69,15 +69,11 @@ public abstract class AbstractGenerateSquares implements EnumConstants {
 
   private static String calculateConstantName(Side side, PieceType pieceType) {
     @SuppressWarnings("null") @NonNull final String name = pieceType.name();
-    switch (side) {
-      case WHITE:
-      case BLACK:
-        return name + "_" + side.name();
-      case NONE:
-        return name;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE, BLACK -> name + "_" + side.name();
+      case NONE -> name;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static Set<Square> calculateSquareSet(Side side, Square fromSquare, PieceType pieceType,

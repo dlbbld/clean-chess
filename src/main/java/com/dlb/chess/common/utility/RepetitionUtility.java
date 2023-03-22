@@ -26,14 +26,11 @@ public class RepetitionUtility {
    */
   public static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    switch (enPassantCaptureRule) {
-      case DO_IGNORE:
-        return equalsIgnoringEnPassantCapture(dynamicPosition, obj);
-      case DO_NOT_IGNORE:
-        return equalsNotIgnoringEnPassantCapture(dynamicPosition, obj);
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (enPassantCaptureRule) {
+      case DO_IGNORE -> equalsIgnoringEnPassantCapture(dynamicPosition, obj);
+      case DO_NOT_IGNORE -> equalsNotIgnoringEnPassantCapture(dynamicPosition, obj);
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static boolean equalsIgnoringEnPassantCapture(DynamicPosition dynamicPosition, @Nullable Object obj) {
@@ -65,14 +62,11 @@ public class RepetitionUtility {
   }
 
   public static int getCountRepetition(HalfMove halfMove, EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    switch (enPassantCaptureRule) {
-      case DO_NOT_IGNORE:
-        return halfMove.countRepetition();
-      case DO_IGNORE:
-        return halfMove.countRepetitionIgnoringEnPassantCapture();
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (enPassantCaptureRule) {
+      case DO_NOT_IGNORE -> halfMove.countRepetition();
+      case DO_IGNORE -> halfMove.countRepetitionIgnoringEnPassantCapture();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static int calculateCountRepetition(List<LegalMove> performedLegalMoveList,
@@ -157,14 +151,11 @@ public class RepetitionUtility {
 
   public static List<List<HalfMove>> getRepetitionListListType(Analysis analysis,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    switch (enPassantCaptureRule) {
-      case DO_IGNORE:
-        return analysis.repetitionListListInitialEnPassantCapture();
-      case DO_NOT_IGNORE:
-        return analysis.repetitionListList();
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (enPassantCaptureRule) {
+      case DO_IGNORE -> analysis.repetitionListListInitialEnPassantCapture();
+      case DO_NOT_IGNORE -> analysis.repetitionListList();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

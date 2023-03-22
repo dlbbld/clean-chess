@@ -94,23 +94,16 @@ public class AbstractPossibleMoves implements EnumConstants {
   }
 
   public static PossibleMove getPossibleMove(Side side, PieceType pieceType, Square fromSquare, Square toSquare) {
-    switch (pieceType) {
-      case BISHOP:
-        return NonNullWrapper.getPossibleMove(BISHOP_POSSIBLE_MOVE, side, fromSquare, toSquare);
-      case KING:
-        return NonNullWrapper.getPossibleMove(KING_POSSIBLE_MOVE, side, fromSquare, toSquare);
-      case KNIGHT:
-        return NonNullWrapper.getPossibleMove(KNIGHT_POSSIBLE_MOVE, side, fromSquare, toSquare);
-      case PAWN:
-        return NonNullWrapper.getPossibleMove(PAWN_POSSIBLE_MOVE, side, fromSquare, toSquare);
-      case QUEEN:
-        return NonNullWrapper.getPossibleMove(QUEEN_POSSIBLE_MOVE, side, fromSquare, toSquare);
-      case ROOK:
-        return NonNullWrapper.getPossibleMove(ROOK_POSSIBLE_MOVE, side, fromSquare, toSquare);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pieceType) {
+      case BISHOP -> NonNullWrapper.getPossibleMove(BISHOP_POSSIBLE_MOVE, side, fromSquare, toSquare);
+      case KING -> NonNullWrapper.getPossibleMove(KING_POSSIBLE_MOVE, side, fromSquare, toSquare);
+      case KNIGHT -> NonNullWrapper.getPossibleMove(KNIGHT_POSSIBLE_MOVE, side, fromSquare, toSquare);
+      case PAWN -> NonNullWrapper.getPossibleMove(PAWN_POSSIBLE_MOVE, side, fromSquare, toSquare);
+      case QUEEN -> NonNullWrapper.getPossibleMove(QUEEN_POSSIBLE_MOVE, side, fromSquare, toSquare);
+      case ROOK -> NonNullWrapper.getPossibleMove(ROOK_POSSIBLE_MOVE, side, fromSquare, toSquare);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Set<Square> calculateDiagonalSquares(Square fromSquare,

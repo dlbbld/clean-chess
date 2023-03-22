@@ -81,31 +81,26 @@ public class MoveConversionUtility {
 
   public static Move convertMoveSpecification(MoveSpecification moveSpecification) {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      switch (moveSpecification.havingMove()) {
-        case BLACK:
-          switch (moveSpecification.castlingMove()) {
-            case KING_SIDE:
-              return new Move(com.github.bhlangonijr.chesslib.Square.E8, com.github.bhlangonijr.chesslib.Square.G8);
-            case QUEEN_SIDE:
-              return new Move(com.github.bhlangonijr.chesslib.Square.E8, com.github.bhlangonijr.chesslib.Square.C8);
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
-        case WHITE:
-          switch (moveSpecification.castlingMove()) {
-            case KING_SIDE:
-              return new Move(com.github.bhlangonijr.chesslib.Square.E1, com.github.bhlangonijr.chesslib.Square.G1);
-            case QUEEN_SIDE:
-              return new Move(com.github.bhlangonijr.chesslib.Square.E1, com.github.bhlangonijr.chesslib.Square.C1);
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (moveSpecification.havingMove()) {
+        case BLACK -> switch (moveSpecification.castlingMove()) {
+          case KING_SIDE -> new Move(com.github.bhlangonijr.chesslib.Square.E8,
+              com.github.bhlangonijr.chesslib.Square.G8);
+          case QUEEN_SIDE -> new Move(com.github.bhlangonijr.chesslib.Square.E8,
+              com.github.bhlangonijr.chesslib.Square.C8);
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
+        case WHITE -> switch (moveSpecification.castlingMove()) {
+          case KING_SIDE -> new Move(com.github.bhlangonijr.chesslib.Square.E1,
+              com.github.bhlangonijr.chesslib.Square.G1);
+          case QUEEN_SIDE -> new Move(com.github.bhlangonijr.chesslib.Square.E1,
+              com.github.bhlangonijr.chesslib.Square.C1);
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
+        };
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
     }
 
     final com.github.bhlangonijr.chesslib.Square from = EnumConversionUtility

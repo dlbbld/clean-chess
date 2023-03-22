@@ -105,30 +105,18 @@ public class PgnCreate {
   private static ResultTagValue calculateResultTagValue(ApiBoard board) {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
 
-    switch (gameStatus) {
-      case CHECKMATE:
-        switch (board.getHavingMove()) {
-          case WHITE:
-            return ResultTagValue.BLACK_WON;
-          case BLACK:
-            return ResultTagValue.WHITE_WON;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
-        }
-      case FIVE_FOLD_REPETITION_RULE:
-      case INSUFFICIENT_MATERIAL_BOTH:
-        return ResultTagValue.DRAW;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-      case OTHER:
-        return ResultTagValue.ONGOING;
-      case SEVENTY_FIVE_MOVE_RULE:
-      case STALEMATE:
-        return ResultTagValue.DRAW;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (gameStatus) {
+      case CHECKMATE -> switch (board.getHavingMove()) {
+        case WHITE -> ResultTagValue.BLACK_WON;
+        case BLACK -> ResultTagValue.WHITE_WON;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH -> ResultTagValue.DRAW;
+      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER -> ResultTagValue.ONGOING;
+      case SEVENTY_FIVE_MOVE_RULE, STALEMATE -> ResultTagValue.DRAW;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static String calculateTagEntry(Tag tag) {

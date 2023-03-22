@@ -5,6 +5,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -65,24 +67,18 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
     if (MaterialUtility.calculateHasKingOnly(sideIntendedWinner.getOppositeSide(), staticPosition)) {
       // state 2a
 
-      if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (!squaresAttackedByNotHavingMove.contains(firstFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(firstToSquare)) {
-            return -1;
-          }
-        }
+      if ((NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
+          && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType()).contains(secondPieceType)
+          && !squaresAttackedByNotHavingMove.contains(firstFromSquare))
+          && squaresAttackedByNotHavingMove.contains(firstToSquare)) {
+        return -1;
       }
 
-      if (!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (!squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(secondToSquare)) {
-            return 1;
-          }
-        }
+      if ((!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
+          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType()).contains(secondPieceType)
+          && !squaresAttackedByNotHavingMove.contains(secondFromSquare))
+          && squaresAttackedByNotHavingMove.contains(secondToSquare)) {
+        return 1;
       }
 
       if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
@@ -101,37 +97,31 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
         }
 
         if (squaresAttackedByNotHavingMove.contains(firstFromSquare)
-            && !squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(firstToSquare)) {
-            return -1;
-          }
+            && !squaresAttackedByNotHavingMove.contains(secondFromSquare)
+            && squaresAttackedByNotHavingMove.contains(firstToSquare)) {
+          return -1;
         }
 
         if (!squaresAttackedByNotHavingMove.contains(firstFromSquare)
-            && squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(secondToSquare)) {
-            return 1;
-          }
+            && squaresAttackedByNotHavingMove.contains(secondFromSquare)
+            && squaresAttackedByNotHavingMove.contains(secondToSquare)) {
+          return 1;
         }
 
       }
 
       if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (KingDistance.distance(firstToSquare, opponentKingSquare) < KingDistance.distance(firstFromSquare,
-            opponentKingSquare)) {
-          return -1;
-        }
+          && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType()).contains(secondPieceType)
+          && KingDistance.distance(firstToSquare, opponentKingSquare) < KingDistance.distance(firstFromSquare,
+              opponentKingSquare)) {
+        return -1;
       }
 
       if (!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (KingDistance.distance(secondToSquare, opponentKingSquare) < KingDistance.distance(secondFromSquare,
-            opponentKingSquare)) {
-          return 1;
-        }
+          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType()).contains(secondPieceType)
+          && KingDistance.distance(secondToSquare, opponentKingSquare) < KingDistance.distance(secondFromSquare,
+              opponentKingSquare)) {
+        return 1;
       }
 
       if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
@@ -332,24 +322,20 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
   private static Map<SquareType, Set<PieceType>> calculateAffordablePieceTypeMap(Side sideCheckmating,
       StaticPosition staticPosition, ClassicalCheckmateSituation aboveCheckmateMaterial) {
 
-    switch (aboveCheckmateMaterial) {
-      case ABOVE_KING_AND_QUEEN:
-      case ABOVE_KING_AND_ROOK:
-      case ABOVE_KING_AND_KNIGHT_AND_BISHOP:
+    return switch (aboveCheckmateMaterial) {
+      case ABOVE_KING_AND_QUEEN, ABOVE_KING_AND_ROOK, ABOVE_KING_AND_KNIGHT_AND_BISHOP -> {
         final Set<PieceType> affordablePieceTypeSet = calculateAffordablePieceTypeSet(sideCheckmating, staticPosition,
             aboveCheckmateMaterial);
-        final Map<SquareType, Set<PieceType>> map = new TreeMap<>();
+        final @NonNull Map<SquareType, Set<PieceType>> map = new TreeMap<>();
         map.put(SquareType.LIGHT_SQUARE, affordablePieceTypeSet);
         map.put(SquareType.DARK_SQUARE, affordablePieceTypeSet);
-
-        return map;
-      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP:
-        return calculateAffordablePieceTypeMapOppositeBishops(sideCheckmating, staticPosition);
-      case NO_HAVING_PAWN:
-      case NO_NOT_HAVING_PAWN:
-      default:
-        throw new IllegalArgumentException();
-    }
+        yield map;
+      }
+      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP -> calculateAffordablePieceTypeMapOppositeBishops(sideCheckmating,
+          staticPosition);
+      case NO_HAVING_PAWN, NO_NOT_HAVING_PAWN -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
 
   }
 
@@ -426,28 +412,22 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
 
   private int compareSacrificeHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove, Side color,
       StaticPosition staticPosition, ClassicalCheckmateSituation aboveCheckmateMaterial) {
-    switch (aboveCheckmateMaterial) {
-      case ABOVE_KING_AND_QUEEN:
-      case ABOVE_KING_AND_ROOK:
-      case ABOVE_KING_AND_KNIGHT_AND_BISHOP: {
+    return switch (aboveCheckmateMaterial) {
+      case ABOVE_KING_AND_QUEEN, ABOVE_KING_AND_ROOK, ABOVE_KING_AND_KNIGHT_AND_BISHOP -> {
         final Set<PieceType> affordablePieceTypeSet = calculateAffordablePieceTypeSet(color, staticPosition,
             aboveCheckmateMaterial);
-
         final var comparePieceSacrifice = comparePieceSacrifice(firstLegalMove, secondLegalMove,
             affordablePieceTypeSet);
-        return comparePieceSacrifice;
+        yield comparePieceSacrifice;
       }
-      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP: {
+      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP -> {
         final Map<SquareType, Set<PieceType>> affordablePieceTypeMap = calculateAffordablePieceTypeMapOppositeBishops(
             color, staticPosition);
-
-        return comparePieceSacrifice(firstLegalMove, secondLegalMove, affordablePieceTypeMap);
+        yield comparePieceSacrifice(firstLegalMove, secondLegalMove, affordablePieceTypeMap);
       }
-      case NO_HAVING_PAWN:
-      case NO_NOT_HAVING_PAWN:
-      default:
-        throw new IllegalArgumentException();
-    }
+      case NO_HAVING_PAWN, NO_NOT_HAVING_PAWN -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private int compareSacrificeNotHavingMove(LegalMove firstLegalMove, LegalMove secondLegalMove,

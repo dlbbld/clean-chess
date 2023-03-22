@@ -50,25 +50,16 @@ public class WinnableEvaluateGameState {
     if (gameStatusFirstHalfMove.size() == 1) {
       final GameStatus singleGameStatus = BasicUtility.getFirstElement(gameStatusFirstHalfMove);
 
-      switch (singleGameStatus) {
-        case CHECKMATE:
-          return Winnable.YES;
-        case STALEMATE:
-          return Winnable.NO;
-        case INSUFFICIENT_MATERIAL_BOTH:
-          return Winnable.NO;
-        case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-          return Winnable.NO;
-        case FIVE_FOLD_REPETITION_RULE:
-          return Winnable.NO;
-        case SEVENTY_FIVE_MOVE_RULE:
-          return Winnable.NO;
-        case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-        case OTHER:
-          return Winnable.UNKNOWN;
-        default:
-          throw new IllegalArgumentException();
-      }
+      return switch (singleGameStatus) {
+        case CHECKMATE -> Winnable.YES;
+        case STALEMATE -> Winnable.NO;
+        case INSUFFICIENT_MATERIAL_BOTH -> Winnable.NO;
+        case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY -> Winnable.NO;
+        case FIVE_FOLD_REPETITION_RULE -> Winnable.NO;
+        case SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
+        case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+        default -> throw new IllegalArgumentException();
+      };
     }
     if (gameStatusFirstHalfMove.contains(GameStatus.CHECKMATE)) {
       return Winnable.YES;

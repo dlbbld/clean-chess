@@ -11,14 +11,11 @@ public class RepetitionTestUtility {
 
   public static String getExpectedRepetition(PgnFileTestCase testCase,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    switch (enPassantCaptureRule) {
-      case DO_IGNORE:
-        return testCase.expectedRepetitionInitialEnPassantCapture();
-      case DO_NOT_IGNORE:
-        return testCase.expectedRepetition();
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (enPassantCaptureRule) {
+      case DO_IGNORE -> testCase.expectedRepetitionInitialEnPassantCapture();
+      case DO_NOT_IGNORE -> testCase.expectedRepetition();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static void testRepetition(Analysis analysis, PgnFileTestCase testCase,

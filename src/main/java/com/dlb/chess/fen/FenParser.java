@@ -98,15 +98,12 @@ public class FenParser implements EnumConstants {
   private static int calculateMaximumPossibleHalfMoveClock(int fullMoveNumber, Side havingMove) {
 
     final var baseValue = 2 * (fullMoveNumber - 1);
-    switch (havingMove) {
-      case BLACK:
-        return baseValue + 1;
-      case WHITE:
-        return baseValue;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> baseValue + 1;
+      case WHITE -> baseValue;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
 
   }
 
@@ -523,65 +520,50 @@ public class FenParser implements EnumConstants {
     switch (castlingRight) {
       case KING_AND_QUEEN_SIDE:
         if (!isKingSideCastlingOriginalPosition && !isQueenSideCastlingOriginalPosition) {
-          switch (sideToCheck) {
-            case BLACK:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH;
-            case WHITE:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToCheck) {
+            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH;
+            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH;
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         }
         if (!isKingSideCastlingOriginalPosition) {
-          switch (sideToCheck) {
-            case BLACK:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
-            case WHITE:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToCheck) {
+            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
+            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         }
         if (!isQueenSideCastlingOriginalPosition) {
-          switch (sideToCheck) {
-            case BLACK:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
-            case WHITE:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToCheck) {
+            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
+            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         }
         break;
       case KING_SIDE:
         if (!isKingSideCastlingOriginalPosition) {
-          switch (sideToCheck) {
-            case BLACK:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
-            case WHITE:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToCheck) {
+            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
+            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         }
         break;
       case NONE:
         break;
       case QUEEN_SIDE:
         if (!isQueenSideCastlingOriginalPosition) {
-          switch (sideToCheck) {
-            case BLACK:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
-            case WHITE:
-              return FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
-          }
+          return switch (sideToCheck) {
+            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
+            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
+          };
         }
         break;
       default:

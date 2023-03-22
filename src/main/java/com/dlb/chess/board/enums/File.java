@@ -68,51 +68,33 @@ public enum File {
   }
 
   private static File calculateLeftFileWhiteView(File file) {
-    switch (file) {
-      case FILE_A:
-        throw new IllegalArgumentException();
-      case FILE_B:
-        return FILE_A;
-      case FILE_C:
-        return FILE_B;
-      case FILE_D:
-        return FILE_C;
-      case FILE_E:
-        return FILE_D;
-      case FILE_F:
-        return FILE_E;
-      case FILE_G:
-        return FILE_F;
-      case FILE_H:
-        return FILE_G;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (file) {
+      case FILE_A -> throw new IllegalArgumentException();
+      case FILE_B -> FILE_A;
+      case FILE_C -> FILE_B;
+      case FILE_D -> FILE_C;
+      case FILE_E -> FILE_D;
+      case FILE_F -> FILE_E;
+      case FILE_G -> FILE_F;
+      case FILE_H -> FILE_G;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static File calculateRightFileWhiteView(File file) {
-    switch (file) {
-      case FILE_A:
-        return FILE_B;
-      case FILE_B:
-        return FILE_C;
-      case FILE_C:
-        return FILE_D;
-      case FILE_D:
-        return FILE_E;
-      case FILE_E:
-        return FILE_F;
-      case FILE_F:
-        return FILE_G;
-      case FILE_G:
-        return FILE_H;
-      case FILE_H:
-        throw new IllegalArgumentException();
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (file) {
+      case FILE_A -> FILE_B;
+      case FILE_B -> FILE_C;
+      case FILE_C -> FILE_D;
+      case FILE_D -> FILE_E;
+      case FILE_E -> FILE_F;
+      case FILE_F -> FILE_G;
+      case FILE_G -> FILE_H;
+      case FILE_H -> throw new IllegalArgumentException();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final boolean calculateHasLeftFile(final Side havingMove, final File file) {
@@ -120,15 +102,12 @@ public enum File {
       throw new IllegalArgumentException();
     }
 
-    switch (havingMove) {
-      case BLACK:
-        return file != FILE_H;
-      case WHITE:
-        return file != FILE_A;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> file != FILE_H;
+      case WHITE -> file != FILE_A;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final boolean calculateHasLeftLeftFile(final Side havingMove, final File file) {
@@ -148,15 +127,12 @@ public enum File {
       throw new IllegalArgumentException();
     }
 
-    switch (havingMove) {
-      case BLACK:
-        return file != FILE_A;
-      case WHITE:
-        return file != FILE_H;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> file != FILE_A;
+      case WHITE -> file != FILE_H;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final boolean calculateHasRightRightFile(final Side havingMove, final File file) {
@@ -179,15 +155,12 @@ public enum File {
     if (!calculateHasLeftFile(havingMove, file)) {
       throw new IllegalArgumentException("No left file");
     }
-    switch (havingMove) {
-      case BLACK:
-        return calculateRightFileWhiteView(file);
-      case WHITE:
-        return calculateLeftFileWhiteView(file);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> calculateRightFileWhiteView(file);
+      case WHITE -> calculateLeftFileWhiteView(file);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static File calculateRightFile(Side havingMove, final File file) {
@@ -198,15 +171,12 @@ public enum File {
     if (!calculateHasRightFile(havingMove, file)) {
       throw new IllegalArgumentException("No right file");
     }
-    switch (havingMove) {
-      case BLACK:
-        return calculateLeftFileWhiteView(file);
-      case WHITE:
-        return calculateRightFileWhiteView(file);
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> calculateLeftFileWhiteView(file);
+      case WHITE -> calculateRightFileWhiteView(file);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static final File calculateLeftLeftFile(final Side havingMove, final File file) {

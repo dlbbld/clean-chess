@@ -14,41 +14,27 @@ import com.dlb.chess.range.OrthogonalRange;
 public abstract class AbstractEmptyBoardSquares {
 
   public static Set<EmptyBoardMove> calculateNonPawnEmptyBoardMoves(PieceType pieceType, Square fromSquare) {
-    switch (pieceType) {
-      case ROOK:
-        return calculateRookEmptyBoardMoves(fromSquare);
-      case KNIGHT:
-        return calculateKnightEmptyBoardMoves(fromSquare);
-      case BISHOP:
-        return calculateBishopEmptyBoardMoves(fromSquare);
-      case QUEEN:
-        return calculateQueenEmptyBoardMoves(fromSquare);
-      case KING:
-        return calculateKingEmptyBoardMoves(fromSquare);
-      case PAWN:
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pieceType) {
+      case ROOK -> calculateRookEmptyBoardMoves(fromSquare);
+      case KNIGHT -> calculateKnightEmptyBoardMoves(fromSquare);
+      case BISHOP -> calculateBishopEmptyBoardMoves(fromSquare);
+      case QUEEN -> calculateQueenEmptyBoardMoves(fromSquare);
+      case KING -> calculateKingEmptyBoardMoves(fromSquare);
+      case PAWN, NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Set<EmptyBoardMove> calculateNonPawnEmptyBoardMoves(PieceType pieceType) {
-    switch (pieceType) {
-      case ROOK:
-        return calculateRookEmptyBoardMoves();
-      case KNIGHT:
-        return calculateKnightEmptyBoardMoves();
-      case BISHOP:
-        return calculateBishopEmptyBoardMoves();
-      case QUEEN:
-        return calculateQueenEmptyBoardMoves();
-      case KING:
-        return calculateKingEmptyBoardMoves();
-      case PAWN:
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pieceType) {
+      case ROOK -> calculateRookEmptyBoardMoves();
+      case KNIGHT -> calculateKnightEmptyBoardMoves();
+      case BISHOP -> calculateBishopEmptyBoardMoves();
+      case QUEEN -> calculateQueenEmptyBoardMoves();
+      case KING -> calculateKingEmptyBoardMoves();
+      case PAWN, NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static Set<EmptyBoardMove> calculateNonPawnEmptyBoardMovesTo(PieceType pieceType, Square toSquare) {

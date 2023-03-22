@@ -9,15 +9,12 @@ public enum SquareType {
 
   // cannot define in constructor as cannot reference an enum befor it is defined
   public SquareType getOppositeSquareType() {
-    switch (this) {
-      case LIGHT_SQUARE:
-        return DARK_SQUARE;
-      case DARK_SQUARE:
-        return LIGHT_SQUARE;
-      case NONE:
-      default:
-        throw new ProgrammingMistakeException("The non square type has no opposite");
-    }
+    return switch (this) {
+      case LIGHT_SQUARE -> DARK_SQUARE;
+      case DARK_SQUARE -> LIGHT_SQUARE;
+      case NONE -> throw new ProgrammingMistakeException("The non square type has no opposite");
+      default -> throw new ProgrammingMistakeException("The non square type has no opposite");
+    };
   }
 
 }

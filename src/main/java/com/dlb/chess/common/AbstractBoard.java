@@ -163,15 +163,12 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
     if (isFirstMove()) {
       return getInitialFenFullMoveNumber();
     }
-    switch (getHavingMove()) {
-      case BLACK:
-        return getFullMoveNumber();
-      case WHITE:
-        return getFullMoveNumber() + 1;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (getHavingMove()) {
+      case BLACK -> getFullMoveNumber();
+      case WHITE -> getFullMoveNumber() + 1;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

@@ -3,7 +3,6 @@ package com.dlb.chess.test.apicarlos.bugs;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -12,11 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
+import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
-import com.dlb.chess.test.model.PgnFileTestCase;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Side;
 import com.github.bhlangonijr.chesslib.move.Move;
@@ -128,9 +127,7 @@ class TestApiCarlosZobristBug {
         "1. a4 b5 2. axb5 c6 3. bxc6 h5 4. g4 hxg4 5. f3 gxf3 6. cxd7+ Qxd7 7. Rxa7 fxe2 8. Qxe2 Qxd2+ 9. Bxd2 Rxh2 10. Rxa8 Rxh1 11. Rxb8 Rxg1 12. Rxc8+ Kd7 13. Rc7+ Kd8 14. Rxe7 Nf6 15. Nc3 Ne4 16. Bg5 Rxg5 17. Rxf7 Rg2 18. Qg4 Rxc2 19. Qxg7 Rxb2 20. Be2 Rxe2+ 21. Kd1 Ng5 22. Rf5 Rf2 23. Nd5 Rxf5 24. Nb4 Nf3 25. Nd3 Bb4 26. Qa1 Ke7 27. Kc2 Kf7 28. Kb3 Kg6 29. Ka4 Kg5 30. Nc5 Bc3 31. Kb5 Re5 32. Kb6 Rd5 33. Qa7 Rf5 34. Nd3 Re5 35. Qb7 Rf5 36. Qe7+ Kg6 37. Qe8+ Kg5 38. Kb7 Bd4 39. Ka6 Bc3 40. Kb7");
 
     final Board board = new Board();
-    @SuppressWarnings("null") final Iterator<Move> moves = moveList.iterator();
-    while (moves.hasNext()) {
-      @SuppressWarnings("null") final Move move = moves.next();
+    for (Move move : moveList) {
       board.doMove(move);
     }
     assertFalse(board.isRepetition());

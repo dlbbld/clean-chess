@@ -205,37 +205,19 @@ public class WinnableCalculateGameState {
   }
 
   private static boolean calculateIsEndMoveEvaluationMadeTheMove(GameStatus moveEvaluation) {
-    switch (moveEvaluation) {
-      case CHECKMATE:
-        return true;
-      case FIVE_FOLD_REPETITION_RULE:
-      case INSUFFICIENT_MATERIAL_BOTH:
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-      case OTHER:
-      case SEVENTY_FIVE_MOVE_RULE:
-      case STALEMATE:
-        return false;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (moveEvaluation) {
+      case CHECKMATE -> true;
+      case FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER, SEVENTY_FIVE_MOVE_RULE, STALEMATE -> false;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static boolean calculateIsEndMoveEvaluationNotMadeTheMove(GameStatus moveEvaluation) {
-    switch (moveEvaluation) {
-      case OTHER:
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-        return true;
-      case CHECKMATE:
-      case FIVE_FOLD_REPETITION_RULE:
-      case INSUFFICIENT_MATERIAL_BOTH:
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-      case SEVENTY_FIVE_MOVE_RULE:
-      case STALEMATE:
-        return false;
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (moveEvaluation) {
+      case OTHER, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY -> true;
+      case CHECKMATE, FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, SEVENTY_FIVE_MOVE_RULE, STALEMATE -> false;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static boolean addMoveEvaluationMadeTheMove(GameStatus moveEvaluation, Set<GameStatus> gameStatusSet) {

@@ -2,8 +2,8 @@ package com.dlb.chess.model;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.File;
+import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.san.enums.CheckmateOrCheck;

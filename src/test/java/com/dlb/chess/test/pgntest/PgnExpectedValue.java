@@ -25,168 +25,88 @@ public class PgnExpectedValue {
 
   private static PgnFileTestCaseList calculateTestCaseList(PgnTest pgnTest) {
 
-    switch (pgnTest) {
-      case BASIC_CASTLING_SPECIAL_WHITE:
-        return createTestCasesBasicCastlingSpecialWhite();
-      case BASIC_CASTLING_SPECIAL_BLACK:
-        return createTestCasesBasicCastlingSpecialBlack();
-      case BASIC_MOVING_PIECE_WHITE:
-        return createTestCasesBasicMovingPieceWhite();
-      case BASIC_MOVING_PIECE_BLACK:
-        return createTestCasesBasicMovingPieceBlack();
-      case BASIC_CAPTURE_WHITE:
-        return createTestCasesBasicCaptureWhite();
-      case BASIC_CAPTURE_BLACK:
-        return createTestCasesBasicCaptureBlack();
-      case BASIC_EN_PASSANT_CAPTURE_WHITE:
-        return createTestCasesBasicEnPassantCaptureWhite();
-      case BASIC_EN_PASSANT_CAPTURE_BLACK:
-        return createTestCasesBasicEnPassantCaptureBlack();
-      case BASIC_PROMOTION_PIECE_WHITE:
-        return createTestCasesBasicPromotionPieceWhite();
-      case BASIC_PROMOTION_PIECE_BLACK:
-        return createTestCasesBasicPromotionPieceBlack();
-      case BASIC_PROMOTION_SQUARE_WHITE:
-        return createTestCasesBasicPromotionSquareWhite();
-      case BASIC_PROMOTION_SQUARE_BLACK:
-        return createTestCasesBasicPromotionSquareBlack();
-      case BASIC_CHECK_WHITE:
-        return createTestCasesBasicCheckWhite();
-      case BASIC_CHECK_BLACK:
-        return createTestCasesBasicCheckBlack();
-      case BASIC_DOUBLE_CHECK_WHITE:
-        return createTestCasesBasicDoubleCheckWhite();
-      case BASIC_DOUBLE_CHECK_BLACK:
-        return createTestCasesBasicDoubleCheckBlack();
-      case BASIC_CHECKMATE_WHITE:
-        return createTestCasesBasicCheckmateWhite();
-      case BASIC_CHECKMATE_BLACK:
-        return createTestCasesBasicCheckmateBlack();
-      case BASIC_CHECKMATE_VARIOUS_WHITE:
-        return createTestCasesBasicCheckmateVariousWhite();
-      case BASIC_CHECKMATE_VARIOUS_BLACK:
-        return createTestCasesBasicCheckmateVariousBlack();
-      case BASIC_CHECKMATE_DOUBLE_CHECK_WHITE:
-        return createTestCasesBasicCheckmateDoubleCheckWhite();
-      case BASIC_CHECKMATE_DOUBLE_CHECK_BLACK:
-        return createTestCasesBasicCheckmateDoubleCheckBlack();
-      case BASIC_DOUBLE_DRAW:
-        return createTestCasesBasicDoubleDraw();
-      case BASIC_FIFTY:
-        return createTestCasesBasicFifty();
-      case BASIC_FIVEFOLD:
-        return createTestCasesBasicFivefold();
-      case BASIC_FORCED:
-        return createTestCasesBasicForced();
-      case BASIC_FROM_FEN:
-        return createTestCasesBasicFromFen();
-      case BASIC_FROM_FEN_YAWN_WHITE:
-        return createTestCasesBasicFromFenYawnWhite();
-      case BASIC_FROM_FEN_YAWN_BLACK:
-        return createTestCasesBasicFromFenYawnBlack();
-      case BASIC_INSUFFICIENT_MATERIAL:
-        return createTestCasesBasicInsufficientMaterial();
-      case BASIC_INTERVENING:
-        return createTestCasesBasicIntervening();
-      case BASIC_SEVENTY_FIVE:
-        return createTestCasesBasicSeventyFive();
-      case BASIC_STALEMATE:
-        return createTestCasesBasicStalemate();
-      case BASIC_THREEFOLD:
-        return createTestCasesBasicThreefold();
-      case BASIC_THREEFOLD_INITIAL_EP:
-        return createTestCasesBasicThreefoldInitialEnPassantCapture();
-      case CAPTURE_AND_MAX_YAWN:
-        return createTestCasesCapture();
-      case DGT_CENTAUR:
-        return createTestCasesDgtCentaur();
-      case DGT_LIVE_CHESS:
-        return createTestCasesDgtLiveChess();
-      case EARLY_DRAW:
-        return createTestCasesEarlyDraw();
-      case FIFTY_GENERAL:
-        return createTestCasesFiftyGeneral();
-      case FIFTY_PATTERN:
-        return createTestCasesFiftyPattern();
-      case FIVEFOLD_BEYOND:
-        return createTestCasesFivefoldBeyond();
-      case FIVEFOLD_CORRECT:
-        return createTestCasesFivefoldCorrect();
-      case VARIOUS:
-        return createTestCasesVarious();
-      case WCC2021:
-        return createTestCasesWcc201();
-      case LAST_MOVE_ADDED_ACCIDENTALLY:
-        return createTestCasesLastMoveAddedAccidentally();
-      case UNFAIR_LICHESS_EXAMPLES:
-        return createTestCasesUnfairLichessExamples();
-      case UNFAIR_LICHESS_HELPMATE:
-        return createTestCasesUnfairLichessHelpmate();
-      case UNFAIR_DEPTH_THREE:
-        return createTestCasesUnfairDepthThree();
-      case UNFAIR_NOT_QUICK:
-        return createTestCasesUnfairNotQuick();
-      case UNFAIR_AMBRONA:
-        return createTestCasesUnfairAmbrona();
-      case LONG:
-        return createTestCasesLong();
-      case LONGEST_MATE:
-        return createTestCasesLongestMate();
-      case LONGEST_POSSIBLE:
-        return createTestCasesLongestPossible();
-      case MAX_SAME_PIECE_PROMOTION_WHITE:
-        return createTestCasesMaxSamePiecePromotionWhite();
-      case MAX_SAME_PIECE_PROMOTION_BLACK:
-        return createTestCasesMaxSamePiecePromotionBlack();
-      case MAX_SAME_PIECE_PROMOTION_COMBINED:
-        return createTestCasesMaxSamePiecePromotionByCombined();
-      case PAWN_WALL:
-        return createTestCasesPawnWall();
-      case RANDOM_CHECKMATE:
-        return createTestCasesRandomCheckmate();
-      case RANDOM_FIFTY:
-        return createTestCasesRandomFifty();
-      case RANDOM_FIVEFOLD:
-        return createTestCasesRandomFivefold();
-      case RANDOM_INSUFFICIENT_MATERIAL:
-        return createTestCasesRandomInsufficientMaterial();
-      case RANDOM_NO_REPETITION:
-        return createTestCasesRandomNoRepetition();
-      case RANDOM_SEVENTY_FIVE:
-        return createTestCasesRandomSeventyFive();
-      case RANDOM_STALEMATE:
-        return createTestCasesRandomStalemate();
-      case RANDOM_THREEFOLD:
-        return createTestCasesRandomThreefold();
-      case SEQUENCE:
-        return createTestCasesSequence();
-      case SEVENTY_FIVE_BEYOND:
-        return createTestCasesSeventyFiveBeyond();
-      case SEVENTY_FIVE_CORRECT:
-        return createTestCasesSeventyFiveCorrect();
-      case SPECIAL:
-        return createTestCasesSpecial();
-      case WIKIPEDIA_FIFTY_MOVE:
-        return createTestCasesWikipediaFiftyMove();
-      case WIKIPEDIA_THREEFOLD:
-        return createTestCasesWikipediaThreefold();
-      case DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE:
-        return createTestCasesDoubleCheckCheckmateBizarreWhite();
-      case DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK:
-        return createTestCasesDoubleCheckCheckmateBizarreBlack();
-      case MONSTER_BLOG_INSTANT:
-        return createTestCasesBlogInstant();
-      case MONSTER_BLOG_PREDRAW:
-        return createTestCasesBlogPredraw();
-      case MONSTER_BLOG_TIMEOUT:
-        return createTestCasesBlogTimeout();
-      case REPETITION_QUIZ_ONE:
-        return createTestCasesRepetitionQuizOne();
-      case REPETITION_QUIZ_TWO:
-        return createTestCasesRepetitionQuizTwo();
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (pgnTest) {
+      case BASIC_CASTLING_SPECIAL_WHITE -> createTestCasesBasicCastlingSpecialWhite();
+      case BASIC_CASTLING_SPECIAL_BLACK -> createTestCasesBasicCastlingSpecialBlack();
+      case BASIC_MOVING_PIECE_WHITE -> createTestCasesBasicMovingPieceWhite();
+      case BASIC_MOVING_PIECE_BLACK -> createTestCasesBasicMovingPieceBlack();
+      case BASIC_CAPTURE_WHITE -> createTestCasesBasicCaptureWhite();
+      case BASIC_CAPTURE_BLACK -> createTestCasesBasicCaptureBlack();
+      case BASIC_EN_PASSANT_CAPTURE_WHITE -> createTestCasesBasicEnPassantCaptureWhite();
+      case BASIC_EN_PASSANT_CAPTURE_BLACK -> createTestCasesBasicEnPassantCaptureBlack();
+      case BASIC_PROMOTION_PIECE_WHITE -> createTestCasesBasicPromotionPieceWhite();
+      case BASIC_PROMOTION_PIECE_BLACK -> createTestCasesBasicPromotionPieceBlack();
+      case BASIC_PROMOTION_SQUARE_WHITE -> createTestCasesBasicPromotionSquareWhite();
+      case BASIC_PROMOTION_SQUARE_BLACK -> createTestCasesBasicPromotionSquareBlack();
+      case BASIC_CHECK_WHITE -> createTestCasesBasicCheckWhite();
+      case BASIC_CHECK_BLACK -> createTestCasesBasicCheckBlack();
+      case BASIC_DOUBLE_CHECK_WHITE -> createTestCasesBasicDoubleCheckWhite();
+      case BASIC_DOUBLE_CHECK_BLACK -> createTestCasesBasicDoubleCheckBlack();
+      case BASIC_CHECKMATE_WHITE -> createTestCasesBasicCheckmateWhite();
+      case BASIC_CHECKMATE_BLACK -> createTestCasesBasicCheckmateBlack();
+      case BASIC_CHECKMATE_VARIOUS_WHITE -> createTestCasesBasicCheckmateVariousWhite();
+      case BASIC_CHECKMATE_VARIOUS_BLACK -> createTestCasesBasicCheckmateVariousBlack();
+      case BASIC_CHECKMATE_DOUBLE_CHECK_WHITE -> createTestCasesBasicCheckmateDoubleCheckWhite();
+      case BASIC_CHECKMATE_DOUBLE_CHECK_BLACK -> createTestCasesBasicCheckmateDoubleCheckBlack();
+      case BASIC_DOUBLE_DRAW -> createTestCasesBasicDoubleDraw();
+      case BASIC_FIFTY -> createTestCasesBasicFifty();
+      case BASIC_FIVEFOLD -> createTestCasesBasicFivefold();
+      case BASIC_FORCED -> createTestCasesBasicForced();
+      case BASIC_FROM_FEN -> createTestCasesBasicFromFen();
+      case BASIC_FROM_FEN_YAWN_WHITE -> createTestCasesBasicFromFenYawnWhite();
+      case BASIC_FROM_FEN_YAWN_BLACK -> createTestCasesBasicFromFenYawnBlack();
+      case BASIC_INSUFFICIENT_MATERIAL -> createTestCasesBasicInsufficientMaterial();
+      case BASIC_INTERVENING -> createTestCasesBasicIntervening();
+      case BASIC_SEVENTY_FIVE -> createTestCasesBasicSeventyFive();
+      case BASIC_STALEMATE -> createTestCasesBasicStalemate();
+      case BASIC_THREEFOLD -> createTestCasesBasicThreefold();
+      case BASIC_THREEFOLD_INITIAL_EP -> createTestCasesBasicThreefoldInitialEnPassantCapture();
+      case CAPTURE_AND_MAX_YAWN -> createTestCasesCapture();
+      case DGT_CENTAUR -> createTestCasesDgtCentaur();
+      case DGT_LIVE_CHESS -> createTestCasesDgtLiveChess();
+      case EARLY_DRAW -> createTestCasesEarlyDraw();
+      case FIFTY_GENERAL -> createTestCasesFiftyGeneral();
+      case FIFTY_PATTERN -> createTestCasesFiftyPattern();
+      case FIVEFOLD_BEYOND -> createTestCasesFivefoldBeyond();
+      case FIVEFOLD_CORRECT -> createTestCasesFivefoldCorrect();
+      case VARIOUS -> createTestCasesVarious();
+      case WCC2021 -> createTestCasesWcc201();
+      case LAST_MOVE_ADDED_ACCIDENTALLY -> createTestCasesLastMoveAddedAccidentally();
+      case UNFAIR_LICHESS_EXAMPLES -> createTestCasesUnfairLichessExamples();
+      case UNFAIR_LICHESS_HELPMATE -> createTestCasesUnfairLichessHelpmate();
+      case UNFAIR_DEPTH_THREE -> createTestCasesUnfairDepthThree();
+      case UNFAIR_NOT_QUICK -> createTestCasesUnfairNotQuick();
+      case UNFAIR_AMBRONA -> createTestCasesUnfairAmbrona();
+      case LONG -> createTestCasesLong();
+      case LONGEST_MATE -> createTestCasesLongestMate();
+      case LONGEST_POSSIBLE -> createTestCasesLongestPossible();
+      case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
+      case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
+      case MAX_SAME_PIECE_PROMOTION_COMBINED -> createTestCasesMaxSamePiecePromotionByCombined();
+      case PAWN_WALL -> createTestCasesPawnWall();
+      case RANDOM_CHECKMATE -> createTestCasesRandomCheckmate();
+      case RANDOM_FIFTY -> createTestCasesRandomFifty();
+      case RANDOM_FIVEFOLD -> createTestCasesRandomFivefold();
+      case RANDOM_INSUFFICIENT_MATERIAL -> createTestCasesRandomInsufficientMaterial();
+      case RANDOM_NO_REPETITION -> createTestCasesRandomNoRepetition();
+      case RANDOM_SEVENTY_FIVE -> createTestCasesRandomSeventyFive();
+      case RANDOM_STALEMATE -> createTestCasesRandomStalemate();
+      case RANDOM_THREEFOLD -> createTestCasesRandomThreefold();
+      case SEQUENCE -> createTestCasesSequence();
+      case SEVENTY_FIVE_BEYOND -> createTestCasesSeventyFiveBeyond();
+      case SEVENTY_FIVE_CORRECT -> createTestCasesSeventyFiveCorrect();
+      case SPECIAL -> createTestCasesSpecial();
+      case WIKIPEDIA_FIFTY_MOVE -> createTestCasesWikipediaFiftyMove();
+      case WIKIPEDIA_THREEFOLD -> createTestCasesWikipediaThreefold();
+      case DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE -> createTestCasesDoubleCheckCheckmateBizarreWhite();
+      case DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK -> createTestCasesDoubleCheckCheckmateBizarreBlack();
+      case MONSTER_BLOG_INSTANT -> createTestCasesBlogInstant();
+      case MONSTER_BLOG_PREDRAW -> createTestCasesBlogPredraw();
+      case MONSTER_BLOG_TIMEOUT -> createTestCasesBlogTimeout();
+      case REPETITION_QUIZ_ONE -> createTestCasesRepetitionQuizOne();
+      case REPETITION_QUIZ_TWO -> createTestCasesRepetitionQuizTwo();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static final EnumMap<PgnTest, PgnFileTestCaseList> allTestCaseListMap = NonNullWrapperCommon
