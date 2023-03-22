@@ -28,13 +28,14 @@ public abstract class AbstractPotentialToSquares extends AbstractToSquares {
     final Piece pieceOnFromSquare = staticPosition.get(fromSquare);
 
     return switch (pieceOnFromSquare.getPieceType()) {
-      case ROOK, BISHOP, QUEEN -> AbstractRangeSquares.calculateRangeSquare(staticPosition, havingMove, fromSquare, false);
-      case KING -> KingNonCastlingPotentialToSquares.calculateKingNonCastlingPotentialToSquares(staticPosition, fromSquare,
-                  havingMove);
+      case ROOK, BISHOP, QUEEN -> AbstractRangeSquares.calculateRangeSquare(staticPosition, havingMove, fromSquare,
+          false);
+      case KING -> KingNonCastlingPotentialToSquares.calculateKingNonCastlingPotentialToSquares(staticPosition,
+          fromSquare, havingMove);
       case KNIGHT -> KnightPotentialToSquares.calculateKnightPotentialToSquares(staticPosition, fromSquare, havingMove);
       case NONE -> new TreeSet<>();
       case PAWN -> PawnPotentialToSquares.calculatePawnPotentialToSquares(staticPosition, enPassantCaptureTargetSquare,
-                  fromSquare, havingMove);
+          fromSquare, havingMove);
       default -> throw new IllegalArgumentException();
     };
   }

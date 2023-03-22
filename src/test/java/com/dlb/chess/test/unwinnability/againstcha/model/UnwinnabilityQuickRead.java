@@ -21,10 +21,7 @@ public record UnwinnabilityQuickRead(Fen fen, String lichessGameId, Side winner,
     if (this == obj) {
       return true;
     }
-    if (obj == null) {
-      return false;
-    }
-    if (getClass() != obj.getClass()) {
+    if ((obj == null) || (getClass() != obj.getClass())) {
       return false;
     }
     final var other = (UnwinnabilityQuickRead) obj;

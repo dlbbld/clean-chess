@@ -65,23 +65,20 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
     if (MaterialUtility.calculateHasKingOnly(sideIntendedWinner.getOppositeSide(), staticPosition)) {
       // state 2a
 
-      if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
+      if ((NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
           && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (!squaresAttackedByNotHavingMove.contains(firstFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(firstToSquare)) {
-            return -1;
-          }
+              .contains(secondPieceType))
+          && !squaresAttackedByNotHavingMove.contains(firstFromSquare)) {
+        if (squaresAttackedByNotHavingMove.contains(firstToSquare)) {
+          return -1;
         }
       }
 
-      if (!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (!squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(secondToSquare)) {
-            return 1;
-          }
+      if ((!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
+          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType()).contains(secondPieceType))
+          && !squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
+        if (squaresAttackedByNotHavingMove.contains(secondToSquare)) {
+          return 1;
         }
       }
 
@@ -100,38 +97,33 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
           }
         }
 
-        if (squaresAttackedByNotHavingMove.contains(firstFromSquare)
-            && !squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(firstToSquare)) {
-            return -1;
-          }
-        }
-
-        if (!squaresAttackedByNotHavingMove.contains(firstFromSquare)
-            && squaresAttackedByNotHavingMove.contains(secondFromSquare)) {
-          if (squaresAttackedByNotHavingMove.contains(secondToSquare)) {
-            return 1;
-          }
-        }
-
-      }
-
-      if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (KingDistance.distance(firstToSquare, opponentKingSquare) < KingDistance.distance(firstFromSquare,
-            opponentKingSquare)) {
+        if ((squaresAttackedByNotHavingMove.contains(firstFromSquare)
+            && !squaresAttackedByNotHavingMove.contains(secondFromSquare))
+            && squaresAttackedByNotHavingMove.contains(firstToSquare)) {
           return -1;
         }
-      }
 
-      if (!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
-          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
-              .contains(secondPieceType)) {
-        if (KingDistance.distance(secondToSquare, opponentKingSquare) < KingDistance.distance(secondFromSquare,
-            opponentKingSquare)) {
+        if ((!squaresAttackedByNotHavingMove.contains(firstFromSquare)
+            && squaresAttackedByNotHavingMove.contains(secondFromSquare))
+            && squaresAttackedByNotHavingMove.contains(secondToSquare)) {
           return 1;
         }
+
+      }
+
+      if ((NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
+          && !NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType())
+              .contains(secondPieceType))
+          && (KingDistance.distance(firstToSquare, opponentKingSquare) < KingDistance.distance(firstFromSquare,
+              opponentKingSquare))) {
+        return -1;
+      }
+
+      if ((!NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
+          && NonNullWrapperCommon.get(affordablePieceTypeMap, secondToSquare.getSquareType()).contains(secondPieceType))
+          && (KingDistance.distance(secondToSquare, opponentKingSquare) < KingDistance.distance(secondFromSquare,
+              opponentKingSquare))) {
+        return 1;
       }
 
       if (NonNullWrapperCommon.get(affordablePieceTypeMap, firstToSquare.getSquareType()).contains(firstPieceType)
@@ -341,7 +333,8 @@ public class ImprovedComparatorClassicalCheckmate extends AbstractLegalMovesComp
         map.put(SquareType.DARK_SQUARE, affordablePieceTypeSet);
         yield map;
       }
-      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP -> calculateAffordablePieceTypeMapOppositeBishops(sideCheckmating, staticPosition);
+      case ABOVE_KING_AND_OPPOSITE_SQUARES_BISHOP -> calculateAffordablePieceTypeMapOppositeBishops(sideCheckmating,
+          staticPosition);
       case NO_HAVING_PAWN, NO_NOT_HAVING_PAWN -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

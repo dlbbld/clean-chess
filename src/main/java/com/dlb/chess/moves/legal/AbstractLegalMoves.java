@@ -46,7 +46,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
       case QUEEN -> QueenLegalMoves.calculateQueenLegalMoves(staticPosition, havingMove, fromSquare);
       case ROOK -> RookLegalMoves.calculateRookLegalMoves(staticPosition, havingMove, fromSquare);
       case PAWN -> PawnLegalMoves.calculatePawnLegalMoves(staticPosition, enPassantCaptureTargetSquare, havingMove,
-                  fromSquare);
+          fromSquare);
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

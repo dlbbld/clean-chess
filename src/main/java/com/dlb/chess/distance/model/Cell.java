@@ -10,7 +10,7 @@ public record Cell(int x, int y, int dis) {
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final var other = (Cell) obj;

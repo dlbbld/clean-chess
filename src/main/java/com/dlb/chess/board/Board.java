@@ -493,41 +493,38 @@ public class Board extends AbstractBoard {
       return initialFenFullMoveNumber;
     }
 
-    switch (havingMove) {
-      case WHITE:
-        return switch (initialFenHavingMove) {
-          case BLACK -> {
-            // must be even
-            checkIsEven(halfMoveCount + 1);
-            yield (halfMoveCount + 1) / 2 + initialFenFullMoveNumber;
-          }
-          case WHITE -> {
-            // must be even
-            checkIsEven(halfMoveCount);
-            yield halfMoveCount / 2 + initialFenFullMoveNumber;
-          }
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case BLACK:
-        return switch (initialFenHavingMove) {
-          case BLACK -> {
-            // must be even
-            checkIsEven(halfMoveCount);
-            yield halfMoveCount / 2 + initialFenFullMoveNumber;
-          }
-          case WHITE -> {
-            // must be even
-            checkIsEven(halfMoveCount - 1);
-            yield (halfMoveCount - 1) / 2 + initialFenFullMoveNumber;
-          }
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case WHITE -> switch (initialFenHavingMove) {
+        case BLACK -> {
+          // must be even
+          checkIsEven(halfMoveCount + 1);
+          yield (halfMoveCount + 1) / 2 + initialFenFullMoveNumber;
+        }
+        case WHITE -> {
+          // must be even
+          checkIsEven(halfMoveCount);
+          yield halfMoveCount / 2 + initialFenFullMoveNumber;
+        }
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      }; // must be even // must be even
+      case BLACK -> switch (initialFenHavingMove) {
+        case BLACK -> {
+          // must be even
+          checkIsEven(halfMoveCount);
+          yield halfMoveCount / 2 + initialFenFullMoveNumber;
+        }
+        case WHITE -> {
+          // must be even
+          checkIsEven(halfMoveCount - 1);
+          yield (halfMoveCount - 1) / 2 + initialFenFullMoveNumber;
+        }
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      }; // must be even // must be even
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   @Override

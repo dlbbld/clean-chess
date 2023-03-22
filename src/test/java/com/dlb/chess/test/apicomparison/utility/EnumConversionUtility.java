@@ -15,60 +15,54 @@ import com.github.bhlangonijr.chesslib.CastleRight;
 public class EnumConversionUtility implements EnumConstants {
 
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Side havingMove, PieceType pieceType) {
-    switch (havingMove) {
-      case BLACK:
-        return switch (pieceType) {
-          case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
-          case KING -> com.github.bhlangonijr.chesslib.Piece.BLACK_KING;
-          case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
-          case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-          case PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
-          case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
-          case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
-          default -> throw new IllegalArgumentException();
-        };
-      case WHITE:
-        return switch (pieceType) {
-          case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
-          case KING -> com.github.bhlangonijr.chesslib.Piece.WHITE_KING;
-          case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
-          case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-          case PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
-          case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
-          case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
-          default -> throw new IllegalArgumentException();
-        };
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> switch (pieceType) {
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
+        case KING -> com.github.bhlangonijr.chesslib.Piece.BLACK_KING;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
+        case PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
+        case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
+        default -> throw new IllegalArgumentException();
+      };
+      case WHITE -> switch (pieceType) {
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
+        case KING -> com.github.bhlangonijr.chesslib.Piece.WHITE_KING;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
+        case PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
+        case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Side havingMove,
       PromotionPieceType promotionPieceType) {
-    switch (havingMove) {
-      case BLACK:
-        return switch (promotionPieceType) {
-          case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
-          case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
-          case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-          case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
-          case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
-          default -> throw new IllegalArgumentException();
-        };
-      case WHITE:
-        return switch (promotionPieceType) {
-          case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
-          case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
-          case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-          case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
-          case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
-          default -> throw new IllegalArgumentException();
-        };
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case BLACK -> switch (promotionPieceType) {
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
+        case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
+        default -> throw new IllegalArgumentException();
+      };
+      case WHITE -> switch (promotionPieceType) {
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
+        case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Piece piece) {

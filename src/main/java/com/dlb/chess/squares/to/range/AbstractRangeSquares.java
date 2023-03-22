@@ -77,8 +77,10 @@ public abstract class AbstractRangeSquares extends AbstractToSquares {
       throw new IllegalArgumentException();
     }
     return switch (piece.getPieceType()) {
-      case BISHOP -> BishopRangeSquares.calculateBishopRangeSquares(staticPosition, fromSquare, havingMove, isAllowOwnPiece);
-      case QUEEN -> QueenRangeSquares.calculateQueenRangeSquares(staticPosition, fromSquare, havingMove, isAllowOwnPiece);
+      case BISHOP -> BishopRangeSquares.calculateBishopRangeSquares(staticPosition, fromSquare, havingMove,
+          isAllowOwnPiece);
+      case QUEEN -> QueenRangeSquares.calculateQueenRangeSquares(staticPosition, fromSquare, havingMove,
+          isAllowOwnPiece);
       case ROOK -> RookRangeSquares.calculateRookRangeSquares(staticPosition, fromSquare, havingMove, isAllowOwnPiece);
       case KING, KNIGHT, PAWN, NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();

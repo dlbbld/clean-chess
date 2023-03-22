@@ -12,7 +12,7 @@ public record ReachabilityVariable(Side sideWhichCanReach, Square toSquare) {
     if (this == obj) {
       return true;
     }
-    if ((obj == null) || (getClass() != obj.getClass())) {
+    if (obj == null || getClass() != obj.getClass()) {
       return false;
     }
     final var other = (ReachabilityVariable) obj;

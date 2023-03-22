@@ -58,10 +58,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     final String invariant = board.getFen();
 
-    if (maxDepth != 0 && maxDepth % 10 == 0) {
-      if (IS_DEBUG) {
-        logger.info("maxDepth=" + maxDepth);
-      }
+    if ((maxDepth != 0 && maxDepth % 10 == 0) && IS_DEBUG) {
+      logger.info("maxDepth=" + maxDepth);
     }
     this.localNodeCount = 0;
     this.isCanExhaust = true;
@@ -253,12 +251,11 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       if (squareType == SquareType.NONE) {
         continue;
       }
-      if (MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)) {
-        if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
-            && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
-            && MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), staticPosition)) {
-          return true;
-        }
+      if (MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
+          && (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+              && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
+              && MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), staticPosition))) {
+        return true;
       }
     }
     return false;
@@ -289,11 +286,10 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       if (squareType == SquareType.NONE) {
         continue;
       }
-      if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)) {
-        if (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
-            .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType())) {
-          return true;
-        }
+      if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)
+          && (MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
+              .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType()))) {
+        return true;
       }
     }
 
@@ -351,12 +347,10 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     fenSquareErased.append(fenRaw.castlingRightBothStr());
 
-    if (!"-".equals(fenRaw.enPassantCaptureTargetSquare())) {
-      if (!calculateIsEraseEnPassantCaptureTargetSquare(board)) {
-        fenSquareErased.append(" ");
+    if (!"-".equals(fenRaw.enPassantCaptureTargetSquare()) && !calculateIsEraseEnPassantCaptureTargetSquare(board)) {
+      fenSquareErased.append(" ");
 
-        fenSquareErased.append(fenRaw.enPassantCaptureTargetSquare());
-      }
+      fenSquareErased.append(fenRaw.enPassantCaptureTargetSquare());
     }
 
     return NonNullWrapperCommon.toString(fenSquareErased);

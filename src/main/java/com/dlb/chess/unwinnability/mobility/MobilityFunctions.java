@@ -39,24 +39,17 @@ public class MobilityFunctions implements EnumConstants {
   }
 
   static Set<Square> promotion(PiecePlacement piecePlacement) {
-    switch (piecePlacement.pieceType()) {
-      case PAWN:
-        return switch (piecePlacement.side()) {
-          case WHITE -> new TreeSet<>(Arrays.asList(A8, B8, C8, D8, E8, F8, G8, H8));
-          case BLACK -> new TreeSet<>(Arrays.asList(A1, B1, C1, D1, E1, F1, G1, H1));
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case KNIGHT:
-      case BISHOP:
-      case ROOK:
-      case KING:
-      case QUEEN:
-        return new TreeSet<>();
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (piecePlacement.pieceType()) {
+      case PAWN -> switch (piecePlacement.side()) {
+        case WHITE -> new TreeSet<>(Arrays.asList(A8, B8, C8, D8, E8, F8, G8, H8));
+        case BLACK -> new TreeSet<>(Arrays.asList(A1, B1, C1, D1, E1, F1, G1, H1));
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case KNIGHT, BISHOP, ROOK, KING, QUEEN -> new TreeSet<>();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   static Set<Square> predecessors(PiecePlacement piecePlacement, Square square) {

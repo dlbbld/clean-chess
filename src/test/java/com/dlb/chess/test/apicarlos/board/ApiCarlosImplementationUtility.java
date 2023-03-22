@@ -158,33 +158,30 @@ public class ApiCarlosImplementationUtility {
 
   private static boolean calculateHasPiece(Side side, com.github.bhlangonijr.chesslib.PieceType pieceType,
       Board board) {
-    switch (side) {
-      case BLACK:
-        return switch (pieceType) {
-          case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP) != 0L;
-          case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KING) != 0L;
-          case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT) != 0L;
-          case PAWN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN) != 0L;
-          case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN) != 0L;
-          case ROOK -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK) != 0L;
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case WHITE:
-        return switch (pieceType) {
-          case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP) != 0L;
-          case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KING) != 0L;
-          case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT) != 0L;
-          case PAWN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN) != 0L;
-          case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN) != 0L;
-          case ROOK -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK) != 0L;
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> switch (pieceType) {
+        case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP) != 0L;
+        case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KING) != 0L;
+        case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT) != 0L;
+        case PAWN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN) != 0L;
+        case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN) != 0L;
+        case ROOK -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK) != 0L;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case WHITE -> switch (pieceType) {
+        case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP) != 0L;
+        case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KING) != 0L;
+        case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT) != 0L;
+        case PAWN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN) != 0L;
+        case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN) != 0L;
+        case ROOK -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK) != 0L;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static int calculateNumberOfPieces(Side side, Board board) {
@@ -193,27 +190,26 @@ public class ApiCarlosImplementationUtility {
   }
 
   private static boolean calculateHasBishopForColorSquare(Side side, SquareType squareType, Board board) {
-    switch (side) {
-      case BLACK:
-        return switch (squareType) {
-          case DARK_SQUARE -> (Bitboard.darkSquares & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP)) != 0L;
-          case LIGHT_SQUARE -> (Bitboard.lightSquares
-                          & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP)) != 0L;
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case WHITE:
-        return switch (squareType) {
-          case DARK_SQUARE -> (Bitboard.darkSquares & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP)) != 0L;
-          case LIGHT_SQUARE -> (Bitboard.lightSquares
-                          & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP)) != 0L;
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case BLACK -> switch (squareType) {
+        case DARK_SQUARE -> (Bitboard.darkSquares
+            & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP)) != 0L;
+        case LIGHT_SQUARE -> (Bitboard.lightSquares
+            & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP)) != 0L;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case WHITE -> switch (squareType) {
+        case DARK_SQUARE -> (Bitboard.darkSquares
+            & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP)) != 0L;
+        case LIGHT_SQUARE -> (Bitboard.lightSquares
+            & board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP)) != 0L;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
 }

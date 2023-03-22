@@ -111,26 +111,22 @@ public class Score {
   }
 
   private static boolean calculateIsAdvancedRank(Side side, Rank rank) {
-    switch (side) {
-      case WHITE:
-        return switch (rank) {
-          case RANK_1, RANK_2, RANK_3, RANK_4, RANK_5 -> false;
-          case RANK_6, RANK_7, RANK_8 -> true;
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case BLACK:
-        return switch (rank) {
-          case RANK_1, RANK_2, RANK_3 -> true;
-          case RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 -> false;
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        };
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-
-    }
+    return switch (side) {
+      case WHITE -> switch (rank) {
+        case RANK_1, RANK_2, RANK_3, RANK_4, RANK_5 -> false;
+        case RANK_6, RANK_7, RANK_8 -> true;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case BLACK -> switch (rank) {
+        case RANK_1, RANK_2, RANK_3 -> true;
+        case RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 -> false;
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
+      };
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static boolean calculateIsPromotionToHeavyPiece(LegalMove legalMove) {
