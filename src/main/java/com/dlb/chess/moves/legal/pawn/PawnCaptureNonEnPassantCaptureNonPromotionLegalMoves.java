@@ -13,7 +13,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.possible.PawnDiagonalSquares;
+import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
 
 class PawnCaptureNonEnPassantCaptureNonPromotionLegalMoves extends PawnLegalMoves {
 

@@ -2,22 +2,13 @@ package com.dlb.chess.common.utility;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
-
-import com.dlb.chess.board.enums.PieceType;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.model.PossibleMove;
-import com.dlb.chess.model.EmptyBoardMove;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
 public class ImmutableUtility implements EnumConstants {
@@ -103,42 +94,4 @@ public class ImmutableUtility implements EnumConstants {
     return NonNullWrapperCommon.copyOfList(listList);
   }
 
-  public static ImmutableMap<Side, ImmutableMap<Square, ImmutableMap<Square, PossibleMove>>> calculateMapForSet(
-      PieceType pieceType, Set<EmptyBoardMove> emptyBoardMoveSetWhite, Set<EmptyBoardMove> emptyBoardMoveSetBlack) {
-    final ImmutableMap<Square, ImmutableMap<Square, PossibleMove>> mapWhite = calculateMapForSetSide(WHITE, pieceType,
-        emptyBoardMoveSetWhite);
-    final ImmutableMap<Square, ImmutableMap<Square, PossibleMove>> mapBlack = calculateMapForSetSide(BLACK, pieceType,
-        emptyBoardMoveSetBlack);
-
-    final EnumMap<Side, ImmutableMap<Square, ImmutableMap<Square, PossibleMove>>> possibleMoveMap = NonNullWrapperCommon
-        .newEnumMap(Side.class);
-    possibleMoveMap.put(WHITE, mapWhite);
-    possibleMoveMap.put(BLACK, mapBlack);
-
-    return NonNullWrapperCommon.copyOfMap(possibleMoveMap);
-  }
-
-  private static ImmutableMap<Square, ImmutableMap<Square, PossibleMove>> calculateMapForSetSide(Side side,
-      PieceType pieceType, Set<EmptyBoardMove> emptyBoardMoveSetSide) {
-
-    final EnumMap<Square, ImmutableMap<Square, PossibleMove>> mapSide = NonNullWrapperCommon.newEnumMap(Square.class);
-
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
-      final EnumMap<Square, PossibleMove> squareFromToMapSide = NonNullWrapperCommon.newEnumMap(Square.class);
-      for (final EmptyBoardMove emptyBoardMove : emptyBoardMoveSetSide) {
-        final PossibleMove possibleMoveSide = new PossibleMove(side, pieceType, emptyBoardMove.fromSquare(),
-            emptyBoardMove.toSquare());
-        squareFromToMapSide.put(fromSquare, possibleMoveSide);
-
-      }
-      @NonNull final ImmutableMap<Square, PossibleMove> squareFromToMapSideUnmodifiableMap = NonNullWrapperCommon
-          .immutableEnumMap(squareFromToMapSide);
-      mapSide.put(fromSquare, squareFromToMapSideUnmodifiableMap);
-    }
-
-    @NonNull final ImmutableMap<Square, ImmutableMap<Square, PossibleMove>> mapSideUnmodifiableMap = NonNullWrapperCommon
-        .immutableEnumMap(mapSide);
-
-    return mapSideUnmodifiableMap;
-  }
 }

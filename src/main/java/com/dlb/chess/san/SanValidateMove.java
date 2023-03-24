@@ -14,7 +14,7 @@ import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.moves.utility.PawnUtility;
+import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
@@ -291,7 +291,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
 
   private static boolean calculateIsAdjacentFileUsingDiagonalMoves(Side havingMove, File fromFile, Square toSquare) {
     // diagonal moves
-    final Set<PawnDiagonalBoardMove> pawnDiagonalMoveSet = PawnUtility.calculatePawnDiagonalMoves(havingMove);
+    final Set<PawnDiagonalBoardMove> pawnDiagonalMoveSet = PawnDiagonalMoveUtility.calculatePawnDiagonalMoves(havingMove);
     for (final PawnDiagonalBoardMove diagonalMove : pawnDiagonalMoveSet) {
       if (diagonalMove.fromSquare().getFile() == fromFile && diagonalMove.toSquare().getFile() == toSquare.getFile()) {
         // adjacent file

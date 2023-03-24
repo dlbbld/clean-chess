@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.possible;
+package com.dlb.chess.squares.pawn.diagonal;
 
 import static com.dlb.chess.common.utility.ImmutableUtility.constructSet;
 

@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
-import com.dlb.chess.moves.utility.PawnUtility;
+import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
 import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 
 //TODO make the count for the possible SAN
@@ -65,7 +65,7 @@ public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanV
       appendOnlyMove(resultSet, move.toSquare());
     }
 
-    final Set<PawnDiagonalBoardMove> diagonalMoveSet = PawnUtility.calculatePawnDiagonalMoves(getSide());
+    final Set<PawnDiagonalBoardMove> diagonalMoveSet = PawnDiagonalMoveUtility.calculatePawnDiagonalMoves(getSide());
     for (final PawnDiagonalBoardMove diagonalMove : diagonalMoveSet) {
       appendMoveWithFile(resultSet, diagonalMove.toSquare(), diagonalMove.fromSquare().getFile());
     }

@@ -6,9 +6,9 @@ import java.util.TreeSet;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
-import com.dlb.chess.moves.possible.PawnDiagonalSquares;
+import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
 
-public class PawnUtility {
+public class PawnDiagonalMoveUtility {
   public static Set<PawnDiagonalBoardMove> calculatePawnDiagonalMoves(Side side) {
     final Set<PawnDiagonalBoardMove> diagonalBoardMoveSetSide = new TreeSet<>();
 
