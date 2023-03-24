@@ -1,4 +1,4 @@
-package com.dlb.chess.test.apicarlos.bugs;
+package com.dlb.chess.test.apicarlos.bugs.fixed;
 
 import org.junit.jupiter.api.Test;
 

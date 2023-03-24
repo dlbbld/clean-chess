@@ -1,4 +1,4 @@
-package com.dlb.chess.test.apicarlos.bugs;
+package com.dlb.chess.test.apicarlos.bugs.fixed;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
