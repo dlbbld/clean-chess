@@ -129,6 +129,10 @@ public class NonNullWrapperCommon {
     return checkResult(StringUtils.removeEnd(str, remove));
   }
 
+  public static String capitalize(final String str) {
+    return checkResult(StringUtils.capitalize(str));
+  }
+
   @SuppressWarnings("null")
   @NonNull
   public static String[] split(String str, String regex) {

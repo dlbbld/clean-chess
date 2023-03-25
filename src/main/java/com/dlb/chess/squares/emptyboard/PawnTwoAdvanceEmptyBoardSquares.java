@@ -9,6 +9,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
+import com.dlb.chess.common.utility.ImmutableUtility;
 import com.dlb.chess.utility.ValidateMoveNumberUtility;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -17,334 +18,398 @@ public class PawnTwoAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares i
 
   // BEGIN generated code
 
-  private static final ImmutableMap<Square, ImmutableSet<Square>> PAWN_WHITE_SQUARES;
+  private static void addWhiteA1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A1, squareSet);
+  }
+
+  private static void addWhiteB1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B1, squareSet);
+  }
+
+  private static void addWhiteC1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C1, squareSet);
+  }
+
+  private static void addWhiteD1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D1, squareSet);
+  }
+
+  private static void addWhiteE1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E1, squareSet);
+  }
+
+  private static void addWhiteF1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F1, squareSet);
+  }
+
+  private static void addWhiteG1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G1, squareSet);
+  }
+
+  private static void addWhiteH1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H1, squareSet);
+  }
+
+  private static void addWhiteA2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(A4);
+    map.put(A2, squareSet);
+  }
+
+  private static void addWhiteB2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(B4);
+    map.put(B2, squareSet);
+  }
+
+  private static void addWhiteC2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(C4);
+    map.put(C2, squareSet);
+  }
+
+  private static void addWhiteD2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(D4);
+    map.put(D2, squareSet);
+  }
+
+  private static void addWhiteE2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(E4);
+    map.put(E2, squareSet);
+  }
+
+  private static void addWhiteF2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(F4);
+    map.put(F2, squareSet);
+  }
+
+  private static void addWhiteG2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(G4);
+    map.put(G2, squareSet);
+  }
+
+  private static void addWhiteH2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(H4);
+    map.put(H2, squareSet);
+  }
+
+  private static void addWhiteA3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A3, squareSet);
+  }
+
+  private static void addWhiteB3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B3, squareSet);
+  }
+
+  private static void addWhiteC3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C3, squareSet);
+  }
+
+  private static void addWhiteD3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D3, squareSet);
+  }
+
+  private static void addWhiteE3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E3, squareSet);
+  }
+
+  private static void addWhiteF3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F3, squareSet);
+  }
+
+  private static void addWhiteG3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G3, squareSet);
+  }
+
+  private static void addWhiteH3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H3, squareSet);
+  }
+
+  private static void addWhiteA4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A4, squareSet);
+  }
+
+  private static void addWhiteB4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B4, squareSet);
+  }
+
+  private static void addWhiteC4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C4, squareSet);
+  }
+
+  private static void addWhiteD4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D4, squareSet);
+  }
+
+  private static void addWhiteE4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E4, squareSet);
+  }
+
+  private static void addWhiteF4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F4, squareSet);
+  }
+
+  private static void addWhiteG4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G4, squareSet);
+  }
+
+  private static void addWhiteH4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H4, squareSet);
+  }
+
+  private static void addWhiteA5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A5, squareSet);
+  }
+
+  private static void addWhiteB5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B5, squareSet);
+  }
+
+  private static void addWhiteC5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C5, squareSet);
+  }
+
+  private static void addWhiteD5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D5, squareSet);
+  }
+
+  private static void addWhiteE5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E5, squareSet);
+  }
+
+  private static void addWhiteF5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F5, squareSet);
+  }
+
+  private static void addWhiteG5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G5, squareSet);
+  }
+
+  private static void addWhiteH5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H5, squareSet);
+  }
+
+  private static void addWhiteA6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A6, squareSet);
+  }
+
+  private static void addWhiteB6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B6, squareSet);
+  }
+
+  private static void addWhiteC6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C6, squareSet);
+  }
+
+  private static void addWhiteD6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D6, squareSet);
+  }
+
+  private static void addWhiteE6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E6, squareSet);
+  }
+
+  private static void addWhiteF6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F6, squareSet);
+  }
+
+  private static void addWhiteG6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G6, squareSet);
+  }
+
+  private static void addWhiteH6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H6, squareSet);
+  }
+
+  private static void addWhiteA7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A7, squareSet);
+  }
+
+  private static void addWhiteB7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B7, squareSet);
+  }
+
+  private static void addWhiteC7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C7, squareSet);
+  }
+
+  private static void addWhiteD7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D7, squareSet);
+  }
+
+  private static void addWhiteE7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E7, squareSet);
+  }
+
+  private static void addWhiteF7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F7, squareSet);
+  }
+
+  private static void addWhiteG7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G7, squareSet);
+  }
+
+  private static void addWhiteH7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H7, squareSet);
+  }
+
+  private static void addWhiteA8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A8, squareSet);
+  }
+
+  private static void addWhiteB8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B8, squareSet);
+  }
+
+  private static void addWhiteC8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C8, squareSet);
+  }
+
+  private static void addWhiteD8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D8, squareSet);
+  }
+
+  private static void addWhiteE8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E8, squareSet);
+  }
+
+  private static void addWhiteF8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F8, squareSet);
+  }
+
+  private static void addWhiteG8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G8, squareSet);
+  }
+
+  private static void addWhiteH8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H8, squareSet);
+  }
+
+  private static final ImmutableMap<Square, ImmutableSet<Square>> PAWN_WHITE_SQUARES_MAP;
 
   static {
-    final EnumMap<Square, ImmutableSet<Square>> pawnWhiteMap = NonNullWrapperCommon.newEnumMap(Square.class);
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(A4);
-      pawnWhiteMap.put(A2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(B4);
-      pawnWhiteMap.put(B2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(C4);
-      pawnWhiteMap.put(C2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(D4);
-      pawnWhiteMap.put(D2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(E4);
-      pawnWhiteMap.put(E2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(F4);
-      pawnWhiteMap.put(F2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(G4);
-      pawnWhiteMap.put(G2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(H4);
-      pawnWhiteMap.put(H2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(A8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(B8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(C8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(D8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(E8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(F8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(G8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnWhiteMap.put(H8, squareSet);
-    }
-
-    PAWN_WHITE_SQUARES = NonNullWrapperCommon.copyOfMap(pawnWhiteMap);
-
-    ValidateMoveNumberUtility.validateMapOfSet(PAWN_WHITE_SQUARES, 8);
+    final EnumMap<Square, ImmutableSet<Square>> pawnWhiteSquaresMap = NonNullWrapperCommon.newEnumMap(Square.class);
+    addWhiteA1(pawnWhiteSquaresMap);
+    addWhiteB1(pawnWhiteSquaresMap);
+    addWhiteC1(pawnWhiteSquaresMap);
+    addWhiteD1(pawnWhiteSquaresMap);
+    addWhiteE1(pawnWhiteSquaresMap);
+    addWhiteF1(pawnWhiteSquaresMap);
+    addWhiteG1(pawnWhiteSquaresMap);
+    addWhiteH1(pawnWhiteSquaresMap);
+    addWhiteA2(pawnWhiteSquaresMap);
+    addWhiteB2(pawnWhiteSquaresMap);
+    addWhiteC2(pawnWhiteSquaresMap);
+    addWhiteD2(pawnWhiteSquaresMap);
+    addWhiteE2(pawnWhiteSquaresMap);
+    addWhiteF2(pawnWhiteSquaresMap);
+    addWhiteG2(pawnWhiteSquaresMap);
+    addWhiteH2(pawnWhiteSquaresMap);
+    addWhiteA3(pawnWhiteSquaresMap);
+    addWhiteB3(pawnWhiteSquaresMap);
+    addWhiteC3(pawnWhiteSquaresMap);
+    addWhiteD3(pawnWhiteSquaresMap);
+    addWhiteE3(pawnWhiteSquaresMap);
+    addWhiteF3(pawnWhiteSquaresMap);
+    addWhiteG3(pawnWhiteSquaresMap);
+    addWhiteH3(pawnWhiteSquaresMap);
+    addWhiteA4(pawnWhiteSquaresMap);
+    addWhiteB4(pawnWhiteSquaresMap);
+    addWhiteC4(pawnWhiteSquaresMap);
+    addWhiteD4(pawnWhiteSquaresMap);
+    addWhiteE4(pawnWhiteSquaresMap);
+    addWhiteF4(pawnWhiteSquaresMap);
+    addWhiteG4(pawnWhiteSquaresMap);
+    addWhiteH4(pawnWhiteSquaresMap);
+    addWhiteA5(pawnWhiteSquaresMap);
+    addWhiteB5(pawnWhiteSquaresMap);
+    addWhiteC5(pawnWhiteSquaresMap);
+    addWhiteD5(pawnWhiteSquaresMap);
+    addWhiteE5(pawnWhiteSquaresMap);
+    addWhiteF5(pawnWhiteSquaresMap);
+    addWhiteG5(pawnWhiteSquaresMap);
+    addWhiteH5(pawnWhiteSquaresMap);
+    addWhiteA6(pawnWhiteSquaresMap);
+    addWhiteB6(pawnWhiteSquaresMap);
+    addWhiteC6(pawnWhiteSquaresMap);
+    addWhiteD6(pawnWhiteSquaresMap);
+    addWhiteE6(pawnWhiteSquaresMap);
+    addWhiteF6(pawnWhiteSquaresMap);
+    addWhiteG6(pawnWhiteSquaresMap);
+    addWhiteH6(pawnWhiteSquaresMap);
+    addWhiteA7(pawnWhiteSquaresMap);
+    addWhiteB7(pawnWhiteSquaresMap);
+    addWhiteC7(pawnWhiteSquaresMap);
+    addWhiteD7(pawnWhiteSquaresMap);
+    addWhiteE7(pawnWhiteSquaresMap);
+    addWhiteF7(pawnWhiteSquaresMap);
+    addWhiteG7(pawnWhiteSquaresMap);
+    addWhiteH7(pawnWhiteSquaresMap);
+    addWhiteA8(pawnWhiteSquaresMap);
+    addWhiteB8(pawnWhiteSquaresMap);
+    addWhiteC8(pawnWhiteSquaresMap);
+    addWhiteD8(pawnWhiteSquaresMap);
+    addWhiteE8(pawnWhiteSquaresMap);
+    addWhiteF8(pawnWhiteSquaresMap);
+    addWhiteG8(pawnWhiteSquaresMap);
+    addWhiteH8(pawnWhiteSquaresMap);
+
+    PAWN_WHITE_SQUARES_MAP = NonNullWrapperCommon.copyOfMap(pawnWhiteSquaresMap);
+
+    ValidateMoveNumberUtility.validateMapOfSet(PAWN_WHITE_SQUARES_MAP, 8);
 
   }
 
@@ -352,334 +417,398 @@ public class PawnTwoAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares i
 
   // BEGIN generated code
 
-  private static final ImmutableMap<Square, ImmutableSet<Square>> PAWN_BLACK_SQUARES;
+  private static void addBlackA1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A1, squareSet);
+  }
+
+  private static void addBlackB1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B1, squareSet);
+  }
+
+  private static void addBlackC1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C1, squareSet);
+  }
+
+  private static void addBlackD1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D1, squareSet);
+  }
+
+  private static void addBlackE1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E1, squareSet);
+  }
+
+  private static void addBlackF1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F1, squareSet);
+  }
+
+  private static void addBlackG1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G1, squareSet);
+  }
+
+  private static void addBlackH1(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H1, squareSet);
+  }
+
+  private static void addBlackA2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A2, squareSet);
+  }
+
+  private static void addBlackB2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B2, squareSet);
+  }
+
+  private static void addBlackC2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C2, squareSet);
+  }
+
+  private static void addBlackD2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D2, squareSet);
+  }
+
+  private static void addBlackE2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E2, squareSet);
+  }
+
+  private static void addBlackF2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F2, squareSet);
+  }
+
+  private static void addBlackG2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G2, squareSet);
+  }
+
+  private static void addBlackH2(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H2, squareSet);
+  }
+
+  private static void addBlackA3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A3, squareSet);
+  }
+
+  private static void addBlackB3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B3, squareSet);
+  }
+
+  private static void addBlackC3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C3, squareSet);
+  }
+
+  private static void addBlackD3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D3, squareSet);
+  }
+
+  private static void addBlackE3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E3, squareSet);
+  }
+
+  private static void addBlackF3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F3, squareSet);
+  }
+
+  private static void addBlackG3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G3, squareSet);
+  }
+
+  private static void addBlackH3(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H3, squareSet);
+  }
+
+  private static void addBlackA4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A4, squareSet);
+  }
+
+  private static void addBlackB4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B4, squareSet);
+  }
+
+  private static void addBlackC4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C4, squareSet);
+  }
+
+  private static void addBlackD4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D4, squareSet);
+  }
+
+  private static void addBlackE4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E4, squareSet);
+  }
+
+  private static void addBlackF4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F4, squareSet);
+  }
+
+  private static void addBlackG4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G4, squareSet);
+  }
+
+  private static void addBlackH4(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H4, squareSet);
+  }
+
+  private static void addBlackA5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A5, squareSet);
+  }
+
+  private static void addBlackB5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B5, squareSet);
+  }
+
+  private static void addBlackC5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C5, squareSet);
+  }
+
+  private static void addBlackD5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D5, squareSet);
+  }
+
+  private static void addBlackE5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E5, squareSet);
+  }
+
+  private static void addBlackF5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F5, squareSet);
+  }
+
+  private static void addBlackG5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G5, squareSet);
+  }
+
+  private static void addBlackH5(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H5, squareSet);
+  }
+
+  private static void addBlackA6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A6, squareSet);
+  }
+
+  private static void addBlackB6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B6, squareSet);
+  }
+
+  private static void addBlackC6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C6, squareSet);
+  }
+
+  private static void addBlackD6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D6, squareSet);
+  }
+
+  private static void addBlackE6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E6, squareSet);
+  }
+
+  private static void addBlackF6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F6, squareSet);
+  }
+
+  private static void addBlackG6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G6, squareSet);
+  }
+
+  private static void addBlackH6(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H6, squareSet);
+  }
+
+  private static void addBlackA7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(A5);
+    map.put(A7, squareSet);
+  }
+
+  private static void addBlackB7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(B5);
+    map.put(B7, squareSet);
+  }
+
+  private static void addBlackC7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(C5);
+    map.put(C7, squareSet);
+  }
+
+  private static void addBlackD7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(D5);
+    map.put(D7, squareSet);
+  }
+
+  private static void addBlackE7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(E5);
+    map.put(E7, squareSet);
+  }
+
+  private static void addBlackF7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(F5);
+    map.put(F7, squareSet);
+  }
+
+  private static void addBlackG7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(G5);
+    map.put(G7, squareSet);
+  }
+
+  private static void addBlackH7(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = constructSet(H5);
+    map.put(H7, squareSet);
+  }
+
+  private static void addBlackA8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(A8, squareSet);
+  }
+
+  private static void addBlackB8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(B8, squareSet);
+  }
+
+  private static void addBlackC8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(C8, squareSet);
+  }
+
+  private static void addBlackD8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(D8, squareSet);
+  }
+
+  private static void addBlackE8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(E8, squareSet);
+  }
+
+  private static void addBlackF8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(F8, squareSet);
+  }
+
+  private static void addBlackG8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(G8, squareSet);
+  }
+
+  private static void addBlackH8(EnumMap<Square, ImmutableSet<Square>> map) {
+    final ImmutableSet<Square> squareSet = ImmutableUtility.EMPTY_UNMODIFIABLE_SET;
+    map.put(H8, squareSet);
+  }
+
+  private static final ImmutableMap<Square, ImmutableSet<Square>> PAWN_BLACK_SQUARES_MAP;
 
   static {
-    final EnumMap<Square, ImmutableSet<Square>> pawnBlackMap = NonNullWrapperCommon.newEnumMap(Square.class);
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H1, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H2, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H3, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H4, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H5, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H6, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(A5);
-      pawnBlackMap.put(A7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(B5);
-      pawnBlackMap.put(B7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(C5);
-      pawnBlackMap.put(C7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(D5);
-      pawnBlackMap.put(D7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(E5);
-      pawnBlackMap.put(E7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(F5);
-      pawnBlackMap.put(F7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(G5);
-      pawnBlackMap.put(G7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet(H5);
-      pawnBlackMap.put(H7, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(A8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(B8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(C8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(D8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(E8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(F8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(G8, squareSet);
-    }
-
-    {
-      final ImmutableSet<Square> squareSet = constructSet();
-      pawnBlackMap.put(H8, squareSet);
-    }
-
-    PAWN_BLACK_SQUARES = NonNullWrapperCommon.copyOfMap(pawnBlackMap);
-
-    ValidateMoveNumberUtility.validateMapOfSet(PAWN_BLACK_SQUARES, 8);
+    final EnumMap<Square, ImmutableSet<Square>> pawnBlackSquaresMap = NonNullWrapperCommon.newEnumMap(Square.class);
+    addBlackA1(pawnBlackSquaresMap);
+    addBlackB1(pawnBlackSquaresMap);
+    addBlackC1(pawnBlackSquaresMap);
+    addBlackD1(pawnBlackSquaresMap);
+    addBlackE1(pawnBlackSquaresMap);
+    addBlackF1(pawnBlackSquaresMap);
+    addBlackG1(pawnBlackSquaresMap);
+    addBlackH1(pawnBlackSquaresMap);
+    addBlackA2(pawnBlackSquaresMap);
+    addBlackB2(pawnBlackSquaresMap);
+    addBlackC2(pawnBlackSquaresMap);
+    addBlackD2(pawnBlackSquaresMap);
+    addBlackE2(pawnBlackSquaresMap);
+    addBlackF2(pawnBlackSquaresMap);
+    addBlackG2(pawnBlackSquaresMap);
+    addBlackH2(pawnBlackSquaresMap);
+    addBlackA3(pawnBlackSquaresMap);
+    addBlackB3(pawnBlackSquaresMap);
+    addBlackC3(pawnBlackSquaresMap);
+    addBlackD3(pawnBlackSquaresMap);
+    addBlackE3(pawnBlackSquaresMap);
+    addBlackF3(pawnBlackSquaresMap);
+    addBlackG3(pawnBlackSquaresMap);
+    addBlackH3(pawnBlackSquaresMap);
+    addBlackA4(pawnBlackSquaresMap);
+    addBlackB4(pawnBlackSquaresMap);
+    addBlackC4(pawnBlackSquaresMap);
+    addBlackD4(pawnBlackSquaresMap);
+    addBlackE4(pawnBlackSquaresMap);
+    addBlackF4(pawnBlackSquaresMap);
+    addBlackG4(pawnBlackSquaresMap);
+    addBlackH4(pawnBlackSquaresMap);
+    addBlackA5(pawnBlackSquaresMap);
+    addBlackB5(pawnBlackSquaresMap);
+    addBlackC5(pawnBlackSquaresMap);
+    addBlackD5(pawnBlackSquaresMap);
+    addBlackE5(pawnBlackSquaresMap);
+    addBlackF5(pawnBlackSquaresMap);
+    addBlackG5(pawnBlackSquaresMap);
+    addBlackH5(pawnBlackSquaresMap);
+    addBlackA6(pawnBlackSquaresMap);
+    addBlackB6(pawnBlackSquaresMap);
+    addBlackC6(pawnBlackSquaresMap);
+    addBlackD6(pawnBlackSquaresMap);
+    addBlackE6(pawnBlackSquaresMap);
+    addBlackF6(pawnBlackSquaresMap);
+    addBlackG6(pawnBlackSquaresMap);
+    addBlackH6(pawnBlackSquaresMap);
+    addBlackA7(pawnBlackSquaresMap);
+    addBlackB7(pawnBlackSquaresMap);
+    addBlackC7(pawnBlackSquaresMap);
+    addBlackD7(pawnBlackSquaresMap);
+    addBlackE7(pawnBlackSquaresMap);
+    addBlackF7(pawnBlackSquaresMap);
+    addBlackG7(pawnBlackSquaresMap);
+    addBlackH7(pawnBlackSquaresMap);
+    addBlackA8(pawnBlackSquaresMap);
+    addBlackB8(pawnBlackSquaresMap);
+    addBlackC8(pawnBlackSquaresMap);
+    addBlackD8(pawnBlackSquaresMap);
+    addBlackE8(pawnBlackSquaresMap);
+    addBlackF8(pawnBlackSquaresMap);
+    addBlackG8(pawnBlackSquaresMap);
+    addBlackH8(pawnBlackSquaresMap);
+
+    PAWN_BLACK_SQUARES_MAP = NonNullWrapperCommon.copyOfMap(pawnBlackSquaresMap);
+
+    ValidateMoveNumberUtility.validateMapOfSet(PAWN_BLACK_SQUARES_MAP, 8);
 
   }
 
@@ -687,8 +816,8 @@ public class PawnTwoAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares i
 
   public static Set<Square> getPawnSquares(Side havingMove, Square fromSquare) {
     return switch (havingMove) {
-      case BLACK -> NonNullWrapperCommon.get(PAWN_BLACK_SQUARES, fromSquare);
-      case WHITE -> NonNullWrapperCommon.get(PAWN_WHITE_SQUARES, fromSquare);
+      case BLACK -> NonNullWrapperCommon.get(PAWN_BLACK_SQUARES_MAP, fromSquare);
+      case WHITE -> NonNullWrapperCommon.get(PAWN_WHITE_SQUARES_MAP, fromSquare);
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

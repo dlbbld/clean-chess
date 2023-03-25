@@ -13,7 +13,7 @@ import com.google.common.collect.ImmutableSet;
 
 public class ImmutableUtility implements EnumConstants {
 
-  private static final ImmutableSet<Square> EMPTY_UNMODIFIABLE_SET;
+  public static final ImmutableSet<Square> EMPTY_UNMODIFIABLE_SET;
 
   static {
     final List<Square> list = new ArrayList<>();

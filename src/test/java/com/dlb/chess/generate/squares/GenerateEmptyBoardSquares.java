@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.commons.lang3.StringUtils;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.enums.File;
@@ -23,11 +24,10 @@ import com.dlb.chess.range.model.QueenRange;
 import com.dlb.chess.range.model.RookRange;
 import com.google.common.collect.ImmutableList;
 
-//TODO update code generator
 public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
   public static void main(String[] args) {
-    generatePawnOneSquareAdvanceCode();
+    generateQueenCode();
 
     // condition only to not have warnings on unused methoeds
     if (args.length > 0) {
@@ -54,28 +54,25 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     System.out.println(calculateSquareLiteralList(allButEmpty));
   }
 
-  private static void generateRookBishopQueenCode(PieceType pieceType, int expectedSize) {
+  private static void generateRookBishopQueenCode(PieceType pieceType, int expectedSizeOrthogonal,
+      int expectedSizeDiagonal) {
 
-    final var pieceName = pieceType.getName();
+    System.out.println(AbstractGenerateSquares.BEGIN_GENERATED_CODE);
 
     final List<String> variableNames = calculateVariableNames(pieceType);
 
-    final var mapConstantName = NonNullWrapperCommon.toUpperCase(pieceName) + "_SQUARES";
-    final var mapConstructName = pieceName + "SquaresMap";
-
-    System.out.println(AbstractGenerateSquares.BEGIN_GENERATED_CODE);
-    System.out.println();
-    System.out.println("private static final ImmutableMap<Square, List<List<Square>>> " + mapConstantName + ";");
-    System.out.println();
-    System.out.println("static {");
-    System.out.println("final EnumMap<Square, List<List<Square>>> " + mapConstructName
-        + " = NonNullWrapperCommon.newEnumMap(Square.class);\r\n" + "");
+    // generate static methods
     for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
       System.out.println();
-      System.out.println("{");
 
-      // TODO outdated after introducing range model
-      final List<List<Square>> squareListList = new ArrayList<>();
+      final var methodName = generateMethodName(Side.NONE, fromSquare);
+
+      final var pieceRangeVariableName = pieceType.name().toLowerCase() + "Range";
+      final var pieceRangeClassName = StringUtils.capitalize(pieceRangeVariableName);
+
+      System.out.println("private static void " + methodName + "(EnumMap<Square, " + pieceRangeClassName + "> map) {");
+
+      final List<List<Square>> squareListList = calculateSquareListList(pieceType, fromSquare);
 
       if (squareListList.size() != variableNames.size()) {
         throw new ProgrammingMistakeException("I must have been sleeping when programming");
@@ -85,28 +82,99 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
         final List<Square> squareList = NonNullWrapperCommon.get(squareListList, i);
         final String squareLiteralList = calculateSquareLiteralList(squareList);
 
-        final var destinationList = "final List<Square> " + variableNames.get(i)
-            + " = Collections.unmodifiableList(Arrays.asList(" + squareLiteralList + "));";
+        final var destinationList = "final ImmutableList<Square> " + variableNames.get(i) + " = constructListSquare("
+            + squareLiteralList + ");";
         System.out.println(destinationList);
       }
 
       final String variableNameList = BasicUtility.calculateCommaSeparatedList(variableNames);
 
-      final var destinationListList = "final List<List<Square>> toSquareListList = Collections.unmodifiableList(Arrays.asList("
-          + variableNameList + "));";
-      System.out.println(destinationListList);
-      System.out.println(mapConstructName + ".put(" + calculateSquareLiteral(fromSquare) + ", toSquareListList);");
+      System.out.println("final " + pieceRangeClassName + " " + pieceRangeVariableName + " = new " + pieceRangeClassName
+          + "(" + variableNameList + ");");
+
+      System.out.println("map.put(" + fromSquare.name() + ", " + pieceRangeVariableName + ");");
+
       System.out.println("}");
     }
+
+    final List<String> namePartList = calculateNamePartList(Side.NONE, pieceType);
+
+    final String constantName = calculateConstantName(namePartList);
+
+    final String variableName = calculateVariableName(namePartList);
+
+    final var pieceRangeVariableName = pieceType.name().toLowerCase() + "Range";
+    final var pieceRangeClassName = StringUtils.capitalize(pieceRangeVariableName);
+
     System.out.println();
-    System.out.println(mapConstantName + " = NonNullWrapperCommon.immutableEnumMap(" + mapConstructName + ");");
+    System.out.println("private static final ImmutableMap<Square, " + pieceRangeClassName + "> " + constantName + ";");
     System.out.println();
-    System.out
-        .println("ValidateMoveNumberUtility.validateMapOfListList(" + mapConstantName + ", " + expectedSize + ");");
+    System.out.println("static {");
+    System.out.println("final EnumMap<Square, " + pieceRangeClassName + "> " + variableName
+        + " = NonNullWrapperCommon.newEnumMap(Square.class);\r\n" + "");
+
+    // call the generated static methods
+    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+      final var methodName = generateMethodName(Side.NONE, fromSquare);
+      System.out.println(methodName + "(" + variableName + ");");
+    }
+
+    System.out.println();
+    System.out.println(constantName + " = NonNullWrapperCommon.copyOfMap(" + variableName + ");");
+    System.out.println();
+
+    if (expectedSizeOrthogonal != -1) {
+      System.out.println("ValidateMoveNumberUtility.validateOrthogonalMoveNumber(" + constantName + ", "
+          + expectedSizeOrthogonal + ");");
+    }
+    if (expectedSizeDiagonal != -1) {
+      System.out.println(
+          "ValidateMoveNumberUtility.validateDiagonalMovesNumber(" + constantName + ", " + expectedSizeDiagonal + ");");
+    }
+
     System.out.println();
     System.out.println("}");
     System.out.println(AbstractGenerateSquares.END_GENERATED_CODE);
     System.out.println();
+  }
+
+  private static List<List<Square>> calculateSquareListList(PieceType pieceType, Square fromSquare) {
+
+    final List<List<Square>> result = new ArrayList<>();
+
+    switch (pieceType) {
+      case BISHOP:
+        final DiagonalRange bishopRange = calculateBishopSquares(fromSquare);
+        result.add(bishopRange.squareListNorthEast());
+        result.add(bishopRange.squareListSouthEast());
+        result.add(bishopRange.squareListSouthWest());
+        result.add(bishopRange.squareListNorthWest());
+        break;
+      case QUEEN:
+        final QueenRange queenRange = calculateQueenSquares(fromSquare);
+        result.add(queenRange.squareListNorth());
+        result.add(queenRange.squareListEast());
+        result.add(queenRange.squareListSouth());
+        result.add(queenRange.squareListWest());
+
+        result.add(queenRange.squareListNorthEast());
+        result.add(queenRange.squareListSouthEast());
+        result.add(queenRange.squareListSouthWest());
+        result.add(queenRange.squareListNorthWest());
+        break;
+      case ROOK:
+        final OrthogonalRange rookRange = calculateRookSquares(fromSquare);
+        result.add(rookRange.squareListNorth());
+        result.add(rookRange.squareListEast());
+        result.add(rookRange.squareListSouth());
+        result.add(rookRange.squareListWest());
+        break;
+      case KNIGHT, KING, PAWN, NONE:
+        throw new IllegalArgumentException();
+      default:
+        throw new IllegalArgumentException();
+    }
+    return result;
   }
 
   private static List<String> calculateVariableNames(PieceType pieceType) {
@@ -130,7 +198,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
   }
 
   private static void generateRookCode() {
-    generateRookBishopQueenCode(ROOK, 896);
+    generateRookBishopQueenCode(ROOK, 896, -1);
   }
 
   private static void generateKnightCode() {
@@ -138,11 +206,11 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
   }
 
   private static void generateBishopCode() {
-    generateRookBishopQueenCode(BISHOP, 560);
+    generateRookBishopQueenCode(BISHOP, -1, 560);
   }
 
   private static void generateQueenCode() {
-    generateRookBishopQueenCode(QUEEN, 1456);
+    generateRookBishopQueenCode(QUEEN, 896, 560);
   }
 
   private static void generateKingNonCastlingCode() {

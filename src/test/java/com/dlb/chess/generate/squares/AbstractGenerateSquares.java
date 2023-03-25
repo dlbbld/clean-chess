@@ -5,13 +5,14 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.jdt.annotation.NonNull;
+import org.apache.commons.lang3.StringUtils;
 
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.utility.BasicUtility;
 
@@ -20,21 +21,15 @@ public abstract class AbstractGenerateSquares implements EnumConstants {
   static void generateKnightKingPawnCode(Side side, PieceType pieceType, GeneratePawnMoveType pawnMoveType,
       int expectedSize) {
 
-    final String constantNamePart = calculateConstantName(side, pieceType);
-
-    final var mapConstantName = constantNamePart + "_SQUARES";
-    final var mapConstructName = constantNamePart.toLowerCase() + "Map";
-
     System.out.println(AbstractGenerateSquares.BEGIN_GENERATED_CODE);
-    System.out.println();
-    System.out.println("private static final ImmutableMap<Square, Set<Square>> " + mapConstantName + ";");
-    System.out.println();
-    System.out.println("static {");
-    System.out.println("final  EnumMap<Square, Set<Square>> " + mapConstructName
-        + " = NonNullWrapperCommon.newEnumMap(Square.class);");
+
+    // generate static methods
     for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
       System.out.println();
-      System.out.println("{");
+
+      final var methodName = generateMethodName(side, fromSquare);
+
+      System.out.println("private static void " + methodName + "(EnumMap<Square, ImmutableSet<Square>> map) {");
 
       final Set<Square> squareSet = calculateSquareSet(side, fromSquare, pieceType, pawnMoveType);
 
@@ -42,38 +37,108 @@ public abstract class AbstractGenerateSquares implements EnumConstants {
 
       final String setConstructionValue;
       if (squareSet.isEmpty()) {
-        setConstructionValue = "EMPTY_UNMODIFIABLE_SET";
+        setConstructionValue = "ImmutableUtility.EMPTY_UNMODIFIABLE_SET";
       } else {
-        setConstructionValue = "NonNullWrapperCommon.immutableEnumMap(new TreeSet<>(Arrays.asList(" + squareLiteralList
-            + ")))";
+        setConstructionValue = "constructSet(" + squareLiteralList + ")";
       }
 
-      final var setConstruction = "final Set<Square> squareSet = " + setConstructionValue + ";";
+      final var setConstruction = "final ImmutableSet<Square> squareSet = " + setConstructionValue + ";";
 
       System.out.println(setConstruction);
 
-      System.out.println(mapConstructName + ".put(" + calculateSquareLiteral(fromSquare) + ", squareSet);");
+      System.out.println("map.put(" + calculateSquareLiteral(fromSquare) + ", squareSet);");
       System.out.println("}");
     }
+
+    final List<String> namePartList = calculateNamePartList(side, pieceType);
+
+    final String constantName = calculateConstantName(namePartList);
+
+    final String variableName = calculateVariableName(namePartList);
+
     System.out.println();
-    System.out.println(mapConstantName + " = NonNullWrapperCommon.copyOf(" + mapConstructName + ");");
+    System.out.println("private static final ImmutableMap<Square, ImmutableSet<Square>> " + constantName + ";");
+    System.out.println();
+    System.out.println("static {");
+    System.out.println("final  EnumMap<Square, ImmutableSet<Square>> " + variableName
+        + " = NonNullWrapperCommon.newEnumMap(Square.class);");
+
+    // call the generated static methods
+    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+      final var methodName = generateMethodName(side, fromSquare);
+      System.out.println(methodName + "(" + variableName + ");");
+    }
+    System.out.println();
+    System.out.println(constantName + " = NonNullWrapperCommon.copyOfMap(" + variableName + ");");
     System.out.println();
 
-    System.out.println("ValidateMoveNumberUtility.validateMapOfSet(" + mapConstantName + ", " + expectedSize + ");");
+    System.out.println("ValidateMoveNumberUtility.validateMapOfSet(" + constantName + ", " + expectedSize + ");");
     System.out.println();
     System.out.println("}");
 
     System.out.println(AbstractGenerateSquares.END_GENERATED_CODE);
-    System.out.println();
   }
 
-  private static String calculateConstantName(Side side, PieceType pieceType) {
-    @SuppressWarnings("null") @NonNull final String name = pieceType.name();
+  static String generateMethodName(Side side, Square fromSquare) {
+    return "add" + calculateSidePart(side) + StringUtils.capitalize(fromSquare.getName());
+  }
+
+  private static String calculateSidePart(Side side) {
     return switch (side) {
-      case WHITE, BLACK -> name + "_" + side.name();
-      case NONE -> name;
+      case WHITE, BLACK -> NonNullWrapperCommon.capitalize(side.getName());
+      case NONE -> "";
       default -> throw new IllegalArgumentException();
     };
+  }
+
+  static List<String> calculateNamePartList(Side side, PieceType pieceType) {
+
+    final List<String> list = new ArrayList<>();
+
+    list.add(pieceType.getName());
+    switch (side) {
+      case WHITE, BLACK:
+        list.add(side.getName());
+        break;
+      case NONE:
+        break;
+      default:
+        throw new IllegalArgumentException();
+    }
+    list.add("Squares");
+    list.add("Map");
+
+    return list;
+  }
+
+  static String calculateVariableName(List<String> list) {
+
+    final StringBuilder result = new StringBuilder();
+    var isFirstEntry = true;
+    for (final String item : list) {
+      if (isFirstEntry) {
+        result.append(StringUtils.uncapitalize(item));
+      } else {
+        result.append(StringUtils.capitalize(item));
+      }
+      isFirstEntry = false;
+    }
+
+    return NonNullWrapperCommon.toString(result);
+  }
+
+  static String calculateConstantName(List<String> list) {
+
+    final StringBuilder result = new StringBuilder();
+    for (var i = 0; i < list.size(); i++) {
+      final String item = NonNullWrapperCommon.get(list, i);
+      result.append(NonNullWrapperCommon.toUpperCase(item));
+      if (i != list.size() - 1) {
+        result.append("_");
+      }
+    }
+
+    return NonNullWrapperCommon.toString(result);
   }
 
   private static Set<Square> calculateSquareSet(Side side, Square fromSquare, PieceType pieceType,

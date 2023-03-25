@@ -34,4 +34,36 @@ public record QueenRange(ImmutableList<Square> squareListNorth, ImmutableList<Sq
         && Objects.equals(squareListWest, other.squareListWest);
   }
 
+  public ImmutableList<Square> squareListNorth() {
+    return squareListNorth;
+  }
+
+  public ImmutableList<Square> squareListEast() {
+    return squareListEast;
+  }
+
+  public ImmutableList<Square> squareListSouth() {
+    return squareListSouth;
+  }
+
+  public ImmutableList<Square> squareListWest() {
+    return squareListWest;
+  }
+
+  public ImmutableList<Square> squareListNorthEast() {
+    return squareListNorthEast;
+  }
+
+  public ImmutableList<Square> squareListSouthEast() {
+    return squareListSouthEast;
+  }
+
+  public ImmutableList<Square> squareListSouthWest() {
+    return squareListSouthWest;
+  }
+
+  public ImmutableList<Square> squareListNorthWest() {
+    return squareListNorthWest;
+  }
+
 }
