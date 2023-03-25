@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.StaticPosition;
@@ -59,7 +60,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     final String invariant = board.getFen();
 
     if (maxDepth != 0 && maxDepth % 10 == 0) {
-      logger.debug("maxDepth=" + maxDepth);
+      logger.printf(Level.DEBUG, "maxDepth=%d", maxDepth);
     }
 
     this.localNodeCount = 0;

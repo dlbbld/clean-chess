@@ -2,6 +2,7 @@ package com.dlb.chess.unwinnability.findhelpmate;
 
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
@@ -41,15 +42,15 @@ public abstract class AbstractFindHelpmate {
 
     if (IS_DEBUG) {
       if (isFoundFivefold) {
-        logger.warn("Not a checkmate for fivefold: " + fen);
+        logger.printf(Level.WARN, "Not a checkmate for fivefold: %s", fen);
       }
 
       if (isFoundSeventyFiveMoves) {
-        logger.warn("Not a checkmate for seventy-five moves: " + fen);
+        logger.printf(Level.WARN, "Not a checkmate for seventy-five moves: %s", fen);
       }
 
       final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
-      logger.info("Checkmate in " + numberOfMovesForCheckmate + " moves");
+      logger.printf(Level.INFO, "Checkmate in %d moves", numberOfMovesForCheckmate);
       System.out.println(PgnCreate.createPgnFileString(boardCheck));
     }
 
@@ -69,7 +70,8 @@ public abstract class AbstractFindHelpmate {
 
     if (IS_DEBUG) {
       final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
-      logger.info("Classical checkmate position found in " + numberOfMovesForClassicalCheckmatePosition + " moves");
+      logger.printf(Level.INFO, "Classical checkmate position found in %d moves",
+          numberOfMovesForClassicalCheckmatePosition);
       System.out.println(PgnCreate.createPgnFileString(boardCheck));
     }
 
