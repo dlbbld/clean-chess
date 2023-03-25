@@ -7,7 +7,7 @@ import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.RepetitionOutput;
 import com.dlb.chess.test.model.PgnFileTestCase;
 
-public class RepetitionTestUtility {
+public abstract class RepetitionTestUtility {
 
   public static String getExpectedRepetition(PgnFileTestCase testCase,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {

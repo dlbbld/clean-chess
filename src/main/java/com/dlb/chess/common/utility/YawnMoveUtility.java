@@ -14,7 +14,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 
-public class YawnMoveUtility {
+public abstract class YawnMoveUtility {
 
   public static List<List<YawnHalfMove>> calculateYawnMoveRule(ApiBoard board, int numberOfHalfMovesThreshold) {
 

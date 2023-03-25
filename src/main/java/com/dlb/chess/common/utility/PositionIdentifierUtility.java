@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 
-public class PositionIdentifierUtility {
+public abstract class PositionIdentifierUtility {
 
   private static final int BASE = 26;
   private static final int ASCII_TABLE_BEFORE_UPPER_CASE_A_NUMBER = 64;

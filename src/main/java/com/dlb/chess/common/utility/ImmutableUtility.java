@@ -11,7 +11,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-public class ImmutableUtility implements EnumConstants {
+public abstract class ImmutableUtility implements EnumConstants {
 
   public static final ImmutableSet<Square> EMPTY_UNMODIFIABLE_SET;
 

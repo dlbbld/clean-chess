@@ -12,7 +12,7 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.enums.AddSpace;
 
-public class HalfMoveUtility {
+public abstract class HalfMoveUtility {
   // TODO remove fix for API carlos san generation starting from position
   public static HalfMove calculateHalfMoveApiCarlosFix(MoveSpecification moveSpecification, ApiBoard board,
       String san) {

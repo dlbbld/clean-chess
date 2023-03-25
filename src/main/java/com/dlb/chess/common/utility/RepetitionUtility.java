@@ -15,7 +15,7 @@ import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.LegalMove;
 
-public class RepetitionUtility {
+public abstract class RepetitionUtility {
 
   /**
    * We do not override equals because we need conditional equals method which we realize by always comparing explicitly

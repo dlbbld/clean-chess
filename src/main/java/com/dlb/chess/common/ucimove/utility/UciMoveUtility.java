@@ -9,7 +9,7 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
-public class UciMoveUtility {
+public abstract class UciMoveUtility {
 
   public static UciMove convertMoveSpecificationToUci(MoveSpecification moveSpecification) {
     Square fromSquare;

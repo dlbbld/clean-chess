@@ -23,7 +23,7 @@ import com.dlb.chess.common.constants.ConfigurationConstants;
 //7) Open the exported PGN in Notepad2 and change encoding to ANSI, save
 //8) This resulting PGN can be used here to be splitted
 
-public class MultiplePgnSplitUtility {
+public abstract class MultiplePgnSplitUtility {
   private static final String MULTIPLE_PGN_FILE_PATH = ConfigurationConstants.TEMP_FOLDER_PATH
       + "\\otherdb\\mb-3.45\\mb-3.45.pgn";
   private static final String OUTPUT_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH

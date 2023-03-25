@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
 
-public class CommonTestUtility implements EnumConstants {
+public abstract class CommonTestUtility implements EnumConstants {
 
   public static void checkBoardsAgainstEachOtherAll(ApiBoard boardFirst, ApiBoard boardSecond) {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, true);

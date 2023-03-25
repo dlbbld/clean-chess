@@ -6,7 +6,7 @@ import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
 import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
-public class CommentaryUtility extends AbstractCommentaryUtility {
+public abstract class CommentaryUtility {
 
   public static ReadComment parseComment(String movetextPart, boolean isStrict)
       throws PgnReaderStrictValidationException {
@@ -15,13 +15,13 @@ public class CommentaryUtility extends AbstractCommentaryUtility {
     }
 
     final var firstLetter = NonNullWrapperCommon.toString(movetextPart.charAt(0));
-    if (AbstractCommentaryUtility.COMMENTARY_END_BRACE.equals(firstLetter)) {
+    if (CommentaryUtility.COMMENTARY_END_BRACE.equals(firstLetter)) {
       throw new PgnReaderStrictValidationException(
           PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE, SanValidationProblem.NONE,
           "Movetext starts with commentary end brace");
     }
 
-    if (!AbstractCommentaryUtility.COMMENTARY_START_BRACE.equals(firstLetter)) {
+    if (!CommentaryUtility.COMMENTARY_START_BRACE.equals(firstLetter)) {
       return new ReadComment("", false, movetextPart);
     }
     // we found a commentary start brace
@@ -41,7 +41,7 @@ public class CommentaryUtility extends AbstractCommentaryUtility {
     for (var i = 1; i < movetextPart.length(); i++) {
       final var currentLetter = NonNullWrapperCommon.toString(movetextPart.charAt(i));
 
-      if (AbstractCommentaryUtility.COMMENTARY_END_BRACE.equals(currentLetter)) {
+      if (CommentaryUtility.COMMENTARY_END_BRACE.equals(currentLetter)) {
         // we found the end brace
         if (i == movetextPart.length() - 1) {
           // we reached the end of the string
@@ -87,5 +87,8 @@ public class CommentaryUtility extends AbstractCommentaryUtility {
         PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
         SanValidationProblem.NONE, "Found commentary start brace without commentary end brace");
   }
+
+  protected static final String COMMENTARY_START_BRACE = "{";
+  protected static final String COMMENTARY_END_BRACE = "}";
 
 }

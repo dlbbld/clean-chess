@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.utility.PositionIdentifierUtility;
 
-public class TestPositionIdentifierUtility {
+class TestPositionIdentifierUtility {
 
   @Test
   @SuppressWarnings("static-method")

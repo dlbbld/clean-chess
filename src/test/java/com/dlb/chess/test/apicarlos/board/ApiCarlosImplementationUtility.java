@@ -15,7 +15,7 @@ import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 
-public class ApiCarlosImplementationUtility {
+public abstract class ApiCarlosImplementationUtility {
 
   private static Square calculateEnPassantCaptureDestination(Square moveTwoSquareAdvanceTo) {
     return switch (moveTwoSquareAdvanceTo) {

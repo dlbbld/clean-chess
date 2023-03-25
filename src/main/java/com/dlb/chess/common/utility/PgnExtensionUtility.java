@@ -3,7 +3,7 @@ package com.dlb.chess.common.utility;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 
-public class PgnExtensionUtility extends ChessConstants {
+public abstract class PgnExtensionUtility extends ChessConstants {
 
   public static boolean hasPgnFileExtension(String pgnFileName) {
     return pgnFileName.endsWith(PGN_FILE_EXTENSION_INCLUDING_DOT);

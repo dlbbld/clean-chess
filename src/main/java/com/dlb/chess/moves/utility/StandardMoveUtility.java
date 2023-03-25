@@ -10,7 +10,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 
-public class StandardMoveUtility implements EnumConstants {
+public abstract class StandardMoveUtility implements EnumConstants {
 
   public static List<UpdateSquare> performStandardMovements(StaticPosition oldStaticPosition,
       MoveSpecification moveSpecification) {

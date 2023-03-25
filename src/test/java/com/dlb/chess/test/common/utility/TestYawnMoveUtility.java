@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.utility.YawnMoveUtility;
 
-public class TestYawnMoveUtility {
+class TestYawnMoveUtility {
 
   @SuppressWarnings("static-method")
   @Test

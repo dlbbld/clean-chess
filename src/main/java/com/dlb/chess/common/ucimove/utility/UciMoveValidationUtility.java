@@ -15,7 +15,7 @@ import com.dlb.chess.model.UciMove;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 
-public class UciMoveValidationUtility implements EnumConstants {
+public abstract class UciMoveValidationUtility implements EnumConstants {
 
   private static final ImmutableList<UciMove> UCI_MOVE_LIST;
   private static final ImmutableMap<String, UciMove> UCI_MOVE_TEXT_LOOKUP;

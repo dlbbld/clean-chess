@@ -17,7 +17,7 @@ import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 
-public class GeneralUtility {
+public abstract class GeneralUtility {
 
   public static CheckmateOrStalemate calculateLastPositionEvaluation(ApiBoard board) {
     // order is crucial

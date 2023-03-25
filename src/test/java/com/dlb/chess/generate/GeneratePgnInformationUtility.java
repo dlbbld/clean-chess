@@ -17,7 +17,7 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
 import com.dlb.chess.utility.TagUtility;
 
-public class GeneratePgnInformationUtility {
+public abstract class GeneratePgnInformationUtility {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePgnInformationUtility.class);
 

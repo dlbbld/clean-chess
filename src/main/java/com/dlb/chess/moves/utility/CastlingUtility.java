@@ -21,7 +21,7 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.google.common.collect.ImmutableList;
 
-public class CastlingUtility implements EnumConstants {
+public abstract class CastlingUtility implements EnumConstants {
 
   // TODO improve design - to separate file as used elsewhere
   // constants for white

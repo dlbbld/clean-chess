@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
 import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
 
-public class PawnDiagonalMoveUtility {
+public abstract class PawnDiagonalMoveUtility {
   public static Set<PawnDiagonalBoardMove> calculatePawnDiagonalMoves(Side side) {
     final Set<PawnDiagonalBoardMove> diagonalBoardMoveSetSide = new TreeSet<>();
 

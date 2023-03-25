@@ -21,10 +21,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
-public class FileUtility {
-
-  private FileUtility() {
-  }
+public abstract class FileUtility {
 
   /**
    * Reading a file linewise, without including linebreaks or adding spaces after a line break.

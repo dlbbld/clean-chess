@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.constants.EnumConstants;
 
-public class MaterialUtility implements EnumConstants {
+public abstract class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
