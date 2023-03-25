@@ -2,19 +2,13 @@ package com.dlb.chess.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 
-public record SanAndMoveSuffix(String san, MoveSuffixAnnotation moveSuffixAnnotation) {
-
-  public String san() {
-    return san;
-  }
-
-  public MoveSuffixAnnotation moveSuffixAnnotation() {
-    return moveSuffixAnnotation;
-  }
+@SuppressWarnings("null")
+public record SanAndMoveSuffix(@NonNull String san, @NonNull MoveSuffixAnnotation moveSuffixAnnotation) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

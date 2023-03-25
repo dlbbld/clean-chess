@@ -2,19 +2,13 @@ package com.dlb.chess.illegal.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.model.MoveRepresentation;
 
-public record CheckLegalMove(boolean isLegal, MoveRepresentation moveRepresentation) {
-
-  public boolean isLegal() {
-    return isLegal;
-  }
-
-  public MoveRepresentation moveRepresentation() {
-    return moveRepresentation;
-  }
+@SuppressWarnings("null")
+public record CheckLegalMove(boolean isLegal, @NonNull MoveRepresentation moveRepresentation) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

@@ -9,6 +9,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.model.SanPatternDescription;
+import com.dlb.chess.san.model.SanExample;
 
 public abstract class SanFormatDescription extends AbstractSan {
 

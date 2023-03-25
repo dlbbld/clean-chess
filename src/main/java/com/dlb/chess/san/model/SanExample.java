@@ -1,18 +1,12 @@
-package com.dlb.chess.san;
+package com.dlb.chess.san.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public record SanExample(String san, String description) {
-
-  public String san() {
-    return san;
-  }
-
-  public String description() {
-    return description;
-  }
+@SuppressWarnings("null")
+public record SanExample(@NonNull String san, @NonNull String description) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

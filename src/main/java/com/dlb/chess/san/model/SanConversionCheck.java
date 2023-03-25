@@ -2,11 +2,13 @@ package com.dlb.chess.san.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.model.SanConversion;
 
-public record SanConversionCheck(boolean isMatch, SanConversion sanConversion) {
+@SuppressWarnings("null")
+public record SanConversionCheck(boolean isMatch, @NonNull SanConversion sanConversion) {
 
   public static final SanConversionCheck IS_NO_MATCH = new SanConversionCheck(false, SanConversion.EMPTY);
 

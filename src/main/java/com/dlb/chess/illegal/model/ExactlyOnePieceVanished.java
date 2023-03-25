@@ -1,10 +1,12 @@
 package com.dlb.chess.illegal.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Square;
 
-public record ExactlyOnePieceVanished(boolean isHappened, Square fromSquare) {
+@SuppressWarnings("null")
+public record ExactlyOnePieceVanished(boolean isHappened, @NonNull Square fromSquare) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

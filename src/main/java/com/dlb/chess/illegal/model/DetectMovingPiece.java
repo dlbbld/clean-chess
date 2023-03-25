@@ -1,12 +1,14 @@
 package com.dlb.chess.illegal.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 
-public record DetectMovingPiece(boolean isDetected, Piece movingPiece, Square fromSquare, Square toSquare,
-    Piece pieceCaptured) {
+@SuppressWarnings("null")
+public record DetectMovingPiece(boolean isDetected, @NonNull Piece movingPiece, @NonNull Square fromSquare,
+    @NonNull Square toSquare, @NonNull Piece pieceCaptured) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

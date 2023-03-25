@@ -2,6 +2,7 @@ package com.dlb.chess.range.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Square;
@@ -9,10 +10,11 @@ import com.dlb.chess.range.DiagonalRange;
 import com.dlb.chess.range.OrthogonalRange;
 import com.google.common.collect.ImmutableList;
 
-public record QueenRange(ImmutableList<Square> squareListNorth, ImmutableList<Square> squareListEast,
-    ImmutableList<Square> squareListSouth, ImmutableList<Square> squareListWest,
-    ImmutableList<Square> squareListNorthEast, ImmutableList<Square> squareListSouthEast,
-    ImmutableList<Square> squareListSouthWest, ImmutableList<Square> squareListNorthWest)
+@SuppressWarnings("null")
+public record QueenRange(@NonNull ImmutableList<Square> squareListNorth, @NonNull ImmutableList<Square> squareListEast,
+    @NonNull ImmutableList<Square> squareListSouth, @NonNull ImmutableList<Square> squareListWest,
+    @NonNull ImmutableList<Square> squareListNorthEast, @NonNull ImmutableList<Square> squareListSouthEast,
+    @NonNull ImmutableList<Square> squareListSouthWest, @NonNull ImmutableList<Square> squareListNorthWest)
     implements DiagonalRange, OrthogonalRange {
 
   @Override
@@ -32,38 +34,6 @@ public record QueenRange(ImmutableList<Square> squareListNorth, ImmutableList<Sq
         && Objects.equals(squareListSouthEast, other.squareListSouthEast)
         && Objects.equals(squareListSouthWest, other.squareListSouthWest)
         && Objects.equals(squareListWest, other.squareListWest);
-  }
-
-  public ImmutableList<Square> squareListNorth() {
-    return squareListNorth;
-  }
-
-  public ImmutableList<Square> squareListEast() {
-    return squareListEast;
-  }
-
-  public ImmutableList<Square> squareListSouth() {
-    return squareListSouth;
-  }
-
-  public ImmutableList<Square> squareListWest() {
-    return squareListWest;
-  }
-
-  public ImmutableList<Square> squareListNorthEast() {
-    return squareListNorthEast;
-  }
-
-  public ImmutableList<Square> squareListSouthEast() {
-    return squareListSouthEast;
-  }
-
-  public ImmutableList<Square> squareListSouthWest() {
-    return squareListSouthWest;
-  }
-
-  public ImmutableList<Square> squareListNorthWest() {
-    return squareListNorthWest;
   }
 
 }

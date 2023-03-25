@@ -1,5 +1,6 @@
 package com.dlb.chess.illegal.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.CastlingMove;
@@ -7,9 +8,10 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 
 // TODO promotion
-
-public record DetectMovement(boolean isDetected, Piece movingPiece, Square fromSquare, Square toSquare,
-    Piece pieceCaptured, CastlingMove castlingMove, boolean isEnPassantCapture) {
+@SuppressWarnings("null")
+public record DetectMovement(boolean isDetected, @NonNull Piece movingPiece, @NonNull Square fromSquare,
+    @NonNull Square toSquare, @NonNull Piece pieceCaptured, @NonNull CastlingMove castlingMove,
+    boolean isEnPassantCapture) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

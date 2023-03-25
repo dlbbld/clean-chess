@@ -2,6 +2,7 @@ package com.dlb.chess.common.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
@@ -9,57 +10,11 @@ import com.dlb.chess.common.utility.HalfMoveUtility;
 
 // only use half moves in lists, and then add them in order of play.
 // not used in sets per this design, so we don't need sorting.
+@SuppressWarnings("null")
 public record HalfMove(int index, int halfMoveCount, int fullMoveNumber, int halfMoveClock, boolean isCapture,
-    String fen, DynamicPosition dynamicPosition, int countRepetition, int countRepetitionIgnoringEnPassantCapture,
-    String san, Piece movingPiece, MoveSpecification moveSpecification) {
-
-  public int index() {
-    return index;
-  }
-
-  public int halfMoveCount() {
-    return halfMoveCount;
-  }
-
-  public int fullMoveNumber() {
-    return fullMoveNumber;
-  }
-
-  public int halfMoveClock() {
-    return halfMoveClock;
-  }
-
-  public boolean isCapture() {
-    return isCapture;
-  }
-
-  public String fen() {
-    return fen;
-  }
-
-  public DynamicPosition dynamicPosition() {
-    return dynamicPosition;
-  }
-
-  public int countRepetition() {
-    return countRepetition;
-  }
-
-  public int countRepetitionIgnoringEnPassantCapture() {
-    return countRepetitionIgnoringEnPassantCapture;
-  }
-
-  public String san() {
-    return san;
-  }
-
-  public Piece movingPiece() {
-    return movingPiece;
-  }
-
-  public MoveSpecification moveSpecification() {
-    return moveSpecification;
-  }
+    @NonNull String fen, @NonNull DynamicPosition dynamicPosition, int countRepetition,
+    int countRepetitionIgnoringEnPassantCapture, @NonNull String san, @NonNull Piece movingPiece,
+    @NonNull MoveSpecification moveSpecification) {
 
   @Override
   public String toString() {

@@ -3,11 +3,14 @@ package com.dlb.chess.model;
 import java.util.Arrays;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.san.SanExample;
+import com.dlb.chess.san.model.SanExample;
 
-public record SanPatternDescription(String pattern, String comment, SanExample... sanExampleList) {
+@SuppressWarnings("null")
+public record SanPatternDescription(@NonNull String pattern, @NonNull String comment,
+    @NonNull SanExample... sanExampleList) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

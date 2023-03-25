@@ -1,18 +1,12 @@
 package com.dlb.chess.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.CastlingRight;
 
-public record CastlingRightBoth(CastlingRight castlingRightWhite, CastlingRight castlingRightBlack) {
-
-  public CastlingRight castlingRightWhite() {
-    return castlingRightWhite;
-  }
-
-  public CastlingRight castlingRightBlack() {
-    return castlingRightBlack;
-  }
+@SuppressWarnings("null")
+public record CastlingRightBoth(@NonNull CastlingRight castlingRightWhite, @NonNull CastlingRight castlingRightBlack) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

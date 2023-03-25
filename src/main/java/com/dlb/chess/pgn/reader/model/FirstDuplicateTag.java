@@ -2,9 +2,11 @@ package com.dlb.chess.pgn.reader.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public record FirstDuplicateTag(boolean hasDuplicateTag, String duplicateTagName) {
+@SuppressWarnings("null")
+public record FirstDuplicateTag(boolean hasDuplicateTag, @NonNull String duplicateTagName) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

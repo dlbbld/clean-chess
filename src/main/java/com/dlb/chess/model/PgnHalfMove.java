@@ -2,23 +2,14 @@ package com.dlb.chess.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 
-public record PgnHalfMove(String san, MoveSuffixAnnotation moveSuffixAnnotation, String commentary) {
-
-  public String san() {
-    return san;
-  }
-
-  public MoveSuffixAnnotation moveSuffixAnnotation() {
-    return moveSuffixAnnotation;
-  }
-
-  public String commentary() {
-    return commentary;
-  }
+@SuppressWarnings("null")
+public record PgnHalfMove(@NonNull String san, @NonNull MoveSuffixAnnotation moveSuffixAnnotation,
+    @NonNull String commentary) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

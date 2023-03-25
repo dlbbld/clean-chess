@@ -2,29 +2,19 @@ package com.dlb.chess.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 
-public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured)
-    implements Comparable<LegalMove>, EnumConstants {
+@SuppressWarnings("null")
+public record LegalMove(@NonNull MoveSpecification moveSpecification, @NonNull Piece movingPiece,
+    @NonNull Piece pieceCaptured) implements Comparable<LegalMove>, EnumConstants {
 
   public LegalMove(MoveSpecification moveSpecification) {
     this(moveSpecification, Piece.NONE, Piece.NONE);
-  }
-
-  public MoveSpecification moveSpecification() {
-    return moveSpecification;
-  }
-
-  public Piece movingPiece() {
-    return movingPiece;
-  }
-
-  public Piece pieceCaptured() {
-    return pieceCaptured;
   }
 
   @Override

@@ -2,14 +2,17 @@ package com.dlb.chess.range.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.range.DiagonalRange;
 import com.google.common.collect.ImmutableList;
 
-public record BishopRange(ImmutableList<Square> squareListNorthEast, ImmutableList<Square> squareListSouthEast,
-    ImmutableList<Square> squareListSouthWest, ImmutableList<Square> squareListNorthWest) implements DiagonalRange {
+@SuppressWarnings("null")
+public record BishopRange(@NonNull ImmutableList<Square> squareListNorthEast,
+    @NonNull ImmutableList<Square> squareListSouthEast, @NonNull ImmutableList<Square> squareListSouthWest,
+    @NonNull ImmutableList<Square> squareListNorthWest) implements DiagonalRange {
 
   @Override
   public boolean equals(@Nullable Object obj) {

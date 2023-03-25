@@ -15,6 +15,7 @@ import com.dlb.chess.illegal.model.RestorePositionAdviceNonEmptySquareMoveToOthe
 import com.dlb.chess.illegal.model.RestorePositionAdviceNonEmptySquareRemoveFromBoard;
 import com.dlb.chess.illegal.model.RestorePositionAdviceNonEmptySquareSwapPiece;
 import com.dlb.chess.illegal.model.RestorePositionAdviceNone;
+import com.dlb.chess.illegal.model.SquareDistance;
 
 public class PositionRestoreAdvisor {
 

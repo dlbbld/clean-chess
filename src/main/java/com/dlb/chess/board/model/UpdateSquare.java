@@ -1,15 +1,13 @@
 package com.dlb.chess.board.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 
-public record UpdateSquare(Square square, Piece piece) {
-  public UpdateSquare(Square square, Piece piece) {
-    this.square = square;
-    this.piece = piece;
-  }
+@SuppressWarnings("null")
+public record UpdateSquare(@NonNull Square square, @NonNull Piece piece) {
 
   public UpdateSquare(Square square) {
     this(square, Piece.NONE);

@@ -1,12 +1,14 @@
-package com.dlb.chess.illegal;
+package com.dlb.chess.illegal.model;
 
 import java.util.Comparator;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Square;
 
-public record SquareDistance(Square fromSquare) implements Comparator<Square> {
+@SuppressWarnings("null")
+public record SquareDistance(@NonNull Square fromSquare) implements Comparator<Square> {
 
   @Override
   public int compare(Square a, Square b) {

@@ -2,10 +2,12 @@ package com.dlb.chess.fen.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public record FenRaw(String piecePlacement, String havingMove, String castlingRightBothStr,
-    String enPassantCaptureTargetSquare, String halfMoveClock, String fullMoveNumber) {
+@SuppressWarnings("null")
+public record FenRaw(@NonNull String piecePlacement, @NonNull String havingMove, @NonNull String castlingRightBothStr,
+    @NonNull String enPassantCaptureTargetSquare, @NonNull String halfMoveClock, @NonNull String fullMoveNumber) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

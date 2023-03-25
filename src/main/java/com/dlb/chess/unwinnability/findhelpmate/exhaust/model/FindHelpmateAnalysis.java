@@ -23,12 +23,4 @@ public record FindHelpmateAnalysis(FindHelpmateResult findHelpmateResult, int lo
         && Objects.equals(mateLine, other.mateLine);
   }
 
-  public FindHelpmateResult findHelpmateResult() {
-    return findHelpmateResult;
-  }
-
-  public List<UciMove> mateLine() {
-    return mateLine;
-  }
-
 }

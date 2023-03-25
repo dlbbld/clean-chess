@@ -1,11 +1,13 @@
 package com.dlb.chess.illegal.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 
-public record RestorePositionAdviceNonEmptySquareRemoveFromBoard(Square square, Piece pieceOnSquare)
+@SuppressWarnings("null")
+public record RestorePositionAdviceNonEmptySquareRemoveFromBoard(@NonNull Square square, @NonNull Piece pieceOnSquare)
     implements RestorePositionAdvice {
 
   @Override

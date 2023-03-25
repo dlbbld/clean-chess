@@ -3,6 +3,7 @@ package com.dlb.chess.board;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
@@ -14,12 +15,18 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 
 //TODO tests for toString method
-public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8, Piece e8, Piece f8, Piece g8, Piece h8, Piece a7,
-    Piece b7, Piece c7, Piece d7, Piece e7, Piece f7, Piece g7, Piece h7, Piece a6, Piece b6, Piece c6, Piece d6,
-    Piece e6, Piece f6, Piece g6, Piece h6, Piece a5, Piece b5, Piece c5, Piece d5, Piece e5, Piece f5, Piece g5,
-    Piece h5, Piece a4, Piece b4, Piece c4, Piece d4, Piece e4, Piece f4, Piece g4, Piece h4, Piece a3, Piece b3,
-    Piece c3, Piece d3, Piece e3, Piece f3, Piece g3, Piece h3, Piece a2, Piece b2, Piece c2, Piece d2, Piece e2,
-    Piece f2, Piece g2, Piece h2, Piece a1, Piece b1, Piece c1, Piece d1, Piece e1, Piece f1, Piece g1, Piece h1)
+@SuppressWarnings("null")
+public record StaticPosition(@NonNull Piece a8, @NonNull Piece b8, @NonNull Piece c8, @NonNull Piece d8,
+    @NonNull Piece e8, @NonNull Piece f8, @NonNull Piece g8, @NonNull Piece h8, @NonNull Piece a7, @NonNull Piece b7,
+    @NonNull Piece c7, @NonNull Piece d7, @NonNull Piece e7, @NonNull Piece f7, @NonNull Piece g7, @NonNull Piece h7,
+    @NonNull Piece a6, @NonNull Piece b6, @NonNull Piece c6, @NonNull Piece d6, @NonNull Piece e6, @NonNull Piece f6,
+    @NonNull Piece g6, @NonNull Piece h6, @NonNull Piece a5, @NonNull Piece b5, @NonNull Piece c5, @NonNull Piece d5,
+    @NonNull Piece e5, @NonNull Piece f5, @NonNull Piece g5, @NonNull Piece h5, @NonNull Piece a4, @NonNull Piece b4,
+    @NonNull Piece c4, @NonNull Piece d4, @NonNull Piece e4, @NonNull Piece f4, @NonNull Piece g4, @NonNull Piece h4,
+    @NonNull Piece a3, @NonNull Piece b3, @NonNull Piece c3, @NonNull Piece d3, @NonNull Piece e3, @NonNull Piece f3,
+    @NonNull Piece g3, @NonNull Piece h3, @NonNull Piece a2, @NonNull Piece b2, @NonNull Piece c2, @NonNull Piece d2,
+    @NonNull Piece e2, @NonNull Piece f2, @NonNull Piece g2, @NonNull Piece h2, @NonNull Piece a1, @NonNull Piece b1,
+    @NonNull Piece c1, @NonNull Piece d1, @NonNull Piece e1, @NonNull Piece f1, @NonNull Piece g1, @NonNull Piece h1)
     implements EnumConstants {
 
   public static final StaticPosition INITIAL_POSITION = new StaticPosition(BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP,

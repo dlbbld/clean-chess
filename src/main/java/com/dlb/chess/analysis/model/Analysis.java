@@ -3,6 +3,7 @@ package com.dlb.chess.analysis.model;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
@@ -13,14 +14,18 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
-    List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<List<YawnHalfMove>> yawnMoveListList,
-    boolean hasThreefoldRepetition, boolean hasThreefoldRepetitionInitialEnPassantCapture,
-    boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule,
-    boolean isGameContinuedOverFivefoldRepetition, boolean isGameContinuedOverSeventyFiveMove, int firstCapture,
-    boolean hasCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate,
-    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite, UnwinnableFull unwinnableFullBlack,
-    UnwinnableQuick unwinnableQuickWhite, UnwinnableQuick unwinnableQuickBlack, String fen, ApiBoard board) {
+@SuppressWarnings("null")
+public record Analysis(@NonNull Side havingMove, @NonNull List<HalfMove> halfMoveList,
+    @NonNull List<List<HalfMove>> repetitionListList,
+    @NonNull List<List<HalfMove>> repetitionListListInitialEnPassantCapture,
+    @NonNull List<List<YawnHalfMove>> yawnMoveListList, boolean hasThreefoldRepetition,
+    boolean hasThreefoldRepetitionInitialEnPassantCapture, boolean hasFivefoldRepetition, boolean hasFiftyMoveRule,
+    boolean hasSeventyFiveMoveRule, boolean isGameContinuedOverFivefoldRepetition,
+    boolean isGameContinuedOverSeventyFiveMove, int firstCapture, boolean hasCapture, int maxYawnSequence,
+    @NonNull CheckmateOrStalemate checkmateOrStalemate, @NonNull InsufficientMaterial insufficientMaterial,
+    @NonNull UnwinnableFull unwinnableFullWhite, @NonNull UnwinnableFull unwinnableFullBlack,
+    @NonNull UnwinnableQuick unwinnableQuickWhite, @NonNull UnwinnableQuick unwinnableQuickBlack, @NonNull String fen,
+    @NonNull ApiBoard board) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -46,90 +51,6 @@ public record Analysis(Side havingMove, List<HalfMove> halfMoveList, List<List<H
         && Objects.equals(repetitionListListInitialEnPassantCapture, other.repetitionListListInitialEnPassantCapture)
         && unwinnableFullWhite == other.unwinnableFullWhite && unwinnableFullBlack == other.unwinnableFullBlack
         && unwinnableQuickWhite == other.unwinnableQuickWhite && unwinnableQuickBlack == other.unwinnableQuickBlack;
-  }
-
-  public Side havingMove() {
-    return havingMove;
-  }
-
-  public List<HalfMove> halfMoveList() {
-    return halfMoveList;
-  }
-
-  public List<List<HalfMove>> repetitionListList() {
-    return repetitionListList;
-  }
-
-  public List<List<HalfMove>> repetitionListListInitialEnPassantCapture() {
-    return repetitionListListInitialEnPassantCapture;
-  }
-
-  public List<List<YawnHalfMove>> yawnMoveListList() {
-    return yawnMoveListList;
-  }
-
-  public boolean hasThreefoldRepetition() {
-    return hasThreefoldRepetition;
-  }
-
-  public boolean hasThreefoldRepetitionInitialEnPassantCapture() {
-    return hasThreefoldRepetitionInitialEnPassantCapture;
-  }
-
-  public boolean hasFivefoldRepetition() {
-    return hasFivefoldRepetition;
-  }
-
-  public boolean hasFiftyMoveRule() {
-    return hasFiftyMoveRule;
-  }
-
-  public boolean hasSeventyFiveMoveRule() {
-    return hasSeventyFiveMoveRule;
-  }
-
-  public boolean isGameContinuedOverFivefoldRepetition() {
-    return isGameContinuedOverFivefoldRepetition;
-  }
-
-  public boolean isGameContinuedOverSeventyFiveMove() {
-    return isGameContinuedOverSeventyFiveMove;
-  }
-
-  public int firstCapture() {
-    return firstCapture;
-  }
-
-  public boolean hasCapture() {
-    return hasCapture;
-  }
-
-  public int maxYawnSequence() {
-    return maxYawnSequence;
-  }
-
-  public CheckmateOrStalemate checkmateOrStalemate() {
-    return checkmateOrStalemate;
-  }
-
-  public InsufficientMaterial insufficientMaterial() {
-    return insufficientMaterial;
-  }
-
-  public UnwinnableQuick unwinnableQuickBlack() {
-    return unwinnableQuickBlack;
-  }
-
-  public UnwinnableQuick unwinnableQuickWhite() {
-    return unwinnableQuickWhite;
-  }
-
-  public String fen() {
-    return fen;
-  }
-
-  public ApiBoard board() {
-    return board;
   }
 
 }

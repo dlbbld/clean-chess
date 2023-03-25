@@ -2,12 +2,14 @@ package com.dlb.chess.san.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanType;
 
-public record SanParse(SanType sanType, SanConversion sanConversion) {
+@SuppressWarnings("null")
+public record SanParse(@NonNull SanType sanType, @NonNull SanConversion sanConversion) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

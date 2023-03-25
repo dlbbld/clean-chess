@@ -1,10 +1,12 @@
 package com.dlb.chess.illegal.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Square;
 
-public record RestorePositionAdviceNone(Square square) implements RestorePositionAdvice {
+@SuppressWarnings("null")
+public record RestorePositionAdviceNone(@NonNull Square square) implements RestorePositionAdvice {
 
   @Override
   public boolean equals(@Nullable Object obj) {

@@ -2,11 +2,13 @@ package com.dlb.chess.illegal.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.model.MoveSpecification;
 
-public record DetectEnPassantCapture(boolean isDetected, MoveSpecification moveSpecification) {
+@SuppressWarnings("null")
+public record DetectEnPassantCapture(boolean isDetected, @NonNull MoveSpecification moveSpecification) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

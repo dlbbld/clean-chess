@@ -1,5 +1,6 @@
 package com.dlb.chess.common.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.CastlingMove;
@@ -12,9 +13,10 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 // different board squares, for the non-castling promotion move the from and to square must be different board squares
 // and the promotion piece type not the none piece type, for the castling move the castling move must be king-side or
 // queen-side.
-
-public record MoveSpecification(Side havingMove, Square fromSquare, Square toSquare, CastlingMove castlingMove,
-    PromotionPieceType promotionPieceType) implements Comparable<MoveSpecification> {
+@SuppressWarnings("null")
+public record MoveSpecification(@NonNull Side havingMove, @NonNull Square fromSquare, @NonNull Square toSquare,
+    @NonNull CastlingMove castlingMove, @NonNull PromotionPieceType promotionPieceType)
+    implements Comparable<MoveSpecification> {
 
   public MoveSpecification(Side havingMove, Square fromSquare, Square toSquare) {
     this(havingMove, fromSquare, toSquare, CastlingMove.NONE, PromotionPieceType.NONE);

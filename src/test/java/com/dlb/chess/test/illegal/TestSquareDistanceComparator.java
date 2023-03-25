@@ -10,7 +10,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.illegal.SquareDistance;
+import com.dlb.chess.illegal.model.SquareDistance;
 
 class TestSquareDistanceComparator {
 

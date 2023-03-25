@@ -22,12 +22,4 @@ public record UnwinnableFullAnalysis(UnwinnableFull unwinnableFull, List<UciMove
     return Objects.equals(mateLine, other.mateLine) && unwinnableFull == other.unwinnableFull;
   }
 
-  public UnwinnableFull unwinnableFull() {
-    return unwinnableFull;
-  }
-
-  public List<UciMove> mateLine() {
-    return mateLine;
-  }
-
 }

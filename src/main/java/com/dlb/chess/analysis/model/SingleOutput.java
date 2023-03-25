@@ -3,17 +3,11 @@ package com.dlb.chess.analysis.model;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public record SingleOutput(Analysis analysis, List<String> output) {
-
-  public Analysis analysis() {
-    return analysis;
-  }
-
-  public List<String> output() {
-    return output;
-  }
+@SuppressWarnings("null")
+public record SingleOutput(@NonNull Analysis analysis, @NonNull List<String> output) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
