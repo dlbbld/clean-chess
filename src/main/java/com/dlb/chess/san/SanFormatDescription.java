@@ -14,7 +14,6 @@ import com.dlb.chess.san.model.SanExample;
 public abstract class SanFormatDescription extends AbstractSan {
 
   public static void main(String[] args) {
-    // printSanFormatDescription(WHITE);
     for (final Square square : Square.BOARD_SQUARE_LIST) {
       System.out.println("Square " + square + " = Square." + square + ";");
     }

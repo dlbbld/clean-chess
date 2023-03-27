@@ -13,13 +13,8 @@ public class KnightDistance {
 
   private static final int BOARD_SIZE = 8;
 
-  // Utility method returns true if (x, y) lies
-  // inside Board
   private static boolean isInside(int x, int y) {
-    if (x >= 1 && x <= BOARD_SIZE && y >= 1 && y <= BOARD_SIZE) {
-      return true;
-    }
-    return false;
+    return x >= 1 && x <= BOARD_SIZE && y >= 1 && y <= BOARD_SIZE;
   }
 
   public static int distance(Square fromSquare, Square toSquare) {

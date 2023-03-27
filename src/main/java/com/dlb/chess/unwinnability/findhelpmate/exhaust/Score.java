@@ -130,12 +130,9 @@ public class Score {
   }
 
   private static boolean calculateIsPromotionToHeavyPiece(LegalMove legalMove) {
-    if (PromotionUtility.calculateIsPromotion(legalMove.moveSpecification())
+    return PromotionUtility.calculateIsPromotion(legalMove.moveSpecification())
         && (legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.QUEEN
-            || legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.ROOK)) {
-      return true;
-    }
-    return false;
+            || legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.ROOK);
   }
 
 }

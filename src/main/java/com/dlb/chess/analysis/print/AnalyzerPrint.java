@@ -26,7 +26,7 @@ public class AnalyzerPrint {
   private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
   private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;
 
-  protected static void printAnalysis(String pgn) throws Exception {
+  protected static void printAnalysis(String pgn) {
 
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
 
@@ -36,13 +36,13 @@ public class AnalyzerPrint {
     printAnalysis(board);
   }
 
-  protected static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
+  protected static void printAnalysis(String folderPath, String pgnFileName) {
 
     final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     printAnalysis(board);
   }
 
-  protected static void printAnalysis(ApiBoard board) throws Exception {
+  protected static void printAnalysis(ApiBoard board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition

@@ -18,12 +18,8 @@ public record YawnHalfMove(int performedHalfMoveCount, int fullMoveNumber, @NonN
       return false;
     }
     final var other = (YawnHalfMove) obj;
-    if (fullMoveNumber != other.fullMoveNumber || performedHalfMoveCount != other.performedHalfMoveCount
-        || !san.equals(other.san) || sequenceLength != other.sequenceLength || sideMoved != other.sideMoved) {
-      return false;
-    }
-
-    return true;
+    return ((fullMoveNumber == other.fullMoveNumber) && (performedHalfMoveCount == other.performedHalfMoveCount) && san.equals(other.san) && (sequenceLength == other.sequenceLength)
+        && (sideMoved == other.sideMoved));
   }
 
   @Override

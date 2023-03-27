@@ -85,61 +85,61 @@ public class ReadMeForRepository {
     checkUnwinnabilityQuickFails();
   }
 
-  private static void checkUnwinnabilityInsufficientMaterial() throws Exception {
+  private static void checkUnwinnabilityInsufficientMaterial() {
     final Board board = new Board("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50");
     System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
     System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
   }
 
-  private static void checkUnwinnabilityPawnWall() throws Exception {
+  private static void checkUnwinnabilityPawnWall() {
     final Board board = new Board("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62");
     System.out.println(board.isUnwinnableQuick(Side.BLACK)); // UNWINNABLE
     System.out.println(board.isUnwinnableFull(Side.BLACK)); // UNWINNABLE
   }
 
-  private static void checkUnwinnabilityForcedMoves() throws Exception {
+  private static void checkUnwinnabilityForcedMoves() {
     final Board board = new Board("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51");
     System.out.println(board.isUnwinnableQuick(Side.WHITE)); // UNWINNABLE
     System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
   }
 
-  private static void checkUnwinnabilityCommonPositions() throws Exception {
+  private static void checkUnwinnabilityCommonPositions() {
     final Board board = new Board("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29");
     System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
     System.out.println(board.isUnwinnableFull(Side.WHITE)); // WINNABLE
   }
 
-  private static void checkUnwinnabilityQuickFails() throws Exception {
+  private static void checkUnwinnabilityQuickFails() {
     final Board board = new Board("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41");
     System.out.println(board.isUnwinnableQuick(Side.WHITE)); // POSSIBLY_WINNABLE
     System.out.println(board.isUnwinnableFull(Side.WHITE)); // UNWINNABLE
   }
 
-  private static void checkDeadPosition() throws Exception {
+  private static void checkDeadPosition() {
     checkDeadPositionInsufficientMaterial();
     checkDeadPositionPawnWall();
     checkDeadPositionForcedMoves();
   }
 
-  private static void checkDeadPositionInsufficientMaterial() throws Exception {
+  private static void checkDeadPositionInsufficientMaterial() {
     final Board board = new Board("8/8/3kn3/8/2K5/8/8/8 w - - 0 50");
     System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
     System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
   }
 
-  private static void checkDeadPositionPawnWall() throws Exception {
+  private static void checkDeadPositionPawnWall() {
     final Board board = new Board("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61");
     System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
     System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
   }
 
-  private static void checkDeadPositionForcedMoves() throws Exception {
+  private static void checkDeadPositionForcedMoves() {
     final Board board = new Board("k7/P1K5/8/8/8/8/8/8 b - - 2 58");
     System.out.println(board.isDeadPositionQuick()); // DEAD_POSITION
     System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
   }
 
-  private static void checkBoard() throws Exception {
+  private static void checkBoard() {
     final Board board = new Board();
 
     board.performMove("e4"); // specifying the SAN
@@ -155,12 +155,12 @@ public class ReadMeForRepository {
     System.out.println(board.isCheckmate()); // true
   }
 
-  private static void checkPgnReader() throws Exception {
+  private static void checkPgnReader() {
     checkPgnReaderExample1();
     checkPgnReaderExample2();
   }
 
-  private static void checkPgnReaderExample1() throws Exception {
+  private static void checkPgnReaderExample1() {
     final var pgn = """
         [Event "Spassky - Fischer World Championship Match"]
         [Site "Reykjavik ISL"]
@@ -198,14 +198,14 @@ public class ReadMeForRepository {
     System.out.println(board.getSan()); // SAN of last move, R1c2
   }
 
-  private static void checkPgnReaderExample2() throws Exception {
+  private static void checkPgnReaderExample2() {
     if (FileUtility.exists("C:\\temp\\myPgnFolder", "myPgnFile.pgn")) {
       final PgnFile pgnFile = PgnReader.readPgn("C:\\temp\\myPgnFolder", "myPgnFile.pgn");
       System.out.println(PgnCreate.createPgnFileString(pgnFile));
     }
   }
 
-  private static void checkPgnWriter() throws Exception {
+  private static void checkPgnWriter() {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 

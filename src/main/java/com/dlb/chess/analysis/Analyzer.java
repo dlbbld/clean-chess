@@ -27,19 +27,19 @@ import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 public class Analyzer extends AnalyzerPrint {
 
   // we set to false for faster testing runs
-  public static boolean IS_CALCULATE_UNWINNABLE = false;
+  public static final boolean IS_CALCULATE_UNWINNABLE = false;
 
-  public static void printAnalysis(String pgn) throws Exception {
+  public static void printAnalysis(String pgn) {
     // delegated to package protected method for class organization
     AnalyzerPrint.printAnalysis(pgn);
   }
 
-  public static void printAnalysis(String folderPath, String pgnFileName) throws Exception {
+  public static void printAnalysis(String folderPath, String pgnFileName) {
     // delegated to package protected method for class organization
     AnalyzerPrint.printAnalysis(folderPath, pgnFileName);
   }
 
-  public static void printAnalysis(ApiBoard board) throws Exception {
+  public static void printAnalysis(ApiBoard board) {
     // delegated to package protected method for class organization
     AnalyzerPrint.printAnalysis(board);
   }
@@ -182,10 +182,7 @@ public class Analyzer extends AnalyzerPrint {
       final var countRepetition = RepetitionUtility.getCountRepetition(halfMove,
           EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
       if (countRepetition >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD) {
-        if (halfMove.equals(NonNullWrapperCommon.getLast(halfMoveList))) {
-          return false;
-        }
-        return true;
+        return !halfMove.equals(NonNullWrapperCommon.getLast(halfMoveList));
       }
     }
     return false;
