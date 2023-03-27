@@ -55,7 +55,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       case KING_CASTLING_QUEEN_SIDE_FORMAT:
       case KING_CASTLING_KING_SIDE_FORMAT:
         throw new ProgrammingMistakeException("Castling is handled before switch");
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
+      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT: {
         if (!Rank.calculateIsPawnTwoSquareAdvanceRank(havingMove, toSquare.getRank())) {
           // one square advance, san information is enough
           // from file equals to file and from rank is the rank before to rank
@@ -75,7 +75,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
           return new MoveSpecification(havingMove, fromSquare, toSquare);
         }
 
-      {
         // one square advance
         final var fromSquare = potentialJumpOverSquare;
         return new MoveSpecification(havingMove, fromSquare, toSquare);

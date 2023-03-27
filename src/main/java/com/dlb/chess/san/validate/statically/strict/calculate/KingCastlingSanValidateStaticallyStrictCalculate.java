@@ -19,48 +19,68 @@ public class KingCastlingSanValidateStaticallyStrictCalculate extends AbstractSa
   public static ImmutableMap<String, SanParse> calculateSanMap() {
 
     final Map<String, SanParse> sanCastlingMap = new TreeMap<>();
-    // king-side castling
-    {
-      final String san = CastlingConstants.SAN_CASTLING_KING_SIDE;
 
-      final var model = new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE,
-          new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.NONE));
-      sanCastlingMap.put(san, model);
-    }
-    {
-      final var san = CastlingConstants.SAN_CASTLING_KING_SIDE + SanLetter.CHECKMATE.getLetter();
-      final var model = new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE,
-          new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECKMATE));
-      sanCastlingMap.put(san, model);
-    }
-    {
-      final var san = CastlingConstants.SAN_CASTLING_KING_SIDE + SanLetter.CHECK.getLetter();
-      final var model = new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE,
-          new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECK));
-      sanCastlingMap.put(san, model);
-    }
-
-    // queen-side castling
-    {
-      final String san = CastlingConstants.SAN_CASTLING_QUEEN_SIDE;
-      final var model = new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
-          new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.NONE));
-      sanCastlingMap.put(san, model);
-    }
-    {
-      final var san = CastlingConstants.SAN_CASTLING_QUEEN_SIDE + SanLetter.CHECKMATE.getLetter();
-      final var model = new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
-          new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECKMATE));
-      sanCastlingMap.put(san, model);
-    }
-    {
-      final var san = CastlingConstants.SAN_CASTLING_QUEEN_SIDE + SanLetter.CHECK.getLetter();
-      final var model = new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
-          new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECK));
-      sanCastlingMap.put(san, model);
-    }
+    initializeKingSide(sanCastlingMap);
+    initializeQueenSide(sanCastlingMap);
 
     return NonNullWrapperCommon.copyOfMap(sanCastlingMap);
   }
 
+  private static void initializeKingSide(Map<String, SanParse> sanCastlingMap) {
+    initializeKingSideNoCheck(sanCastlingMap);
+    initializeKingSideCheckmate(sanCastlingMap);
+    initializeKingSideCheck(sanCastlingMap);
+  }
+
+  private static void initializeKingSideNoCheck(Map<String, SanParse> sanCastlingMap) {
+    final String san = CastlingConstants.SAN_CASTLING_KING_SIDE;
+    final var model = new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE,
+        new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.NONE));
+    sanCastlingMap.put(san, model);
+
+  }
+
+  private static void initializeKingSideCheckmate(Map<String, SanParse> sanCastlingMap) {
+    final var san = CastlingConstants.SAN_CASTLING_KING_SIDE + SanLetter.CHECKMATE.getLetter();
+    final var model = new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE,
+        new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECKMATE));
+    sanCastlingMap.put(san, model);
+
+  }
+
+  private static void initializeKingSideCheck(Map<String, SanParse> sanCastlingMap) {
+    final var san = CastlingConstants.SAN_CASTLING_KING_SIDE + SanLetter.CHECK.getLetter();
+    final var model = new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE,
+        new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECK));
+    sanCastlingMap.put(san, model);
+
+  }
+
+  private static void initializeQueenSide(Map<String, SanParse> sanCastlingMap) {
+    initializeQueenSideNoCheck(sanCastlingMap);
+    initializeQueenSideCheckmate(sanCastlingMap);
+    initializeQueenSideCheck(sanCastlingMap);
+  }
+
+  private static void initializeQueenSideNoCheck(Map<String, SanParse> sanCastlingMap) {
+    final String san = CastlingConstants.SAN_CASTLING_QUEEN_SIDE;
+    final var model = new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
+        new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.NONE));
+    sanCastlingMap.put(san, model);
+
+  }
+
+  private static void initializeQueenSideCheckmate(Map<String, SanParse> sanCastlingMap) {
+    final var san = CastlingConstants.SAN_CASTLING_QUEEN_SIDE + SanLetter.CHECKMATE.getLetter();
+    final var model = new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
+        new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECKMATE));
+    sanCastlingMap.put(san, model);
+  }
+
+  private static void initializeQueenSideCheck(Map<String, SanParse> sanCastlingMap) {
+    final var san = CastlingConstants.SAN_CASTLING_QUEEN_SIDE + SanLetter.CHECK.getLetter();
+    final var model = new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
+        new SanConversion(FILE_NONE, RANK_NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.CHECK));
+    sanCastlingMap.put(san, model);
+  }
 }

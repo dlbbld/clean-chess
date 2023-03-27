@@ -78,55 +78,56 @@ public abstract class DiagonalLineUtility implements EnumConstants {
   private static final ImmutableList<ImmutableList<Square>> ALL_DIAGONALS;
 
   static {
+    final List<ImmutableList<Square>> whiteDiagonals = new ArrayList<>();
+    initializeWhiteDiagonals(whiteDiagonals);
+    WHITE_DIAGONALS = NonNullWrapperCommon.copyOfList(whiteDiagonals);
 
-    {
-      final List<ImmutableList<Square>> diagonals = new ArrayList<>();
-      diagonals.add(A8_UP);
-      diagonals.add(A6_UP);
-      diagonals.add(A4_UP);
-      diagonals.add(A2_UP);
-      diagonals.add(B1_UP);
-      diagonals.add(D1_UP);
-      diagonals.add(F1_UP);
-      diagonals.add(H1_UP);
-
-      diagonals.add(A2_DOWN);
-      diagonals.add(A4_DOWN);
-      diagonals.add(A6_DOWN);
-      diagonals.add(A8_DOWN);
-      diagonals.add(C8_DOWN);
-      diagonals.add(E8_DOWN);
-      diagonals.add(G8_DOWN);
-
-      WHITE_DIAGONALS = NonNullWrapperCommon.copyOfList(diagonals);
-    }
-
-    {
-      final List<ImmutableList<Square>> diagonals = new ArrayList<>();
-      diagonals.add(A7_UP);
-      diagonals.add(A5_UP);
-      diagonals.add(A3_UP);
-      diagonals.add(A1_UP);
-      diagonals.add(C1_UP);
-      diagonals.add(E1_UP);
-      diagonals.add(G1_UP);
-
-      diagonals.add(A1_DOWN);
-      diagonals.add(A3_DOWN);
-      diagonals.add(A5_DOWN);
-      diagonals.add(A7_DOWN);
-      diagonals.add(B8_DOWN);
-      diagonals.add(D8_DOWN);
-      diagonals.add(G8_DOWN);
-      diagonals.add(H8_DOWN);
-
-      BLACK_DIAGONALS = NonNullWrapperCommon.copyOfList(diagonals);
-    }
+    final List<ImmutableList<Square>> blackDiagonals = new ArrayList<>();
+    initializeBlackDiagonals(blackDiagonals);
+    BLACK_DIAGONALS = NonNullWrapperCommon.copyOfList(blackDiagonals);
 
     final List<ImmutableList<Square>> allDiagonals = new ArrayList<>();
     allDiagonals.addAll(WHITE_DIAGONALS);
     allDiagonals.addAll(BLACK_DIAGONALS);
     ALL_DIAGONALS = NonNullWrapperCommon.copyOfList(allDiagonals);
+  }
+
+  private static void initializeWhiteDiagonals(List<ImmutableList<Square>> diagonals) {
+    diagonals.add(A8_UP);
+    diagonals.add(A6_UP);
+    diagonals.add(A4_UP);
+    diagonals.add(A2_UP);
+    diagonals.add(B1_UP);
+    diagonals.add(D1_UP);
+    diagonals.add(F1_UP);
+    diagonals.add(H1_UP);
+
+    diagonals.add(A2_DOWN);
+    diagonals.add(A4_DOWN);
+    diagonals.add(A6_DOWN);
+    diagonals.add(A8_DOWN);
+    diagonals.add(C8_DOWN);
+    diagonals.add(E8_DOWN);
+    diagonals.add(G8_DOWN);
+  }
+
+  private static void initializeBlackDiagonals(List<ImmutableList<Square>> diagonals) {
+    diagonals.add(A7_UP);
+    diagonals.add(A5_UP);
+    diagonals.add(A3_UP);
+    diagonals.add(A1_UP);
+    diagonals.add(C1_UP);
+    diagonals.add(E1_UP);
+    diagonals.add(G1_UP);
+
+    diagonals.add(A1_DOWN);
+    diagonals.add(A3_DOWN);
+    diagonals.add(A5_DOWN);
+    diagonals.add(A7_DOWN);
+    diagonals.add(B8_DOWN);
+    diagonals.add(D8_DOWN);
+    diagonals.add(G8_DOWN);
+    diagonals.add(H8_DOWN);
   }
 
   public static ImmutableList<Square> calculateLeftToRightUpDiagonal(Square square) {

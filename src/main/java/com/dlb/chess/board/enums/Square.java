@@ -459,42 +459,38 @@ public enum Square implements Comparable<Square> {
   }
 
   public static final ImmutableList<ImmutableList<Square>> WHITE_PAWN_TWO_SQUARE_ADVANCE;
-
-  static {
-    {
-      final List<ImmutableList<Square>> listList = new ArrayList<>();
-
-      listList.add(constructListSquare(A2, A4));
-      listList.add(constructListSquare(B2, B4));
-      listList.add(constructListSquare(C2, C4));
-      listList.add(constructListSquare(D2, D4));
-      listList.add(constructListSquare(E2, E4));
-      listList.add(constructListSquare(F2, F4));
-      listList.add(constructListSquare(G2, G4));
-      listList.add(constructListSquare(H2, H4));
-
-      WHITE_PAWN_TWO_SQUARE_ADVANCE = NonNullWrapperCommon.copyOfList(listList);
-    }
-  }
-
   public static final ImmutableList<ImmutableList<Square>> BLACK_PAWN_TWO_SQUARE_ADVANCE;
 
   static {
-    {
-      final List<ImmutableList<Square>> listList = new ArrayList<>();
+    final List<ImmutableList<Square>> whiteListList = new ArrayList<>();
+    initializeWhite(whiteListList);
+    WHITE_PAWN_TWO_SQUARE_ADVANCE = NonNullWrapperCommon.copyOfList(whiteListList);
 
-      listList.add(constructListSquare(A7, A5));
-      listList.add(constructListSquare(B7, B5));
-      listList.add(constructListSquare(C7, C5));
-      listList.add(constructListSquare(D7, D5));
-      listList.add(constructListSquare(E7, E5));
-      listList.add(constructListSquare(F7, F5));
-      listList.add(constructListSquare(G7, G5));
-      listList.add(constructListSquare(H7, H5));
+    final List<ImmutableList<Square>> blackListList = new ArrayList<>();
+    initializeBlack(blackListList);
+    BLACK_PAWN_TWO_SQUARE_ADVANCE = NonNullWrapperCommon.copyOfList(blackListList);
+  }
 
-      BLACK_PAWN_TWO_SQUARE_ADVANCE = NonNullWrapperCommon.copyOfList(listList);
-    }
+  private static void initializeWhite(List<ImmutableList<Square>> listList) {
+    listList.add(constructListSquare(A2, A4));
+    listList.add(constructListSquare(B2, B4));
+    listList.add(constructListSquare(C2, C4));
+    listList.add(constructListSquare(D2, D4));
+    listList.add(constructListSquare(E2, E4));
+    listList.add(constructListSquare(F2, F4));
+    listList.add(constructListSquare(G2, G4));
+    listList.add(constructListSquare(H2, H4));
+  }
 
+  private static void initializeBlack(List<ImmutableList<Square>> listList) {
+    listList.add(constructListSquare(A7, A5));
+    listList.add(constructListSquare(B7, B5));
+    listList.add(constructListSquare(C7, C5));
+    listList.add(constructListSquare(D7, D5));
+    listList.add(constructListSquare(E7, E5));
+    listList.add(constructListSquare(F7, F5));
+    listList.add(constructListSquare(G7, G5));
+    listList.add(constructListSquare(H7, H5));
   }
 
   public static boolean calculateIsDisjoint(Set<Square> setOne, Set<Square> setTwo) {

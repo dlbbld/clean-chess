@@ -282,39 +282,41 @@ public class Board extends AbstractBoard {
     return StandardMoveUtility.performStandardMovements(staticPosition, moveSpecification);
   }
 
+  private void correctnessCheck() {
+    // only to test our methods correctness we perform an undo and check against the previous position
+    // the below has no other purpose and could be removed
+    final LegalMove moveToUndo = getLastMove();
+    final StaticPosition staticPositionBeforeLastMove = NonNullWrapperCommon
+        .get(dynamicPositionList, this.dynamicPositionList.size() - 2).staticPosition();
+
+    final StaticPosition staticPositionToUndo = NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
+    final StaticPosition staticPositionUndoExpected = NonNullWrapperCommon
+        .get(dynamicPositionList, dynamicPositionList.size() - 2).staticPosition();
+
+    List<UpdateSquare> updateSquareList;
+    if (EnPassantCaptureUtility.calculateIsEnPassantCapture(staticPositionBeforeLastMove,
+        moveToUndo.moveSpecification())) {
+      updateSquareList = EnPassantCaptureUtility.performEnPassantCaptureUndoMovements(moveToUndo);
+    } else if (CastlingUtility.calculateIsCastlingMove(moveToUndo.moveSpecification())) {
+      updateSquareList = CastlingUtility.performCastlingUndoMovements(moveToUndo);
+    } else if (PromotionUtility.calculateIsPromotion(moveToUndo.moveSpecification())) {
+      updateSquareList = PromotionUtility.performPromotionUndoMovements(moveToUndo);
+    } else {
+      updateSquareList = StandardMoveUtility.performStandardUndoMovements(moveToUndo);
+    }
+    final StaticPosition staticPositionUndoActual = staticPositionToUndo.createChangedPosition(updateSquareList);
+    if (!staticPositionUndoExpected.equals(staticPositionUndoActual)) {
+      throw new ProgrammingMistakeException("The undo position calculation is correct");
+    }
+  }
+
   @Override
   public void unperformMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("Undo move requested but no move to undo");
     }
 
-    {
-      // only to test our methods correctness we perform an undo and check against the previous position
-      // the below has no other purpose and could be removed
-      final LegalMove moveToUndo = getLastMove();
-      final StaticPosition staticPositionBeforeLastMove = NonNullWrapperCommon
-          .get(dynamicPositionList, this.dynamicPositionList.size() - 2).staticPosition();
-
-      final StaticPosition staticPositionToUndo = NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
-      final StaticPosition staticPositionUndoExpected = NonNullWrapperCommon
-          .get(dynamicPositionList, dynamicPositionList.size() - 2).staticPosition();
-
-      List<UpdateSquare> updateSquareList;
-      if (EnPassantCaptureUtility.calculateIsEnPassantCapture(staticPositionBeforeLastMove,
-          moveToUndo.moveSpecification())) {
-        updateSquareList = EnPassantCaptureUtility.performEnPassantCaptureUndoMovements(moveToUndo);
-      } else if (CastlingUtility.calculateIsCastlingMove(moveToUndo.moveSpecification())) {
-        updateSquareList = CastlingUtility.performCastlingUndoMovements(moveToUndo);
-      } else if (PromotionUtility.calculateIsPromotion(moveToUndo.moveSpecification())) {
-        updateSquareList = PromotionUtility.performPromotionUndoMovements(moveToUndo);
-      } else {
-        updateSquareList = StandardMoveUtility.performStandardUndoMovements(moveToUndo);
-      }
-      final StaticPosition staticPositionUndoActual = staticPositionToUndo.createChangedPosition(updateSquareList);
-      if (!staticPositionUndoExpected.equals(staticPositionUndoActual)) {
-        throw new ProgrammingMistakeException("The undo position calculation is correct");
-      }
-    }
+    correctnessCheck();
 
     this.performedLegalMoveList.remove(performedLegalMoveList.size() - 1);
     this.legalMoveListSet.remove(legalMoveListSet.size() - 1);
