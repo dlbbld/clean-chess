@@ -45,7 +45,6 @@ public class Reachability {
     return NonNullWrapperCommon.get(map, toSquare);
   }
 
-  // TODO unwinnability - use values two times, that is much easier
   public int calculateVariableCountSetToOne() {
     var count = 0;
     for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {

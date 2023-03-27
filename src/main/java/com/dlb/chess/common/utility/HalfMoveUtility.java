@@ -13,18 +13,12 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.enums.AddSpace;
 
 public abstract class HalfMoveUtility {
-  // TODO remove fix for API carlos san generation starting from position
-  public static HalfMove calculateHalfMoveApiCarlosFix(MoveSpecification moveSpecification, ApiBoard board,
-      String san) {
-    return calculateHalfMoveInternal(moveSpecification, board, san);
-  }
-
   public static HalfMove calculateHalfMove(MoveSpecification moveSpecification, ApiBoard board) {
     final String san = board.getSan();
     return calculateHalfMoveInternal(moveSpecification, board, san);
   }
 
-  public static HalfMove calculateHalfMoveInternal(MoveSpecification moveSpecification, ApiBoard board, String san) {
+  private static HalfMove calculateHalfMoveInternal(MoveSpecification moveSpecification, ApiBoard board, String san) {
 
     final var halfMoveCount = board.getPerformedHalfMoveCount();
     final var index = halfMoveCount - 1;

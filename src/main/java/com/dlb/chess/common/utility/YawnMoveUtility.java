@@ -145,7 +145,6 @@ public abstract class YawnMoveUtility {
         sequenceLength);
   }
 
-  // TODO that is not a very nice way to handle empty games
   private static YawnHalfMove calculateYawnHalfMoveNotPerformed(Side havingMoveInitial, int fullMoveNumberInitial,
       int performedIndex, int sequenceLength) {
 

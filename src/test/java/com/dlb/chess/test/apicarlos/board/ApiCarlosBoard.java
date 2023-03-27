@@ -103,8 +103,7 @@ public class ApiCarlosBoard extends AbstractBoard {
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
         getCastlingRightBoth()));
 
-    // TODO timely dependency, must be after the above code is very very dangerous
-    final HalfMove halfMove = HalfMoveUtility.calculateHalfMoveApiCarlosFix(moveSpecification, this, san);
+    final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
     halfMoveList.add(halfMove);
   }
 
@@ -586,10 +585,6 @@ public class ApiCarlosBoard extends AbstractBoard {
           */
       default -> throw new IllegalArgumentException();
     };
-  }
-
-  public void loadFromFen(String fen) {
-    board.loadFromFen(fen);
   }
 
   @Override

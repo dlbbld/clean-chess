@@ -14,7 +14,6 @@ import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 
-//TODO tests for toString method
 @SuppressWarnings("null")
 public record StaticPosition(@NonNull Piece a8, @NonNull Piece b8, @NonNull Piece c8, @NonNull Piece d8,
     @NonNull Piece e8, @NonNull Piece f8, @NonNull Piece g8, @NonNull Piece h8, @NonNull Piece a7, @NonNull Piece b7,
@@ -47,8 +46,6 @@ public record StaticPosition(@NonNull Piece a8, @NonNull Piece b8, @NonNull Piec
       Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE,
       Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE);
 
-  private static final String HORIZONTAL_BOARD_LINE = "-----------------\n";
-
   @Override
   public boolean equals(@Nullable Object obj) {
     if (this == obj) {
@@ -75,103 +72,92 @@ public record StaticPosition(@NonNull Piece a8, @NonNull Piece b8, @NonNull Piec
   public String toString() {
     final var output = new StringBuilder();
 
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a8));
+    output.append(calculateSquareLetter(b8));
+    output.append(calculateSquareLetter(c8));
+    output.append(calculateSquareLetter(d8));
+    output.append(calculateSquareLetter(e8));
+    output.append(calculateSquareLetter(f8));
+    output.append(calculateSquareLetter(g8));
+    output.append(calculateSquareLetter(h8));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a8));
-    output.append("|" + calculateSquareLetter(b8));
-    output.append("|" + calculateSquareLetter(c8));
-    output.append("|" + calculateSquareLetter(d8));
-    output.append("|" + calculateSquareLetter(e8));
-    output.append("|" + calculateSquareLetter(f8));
-    output.append("|" + calculateSquareLetter(g8));
-    output.append("|" + calculateSquareLetter(h8));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a7));
+    output.append(calculateSquareLetter(b7));
+    output.append(calculateSquareLetter(c7));
+    output.append(calculateSquareLetter(d7));
+    output.append(calculateSquareLetter(e7));
+    output.append(calculateSquareLetter(f7));
+    output.append(calculateSquareLetter(g7));
+    output.append(calculateSquareLetter(h7));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a7));
-    output.append("|" + calculateSquareLetter(b7));
-    output.append("|" + calculateSquareLetter(c7));
-    output.append("|" + calculateSquareLetter(d7));
-    output.append("|" + calculateSquareLetter(e7));
-    output.append("|" + calculateSquareLetter(f7));
-    output.append("|" + calculateSquareLetter(g7));
-    output.append("|" + calculateSquareLetter(h7));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a6));
+    output.append(calculateSquareLetter(b6));
+    output.append(calculateSquareLetter(c6));
+    output.append(calculateSquareLetter(d6));
+    output.append(calculateSquareLetter(e6));
+    output.append(calculateSquareLetter(f6));
+    output.append(calculateSquareLetter(g6));
+    output.append(calculateSquareLetter(h6));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a6));
-    output.append("|" + calculateSquareLetter(b6));
-    output.append("|" + calculateSquareLetter(c6));
-    output.append("|" + calculateSquareLetter(d6));
-    output.append("|" + calculateSquareLetter(e6));
-    output.append("|" + calculateSquareLetter(f6));
-    output.append("|" + calculateSquareLetter(g6));
-    output.append("|" + calculateSquareLetter(h6));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a5));
+    output.append(calculateSquareLetter(b5));
+    output.append(calculateSquareLetter(c5));
+    output.append(calculateSquareLetter(d5));
+    output.append(calculateSquareLetter(e5));
+    output.append(calculateSquareLetter(f5));
+    output.append(calculateSquareLetter(g5));
+    output.append(calculateSquareLetter(h5));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a5));
-    output.append("|" + calculateSquareLetter(b5));
-    output.append("|" + calculateSquareLetter(c5));
-    output.append("|" + calculateSquareLetter(d5));
-    output.append("|" + calculateSquareLetter(e5));
-    output.append("|" + calculateSquareLetter(f5));
-    output.append("|" + calculateSquareLetter(g5));
-    output.append("|" + calculateSquareLetter(h5));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a4));
+    output.append(calculateSquareLetter(b4));
+    output.append(calculateSquareLetter(c4));
+    output.append(calculateSquareLetter(d4));
+    output.append(calculateSquareLetter(e4));
+    output.append(calculateSquareLetter(f4));
+    output.append(calculateSquareLetter(g4));
+    output.append(calculateSquareLetter(h4));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a4));
-    output.append("|" + calculateSquareLetter(b4));
-    output.append("|" + calculateSquareLetter(c4));
-    output.append("|" + calculateSquareLetter(d4));
-    output.append("|" + calculateSquareLetter(e4));
-    output.append("|" + calculateSquareLetter(f4));
-    output.append("|" + calculateSquareLetter(g4));
-    output.append("|" + calculateSquareLetter(h4));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a3));
+    output.append(calculateSquareLetter(b3));
+    output.append(calculateSquareLetter(c3));
+    output.append(calculateSquareLetter(d3));
+    output.append(calculateSquareLetter(e3));
+    output.append(calculateSquareLetter(f3));
+    output.append(calculateSquareLetter(g3));
+    output.append(calculateSquareLetter(h3));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a3));
-    output.append("|" + calculateSquareLetter(b3));
-    output.append("|" + calculateSquareLetter(c3));
-    output.append("|" + calculateSquareLetter(d3));
-    output.append("|" + calculateSquareLetter(e3));
-    output.append("|" + calculateSquareLetter(f3));
-    output.append("|" + calculateSquareLetter(g3));
-    output.append("|" + calculateSquareLetter(h3));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a2));
+    output.append(calculateSquareLetter(b2));
+    output.append(calculateSquareLetter(c2));
+    output.append(calculateSquareLetter(d2));
+    output.append(calculateSquareLetter(e2));
+    output.append(calculateSquareLetter(f2));
+    output.append(calculateSquareLetter(g2));
+    output.append(calculateSquareLetter(h2));
+    output.append("\n");
 
-    output.append("|" + calculateSquareLetter(a2));
-    output.append("|" + calculateSquareLetter(b2));
-    output.append("|" + calculateSquareLetter(c2));
-    output.append("|" + calculateSquareLetter(d2));
-    output.append("|" + calculateSquareLetter(e2));
-    output.append("|" + calculateSquareLetter(f2));
-    output.append("|" + calculateSquareLetter(g2));
-    output.append("|" + calculateSquareLetter(h2));
-    output.append("|\n");
-    output.append(HORIZONTAL_BOARD_LINE);
-
-    output.append("|" + calculateSquareLetter(a1));
-    output.append("|" + calculateSquareLetter(b1));
-    output.append("|" + calculateSquareLetter(c1));
-    output.append("|" + calculateSquareLetter(d1));
-    output.append("|" + calculateSquareLetter(e1));
-    output.append("|" + calculateSquareLetter(f1));
-    output.append("|" + calculateSquareLetter(g1));
-    output.append("|" + calculateSquareLetter(h1));
-    output.append("|\n");
-
-    output.append(HORIZONTAL_BOARD_LINE);
+    output.append(calculateSquareLetter(a1));
+    output.append(calculateSquareLetter(b1));
+    output.append(calculateSquareLetter(c1));
+    output.append(calculateSquareLetter(d1));
+    output.append(calculateSquareLetter(e1));
+    output.append(calculateSquareLetter(f1));
+    output.append(calculateSquareLetter(g1));
+    output.append(calculateSquareLetter(h1));
+    output.append("\n");
 
     return NonNullWrapperCommon.toString(output);
   }
 
   private static String calculateSquareLetter(Piece piece) {
     if (piece == Piece.NONE) {
-      return " ";
+      return ".";
     }
     return piece.getLetter();
   }

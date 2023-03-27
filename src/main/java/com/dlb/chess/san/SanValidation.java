@@ -31,8 +31,6 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
-// TODO today we are not checking opposite rank and diagonals!!
-// TODO get clear about different validations and checks
 public class SanValidation extends AbstractSan implements EnumConstants {
 
   public static MoveSpecification calculateMoveSpecificationForSan(String san, ApiBoard board)
@@ -527,8 +525,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
           if (numberOfLegalMovesFromSameFile < 2) {
             throw new ProgrammingMistakeException("A programming assumption about the rank turned out to be wrong");
           }
-          // TODO plural - how to address
-          // TODO today test cases for all situations?? are they already there???
           throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
               Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
                   sanConversion.fromFile().getLetter(), toSquare.getName()));

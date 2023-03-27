@@ -21,7 +21,6 @@ public abstract class SanFormatDescription extends AbstractSan {
 
   }
 
-  // TODO SAN hardcoded or text file description - think how to organize
   public static void printSanFormatDescription(Side havingMove) {
     // we can have the following formats
     final SanPatternDescription pawnNonCapturingNonPromotionMovesWhite = new SanPatternDescription(

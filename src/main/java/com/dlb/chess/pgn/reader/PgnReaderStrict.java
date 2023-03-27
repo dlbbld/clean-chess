@@ -28,7 +28,6 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.utility.MovetextUtility;
 import com.dlb.chess.utility.TagUtility;
 
-// TODO validateExportFormat
 public class PgnReaderStrict extends AbstractPgnReader {
 
   public static final String EMPTY_LINE = "";

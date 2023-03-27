@@ -40,12 +40,12 @@ class TestFenParserAll extends AbstractTestFenParser {
         }
       }
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        checkLoadFromFen(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        checkFromFen(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       }
     }
   }
 
-  private static void checkLoadFromFen(String folderPath, String pgnFileName) throws Exception {
+  private static void checkFromFen(String folderPath, String pgnFileName) throws Exception {
 
     logger.info(pgnFileName);
 

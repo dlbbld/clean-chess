@@ -51,6 +51,7 @@ class TestBoardAgainstEachOther {
         final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
 
         if (pgnFile.startFen() != FenConstants.FEN_INITIAL) {
+          // API Carlos does not generate correct SAN when starting from position
           logger.warn("Skipping PGN as starting from non-initital position:" + pgnFileName);
           continue;
         }
