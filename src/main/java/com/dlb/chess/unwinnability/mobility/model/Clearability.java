@@ -29,7 +29,6 @@ public class Clearability {
     return NonNullWrapperCommon.get(clearabilityMap, piecePlacement);
   }
 
-  // TODO unwinnability - use values two times, that is much easier
   public int calculateVariableCountSetToOne() {
     var count = 0;
     for (final Entry<PiecePlacement, VariableState> entry : clearabilityMap.entrySet()) {

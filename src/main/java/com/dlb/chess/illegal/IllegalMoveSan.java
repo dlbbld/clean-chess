@@ -25,7 +25,6 @@ import com.dlb.chess.illegal.model.ExactlyOneOtherSquareChanged;
 import com.dlb.chess.illegal.model.ExactlyOnePieceVanished;
 import com.dlb.chess.illegal.model.GuessMove;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.san.enums.SanLetter;
 
 public class IllegalMoveSan {
@@ -112,17 +111,17 @@ public class IllegalMoveSan {
 
     switch (havingMove) {
       case WHITE:
-        if (previousPosition.get(CastlingUtility.WHITE_KING_FROM) == Piece.WHITE_KING) {
-          if (previousPosition.get(CastlingUtility.WHITE_ROOK_KING_SIDE_CASTLING_FROM) == Piece.WHITE_ROOK) {
+        if (previousPosition.get(CastlingConstants.WHITE_KING_FROM) == Piece.WHITE_KING) {
+          if (previousPosition.get(CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_FROM) == Piece.WHITE_ROOK) {
 
             // perform castling movement
             final List<UpdateSquare> updateSquareList = new ArrayList<>();
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_KING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_KING_KING_SIDE_CASTLING_TO, Piece.WHITE_KING));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_KING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_KING_KING_SIDE_CASTLING_TO, Piece.WHITE_KING));
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_KING_SIDE_CASTLING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_KING_SIDE_CASTLING_TO, Piece.WHITE_ROOK));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_TO, Piece.WHITE_ROOK));
 
             final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
@@ -130,16 +129,16 @@ public class IllegalMoveSan {
               return CastlingMove.KING_SIDE;
             }
           }
-          if (previousPosition.get(CastlingUtility.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM) == Piece.WHITE_ROOK) {
+          if (previousPosition.get(CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM) == Piece.WHITE_ROOK) {
 
             // perform castling movement
             final List<UpdateSquare> updateSquareList = new ArrayList<>();
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_KING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_KING_QUEEN_SIDE_CASTLING_TO, Piece.WHITE_KING));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_KING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_KING_QUEEN_SIDE_CASTLING_TO, Piece.WHITE_KING));
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.WHITE_ROOK_QUEEN_SIDE_CASTLING_TO, Piece.WHITE_ROOK));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_TO, Piece.WHITE_ROOK));
 
             final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
@@ -150,17 +149,17 @@ public class IllegalMoveSan {
         }
         break;
       case BLACK:
-        if (previousPosition.get(CastlingUtility.BLACK_KING_FROM) == Piece.BLACK_KING) {
-          if (previousPosition.get(CastlingUtility.BLACK_ROOK_KING_SIDE_CASTLING_FROM) == Piece.BLACK_ROOK) {
+        if (previousPosition.get(CastlingConstants.BLACK_KING_FROM) == Piece.BLACK_KING) {
+          if (previousPosition.get(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM) == Piece.BLACK_ROOK) {
 
             // perform castling movement
             final List<UpdateSquare> updateSquareList = new ArrayList<>();
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_KING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_KING_KING_SIDE_CASTLING_TO, Piece.BLACK_KING));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_KING_KING_SIDE_CASTLING_TO, Piece.BLACK_KING));
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_KING_SIDE_CASTLING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_KING_SIDE_CASTLING_TO, Piece.BLACK_ROOK));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_TO, Piece.BLACK_ROOK));
 
             final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);
@@ -168,16 +167,16 @@ public class IllegalMoveSan {
               return CastlingMove.KING_SIDE;
             }
           }
-          if (previousPosition.get(CastlingUtility.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM) == Piece.BLACK_ROOK) {
+          if (previousPosition.get(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM) == Piece.BLACK_ROOK) {
 
             // perform castling movement
             final List<UpdateSquare> updateSquareList = new ArrayList<>();
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_KING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_KING_QUEEN_SIDE_CASTLING_TO, Piece.BLACK_KING));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_KING_QUEEN_SIDE_CASTLING_TO, Piece.BLACK_KING));
 
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM));
-            updateSquareList.add(new UpdateSquare(CastlingUtility.BLACK_ROOK_QUEEN_SIDE_CASTLING_TO, Piece.BLACK_ROOK));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM));
+            updateSquareList.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_TO, Piece.BLACK_ROOK));
 
             final StaticPosition previousPositionPlusCastling = board.getStaticPosition()
                 .createChangedPosition(updateSquareList);

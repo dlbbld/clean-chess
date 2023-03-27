@@ -4,6 +4,7 @@ import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.UciMove;
@@ -65,20 +66,20 @@ public abstract class UciMoveUtility {
   }
 
   private static CastlingMove calculatePotentialCastlingMove(Square firstSquare, Square secondSquare) {
-    if (firstSquare == CastlingUtility.WHITE_KING_FROM
-        && secondSquare == CastlingUtility.WHITE_KING_KING_SIDE_CASTLING_TO) {
+    if (firstSquare == CastlingConstants.WHITE_KING_FROM
+        && secondSquare == CastlingConstants.WHITE_KING_KING_SIDE_CASTLING_TO) {
       return CastlingMove.KING_SIDE;
     }
-    if (firstSquare == CastlingUtility.WHITE_KING_FROM
-        && secondSquare == CastlingUtility.WHITE_KING_QUEEN_SIDE_CASTLING_TO) {
+    if (firstSquare == CastlingConstants.WHITE_KING_FROM
+        && secondSquare == CastlingConstants.WHITE_KING_QUEEN_SIDE_CASTLING_TO) {
       return CastlingMove.QUEEN_SIDE;
     }
-    if (firstSquare == CastlingUtility.BLACK_KING_FROM
-        && secondSquare == CastlingUtility.BLACK_KING_KING_SIDE_CASTLING_TO) {
+    if (firstSquare == CastlingConstants.BLACK_KING_FROM
+        && secondSquare == CastlingConstants.BLACK_KING_KING_SIDE_CASTLING_TO) {
       return CastlingMove.KING_SIDE;
     }
-    if (firstSquare == CastlingUtility.BLACK_KING_FROM
-        && secondSquare == CastlingUtility.BLACK_KING_QUEEN_SIDE_CASTLING_TO) {
+    if (firstSquare == CastlingConstants.BLACK_KING_FROM
+        && secondSquare == CastlingConstants.BLACK_KING_QUEEN_SIDE_CASTLING_TO) {
       return CastlingMove.QUEEN_SIDE;
     }
     return CastlingMove.NONE;
