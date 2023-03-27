@@ -57,7 +57,7 @@ public abstract class GeneralUtility {
     return board;
   }
 
-  public static ApiBoard calculateBoard(String folderPath, String pgnFileName) throws Exception {
+  public static ApiBoard calculateBoard(String folderPath, String pgnFileName) {
 
     final PgnFile pgnFile = PgnReader.readPgn(folderPath, pgnFileName);
 

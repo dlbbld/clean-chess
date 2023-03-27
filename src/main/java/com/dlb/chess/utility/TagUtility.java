@@ -18,7 +18,7 @@ import com.google.common.collect.ImmutableList;
 
 public abstract class TagUtility {
 
-  private static final String TAG_PATTERN = "\\[([A-Za-z0-9_]+) \"([^\"]*)\"\\]";
+  private static final String TAG_PATTERN = "\\[([\\w]+) \"([^\"]*)\"\\]";
 
   @SuppressWarnings("null")
   public static final ImmutableList<StandardTag> SEVEN_TAG_ROSTER_TAG_LIST = NonNullWrapperCommon

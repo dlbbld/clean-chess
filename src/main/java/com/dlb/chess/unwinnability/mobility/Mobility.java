@@ -196,8 +196,8 @@ public class Mobility {
     for (final MobilitySolutionVariable evaluateCapture : mobilitySolution.calculateEntriesWithValueOne()) {
       // we only check non pawns, because for pawn we would not need to exclude forward pushes
       // which we can't do as we have no move history
-      if ((evaluateCapture.piecePlacement().side() != opponentPawn.side()
-          && evaluateCapture.piecePlacement().pieceType() != PieceType.PAWN)
+      if (evaluateCapture.piecePlacement().side() != opponentPawn.side()
+          && evaluateCapture.piecePlacement().pieceType() != PieceType.PAWN
           && pawnSquareAndForwardPushesSet.contains(evaluateCapture.toSquare())) {
         return true;
       }
@@ -233,13 +233,9 @@ public class Mobility {
   private static boolean calculateIsPawnMoveConditionOk(MobilitySolutionVariable candidateMobility,
       MobilitySolution mobility, Clearability clearability, Reachability reachability) {
 
-    if (calculateIsPossiblePawnForwardMove(candidateMobility, mobility, clearability)
+    return calculateIsPossiblePawnForwardMove(candidateMobility, mobility, clearability)
         || calculateIsPossiblePawnCapture(candidateMobility, mobility, reachability)
-        || calculateIsPossiblePawnPromotion(candidateMobility, mobility)) {
-      return true;
-    }
-
-    return false;
+        || calculateIsPossiblePawnPromotion(candidateMobility, mobility);
   }
 
   private static boolean calculateIsPossiblePawnForwardMove(MobilitySolutionVariable candidateMobility,
@@ -250,9 +246,9 @@ public class Mobility {
     // currently only one predecessor
     // still by the logic we check as if multiple, "any valid predecessor" returns true
     for (final Square predecessor : MobilityFunctions.predecessors(candidatePiecePlacement, candidateToSquare)) {
-      if ((mobility.get(candidatePiecePlacement, predecessor) == VariableState.ONE)
-          && (!calculateHasBlockingNonPawn(candidateMobility, mobility, clearability)
-              && !calculateHasBlockingPawn(candidateMobility, mobility))) {
+      if (mobility.get(candidatePiecePlacement, predecessor) == VariableState.ONE
+          && !calculateHasBlockingNonPawn(candidateMobility, mobility, clearability)
+          && !calculateHasBlockingPawn(candidateMobility, mobility)) {
         return true;
       }
     }

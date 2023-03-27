@@ -42,7 +42,7 @@ public class AnalyzerPrint {
     printAnalysis(board);
   }
 
-  protected static void printAnalysis(ApiBoard board) throws Exception {
+  protected static void printAnalysis(ApiBoard board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
