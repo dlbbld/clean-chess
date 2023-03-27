@@ -34,12 +34,14 @@ public abstract class PositionIdentifierUtility {
     final List<Integer> result = new ArrayList<>();
 
     var workingNumber = number;
-    var multiplies = (int) Math.floor(workingNumber / base);
+    double workingNumberToDoubleForDivision = workingNumber;
+    var multiplies = (int) Math.floor(workingNumberToDoubleForDivision / base);
     var remainder = workingNumber % base;
     result.add(remainder);
     while (multiplies > 0) {
       workingNumber = (workingNumber - remainder) / base;
-      multiplies = (int) Math.floor(workingNumber / base);
+      workingNumberToDoubleForDivision = workingNumber;
+      multiplies = (int) Math.floor(workingNumberToDoubleForDivision / base);
       remainder = workingNumber % base;
       result.add(remainder);
     }
