@@ -11,7 +11,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.unwinnability.quick.utility.SemiOpenFilesUtility;
 
-public class TestSemiOpenFilesUtility implements EnumConstants {
+class TestSemiOpenFilesUtility implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 
-public class TestStaticPosition {
+class TestStaticPosition {
 
   @SuppressWarnings("static-method")
   @Test

@@ -22,7 +22,7 @@ import com.dlb.chess.unwinnability.mobility.Mobility;
 import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.model.PiecePlacement;
 
-public class TestMobilitySolution implements EnumConstants {
+class TestMobilitySolution implements EnumConstants {
 
   private static final Set<Square> ALL_SQUARE_SET = new TreeSet<>(Square.BOARD_SQUARE_LIST);
   private static final Set<Square> LIGHT_SQUARE_SET;

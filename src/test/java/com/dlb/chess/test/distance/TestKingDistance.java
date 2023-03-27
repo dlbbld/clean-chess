@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.distance.KingDistance;
 
-public class TestKingDistance implements EnumConstants {
+class TestKingDistance implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test

@@ -23,7 +23,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class TestUnwinnabilityQuick {
+class TestUnwinnabilityQuick {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuick.class);
 

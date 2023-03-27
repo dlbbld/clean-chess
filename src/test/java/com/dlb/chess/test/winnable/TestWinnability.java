@@ -19,7 +19,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class TestWinnability {
+class TestWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestWinnability.class);
 
