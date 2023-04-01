@@ -12,7 +12,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
 import com.github.bhlangonijr.chesslib.CastleRight;
 
-public class EnumConversionUtility implements EnumConstants {
+public abstract class EnumConversionUtility implements EnumConstants {
 
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Side havingMove, PieceType pieceType) {
     return switch (havingMove) {

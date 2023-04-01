@@ -3,9 +3,11 @@ package com.dlb.chess.pgn.reader.model;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public record PgnSan(String startingFen, List<String> sanList) {
+@SuppressWarnings("null")
+public record PgnSan(@NonNull String startingFen, @NonNull List<String> sanList) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

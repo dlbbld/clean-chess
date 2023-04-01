@@ -23,7 +23,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class TestUnwinnabilityQuick {
+class TestUnwinnabilityQuick {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuick.class);
 
@@ -115,14 +115,14 @@ public class TestUnwinnabilityQuick {
         final var beforeMilliSeconds = System.currentTimeMillis();
         final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullWhite(), unwinnableQuickWhite);
+        assertEquals(testCase.unwinnableQuickWhite(), unwinnableQuickWhite);
       }
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
         final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullBlack(), unwinnableQuickBlack);
+        assertEquals(testCase.unwinnableQuickBlack(), unwinnableQuickBlack);
       }
 
     }

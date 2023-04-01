@@ -17,7 +17,7 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 
-public class TestThreefoldClaimAheadUtility {
+class TestThreefoldClaimAheadUtility {
 
   @SuppressWarnings("static-method")
   @Test

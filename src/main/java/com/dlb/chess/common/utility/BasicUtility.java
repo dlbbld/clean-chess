@@ -11,7 +11,7 @@ import java.util.regex.Pattern;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
-public class BasicUtility {
+public abstract class BasicUtility {
 
   private static final String COMMA_SEPARATOR_LIST = ", ";
 

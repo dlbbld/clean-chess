@@ -20,7 +20,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
-public class TestFindHelpMate {
+class TestFindHelpMate {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestFindHelpMate.class);
 

@@ -8,7 +8,7 @@ import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 
-public class ThreefoldClaimAheadUtility {
+public abstract class ThreefoldClaimAheadUtility {
   public static List<List<ClaimAhead>> calculateThreefoldClaimAhead(Board board) {
     return calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
   }

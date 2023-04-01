@@ -16,7 +16,7 @@ import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public class TestUnwinnabilityQuickAgainstWinnability {
+class TestUnwinnabilityQuickAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuickAgainstWinnability.class);
 

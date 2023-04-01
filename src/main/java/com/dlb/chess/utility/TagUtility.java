@@ -16,9 +16,9 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.pgn.reader.model.Tag;
 import com.google.common.collect.ImmutableList;
 
-public class TagUtility {
+public abstract class TagUtility {
 
-  private static final String TAG_PATTERN = "\\[([A-Za-z0-9_]+) \"([^\"]*)\"\\]";
+  private static final String TAG_PATTERN = "\\[([\\w]+) \"([^\"]*)\"\\]";
 
   @SuppressWarnings("null")
   public static final ImmutableList<StandardTag> SEVEN_TAG_ROSTER_TAG_LIST = NonNullWrapperCommon

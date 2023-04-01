@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
 
-public class EnPassantCaptureUtility implements EnumConstants {
+public abstract class EnPassantCaptureUtility implements EnumConstants {
 
   private static final ImmutableList<ImmutableList<Square>> WHITE_EN_PASSANT_CAPTURE_FROM_TO;
 

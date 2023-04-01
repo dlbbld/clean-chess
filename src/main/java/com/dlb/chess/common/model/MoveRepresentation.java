@@ -2,32 +2,14 @@ package com.dlb.chess.common.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.model.LegalMove;
 
-public record MoveRepresentation(MoveSpecification moveSpecification, LegalMove legalMove, String san, String lan,
-    String uci) {
-
-  public MoveSpecification moveSpecification() {
-    return moveSpecification;
-  }
-
-  public LegalMove legalMove() {
-    return legalMove;
-  }
-
-  public String san() {
-    return san;
-  }
-
-  public String lan() {
-    return lan;
-  }
-
-  public String uci() {
-    return uci;
-  }
+@SuppressWarnings("null")
+public record MoveRepresentation(@NonNull MoveSpecification moveSpecification, @NonNull LegalMove legalMove,
+    @NonNull String san, @NonNull String lan, @NonNull String uci) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

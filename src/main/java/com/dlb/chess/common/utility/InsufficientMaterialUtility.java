@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.constants.EnumConstants;
 
-public class InsufficientMaterialUtility implements EnumConstants {
+public abstract class InsufficientMaterialUtility implements EnumConstants {
 
   public static boolean calculateIsInsufficientMaterial(Side side, StaticPosition staticPosition) {
     final Side oppositeSide = side.getOppositeSide();

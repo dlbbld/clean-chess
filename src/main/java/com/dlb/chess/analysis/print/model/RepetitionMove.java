@@ -2,11 +2,14 @@ package com.dlb.chess.analysis.print.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.model.HalfMove;
 
-public record RepetitionMove(int positionId, int fold, HalfMove halfMove) implements Comparable<RepetitionMove> {
+@SuppressWarnings("null")
+public record RepetitionMove(int positionId, int fold, @NonNull HalfMove halfMove)
+    implements Comparable<RepetitionMove> {
 
   @Override
   public boolean equals(@Nullable Object obj) {

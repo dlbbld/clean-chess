@@ -38,7 +38,6 @@ public class UnwinnableSemiStatic {
     // can potentially be reached by piece P)
 
     // 3: let Kc (resp. K¬c) be the intended winner’s king (resp. intended loser’s king)
-    // final PiecePlacement intendedWinnerKing = calculateKing(c, mobilitySolution);
     final PiecePlacement intendedLoserKing = calculateKing(c.getOppositeSide(), mobilitySolution);
 
     // 4: set intruders := {P in pos | P.side = c ^ region(P) \ region(K¬c) != the empty set} ( -> The

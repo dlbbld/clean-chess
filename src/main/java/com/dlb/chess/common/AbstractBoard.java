@@ -24,7 +24,6 @@ import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
-  // TODO very slow, must be fast, though now for generating test cases only
   @Override
   public Set<String> getLegalMovesSan() {
     final Set<String> result = new TreeSet<>();

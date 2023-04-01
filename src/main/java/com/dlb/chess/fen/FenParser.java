@@ -574,139 +574,140 @@ public class FenParser implements EnumConstants {
   }
 
   private static void validateNumberOfPieces(StaticPosition staticPosition) throws FenValidationException {
+    validateWhiteNumberOfPieces(staticPosition);
+    validateBlackNumberOfPieces(staticPosition);
+  }
 
-    // white
-    {
-      // kings
-      final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KING);
-      if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_KINGS,
-            "there is more than one white king");
-      }
-      if (numberOfKings == 0) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_NO_KING, "there is no white king");
-      }
-
-      // pawns
-      final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.PAWN);
-      if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS,
-            "there are too many white pawns");
-      }
-
-      final var numberOfPossiblePromotions = ChessConstants.INITIAL_NUMBER_OF_PAWNS - numberOfPawns;
-
-      // rooks
-      final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.ROOK);
-      final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
-      if (numberOfRooksPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS,
-            "there are too many white rooks");
-      }
-
-      // knights
-      final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KNIGHT);
-      final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
-      if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS,
-            "there are too many white knights");
-      }
-
-      // light square bishops
-      final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
-          SquareType.LIGHT_SQUARE);
-      final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
-          - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
-      if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS,
-            "there are too many white light squared bishops");
-      }
-
-      // dark square bishops
-      final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
-          SquareType.DARK_SQUARE);
-      final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
-          - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
-      if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS,
-            "there are too many white dark squared bishops");
-      }
-
-      // queens
-      final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.QUEEN);
-      final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
-      if (numberOfQueensPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS,
-            "there are too many white queens");
-      }
+  private static void validateWhiteNumberOfPieces(StaticPosition staticPosition) throws FenValidationException {
+    // kings
+    final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KING);
+    if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_KINGS,
+          "there is more than one white king");
+    }
+    if (numberOfKings == 0) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_NO_KING, "there is no white king");
     }
 
-    // black
+    // pawns
+    final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.PAWN);
+    if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS,
+          "there are too many white pawns");
+    }
+
+    final var numberOfPossiblePromotions = ChessConstants.INITIAL_NUMBER_OF_PAWNS - numberOfPawns;
+
+    // rooks
+    final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.ROOK);
+    final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
+    if (numberOfRooksPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS,
+          "there are too many white rooks");
+    }
+
+    // knights
+    final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KNIGHT);
+    final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
+    if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS,
+          "there are too many white knights");
+    }
+
+    // light square bishops
+    final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
+        SquareType.LIGHT_SQUARE);
+    final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
+        - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
+    if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS,
+          "there are too many white light squared bishops");
+    }
+
+    // dark square bishops
+    final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
+        SquareType.DARK_SQUARE);
+    final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
+        - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
+    if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS,
+          "there are too many white dark squared bishops");
+    }
+
+    // queens
+    final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.QUEEN);
+    final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
+    if (numberOfQueensPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS,
+          "there are too many white queens");
+    }
+  }
+
+  private static void validateBlackNumberOfPieces(StaticPosition staticPosition) throws FenValidationException {
     // copy/replace code of white
-    {
-      // kings
-      final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KING);
-      if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_KINGS,
-            "there is more than one black king");
-      }
-      if (numberOfKings == 0) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_NO_KING, "there is no black king");
-      }
-
-      // pawns
-      final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.PAWN);
-      if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS,
-            "there are too many black pawns");
-      }
-
-      final var numberOfPossiblePromotions = ChessConstants.INITIAL_NUMBER_OF_PAWNS - numberOfPawns;
-
-      // rooks
-      final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.ROOK);
-      final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
-      if (numberOfRooksPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS,
-            "there are too many black rooks");
-      }
-
-      // knights
-      final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KNIGHT);
-      final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
-      if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS,
-            "there are too many black knights");
-      }
-
-      // light square bishops
-      final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
-          SquareType.LIGHT_SQUARE);
-      final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
-          - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
-      if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS,
-            "there are too many black light squared bishops");
-      }
-
-      // dark square bishops
-      final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
-          SquareType.DARK_SQUARE);
-      final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
-          - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
-      if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS,
-            "there are too many black dark squared bishops");
-      }
-
-      // queens
-      final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.QUEEN);
-      final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
-      if (numberOfQueensPromoted > numberOfPossiblePromotions) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS,
-            "there are too many black queens");
-      }
+    // kings
+    final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KING);
+    if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_KINGS,
+          "there is more than one black king");
     }
+    if (numberOfKings == 0) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_NO_KING, "there is no black king");
+    }
+
+    // pawns
+    final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.PAWN);
+    if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS,
+          "there are too many black pawns");
+    }
+
+    final var numberOfPossiblePromotions = ChessConstants.INITIAL_NUMBER_OF_PAWNS - numberOfPawns;
+
+    // rooks
+    final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.ROOK);
+    final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
+    if (numberOfRooksPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS,
+          "there are too many black rooks");
+    }
+
+    // knights
+    final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KNIGHT);
+    final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
+    if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS,
+          "there are too many black knights");
+    }
+
+    // light square bishops
+    final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
+        SquareType.LIGHT_SQUARE);
+    final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
+        - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
+    if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS,
+          "there are too many black light squared bishops");
+    }
+
+    // dark square bishops
+    final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
+        SquareType.DARK_SQUARE);
+    final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
+        - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
+    if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS,
+          "there are too many black dark squared bishops");
+    }
+
+    // queens
+    final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.QUEEN);
+    final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
+    if (numberOfQueensPromoted > numberOfPossiblePromotions) {
+      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS,
+          "there are too many black queens");
+    }
+
   }
 
   private static void validatePawnRankNotPromotionRank(StaticPosition staticPosition) throws FenValidationException {

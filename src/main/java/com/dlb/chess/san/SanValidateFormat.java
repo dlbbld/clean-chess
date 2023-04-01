@@ -45,7 +45,6 @@ public abstract class SanValidateFormat extends AbstractSan {
       }
     }
 
-    // TODO SAN hardcoded or text file description - think how to organize
     throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
   }
 

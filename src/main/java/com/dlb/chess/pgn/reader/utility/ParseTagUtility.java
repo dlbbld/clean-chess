@@ -12,7 +12,7 @@ import com.dlb.chess.pgn.reader.model.Tag;
 import com.dlb.chess.pgn.reader.model.TagCandidate;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
-public class ParseTagUtility extends AbstractParseTagUtility {
+public abstract class ParseTagUtility extends AbstractParseTagUtility {
 
   // we normalize the tag line before parsing here
   // so we can use a much easier regular expression

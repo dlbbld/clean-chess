@@ -1,6 +1,7 @@
 package com.dlb.chess.unwinnability.mobility.model;
 
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,18 +20,18 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 
 public class MobilitySolution {
 
-  private final Map<PiecePlacement, Map<Square, VariableState>> mobilityMap = new HashMap<>();
+  private final Map<PiecePlacement, EnumMap<Square, VariableState>> mobilityMap = new HashMap<>();
 
   public void put(PiecePlacement piecePlacement, Square toSquare, VariableState mobility) {
-    Map<Square, VariableState> map;
+    EnumMap<Square, VariableState> enumMap;
     if (!mobilityMap.containsKey(piecePlacement)) {
-      map = new HashMap<>();
-      mobilityMap.put(piecePlacement, map);
+      enumMap = NonNullWrapperCommon.newEnumMap(Square.class);
+      mobilityMap.put(piecePlacement, enumMap);
     } else {
-      map = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
+      enumMap = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
     }
 
-    map.put(toSquare, mobility);
+    enumMap.put(toSquare, mobility);
   }
 
   public VariableState get(PiecePlacement piecePlacement, Square toSquare) {
@@ -76,8 +77,8 @@ public class MobilitySolution {
 
   public List<MobilitySolutionVariable> calculateEntries(VariableState mobility) {
     final List<MobilitySolutionVariable> result = new ArrayList<>();
-    for (final Entry<PiecePlacement, Map<Square, VariableState>> mapEntryMap : mobilityMap.entrySet()) {
-      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(mobilityMap, mapEntryMap.getKey());
+    for (final Entry<PiecePlacement, EnumMap<Square, VariableState>> mapEntryMap : mobilityMap.entrySet()) {
+      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(mobilityMap, mapEntryMap.getKey());
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == mobility) {
           result.add(new MobilitySolutionVariable(mapEntryMap.getKey(), entry.getKey()));

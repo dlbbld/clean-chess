@@ -14,7 +14,7 @@ import com.dlb.chess.pgn.reader.model.TagCandidate;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.utility.TagUtility;
 
-public class ParseTagStrictUtility extends AbstractParseTagUtility {
+public abstract class ParseTagStrictUtility extends AbstractParseTagUtility {
 
   private static final String TAG_PATTERN = "\\[(" + TAG_NAME_PATTERN + ") \"([^\"]*)\"\\]";
   @SuppressWarnings("null")

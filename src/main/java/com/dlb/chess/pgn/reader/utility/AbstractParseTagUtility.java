@@ -15,7 +15,7 @@ import com.dlb.chess.pgn.reader.model.FirstDuplicateTag;
 import com.dlb.chess.pgn.reader.model.Tag;
 import com.dlb.chess.pgn.reader.model.TagCandidate;
 
-public class AbstractParseTagUtility {
+public abstract class AbstractParseTagUtility {
 
   static final String LEFT_SQUARE_BRACKET = "[";
 

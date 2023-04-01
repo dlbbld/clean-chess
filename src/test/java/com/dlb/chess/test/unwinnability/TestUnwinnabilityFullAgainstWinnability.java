@@ -16,7 +16,7 @@ import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 
-public class TestUnwinnabilityFullAgainstWinnability {
+class TestUnwinnabilityFullAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFullAgainstWinnability.class);
 

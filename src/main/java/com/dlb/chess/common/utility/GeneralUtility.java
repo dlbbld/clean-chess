@@ -17,7 +17,7 @@ import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 
-public class GeneralUtility {
+public abstract class GeneralUtility {
 
   public static CheckmateOrStalemate calculateLastPositionEvaluation(ApiBoard board) {
     // order is crucial
@@ -57,7 +57,7 @@ public class GeneralUtility {
     return board;
   }
 
-  public static ApiBoard calculateBoard(String folderPath, String pgnFileName) throws Exception {
+  public static ApiBoard calculateBoard(String folderPath, String pgnFileName) {
 
     final PgnFile pgnFile = PgnReader.readPgn(folderPath, pgnFileName);
 

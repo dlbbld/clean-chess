@@ -9,7 +9,7 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.analysis.output.BasicOutput;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-public class TestSinglePgn extends AbstractSinglePgnTest {
+class TestSinglePgn extends AbstractSinglePgnTest {
 
   private static final String PGN_FILE_NAME = "03_claim_for_own_move_incorrect_castling_right_lost_for_king_move.pgn";
 

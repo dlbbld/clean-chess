@@ -72,7 +72,7 @@ public class ApiCarlosBoard extends AbstractBoard {
 
     final var result = board.doMove(san);
     final MoveSpecification lastMoveSpecification = calculateLastMoveSpecification();
-    populateMoveHistory(lastMoveSpecification, san);
+    populateMoveHistory(lastMoveSpecification);
     return result;
   }
 
@@ -92,20 +92,6 @@ public class ApiCarlosBoard extends AbstractBoard {
       movingPiece = NonNullWrapperApiCarlos.getPiece(this.board, fromSquare);
     }
     return MoveConversionUtility.convertMove(havingMove, move, movingPiece);
-  }
-
-  private void populateMoveHistory(MoveSpecification moveSpecification, String san) {
-    performedHalfMoveCount++;
-
-    final MoveBackup moveBackup = NonNullWrapperApiCarlos.getLast(this.board);
-    final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
-    performedLegalMoveList.add(legalMove);
-    dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
-        getCastlingRightBoth()));
-
-    // TODO timely dependency, must be after the above code is very very dangerous
-    final HalfMove halfMove = HalfMoveUtility.calculateHalfMoveApiCarlosFix(moveSpecification, this, san);
-    halfMoveList.add(halfMove);
   }
 
   private void populateMoveHistory(MoveSpecification moveSpecification) {
@@ -586,10 +572,6 @@ public class ApiCarlosBoard extends AbstractBoard {
           */
       default -> throw new IllegalArgumentException();
     };
-  }
-
-  public void loadFromFen(String fen) {
-    board.loadFromFen(fen);
   }
 
   @Override

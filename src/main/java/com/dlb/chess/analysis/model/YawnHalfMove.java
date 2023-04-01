@@ -1,31 +1,13 @@
 package com.dlb.chess.analysis.model;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Side;
 
-public record YawnHalfMove(int performedHalfMoveCount, int fullMoveNumber, String san, Side sideMoved,
+@SuppressWarnings("null")
+public record YawnHalfMove(int performedHalfMoveCount, int fullMoveNumber, @NonNull String san, @NonNull Side sideMoved,
     int sequenceLength) implements Comparable<YawnHalfMove> {
-
-  public int performedHalfMoveCount() {
-    return performedHalfMoveCount;
-  }
-
-  public int fullMoveNumber() {
-    return fullMoveNumber;
-  }
-
-  public String san() {
-    return san;
-  }
-
-  public Side sideMoved() {
-    return sideMoved;
-  }
-
-  public int sequenceLength() {
-    return sequenceLength;
-  }
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -36,12 +18,8 @@ public record YawnHalfMove(int performedHalfMoveCount, int fullMoveNumber, Strin
       return false;
     }
     final var other = (YawnHalfMove) obj;
-    if (fullMoveNumber != other.fullMoveNumber || performedHalfMoveCount != other.performedHalfMoveCount
-        || !san.equals(other.san) || sequenceLength != other.sequenceLength || sideMoved != other.sideMoved) {
-      return false;
-    }
-
-    return true;
+    return ((fullMoveNumber == other.fullMoveNumber) && (performedHalfMoveCount == other.performedHalfMoveCount) && san.equals(other.san) && (sequenceLength == other.sequenceLength)
+        && (sideMoved == other.sideMoved));
   }
 
   @Override

@@ -11,7 +11,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 
-public class PromotionUtility implements EnumConstants {
+public abstract class PromotionUtility implements EnumConstants {
 
   public static boolean calculateIsPromotionNewMove(MoveSpecification moveSpecification) {
     return moveSpecification.promotionPieceType() != PromotionPieceType.NONE;

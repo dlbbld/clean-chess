@@ -17,7 +17,7 @@ import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
-public class BasicChessUtility {
+public abstract class BasicChessUtility {
 
   public static String calculateSanList(List<HalfMove> halfMoveList) {
     final List<String> sanList = new ArrayList<>();

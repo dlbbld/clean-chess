@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.constants.EnumConstants;
 
-public class MaterialUtility implements EnumConstants {
+public abstract class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
@@ -111,7 +111,6 @@ public class MaterialUtility implements EnumConstants {
         && calculateNumberOfPieces(side, staticPosition, PAWN) == 0;
   }
 
-  // TODO unwinnability - what if no pawns and queens
   public static boolean calculateHasKingAndPawnsOrQueensOnly(Side side, StaticPosition staticPosition) {
     return calculateNumberOfPieces(side, staticPosition, ROOK) == 0
         && calculateNumberOfPieces(side, staticPosition, KNIGHT) == 0

@@ -13,7 +13,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 
-public class StaticPositionUtility implements EnumConstants {
+public abstract class StaticPositionUtility implements EnumConstants {
 
   public static boolean calculateIsCheck(StaticPosition staticPosition, Side havingMove) {
     final Set<Square> threatenedSquares = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,

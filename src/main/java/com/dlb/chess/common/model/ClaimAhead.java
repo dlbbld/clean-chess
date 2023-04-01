@@ -2,11 +2,13 @@ package com.dlb.chess.common.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.model.LegalMove;
 
-public record ClaimAhead(LegalMove legalMove, int fullMoveNumber, String san) {
+@SuppressWarnings("null")
+public record ClaimAhead(@NonNull LegalMove legalMove, int fullMoveNumber, @NonNull String san) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

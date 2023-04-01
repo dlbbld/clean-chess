@@ -20,7 +20,7 @@ import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
-import com.dlb.chess.moves.utility.PawnUtility;
+import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
 import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 import com.dlb.chess.squares.emptyboard.KingNonCastlingEmptyBoardSquares;
 import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
@@ -170,7 +170,7 @@ public class ValidateNewMove implements EnumConstants {
     final Piece movingPiece = board.getStaticPosition().get(fromSquare);
 
     final var isForwardMove = calculateIsPawnEmptyBoardMove(havingMove, fromSquare, toSquare);
-    final var isDiagonalMove = PawnUtility.calculateIsPawnDiagonalMove(havingMove, fromSquare, toSquare);
+    final var isDiagonalMove = PawnDiagonalMoveUtility.calculateIsPawnDiagonalMove(havingMove, fromSquare, toSquare);
 
     if (!isForwardMove && !isDiagonalMove) {
       throw new InvalidMoveException("pawns cannot move in this way", MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);

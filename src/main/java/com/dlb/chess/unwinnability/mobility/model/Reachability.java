@@ -1,7 +1,7 @@
 package com.dlb.chess.unwinnability.mobility.model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,18 +17,19 @@ import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 
 public class Reachability {
 
-  private final Map<Side, Map<Square, VariableState>> reachabilityMap = new HashMap<>();
+  private final EnumMap<Side, EnumMap<Square, VariableState>> reachabilityMap = NonNullWrapperCommon
+      .newEnumMap(Side.class);
 
   public void put(Side side, Square toSquare, VariableState reachable) {
-    Map<Square, VariableState> map;
+    EnumMap<Square, VariableState> enumMap;
     if (!reachabilityMap.containsKey(side)) {
-      map = new HashMap<>();
-      reachabilityMap.put(side, map);
+      enumMap = NonNullWrapperCommon.newEnumMap(Square.class);
+      reachabilityMap.put(side, enumMap);
     } else {
-      map = NonNullWrapperCommon.get(reachabilityMap, side);
+      enumMap = NonNullWrapperCommon.get(reachabilityMap, side);
     }
 
-    map.put(toSquare, reachable);
+    enumMap.put(toSquare, reachable);
   }
 
   public VariableState get(Side side, Square toSquare) {
@@ -44,11 +45,10 @@ public class Reachability {
     return NonNullWrapperCommon.get(map, toSquare);
   }
 
-  // TODO unwinnability - use values two times, that is much easier
   public int calculateVariableCountSetToOne() {
     var count = 0;
-    for (final Entry<Side, Map<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
-      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
+    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
+      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == VariableState.ONE) {
           count++;
@@ -68,8 +68,8 @@ public class Reachability {
 
   private List<ReachabilityVariable> calculateEntries(VariableState reachable) {
     final List<ReachabilityVariable> result = new ArrayList<>();
-    for (final Entry<Side, Map<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
-      final Map<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
+    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
+      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == reachable) {
           result.add(new ReachabilityVariable(mapEntryMap.getKey(), entry.getKey()));

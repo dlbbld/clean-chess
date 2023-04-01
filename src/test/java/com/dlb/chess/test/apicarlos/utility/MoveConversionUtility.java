@@ -10,7 +10,7 @@ import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
 import com.dlb.chess.test.apicomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.move.Move;
 
-public class MoveConversionUtility {
+public abstract class MoveConversionUtility {
 
   // the SAN is only set when the game is loaded from the PGN
   // this method is only for this case

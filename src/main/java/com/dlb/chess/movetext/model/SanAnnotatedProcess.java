@@ -2,21 +2,11 @@ package com.dlb.chess.movetext.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-public record SanAnnotatedProcess(String sanAnnotated, boolean isExhausted, String remainingValue) {
-
-  public String sanAnnotated() {
-    return sanAnnotated;
-  }
-
-  public boolean isExhausted() {
-    return isExhausted;
-  }
-
-  public String remainingValue() {
-    return remainingValue;
-  }
+@SuppressWarnings("null")
+public record SanAnnotatedProcess(@NonNull String sanAnnotated, boolean isExhausted, @NonNull String remainingValue) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

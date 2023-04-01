@@ -10,7 +10,7 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-public class ValidateMoveNumberUtility {
+public abstract class ValidateMoveNumberUtility {
 
   public static <E extends OrthogonalRange> void validateOrthogonalMoveNumber(ImmutableMap<Square, E> mapOfListList,
       int numberOfExpectedMoves) {

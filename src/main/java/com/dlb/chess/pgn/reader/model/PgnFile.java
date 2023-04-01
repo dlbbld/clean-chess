@@ -3,12 +3,15 @@ package com.dlb.chess.pgn.reader.model;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 
-public record PgnFile(List<Tag> tagList, Fen startFen, String leadingCommentary, List<PgnHalfMove> halfMoveList) {
+@SuppressWarnings("null")
+public record PgnFile(@NonNull List<Tag> tagList, @NonNull Fen startFen, @NonNull String leadingCommentary,
+    @NonNull List<PgnHalfMove> halfMoveList) {
 
   @Override
   public boolean equals(@Nullable Object obj) {
@@ -22,22 +25,6 @@ public record PgnFile(List<Tag> tagList, Fen startFen, String leadingCommentary,
     return Objects.equals(halfMoveList, other.halfMoveList)
         && Objects.equals(leadingCommentary, other.leadingCommentary) && Objects.equals(startFen, other.startFen)
         && Objects.equals(tagList, other.tagList);
-  }
-
-  public List<Tag> tagList() {
-    return tagList;
-  }
-
-  public List<PgnHalfMove> halfMoveList() {
-    return halfMoveList;
-  }
-
-  public Fen startFen() {
-    return startFen;
-  }
-
-  public String leadingCommentary() {
-    return leadingCommentary;
   }
 
 }

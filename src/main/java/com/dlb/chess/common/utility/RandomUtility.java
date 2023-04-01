@@ -2,7 +2,7 @@ package com.dlb.chess.common.utility;
 
 import java.util.Random;
 
-public class RandomUtility {
+public abstract class RandomUtility {
 
   // recommended by SonarLint to reuse
   private static final Random random = new Random();

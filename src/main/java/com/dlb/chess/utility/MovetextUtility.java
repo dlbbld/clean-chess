@@ -27,7 +27,7 @@ import com.dlb.chess.pgn.reader.utility.ParseTagUtility;
 import com.dlb.chess.san.enums.SanLetter;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
-public class MovetextUtility {
+public abstract class MovetextUtility {
 
   static final String VALUE_SEPARATION_LETTER = " ";
   private static final int SAN_MIN_LENGTH = 2;
@@ -82,11 +82,11 @@ public class MovetextUtility {
       final var isFirstLine = i == 0;
       if (!isFirstLine) {
         final var isLastLineEndedWithCommentaryStartBrace = NonNullWrapperCommon.get(movetextLines, i - 1)
-            .endsWith(AbstractCommentaryUtility.COMMENTARY_START_BRACE);
+            .endsWith(CommentaryUtility.COMMENTARY_START_BRACE);
         // we add no space if previous line ends with commentary start brace (would add initial space in the comment)
         if (!isLastLineEndedWithCommentaryStartBrace) {
           final var isThisLineStartsWithCommentaryEndBrace = NonNullWrapperCommon.get(movetextLines, i)
-              .startsWith(AbstractCommentaryUtility.COMMENTARY_END_BRACE);
+              .startsWith(CommentaryUtility.COMMENTARY_END_BRACE);
           // we add no space if this line begins with commentary end brace (would add space at the end in the comment)
           if (!isThisLineStartsWithCommentaryEndBrace) {
             result.append(" ");
@@ -577,11 +577,10 @@ public class MovetextUtility {
   private static String adaptMoveTextUntilBeforeNextCommentary(String movetextPart) {
     String partToAdapt;
     String remainingPart;
-    if (movetextPart.contains(AbstractCommentaryUtility.COMMENTARY_START_BRACE)) {
-      partToAdapt = NonNullWrapperCommon.substringBefore(movetextPart,
-          AbstractCommentaryUtility.COMMENTARY_START_BRACE);
-      remainingPart = AbstractCommentaryUtility.COMMENTARY_START_BRACE
-          + NonNullWrapperCommon.substringAfter(movetextPart, AbstractCommentaryUtility.COMMENTARY_START_BRACE);
+    if (movetextPart.contains(CommentaryUtility.COMMENTARY_START_BRACE)) {
+      partToAdapt = NonNullWrapperCommon.substringBefore(movetextPart, CommentaryUtility.COMMENTARY_START_BRACE);
+      remainingPart = CommentaryUtility.COMMENTARY_START_BRACE
+          + NonNullWrapperCommon.substringAfter(movetextPart, CommentaryUtility.COMMENTARY_START_BRACE);
     } else {
       partToAdapt = movetextPart;
       remainingPart = "";
@@ -613,7 +612,7 @@ public class MovetextUtility {
     partToAdapt = NonNullWrapperCommon.normalizeSpace(partToAdapt);
 
     // because the before command does strip trailing white space, we need to add a space if commentary followed
-    if (movetextPart.contains(AbstractCommentaryUtility.COMMENTARY_START_BRACE)) {
+    if (movetextPart.contains(CommentaryUtility.COMMENTARY_START_BRACE)) {
       partToAdapt = partToAdapt + " ";
     }
 

@@ -14,7 +14,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 
-public class YawnMoveUtility {
+public abstract class YawnMoveUtility {
 
   public static List<List<YawnHalfMove>> calculateYawnMoveRule(ApiBoard board, int numberOfHalfMovesThreshold) {
 
@@ -35,15 +35,17 @@ public class YawnMoveUtility {
 
     for (final YawnIndex sequence : indexList) {
 
+      int performedIndex;
+      int sequenceLength;
+      YawnHalfMove entry;
+
       final List<YawnHalfMove> result = new ArrayList<>();
       // we add the initial entry
-      {
-        final var performedIndex = sequence.beginPerformedIndex();
-        final var sequenceLength = 1;
-        final YawnHalfMove firstEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial,
-            halfMoveList, performedIndex, sequenceLength);
-        result.add(firstEntry);
-      }
+      performedIndex = sequence.beginPerformedIndex();
+      sequenceLength = 1;
+      entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+          performedIndex, sequenceLength);
+      result.add(entry);
 
       final var halfMoveClockEnd = sequence.halfMoveClockEnd();
       if (halfMoveClockEnd < numberOfHalfMovesThreshold) {
@@ -52,80 +54,60 @@ public class YawnMoveUtility {
 
       if (halfMoveClockEnd == numberOfHalfMovesThreshold) {
         // we add the last entry, which also ends the sequence
-        {
-          final var performedIndex = sequence.endPerformedIndex();
-          final var sequenceLength = numberOfHalfMovesThreshold;
-          final YawnHalfMove secondEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial,
-              fullMoveNumberInitial, halfMoveList, performedIndex, sequenceLength);
-          result.add(secondEntry);
-        }
+        performedIndex = sequence.endPerformedIndex();
+        sequenceLength = numberOfHalfMovesThreshold;
+        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+            performedIndex, sequenceLength);
+        result.add(entry);
+
         // we add the entry reaching the threshold if sequence below fifty moves
       } else if (numberOfHalfMovesThreshold < ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
           && halfMoveClockEnd < ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
 
         // we can add the move per index as last entry
-        {
-          final var performedIndex = sequence.endPerformedIndex();
-          final var sequenceLength = halfMoveClockEnd;
-          final YawnHalfMove lastEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial,
-              halfMoveList, performedIndex, sequenceLength);
-          result.add(lastEntry);
-        }
+        performedIndex = sequence.endPerformedIndex();
+        sequenceLength = halfMoveClockEnd;
+        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+            performedIndex, sequenceLength);
+        result.add(entry);
       } else {
 
         // we add the half move when the fifty-move rule becomes effective
-        {
-          final var performedIndex = sequence.beginPerformedIndex()
-              + ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
-          final var sequenceLength = ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-          final YawnHalfMove intermediaryEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial,
-              fullMoveNumberInitial, halfMoveList, performedIndex, sequenceLength);
-          result.add(intermediaryEntry);
-        }
+        performedIndex = sequence.beginPerformedIndex() + ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
+        sequenceLength = ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
+        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+            performedIndex, sequenceLength);
+        result.add(entry);
 
         if (halfMoveClockEnd < ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
           // we can add the move per index as last entry
-          {
-            final var performedIndex = sequence.endPerformedIndex();
-            final var sequenceLength = halfMoveClockEnd;
-            final YawnHalfMove lastEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial,
-                fullMoveNumberInitial, halfMoveList, performedIndex, sequenceLength);
-            result.add(lastEntry);
-          }
+          performedIndex = sequence.endPerformedIndex();
+          sequenceLength = halfMoveClockEnd;
 
         } else if (halfMoveClockEnd == ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
           // we add the last entry, which also ends the sequence
-          {
-            final var performedIndex = sequence.endPerformedIndex();
-            final var sequenceLength = ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-            final YawnHalfMove secondEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial,
-                fullMoveNumberInitial, halfMoveList, performedIndex, sequenceLength);
-            result.add(secondEntry);
-          }
+          performedIndex = sequence.endPerformedIndex();
+          sequenceLength = ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
         } else {
 
           // we add the first half move when the seventy-five-move rule becomes effective
           // (the
           // 150th)
-          {
-            final var performedIndex = sequence.beginPerformedIndex()
-                + ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
-            final var sequenceLength = ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-            final YawnHalfMove intermediaryEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial,
-                fullMoveNumberInitial, halfMoveList, performedIndex, sequenceLength);
-            result.add(intermediaryEntry);
-          }
+          performedIndex = sequence.beginPerformedIndex()
+              + ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
+          sequenceLength = ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
+          entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+              performedIndex, sequenceLength);
+          result.add(entry);
 
           // we add the last half move of the sequence
           // we add the last entry, which also ends the sequence
-          {
-            final var performedIndex = sequence.endPerformedIndex();
-            final var sequenceLength = halfMoveClockEnd;
-            final YawnHalfMove thirdEntry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial,
-                fullMoveNumberInitial, halfMoveList, performedIndex, sequenceLength);
-            result.add(thirdEntry);
-          }
+          performedIndex = sequence.endPerformedIndex();
+          sequenceLength = halfMoveClockEnd;
         }
+        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+            performedIndex, sequenceLength);
+        result.add(entry);
       }
       resultList.add(result);
     }
@@ -145,7 +127,6 @@ public class YawnMoveUtility {
         sequenceLength);
   }
 
-  // TODO that is not a very nice way to handle empty games
   private static YawnHalfMove calculateYawnHalfMoveNotPerformed(Side havingMoveInitial, int fullMoveNumberInitial,
       int performedIndex, int sequenceLength) {
 

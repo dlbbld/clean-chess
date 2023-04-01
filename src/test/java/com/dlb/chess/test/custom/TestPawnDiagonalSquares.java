@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.moves.possible.PawnDiagonalSquares;
+import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
 
 class TestPawnDiagonalSquares implements EnumConstants {
 

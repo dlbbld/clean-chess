@@ -2,21 +2,16 @@ package com.dlb.chess.pgn.reader.model;
 
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 // we need the comparison for tests, for an use case with imports
 
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 
-public record Tag(String name, String value) implements Comparable<Tag> {
-
-  public String name() {
-    return name;
-  }
-
-  public String value() {
-    return value;
-  }
+@SuppressWarnings("null")
+public record Tag(@NonNull String name, @NonNull String value) implements Comparable<Tag> {
 
   @Override
   public boolean equals(@Nullable Object obj) {
