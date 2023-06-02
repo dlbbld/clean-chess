@@ -3,8 +3,6 @@ package com.dlb.chess.san;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -199,8 +197,7 @@ public abstract class SanFormatDescription extends AbstractSan {
     output.append(sanPattern.comment());
     output.append("):\n");
     for (final SanExample example : sanPattern.sanExampleList()) {
-      @SuppressWarnings("null") @NonNull final SanExample exampleNonNull = example;
-      output.append(calculateExampleDescription(exampleNonNull));
+      output.append(calculateExampleDescription(example));
       output.append("\n");
     }
     return NonNullWrapperCommon.toString(output);
