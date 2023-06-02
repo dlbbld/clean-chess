@@ -117,6 +117,10 @@ public class NonNullWrapperCommon {
     return checkResult(str.stripTrailing());
   }
 
+  public static String strip(String str) {
+    return checkResult(str.strip());
+  }
+
   public static String substringBefore(String str, String separator) {
     return checkResult(StringUtils.substringBefore(str, separator));
   }
@@ -155,6 +159,11 @@ public class NonNullWrapperCommon {
   @NonNull
   public static <E> E get(List<E> list, int index) {
     return checkResult(list.get(index));
+  }
+
+  @NonNull
+  public static <E> E get(E[] list, int index) {
+    return checkResult(list[index]);
   }
 
   @NonNull
