@@ -13,65 +13,65 @@ import com.google.common.collect.ImmutableList;
 
 public abstract class DiagonalLineUtility implements EnumConstants {
 
-  private static final ImmutableList<Square> A8_UP = constructListSquare(A8);
+  public static final ImmutableList<Square> A8_UP = constructListSquare(A8);
 
-  private static final ImmutableList<Square> A7_UP = constructListSquare(A7, B8);
+  public static final ImmutableList<Square> A7_UP = constructListSquare(A7, B8);
 
-  private static final ImmutableList<Square> A6_UP = constructListSquare(A6, B7, C8);
+  public static final ImmutableList<Square> A6_UP = constructListSquare(A6, B7, C8);
 
-  private static final ImmutableList<Square> A5_UP = constructListSquare(A5, B6, C7, D8);
+  public static final ImmutableList<Square> A5_UP = constructListSquare(A5, B6, C7, D8);
 
-  private static final ImmutableList<Square> A4_UP = constructListSquare(A4, B5, C6, D7, E8);
+  public static final ImmutableList<Square> A4_UP = constructListSquare(A4, B5, C6, D7, E8);
 
-  private static final ImmutableList<Square> A3_UP = constructListSquare(A3, B4, C5, D6, E7, F8);
+  public static final ImmutableList<Square> A3_UP = constructListSquare(A3, B4, C5, D6, E7, F8);
 
-  private static final ImmutableList<Square> A2_UP = constructListSquare(A2, B3, C4, D5, E6, F7, G8);
+  public static final ImmutableList<Square> A2_UP = constructListSquare(A2, B3, C4, D5, E6, F7, G8);
 
-  private static final ImmutableList<Square> A1_UP = constructListSquare(A1, B2, C3, D4, E5, F6, G7, H8);
+  public static final ImmutableList<Square> A1_UP = constructListSquare(A1, B2, C3, D4, E5, F6, G7, H8);
 
-  private static final ImmutableList<Square> B1_UP = constructListSquare(B1, C2, D3, E4, F5, G6, H7);
+  public static final ImmutableList<Square> B1_UP = constructListSquare(B1, C2, D3, E4, F5, G6, H7);
 
-  private static final ImmutableList<Square> C1_UP = constructListSquare(C1, D2, E3, F4, G5, H6);
+  public static final ImmutableList<Square> C1_UP = constructListSquare(C1, D2, E3, F4, G5, H6);
 
-  private static final ImmutableList<Square> D1_UP = constructListSquare(D1, E2, F3, G4, H5);
+  public static final ImmutableList<Square> D1_UP = constructListSquare(D1, E2, F3, G4, H5);
 
-  private static final ImmutableList<Square> E1_UP = constructListSquare(E1, F2, G3, H4);
+  public static final ImmutableList<Square> E1_UP = constructListSquare(E1, F2, G3, H4);
 
-  private static final ImmutableList<Square> F1_UP = constructListSquare(F1, G2, H3);
+  public static final ImmutableList<Square> F1_UP = constructListSquare(F1, G2, H3);
 
-  private static final ImmutableList<Square> G1_UP = constructListSquare(G1, H2);
+  public static final ImmutableList<Square> G1_UP = constructListSquare(G1, H2);
 
-  private static final ImmutableList<Square> H1_UP = constructListSquare(H1);
+  public static final ImmutableList<Square> H1_UP = constructListSquare(H1);
 
-  private static final ImmutableList<Square> A1_DOWN = constructListSquare(A1);
+  public static final ImmutableList<Square> A1_DOWN = constructListSquare(A1);
 
-  private static final ImmutableList<Square> A2_DOWN = constructListSquare(A2, B1);
+  public static final ImmutableList<Square> A2_DOWN = constructListSquare(A2, B1);
 
-  private static final ImmutableList<Square> A3_DOWN = constructListSquare(A3, B2, C1);
+  public static final ImmutableList<Square> A3_DOWN = constructListSquare(A3, B2, C1);
 
-  private static final ImmutableList<Square> A4_DOWN = constructListSquare(A4, B3, C2, D1);
+  public static final ImmutableList<Square> A4_DOWN = constructListSquare(A4, B3, C2, D1);
 
-  private static final ImmutableList<Square> A5_DOWN = constructListSquare(A5, B4, C3, D2, E1);
+  public static final ImmutableList<Square> A5_DOWN = constructListSquare(A5, B4, C3, D2, E1);
 
-  private static final ImmutableList<Square> A6_DOWN = constructListSquare(A6, B5, C4, D3, E2, F1);
+  public static final ImmutableList<Square> A6_DOWN = constructListSquare(A6, B5, C4, D3, E2, F1);
 
-  private static final ImmutableList<Square> A7_DOWN = constructListSquare(A7, B6, C5, D4, E3, F2, G1);
+  public static final ImmutableList<Square> A7_DOWN = constructListSquare(A7, B6, C5, D4, E3, F2, G1);
 
-  private static final ImmutableList<Square> A8_DOWN = constructListSquare(A8, B7, C6, D5, E4, F3, G2, H1);
+  public static final ImmutableList<Square> A8_DOWN = constructListSquare(A8, B7, C6, D5, E4, F3, G2, H1);
 
-  private static final ImmutableList<Square> B8_DOWN = constructListSquare(B8, C7, D6, E5, F4, G3, H2);
+  public static final ImmutableList<Square> B8_DOWN = constructListSquare(B8, C7, D6, E5, F4, G3, H2);
 
-  private static final ImmutableList<Square> C8_DOWN = constructListSquare(C8, D7, E6, F5, G4, H3);
+  public static final ImmutableList<Square> C8_DOWN = constructListSquare(C8, D7, E6, F5, G4, H3);
 
-  private static final ImmutableList<Square> D8_DOWN = constructListSquare(D8, E7, F6, G5, H4);
+  public static final ImmutableList<Square> D8_DOWN = constructListSquare(D8, E7, F6, G5, H4);
 
-  private static final ImmutableList<Square> E8_DOWN = constructListSquare(E8, F7, G6, H5);
+  public static final ImmutableList<Square> E8_DOWN = constructListSquare(E8, F7, G6, H5);
 
-  private static final ImmutableList<Square> F8_DOWN = constructListSquare(F8, G7, H6);
+  public static final ImmutableList<Square> F8_DOWN = constructListSquare(F8, G7, H6);
 
-  private static final ImmutableList<Square> G8_DOWN = constructListSquare(G8, H7);
+  public static final ImmutableList<Square> G8_DOWN = constructListSquare(G8, H7);
 
-  private static final ImmutableList<Square> H8_DOWN = constructListSquare(H8);
+  public static final ImmutableList<Square> H8_DOWN = constructListSquare(H8);
 
   private static final ImmutableList<ImmutableList<Square>> WHITE_DIAGONALS;
   private static final ImmutableList<ImmutableList<Square>> BLACK_DIAGONALS;

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
@@ -18,7 +18,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   @SuppressWarnings("static-method")
   @Test
   void testInitial() {
-    final Fen fen = FenParser.parseAdvancedFen(FenConstants.FEN_INITIAL_STR);
+    final Fen fen = FenParserAdvanced.parseFenAdvanced(FenConstants.FEN_INITIAL_STR);
     final ApiBoard boardFromFenInitial = new Board(fen);
     final ApiBoard board = new Board();
 

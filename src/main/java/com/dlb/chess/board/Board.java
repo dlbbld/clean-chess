@@ -29,7 +29,7 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.fen.FenBoard;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
@@ -132,7 +132,7 @@ public class Board extends AbstractBoard {
   }
 
   public Board(String fen) {
-    this(FenParser.parseAdvancedFen(fen));
+    this(FenParserAdvanced.parseFenAdvanced(fen));
   }
 
   @Override

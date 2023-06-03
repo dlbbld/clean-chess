@@ -3,12 +3,15 @@ package com.dlb.chess.unwinnability.findhelpmate.exhaust.model;
 import java.util.List;
 import java.util.Objects;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.unwinnability.findhelpmate.enums.FindHelpmateResult;
 
-public record FindHelpmateAnalysis(FindHelpmateResult findHelpmateResult, int localNodesCount, List<UciMove> mateLine) {
+@SuppressWarnings("null")
+public record FindHelpmateAnalysis(FindHelpmateResult findHelpmateResult, int localNodesCount,
+    @NonNull List<UciMove> mateLine) {
 
   @Override
   public boolean equals(@Nullable Object obj) {

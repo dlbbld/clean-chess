@@ -21,8 +21,9 @@ import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.enums.FenValidationProblem;
-import com.dlb.chess.common.exceptions.FenValidationException;
+import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
+import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
+import com.dlb.chess.common.exceptions.FenRawValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
@@ -33,7 +34,7 @@ import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
-public class FenParser implements EnumConstants {
+public class FenParserAdvanced implements EnumConstants {
 
   private static final String REG_EXP_EMPTY_RANK = "//";
   @SuppressWarnings("null")
@@ -47,11 +48,17 @@ public class FenParser implements EnumConstants {
   @SuppressWarnings("null")
   private static final Pattern PATTERN_SIDE = Pattern.compile(REG_EXP_SIDE);
 
-  private FenParser() {
+  private FenParserAdvanced() {
   }
 
-  public static Fen parseAdvancedFen(String fen) throws FenValidationException {
-    final FenRaw fenRaw = FenParserRaw.parseFenRaw(fen);
+  public static Fen parseFenAdvanced(String fen) throws FenAdvancedValidationException {
+    final FenRaw fenRaw;
+    try {
+      fenRaw = FenParserRaw.parseFenRaw(fen);
+    } catch (final FenRawValidationException e) {
+      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FORMAT, message);
+    }
 
     final var piecePlacement = fenRaw.piecePlacement();
     final StaticPosition staticPosition = validatePiecePlacement(piecePlacement);
@@ -65,7 +72,7 @@ public class FenParser implements EnumConstants {
     final Side havingMove = validateHavingMove(havingMoveCheck);
 
     if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove)) {
-      throw new FenValidationException(FenValidationProblem.INVALID_POSITION_CHECK,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_CHECK,
           "the king of the opposing player is in check");
     }
 
@@ -82,29 +89,8 @@ public class FenParser implements EnumConstants {
     final var fullMoveNumberStr = fenRaw.fullMoveNumber();
     final var fullMoveNumber = validateFullMoveNumber(fen, havingMove, fullMoveNumberStr);
 
-    final var maximumPossibleHalfMoveClock = calculateMaximumPossibleHalfMoveClock(fullMoveNumber, havingMove);
-
-    if (halfMoveClock > maximumPossibleHalfMoveClock) {
-      throw new FenValidationException(
-          FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER,
-          "the half-move clock \"" + halfMoveClockStr + "\" is greater than the maximum possible half-move clock \""
-              + maximumPossibleHalfMoveClock + "\" for the specified full-move counter of " + fullMoveNumber);
-    }
-
     return new Fen(fen, staticPosition, havingMove, castlingRightBoth, enPassantCaptureTargetSquare, halfMoveClock,
         fullMoveNumber);
-  }
-
-  private static int calculateMaximumPossibleHalfMoveClock(int fullMoveNumber, Side havingMove) {
-
-    final var baseValue = 2 * (fullMoveNumber - 1);
-    return switch (havingMove) {
-      case BLACK -> baseValue + 1;
-      case WHITE -> baseValue;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-
   }
 
   // important semantically
@@ -112,10 +98,10 @@ public class FenParser implements EnumConstants {
   // we do not validate if the position actually makes sense, like two kings of
   // same color or no king or both kings in
   // check, too much pawns etc.
-  public static StaticPosition validatePiecePlacement(String piecePlacement) throws FenValidationException {
+  public static StaticPosition validatePiecePlacement(String piecePlacement) throws FenAdvancedValidationException {
 
     if (piecePlacement.endsWith("/")) {
-      throw new FenValidationException(FenValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH,
           "it ends with a slash");
     }
 
@@ -123,13 +109,14 @@ public class FenParser implements EnumConstants {
     // empty ranks
     final var matcherEmptyRank = PATTERN_EMPTY_RANK.matcher(piecePlacement);
     if (matcherEmptyRank.find()) {
-      throw new FenValidationException(FenValidationProblem.INVALID_POSITION_EMPTY_RANK, "it contains empty ranks");
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_EMPTY_RANK,
+          "it contains empty ranks");
     }
 
     final var rankDescriptionList = piecePlacement.split("/");
 
     if (rankDescriptionList.length != 8) {
-      throw new FenValidationException(FenValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS,
           "it does not specify eight ranks");
     }
 
@@ -138,7 +125,7 @@ public class FenParser implements EnumConstants {
       rankNumber++;
       final var matcherRank = PATTERN_RANK.matcher(rankDescription);
       if (!matcherRank.find()) {
-        throw new FenValidationException(FenValidationProblem.INVALID_POSITION_UNKNOWN_CHAR,
+        throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_UNKNOWN_CHAR,
             "the rank " + rankNumber + " contains invalid chars");
       }
     }
@@ -201,7 +188,7 @@ public class FenParser implements EnumConstants {
 
   }
 
-  private static List<String> validateEvaluatedLength(String rankDescription) throws FenValidationException {
+  private static List<String> validateEvaluatedLength(String rankDescription) throws FenAdvancedValidationException {
     final List<String> squareDescriptionList = new ArrayList<>();
 
     var countEvaluatedLength = 0;
@@ -221,7 +208,7 @@ public class FenParser implements EnumConstants {
 
     }
     if (countEvaluatedLength != 8) {
-      throw new FenValidationException(FenValidationProblem.INVALID_POSITION_LINE_EVALUATION_LENGTH,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_LINE_EVALUATION_LENGTH,
           "the rank description \"" + rankDescription + "\" for the position does not evaluate to eight squares");
     }
 
@@ -232,10 +219,10 @@ public class FenParser implements EnumConstants {
     return squareDescriptionList;
   }
 
-  private static Side validateHavingMove(String havingMove) throws FenValidationException {
+  private static Side validateHavingMove(String havingMove) throws FenAdvancedValidationException {
     final var matcher = PATTERN_SIDE.matcher(havingMove);
     if (!matcher.find()) {
-      throw new FenValidationException(FenValidationProblem.INVALID_HAVING_MOVE_RANGE,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_HAVING_MOVE_RANGE,
           "the having move part of \"" + havingMove + "\" is not valid");
     }
     if ("w".equals(havingMove)) {
@@ -248,14 +235,14 @@ public class FenParser implements EnumConstants {
   }
 
   private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition, String castlingRightBothStr)
-      throws FenValidationException {
+      throws FenAdvancedValidationException {
     final CastlingRightBoth castlingRightBoth = validateCastlingRightBoth(castlingRightBothStr);
     validateCastlingRightAgainstStaticPosition(staticPosition, castlingRightBoth);
     return castlingRightBoth;
   }
 
   private static CastlingRightBoth validateCastlingRightBoth(String castlingRightBothStr)
-      throws FenValidationException {
+      throws FenAdvancedValidationException {
 
     switch (castlingRightBothStr) {
       case "-":
@@ -293,12 +280,12 @@ public class FenParser implements EnumConstants {
       default:
         break;
     }
-    throw new FenValidationException(FenValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
+    throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
         "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
   }
 
   private static Square validateEnPassantCaptureTargetSquare(StaticPosition staticPosition,
-      String enPassantCaptureTargetSquareStr, Side havingMove) throws FenValidationException {
+      String enPassantCaptureTargetSquareStr, Side havingMove) throws FenAdvancedValidationException {
     final Square enPassantCaptureTargetSquare = validateEnPassantCaptureTargetSquare(enPassantCaptureTargetSquareStr,
         havingMove);
     validateEnPassantCaptureTargetSquareAgainstStaticPosition(staticPosition, enPassantCaptureTargetSquare, havingMove);
@@ -306,7 +293,7 @@ public class FenParser implements EnumConstants {
   }
 
   private static Square validateEnPassantCaptureTargetSquare(String enPassantCaptureTargetSquare, Side havingMove)
-      throws FenValidationException {
+      throws FenAdvancedValidationException {
     if (enPassantCaptureTargetSquare.length() == 1 && "-".equals(enPassantCaptureTargetSquare)) {
       return Square.NONE;
     }
@@ -326,8 +313,8 @@ public class FenParser implements EnumConstants {
             }
             final Side oppositeSide = havingMove.getOppositeSide();
             if (Square.calculateEnPassantCaptureTargetSquareList(oppositeSide).contains(square)) {
-              throw new FenValidationException(
-                  FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR,
+              throw new FenAdvancedValidationException(
+                  FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR,
                   "the en passant target square \"" + enPassantCaptureTargetSquare
                       + "\" belongs to the player having the move, not the opponent");
             }
@@ -335,12 +322,13 @@ public class FenParser implements EnumConstants {
         }
       }
     }
-    throw new FenValidationException(FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE,
+    throw new FenAdvancedValidationException(
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE,
         "the en passant target square part of \"" + enPassantCaptureTargetSquare + "\" is not valid");
   }
 
   private static void validateEnPassantCaptureTargetSquareAgainstStaticPosition(StaticPosition staticPosition,
-      Square enPassantCaptureTargetSquare, Side havingMove) throws FenValidationException {
+      Square enPassantCaptureTargetSquare, Side havingMove) throws FenAdvancedValidationException {
     if (enPassantCaptureTargetSquare == Square.NONE) {
       // if not set there is nothing to validate
       return;
@@ -353,7 +341,8 @@ public class FenParser implements EnumConstants {
     final Piece pieceOnTwoAdvanceSquare = staticPosition.get(pawnTwoAdvanceSquare);
     if (pieceOnTwoAdvanceSquare == Piece.NONE
         || pieceOnTwoAdvanceSquare.getSide() != oppositeSide && pieceOnTwoAdvanceSquare.getPieceType() != PAWN) {
-      throw new FenValidationException(FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER,
+      throw new FenAdvancedValidationException(
+          FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER,
           "the en passant target square is specified as \"" + enPassantCaptureTargetSquare
               + "\" but there is no opponent pawn on \"" + pawnTwoAdvanceSquare + "\"");
     }
@@ -367,18 +356,20 @@ public class FenParser implements EnumConstants {
     final var isEnPassantCaptureTargetSquareEmpty = pieceOnEnPassantCaptureTargetSquare != Piece.NONE;
 
     if (isStartingSquareEmpty && isEnPassantCaptureTargetSquareEmpty) {
-      throw new FenValidationException(FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_BOTH_NOT_EMPTY,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_BOTH_NOT_EMPTY,
           "the en passant target square \"" + enPassantCaptureTargetSquare + "\" and the pawn starting square  \""
               + startingSquare + "\" are not empty");
     }
 
     if (isStartingSquareEmpty) {
-      throw new FenValidationException(FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_STARTING_SQUARE_NOT_EMPTY,
+      throw new FenAdvancedValidationException(
+          FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_STARTING_SQUARE_NOT_EMPTY,
           "the from square \"" + startingSquare + "\" of the pawn making the two square advance is not empty");
     }
 
     if (isEnPassantCaptureTargetSquareEmpty) {
-      throw new FenValidationException(FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NOT_EMPTY,
+      throw new FenAdvancedValidationException(
+          FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NOT_EMPTY,
           "the en passant target square \"" + enPassantCaptureTargetSquare + "\" is not empty");
     }
 
@@ -391,25 +382,26 @@ public class FenParser implements EnumConstants {
     final StaticPosition staticPositionBeforeTwoSquareAdvance = staticPosition.createChangedPosition(updateSquareList);
 
     if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPositionBeforeTwoSquareAdvance, oppositeSide)) {
-      throw new FenValidationException(FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL,
+      throw new FenAdvancedValidationException(
+          FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL,
           "the opponent king was in check before before performing the pawn two square advance");
     }
 
   }
 
   private static int validateHalfMoveClock(String halfMoveClockStr, Square enPassantCaptureTargetSquare)
-      throws FenValidationException {
+      throws FenAdvancedValidationException {
     final var halfMoveClock = validateHalfMoveClock(halfMoveClockStr);
     validateHalfMoveClock(halfMoveClock, enPassantCaptureTargetSquare);
     return halfMoveClock;
   }
 
-  private static int validateHalfMoveClock(String halfMoveClockStr) throws FenValidationException {
+  private static int validateHalfMoveClock(String halfMoveClockStr) throws FenAdvancedValidationException {
     int halfMoveClock;
     try {
       halfMoveClock = Integer.parseInt(halfMoveClockStr);
     } catch (@SuppressWarnings("unused") final NumberFormatException e) {
-      throw new FenValidationException(FenValidationProblem.INVALID_HALF_MOVE_CLOCK_RANGE,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_RANGE,
           "the half-move clock part of \"" + halfMoveClockStr + "\" is not an integer value");
     }
 
@@ -417,59 +409,36 @@ public class FenParser implements EnumConstants {
   }
 
   private static void validateHalfMoveClock(int halfMoveClock, Square enPassantCaptureTargetSquare)
-      throws FenValidationException {
+      throws FenAdvancedValidationException {
     if (enPassantCaptureTargetSquare != Square.NONE && halfMoveClock != 0) {
-      throw new FenValidationException(
-          FenValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET,
+      throw new FenAdvancedValidationException(
+          FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET,
           "the half-move clock is \"" + halfMoveClock + "\" must be zero if en passant target square is set");
     }
   }
 
   private static int validateFullMoveNumber(String fen, Side havingMove, String fullMoveNumberStr)
-      throws FenValidationException {
+      throws FenAdvancedValidationException {
     int fullMoveNumber;
     try {
       fullMoveNumber = Integer.parseInt(fullMoveNumberStr);
     } catch (@SuppressWarnings("unused") final NumberFormatException e) {
-      throw new FenValidationException(FenValidationProblem.INVALID_FULL_MOVE_NUMBER_RANGE,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_RANGE,
           "the full move counter of \"" + fullMoveNumberStr + "\" is not an integer value");
     }
 
     if (fullMoveNumber < 0) {
-      throw new FenValidationException(FenValidationProblem.INVALID_FULL_MOVE_NUMBER_NEGATIVE,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_NEGATIVE,
           "the full move counter of \"" + fullMoveNumberStr + "\" cannot be negative");
     }
 
     if (fullMoveNumber == 0) {
-      throw new FenValidationException(FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ZERO,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_ZERO,
           "the full move counter cannot be zero");
     }
 
-    if (fullMoveNumber == 1) {
-      switch (havingMove) {
-        case BLACK:
-          if (!FenConstants.POSSIBLE_FEN_AFTER_FIRST_HALF_MOVE.contains(fen)) {
-            throw new FenValidationException(
-                FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_BLACK_IN_NON_POSSIBLE_POSITION,
-                "Black can only make the first move, "
-                    + "(full move counter of one), if it's any of the 20 possible positions after White's first move");
-          }
-          break;
-        case WHITE:
-          if (!FenConstants.FEN_INITIAL_STR.equals(fen)) {
-            throw new FenValidationException(
-                FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_WHITE_IN_NON_STARTING_POSITION,
-                "White can only make the first move, " + "(full move counter of one), in the starting position");
-          }
-          break;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
-      }
-    }
-
     if (fullMoveNumber > FenConstants.MAX_FULL_MOVE_NUMBER) {
-      throw new FenValidationException(FenValidationProblem.INVALID_FULL_MOVE_NUMBER_TOO_BIG_ABSOLUT,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_TOO_BIG_ABSOLUT,
           "the full move counter of " + fullMoveNumber + " is above the maximum supported value of "
               + FenConstants.MAX_FULL_MOVE_NUMBER + "");
     }
@@ -478,7 +447,7 @@ public class FenParser implements EnumConstants {
   }
 
   private static void validateCastlingRightAgainstStaticPosition(StaticPosition staticPosition,
-      CastlingRightBoth castlingRightBoth) throws FenValidationException {
+      CastlingRightBoth castlingRightBoth) throws FenAdvancedValidationException {
 
     final List<Side> sideToCheckList = new ArrayList<>();
     sideToCheckList.add(WHITE);
@@ -492,17 +461,17 @@ public class FenParser implements EnumConstants {
       final var isQueenSideCastlingOriginalPosition = CastlingUtility
           .calculateQueenSideCastlingIsOriginalPosition(staticPosition, sideToCheck);
 
-      final FenValidationProblem parseFenCheck = calculateParseFenCheck(sideToCheck, sideCastlingRight,
+      final FenAdvancedValidationProblem parseFenCheck = calculateParseFenCheck(sideToCheck, sideCastlingRight,
           isKingSideCastlingOriginalPosition, isQueenSideCastlingOriginalPosition);
 
-      if (parseFenCheck != FenValidationProblem.SUCCESS) {
+      if (parseFenCheck != FenAdvancedValidationProblem.SUCCESS) {
         throw calculateParseFenException(sideToCheck, sideCastlingRight, parseFenCheck);
       }
     }
   }
 
-  private static FenValidationException calculateParseFenException(Side sideToCheck, CastlingRight castlingRight,
-      FenValidationProblem parseFenCheck) {
+  private static FenAdvancedValidationException calculateParseFenException(Side sideToCheck,
+      CastlingRight castlingRight, FenAdvancedValidationProblem parseFenCheck) {
 
     final StringBuilder message = new StringBuilder();
     message.append("Castling rights for ");
@@ -512,33 +481,33 @@ public class FenParser implements EnumConstants {
     message.append(
         ", but castling as such is not possible, as the king and/or rock are not in their original positions anymore.");
 
-    return new FenValidationException(parseFenCheck, NonNullWrapperCommon.toString(message));
+    return new FenAdvancedValidationException(parseFenCheck, NonNullWrapperCommon.toString(message));
   }
 
-  private static FenValidationProblem calculateParseFenCheck(Side sideToCheck, CastlingRight castlingRight,
+  private static FenAdvancedValidationProblem calculateParseFenCheck(Side sideToCheck, CastlingRight castlingRight,
       boolean isKingSideCastlingOriginalPosition, boolean isQueenSideCastlingOriginalPosition) {
     switch (castlingRight) {
       case KING_AND_QUEEN_SIDE:
         if (!isKingSideCastlingOriginalPosition && !isQueenSideCastlingOriginalPosition) {
           return switch (sideToCheck) {
-            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH;
-            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH;
+            case BLACK -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH;
+            case WHITE -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH;
             case NONE -> throw new IllegalArgumentException();
             default -> throw new IllegalArgumentException();
           };
         }
         if (!isKingSideCastlingOriginalPosition) {
           return switch (sideToCheck) {
-            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
-            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
+            case BLACK -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
+            case WHITE -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
             case NONE -> throw new IllegalArgumentException();
             default -> throw new IllegalArgumentException();
           };
         }
         if (!isQueenSideCastlingOriginalPosition) {
           return switch (sideToCheck) {
-            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
-            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
+            case BLACK -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
+            case WHITE -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
             case NONE -> throw new IllegalArgumentException();
             default -> throw new IllegalArgumentException();
           };
@@ -547,8 +516,8 @@ public class FenParser implements EnumConstants {
       case KING_SIDE:
         if (!isKingSideCastlingOriginalPosition) {
           return switch (sideToCheck) {
-            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
-            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
+            case BLACK -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE;
+            case WHITE -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE;
             case NONE -> throw new IllegalArgumentException();
             default -> throw new IllegalArgumentException();
           };
@@ -559,8 +528,8 @@ public class FenParser implements EnumConstants {
       case QUEEN_SIDE:
         if (!isQueenSideCastlingOriginalPosition) {
           return switch (sideToCheck) {
-            case BLACK -> FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
-            case WHITE -> FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
+            case BLACK -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE;
+            case WHITE -> FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE;
             case NONE -> throw new IllegalArgumentException();
             default -> throw new IllegalArgumentException();
           };
@@ -569,30 +538,31 @@ public class FenParser implements EnumConstants {
       default:
         throw new IllegalArgumentException();
     }
-    return FenValidationProblem.SUCCESS;
+    return FenAdvancedValidationProblem.SUCCESS;
 
   }
 
-  private static void validateNumberOfPieces(StaticPosition staticPosition) throws FenValidationException {
+  private static void validateNumberOfPieces(StaticPosition staticPosition) throws FenAdvancedValidationException {
     validateWhiteNumberOfPieces(staticPosition);
     validateBlackNumberOfPieces(staticPosition);
   }
 
-  private static void validateWhiteNumberOfPieces(StaticPosition staticPosition) throws FenValidationException {
+  private static void validateWhiteNumberOfPieces(StaticPosition staticPosition) throws FenAdvancedValidationException {
     // kings
     final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KING);
     if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_KINGS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KINGS,
           "there is more than one white king");
     }
     if (numberOfKings == 0) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_NO_KING, "there is no white king");
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_NO_KING,
+          "there is no white king");
     }
 
     // pawns
     final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.PAWN);
     if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS,
           "there are too many white pawns");
     }
 
@@ -602,7 +572,7 @@ public class FenParser implements EnumConstants {
     final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.ROOK);
     final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
     if (numberOfRooksPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS,
           "there are too many white rooks");
     }
 
@@ -610,7 +580,7 @@ public class FenParser implements EnumConstants {
     final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KNIGHT);
     final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
     if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS,
           "there are too many white knights");
     }
 
@@ -620,7 +590,7 @@ public class FenParser implements EnumConstants {
     final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
     if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS,
           "there are too many white light squared bishops");
     }
 
@@ -630,7 +600,7 @@ public class FenParser implements EnumConstants {
     final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
     if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS,
           "there are too many white dark squared bishops");
     }
 
@@ -638,27 +608,28 @@ public class FenParser implements EnumConstants {
     final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.QUEEN);
     final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
     if (numberOfQueensPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS,
           "there are too many white queens");
     }
   }
 
-  private static void validateBlackNumberOfPieces(StaticPosition staticPosition) throws FenValidationException {
+  private static void validateBlackNumberOfPieces(StaticPosition staticPosition) throws FenAdvancedValidationException {
     // copy/replace code of white
     // kings
     final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KING);
     if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_KINGS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KINGS,
           "there is more than one black king");
     }
     if (numberOfKings == 0) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_NO_KING, "there is no black king");
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_NO_KING,
+          "there is no black king");
     }
 
     // pawns
     final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.PAWN);
     if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS,
           "there are too many black pawns");
     }
 
@@ -668,7 +639,7 @@ public class FenParser implements EnumConstants {
     final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.ROOK);
     final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
     if (numberOfRooksPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS,
           "there are too many black rooks");
     }
 
@@ -676,7 +647,7 @@ public class FenParser implements EnumConstants {
     final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KNIGHT);
     final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
     if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS,
           "there are too many black knights");
     }
 
@@ -686,7 +657,7 @@ public class FenParser implements EnumConstants {
     final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
     if (numberOfLightSquareBishopsPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS,
           "there are too many black light squared bishops");
     }
 
@@ -696,7 +667,7 @@ public class FenParser implements EnumConstants {
     final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
     if (numberOfDarkSquareBishopsPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS,
           "there are too many black dark squared bishops");
     }
 
@@ -704,39 +675,45 @@ public class FenParser implements EnumConstants {
     final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.QUEEN);
     final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
     if (numberOfQueensPromoted > numberOfPossiblePromotions) {
-      throw new FenValidationException(FenValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS,
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS,
           "there are too many black queens");
     }
 
   }
 
-  private static void validatePawnRankNotPromotionRank(StaticPosition staticPosition) throws FenValidationException {
+  private static void validatePawnRankNotPromotionRank(StaticPosition staticPosition)
+      throws FenAdvancedValidationException {
     for (final Square square : Square.getPromotionRank(WHITE)) {
       if (staticPosition.get(square) == WHITE_PAWN) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_PROMOTION_RANK,
+        throw new FenAdvancedValidationException(
+            FenAdvancedValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_PROMOTION_RANK,
             "There is a non promoted white pawn on rank " + square.getRank().getNumber());
       }
     }
 
     for (final Square square : Square.getPromotionRank(BLACK)) {
       if (staticPosition.get(square) == BLACK_PAWN) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_PROMOTION_RANK,
+        throw new FenAdvancedValidationException(
+            FenAdvancedValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_PROMOTION_RANK,
             "There is a non promoted black pawn on rank " + square.getRank().getNumber());
       }
     }
   }
 
-  private static void validatePawnRankNotGroundRank(StaticPosition staticPosition) throws FenValidationException {
+  private static void validatePawnRankNotGroundRank(StaticPosition staticPosition)
+      throws FenAdvancedValidationException {
     for (final Square square : Square.getPromotionRank(BLACK)) {
       if (staticPosition.get(square) == WHITE_PAWN) {
-        throw new FenValidationException(FenValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_GROUND_RANK,
+        throw new FenAdvancedValidationException(
+            FenAdvancedValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_GROUND_RANK,
             "There is a white pawn on rank " + square.getRank().getNumber());
       }
     }
 
     for (final Square square : Square.getPromotionRank(WHITE)) {
       if (staticPosition.get(square) == BLACK_PAWN) {
-        throw new FenValidationException(FenValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_GROUND_RANK,
+        throw new FenAdvancedValidationException(
+            FenAdvancedValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_GROUND_RANK,
             "There is a black pawn on rank " + square.getRank().getNumber());
       }
     }

@@ -8,10 +8,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.exceptions.FenValidationException;
+import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.HalfMoveUtility;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.movetext.model.MovetextParseResult;
@@ -167,8 +167,8 @@ public class PgnReaderStrict extends AbstractPgnReader {
 
         final String fen = TagUtility.readFen(tagList);
         try {
-          FenParser.parseAdvancedFen(fen);
-        } catch (final FenValidationException e) {
+          FenParserAdvanced.parseFenAdvanced(fen);
+        } catch (final FenAdvancedValidationException e) {
           throw new PgnReaderStrictValidationException(
               PgnReaderStrictValidationProblem.TAG_SET_UP_REQUIRES_FEN_TAG_BUT_FEN_INVALID, SanValidationProblem.NONE,
               "The required FEN tag was provided but is invalid. The error message when parsing was \"" + e.getMessage()

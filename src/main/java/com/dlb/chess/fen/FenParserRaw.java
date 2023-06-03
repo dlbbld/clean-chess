@@ -4,8 +4,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.enums.FenValidationProblem;
-import com.dlb.chess.common.exceptions.FenValidationException;
+import com.dlb.chess.common.exceptions.FenRawValidationException;
 import com.dlb.chess.fen.model.FenRaw;
 
 public class FenParserRaw {
@@ -37,13 +36,12 @@ public class FenParserRaw {
     return parseFenRaw(fen).fullMoveNumber();
   }
 
-  public static FenRaw parseFenRaw(String fen) throws FenValidationException {
+  public static FenRaw parseFenRaw(String fen) throws FenRawValidationException {
     final var regExp = "^([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)$";
     final var pattern = Pattern.compile(regExp);
     final var matcher = pattern.matcher(fen);
     if (!matcher.find()) {
-      throw new FenValidationException(FenValidationProblem.INVALID_FORMAT,
-          "the format could not be identifed as valid FEN format");
+      throw new FenRawValidationException("The format could not be identifed as valid FEN format");
     }
     // the regular expressions assures that these matches are not empty
     @SuppressWarnings("null") @NonNull final String piecePlacement = matcher.group(1);

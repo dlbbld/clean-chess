@@ -9,7 +9,7 @@ import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
@@ -61,7 +61,7 @@ public abstract class AbstractPgnReader {
 
   static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
     final String startFenStr = calculateStartFenStr(tagList, isStartFromPosition);
-    return FenParser.parseAdvancedFen(startFenStr);
+    return FenParserAdvanced.parseFenAdvanced(startFenStr);
   }
 
   static void removeFenIfInitial(List<Tag> tagList, Fen startFen) {

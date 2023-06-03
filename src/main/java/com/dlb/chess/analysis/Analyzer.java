@@ -20,7 +20,6 @@ import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.mobility.Mobility;
-import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -84,7 +83,7 @@ public class Analyzer extends AnalyzerPrint {
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
 
     // for performance we calculate and reuse the mobility solution
-    final MobilitySolution mobilitySolution = Mobility.mobility(board);
+    final var mobilitySolution = Mobility.mobility(board);
 
     final UnwinnableFull unwinnableFullWhite;
     final UnwinnableFull unwinnableFullBlack;
