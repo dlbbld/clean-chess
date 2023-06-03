@@ -9,15 +9,15 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.enums.FenValidationProblem;
-import com.dlb.chess.common.exceptions.FenValidationException;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
+import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.fen.model.FenRaw;
 
-class TestFenParser implements EnumConstants {
+class TestFenParserAdvanced implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
@@ -43,233 +43,203 @@ class TestFenParser implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testParseFenException() {
-    checkParseFenException("", FenValidationProblem.INVALID_FORMAT);
+    checkParseFenException("", FenAdvancedValidationProblem.INVALID_FORMAT);
 
     // position format
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR/ w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH);
+        FenAdvancedValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR// w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH);
+        FenAdvancedValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR/// w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH);
+        FenAdvancedValidationProblem.INVALID_POSITION_ENDS_WITH_FORWARD_SLASH);
 
     checkParseFenException("//rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_EMPTY_RANK);
+        FenAdvancedValidationProblem.INVALID_POSITION_EMPTY_RANK);
 
     checkParseFenException("rnbqkbnr//pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_EMPTY_RANK);
+        FenAdvancedValidationProblem.INVALID_POSITION_EMPTY_RANK);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8//8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_EMPTY_RANK);
+        FenAdvancedValidationProblem.INVALID_POSITION_EMPTY_RANK);
 
-    checkParseFenException("RNBQKBNR//rn w KQkq - 0 1", FenValidationProblem.INVALID_POSITION_EMPTY_RANK);
+    checkParseFenException("RNBQKBNR//rn w KQkq - 0 1", FenAdvancedValidationProblem.INVALID_POSITION_EMPTY_RANK);
 
     checkParseFenException("pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS);
+        FenAdvancedValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS);
 
     checkParseFenException("8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS);
+        FenAdvancedValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS);
 
-    checkParseFenException("RNBQKBNR w KQkq - 0 1", FenValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS);
+    checkParseFenException("RNBQKBNR w KQkq - 0 1", FenAdvancedValidationProblem.INVALID_POSITION_NUMBER_OF_RANKS);
 
     checkParseFenException("xnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
+        FenAdvancedValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
 
     checkParseFenException("-nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
+        FenAdvancedValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
 
     checkParseFenException("0nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
+        FenAdvancedValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
 
     checkParseFenException("9nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
+        FenAdvancedValidationProblem.INVALID_POSITION_UNKNOWN_CHAR);
 
     checkParseFenException("nbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_LINE_EVALUATION_LENGTH);
+        FenAdvancedValidationProblem.INVALID_POSITION_LINE_EVALUATION_LENGTH);
 
     checkParseFenException("rnbqkbnr/pppppppp/7/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-        FenValidationProblem.INVALID_POSITION_LINE_EVALUATION_LENGTH);
+        FenAdvancedValidationProblem.INVALID_POSITION_LINE_EVALUATION_LENGTH);
 
     // position illegal
 
     // white move - black king in check
     checkParseFenException("rnbq1rk1/pppp1Bpp/5n2/4p3/1b2P3/5N2/PPPP1PPP/RNBQ1RK1 w - - 0 5",
-        FenValidationProblem.INVALID_POSITION_CHECK);
+        FenAdvancedValidationProblem.INVALID_POSITION_CHECK);
 
     // black move - white king in check
     checkParseFenException("rnbq1rk1/pppp1ppp/5n2/4p3/1PB1P3/5N1P/P1PP1bP1/RNBQ1RK1 b - - 0 7",
-        FenValidationProblem.INVALID_POSITION_CHECK);
+        FenAdvancedValidationProblem.INVALID_POSITION_CHECK);
 
     // having move
     // range
-    checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R x - - 0 100", FenValidationProblem.INVALID_HAVING_MOVE_RANGE);
+    checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R x - - 0 100",
+        FenAdvancedValidationProblem.INVALID_HAVING_MOVE_RANGE);
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR x KQkq - 0 1",
-        FenValidationProblem.INVALID_HAVING_MOVE_RANGE);
+        FenAdvancedValidationProblem.INVALID_HAVING_MOVE_RANGE);
 
     // castling right
     // range
-    checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R w x - 0 100", FenValidationProblem.INVALID_CASTLING_RIGHT_RANGE);
+    checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R w x - 0 100",
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE);
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b x - 0 1",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_RANGE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE);
 
     // invalid value
     // white both for king
     checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R w KQkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH);
     // white both for rooks
     checkParseFenException("r3k2r/8/8/8/8/8/8/1R2K1R1 w KQkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_BOTH);
     // white kingside for king
     checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R w Kkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE);
     // white kingside for rook
     checkParseFenException("r3k2r/8/8/8/8/8/8/1R2K1R1 w Kkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_KINGSIDE);
     // white queenside for king
     checkParseFenException("r3k2r/8/8/8/8/8/8/R2K3R w Qkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE);
     // white queenside for rook
     checkParseFenException("r3k2r/8/8/8/8/8/8/1R2K1R1 w Qkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_WHITE_QUEENSIDE);
 
     // black both for king
     checkParseFenException("r2k3r/8/8/8/8/8/8/RN2K1NR w KQkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH);
     // black both for rooks
     checkParseFenException("1r2k3/7r/8/8/8/8/8/RN2K1NR w KQkq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_BOTH);
     // black kingside for king
     checkParseFenException("r2k3r/8/8/8/8/8/8/RN2K1NR w Kk - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE);
     // black kingside for rook
     checkParseFenException("1r2k3/7r/8/8/8/8/8/RN2K1NR w Kk - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_KINGSIDE);
     // black queenside for king
     checkParseFenException("r2k3r/8/8/8/8/8/8/RN2K1NR w Qq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE);
     // black queenside for rook
     checkParseFenException("1r2k3/7r/8/8/8/8/8/RN2K1NR w Qq - 0 100",
-        FenValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE);
+        FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_BLACK_QUEENSIDE);
 
     // en passant target square
 
     // range
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq x 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq x2 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a0 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
 
     // invalid value - no target square
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq a2 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq b5 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq c7 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_RANGE);
 
     // invalid value - target square own
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq d6 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR);
 
     checkParseFenException("rnbqkbnr/ppp1pppp/3p4/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq e3 0 2",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR);
 
     // no pawn after target square
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq e3 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
 
     checkParseFenException("r1bqkbnr/pppppppp/2n5/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq d6 0 2",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/4P3/PPPP1PPP/RNBQKBNR b KQkq e3 0 1",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
 
     checkParseFenException("rnbqkbnr/p1pppppp/1p6/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq b6 0 2",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NO_PAWN_AFTER);
 
     // en passant target square not empty
     checkParseFenException("r1bqkbnr/2pppppp/p1n5/1p6/4P3/3PBN2/PPP2PPP/RN1QKB1R b KQkq e3 0 4",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NOT_EMPTY);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NOT_EMPTY);
     checkParseFenException("r1bqkb1r/2ppppp1/p1n4n/1p5p/4P3/3PBN1P/PPP2PP1/RN1QKB1R w KQkq h6 0 6",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NOT_EMPTY);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_NOT_EMPTY);
 
     // starting square not empty
     checkParseFenException("r1bqkbnr/2pppppp/p1n5/1p6/4P3/3P1N2/PPP1BPPP/RNBQK2R b KQkq e3 0 4",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_STARTING_SQUARE_NOT_EMPTY);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_STARTING_SQUARE_NOT_EMPTY);
     checkParseFenException("r1bqkb1r/2pppppn/p1n5/1p5p/4P3/3PBN1P/PPP2PP1/RN1QKB1R w KQkq h6 0 6",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_STARTING_SQUARE_NOT_EMPTY);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_STARTING_SQUARE_NOT_EMPTY);
 
     // both not empty
     checkParseFenException("r1bqkbnr/2pppppp/p1n5/1p6/4P3/3PBN2/PPP1BPPP/RN1QK2R b KQkq e3 0 4",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_BOTH_NOT_EMPTY);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_BOTH_NOT_EMPTY);
     checkParseFenException("r1bqkb1r/2pppppn/p6n/1p5p/4P3/3PBN1P/PPP2PP1/RN1QKB1R w KQkq h6 0 6",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_BOTH_NOT_EMPTY);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_BOTH_NOT_EMPTY);
 
     // position before two-square advance illegal
     checkParseFenException("8/8/6k1/p1p1p3/P1P1Pp1p/5P1P/2B5/4K3 b - e3 0 50",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL);
     checkParseFenException("1b2k3/8/5p1p/4pP1P/p1p1P3/P1P3K1/8/8 w - e6 0 50",
-        FenValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL);
+        FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL);
 
     // half-move clock
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - x 1",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_RANGE);
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_RANGE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 1 1",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET);
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET);
 
     checkParseFenException("rnbqkb1r/ppp1pppp/5n2/3pP3/8/8/PPPP1PPP/RNBQKBNR w KQkq d6 2 3",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET);
-
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 3 2",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 4 2",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 100 10",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 20 10",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 22 11",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_NOT_ZERO_BUT_EN_PASSANT_CAPTURE_TARGET_SQUARE_SET);
 
     // full move counter
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 x",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_RANGE);
+        FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_RANGE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 -1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_NEGATIVE);
+        FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_NEGATIVE);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 0",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ZERO);
-
-    checkParseFenException("8/8/6K1/7B/7N/7k/8/2q5 w - - 0 1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_WHITE_IN_NON_STARTING_POSITION);
-
-    // starting position, but castling rights not ok
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQk - 0 1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_WHITE_IN_NON_STARTING_POSITION);
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQ - 0 1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_WHITE_IN_NON_STARTING_POSITION);
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w K - 0 1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_WHITE_IN_NON_STARTING_POSITION);
-
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b - - 0 1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_BLACK_IN_NON_POSSIBLE_POSITION);
-
-    checkParseFenException("8/8/6K1/7B/7N/7k/8/2q5 b - - 0 1",
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_ONE_BLACK_IN_NON_POSSIBLE_POSITION);
+        FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_ZERO);
 
   }
 
@@ -286,7 +256,7 @@ class TestFenParser implements EnumConstants {
 
     // outside integer parsing range
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - " + aboveMaxValue + " 100",
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_RANGE);
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_RANGE);
 
     // max values reached
     checkParseFenSuccess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - " + whiteHavingMoveMaxHalfMoveClock + " "
@@ -294,29 +264,16 @@ class TestFenParser implements EnumConstants {
     checkParseFenSuccess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - " + blackHavingMoveMaxHalfMoveClock + " "
         + FenConstants.MAX_FULL_MOVE_NUMBER);
 
-    // max values exceeded by one
-    // max full move number - half-move clock one above possible value - white having the move
-    checkParseFenException(
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - " + (whiteHavingMoveMaxHalfMoveClock + 1) + " "
-            + FenConstants.MAX_FULL_MOVE_NUMBER,
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
-    // max full move number - half-move clock one above possible value - black having the move
-    checkParseFenException(
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - " + (blackHavingMoveMaxHalfMoveClock + 1) + " "
-            + FenConstants.MAX_FULL_MOVE_NUMBER,
-        FenValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
     // fullMoveNumber
 
     // outside integer parsing range
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 " + aboveMaxValue,
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_RANGE);
+        FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_RANGE);
 
     // above max value
     checkParseFenException(
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 " + (FenConstants.MAX_FULL_MOVE_NUMBER + 1),
-        FenValidationProblem.INVALID_FULL_MOVE_NUMBER_TOO_BIG_ABSOLUT);
+        FenAdvancedValidationProblem.INVALID_FULL_MOVE_NUMBER_TOO_BIG_ABSOLUT);
 
   }
 
@@ -324,7 +281,7 @@ class TestFenParser implements EnumConstants {
   @Test
   void testParseFenConverted() {
 
-    final Fen actual = FenParser.parseAdvancedFen(FenConstants.FEN_INITIAL_STR);
+    final Fen actual = FenParserAdvanced.parseFenAdvanced(FenConstants.FEN_INITIAL_STR);
 
     assertEquals(StaticPosition.INITIAL_POSITION, actual.staticPosition());
     assertEquals(WHITE, actual.havingMove());
@@ -339,84 +296,84 @@ class TestFenParser implements EnumConstants {
   @Test
   void testParseFenNumberOfPieces() {
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/K7/PPPPPPPP/RNBQKBNR w kq - 18 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_KINGS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KINGS);
     checkParseFenException("rnbqkbnr/pppppppp/8/3k4/8/8/PPPPPPPP/RNBQKBNR b KQ - 19 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_KINGS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KINGS);
 
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/2b1p3/2BPP1q1/1KN4P/PPPB1PPp/R2QK1NR w kq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_KINGS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KINGS);
     checkParseFenException("rnkqkb1r/pbp2ppr/1p1p1n1p/2b1p3/2BPP1q1/2N4P/PPPB1PPp/R2QK1NR b KQ - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_KINGS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KINGS);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_NO_KING);
+        FenAdvancedValidationProblem.INVALID_WHITE_NO_KING);
     checkParseFenException("rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_NO_KING);
+        FenAdvancedValidationProblem.INVALID_BLACK_NO_KING);
 
     // we check white said first and halt on first error, if both kings are off the board an exception about white king
     // missing is expected
     checkParseFenException("rnbq1bnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQ1BNR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_NO_KING);
+        FenAdvancedValidationProblem.INVALID_WHITE_NO_KING);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/P7/PPPPPPPP/RNBQKBNR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS);
     checkParseFenException("rnbqkbnr/pppppppp/3p4/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS);
 
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/P3p3/2BPP1q1/2N4P/PPPB1PP1/R2QK1NR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS);
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/4p3/2BPP1q1/2N4P/PPPB1PPp/R2QK1NR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/R7/8/PPPPPPPP/RNBQKBNR w KQkq - 18 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS);
     checkParseFenException("rnbqkbnr/pppppppp/3r4/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 19 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS);
 
     checkParseFenException("rn1qkb1r/pbp2pp1/1p1p1n1p/4p3/2BPP3/2N4P/PPPB1PPR/R2QK1NR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS);
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/4p3/2BPP3/2N4P/PPPB1PP1/R2QK1NR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/N7/8/PPPPPPPP/RNBQKBNR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS);
     checkParseFenException("rnbqkbnr/pppppppp/3n4/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS);
 
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/4p3/2BPP3/2N4P/PPPB1PP1/RN1QK1NR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS);
     checkParseFenException("rn1qkb1r/pbp2pp1/1p1p1n1p/3np3/2BPP3/2N4P/PPPB1PP1/R2QK1NR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/5B2/PPPPPPPP/RNBQKBNR w KQkq - 18 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS);
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/3b4/PPPPPPPP/RNBQKBNR b KQkq - 19 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS);
 
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/4p3/2BPP1q1/2NB3P/PPPB1PPp/R2QK1NR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_LIGHT_SQUARE_BISHOPS);
     checkParseFenException("rn1qkb1r/pbp2pp1/1pbp1n1p/4p3/2BPP3/2N4P/PPPB1PP1/R2QK1NR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_LIGHT_SQUARE_BISHOPS);
 
     checkParseFenException("rnbqkbnr/pppppppp/1B6/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 18 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS);
     checkParseFenException("rnbqkbnr/pppppppp/7b/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 19 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS);
 
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/4p3/2BPP1q1/B1N4P/PPPB1PPp/R2QK1NR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_DARK_SQUARE_BISHOPS);
     checkParseFenException("rn1qkb1r/pbp2pp1/1p1p1n1p/2b1p3/2BPP3/2N4P/PPPB1PP1/R2QK1NR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_DARK_SQUARE_BISHOPS);
 
     checkParseFenException("rnbqkbnr/pppppppp/8/8/Q7/8/PPPPPPPP/RNBQKBNR w KQkq - 18 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS);
     checkParseFenException("rnbqkbnr/pppppppp/3q4/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 19 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS);
 
     checkParseFenException("rn1qkb1r/pbp2ppr/1p1p1n1p/4p3/2BPP1Q1/2N4P/PPPB1PP1/R2QK1NR w KQkq - 0 10",
-        FenValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS);
+        FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS);
     checkParseFenException("rn1qkb1r/pbp2pp1/1p1p1n1p/4p3/2BPP1q1/2N4P/PPPB1PP1/R2QK1NR b KQkq - 0 10",
-        FenValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS);
+        FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS);
 
   }
 
@@ -424,26 +381,26 @@ class TestFenParser implements EnumConstants {
   @Test
   void testParseFenPawnOnPromotionRank() {
     checkParseFenException("3k1P2/8/8/4b3/8/4N3/4B3/3K4 w - - 0 100",
-        FenValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_PROMOTION_RANK);
+        FenAdvancedValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_PROMOTION_RANK);
     checkParseFenException("8/8/3kq3/4b3/8/4N3/3KB3/6p1 b - - 0 100",
-        FenValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_PROMOTION_RANK);
+        FenAdvancedValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_PROMOTION_RANK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testParseFenPawnOnGroundRank() {
     checkParseFenException("8/8/3kq3/4b3/8/2Q1N3/3KB3/3P4 w - - 0 100",
-        FenValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_GROUND_RANK);
+        FenAdvancedValidationProblem.INVALID_WHITE_PAWN_INVALID_RANK_GROUND_RANK);
     checkParseFenException("7p/8/3kq3/3rb3/8/2Q1N3/2K1B3/8 w - - 0 100",
-        FenValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_GROUND_RANK);
+        FenAdvancedValidationProblem.INVALID_BLACK_PAWN_INVALID_RANK_GROUND_RANK);
   }
 
-  private static void checkParseFenException(String fen, FenValidationProblem expected) {
-    var actual = FenValidationProblem.SUCCESS;
+  private static void checkParseFenException(String fen, FenAdvancedValidationProblem expected) {
+    var actual = FenAdvancedValidationProblem.SUCCESS;
     try {
-      FenParser.parseAdvancedFen(fen);
-    } catch (final FenValidationException e) {
-      actual = e.getFenValidationProblem();
+      FenParserAdvanced.parseFenAdvanced(fen);
+    } catch (final FenAdvancedValidationException e) {
+      actual = e.getFenAdvancedValidationProblem();
     }
     assertEquals(expected, actual);
   }
@@ -451,8 +408,8 @@ class TestFenParser implements EnumConstants {
   private static void checkParseFenSuccess(String fen) {
     var isException = false;
     try {
-      FenParser.parseAdvancedFen(fen);
-    } catch (@SuppressWarnings("unused") final FenValidationException e) {
+      FenParserAdvanced.parseFenAdvanced(fen);
+    } catch (@SuppressWarnings("unused") final FenAdvancedValidationException e) {
       isException = true;
     }
     assertFalse(isException);

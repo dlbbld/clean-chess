@@ -1,18 +1,18 @@
 package com.dlb.chess.test.fen;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.exceptions.FenRawValidationException;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.constants.FenConstants;
 
 class TestFenParserRaw {
-  // what we provide here are the actual results expected by JUnit
-
   @SuppressWarnings("static-method")
   @Test
-  void testParseFields() {
+  void testSuccessParseFields() {
 
     // 1. e4
     // 1... c6
@@ -69,4 +69,32 @@ class TestFenParserRaw {
     assertEquals("3", FenParserRaw.parseFullMoveNumber(halfMove5));
   }
 
+  @SuppressWarnings("static-method")
+  @Test
+  void testException() {
+    checkException(" rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR  w KQkq - 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w  KQkq - 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq  - 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -  0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0  1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1 ");
+
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNRw KQkq - 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR wKQkq - 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq- 0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq -0 1");
+    checkException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 01");
+  }
+
+  private static void checkException(String fen) {
+    var isException = false;
+    try {
+      FenParserRaw.parseFenRaw(fen);
+    } catch (@SuppressWarnings("unused") final FenRawValidationException e) {
+      isException = true;
+    }
+    assertTrue(isException);
+
+  }
 }

@@ -12,10 +12,10 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.exceptions.FenValidationException;
+import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.StaticPositionUtility;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 
 class TestFenInsufficientMaterial {
 
@@ -43,7 +43,7 @@ class TestFenInsufficientMaterial {
         final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
         final String fen = createFenForPiecePlacement(piecePlacement, side);
         try {
-          FenParser.parseAdvancedFen(fen);
+          FenParserAdvanced.parseFenAdvanced(fen);
           // counting if valid
           counter++;
           // we check by the side if we have illegal material
@@ -51,7 +51,7 @@ class TestFenInsufficientMaterial {
           if (board.isCheckmate()) {
             throw new ProgrammingMistakeException("We don't have insufficient material. The FEN is \"" + fen + "\".");
           }
-        } catch (@SuppressWarnings("unused") final FenValidationException fve) {
+        } catch (@SuppressWarnings("unused") final FenAdvancedValidationException fve) {
           // not counting if invalid
         }
         staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing);
@@ -148,7 +148,7 @@ class TestFenInsufficientMaterial {
             final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
             final String fen = createFenForPiecePlacement(piecePlacement, side);
             try {
-              FenParser.parseAdvancedFen(fen);
+              FenParserAdvanced.parseFenAdvanced(fen);
               // counting if valid
               counter++;
               // we check by the side if we have illegal material
@@ -157,7 +157,7 @@ class TestFenInsufficientMaterial {
                 throw new ProgrammingMistakeException(
                     "We don't have insufficient material. The FEN is \"" + fen + "\".");
               }
-            } catch (@SuppressWarnings("unused") final FenValidationException fve) {
+            } catch (@SuppressWarnings("unused") final FenAdvancedValidationException fve) {
               // not counting if invalid
             }
             staticPositionWork = staticPositionWork.createChangedPosition(squareSecondBishop);
@@ -206,7 +206,7 @@ class TestFenInsufficientMaterial {
           final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
           final String fen = createFenForPiecePlacement(piecePlacement, side);
           try {
-            FenParser.parseAdvancedFen(fen);
+            FenParserAdvanced.parseFenAdvanced(fen);
             // counting if valid
             counter++;
             // we check by the side if we have illegal material
@@ -214,7 +214,7 @@ class TestFenInsufficientMaterial {
             if (board.isCheckmate()) {
               throw new ProgrammingMistakeException("We don't have insufficient material. The FEN is \"" + fen + "\".");
             }
-          } catch (@SuppressWarnings("unused") final FenValidationException fve) {
+          } catch (@SuppressWarnings("unused") final FenAdvancedValidationException fve) {
             // not counting if invalid
           }
           staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing);

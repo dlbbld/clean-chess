@@ -9,7 +9,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 
 class TestBasicStaticPosition implements EnumConstants {
@@ -30,7 +30,7 @@ class TestBasicStaticPosition implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testInitialPosition() throws Exception {
-    final StaticPosition staticInitialPositionActual = FenParser.parseAdvancedFen(FenConstants.FEN_INITIAL_STR)
+    final StaticPosition staticInitialPositionActual = FenParserAdvanced.parseFenAdvanced(FenConstants.FEN_INITIAL_STR)
         .staticPosition();
 
     assertEquals(StaticPosition.INITIAL_POSITION, staticInitialPositionActual);

@@ -11,7 +11,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.reader.PgnReader;
@@ -34,7 +34,7 @@ class TestThreefoldClaimAheadUtility {
 
     {
       final List<List<ClaimAhead>> actual = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(new ArrayList<>(),
-          FenParser.parseAdvancedFen(FenConstants.FEN_AFTER_E4_STR));
+          FenParserAdvanced.parseFenAdvanced(FenConstants.FEN_AFTER_E4_STR));
 
       assertEquals(expectedEmptyListList, actual);
     }

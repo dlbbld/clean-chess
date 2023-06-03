@@ -5,9 +5,9 @@ import java.util.List;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.exceptions.FenValidationException;
+import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.fen.FenParser;
+import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -33,8 +33,8 @@ public abstract class AbstractTestAgainstCha {
 
       final Fen fen;
       try {
-        fen = FenParser.parseAdvancedFen(fenStr);
-      } catch (final FenValidationException fve) {
+        fen = FenParserAdvanced.parseFenAdvanced(fenStr);
+      } catch (final FenAdvancedValidationException fve) {
         throw new IllegalArgumentException("Illegal FEN of \"" + fenStr + "\" for " + fve.getMessage() + " was found");
       }
 
