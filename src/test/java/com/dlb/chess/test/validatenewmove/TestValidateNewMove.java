@@ -12,8 +12,8 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
   @Test
   @SuppressWarnings("static-method")
-  void testWhite() {
-    ApiBoard board = new Board();
+  void testWhiteMovingPiece() {
+    final ApiBoard board = new Board();
     MoveSpecification move;
 
     move = new MoveSpecification(BLACK, E2, E4);
@@ -144,11 +144,17 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     move = new MoveSpecification(WHITE, A2, A8, PromotionPieceType.QUEEN);
     check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
 
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testWhiteCapturingNonPawn() {
+
     // capturing own pieces
-    board = new Board();
+    final ApiBoard board = new Board();
 
     // rook
-    move = new MoveSpecification(WHITE, A1, A2);
+    MoveSpecification move = new MoveSpecification(WHITE, A1, A2);
     check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(WHITE, A1, B1);
@@ -204,8 +210,16 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     move = new MoveSpecification(WHITE, E1, F1);
     check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testWhiteCapturingPawn() {
+
+    ApiBoard board = new Board("rnb1kbnr/pppq1ppp/8/3pp3/3P4/P7/1PPQPPPP/RNB1KBNR w KQkq - 2 4");
+
     // pawn
-    move = new MoveSpecification(WHITE, A3, A4);
+    MoveSpecification move = new MoveSpecification(WHITE, A3, A4);
     board.performMove(move);
 
     move = new MoveSpecification(BLACK, A7, A5);
@@ -224,7 +238,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(WHITE, A4, A5);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(WHITE, D4, E5);
     board.performMove(move);
@@ -239,7 +253,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(WHITE, E4, E5);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(WHITE, H2, H4);
     board.performMove(move);
@@ -248,7 +262,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(WHITE, H4, H5);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(WHITE, A5, A6);
     board.performMove(move);
@@ -263,7 +277,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(WHITE, A5, A6);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(WHITE, F2, F3);
     board.performMove(move);
@@ -469,10 +483,16 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     move = new MoveSpecification(WHITE, H5, G6);
     check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
-    // pawn two advance moves
-    board = new Board();
+  }
 
-    move = new MoveSpecification(WHITE, B1, C3);
+  @Test
+  @SuppressWarnings("static-method")
+  void testWhitePawnTwoSquareAdvanceMoves() {
+    // pawn two advance moves
+
+    final ApiBoard board = new Board();
+
+    MoveSpecification move = new MoveSpecification(WHITE, B1, C3);
     board.performMove(move);
 
     move = new MoveSpecification(BLACK, B8, C6);
@@ -510,11 +530,18 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     move = new MoveSpecification(WHITE, C2, C4);
     check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testWhiteKingMoves() {
+
+    ApiBoard board = new Board();
 
     // king
     board = new Board();
 
-    move = new MoveSpecification(WHITE, B1, A3);
+    MoveSpecification move = new MoveSpecification(WHITE, B1, A3);
     board.performMove(move);
 
     move = new MoveSpecification(BLACK, B8, C6);
@@ -667,10 +694,17 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     move = new MoveSpecification(WHITE, C5, D6);
     check(board, move, MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
 
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testWhitePromotionPieceWronglySet() {
+
+    ApiBoard board = new Board();
     // non pawn move - promotion piece set
     board = new Board();
 
-    move = new MoveSpecification(WHITE, A2, A4);
+    MoveSpecification move = new MoveSpecification(WHITE, A2, A4);
     board.performMove(move);
 
     move = new MoveSpecification(BLACK, A7, A5);
@@ -808,8 +842,687 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   }
 
   @Test
-  void testBlack() {
-    // TODO testcase for Black
+  @SuppressWarnings("static-method")
+  void testBlackMovingPieces() {
+    final ApiBoard board = new Board();
+
+    board.performMove("e4");
+
+    MoveSpecification move;
+
+    move = new MoveSpecification(WHITE, E7, E5);
+    check(board, move, MoveCheck.BASIC_NOT_HAVING_MOVE);
+
+    move = new MoveSpecification(WHITE, E2, E1);
+    check(board, move, MoveCheck.BASIC_NOT_HAVING_MOVE);
+
+    move = new MoveSpecification(BLACK, E6, E5);
+    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+
+    move = new MoveSpecification(BLACK, A6, H3);
+    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+
+    move = new MoveSpecification(BLACK, D4, D1);
+    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+
+    move = new MoveSpecification(BLACK, D2, D3);
+    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+
+    move = new MoveSpecification(BLACK, D1, D3);
+    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+
+    move = new MoveSpecification(BLACK, E1, E2);
+    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+
+    move = new MoveSpecification(BLACK, B7, B6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, B2, B3);
+    board.performMove(move);
+
+    // rook movement
+    move = new MoveSpecification(BLACK, A8, B7);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // rook movement
+    move = new MoveSpecification(BLACK, H8, G6);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // rook movement
+    move = new MoveSpecification(BLACK, A8, B1);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // knight movement
+    move = new MoveSpecification(BLACK, B8, B5);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // knight movement
+    move = new MoveSpecification(BLACK, B8, B7);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    move = new MoveSpecification(BLACK, C7, C5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C2, C4);
+    board.performMove(move);
+
+    // knight movement
+    move = new MoveSpecification(BLACK, B8, C7);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    move = new MoveSpecification(BLACK, B8, C6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, B1, C3);
+    board.performMove(move);
+
+    // bishop movement
+    move = new MoveSpecification(BLACK, C8, C7);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // bishop movement
+    move = new MoveSpecification(BLACK, F8, C6);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // bishop movement
+    move = new MoveSpecification(BLACK, C8, C1);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // queen movement
+    move = new MoveSpecification(BLACK, D8, B7);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // queen movement
+    move = new MoveSpecification(BLACK, D8, H6);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // queen movement
+    move = new MoveSpecification(BLACK, D8, C1);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    move = new MoveSpecification(BLACK, E7, E5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D2, D4);
+    board.performMove(move);
+
+    // king movement
+    move = new MoveSpecification(BLACK, E8, E6);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // king movement
+    move = new MoveSpecification(BLACK, E8, F6);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // king movement
+    move = new MoveSpecification(BLACK, E8, A1);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // pawn movement
+    move = new MoveSpecification(BLACK, A7, A4);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // pawn movement
+    move = new MoveSpecification(BLACK, A7, B5);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // pawn movement
+    move = new MoveSpecification(BLACK, A7, A1);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+    // pawn movement
+    move = new MoveSpecification(BLACK, A7, A6, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
+    // pawn movement
+    move = new MoveSpecification(BLACK, A7, A1, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testBlackCapturingNonPawn() {
+
+    // capturing own pieces
+    final ApiBoard board = new Board();
+    board.performMove("e4");
+
+    // rook
+    MoveSpecification move = new MoveSpecification(BLACK, A8, A7);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, A8, B8);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    // knight
+    move = new MoveSpecification(BLACK, B8, D7);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, A7, A6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A2, A3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B8, A6);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    // bishop
+    move = new MoveSpecification(BLACK, C8, B7);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, D7, D5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D2, D4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D8, D7);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D1, D2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, C8, D7);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    // queen
+    move = new MoveSpecification(BLACK, D7, C8);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    // queen tries to capture the own king
+    move = new MoveSpecification(BLACK, D7, E8);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, D7, C7);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    // king
+    move = new MoveSpecification(BLACK, E8, D7);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, E8, F8);
+    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testBlackCapturingPawn() {
+    // pawn
+
+    ApiBoard board = new Board();
+
+    MoveSpecification move = new MoveSpecification(WHITE, A2, A3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B7, B5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A3, A4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B5, A4);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A7, A5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A2, A1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A5, A4);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, G8, H6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H7, H6);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, A2, A4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A7, A5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A5, A4);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+
+    move = new MoveSpecification(BLACK, A8, A6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A3, G3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A6, A7);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G3, G6);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, G7, G6);
+    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B8, C6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D2, D4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B7, C6);
+    check(board, move, MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+
+    move = new MoveSpecification(BLACK, E7, E5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G2, G4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D7, D5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G4, G5);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D8, D7);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G5, G6);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H7, G6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E1, E2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F7, G6);
+    check(board, move, MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, G7, F6);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+
+    move = new MoveSpecification(BLACK, G7, H6);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+
+    move = new MoveSpecification(BLACK, F7, F5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E4, E5);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F5, E4);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+
+    move = new MoveSpecification(BLACK, B7, B6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G2, G4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B6, C5);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+
+    move = new MoveSpecification(BLACK, B6, A5);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, A2, A4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B7, B5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C2, C4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B5, B4);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B4, A3);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+
+    move = new MoveSpecification(BLACK, B4, C3);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+
+    move = new MoveSpecification(BLACK, C8, B7);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H7, H5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A2, A1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H5, H4);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H4, G3);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+
+    move = new MoveSpecification(BLACK, F7, F5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A2, A1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F5, F4);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G2, G4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B8, C6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F4, G3);
+    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testBlackPawnTwoSquareAdvanceMoves() {
+
+    final ApiBoard board = new Board();
+
+    MoveSpecification move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B8, C6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D2, D4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, C7, C5);
+    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
+
+    move = new MoveSpecification(BLACK, C6, B8);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A2, A4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B8, C6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A4, A5);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, C6, B8);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A5, A6);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A7, A5);
+    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
+
+    move = new MoveSpecification(BLACK, G8, F6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A1, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F6, H5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, A2, A1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H7, H5);
+    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
+
+    move = new MoveSpecification(BLACK, H5, F6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, F2, F4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, H7, H6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, F4, F5);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F7, F5);
+    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
+
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testBlackKingMoves() {
+
+    ApiBoard board = new Board();
+
+    MoveSpecification move = new MoveSpecification(WHITE, B1, C3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D7, D5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C3, D5);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, E8, D7);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C2, C4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D7, D6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G1, F3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D6, D5);
+    check(board, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
+
+    // kings walk on the middle of the board to move next to each other
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, F2, F3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F7, F6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E1, F2);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, E8, F7);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, F2, E3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, F7, E6);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E3, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, E6, E5);
+    check(board, move, MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void testBlackPromotionPieceWronglySet() {
+
+    ApiBoard board = new Board();
+
+    MoveSpecification move = new MoveSpecification(WHITE, A2, A4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A7, A5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D2, D4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D7, D5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, E7, E5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D1, D2);
+    board.performMove(move);
+
+    // rook
+    move = new MoveSpecification(BLACK, A8, A7, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+
+    // knight
+    move = new MoveSpecification(BLACK, B8, C6, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+
+    // bishop light square
+    move = new MoveSpecification(BLACK, F8, C5, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+
+    // bishop dark square
+    move = new MoveSpecification(BLACK, C8, F5, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+
+    // queen
+    move = new MoveSpecification(BLACK, D8, D7, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+
+    // king
+    move = new MoveSpecification(BLACK, E8, E7, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+
+    // pawn move - promotion piece checks with promotion by capture
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, E7, E6, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
+    move = new MoveSpecification(BLACK, E7, E5, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
+    move = new MoveSpecification(BLACK, E7, E5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, D2, D4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, E5, D4, PromotionPieceType.KNIGHT);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
+    // en passant capture
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, B1, C3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D7, D5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C3, B1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D5, D4);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, E2, E4);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D4, E3, PromotionPieceType.BISHOP);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
+    // promotion with capture
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, B1, C3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B7, B5);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C3, B1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B5, B4);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, B1, C3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B4, B3);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, C3, B1);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, B3, A2);
+    board.performMove(move);
+
+    move = new MoveSpecification(WHITE, G1, F3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, A2, B1);
+    check(board, move, MoveCheck.PAWN_PROMOTION_MOVE_NO_PROMOTION_PIECE);
+
+    // pawn move - promotion piece checks with promotion without capture
+    board = new Board();
+
+    move = new MoveSpecification(WHITE, G1, F3);
+    board.performMove(move);
+
+    move = new MoveSpecification(BLACK, D7, D6, PromotionPieceType.QUEEN);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
+    move = new MoveSpecification(BLACK, D7, D5, PromotionPieceType.ROOK);
+    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+
   }
 
   @Test
