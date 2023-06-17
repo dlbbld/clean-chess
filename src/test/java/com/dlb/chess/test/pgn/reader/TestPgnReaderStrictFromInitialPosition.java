@@ -1,7 +1,6 @@
 package com.dlb.chess.test.pgn.reader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
@@ -75,7 +74,7 @@ class TestPgnReaderStrictFromInitialPosition {
       expected.performMove(nonNullSan);
     }
 
-    assertTrue(expected.equals(actual));
+    assertEquals(expected, actual);
   }
 
 }

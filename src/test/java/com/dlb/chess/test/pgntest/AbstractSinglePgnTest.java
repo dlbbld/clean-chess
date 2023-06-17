@@ -6,9 +6,9 @@ import com.dlb.chess.test.pgnall.AbstractPgnTest;
 
 public abstract class AbstractSinglePgnTest extends AbstractPgnTest {
 
-  static void runTestCase(String pgnFileName, Analysis analysis) throws Exception {
+  static boolean runTestCase(String pgnFileName, Analysis analysis) throws Exception {
     final PgnFileTestCase testCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase(pgnFileName);
-    testGame(testCase, analysis);
+    return testGame(testCase, analysis);
   }
 
 }

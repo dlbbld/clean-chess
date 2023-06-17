@@ -1,6 +1,9 @@
 package com.dlb.chess.test.pgntest;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.analysis.model.SingleOutput;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -14,11 +17,10 @@ class RunSinglePgnTest extends AbstractSinglePgnTest {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(RunSinglePgnTest.class);
 
-  public static void main(String[] args) throws Exception {
-    testPgnFile();
-  }
+  @SuppressWarnings("static-method")
+  @Test
+  void testPgnFile() throws Exception {
 
-  private static void testPgnFile() throws Exception {
     logger.info(PGN_FILE_NAME);
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestHavingTestValuesAlready(PGN_FILE_NAME);
@@ -26,7 +28,7 @@ class RunSinglePgnTest extends AbstractSinglePgnTest {
 
     GeneralUtility.logLines(logger, testResult.output());
 
-    runTestCase(PGN_FILE_NAME, testResult.analysis());
+    assertTrue(runTestCase(PGN_FILE_NAME, testResult.analysis()));
   }
 
 }

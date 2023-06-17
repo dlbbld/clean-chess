@@ -1,8 +1,10 @@
 package com.dlb.chess.distance;
 
-import java.util.Vector;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.distance.model.DistanceToCell;
 
 //This code contributed by Rajput-Ji
@@ -33,7 +35,7 @@ public class KnightDistance {
     final int[] dy = { -1, -2, -2, -1, 1, 2, 2, 1 };
 
     // queue for storing states of knight in board
-    final Vector<DistanceToCell> q = new Vector<>();
+    final List<DistanceToCell> q = new ArrayList<>();
 
     // push starting position of knight with 0 distance
     q.add(new DistanceToCell(knightPos[0], knightPos[1], 0));
@@ -55,7 +57,7 @@ public class KnightDistance {
 
     // loop until we have one element in queue
     while (!q.isEmpty()) {
-      @SuppressWarnings("null") final var firstElement = q.firstElement();
+      final var firstElement = NonNullWrapperCommon.getFirst(q);
       t = firstElement;
       q.remove(0);
 
