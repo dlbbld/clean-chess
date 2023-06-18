@@ -7,6 +7,10 @@ import com.dlb.chess.common.exceptions.FenAdvancedFurtherValidationException;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 
+/**
+ * Class for advanced validation which FEN's from a real chess game must fulfill. However for practicality it makes
+ * sense to usually not require this for FEN's. Not currently used, but there might be potential usage, so left for now.
+ */
 public class FenParserAdvancedFurther implements EnumConstants {
 
   private FenParserAdvancedFurther() {

@@ -71,10 +71,6 @@ public abstract class BasicChessUtility {
     return NonNullWrapperCommon.toString(result);
   }
 
-  public static Side calculateSideHavingMoveForFen(String fen) {
-    return calculateSideHavingMoveForSide(FenParserRaw.parseHavingMove(fen));
-  }
-
   public static Side calculateSideHavingMoveForSide(String side) {
     return switch (side) {
       case "b" -> Side.BLACK;
