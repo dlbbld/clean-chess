@@ -1,9 +1,5 @@
 package com.dlb.chess.test.model;
 
-import java.util.Objects;
-
-import org.eclipse.jdt.annotation.Nullable;
-
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -69,25 +65,6 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
 
   public UnwinnableQuick unwinnableQuickBlack() {
     return unwinnableQuickBlack;
-  }
-
-  @Override
-  public boolean equals(@Nullable Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    final var other = (PgnFileTestCase) obj;
-    return Objects.equals(expectedYawnMoveRule, other.expectedYawnMoveRule)
-        && Objects.equals(expectedRepetition, other.expectedRepetition)
-        && Objects.equals(expectedRepetitionInitialEnPassantCapture, other.expectedRepetitionInitialEnPassantCapture)
-        && Objects.equals(fen, other.fen) && firstCapture == other.firstCapture
-        && insufficientMaterial == other.insufficientMaterial && checkmateOrStalemate == other.checkmateOrStalemate
-        && maxYawnSequence == other.maxYawnSequence && Objects.equals(pgnFileName, other.pgnFileName)
-        && unwinnableFullWhite == other.unwinnableFullWhite && unwinnableFullBlack == other.unwinnableFullBlack
-        && unwinnableQuickWhite == other.unwinnableQuickWhite && unwinnableQuickBlack == other.unwinnableQuickBlack;
   }
 
 }

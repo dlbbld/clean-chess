@@ -1,7 +1,6 @@
 package com.dlb.chess.common.model;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -58,20 +57,6 @@ public record MoveSpecification(@NonNull Side havingMove, @NonNull Square fromSq
     if (fromSquare == toSquare) {
       throw new IllegalArgumentException("The from and to square must be different");
     }
-  }
-
-  @Override
-  public boolean equals(@Nullable Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    final var other = (MoveSpecification) obj;
-    return castlingMove == other.castlingMove && fromSquare == other.fromSquare
-        && promotionPieceType == other.promotionPieceType && havingMove == other.havingMove
-        && toSquare == other.toSquare;
   }
 
   @Override
