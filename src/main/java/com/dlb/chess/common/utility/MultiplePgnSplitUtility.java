@@ -9,9 +9,11 @@ import java.util.Scanner;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
+import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 
 //manual to create multiple pgn file
 //1) open database in chessbase
@@ -90,8 +92,9 @@ public abstract class MultiplePgnSplitUtility {
         }
         currentFileLines.add(line);
       }
-    } catch (final IOException e) {
-      throw new RuntimeException(e);
+    } catch (final IOException ioe) {
+      @SuppressWarnings("null") @NonNull final String message = ioe.getMessage();
+      throw new ChessApiRuntimeException(message);
     }
 
     logger.printf(Level.INFO, "Created %s files", writtenFileCounter);

@@ -132,7 +132,8 @@ public class ValidateNewMove implements EnumConstants {
       case PAWN_DIAGONAL_OWN_PIECE:
       case PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE:
       case PAWN_EN_PASSANT_CAPTURE_WRONG_RANK:
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY:
+      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE:
+      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE:
       case PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY:
       case PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY:
       case PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY:
@@ -182,7 +183,7 @@ public class ValidateNewMove implements EnumConstants {
       }
       validatePawnOneSquareAdvanceMove(board, moveSpecification);
 
-    } else if (isDiagonalMove) {
+    } else {
       // diagonal move
       validatePawnCapture(board, moveSpecification);
     }
@@ -229,12 +230,18 @@ public class ValidateNewMove implements EnumConstants {
   private static void validatePawnOneSquareAdvanceMove(ApiBoard board, MoveSpecification moveSpecification) {
 
     final Square toSquare = moveSpecification.toSquare();
-    final Piece capturedPiece = board.getStaticPosition().get(toSquare);
 
-    if (capturedPiece != Piece.NONE) {
+    if (!board.getStaticPosition().isEmpty(toSquare)) {
+      final Piece pieceOnToSquare = board.getStaticPosition().get(toSquare);
+
+      if (pieceOnToSquare.getSide() == board.getHavingMove()) {
+        throw new InvalidMoveException(
+            "when moving a pawn one square forwards, the destination square must be empty, but the destination square is occupied by an own piece",
+            MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+      }
       throw new InvalidMoveException(
-          "when moving a pawn one square forwards, the destination square must be empty, but the destination square is occupied",
-          MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY);
+          "when moving a pawn one square forwards, the destination square must be empty, but the destination square is occupied by an opponent pieces",
+          MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
     }
   }
 

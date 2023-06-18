@@ -122,7 +122,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
       if (emptyBoardToSquare == toSquare) {
         final Square emptyBoardFromSquare = emptyBoardMove.fromSquare();
         final File emptyBoardFromFile = emptyBoardFromSquare.getFile();
-        if (emptyBoardFromFile == fromFile && emptyBoardToSquare == toSquare) {
+        if (emptyBoardFromFile == fromFile) {
           // found a possible move
           return;
         }
@@ -291,7 +291,8 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
 
   private static boolean calculateIsAdjacentFileUsingDiagonalMoves(Side havingMove, File fromFile, Square toSquare) {
     // diagonal moves
-    final Set<PawnDiagonalBoardMove> pawnDiagonalMoveSet = PawnDiagonalMoveUtility.calculatePawnDiagonalMoves(havingMove);
+    final Set<PawnDiagonalBoardMove> pawnDiagonalMoveSet = PawnDiagonalMoveUtility
+        .calculatePawnDiagonalMoves(havingMove);
     for (final PawnDiagonalBoardMove diagonalMove : pawnDiagonalMoveSet) {
       if (diagonalMove.fromSquare().getFile() == fromFile && diagonalMove.toSquare().getFile() == toSquare.getFile()) {
         // adjacent file

@@ -44,7 +44,7 @@ public class FenParserAdvanced implements EnumConstants {
   @SuppressWarnings("null")
   private static final Pattern PATTERN_RANK = Pattern.compile(REG_EXP_RANK);
 
-  private static final String REG_EXP_SIDE = "^[wb]{1}$";
+  private static final String REG_EXP_SIDE = "^[wb]$";
   @SuppressWarnings("null")
   private static final Pattern PATTERN_SIDE = Pattern.compile(REG_EXP_SIDE);
 
@@ -87,7 +87,7 @@ public class FenParserAdvanced implements EnumConstants {
     final var halfMoveClock = validateHalfMoveClock(halfMoveClockStr, enPassantCaptureTargetSquare);
 
     final var fullMoveNumberStr = fenRaw.fullMoveNumber();
-    final var fullMoveNumber = validateFullMoveNumber(fen, havingMove, fullMoveNumberStr);
+    final var fullMoveNumber = validateFullMoveNumber(fullMoveNumberStr);
 
     return new Fen(fen, staticPosition, havingMove, castlingRightBoth, enPassantCaptureTargetSquare, halfMoveClock,
         fullMoveNumber);
@@ -417,8 +417,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
   }
 
-  private static int validateFullMoveNumber(String fen, Side havingMove, String fullMoveNumberStr)
-      throws FenAdvancedValidationException {
+  private static int validateFullMoveNumber(String fullMoveNumberStr) throws FenAdvancedValidationException {
     int fullMoveNumber;
     try {
       fullMoveNumber = Integer.parseInt(fullMoveNumberStr);

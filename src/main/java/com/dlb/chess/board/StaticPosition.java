@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -45,28 +44,6 @@ public record StaticPosition(@NonNull Piece a8, @NonNull Piece b8, @NonNull Piec
       Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE,
       Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE,
       Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE, Piece.NONE);
-
-  @Override
-  public boolean equals(@Nullable Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    final var other = (StaticPosition) obj;
-    return a1 == other.a1 && a2 == other.a2 && a3 == other.a3 && a4 == other.a4 && a5 == other.a5 && a6 == other.a6
-        && a7 == other.a7 && a8 == other.a8 && b1 == other.b1 && b2 == other.b2 && b3 == other.b3 && b4 == other.b4
-        && b5 == other.b5 && b6 == other.b6 && b7 == other.b7 && b8 == other.b8 && c1 == other.c1 && c2 == other.c2
-        && c3 == other.c3 && c4 == other.c4 && c5 == other.c5 && c6 == other.c6 && c7 == other.c7 && c8 == other.c8
-        && d1 == other.d1 && d2 == other.d2 && d3 == other.d3 && d4 == other.d4 && d5 == other.d5 && d6 == other.d6
-        && d7 == other.d7 && d8 == other.d8 && e1 == other.e1 && e2 == other.e2 && e3 == other.e3 && e4 == other.e4
-        && e5 == other.e5 && e6 == other.e6 && e7 == other.e7 && e8 == other.e8 && f1 == other.f1 && f2 == other.f2
-        && f3 == other.f3 && f4 == other.f4 && f5 == other.f5 && f6 == other.f6 && f7 == other.f7 && f8 == other.f8
-        && g1 == other.g1 && g2 == other.g2 && g3 == other.g3 && g4 == other.g4 && g5 == other.g5 && g6 == other.g6
-        && g7 == other.g7 && g8 == other.g8 && h1 == other.h1 && h2 == other.h2 && h3 == other.h3 && h4 == other.h4
-        && h5 == other.h5 && h6 == other.h6 && h7 == other.h7 && h8 == other.h8;
-  }
 
   @Override
   public String toString() {

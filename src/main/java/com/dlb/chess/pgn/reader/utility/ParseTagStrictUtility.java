@@ -20,7 +20,7 @@ public abstract class ParseTagStrictUtility extends AbstractParseTagUtility {
   @SuppressWarnings("null")
   private static final Pattern TAG_PATTERN_COMPILE = Pattern.compile(TAG_PATTERN);
 
-  private static final String TAG_PATTERN_FIRST_CHARACTER = "\\[[A-Za-z0-9]{1}.*";
+  private static final String TAG_PATTERN_FIRST_CHARACTER = "\\[[A-Za-z0-9].*";
   @SuppressWarnings("null")
   private static final Pattern TAG_PATTERN_FIRST_CHARACTER_COMPILE = Pattern.compile(TAG_PATTERN_FIRST_CHARACTER);
 

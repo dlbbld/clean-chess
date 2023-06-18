@@ -62,7 +62,7 @@ class TestPgnExportBoard {
 
   private static void checkBoardReplay(Board boardExpected, PgnFile boardExpectedPgnFile) {
     final Board boardActual = PgnUtility.calculateBoardPerLastMove(boardExpectedPgnFile);
-    assertTrue(boardExpected.equals(boardActual));
+    assertEquals(boardExpected, boardActual);
   }
 
 }

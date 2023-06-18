@@ -13,7 +13,7 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 
 public class ReadMeForRepository {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
 
     checkThreefoldClaimAhead();
     checkThreefoldOnTheBoard();
@@ -28,7 +28,7 @@ public class ReadMeForRepository {
     checkPgnWriter();
   }
 
-  private static void checkThreefoldClaimAhead() throws Exception {
+  private static void checkThreefoldClaimAhead() {
     final var pgn = """
         1. Nf3 c5 2. c4 Nf6 3. Nc3 Nc6 4. d4 cxd4 5. Nxd4 e6 6. g3 Qb6 7. Nb3 Ne5 8. e4
         Bb4 9. Qe2 O-O 10. f4 Nc6 11. e5 Ne8 12. Bd2 f6 13. c5 Qd8 14. a3 Bxc3 15. Bxc3
@@ -38,7 +38,7 @@ public class ReadMeForRepository {
     Analyzer.printAnalysis(pgn);
   }
 
-  private static void checkThreefoldOnTheBoard() throws Exception {
+  private static void checkThreefoldOnTheBoard() {
     final var pgn = """
         1. d4 d5 2. Nf3 Nf6 3. c4 e6 4. Bg5 Nbd7 5. e3 Be7 6. Nc3 O-O 7. Rc1 b6 8. cxd5
         exd5 9. Qa4 c5 10. Qc6 Rb8 11. Nxd5 Bb7 12. Nxe7+ Qxe7 13. Qa4 Rbc8 14. Qa3 Qe6
@@ -52,7 +52,7 @@ public class ReadMeForRepository {
     Analyzer.printAnalysis(pgn);
   }
 
-  private static void checkFiftyMoves() throws Exception {
+  private static void checkFiftyMoves() {
     final var pgn = """
         1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5
         Ne7 9. Nd2 a5 10. Rb1 Nd7 11. a3 f5 12. b4 Kh8 13. f3 Ng8 14. Qc2 Ngf6 15. Nb5
@@ -77,7 +77,7 @@ public class ReadMeForRepository {
     Analyzer.printAnalysis(pgn);
   }
 
-  private static void checkUnwinnability() throws Exception {
+  private static void checkUnwinnability() {
     checkUnwinnabilityInsufficientMaterial();
     checkUnwinnabilityPawnWall();
     checkUnwinnabilityForcedMoves();

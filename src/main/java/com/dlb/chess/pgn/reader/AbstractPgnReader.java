@@ -4,7 +4,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -47,7 +50,8 @@ public abstract class AbstractPgnReader {
       throw new FileSystemAccessException("Reading file \"" + filePath + "\" failed", ioe);
 
     } catch (final IOException ioe) {
-      throw new RuntimeException(ioe);
+      @SuppressWarnings("null") @NonNull final String message = ioe.getMessage();
+      throw new ChessApiRuntimeException(message);
     }
     return fileLines;
   }

@@ -11,7 +11,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 
 public abstract class AbstractPgnTest {
 
-  public static void testGame(PgnFileTestCase testCase, Analysis analysis) throws Exception {
+  public static boolean testGame(PgnFileTestCase testCase, Analysis analysis) throws Exception {
     testFen(testCase.fen(), analysis.fen());
     testRepetition(analysis, testCase);
     testRepetitionInitialEnPassantCapture(analysis, testCase);
@@ -25,6 +25,7 @@ public abstract class AbstractPgnTest {
       testUnwinnableFull(analysis, testCase);
       testUnwinnableQuick(analysis, testCase);
     }
+    return true;
   }
 
   private static void testFen(String expectedFen, String actualFen) {

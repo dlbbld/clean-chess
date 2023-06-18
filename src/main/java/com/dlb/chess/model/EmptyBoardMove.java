@@ -1,25 +1,12 @@
 package com.dlb.chess.model;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Square;
 
 @SuppressWarnings("null")
 public record EmptyBoardMove(@NonNull Square fromSquare, @NonNull Square toSquare)
     implements Comparable<EmptyBoardMove> {
-
-  @Override
-  public boolean equals(@Nullable Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    final var other = (EmptyBoardMove) obj;
-    return fromSquare == other.fromSquare && toSquare == other.toSquare;
-  }
 
   @Override
   public String toString() {

@@ -31,6 +31,9 @@ public abstract class UciMoveUtility {
     return UciMoveValidationUtility.lookup(uciMoveStr);
   }
 
+  // we are avoiding checks weather the uci move is legal move or not
+  // the goal is to provide a move specification
+  // the move specificatoin can then be checked to be legal
   public static MoveSpecification convertUciMoveToMoveSpecification(ApiBoard board, UciMove uciMove) {
     // we need the board to identify the castling move
 
@@ -41,7 +44,8 @@ public abstract class UciMoveUtility {
       return new MoveSpecification(board.getHavingMove(), fromSquare, toSquare, uciMove.promotionPieceType());
     }
 
-    if (board.getStaticPosition().get(fromSquare).getPieceType() == PieceType.KING) {
+    if (!board.getStaticPosition().isEmpty(fromSquare)
+        && board.getStaticPosition().get(fromSquare).getPieceType() == PieceType.KING) {
       final CastlingMove potentialCastlingMove = calculatePotentialCastlingMove(fromSquare, toSquare);
       switch (potentialCastlingMove) {
         case KING_SIDE:

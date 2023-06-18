@@ -1,7 +1,6 @@
 package com.dlb.chess.model;
 
 import org.eclipse.jdt.annotation.NonNull;
-import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -15,18 +14,5 @@ public record SanConversion(@NonNull File fromFile, @NonNull Rank fromRank, @Non
 
   public static final SanConversion EMPTY = new SanConversion(File.NONE, Rank.NONE, Square.NONE,
       PromotionPieceType.NONE, CheckmateOrCheck.NONE);
-
-  @Override
-  public boolean equals(@Nullable Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    final var other = (SanConversion) obj;
-    return fromFile == other.fromFile && fromRank == other.fromRank && promotionPieceType == other.promotionPieceType
-        && checkmateOrCheck == other.checkmateOrCheck && toSquare == other.toSquare;
-  }
 
 }
