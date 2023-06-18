@@ -14,6 +14,7 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.FenUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.FenParserAdvanced;
 
@@ -41,7 +42,7 @@ class TestFenInsufficientMaterial {
         }
         staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing, Piece.BLACK_KING);
         final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
-        final String fen = createFenForPiecePlacement(piecePlacement, side);
+        final String fen = FenUtility.createDummyFenForPiecePlacement(piecePlacement, side);
         try {
           FenParserAdvanced.parseFenAdvanced(fen);
           // counting if valid
@@ -146,7 +147,7 @@ class TestFenInsufficientMaterial {
             staticPositionWork = staticPositionWork.createChangedPosition(squareSecondBishop, Piece.BLACK_BISHOP);
 
             final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
-            final String fen = createFenForPiecePlacement(piecePlacement, side);
+            final String fen = FenUtility.createDummyFenForPiecePlacement(piecePlacement, side);
             try {
               FenParserAdvanced.parseFenAdvanced(fen);
               // counting if valid
@@ -204,7 +205,7 @@ class TestFenInsufficientMaterial {
           }
           staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing, Piece.BLACK_KING);
           final String piecePlacement = StaticPositionUtility.calculatePiecePlacement(staticPositionWork);
-          final String fen = createFenForPiecePlacement(piecePlacement, side);
+          final String fen = FenUtility.createDummyFenForPiecePlacement(piecePlacement, side);
           try {
             FenParserAdvanced.parseFenAdvanced(fen);
             // counting if valid
@@ -227,18 +228,6 @@ class TestFenInsufficientMaterial {
       }
     }
     return counter;
-  }
-
-  private static String createFenForPiecePlacement(String piecePlacement, Side side) {
-    final StringBuilder fen = new StringBuilder();
-
-    fen.append(piecePlacement);
-    fen.append(" ");
-    fen.append(side.getFenLetter());
-    fen.append(" - - 0 100");
-
-    return NonNullWrapperCommon.toString(fen);
-
   }
 
 }

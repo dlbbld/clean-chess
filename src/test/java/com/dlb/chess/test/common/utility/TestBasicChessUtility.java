@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.utility.BasicChessUtility;
+import com.dlb.chess.common.utility.FenUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 
 class TestBasicChessUtility {
@@ -32,13 +33,13 @@ class TestBasicChessUtility {
   @Test
   void testSideHavingMoveForFen() {
 
-    assertEquals(Side.WHITE, BasicChessUtility.calculateSideHavingMoveForFen(FenConstants.FEN_INITIAL_STR));
-    assertEquals(Side.BLACK, BasicChessUtility.calculateSideHavingMoveForFen(FenConstants.FEN_AFTER_E4_STR));
+    assertEquals(Side.WHITE, FenUtility.calculateSideHavingMoveForFen(FenConstants.FEN_INITIAL_STR));
+    assertEquals(Side.BLACK, FenUtility.calculateSideHavingMoveForFen(FenConstants.FEN_AFTER_E4_STR));
 
     var isException = false;
     try {
       @SuppressWarnings("null") @NonNull final String invalidFen = FenConstants.FEN_INITIAL_STR.replace(" w ", " x ");
-      BasicChessUtility.calculateSideHavingMoveForFen(invalidFen);
+      FenUtility.calculateSideHavingMoveForFen(invalidFen);
     } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
       isException = true;
     }

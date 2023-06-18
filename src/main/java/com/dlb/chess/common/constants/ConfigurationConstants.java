@@ -8,7 +8,6 @@ public abstract class ConfigurationConstants {
   // the json file for the google text to speech service account (non free service)
 
   public static final String TEMP_FOLDER_PATH = "C:\\temp";
-  public static final String STOCKFISH_EXE_PATH = "C:\\Users\\danie\\OneDrive\\Documents\\copy\\UCI\\stockfish_14_win_x64_avx2\\stockfish_14_x64_avx2.exe";
   public static final String PROJECT_ROOT_FOLDER_PATH = "C:\\Users\\danie\\git\\clean-chess";
 
   public static final int DGT_MY_BLUETOOTH_BOARD_ID = 23944;
