@@ -44,7 +44,7 @@ public class FenParserAdvanced implements EnumConstants {
   @SuppressWarnings("null")
   private static final Pattern PATTERN_RANK = Pattern.compile(REG_EXP_RANK);
 
-  private static final String REG_EXP_SIDE = "^[wb]{1}$";
+  private static final String REG_EXP_SIDE = "^[wb]$";
   @SuppressWarnings("null")
   private static final Pattern PATTERN_SIDE = Pattern.compile(REG_EXP_SIDE);
 

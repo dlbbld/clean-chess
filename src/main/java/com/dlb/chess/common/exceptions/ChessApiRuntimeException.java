@@ -1,6 +1,6 @@
 package com.dlb.chess.common.exceptions;
 
-public abstract class ChessApiRuntimeException extends RuntimeException {
+public class ChessApiRuntimeException extends RuntimeException {
 
   public ChessApiRuntimeException() {
   }

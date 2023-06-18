@@ -49,7 +49,7 @@ public class Analyzer extends AnalyzerPrint {
     return calculateAnalysis(board);
   }
 
-  public static Analysis calculateAnalysis(ApiBoard board) throws Exception {
+  public static Analysis calculateAnalysis(ApiBoard board) {
 
     final String invariant = board.getFen();
 
