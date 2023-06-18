@@ -183,7 +183,7 @@ public class ValidateNewMove implements EnumConstants {
       }
       validatePawnOneSquareAdvanceMove(board, moveSpecification);
 
-    } else if (isDiagonalMove) {
+    } else {
       // diagonal move
       validatePawnCapture(board, moveSpecification);
     }

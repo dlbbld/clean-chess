@@ -13,7 +13,7 @@ import com.dlb.chess.pgn.reader.model.PgnFile;
 
 public class ReadMeForRepository {
 
-  public static void main(String[] args) throws Exception {
+  public static void main(String[] args) {
 
     checkThreefoldClaimAhead();
     checkThreefoldOnTheBoard();

@@ -73,26 +73,26 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
     if (!isCapture) {
       switch (movingPieceType) {
         case BISHOP:
-          if (fromFile == File.NONE && fromRank == Rank.NONE) {
-            return SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
-          }
-          if (fromFile != File.NONE && fromRank == Rank.NONE) {
+          if (fromRank == Rank.NONE) {
+            if (fromFile == File.NONE) {
+              return SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
+            }
             return SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
           }
-          if (fromFile == File.NONE && fromRank != Rank.NONE) {
+          if (fromFile == File.NONE) {
             return SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
           }
           return SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
         case KING:
           return SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE;
         case KNIGHT:
-          if (fromFile == File.NONE && fromRank == Rank.NONE) {
-            return SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE;
-          }
-          if (fromFile != File.NONE && fromRank == Rank.NONE) {
+          if (fromRank == Rank.NONE) {
+            if (fromFile == File.NONE) {
+              return SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE;
+            }
             return SanType.KNIGHT_NON_CAPTURING_FILE_MOVE;
           }
-          if (fromFile == File.NONE && fromRank != Rank.NONE) {
+          if (fromFile == File.NONE) {
             return SanType.KNIGHT_NON_CAPTURING_RANK_MOVE;
           }
           return SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE;
@@ -102,24 +102,25 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
           }
           return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
         case QUEEN:
-          if (fromFile == File.NONE && fromRank == Rank.NONE) {
-            return SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
-          }
-          if (fromFile != File.NONE && fromRank == Rank.NONE) {
+          if (fromRank == Rank.NONE) {
+            if (fromFile == File.NONE) {
+              return SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
+            }
+
             return SanType.QUEEN_NON_CAPTURING_FILE_MOVE;
           }
-          if (fromFile == File.NONE && fromRank != Rank.NONE) {
+          if (fromFile == File.NONE) {
             return SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
           }
           return SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
         case ROOK:
-          if (fromFile == File.NONE && fromRank == Rank.NONE) {
-            return SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
-          }
-          if (fromFile != File.NONE && fromRank == Rank.NONE) {
+          if (fromRank == Rank.NONE) {
+            if (fromFile == File.NONE) {
+              return SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
+            }
             return SanType.ROOK_NON_CAPTURING_FILE_MOVE;
           }
-          if (fromFile == File.NONE && fromRank != Rank.NONE) {
+          if (fromFile == File.NONE) {
             return SanType.ROOK_NON_CAPTURING_RANK_MOVE;
           }
           return SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
@@ -132,26 +133,26 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
     // now capture
     switch (movingPieceType) {
       case BISHOP:
-        if (fromFile == File.NONE && fromRank == Rank.NONE) {
-          return SanType.BISHOP_CAPTURING_NEITHER_MOVE;
-        }
-        if (fromFile != File.NONE && fromRank == Rank.NONE) {
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.BISHOP_CAPTURING_NEITHER_MOVE;
+          }
           return SanType.BISHOP_CAPTURING_FILE_MOVE;
         }
-        if (fromFile == File.NONE && fromRank != Rank.NONE) {
+        if (fromFile == File.NONE) {
           return SanType.BISHOP_CAPTURING_RANK_MOVE;
         }
         return SanType.BISHOP_CAPTURING_SQUARE_MOVE;
       case KING:
         return SanType.KING_NON_CASTLING_CAPTURING_MOVE;
       case KNIGHT:
-        if (fromFile == File.NONE && fromRank == Rank.NONE) {
-          return SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
-        }
-        if (fromFile != File.NONE && fromRank == Rank.NONE) {
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
+          }
           return SanType.KNIGHT_CAPTURING_FILE_MOVE;
         }
-        if (fromFile == File.NONE && fromRank != Rank.NONE) {
+        if (fromFile == File.NONE) {
           return SanType.KNIGHT_CAPTURING_RANK_MOVE;
         }
         return SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
@@ -161,24 +162,24 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
         }
         return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       case QUEEN:
-        if (fromFile == File.NONE && fromRank == Rank.NONE) {
-          return SanType.QUEEN_CAPTURING_NEITHER_MOVE;
-        }
-        if (fromFile != File.NONE && fromRank == Rank.NONE) {
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.QUEEN_CAPTURING_NEITHER_MOVE;
+          }
           return SanType.QUEEN_CAPTURING_FILE_MOVE;
         }
-        if (fromFile == File.NONE && fromRank != Rank.NONE) {
+        if (fromFile == File.NONE) {
           return SanType.QUEEN_CAPTURING_RANK_MOVE;
         }
         return SanType.QUEEN_CAPTURING_SQUARE_MOVE;
       case ROOK:
-        if (fromFile == File.NONE && fromRank == Rank.NONE) {
-          return SanType.ROOK_CAPTURING_NEITHER_MOVE;
-        }
-        if (fromFile != File.NONE && fromRank == Rank.NONE) {
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.ROOK_CAPTURING_NEITHER_MOVE;
+          }
           return SanType.ROOK_CAPTURING_FILE_MOVE;
         }
-        if (fromFile == File.NONE && fromRank != Rank.NONE) {
+        if (fromFile == File.NONE) {
           return SanType.ROOK_CAPTURING_RANK_MOVE;
         }
         return SanType.ROOK_CAPTURING_SQUARE_MOVE;
