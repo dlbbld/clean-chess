@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
@@ -91,8 +92,9 @@ public abstract class MultiplePgnSplitUtility {
         }
         currentFileLines.add(line);
       }
-    } catch (final IOException e) {
-      throw new ChessApiRuntimeException(e.getMessage());
+    } catch (final IOException ioe) {
+      @SuppressWarnings("null") @NonNull final String message = ioe.getMessage();
+      throw new ChessApiRuntimeException(message);
     }
 
     logger.printf(Level.INFO, "Created %s files", writtenFileCounter);
