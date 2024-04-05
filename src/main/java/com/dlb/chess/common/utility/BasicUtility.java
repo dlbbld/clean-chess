@@ -24,6 +24,14 @@ public abstract class BasicUtility {
   private BasicUtility() {
   }
 
+  public static String readProjectFolderPath() {
+    final String projectRootFolderPath = System.getProperty("user.dir");
+    if (projectRootFolderPath == null) {
+      throw new RuntimeException("Project root folder path is not set as property");
+    }
+    return projectRootFolderPath;
+  }
+
   public static void removeLastChar(StringBuilder stringBuilder) {
     final var length = stringBuilder.length();
     if (length > 0) {
