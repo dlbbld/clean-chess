@@ -3,6 +3,7 @@ package com.dlb.chess.test.pgn.export;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -17,7 +18,8 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnExportLineLength {
 
-  private static final String TEST_FOLDER_PATH = PgnTestConstants.PGN_EXPORT_TEST_ROOT_FOLDER_PATH + "\\lineLength80";
+  private static final Path TEST_FOLDER_PATH = PgnTestConstants.PGN_EXPORT_TEST_ROOT_FOLDER_PATH
+      .resolve("lineLength80");
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineLength.class);
 

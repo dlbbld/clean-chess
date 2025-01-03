@@ -1,5 +1,6 @@
 package com.dlb.chess.generate;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,8 +31,8 @@ public class GeneratePythonTestCases implements EnumConstants {
   private static final int PRINT_GENERATED_LINES_INTERVAL = 1000;
 
   private static final int WRITE_LINE_INTERVAL = 100000;
-  private static final String PYTHON_SCRIPT = FileUtility
-      .calculateFilePath(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH + "\\..\\python-chess", "test_play_game.py");
+  private static final Path PYTHON_SCRIPT = FileUtility.calculateFilePath(
+      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH.resolve("../python-chess"), "test_play_game.py");
 
   public static void main(String[] args) throws Exception {
     generatePythonTestCase();
@@ -51,13 +52,14 @@ public class GeneratePythonTestCases implements EnumConstants {
     processPythonCodeLine("class GameTestCase(unittest.TestCase):", counterList, codeLineList);
 
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
-      final String folderPath = testCaseList.pgnTest().getFolderPath();
+      final Path folderPath = testCaseList.pgnTest().getFolderPath();
       logger.info("Processing folder " + folderPath);
       processPythonCodeLine("", counterList, codeLineList);
       final String folderIndication;
       {
-        final var folderIndication0 = folderPath;
-        final var folderIndication1 = folderIndication0.replace(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH, "");
+        final var folderIndication0 = folderPath.toAbsolutePath().toString();
+        final var folderIndication1 = folderIndication0
+            .replace(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH.toAbsolutePath().toString(), "");
         folderIndication = folderIndication1.replace("\\", "_");
       }
       processPythonCodeLine("  def test_" + folderIndication + "(self):", counterList, codeLineList);

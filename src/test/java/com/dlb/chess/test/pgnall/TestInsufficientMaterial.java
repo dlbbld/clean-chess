@@ -2,6 +2,8 @@ package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
+
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
@@ -50,7 +52,7 @@ class TestInsufficientMaterial implements EnumConstants {
     }
   }
 
-  private static void checkInsufficientMaterial(String folderPath, String pgnFileName) throws Exception {
+  private static void checkInsufficientMaterial(Path folderPath, String pgnFileName) throws Exception {
 
     logger.info(pgnFileName);
 

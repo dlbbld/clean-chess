@@ -1,5 +1,7 @@
 package com.dlb.chess.test.pgntest.enums;
 
+import java.nio.file.Path;
+
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 public enum PgnTest {
@@ -109,15 +111,15 @@ public enum PgnTest {
     this.folderPart = folderPart;
   }
 
-  public String getFolderPath() {
-    return PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH + "\\" + folderPart;
+  public Path getFolderPath() {
+    return PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH.resolve(folderPart);
   }
 
   public boolean getIsBasicTest() {
     return isBasicTest;
   }
 
-  public static boolean existsFolderPath(String folderPath) {
+  public static boolean existsFolderPath(Path folderPath) {
     for (final PgnTest pgnTest : PgnTest.values()) {
       if (pgnTest.getFolderPath().equals(folderPath)) {
         return true;

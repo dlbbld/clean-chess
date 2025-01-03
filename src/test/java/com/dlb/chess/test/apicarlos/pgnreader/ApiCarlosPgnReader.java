@@ -1,5 +1,6 @@
 package com.dlb.chess.test.apicarlos.pgnreader;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +14,7 @@ import com.github.bhlangonijr.chesslib.move.Move;
 
 public class ApiCarlosPgnReader {
 
-  public static PgnSan readPgnSanList(String pgnFolderPath, String pgnFileName) {
+  public static PgnSan readPgnSanList(Path pgnFolderPath, String pgnFileName) {
 
     final Game game = PgnUtilityApiCarlos.readPgn(pgnFolderPath, pgnFileName);
 

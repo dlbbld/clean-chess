@@ -1,5 +1,7 @@
 package com.dlb.chess.test.pgntest;
 
+import java.nio.file.Path;
+
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 
@@ -16,16 +18,16 @@ public abstract class PgnTestConstants {
 
   public static final PgnTestInclusion PGN_TEST_INCLUSION = PgnTestInclusion.ALL_EXCEPT_LONGEST_POSSIBLE;
 
-  public static final String PGN_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgn";
+  public static final Path PGN_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
+      .resolve("src/test/resources/pgn");
 
-  public static final String PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgnReader\\nonStrict";
+  public static final Path PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
+      .resolve("src/test/resources/pgnReader/nonStrict");
 
-  public static final String PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgnReader\\strict";
+  public static final Path PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
+      .resolve("src/test/resources/pgnReader/strict");
 
-  public static final String PGN_EXPORT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
-      + "\\src\\test\\resources\\pgnExport";
+  public static final Path PGN_EXPORT_TEST_ROOT_FOLDER_PATH = ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH
+      .resolve("src/test/resources/pgnExport");
 
 }

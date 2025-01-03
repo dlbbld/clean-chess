@@ -2,6 +2,7 @@ package com.dlb.chess.pgn.reader;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -36,9 +37,9 @@ public abstract class AbstractPgnReader {
     return board.getPerformedMoveSpecificationList();
   }
 
-  static List<String> readPgnFileLineList(String pgnFolderPath, String pgnFileName)
+  static List<String> readPgnFileLineList(Path pgnFolderPath, String pgnFileName)
       throws PgnReaderStrictValidationException {
-    final String filePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
+    final Path filePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
     final List<String> fileLines;
     try {
       if (!FileUtility.exists(pgnFolderPath, pgnFileName)) {

@@ -3,6 +3,7 @@ package com.dlb.chess.test.common.utility;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
 
@@ -17,11 +18,11 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
-  private static final String PGN_CUSTOM_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH
-      + "\\movementSpecification";
+  private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH
+      .resolve("movementSpecification");
 
-  private static final String PGN_TEST_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\commentary\\leadingCommentary\\exception";
+  private static final Path PGN_TEST_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("commentary/leadingCommentary/exception");
 
   @SuppressWarnings("static-method")
   @Test
@@ -62,8 +63,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertTrue(isException);
   }
 
-  private static final String PGN_TEST_NON_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\commentary\\nonLeadingCommentary\\exception";
+  private static final Path PGN_TEST_NON_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("commentary/nonLeadingCommentary/exception");
 
   @SuppressWarnings("static-method")
   void testNonLeadingCommentaryException() {
@@ -111,8 +112,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertTrue(isException);
   }
 
-  private static final String PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\moveSuffixAnnotation\\exception";
+  private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("moveSuffixAnnotation/exception");
 
   @SuppressWarnings({ "static-method" })
   @Test
@@ -137,8 +138,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertTrue(isException);
   }
 
-  private static final String PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\combined\\exception";
+  private static final Path PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("combined/exception");
 
   @SuppressWarnings({ "static-method" })
   @Test
@@ -160,8 +161,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertTrue(isException);
   }
 
-  private static final String PGN_TEST_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\commentary\\leadingCommentary\\success";
+  private static final Path PGN_TEST_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("commentary/leadingCommentary/success");
 
   @SuppressWarnings("static-method")
   @Test
@@ -185,8 +186,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertEquals(leadingCommentary, pgnFile.leadingCommentary());
   }
 
-  private static final String PGN_TEST_NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\commentary\\nonLeadingCommentary\\success";
+  private static final Path PGN_TEST_NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("commentary/nonLeadingCommentary/success");
 
   @SuppressWarnings({ "static-method", "null" })
   @Test
@@ -228,8 +229,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));
   }
 
-  private static final String PGN_TEST_COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\commentary\\combinedCommentary\\success";
+  private static final Path PGN_TEST_COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("commentary/combinedCommentary/success");
 
   @SuppressWarnings({ "static-method", "null" })
   @Test
@@ -279,8 +280,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));
   }
 
-  private static final String PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\moveSuffixAnnotation\\success";
+  private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("moveSuffixAnnotation/success");
 
   @SuppressWarnings({ "static-method", "null" })
   @Test
@@ -300,8 +301,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
   }
 
-  private static final String PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
-      + "\\combined\\success";
+  private static final Path PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = PGN_CUSTOM_TEST_FOLDER_PATH
+      .resolve("combined/success");
 
   @SuppressWarnings({ "static-method", "null" })
   @Test

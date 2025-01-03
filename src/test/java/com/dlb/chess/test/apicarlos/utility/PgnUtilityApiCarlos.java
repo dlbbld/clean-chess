@@ -1,5 +1,7 @@
 package com.dlb.chess.test.apicarlos.utility;
 
+import java.nio.file.Path;
+
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
 import com.github.bhlangonijr.chesslib.game.Game;
@@ -10,11 +12,11 @@ public class PgnUtilityApiCarlos {
   private PgnUtilityApiCarlos() {
   }
 
-  public static Game readPgn(String pgnFolderPath, String pgnFileName) {
+  public static Game readPgn(Path pgnFolderPath, String pgnFileName) {
 
-    final var pgnFilePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
+    final Path pgnFilePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
 
-    final PgnHolder pgnHolder = new PgnHolder(pgnFilePath);
+    final var pgnHolder = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
     try {
       pgnHolder.loadPgn();
     } catch (final Exception e) {

@@ -2,14 +2,16 @@ package com.dlb.chess.test.pgn.reader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderStrictFromInitialPositionUsingFen extends AbstractTestPgnReader {
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH
-      + "\\fromInitialPositionUsingFen";
+  private static final Path PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH
+      .resolve("fromInitialPositionUsingFen");
 
   @SuppressWarnings("static-method")
   @Test

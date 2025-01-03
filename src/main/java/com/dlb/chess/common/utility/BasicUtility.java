@@ -1,5 +1,7 @@
 package com.dlb.chess.common.utility;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,8 +26,8 @@ public abstract class BasicUtility {
   private BasicUtility() {
   }
 
-  public static String readProjectFolderPath() {
-    final String projectRootFolderPath = System.getProperty("user.dir");
+  public static Path readProjectFolderPath() {
+    final var projectRootFolderPath = Paths.get(System.getProperty("user.dir"));
     if (projectRootFolderPath == null) {
       throw new RuntimeException("Project root folder path is not set as property");
     }

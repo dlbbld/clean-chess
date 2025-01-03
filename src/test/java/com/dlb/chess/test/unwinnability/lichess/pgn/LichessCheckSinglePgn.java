@@ -1,11 +1,13 @@
 package com.dlb.chess.test.unwinnability.lichess.pgn;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.pgn.reader.model.PgnFile;
@@ -16,14 +18,14 @@ public class LichessCheckSinglePgn extends AbstractLichessCheck {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckSinglePgn.class);
 
-  private static final String PGN_FOLDER_PATH = "D:\\Lichess\\split";
+  private static final Path PGN_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH.resolve("lichess/split");
 
   public static void main(String[] args) {
     doTheCheck(PGN_FOLDER_PATH);
   }
 
-  private static void doTheCheck(String pngOutFolderPath) {
-    final File folder = new File(pngOutFolderPath);
+  private static void doTheCheck(Path pngOutFolderPath) {
+    final var folder = pngOutFolderPath.toFile();
     if (!folder.isDirectory()) {
       throw new IllegalArgumentException("\"" + pngOutFolderPath + "\" is not a directory");
     }

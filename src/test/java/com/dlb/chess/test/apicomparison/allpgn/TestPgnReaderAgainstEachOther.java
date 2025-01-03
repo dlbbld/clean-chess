@@ -2,6 +2,7 @@ package com.dlb.chess.test.apicomparison.allpgn;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,7 +63,7 @@ class TestPgnReaderAgainstEachOther {
 
   // we extract some of the most important information from the PGN reader we can test against API carlos PGN reader
   // we cannot test the full information against API carlos PGN reader
-  public static PgnSan readPgnSanList(String pgnFolderPath, String pgnFileName) {
+  public static PgnSan readPgnSanList(Path pgnFolderPath, String pgnFileName) {
     final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(pgnFolderPath, pgnFileName);
     final Fen startFen = pgnFile.startFen();
 

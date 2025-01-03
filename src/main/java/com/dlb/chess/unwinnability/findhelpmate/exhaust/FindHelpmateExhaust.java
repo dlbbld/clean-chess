@@ -12,6 +12,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
@@ -74,7 +75,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     if (IS_DEBUG) {
-      FileUtility.writeFile("C:\\Users\\danie\\git\\D3-Chess-test\\debug\\fenListMine.txt", evalFenList);
+      FileUtility.writeFile(ConfigurationConstants.TEMP_FOLDER_PATH.resolve("fenListMine.txt"), evalFenList);
     }
 
     switch (findHelpmate) {

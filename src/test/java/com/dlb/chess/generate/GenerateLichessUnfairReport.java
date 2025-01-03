@@ -1,5 +1,7 @@
 package com.dlb.chess.generate;
 
+import java.nio.file.Path;
+
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.enums.Side;
@@ -25,7 +27,7 @@ public class GenerateLichessUnfairReport {
 
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final String pgnFileName = testCase.pgnFileName();
-      final String folderPath = testCaseList.pgnTest().getFolderPath();
+      final Path folderPath = testCaseList.pgnTest().getFolderPath();
 
       final var isPawnWallAmbrona = true;
       if (isPawnWallAmbrona) {

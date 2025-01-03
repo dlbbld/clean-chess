@@ -1,6 +1,6 @@
 package com.dlb.chess.test.pgntest;
 
-import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -39,11 +39,11 @@ public class CreateAmbronaHelpMateTestCases {
   private static final Logger logger = NonNullWrapperCommon.getLogger(CreateAmbronaHelpMateTestCases.class);
 
   private static final String OUTPUT_FOLDER_NAME = "lichessHelpmate";
-  private static final String OUTPUT_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH + "\\" + OUTPUT_FOLDER_NAME;
+  private static final Path OUTPUT_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH.resolve(OUTPUT_FOLDER_NAME);
 
   public static void main(String[] args) throws Exception {
 
-    final File folder = new File(OUTPUT_FOLDER_PATH);
+    final var folder = OUTPUT_FOLDER_PATH.toFile();
     if (!folder.exists()) {
       folder.mkdir();
     }
@@ -53,7 +53,7 @@ public class CreateAmbronaHelpMateTestCases {
 
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final String folderPath = testCaseList.pgnTest().getFolderPath();
+      final Path folderPath = testCaseList.pgnTest().getFolderPath();
       final var analysis = Analyzer.calculateAnalysis(folderPath, testCase.pgnFileName());
       if (IS_CREATE_UCI_REQUIRED) {
         printMovesAsUci(testCase.pgnFileName(), analysis);
@@ -84,8 +84,8 @@ public class CreateAmbronaHelpMateTestCases {
 
   }
 
-  private static void writeGameAsContinued(Map<String, String> havingHelpMate, String folderExisting,
-      String pgnFileName, Analysis analysis) {
+  private static void writeGameAsContinued(Map<String, String> havingHelpMate, Path folderExisting, String pgnFileName,
+      Analysis analysis) {
 
     if (havingHelpMate.containsKey(pgnFileName)) {
 

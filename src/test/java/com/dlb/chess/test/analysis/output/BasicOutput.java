@@ -1,5 +1,6 @@
 package com.dlb.chess.test.analysis.output;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class BasicOutput {
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
-  public static SingleOutput calculateTestResult(String folderPath, String pgnFileName) throws Exception {
+  public static SingleOutput calculateTestResult(Path folderPath, String pgnFileName) throws Exception {
     final var analysis = Analyzer.calculateAnalysis(folderPath, pgnFileName);
     return calculateTestResult(analysis, pgnFileName);
   }
