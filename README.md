@@ -383,10 +383,11 @@ The PGN reader supports any PGNs except PGNs with move variations.
 Reading PGN files from the file system:
 
 ```java
-  if (FileUtility.exists("C:\\myPgnFolder", "myPgnFile.pgn")) {
-    final PgnFile pgnFile = PgnReader.readPgn("C:\\temp\\myPgnFolder", "myPgnFile.pgn");
-    System.out.println(PgnCreate.createPgnFileString(pgnFile));
-  }
+	final var folderPath = ConfigurationConstants.TEMP_FOLDER_PATH.resolve("myPgnFolder");
+	if (FileUtility.exists(folderPath, "myPgnFile.pgn")) {
+	  final PgnFile pgnFile = PgnReader.readPgn(folderPath, "myPgnFile.pgn");
+	  System.out.println(PgnCreate.createPgnFileString(pgnFile));
+	}
 ```
       
 ## PGN creation
