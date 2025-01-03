@@ -2,6 +2,7 @@ package com.dlb.chess.test.pgntest.enums;
 
 import java.nio.file.Path;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 public enum PgnTest {
@@ -112,7 +113,7 @@ public enum PgnTest {
   }
 
   public Path getFolderPath() {
-    return PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH.resolve(folderPart);
+    return NonNullWrapperCommon.resolve(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH, folderPart);
   }
 
   public boolean getIsBasicTest() {

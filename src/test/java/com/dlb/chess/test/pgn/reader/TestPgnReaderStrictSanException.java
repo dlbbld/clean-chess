@@ -7,14 +7,15 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
 import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderStrictSanException {
-  private static final Path PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH
-      .resolve("exception/san");
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH, "exception/san");
 
   @SuppressWarnings("static-method")
   @Test

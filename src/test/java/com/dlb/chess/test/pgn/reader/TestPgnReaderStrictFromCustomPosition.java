@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
@@ -16,8 +17,8 @@ import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderStrictFromCustomPosition {
-  private static final Path PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH
-      .resolve("fromCustomPosition");
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH, "fromCustomPosition");
 
   @SuppressWarnings("static-method")
   @Test

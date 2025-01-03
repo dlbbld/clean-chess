@@ -33,7 +33,8 @@ public class GeneratePythonTestCases implements EnumConstants {
 
   private static final int WRITE_LINE_INTERVAL = 100000;
   private static final Path PYTHON_SCRIPT = FileUtility.calculateFilePath(
-      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH.resolve("../python-chess"), "test_play_game.py");
+      NonNullWrapperCommon.resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
+      "test_play_game.py");
 
   public static void main(String[] args) throws Exception {
     generatePythonTestCase();
@@ -61,8 +62,10 @@ public class GeneratePythonTestCases implements EnumConstants {
         final var folderIndication0 = folderPath.toAbsolutePath().toString();
         final var folderIndication1 = folderIndication0
             .replace(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH.toAbsolutePath().toString(), "");
-        final var separator = FileSystems.getDefault().getSeparator();
-        folderIndication = folderIndication1.replace(separator, "_");
+        try (final var fileSystem = FileSystems.getDefault()) {
+          final var separator = fileSystem.getSeparator();
+          folderIndication = folderIndication1.replace(separator, "_");
+        }
       }
       processPythonCodeLine("  def test_" + folderIndication + "(self):", counterList, codeLineList);
       processPythonCodeLine("    print(\"Processing module " + folderIndication + "\")", counterList, codeLineList);

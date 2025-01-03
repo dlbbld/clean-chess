@@ -18,7 +18,8 @@ public class LichessCheckSinglePgn extends AbstractLichessCheck {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckSinglePgn.class);
 
-  private static final Path PGN_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH.resolve("lichess/split");
+  private static final Path PGN_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "lichess/split");
 
   public static void main(String[] args) {
     doTheCheck(PGN_FOLDER_PATH);

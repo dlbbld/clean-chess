@@ -6,12 +6,13 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderFromInitialPosition extends AbstractTestPgnReader {
-  private static final Path PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH
-      .resolve("fromInitialPosition");
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH, "fromInitialPosition");
 
   @SuppressWarnings("static-method")
   @Test

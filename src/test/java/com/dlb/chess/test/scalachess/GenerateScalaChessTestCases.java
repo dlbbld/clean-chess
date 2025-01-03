@@ -57,8 +57,8 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   private static final int PRINT_GENERATED_LINES_INTERVAL = 1000;
 
   private static final int WRITE_LINE_INTERVAL = 100000;
-  private static final Path SCALA_SCRIPT = ConfigurationConstants.TEMP_FOLDER_PATH
-      .resolve("TestDaniAgainstScalaChess.scala");
+  private static final Path SCALA_SCRIPT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "TestDaniAgainstScalaChess.scala");
 
   public static void main(String[] args) throws Exception {
     generateScalaChessTestCase();

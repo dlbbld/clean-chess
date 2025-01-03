@@ -1,6 +1,7 @@
 package com.dlb.chess.test.unwinnability.lichess.fen;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
@@ -27,8 +28,8 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
       throw new IllegalArgumentException("\"" + FEN_FOLDER_PATH + "\" directory does not exist");
     }
 
-    final var fenFilePathIn = FEN_FOLDER_PATH.resolve(FEN_FILE_NAME_IN);
-    final var fenFilePathOut = FEN_FOLDER_PATH.resolve(FEN_FILE_NAME_MINE_RESULT);
+    final var fenFilePathIn = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH, FEN_FILE_NAME_IN);
+    final Path fenFilePathOut = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT);
 
     boolean isResumeFromLichessGameId;
     String lastProcessedLichessGameId;

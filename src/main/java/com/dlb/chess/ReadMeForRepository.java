@@ -4,6 +4,7 @@ import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.FileUtility;
@@ -200,7 +201,7 @@ public class ReadMeForRepository {
   }
 
   private static void checkPgnReaderExample2() {
-    final var folderPath = ConfigurationConstants.TEMP_FOLDER_PATH.resolve("myPgnFolder");
+    final var folderPath = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "myPgnFolder");
     if (FileUtility.exists(folderPath, "myPgnFile.pgn")) {
       final PgnFile pgnFile = PgnReader.readPgn(folderPath, "myPgnFile.pgn");
       System.out.println(PgnCreate.createPgnFileString(pgnFile));

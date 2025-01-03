@@ -23,7 +23,7 @@ public abstract class GeneratePgnInformationUtility {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePgnInformationUtility.class);
 
   public static void main(String[] args) throws Exception {
-    createInformation(ConfigurationConstants.TEMP_FOLDER_PATH.resolve("candidates"),
+    createInformation(NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "candidates"),
         ConfigurationConstants.TEMP_FOLDER_PATH, "candidates_information.txt");
   }
 

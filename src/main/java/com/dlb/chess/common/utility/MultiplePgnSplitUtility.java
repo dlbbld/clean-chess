@@ -26,10 +26,10 @@ import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 //8) This resulting PGN can be used here to be splitted
 
 public abstract class MultiplePgnSplitUtility {
-  private static final Path MULTIPLE_PGN_FILE_PATH = ConfigurationConstants.TEMP_FOLDER_PATH
-      .resolve("otherdb/mb-3.45/mb-3.45.pgn");
-  private static final Path OUTPUT_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH
-      .resolve("otherdb/mb-3.45/split");
+  private static final Path MULTIPLE_PGN_FILE_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "otherdb/mb-3.45/mb-3.45.pgn");
+  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "otherdb/mb-3.45/split");
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(MultiplePgnSplitUtility.class);
 

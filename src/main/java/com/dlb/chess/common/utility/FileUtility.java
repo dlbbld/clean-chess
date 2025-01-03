@@ -45,7 +45,7 @@ public abstract class FileUtility {
   }
 
   public static Path calculateFilePath(Path folderPath, String fileName) {
-    return folderPath.resolve(fileName);
+    return NonNullWrapperCommon.resolve(folderPath, fileName);
   }
 
   public static void writeFile(Path folderPath, String fileName, List<String> lineList) {
