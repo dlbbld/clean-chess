@@ -1,5 +1,6 @@
 package com.dlb.chess.generate;
 
+import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +61,8 @@ public class GeneratePythonTestCases implements EnumConstants {
         final var folderIndication0 = folderPath.toAbsolutePath().toString();
         final var folderIndication1 = folderIndication0
             .replace(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH.toAbsolutePath().toString(), "");
-        folderIndication = folderIndication1.replace("\\", "_");
+        final var separator = FileSystems.getDefault().getSeparator();
+        folderIndication = folderIndication1.replace(separator, "_");
       }
       processPythonCodeLine("  def test_" + folderIndication + "(self):", counterList, codeLineList);
       processPythonCodeLine("    print(\"Processing module " + folderIndication + "\")", counterList, codeLineList);

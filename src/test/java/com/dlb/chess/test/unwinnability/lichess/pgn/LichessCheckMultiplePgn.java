@@ -1,8 +1,8 @@
 package com.dlb.chess.test.unwinnability.lichess.pgn;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,6 +11,7 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.pgn.reader.PgnReaderStrict;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.utility.TagUtility;
@@ -30,7 +31,8 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
   private static final int RESUME_FROM_PGN_NUMBER = 550000;
 
   // 2020 - March - 13.9 GB - 55,544,817 games
-  private static final String MULTIPLE_PGN_FILE_PATH = "L:\\Lichess\\lichess_db_standard_rated_2020-03.pgn";
+  private static final Path MULTIPLE_PGN_FILE_PATH = ConfigurationConstants.TEMP_FOLDER_PATH
+      .resolve("lichess_db_standard_rated_2020-03.pgn");
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckMultiplePgn.class);
 
@@ -38,7 +40,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
     doTheCheck(MULTIPLE_PGN_FILE_PATH);
   }
 
-  private static void doTheCheck(String multiplePgnFilePath) {
+  private static void doTheCheck(Path multiplePgnFilePath) {
     logger.printf(Level.INFO, "Processing file %s", multiplePgnFilePath);
     logger.printf(Level.INFO, "Resuming from PGN number %s", RESUME_FROM_PGN_NUMBER);
 
@@ -51,7 +53,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
     List<String> currentPgnFileLines = new ArrayList<>();
     StringBuilder currentPgnFileString = new StringBuilder();
 
-    final File file = new File(multiplePgnFilePath);
+    final var file = multiplePgnFilePath.toFile();
     if (!file.isFile()) {
       throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
     }
