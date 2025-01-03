@@ -6,7 +6,7 @@
     </Console>
     <File name="LogToFile" fileName="${sys:java.io.tmpdir}/clean-chess.log">
       <PatternLayout>
-        <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
+        <Pattern>%d %p %c [%t] %m%n</Pattern>
       </PatternLayout>
     </File>
   </Appenders>
