@@ -1,17 +1,20 @@
 package com.dlb.chess.unwinnability.findhelpmate.exhaust;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
@@ -74,7 +77,9 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     if (IS_DEBUG) {
-      FileUtility.writeFile("C:\\Users\\danie\\git\\D3-Chess-test\\debug\\fenListMine.txt", evalFenList);
+      final @NonNull Path filePath = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+          "fenListMine.txt");
+      FileUtility.writeFile(filePath, evalFenList);
     }
 
     switch (findHelpmate) {

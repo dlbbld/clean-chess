@@ -32,7 +32,7 @@ class TestApiCarlosHash {
   }
 
   private static void processFileList(PgnTest pgnTest) throws Exception {
-    final File folder = new File(pgnTest.getFolderPath());
+    final var folder = pgnTest.getFolderPath().toFile();
     if (!folder.isDirectory()) {
       throw new TestSetupException("\"" + pgnTest.getFolderPath() + "\" is not a directory");
     }

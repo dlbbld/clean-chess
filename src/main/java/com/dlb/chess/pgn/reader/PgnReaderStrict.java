@@ -1,5 +1,6 @@
 package com.dlb.chess.pgn.reader;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -32,7 +33,7 @@ public class PgnReaderStrict extends AbstractPgnReader {
 
   public static final String EMPTY_LINE = "";
 
-  public static PgnFile readPgn(String pgnFolderPath, String pgnFileName) {
+  public static PgnFile readPgn(Path pgnFolderPath, String pgnFileName) {
     final List<String> fileLineList = readPgnFileLineList(pgnFolderPath, pgnFileName);
     return readPgn(fileLineList);
   }

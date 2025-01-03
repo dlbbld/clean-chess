@@ -3,16 +3,19 @@ package com.dlb.chess.test.pgn.reader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.reader.enums.ResultTagValue;
 import com.dlb.chess.pgn.reader.model.PgnFile;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
 class TestPgnReaderTag extends AbstractTestPgnReader {
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH
-      + "\\tag";
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH, "tag");
 
   @SuppressWarnings("static-method")
   @Test

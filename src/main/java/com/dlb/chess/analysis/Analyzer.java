@@ -1,5 +1,6 @@
 package com.dlb.chess.analysis;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class Analyzer extends AnalyzerPrint {
     AnalyzerPrint.printAnalysis(pgn);
   }
 
-  public static void printAnalysis(String folderPath, String pgnFileName) {
+  public static void printAnalysis(Path folderPath, String pgnFileName) {
     // delegated to package protected method for class organization
     AnalyzerPrint.printAnalysis(folderPath, pgnFileName);
   }
@@ -43,7 +44,7 @@ public class Analyzer extends AnalyzerPrint {
     AnalyzerPrint.printAnalysis(board);
   }
 
-  public static Analysis calculateAnalysis(String folderPath, String pgnFileName) throws Exception {
+  public static Analysis calculateAnalysis(Path folderPath, String pgnFileName) throws Exception {
 
     final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateAnalysis(board);

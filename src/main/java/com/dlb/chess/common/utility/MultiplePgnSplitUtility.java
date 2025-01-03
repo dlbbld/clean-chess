@@ -1,8 +1,8 @@
 package com.dlb.chess.common.utility;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -26,10 +26,10 @@ import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 //8) This resulting PGN can be used here to be splitted
 
 public abstract class MultiplePgnSplitUtility {
-  private static final String MULTIPLE_PGN_FILE_PATH = ConfigurationConstants.TEMP_FOLDER_PATH
-      + "\\otherdb\\mb-3.45\\mb-3.45.pgn";
-  private static final String OUTPUT_FOLDER_PATH = ConfigurationConstants.TEMP_FOLDER_PATH
-      + "\\otherdb\\mb-3.45\\split";
+  private static final Path MULTIPLE_PGN_FILE_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "otherdb/mb-3.45/mb-3.45.pgn");
+  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "otherdb/mb-3.45/split");
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(MultiplePgnSplitUtility.class);
 
@@ -37,7 +37,7 @@ public abstract class MultiplePgnSplitUtility {
     createSinglePgnFilesFromPgnMultipleFile(MULTIPLE_PGN_FILE_PATH, OUTPUT_FOLDER_PATH);
   }
 
-  private static void createSinglePgnFilesFromPgnMultipleFile(String multiplePgnFilePath, String outputFolderPath) {
+  private static void createSinglePgnFilesFromPgnMultipleFile(Path multiplePgnFilePath, Path outputFolderPath) {
     FileUtility.deleteFilesInDirectory(outputFolderPath);
 
     logger.printf(Level.INFO, "Processing file %s", multiplePgnFilePath);
@@ -50,7 +50,7 @@ public abstract class MultiplePgnSplitUtility {
     var isFen = false;
     List<String> currentFileLines = new ArrayList<>();
 
-    final File file = new File(multiplePgnFilePath);
+    final var file = multiplePgnFilePath.toFile();
     if (!file.isFile()) {
       throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
     }

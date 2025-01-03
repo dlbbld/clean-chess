@@ -1,6 +1,7 @@
 package com.dlb.chess.common;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -217,6 +218,11 @@ public class NonNullWrapperCommon {
   @SuppressWarnings("null")
   public static <E> List<E> subList(List<E> list, int fromIndex, int toIndex) {
     return list.subList(fromIndex, toIndex);
+  }
+
+  @SuppressWarnings("null")
+  public static Path resolve(final Path directoryPath, final String filePath) {
+    return directoryPath.resolve(filePath);
   }
 
 }

@@ -1,5 +1,6 @@
 package com.dlb.chess.common.utility;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -57,7 +58,7 @@ public abstract class GeneralUtility {
     return board;
   }
 
-  public static ApiBoard calculateBoard(String folderPath, String pgnFileName) {
+  public static ApiBoard calculateBoard(Path folderPath, String pgnFileName) {
 
     final PgnFile pgnFile = PgnReader.readPgn(folderPath, pgnFileName);
 

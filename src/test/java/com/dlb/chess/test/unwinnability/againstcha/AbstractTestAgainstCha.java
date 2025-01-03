@@ -1,5 +1,6 @@
 package com.dlb.chess.test.unwinnability.againstcha;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
 
 public abstract class AbstractTestAgainstCha {
 
-  public static List<UnwinnabilityRawRead> readChaRawResultList(String fenAnalysisFilePath) throws Exception {
+  public static List<UnwinnabilityRawRead> readChaRawResultList(Path fenAnalysisFilePath) throws Exception {
     final List<UnwinnabilityRawRead> resultList = new ArrayList<>();
 
     final List<String> fileLineList = FileUtility.readFileLines(fenAnalysisFilePath);

@@ -1,5 +1,7 @@
 package com.dlb.chess.generate;
 
+import java.nio.file.Path;
+
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.analysis.model.Analysis;
@@ -14,7 +16,7 @@ import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
-  static String generate(String pgnFolderPath, String pgnFileName) throws Exception {
+  static String generate(Path pgnFolderPath, String pgnFileName) throws Exception {
 
     final Analysis analysis = Analyzer.calculateAnalysis(pgnFolderPath, pgnFileName);
 

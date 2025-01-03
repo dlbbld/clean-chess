@@ -1,5 +1,6 @@
 package com.dlb.chess.test.scalachess;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
@@ -55,7 +57,8 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   private static final int PRINT_GENERATED_LINES_INTERVAL = 1000;
 
   private static final int WRITE_LINE_INTERVAL = 100000;
-  private static final String SCALA_SCRIPT = "C:\\Users\\danie\\IdeaProjects\\scalachess3\\src\\test\\scala\\TestDaniAgainstScalaChess.scala";
+  private static final Path SCALA_SCRIPT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "TestDaniAgainstScalaChess.scala");
 
   public static void main(String[] args) throws Exception {
     generateScalaChessTestCase();
@@ -99,7 +102,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
       }
 
       if (!IS_GENERATE_FOR_PGN_FILE_NAME) {
-        final String folderPath = testCaseList.pgnTest().getFolderPath();
+        final Path folderPath = testCaseList.pgnTest().getFolderPath();
 
         logger.info("Processing folder " + folderPath);
 

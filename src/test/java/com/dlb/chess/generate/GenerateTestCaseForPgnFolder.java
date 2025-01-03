@@ -1,6 +1,7 @@
 package com.dlb.chess.generate;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
@@ -12,14 +13,14 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn {
 
   // the folder can only contain PGN files
-  private static final String PGN_FOLDER_PATH = PgnTest.REPETITION_QUIZ_TWO.getFolderPath();
+  private static final Path PGN_FOLDER_PATH = PgnTest.REPETITION_QUIZ_TWO.getFolderPath();
 
   public static void main(String[] args) throws Exception {
     generateTestCaseForFolder(PGN_FOLDER_PATH);
   }
 
-  private static void generateTestCaseForFolder(String pgnFolderPath) throws Exception {
-    final File folder = new File(pgnFolderPath);
+  private static void generateTestCaseForFolder(Path pgnFolderPath) throws Exception {
+    final var folder = pgnFolderPath.toFile();
     if (!folder.isDirectory()) {
       throw new IllegalArgumentException("\"" + pgnFolderPath + "\" is not a directory");
     }

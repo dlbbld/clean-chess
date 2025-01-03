@@ -1,5 +1,6 @@
 package com.dlb.chess.analysis.print;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +37,7 @@ public class AnalyzerPrint {
     printAnalysis(board);
   }
 
-  protected static void printAnalysis(String folderPath, String pgnFileName) {
+  protected static void printAnalysis(Path folderPath, String pgnFileName) {
 
     final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     printAnalysis(board);

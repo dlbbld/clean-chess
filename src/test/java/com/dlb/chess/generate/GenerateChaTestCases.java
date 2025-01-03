@@ -1,12 +1,12 @@
 package com.dlb.chess.generate;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Path;
 
 import org.apache.logging.log4j.Logger;
 
@@ -28,23 +28,24 @@ public class GenerateChaTestCases implements EnumConstants {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateChaTestCases.class);
 
-  private static final String LIST_FOR_CHA_FILE_PATH = ConfigurationConstants.TEMP_FOLDER_PATH + "\\list_cha_2.txt";
+  private static final Path LIST_FOR_CHA_FILE_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "list_cha_2.txt");
 
   public static void main(String[] args) throws Exception {
     generateChaTestCases(LIST_FOR_CHA_FILE_PATH);
   }
 
-  public static void generateChaTestCases(String filePath) throws Exception {
+  public static void generateChaTestCases(Path filePath) throws Exception {
 
     FileUtility.deleteIfExists(filePath);
 
     logger.info("BEGIN generating code");
-    final File file = new File(filePath);
+    final var file = filePath.toFile();
     try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
         PrintWriter pw = new PrintWriter(w)) {
 
       for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
-        final String folderPath = testCaseList.pgnTest().getFolderPath();
+        final Path folderPath = testCaseList.pgnTest().getFolderPath();
         logger.info("Processing folder " + folderPath);
 
         for (final PgnFileTestCase testCase : testCaseList.list()) {
@@ -78,7 +79,7 @@ public class GenerateChaTestCases implements EnumConstants {
     logger.info("END generating code");
   }
 
-  private static String calculateLine(ApiBoard board, String folderPath, String game, int halfMoveCounter) {
+  private static String calculateLine(ApiBoard board, Path folderPath, String game, int halfMoveCounter) {
     final StringBuilder line = new StringBuilder();
     line.append(board.getFen());
 

@@ -2,6 +2,7 @@ package com.dlb.chess.test.apicarlos.bugs.fixed;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,8 @@ class TestApiCarlosPerformance {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();
         System.out.printf("Processing %s%n", pgnFileName);
-        final PgnHolder pgn = new PgnHolder(FileUtility.calculateFilePath(pgnTest.getFolderPath(), pgnFileName));
+        final Path filePath = FileUtility.calculateFilePath(pgnTest.getFolderPath(), pgnFileName);
+        final var pgn = new PgnHolder(filePath.toAbsolutePath().toString());
 
         final var millisecondsBeforeLoadPgn = System.currentTimeMillis();
         pgn.loadPgn();

@@ -2,11 +2,13 @@ package com.dlb.chess.test.pgn.reader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 import com.dlb.chess.pgn.reader.model.PgnFile;
@@ -15,7 +17,8 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
 class TestPgnReaderStrictReadTag extends AbstractTestMovetextUtility {
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH + "\\tag";
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH, "tag");
 
   @SuppressWarnings("static-method")
   @Test

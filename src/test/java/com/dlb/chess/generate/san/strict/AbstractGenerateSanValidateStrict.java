@@ -162,12 +162,12 @@ public abstract class AbstractGenerateSanValidateStrict implements EnumConstants
       // System.out.println("formalSet:");
       // printEnumConstantList(formalSet);
 
-      System.out.println("handwovenSet\\formalSet:");
+      System.out.println("handwovenSet minus formalSet:");
       final Set<String> handwovenSetMinusFormalSet = new TreeSet<>(handwovenSet);
       handwovenSetMinusFormalSet.removeAll(formalSet);
       printEnumConstantList(handwovenSetMinusFormalSet);
 
-      System.out.println("formalSet\\handwovenSet:");
+      System.out.println("formalSet minus handwovenSet:");
       final Set<String> formalSetMinusHandwovenSet = new TreeSet<>(formalSet);
       formalSetMinusHandwovenSet.removeAll(handwovenSet);
       printEnumConstantList(formalSetMinusHandwovenSet);

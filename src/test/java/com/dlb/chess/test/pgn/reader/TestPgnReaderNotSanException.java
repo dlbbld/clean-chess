@@ -1,13 +1,16 @@
 package com.dlb.chess.test.pgn.reader;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.reader.enums.PgnReaderValidationProblem;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderNotSanException extends AbstractTestPgnReaderException {
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH
-      + "\\exception\\notSan";
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH, "exception/notSan");
 
   @SuppressWarnings("static-method")
   @Test

@@ -3,8 +3,11 @@ package com.dlb.chess.test.pgn.reader;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Path;
+
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.reader.enums.PgnReaderValidationProblem;
 import com.dlb.chess.pgn.reader.exceptions.PgnReaderValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
@@ -13,8 +16,8 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnReaderSanException extends AbstractTestMovetextUtility {
 
-  private static final String PGN_TEST_FOLDER_PATH = PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH
-      + "\\exception\\san";
+  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(PgnTestConstants.PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH, "exception/san");
 
   @SuppressWarnings("static-method")
   @Test

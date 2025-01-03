@@ -1,5 +1,6 @@
 package com.dlb.chess.pgn.reader;
 
+import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
 
@@ -171,7 +172,7 @@ public class PgnReader extends AbstractPgnReader {
     return readPgn(lines);
   }
 
-  public static PgnFile readPgn(String pgnFolderPath, String pgnFileName) {
+  public static PgnFile readPgn(Path pgnFolderPath, String pgnFileName) {
     final List<String> fileLines = readPgnFileLineList(pgnFolderPath, pgnFileName);
     return readPgn(fileLines);
   }

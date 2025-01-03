@@ -1,5 +1,6 @@
 package com.dlb.chess.test.pgnall;
 
+import java.nio.file.Path;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -45,7 +46,7 @@ class TestFenParserAll extends AbstractTestFenParser {
     }
   }
 
-  private static void checkFromFen(String folderPath, String pgnFileName) throws Exception {
+  private static void checkFromFen(Path folderPath, String pgnFileName) throws Exception {
 
     logger.info(pgnFileName);
 

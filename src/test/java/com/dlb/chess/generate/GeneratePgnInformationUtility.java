@@ -1,6 +1,7 @@
 package com.dlb.chess.generate;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,13 +23,14 @@ public abstract class GeneratePgnInformationUtility {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePgnInformationUtility.class);
 
   public static void main(String[] args) throws Exception {
-    createInformation("C:\\temp\\candidates", ConfigurationConstants.TEMP_FOLDER_PATH, "candidates_information.txt");
+    createInformation(NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "candidates"),
+        ConfigurationConstants.TEMP_FOLDER_PATH, "candidates_information.txt");
   }
 
-  private static void createInformation(String inputFolderPath, String outputFolderPath, String outputFileName)
+  private static void createInformation(Path inputFolderPath, Path outputFolderPath, String outputFileName)
       throws Exception {
 
-    final File inputFolder = new File(inputFolderPath);
+    final var inputFolder = inputFolderPath.toFile();
     if (!inputFolder.isDirectory()) {
       throw new IllegalArgumentException("\"" + inputFolderPath + "\" is not a directory");
     }

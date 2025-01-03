@@ -1,6 +1,5 @@
 package com.dlb.chess.test.unwinnability.lichess.fen;
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -34,16 +33,17 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
   private static void reportDifferencesQuick() throws IOException {
 
-    final var fenFilePathAmbronaResult = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_AMBRONA_RESULT_QUICK;
-    final var fenFilePathMineResult = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_MINE_RESULT_QUICK;
+    final var fenFilePathAmbronaResult = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH,
+        FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
+    final var fenFilePathMineResult = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT_QUICK);
 
-    final var fenFilePathCompareQuick = FEN_FOLDER_PATH + "\\" + FEN_FILE_NAME_COMPARE_QUICK;
+    final var fenFilePathCompareQuick = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH, FEN_FILE_NAME_COMPARE_QUICK);
 
     FileUtility.writeFile(fenFilePathCompareQuick, FEN_FILE_COMPARE_QUICK_HEADER);
 
-    final File fileAmbrona = new File(fenFilePathAmbronaResult);
-    final File fileMine = new File(fenFilePathMineResult);
-    final File fileReport = new File(fenFilePathCompareQuick);
+    final var fileAmbrona = fenFilePathAmbronaResult.toFile();
+    final var fileMine = fenFilePathMineResult.toFile();
+    final var fileReport = fenFilePathCompareQuick.toFile();
 
     var counterAll = 0;
     var counterDifferences = 0;

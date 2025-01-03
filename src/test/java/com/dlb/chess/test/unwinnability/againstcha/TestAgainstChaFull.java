@@ -1,5 +1,6 @@
 package com.dlb.chess.test.unwinnability.againstcha;
 
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
@@ -28,15 +30,17 @@ public class TestAgainstChaFull extends AbstractTestAgainstCha {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaFull.class);
 
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final String CHA_FULL_RESULT = "C:\\Users\\danie\\git\\D3-Chess-test\\debug\\chaFullResult.txt";
+  private static final Path CHA_FULL_RESULT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "chaFullResult.txt");
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final String MINE_OUT = "c:\\temp\\cha\\mine\\mineFullResult.txt";
+  private static final Path MINE_OUT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "mineFullResult.txt");
 
   public static void main(String[] args) throws Exception {
     checkMineFullAgainstChaFull();
   }
 
-  public static List<UnwinnabilityFullRead> readFullResultList(String path) throws Exception {
+  public static List<UnwinnabilityFullRead> readFullResultList(Path path) throws Exception {
     final List<UnwinnabilityFullRead> resultList = new ArrayList<>();
 
     final List<UnwinnabilityRawRead> chaRawResultList = readChaRawResultList(path);

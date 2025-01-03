@@ -2,6 +2,7 @@ package com.dlb.chess.test.legalmoves;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Path;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -63,7 +64,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     }
   }
 
-  private static void checkLegalMoves(String folderPath, String pgnFileName) {
+  private static void checkLegalMoves(Path folderPath, String pgnFileName) {
 
     logger.info(pgnFileName);
 
