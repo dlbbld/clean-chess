@@ -1,24 +1,31 @@
-package com.dlb.chess.test.pgn.linebreaks;
+package com.dlb.chess.test.pgn.export.linebreaks;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.pgn.reader.PgnReader;
 import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
-public class TestPgnLineBreaks {
+public class TestPgnExportLineBreaks {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnLineBreaks.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineBreaks.class);
+
+  private static final String PGN_FILE_NAME = "test_write_line_breaks.pgn";
 
   @SuppressWarnings("static-method")
   @Test
-  void test() throws IOException {
+  void test() {
     final var pgn = """
                 [Event "World Blitz Championship"]
                 [Site "St Petersburg RUS"]
@@ -63,20 +70,56 @@ public class TestPgnLineBreaks {
 
         """;
 
-    final PgnFile pgnFileExpected = PgnReader.readPgn(pgn);
-    checkFile(pgnFileExpected, "01_linux.pgn");
-    checkFile(pgnFileExpected, "02_windows.pgn");
-    checkFile(pgnFileExpected, "03_mixed.pgn");
+    logger.info(PGN_FILE_NAME);
 
+    final PgnFile pgnFile = PgnReader.readPgn(pgn);
+    PgnWriter.writePgnFile(pgnFile, ConfigurationConstants.TEMP_FOLDER_PATH, PGN_FILE_NAME);
+
+    @SuppressWarnings("null") final @NonNull String lineSeparator = System.lineSeparator();
+
+    final Path pgnFileActualPath = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, PGN_FILE_NAME);
+    if ("\n".equals(lineSeparator)) {
+      assertTrue(check(pgnFileActualPath, "01_linux.pgn"));
+    } else if ("\r\n".equals(lineSeparator)) {
+      assertTrue(check(pgnFileActualPath, "02_windows.pgn"));
+    } else {
+      logger.info("Detected an unknown line separator: " + escapeString(lineSeparator));
+    }
   }
 
-  private static void checkFile(PgnFile pgnFileExpected, String pgnFileName) {
+  private static boolean check(Path pgnFileActualPath, String pgnExpectedFileName) {
+    final Path pgnFileExpectedPath = NonNullWrapperCommon
+        .resolve(PgnTestConstants.PGN_EXPORT_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, pgnExpectedFileName);
 
-    logger.info(pgnFileName);
+    logger.info("Testing " + pgnFileExpectedPath + " against " + pgnFileActualPath);
 
-    final PgnFile pgnFileActual = PgnReader.readPgn(PgnTestConstants.PGN_READER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH,
-        pgnFileName);
-
-    assertEquals(pgnFileExpected, pgnFileActual);
+    try {
+      return determineIsFilesAreEqual(pgnFileExpectedPath, pgnFileActualPath);
+    } catch (final IOException e) {
+      logger.error("Error while comparing files: " + e.getMessage());
+      return false;
+    }
   }
+
+  /**
+   * Helper method to display non-printable characters (like \r and \n) more clearly.
+   */
+  private static String escapeString(String str) {
+    final String work = NonNullWrapperCommon.replace(str, "\r", "\\r");
+    return NonNullWrapperCommon.replace(work, "\n", "\\n");
+  }
+
+  private static boolean determineIsFilesAreEqual(Path path1, Path path2) throws IOException {
+    // Quick check: if sizes differ, no need to compare contents
+    if (Files.size(path1) != Files.size(path2)) {
+      return false;
+    }
+    // mismatch() returns -1 if there is no mismatch
+    return Files.mismatch(path1, path2) == -1;
+  }
+
+  // 16:00:33.138 [main] INFO com.dlb.chess.test.pgn.export.linebreaks.TestPgnExportLineBreaks
+  // - Testing
+  /// Users/danielbaechli/git/clean-chess/src/test/resources/pgnExport/lineBreaks/01_linux.pgn
+  /// var/folders/jl/1n9zly116tj7dnlyl8ccthq80000gn/T/test_write_line_breaks.pgn
 }

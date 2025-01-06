@@ -29,9 +29,12 @@ public abstract class PgnTestConstants {
       .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/strict");
 
   public static final Path PGN_READER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/linebreaks");
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/lineBreaks");
 
   public static final Path PGN_EXPORT_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnExport");
+
+  public static final Path PGN_EXPORT_LINE_BREAKS_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnExport/lineBreaks");
 
 }
