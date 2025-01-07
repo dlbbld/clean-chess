@@ -10,6 +10,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.Movetext;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
@@ -173,7 +174,12 @@ public class PgnReader extends AbstractPgnReader {
   }
 
   public static PgnFile readPgn(Path pgnFolderPath, String pgnFileName) {
-    final List<String> fileLines = readPgnFileLineList(pgnFolderPath, pgnFileName);
+    final Path filePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
+    return readPgn(filePath);
+  }
+
+  public static PgnFile readPgn(Path pgnFilePath) {
+    final List<String> fileLines = readPgnFileLineList(pgnFilePath);
     return readPgn(fileLines);
   }
 

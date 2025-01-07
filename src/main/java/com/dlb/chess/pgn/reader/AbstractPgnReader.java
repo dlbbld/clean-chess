@@ -40,13 +40,17 @@ public abstract class AbstractPgnReader {
   static List<String> readPgnFileLineList(Path pgnFolderPath, String pgnFileName)
       throws PgnReaderStrictValidationException {
     final Path filePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
+    return readPgnFileLineList(filePath);
+  }
+
+  static List<String> readPgnFileLineList(Path filePath) throws PgnReaderStrictValidationException {
     final List<String> fileLines;
     try {
-      if (!FileUtility.exists(pgnFolderPath, pgnFileName)) {
+      if (!FileUtility.exists(filePath)) {
         throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.FILE_NOT_FOUND,
             SanValidationProblem.NONE, "The file \"" + filePath + "\" was not found.");
       }
-      fileLines = FileUtility.readFileLines(pgnFolderPath, pgnFileName);
+      fileLines = FileUtility.readFileLines(filePath);
     } catch (final FileNotFoundException ioe) {
       throw new FileSystemAccessException("Reading file \"" + filePath + "\" failed", ioe);
 

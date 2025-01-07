@@ -54,7 +54,7 @@ public abstract class MultiplePgnSplitUtility {
     if (!file.isFile()) {
       throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
     }
-    try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
+    try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8);) {
       while (myReader.hasNextLine()) {
         final String line = NonNullWrapperCommon.nextLine(myReader);
 
