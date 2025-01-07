@@ -19,7 +19,7 @@ import com.dlb.chess.test.pgntest.PgnTestConstants;
 class TestPgnExportLineLength {
 
   private static final Path TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.PGN_EXPORT_TEST_ROOT_FOLDER_PATH, "lineLength80");
+      .resolve(PgnTestConstants.PGN_EXPORT_TEST_ROOT_FOLDER_PATH, "lineLength");
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineLength.class);
 
@@ -36,9 +36,9 @@ class TestPgnExportLineLength {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFileFromFileSystem = PgnStrictCacheForTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
-
     final List<String> fileLinesExpectedFromFileSystem = FileUtility.readFileLines(TEST_FOLDER_PATH, pgnFileName);
+
+    final PgnFile pgnFileFromFileSystem = PgnStrictCacheForTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
     final List<String> fileLinesActualFromPgn = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
 
     assertEquals(fileLinesExpectedFromFileSystem, fileLinesActualFromPgn);

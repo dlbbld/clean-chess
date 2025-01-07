@@ -28,7 +28,8 @@ import com.dlb.chess.utility.TagUtility;
 
 public class PgnCreate {
 
-  private static final int LINE_LENGTH = 80;
+  // per PGN standard, the maximum line length is 79 characters
+  private static final int MAX_LINE_LENGTH = 79;
 
   public static String createPgnFileString(ApiBoard board) {
     return createPgnFileString(createPgnFile(board));
@@ -186,7 +187,7 @@ public class PgnCreate {
 
     final Movetext movetext = calculateMovetext(fullMoveNumber, havingMove, halfMoveList, resultTagValue);
 
-    return BasicUtility.calculateWrappedLines(movetext.movetext(), LINE_LENGTH);
+    return BasicUtility.calculateWrappedLines(movetext.movetext(), MAX_LINE_LENGTH);
   }
 
   public static PgnFile createPgnFile(ApiBoard board, List<Tag> tagList) {
