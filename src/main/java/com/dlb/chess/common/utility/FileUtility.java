@@ -71,7 +71,7 @@ public abstract class FileUtility {
     try (var writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8)) {
       for (final String line : lineList) {
         writer.write(line);
-        writer.write(System.lineSeparator());
+        writer.write("\n");
       }
 
     } catch (final IOException ex) {

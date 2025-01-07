@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -75,16 +74,8 @@ public class TestPgnExportLineBreaks {
     final PgnFile pgnFile = PgnReader.readPgn(pgn);
     PgnWriter.writePgnFile(pgnFile, ConfigurationConstants.TEMP_FOLDER_PATH, PGN_FILE_NAME);
 
-    @SuppressWarnings("null") final @NonNull String lineSeparator = System.lineSeparator();
-
     final Path pgnFileActualPath = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, PGN_FILE_NAME);
-    if ("\n".equals(lineSeparator)) {
-      assertTrue(check(pgnFileActualPath, "01_linux.pgn"));
-    } else if ("\r\n".equals(lineSeparator)) {
-      assertTrue(check(pgnFileActualPath, "02_windows.pgn"));
-    } else {
-      logger.info("Detected an unknown line separator: " + escapeString(lineSeparator));
-    }
+    assertTrue(check(pgnFileActualPath, "01_linux.pgn"));
   }
 
   private static boolean check(Path pgnFileActualPath, String pgnExpectedFileName) {
@@ -101,14 +92,6 @@ public class TestPgnExportLineBreaks {
     }
   }
 
-  /**
-   * Helper method to display non-printable characters (like \r and \n) more clearly.
-   */
-  private static String escapeString(String str) {
-    final String work = NonNullWrapperCommon.replace(str, "\r", "\\r");
-    return NonNullWrapperCommon.replace(work, "\n", "\\n");
-  }
-
   private static boolean determineIsFilesAreEqual(Path path1, Path path2) throws IOException {
     // Quick check: if sizes differ, no need to compare contents
     if (Files.size(path1) != Files.size(path2)) {
@@ -118,8 +101,4 @@ public class TestPgnExportLineBreaks {
     return Files.mismatch(path1, path2) == -1;
   }
 
-  // 16:00:33.138 [main] INFO com.dlb.chess.test.pgn.export.linebreaks.TestPgnExportLineBreaks
-  // - Testing
-  /// Users/danielbaechli/git/clean-chess/src/test/resources/pgnExport/lineBreaks/01_linux.pgn
-  /// var/folders/jl/1n9zly116tj7dnlyl8ccthq80000gn/T/test_write_line_breaks.pgn
 }

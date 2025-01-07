@@ -111,7 +111,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     System.out.println();
     System.out.println("static {");
     System.out.println("final EnumMap<Square, " + pieceRangeClassName + "> " + variableName
-        + " = NonNullWrapperCommon.newEnumMap(Square.class);\r\n" + "");
+        + " = NonNullWrapperCommon.newEnumMap(Square.class);\n" + "");
 
     // call the generated static methods
     for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
