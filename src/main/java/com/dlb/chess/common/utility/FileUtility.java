@@ -34,7 +34,7 @@ public abstract class FileUtility {
     if (!file.isFile()) {
       throw new IllegalArgumentException("\"" + filePath + "\" is not a file");
     }
-    try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
+    try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8);) {
       while (myReader.hasNextLine()) {
         final String currentLine = NonNullWrapperCommon.nextLine(myReader);
         fileLines.add(currentLine);

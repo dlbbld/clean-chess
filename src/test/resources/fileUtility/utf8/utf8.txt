@@ -1,0 +1,7 @@
+ASCII: Hello, World!
+German: ä, ö, ü, ß
+Emojis: 😀, 🐍, 🚀
+Chinese: 你好
+Hindi: नमस्ते
+Russian: Привет
+Special: €, ©, ™, ✓, ∞

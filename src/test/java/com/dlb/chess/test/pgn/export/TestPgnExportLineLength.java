@@ -40,7 +40,6 @@ class TestPgnExportLineLength {
 
     final PgnFile pgnFileFromFileSystem = PgnStrictCacheForTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
     final List<String> fileLinesActualFromPgn = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
-
     assertEquals(fileLinesExpectedFromFileSystem, fileLinesActualFromPgn);
   }
 }

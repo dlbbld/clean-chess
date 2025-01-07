@@ -12,10 +12,15 @@ import com.dlb.chess.pgn.reader.model.Tag;
 public class PgnWriter {
 
   public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName) {
+    final Path filePath = FileUtility.calculateFilePath(folderPath, pgnFileName);
+    writePgnFile(pgnFile, filePath);
+  }
+
+  public static void writePgnFile(PgnFile pgnFile, Path filePath) {
     final List<String> fileLines = PgnCreate.createPgnFileLines(pgnFile);
 
-    FileUtility.deleteIfExists(folderPath, pgnFileName);
-    FileUtility.writeFile(folderPath, pgnFileName, fileLines);
+    FileUtility.deleteIfExists(filePath);
+    FileUtility.writeFile(filePath, fileLines);
   }
 
   public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName) {
