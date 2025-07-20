@@ -6,6 +6,5 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 
-@SuppressWarnings("null")
 public record SanValidationFromTo(@NonNull File fromFile, @NonNull Rank fromRank, @NonNull Square toSquare) {
 }

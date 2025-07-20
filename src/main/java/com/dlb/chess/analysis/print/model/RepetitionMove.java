@@ -4,7 +4,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.model.HalfMove;
 
-@SuppressWarnings("null")
 public record RepetitionMove(int positionId, int fold, @NonNull HalfMove halfMove)
     implements Comparable<RepetitionMove> {
 

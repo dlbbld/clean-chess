@@ -6,7 +6,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.range.DiagonalRange;
 import com.google.common.collect.ImmutableList;
 
-@SuppressWarnings("null")
 public record BishopRange(@NonNull ImmutableList<Square> squareListNorthEast,
     @NonNull ImmutableList<Square> squareListSouthEast, @NonNull ImmutableList<Square> squareListSouthWest,
     @NonNull ImmutableList<Square> squareListNorthWest) implements DiagonalRange {

@@ -6,7 +6,6 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 
-@SuppressWarnings("null")
 public record LegalMove(@NonNull MoveSpecification moveSpecification, @NonNull Piece movingPiece,
     @NonNull Piece pieceCaptured) implements Comparable<LegalMove>, EnumConstants {
 

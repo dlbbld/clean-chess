@@ -12,7 +12,6 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-@SuppressWarnings("null")
 public record Analysis(@NonNull Side havingMove, @NonNull List<HalfMove> halfMoveList,
     @NonNull List<List<HalfMove>> repetitionListList,
     @NonNull List<List<HalfMove>> repetitionListListInitialEnPassantCapture,

@@ -8,7 +8,6 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 
-@SuppressWarnings("null")
 public record SanConversion(@NonNull File fromFile, @NonNull Rank fromRank, @NonNull Square toSquare,
     @NonNull PromotionPieceType promotionPieceType, @NonNull CheckmateOrCheck checkmateOrCheck) {
 

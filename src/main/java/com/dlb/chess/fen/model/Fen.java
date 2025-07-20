@@ -7,7 +7,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.CastlingRightBoth;
 
-@SuppressWarnings("null")
 public record Fen(@NonNull String fen, @NonNull StaticPosition staticPosition, @NonNull Side havingMove,
     @NonNull CastlingRightBoth castlingRightBoth, @NonNull Square enPassantCaptureTargetSquare, int halfMoveClock,
     int fullMoveNumber) {

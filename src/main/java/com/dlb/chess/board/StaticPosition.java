@@ -13,7 +13,6 @@ import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 
-@SuppressWarnings("null")
 public record StaticPosition(@NonNull Piece a8, @NonNull Piece b8, @NonNull Piece c8, @NonNull Piece d8,
     @NonNull Piece e8, @NonNull Piece f8, @NonNull Piece g8, @NonNull Piece h8, @NonNull Piece a7, @NonNull Piece b7,
     @NonNull Piece c7, @NonNull Piece d7, @NonNull Piece e7, @NonNull Piece f7, @NonNull Piece g7, @NonNull Piece h7,

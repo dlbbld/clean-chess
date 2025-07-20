@@ -7,7 +7,6 @@ import com.dlb.chess.range.DiagonalRange;
 import com.dlb.chess.range.OrthogonalRange;
 import com.google.common.collect.ImmutableList;
 
-@SuppressWarnings("null")
 public record QueenRange(@NonNull ImmutableList<Square> squareListNorth, @NonNull ImmutableList<Square> squareListEast,
     @NonNull ImmutableList<Square> squareListSouth, @NonNull ImmutableList<Square> squareListWest,
     @NonNull ImmutableList<Square> squareListNorthEast, @NonNull ImmutableList<Square> squareListSouthEast,

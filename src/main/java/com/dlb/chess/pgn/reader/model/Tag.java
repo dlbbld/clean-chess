@@ -4,7 +4,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 
-@SuppressWarnings("null")
 public record Tag(@NonNull String name, @NonNull String value) implements Comparable<Tag> {
 
   @Override

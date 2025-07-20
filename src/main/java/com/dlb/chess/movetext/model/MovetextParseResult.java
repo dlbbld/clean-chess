@@ -7,7 +7,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.model.Movetext;
 import com.dlb.chess.model.PgnHalfMove;
 
-@SuppressWarnings("null")
 public record MovetextParseResult(@NonNull Movetext movetext, @NonNull List<PgnHalfMove> halfMoveParseList,
     @NonNull String leadingCommentary) {
 

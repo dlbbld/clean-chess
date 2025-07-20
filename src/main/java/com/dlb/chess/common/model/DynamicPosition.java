@@ -6,7 +6,6 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.model.CastlingRightBoth;
 
-@SuppressWarnings("null")
 public record DynamicPosition(@NonNull Side havingMove, @NonNull StaticPosition staticPosition,
     boolean isEnPassantCapturePossible, @NonNull CastlingRightBoth castlingRightBoth) {
 
