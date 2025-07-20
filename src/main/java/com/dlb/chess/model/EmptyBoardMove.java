@@ -4,7 +4,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.enums.Square;
 
-@SuppressWarnings("null")
 public record EmptyBoardMove(@NonNull Square fromSquare, @NonNull Square toSquare)
     implements Comparable<EmptyBoardMove> {
 
