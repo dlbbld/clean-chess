@@ -1,5 +1,7 @@
 package com.dlb.chess.test.model;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -10,5 +12,23 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
     int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
     InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite, UnwinnableFull unwinnableFullBlack,
     UnwinnableQuick unwinnableQuickWhite, UnwinnableQuick unwinnableQuickBlack, String fen) {
+
+  @SuppressWarnings("null")
+  @Override
+  public @NonNull UnwinnableQuick unwinnableQuickWhite() {
+    return unwinnableQuickWhite;
+  }
+
+  @SuppressWarnings("null")
+  @Override
+  public @NonNull UnwinnableQuick unwinnableQuickBlack() {
+    return unwinnableQuickBlack;
+  }
+
+  @SuppressWarnings("null")
+  @Override
+  public @NonNull String fen() {
+    return fen;
+  }
 
 }
