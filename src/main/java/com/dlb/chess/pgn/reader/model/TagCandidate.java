@@ -1,8 +1,6 @@
 package com.dlb.chess.pgn.reader.model;
 
-import org.eclipse.jdt.annotation.NonNull;
-
-public record TagCandidate(@NonNull String name, @NonNull String value) implements Comparable<TagCandidate> {
+public record TagCandidate(String name, String value) implements Comparable<TagCandidate> {
 
   @Override
   public int compareTo(TagCandidate o) {

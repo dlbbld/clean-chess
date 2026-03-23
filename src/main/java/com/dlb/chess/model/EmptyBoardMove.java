@@ -1,10 +1,8 @@
 package com.dlb.chess.model;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.dlb.chess.board.enums.Square;
 
-public record EmptyBoardMove(@NonNull Square fromSquare, @NonNull Square toSquare)
+public record EmptyBoardMove(Square fromSquare, Square toSquare)
     implements Comparable<EmptyBoardMove> {
 
   @Override

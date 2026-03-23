@@ -4,7 +4,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.san.model.SanExample;
 
-public record SanPatternDescription(@NonNull String pattern, @NonNull String comment,
+public record SanPatternDescription(String pattern, String comment,
     @NonNull SanExample... sanExampleList) {
 
 }

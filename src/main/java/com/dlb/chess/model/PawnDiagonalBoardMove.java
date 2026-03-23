@@ -1,10 +1,8 @@
 package com.dlb.chess.model;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.dlb.chess.board.enums.Square;
 
-public record PawnDiagonalBoardMove(@NonNull Square fromSquare, @NonNull Square toSquare)
+public record PawnDiagonalBoardMove(Square fromSquare, Square toSquare)
     implements Comparable<PawnDiagonalBoardMove> {
 
   @Override

@@ -1,10 +1,8 @@
 package com.dlb.chess.analysis.model;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.dlb.chess.board.enums.Side;
 
-public record YawnHalfMove(int performedHalfMoveCount, int fullMoveNumber, @NonNull String san, @NonNull Side sideMoved,
+public record YawnHalfMove(int performedHalfMoveCount, int fullMoveNumber, String san, Side sideMoved,
     int sequenceLength) implements Comparable<YawnHalfMove> {
 
   @Override
