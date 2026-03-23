@@ -51,7 +51,7 @@ public class Clearability {
     final List<PiecePlacement> result = new ArrayList<>();
     for (final Entry<PiecePlacement, VariableState> entry : clearabilityMap.entrySet()) {
       if (entry.getValue() == variableState) {
-        result.add(entry.getKey());
+        result.add(NonNullWrapperCommon.getKey(entry));
       }
     }
     return result;

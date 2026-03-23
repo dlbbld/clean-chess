@@ -7,6 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -161,13 +162,13 @@ public class PgnExpectedValue {
     return testCaseList;
   }
 
-  public static List<PgnFileTestCaseList> getTestList(PgnTest... pgnTestArray) {
+  public static List<PgnFileTestCaseList> getTestList(@NonNull PgnTest... pgnTestArray) {
     final List<PgnFileTestCaseList> resultListList = new ArrayList<>();
     for (final PgnTest pgnTest : pgnTestArray) {
       if (!allTestCaseListMap.containsKey(pgnTest)) {
         throw new ProgrammingMistakeException("The test list was not constructed correctly");
       }
-      resultListList.add(allTestCaseListMap.get(pgnTest));
+      resultListList.add(NonNullWrapperCommon.get(allTestCaseListMap, pgnTest));
     }
     return resultListList;
   }

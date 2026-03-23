@@ -77,11 +77,14 @@ public class MobilitySolution {
 
   public List<MobilitySolutionVariable> calculateEntries(VariableState mobility) {
     final List<MobilitySolutionVariable> result = new ArrayList<>();
-    for (final Entry<PiecePlacement, EnumMap<Square, VariableState>> mapEntryMap : mobilityMap.entrySet()) {
-      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(mobilityMap, mapEntryMap.getKey());
+    for (final @NonNull Entry<PiecePlacement, EnumMap<Square, VariableState>> mapEntryMap : NonNullWrapperCommon
+        .entrySet(mobilityMap)) {
+      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(mobilityMap,
+          NonNullWrapperCommon.getKey(mapEntryMap));
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == mobility) {
-          result.add(new MobilitySolutionVariable(mapEntryMap.getKey(), entry.getKey()));
+          result.add(new MobilitySolutionVariable(NonNullWrapperCommon.getKey(mapEntryMap),
+              NonNullWrapperCommon.getKey(entry)));
         }
       }
     }

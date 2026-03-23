@@ -371,18 +371,18 @@ public abstract class MovetextUtility {
     // four cases
     switch (havingMove) {
       case BLACK:
-        halfMoveParseList.add(blackHalfMoveList.get(0));
+        halfMoveParseList.add(NonNullWrapperCommon.get(blackHalfMoveList, 0));
         if (hasMovesAndIsLastMoveBlack) {
           // 1... e5 2. d4 d5 3. c4 c5
           for (var i = 0; i <= whiteHalfMoveList.size() - 1; i++) {
-            halfMoveParseList.add(whiteHalfMoveList.get(i));
-            halfMoveParseList.add(blackHalfMoveList.get(i + 1));
+            halfMoveParseList.add(NonNullWrapperCommon.get(whiteHalfMoveList, i));
+            halfMoveParseList.add(NonNullWrapperCommon.get(blackHalfMoveList, i + 1));
           }
         } else {
           // 1... e5 2. d4 d5 3. c4
           for (var i = 0; i <= whiteHalfMoveList.size() - 2; i++) {
-            halfMoveParseList.add(whiteHalfMoveList.get(i));
-            halfMoveParseList.add(blackHalfMoveList.get(i + 1));
+            halfMoveParseList.add(NonNullWrapperCommon.get(whiteHalfMoveList, i));
+            halfMoveParseList.add(NonNullWrapperCommon.get(blackHalfMoveList, i + 1));
           }
           halfMoveParseList.add(NonNullWrapperCommon.getLast(whiteHalfMoveList));
         }
@@ -391,14 +391,14 @@ public abstract class MovetextUtility {
         if (hasMovesAndIsLastMoveBlack) {
           // 1. e5 a6 2. d4 d5 3. c4 c5
           for (var i = 0; i <= whiteHalfMoveList.size() - 1; i++) {
-            halfMoveParseList.add(whiteHalfMoveList.get(i));
-            halfMoveParseList.add(blackHalfMoveList.get(i));
+            halfMoveParseList.add(NonNullWrapperCommon.get(whiteHalfMoveList, i));
+            halfMoveParseList.add(NonNullWrapperCommon.get(blackHalfMoveList, i));
           }
         } else {
           // 1. e5 a6 2. d4 d5 3. c4
           for (var i = 0; i <= whiteHalfMoveList.size() - 2; i++) {
-            halfMoveParseList.add(whiteHalfMoveList.get(i));
-            halfMoveParseList.add(blackHalfMoveList.get(i));
+            halfMoveParseList.add(NonNullWrapperCommon.get(whiteHalfMoveList, i));
+            halfMoveParseList.add(NonNullWrapperCommon.get(blackHalfMoveList, i));
           }
           halfMoveParseList.add(NonNullWrapperCommon.getLast(whiteHalfMoveList));
         }

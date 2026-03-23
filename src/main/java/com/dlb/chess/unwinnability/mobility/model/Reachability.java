@@ -47,8 +47,10 @@ public class Reachability {
 
   public int calculateVariableCountSetToOne() {
     var count = 0;
-    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
-      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
+    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : NonNullWrapperCommon
+        .entrySet(reachabilityMap)) {
+      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap,
+          NonNullWrapperCommon.getKey(mapEntryMap));
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == VariableState.ONE) {
           count++;
@@ -68,11 +70,14 @@ public class Reachability {
 
   private List<ReachabilityVariable> calculateEntries(VariableState reachable) {
     final List<ReachabilityVariable> result = new ArrayList<>();
-    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : reachabilityMap.entrySet()) {
-      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap, mapEntryMap.getKey());
+    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : NonNullWrapperCommon
+        .entrySet(reachabilityMap)) {
+      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(reachabilityMap,
+          NonNullWrapperCommon.getKey(mapEntryMap));
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == reachable) {
-          result.add(new ReachabilityVariable(mapEntryMap.getKey(), entry.getKey()));
+          result.add(
+              new ReachabilityVariable(NonNullWrapperCommon.getKey(mapEntryMap), NonNullWrapperCommon.getKey(entry)));
         }
       }
     }
