@@ -10,9 +10,8 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 // different board squares, for the non-castling promotion move the from and to square must be different board squares
 // and the promotion piece type not the none piece type, for the castling move the castling move must be king-side or
 // queen-side.
-public record MoveSpecification(Side havingMove, Square fromSquare, Square toSquare,
-    CastlingMove castlingMove, PromotionPieceType promotionPieceType)
-    implements Comparable<MoveSpecification> {
+public record MoveSpecification(Side havingMove, Square fromSquare, Square toSquare, CastlingMove castlingMove,
+    PromotionPieceType promotionPieceType) implements Comparable<MoveSpecification> {
 
   public MoveSpecification(Side havingMove, Square fromSquare, Square toSquare) {
     this(havingMove, fromSquare, toSquare, CastlingMove.NONE, PromotionPieceType.NONE);

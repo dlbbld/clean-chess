@@ -2,8 +2,7 @@ package com.dlb.chess.model;
 
 import com.dlb.chess.board.enums.Square;
 
-public record EmptyBoardMove(Square fromSquare, Square toSquare)
-    implements Comparable<EmptyBoardMove> {
+public record EmptyBoardMove(Square fromSquare, Square toSquare) implements Comparable<EmptyBoardMove> {
 
   @Override
   public String toString() {

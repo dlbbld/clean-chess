@@ -11,17 +11,12 @@ import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 
-public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8,
-    Piece e8, Piece f8, Piece g8, Piece h8, Piece a7, Piece b7,
-    Piece c7, Piece d7, Piece e7, Piece f7, Piece g7, Piece h7,
-    Piece a6, Piece b6, Piece c6, Piece d6, Piece e6, Piece f6,
-    Piece g6, Piece h6, Piece a5, Piece b5, Piece c5, Piece d5,
-    Piece e5, Piece f5, Piece g5, Piece h5, Piece a4, Piece b4,
-    Piece c4, Piece d4, Piece e4, Piece f4, Piece g4, Piece h4,
-    Piece a3, Piece b3, Piece c3, Piece d3, Piece e3, Piece f3,
-    Piece g3, Piece h3, Piece a2, Piece b2, Piece c2, Piece d2,
-    Piece e2, Piece f2, Piece g2, Piece h2, Piece a1, Piece b1,
-    Piece c1, Piece d1, Piece e1, Piece f1, Piece g1, Piece h1)
+public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8, Piece e8, Piece f8, Piece g8, Piece h8, Piece a7,
+    Piece b7, Piece c7, Piece d7, Piece e7, Piece f7, Piece g7, Piece h7, Piece a6, Piece b6, Piece c6, Piece d6,
+    Piece e6, Piece f6, Piece g6, Piece h6, Piece a5, Piece b5, Piece c5, Piece d5, Piece e5, Piece f5, Piece g5,
+    Piece h5, Piece a4, Piece b4, Piece c4, Piece d4, Piece e4, Piece f4, Piece g4, Piece h4, Piece a3, Piece b3,
+    Piece c3, Piece d3, Piece e3, Piece f3, Piece g3, Piece h3, Piece a2, Piece b2, Piece c2, Piece d2, Piece e2,
+    Piece f2, Piece g2, Piece h2, Piece a1, Piece b1, Piece c1, Piece d1, Piece e1, Piece f1, Piece g1, Piece h1)
     implements EnumConstants {
 
   public static final StaticPosition INITIAL_POSITION = new StaticPosition(BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP,

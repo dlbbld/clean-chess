@@ -2,8 +2,7 @@ package com.dlb.chess.model;
 
 import com.dlb.chess.board.enums.Square;
 
-public record PawnDiagonalBoardMove(Square fromSquare, Square toSquare)
-    implements Comparable<PawnDiagonalBoardMove> {
+public record PawnDiagonalBoardMove(Square fromSquare, Square toSquare) implements Comparable<PawnDiagonalBoardMove> {
 
   @Override
   public String toString() {
