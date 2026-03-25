@@ -1,10 +1,8 @@
 package com.dlb.chess.pgn.reader.model;
 
-import org.eclipse.jdt.annotation.NonNull;
-
 import com.dlb.chess.pgn.reader.enums.StandardTag;
 
-public record Tag(@NonNull String name, @NonNull String value) implements Comparable<Tag> {
+public record Tag(String name, String value) implements Comparable<Tag> {
 
   @Override
   public int compareTo(Tag o) {

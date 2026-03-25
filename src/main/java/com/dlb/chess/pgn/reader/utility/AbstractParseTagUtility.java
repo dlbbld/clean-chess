@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
@@ -49,11 +50,10 @@ public abstract class AbstractParseTagUtility {
         countTagNames.put(tagName, newCount);
       }
     }
-    for (final Entry<String, Integer> entry : countTagNames.entrySet()) {
-      @SuppressWarnings("null") @NonNull final Entry<String, Integer> entryNonNull = entry;
-      @SuppressWarnings("null") final var value = entryNonNull.getValue();
+    for (final Entry<String, Integer> entry : NonNullWrapperCommon.entrySet(countTagNames)) {
+      @SuppressWarnings("null") final var value = entry.getValue();
       if (value > 1) {
-        return new FirstDuplicateTag(true, entry.getKey());
+        return new FirstDuplicateTag(true, NonNullWrapperCommon.getKey(entry));
       }
     }
     return new FirstDuplicateTag(false, BasicConstants.BLANK);

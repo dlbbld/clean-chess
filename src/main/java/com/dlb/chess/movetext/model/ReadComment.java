@@ -1,7 +1,5 @@
 package com.dlb.chess.movetext.model;
 
-import org.eclipse.jdt.annotation.NonNull;
-
-public record ReadComment(@NonNull String comment, boolean isExhausted, @NonNull String remainingValue) {
+public record ReadComment(String comment, boolean isExhausted, String remainingValue) {
 
 }

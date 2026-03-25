@@ -12,13 +12,13 @@ public abstract class FenUtility {
 
   public static String createDummyFenForPiecePlacement(String piecePlacement, Side side) {
     final StringBuilder fen = new StringBuilder();
-  
+
     fen.append(piecePlacement);
     fen.append(" ");
     fen.append(side.getFenLetter());
     fen.append(" - - 0 100");
-  
+
     return NonNullWrapperCommon.toString(fen);
-  
+
   }
 }

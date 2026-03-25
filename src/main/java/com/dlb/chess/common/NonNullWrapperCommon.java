@@ -9,7 +9,9 @@ import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -131,7 +133,7 @@ public class NonNullWrapperCommon {
   }
 
   public static String removeEnd(final String str, final String remove) {
-    return checkResult(StringUtils.removeEnd(str, remove));
+    return checkResult(org.apache.commons.lang3.Strings.CS.removeEnd(str, remove));
   }
 
   public static String capitalize(final String str) {
@@ -180,6 +182,21 @@ public class NonNullWrapperCommon {
   @NonNull
   public static <E> E getLast(E[] list) {
     return checkResult(list[list.length - 1]);
+  }
+
+  @NonNull
+  public static <E, F> E getKey(Entry<E, F> entry) {
+    return checkResult(entry.getKey());
+  }
+
+  @NonNull
+  public static <E, F> F getValue(Entry<E, F> entry) {
+    return checkResult(entry.getValue());
+  }
+
+  @SuppressWarnings("null")
+  public static <E, F> Set<Map.Entry<E, F>> entrySet(Map<E, F> map) {
+    return map.entrySet();
   }
 
   public static <T> List<T> unmodifiableList(List<? extends T> list) {

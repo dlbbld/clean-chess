@@ -561,15 +561,13 @@ public class ApiCarlosBoard extends AbstractBoard {
       };
       case BLACK -> switch (move.getTo().getRank()) {
         case RANK_1 -> true;
-        case RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 -> /*
-                                                                        * would be illegal for a white pawn, but we are
-                                                                        * not checking here
-                                                                        */ false;
+        case RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8 ->
+            // would be illegal for a white pawn, but we are not checking here
+            false;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
-      }; /*
-          * would be illegal for a white pawn, but we are not checking here
-          */
+      }; // would be illegal for a white pawn, but we are not checking here
+
       default -> throw new IllegalArgumentException();
     };
   }

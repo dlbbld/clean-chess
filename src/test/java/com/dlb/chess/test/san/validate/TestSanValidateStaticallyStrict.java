@@ -308,11 +308,13 @@ class TestSanValidateStaticallyStrict implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testStaticallyAgainstRuntime() {
-    for (final Entry<String, SanParse> entry : SanValidateStaticallyStrict.getSanValidationWhiteMap().entrySet()) {
-      checkStaticallyAgainstRuntime(entry.getKey(), entry.getValue(), WHITE);
+    for (final Entry<String, SanParse> entry : NonNullWrapperCommon
+        .entrySet(SanValidateStaticallyStrict.getSanValidationWhiteMap())) {
+      checkStaticallyAgainstRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry), WHITE);
     }
-    for (final Entry<String, SanParse> entry : SanValidateStaticallyStrict.getSanValidationBlackMap().entrySet()) {
-      checkStaticallyAgainstRuntime(entry.getKey(), entry.getValue(), BLACK);
+    for (final Entry<String, SanParse> entry : NonNullWrapperCommon
+        .entrySet(SanValidateStaticallyStrict.getSanValidationBlackMap())) {
+      checkStaticallyAgainstRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry), BLACK);
     }
   }
 
