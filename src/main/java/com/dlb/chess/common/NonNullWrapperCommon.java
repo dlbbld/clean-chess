@@ -133,7 +133,7 @@ public class NonNullWrapperCommon {
   }
 
   public static String removeEnd(final String str, final String remove) {
-    return checkResult(StringUtils.removeEnd(str, remove));
+    return checkResult(org.apache.commons.lang3.Strings.CS.removeEnd(str, remove));
   }
 
   public static String capitalize(final String str) {
