@@ -119,9 +119,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
         currentPgnFileLines.add(line);
         currentPgnFileString.append(line);
       }
-    } catch (
-
-    final IOException e) {
+    } catch (final IOException e) {
       throw new RuntimeException(e);
     }
 
