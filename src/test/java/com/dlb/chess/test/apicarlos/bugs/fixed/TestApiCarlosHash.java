@@ -96,9 +96,9 @@ class TestApiCarlosHash {
         s.append(" -> ");
         s.append(board.getIncrementalHashKey());
         s.append("\n");
-        map.compute(board.getIncrementalHashKey(), (a, b) -> b == null ? 1 : b + 1);
+        map.merge(board.getIncrementalHashKey(), 1, Integer::sum);
         final var key = board.getPositionId();
-        map2.compute(key, (a, b) -> b == null ? 1 : b + 1);
+        map2.merge(key, 1, Integer::sum);
         map3.put(key, board.getIncrementalHashKey());
       }
 
