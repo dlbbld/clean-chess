@@ -10,10 +10,10 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.pgn.reader.enums.ResultTagValue;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.pgn.reader.model.Tag;
+import com.dlb.chess.pgn.parser.enums.ResultTagValue;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.Tag;
 import com.google.common.collect.ImmutableList;
 
 public abstract class TagUtility {

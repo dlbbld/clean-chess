@@ -13,8 +13,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -74,7 +74,7 @@ class TestUnwinnabilityQuick {
     final var pgnFileName = "unwinnable_fivefold_inevitable.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
-    final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
+    final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 

@@ -1,6 +1,5 @@
 package com.dlb.chess.test.unwinnability.lichess.fen;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -18,11 +17,11 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckFen.class);
 
-  public static void main(String[] args) throws IOException {
+  public static void main(String[] args) {
     checkFen();
   }
 
-  private static void checkFen() throws IOException {
+  private static void checkFen() {
     final var folder = FEN_FOLDER_PATH.toFile();
     if (!folder.exists()) {
       throw new IllegalArgumentException("\"" + FEN_FOLDER_PATH + "\" directory does not exist");

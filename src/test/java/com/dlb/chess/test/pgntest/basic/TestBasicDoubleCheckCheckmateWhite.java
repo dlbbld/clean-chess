@@ -41,20 +41,13 @@ class TestBasicDoubleCheckCheckmateWhite extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_white_double_check_checkmate_rook.pgn":
-          checkDoubleCheckCheckmate(Piece.WHITE_ROOK, board);
-          break;
-        case "02_white_double_check_checkmate_knight_orthogonal.pgn":
-          checkDoubleCheckCheckmate(Piece.WHITE_KNIGHT, board);
-          break;
-        case "03_white_double_check_checkmate_knight_diagonal.pgn":
-          checkDoubleCheckCheckmate(Piece.WHITE_KNIGHT, board);
-          break;
-        case "04_white_double_check_checkmate_bishop.pgn":
-          checkDoubleCheckCheckmate(Piece.WHITE_BISHOP, board);
-          break;
-        default:
-          throw new IllegalArgumentException();
+        case "01_white_double_check_checkmate_rook.pgn" -> checkDoubleCheckCheckmate(Piece.WHITE_ROOK, board);
+        case "02_white_double_check_checkmate_knight_orthogonal.pgn" -> checkDoubleCheckCheckmate(Piece.WHITE_KNIGHT,
+            board);
+        case "03_white_double_check_checkmate_knight_diagonal.pgn" -> checkDoubleCheckCheckmate(Piece.WHITE_KNIGHT,
+            board);
+        case "04_white_double_check_checkmate_bishop.pgn" -> checkDoubleCheckCheckmate(Piece.WHITE_BISHOP, board);
+        default -> throw new IllegalArgumentException();
       }
     }
   }

@@ -1,7 +1,7 @@
 package com.dlb.chess.utility;
 
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.Tag;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.Tag;
 
 public abstract class TagPlaceHolderUtility {
 

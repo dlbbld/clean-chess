@@ -2,7 +2,7 @@ package com.dlb.chess.utility;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 
 public abstract class PgnUtility {
 

@@ -6,8 +6,8 @@ import java.util.List;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.pgn.reader.model.Tag;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.Tag;
 
 public class PgnWriter {
 

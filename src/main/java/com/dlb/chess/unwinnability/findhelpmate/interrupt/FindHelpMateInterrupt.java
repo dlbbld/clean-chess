@@ -58,17 +58,15 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
         final var hasCheckmate = calculateHelpmate(board, c, currentDepth + 1, mateList);
         board.unperformMove();
         switch (hasCheckmate) {
-          case TRUE:
+          case TRUE -> {
             return FindHelpMateInterruptResult.TRUE;
-          case INTERRUPTED:
+          }
+          case INTERRUPTED -> {
             mateList.remove(mateList.size() - 1);
             return FindHelpMateInterruptResult.INTERRUPTED;
-          case FALSE:
-            mateList.remove(mateList.size() - 1);
-            // continue
-            break;
-          default:
-            throw new IllegalArgumentException();
+          }
+          case FALSE -> mateList.remove(mateList.size() - 1);
+          default -> throw new IllegalArgumentException();
         }
       }
     }

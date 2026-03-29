@@ -22,15 +22,10 @@ public class FenBoard implements EnumConstants {
 
     // side having the move
     switch (havingMove) {
-      case BLACK:
-        fen.append("b");
-        break;
-      case WHITE:
-        fen.append("w");
-        break;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
+      case BLACK -> fen.append("b");
+      case WHITE -> fen.append("w");
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
     }
     fen.append(" ");
 

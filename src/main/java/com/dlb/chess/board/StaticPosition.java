@@ -213,266 +213,264 @@ public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8, Piece e8, P
       final Square square = updateSquare.square();
       final Piece newPiece = updateSquare.piece();
       switch (square) {
-        case A8:
+        case A8 -> {
           checkUpdateSquare(square, newA8, newPiece);
           newA8 = newPiece;
-          break;
-        case B8:
+        }
+        case B8 -> {
           checkUpdateSquare(square, newB8, newPiece);
           newB8 = newPiece;
-          break;
-        case C8:
+        }
+        case C8 -> {
           checkUpdateSquare(square, newC8, newPiece);
           newC8 = newPiece;
-          break;
-        case D8:
+        }
+        case D8 -> {
           checkUpdateSquare(square, newD8, newPiece);
           newD8 = newPiece;
-          break;
-        case E8:
+        }
+        case E8 -> {
           checkUpdateSquare(square, newE8, newPiece);
           newE8 = newPiece;
-          break;
-        case F8:
+        }
+        case F8 -> {
           checkUpdateSquare(square, newF8, newPiece);
           newF8 = newPiece;
-          break;
-        case G8:
+        }
+        case G8 -> {
           checkUpdateSquare(square, newG8, newPiece);
           newG8 = newPiece;
-          break;
-        case H8:
+        }
+        case H8 -> {
           checkUpdateSquare(square, newH8, newPiece);
           newH8 = newPiece;
-          break;
-        case A7:
+        }
+        case A7 -> {
           checkUpdateSquare(square, newA7, newPiece);
           newA7 = newPiece;
-          break;
-        case B7:
+        }
+        case B7 -> {
           checkUpdateSquare(square, newB7, newPiece);
           newB7 = newPiece;
-          break;
-        case C7:
+        }
+        case C7 -> {
           checkUpdateSquare(square, newC7, newPiece);
           newC7 = newPiece;
-          break;
-        case D7:
+        }
+        case D7 -> {
           checkUpdateSquare(square, newD7, newPiece);
           newD7 = newPiece;
-          break;
-        case E7:
+        }
+        case E7 -> {
           checkUpdateSquare(square, newE7, newPiece);
           newE7 = newPiece;
-          break;
-        case F7:
+        }
+        case F7 -> {
           checkUpdateSquare(square, newF7, newPiece);
           newF7 = newPiece;
-          break;
-        case G7:
+        }
+        case G7 -> {
           checkUpdateSquare(square, newG7, newPiece);
           newG7 = newPiece;
-          break;
-        case H7:
+        }
+        case H7 -> {
           checkUpdateSquare(square, newH7, newPiece);
           newH7 = newPiece;
-          break;
-        case A6:
+        }
+        case A6 -> {
           checkUpdateSquare(square, newA6, newPiece);
           newA6 = newPiece;
-          break;
-        case B6:
+        }
+        case B6 -> {
           checkUpdateSquare(square, newB6, newPiece);
           newB6 = newPiece;
-          break;
-        case C6:
+        }
+        case C6 -> {
           checkUpdateSquare(square, newC6, newPiece);
           newC6 = newPiece;
-          break;
-        case D6:
+        }
+        case D6 -> {
           checkUpdateSquare(square, newD6, newPiece);
           newD6 = newPiece;
-          break;
-        case E6:
+        }
+        case E6 -> {
           checkUpdateSquare(square, newE6, newPiece);
           newE6 = newPiece;
-          break;
-        case F6:
+        }
+        case F6 -> {
           checkUpdateSquare(square, newF6, newPiece);
           newF6 = newPiece;
-          break;
-        case G6:
+        }
+        case G6 -> {
           checkUpdateSquare(square, newG6, newPiece);
           newG6 = newPiece;
-          break;
-        case H6:
+        }
+        case H6 -> {
           checkUpdateSquare(square, newH6, newPiece);
           newH6 = newPiece;
-          break;
-        case A5:
+        }
+        case A5 -> {
           checkUpdateSquare(square, newA5, newPiece);
           newA5 = newPiece;
-          break;
-        case B5:
+        }
+        case B5 -> {
           checkUpdateSquare(square, newB5, newPiece);
           newB5 = newPiece;
-          break;
-        case C5:
+        }
+        case C5 -> {
           checkUpdateSquare(square, newC5, newPiece);
           newC5 = newPiece;
-          break;
-        case D5:
+        }
+        case D5 -> {
           checkUpdateSquare(square, newD5, newPiece);
           newD5 = newPiece;
-          break;
-        case E5:
+        }
+        case E5 -> {
           checkUpdateSquare(square, newE5, newPiece);
           newE5 = newPiece;
-          break;
-        case F5:
+        }
+        case F5 -> {
           checkUpdateSquare(square, newF5, newPiece);
           newF5 = newPiece;
-          break;
-        case G5:
+        }
+        case G5 -> {
           checkUpdateSquare(square, newG5, newPiece);
           newG5 = newPiece;
-          break;
-        case H5:
+        }
+        case H5 -> {
           checkUpdateSquare(square, newH5, newPiece);
           newH5 = newPiece;
-          break;
-        case A4:
+        }
+        case A4 -> {
           checkUpdateSquare(square, newA4, newPiece);
           newA4 = newPiece;
-          break;
-        case B4:
+        }
+        case B4 -> {
           checkUpdateSquare(square, newB4, newPiece);
           newB4 = newPiece;
-          break;
-        case C4:
+        }
+        case C4 -> {
           checkUpdateSquare(square, newC4, newPiece);
           newC4 = newPiece;
-          break;
-        case D4:
+        }
+        case D4 -> {
           checkUpdateSquare(square, newD4, newPiece);
           newD4 = newPiece;
-          break;
-        case E4:
+        }
+        case E4 -> {
           checkUpdateSquare(square, newE4, newPiece);
           newE4 = newPiece;
-          break;
-        case F4:
+        }
+        case F4 -> {
           checkUpdateSquare(square, newF4, newPiece);
           newF4 = newPiece;
-          break;
-        case G4:
+        }
+        case G4 -> {
           checkUpdateSquare(square, newG4, newPiece);
           newG4 = newPiece;
-          break;
-        case H4:
+        }
+        case H4 -> {
           checkUpdateSquare(square, newH4, newPiece);
           newH4 = newPiece;
-          break;
-        case A3:
+        }
+        case A3 -> {
           checkUpdateSquare(square, newA3, newPiece);
           newA3 = newPiece;
-          break;
-        case B3:
+        }
+        case B3 -> {
           checkUpdateSquare(square, newB3, newPiece);
           newB3 = newPiece;
-          break;
-        case C3:
+        }
+        case C3 -> {
           checkUpdateSquare(square, newC3, newPiece);
           newC3 = newPiece;
-          break;
-        case D3:
+        }
+        case D3 -> {
           checkUpdateSquare(square, newD3, newPiece);
           newD3 = newPiece;
-          break;
-        case E3:
+        }
+        case E3 -> {
           checkUpdateSquare(square, newE3, newPiece);
           newE3 = newPiece;
-          break;
-        case F3:
+        }
+        case F3 -> {
           checkUpdateSquare(square, newF3, newPiece);
           newF3 = newPiece;
-          break;
-        case G3:
+        }
+        case G3 -> {
           checkUpdateSquare(square, newG3, newPiece);
           newG3 = newPiece;
-          break;
-        case H3:
+        }
+        case H3 -> {
           checkUpdateSquare(square, newH3, newPiece);
           newH3 = newPiece;
-          break;
-        case A2:
+        }
+        case A2 -> {
           checkUpdateSquare(square, newA2, newPiece);
           newA2 = newPiece;
-          break;
-        case B2:
+        }
+        case B2 -> {
           checkUpdateSquare(square, newB2, newPiece);
           newB2 = newPiece;
-          break;
-        case C2:
+        }
+        case C2 -> {
           checkUpdateSquare(square, newC2, newPiece);
           newC2 = newPiece;
-          break;
-        case D2:
+        }
+        case D2 -> {
           checkUpdateSquare(square, newD2, newPiece);
           newD2 = newPiece;
-          break;
-        case E2:
+        }
+        case E2 -> {
           checkUpdateSquare(square, newE2, newPiece);
           newE2 = newPiece;
-          break;
-        case F2:
+        }
+        case F2 -> {
           checkUpdateSquare(square, newF2, newPiece);
           newF2 = newPiece;
-          break;
-        case G2:
+        }
+        case G2 -> {
           checkUpdateSquare(square, newG2, newPiece);
           newG2 = newPiece;
-          break;
-        case H2:
+        }
+        case H2 -> {
           checkUpdateSquare(square, newH2, newPiece);
           newH2 = newPiece;
-          break;
-        case A1:
+        }
+        case A1 -> {
           checkUpdateSquare(square, newA1, newPiece);
           newA1 = newPiece;
-          break;
-        case B1:
+        }
+        case B1 -> {
           checkUpdateSquare(square, newB1, newPiece);
           newB1 = newPiece;
-          break;
-        case C1:
+        }
+        case C1 -> {
           checkUpdateSquare(square, newC1, newPiece);
           newC1 = newPiece;
-          break;
-        case D1:
+        }
+        case D1 -> {
           checkUpdateSquare(square, newD1, newPiece);
           newD1 = newPiece;
-          break;
-        case E1:
+        }
+        case E1 -> {
           checkUpdateSquare(square, newE1, newPiece);
           newE1 = newPiece;
-          break;
-        case F1:
+        }
+        case F1 -> {
           checkUpdateSquare(square, newF1, newPiece);
           newF1 = newPiece;
-          break;
-        case G1:
+        }
+        case G1 -> {
           checkUpdateSquare(square, newG1, newPiece);
           newG1 = newPiece;
-          break;
-        case H1:
+        }
+        case H1 -> {
           checkUpdateSquare(square, newH1, newPiece);
           newH1 = newPiece;
-          break;
-        case NONE:
-          throw new IllegalArgumentException("The none square does not belong to the board)");
-        default:
-          throw new IllegalArgumentException();
+        }
+        case NONE -> throw new IllegalArgumentException("The none square does not belong to the board)");
+        default -> throw new IllegalArgumentException();
       }
     }
 

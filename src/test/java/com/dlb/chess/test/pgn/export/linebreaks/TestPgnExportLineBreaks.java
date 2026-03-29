@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.test.FileComparison;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
@@ -74,10 +74,10 @@ public class TestPgnExportLineBreaks {
 
     logger.info(TEST_SOURCE_FILE_PATH.getFileName());
 
-    final PgnFile pgnFile = PgnReader.readPgn(pgn);
+    final PgnFile pgnFile = LenientPgnParser.parse(pgn);
     PgnWriter.writePgnFile(pgnFile, TEST_DESTINATION_FILE_PATH);
 
-    assertTrue(FileComparison.check(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
+    assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
   }
 
 }

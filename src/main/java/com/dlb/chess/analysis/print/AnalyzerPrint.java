@@ -18,8 +18,8 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.internationalization.Message;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 
 //for class organization only, keep methods protected as already used as delegate in main class Analysis
 public class AnalyzerPrint {
@@ -31,7 +31,7 @@ public class AnalyzerPrint {
 
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
 
-    final PgnFile pgnFile = PgnReader.readPgn(lines);
+    final PgnFile pgnFile = LenientPgnParser.parse(lines);
 
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     printAnalysis(board);

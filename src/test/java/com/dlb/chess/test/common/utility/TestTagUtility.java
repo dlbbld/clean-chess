@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.constants.FenConstants;
-import com.dlb.chess.pgn.reader.enums.ResultTagValue;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.Tag;
+import com.dlb.chess.pgn.parser.enums.ResultTagValue;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.utility.TagUtility;
 
 class TestTagUtility implements EnumConstants {

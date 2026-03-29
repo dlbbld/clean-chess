@@ -41,20 +41,11 @@ class TestBasicDoubleCheckBlack extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_black_double_check_rook.pgn":
-          checkDoubleCheck(Piece.BLACK_ROOK, board);
-          break;
-        case "02_black_double_check_knight_orthogonal.pgn":
-          checkDoubleCheck(Piece.BLACK_KNIGHT, board);
-          break;
-        case "03_black_double_check_knight_diagonal.pgn":
-          checkDoubleCheck(Piece.BLACK_KNIGHT, board);
-          break;
-        case "04_black_double_check_bishop.pgn":
-          checkDoubleCheck(Piece.BLACK_BISHOP, board);
-          break;
-        default:
-          throw new IllegalArgumentException();
+        case "01_black_double_check_rook.pgn" -> checkDoubleCheck(Piece.BLACK_ROOK, board);
+        case "02_black_double_check_knight_orthogonal.pgn" -> checkDoubleCheck(Piece.BLACK_KNIGHT, board);
+        case "03_black_double_check_knight_diagonal.pgn" -> checkDoubleCheck(Piece.BLACK_KNIGHT, board);
+        case "04_black_double_check_bishop.pgn" -> checkDoubleCheck(Piece.BLACK_BISHOP, board);
+        default -> throw new IllegalArgumentException();
       }
     }
   }

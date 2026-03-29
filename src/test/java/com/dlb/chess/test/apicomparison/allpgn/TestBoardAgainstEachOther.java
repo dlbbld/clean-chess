@@ -8,12 +8,12 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.apicarlos.board.ApiCarlosBoard;
 import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
@@ -48,7 +48,7 @@ class TestBoardAgainstEachOther {
         final String pgnFileName = testCase.pgnFileName();
         logger.info(pgnFileName);
 
-        final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+        final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
 
         if (pgnFile.startFen() != FenConstants.FEN_INITIAL) {
           // API Carlos does not generate correct SAN when starting from position

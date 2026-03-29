@@ -143,36 +143,33 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     final List<List<Square>> result = new ArrayList<>();
 
     switch (pieceType) {
-      case BISHOP:
+      case BISHOP -> {
         final DiagonalRange bishopRange = calculateBishopSquares(fromSquare);
         result.add(bishopRange.squareListNorthEast());
         result.add(bishopRange.squareListSouthEast());
         result.add(bishopRange.squareListSouthWest());
         result.add(bishopRange.squareListNorthWest());
-        break;
-      case QUEEN:
+      }
+      case QUEEN -> {
         final QueenRange queenRange = calculateQueenSquares(fromSquare);
         result.add(queenRange.squareListNorth());
         result.add(queenRange.squareListEast());
         result.add(queenRange.squareListSouth());
         result.add(queenRange.squareListWest());
-
         result.add(queenRange.squareListNorthEast());
         result.add(queenRange.squareListSouthEast());
         result.add(queenRange.squareListSouthWest());
         result.add(queenRange.squareListNorthWest());
-        break;
-      case ROOK:
+      }
+      case ROOK -> {
         final OrthogonalRange rookRange = calculateRookSquares(fromSquare);
         result.add(rookRange.squareListNorth());
         result.add(rookRange.squareListEast());
         result.add(rookRange.squareListSouth());
         result.add(rookRange.squareListWest());
-        break;
-      case KNIGHT, KING, PAWN, NONE:
-        throw new IllegalArgumentException();
-      default:
-        throw new IllegalArgumentException();
+      }
+      case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
     }
     return result;
   }

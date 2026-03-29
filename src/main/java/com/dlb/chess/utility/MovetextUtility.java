@@ -18,12 +18,12 @@ import com.dlb.chess.model.SanAndMoveSuffix;
 import com.dlb.chess.movetext.model.MovetextParseResult;
 import com.dlb.chess.movetext.model.ReadComment;
 import com.dlb.chess.movetext.model.SanAnnotatedProcess;
-import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
-import com.dlb.chess.pgn.reader.enums.PgnReaderValidationProblem;
-import com.dlb.chess.pgn.reader.enums.ResultTagValue;
-import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
-import com.dlb.chess.pgn.reader.exceptions.PgnReaderValidationException;
-import com.dlb.chess.pgn.reader.utility.ParseTagUtility;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.enums.ResultTagValue;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.parser.utility.LenientParseTagUtility;
 import com.dlb.chess.san.enums.SanLetter;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
@@ -34,11 +34,11 @@ public abstract class MovetextUtility {
   private static final int SAN_MAX_LENGTH = 7;
 
   private static void validateTermination(Movetext movetext, ResultTagValue resultTagValue)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
     final String resultValueTag = resultTagValue.getValue();
     final var gameTerminationMarker = calculateGameTerminationMarker(resultTagValue);
     if (!movetext.movetext().endsWith(gameTerminationMarker)) {
-      throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.MOVETEXT_TERMINATION_INVALID,
+      throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
           SanValidationProblem.NONE,
           "The file must end with the result provided in the result tag. The provided result is \"" + resultValueTag
               + "\".");
@@ -106,7 +106,7 @@ public abstract class MovetextUtility {
       if (line.isBlank()) {
         continue;
       }
-      if (!ParseTagUtility.isConsideredTagLine(line)) {
+      if (!LenientParseTagUtility.isConsideredTagLine(line)) {
         result.add(line);
       }
     }
@@ -127,14 +127,14 @@ public abstract class MovetextUtility {
   }
 
   public static MovetextParseResult validateMovetextStrict(List<String> fileLines, Fen startFen,
-      ResultTagValue resultTagValue, int indexFirstEmptyLine) throws PgnReaderStrictValidationException {
+      ResultTagValue resultTagValue, int indexFirstEmptyLine) throws StrictPgnParserValidationException {
 
     final Movetext movetext = MovetextUtility.calculateMovetextStrict(fileLines, indexFirstEmptyLine);
     return validateMovetextStrict(movetext, startFen, resultTagValue);
   }
 
   private static MovetextParseResult validateMovetextStrict(Movetext movetext, Fen startFen,
-      ResultTagValue resultTagValue) throws PgnReaderStrictValidationException {
+      ResultTagValue resultTagValue) throws StrictPgnParserValidationException {
 
     // now we can validate that the movetext terminates with the result tag value
     validateTermination(movetext, resultTagValue);
@@ -149,17 +149,17 @@ public abstract class MovetextUtility {
   }
 
   public static MovetextParseResult validateMovetext(Fen startFen, Movetext movetext)
-      throws PgnReaderValidationException {
+      throws LenientPgnParserValidationException {
     try {
       return validateMovetextInternal(startFen, movetext);
-    } catch (final PgnReaderStrictValidationException e) {
-      throw new PgnReaderValidationException(PgnReaderValidationProblem.EXCEPTION_CATCHED_FROM_STRICT_VALIDATION,
+    } catch (final StrictPgnParserValidationException e) {
+      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
           SanValidationProblem.NONE, "The validation failed with the following message: " + e.getMessage());
     }
   }
 
   private static MovetextParseResult validateMovetextInternal(Fen startFen, Movetext movetext)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
 
     // here we just ignore the result tag in the move text
 
@@ -203,7 +203,7 @@ public abstract class MovetextUtility {
   }
 
   private static List<PgnHalfMove> parseMovetextAfterInitialComment(String movetextPart, Fen startFen, boolean isStrict)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
 
     final var startFullMoveNumber = startFen.fullMoveNumber();
     final Side havingMove = startFen.havingMove();
@@ -216,7 +216,7 @@ public abstract class MovetextUtility {
   }
 
   public static MovetextParse parseMovetextAfterInitialComment(String movetextPart, int startFullMoveNumber,
-      Side havingMoveInitital, boolean isStrict) throws PgnReaderStrictValidationException {
+      Side havingMoveInitital, boolean isStrict) throws StrictPgnParserValidationException {
 
     String movetextProcess;
     if (isStrict) {
@@ -226,8 +226,8 @@ public abstract class MovetextUtility {
 
       final var startFullMoveNumberStr = String.valueOf(startFullMoveNumber);
       if (!movetextPart.startsWith(startFullMoveNumberStr)) {
-        throw new PgnReaderStrictValidationException(
-            PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT,
+        throw new StrictPgnParserValidationException(
+            StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT,
             SanValidationProblem.NONE,
             "The move text does not begin with full move number \"" + startFullMoveNumberStr + " \" as expected.");
       }
@@ -236,24 +236,21 @@ public abstract class MovetextUtility {
           .calculateFullMoveNumberInitialWithSpace(startFullMoveNumber, havingMoveInitital);
       if (!movetextPart.startsWith(expectedMoveNumberSegmentProcess)) {
         switch (havingMoveInitital) {
-          case BLACK:
-            throw new PgnReaderStrictValidationException(
-                PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE,
-                SanValidationProblem.NONE, "The move text does not begin indicating a Black move \""
-                    + expectedMoveNumberSegmentProcess + " \" as expected.");
-          case WHITE:
-            throw new PgnReaderStrictValidationException(
-                PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE,
-                SanValidationProblem.NONE, "The move text does not begin indicating a White move \""
-                    + expectedMoveNumberSegmentProcess + " \" as expected.");
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
+          case BLACK -> throw new StrictPgnParserValidationException(
+              StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE,
+              SanValidationProblem.NONE, "The move text does not begin indicating a Black move \""
+                  + expectedMoveNumberSegmentProcess + " \" as expected.");
+          case WHITE -> throw new StrictPgnParserValidationException(
+              StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE,
+              SanValidationProblem.NONE, "The move text does not begin indicating a White move \""
+                  + expectedMoveNumberSegmentProcess + " \" as expected.");
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
         }
       }
 
       if (movetextPart.length() == expectedMoveNumberSegmentProcess.length()) {
-        throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER,
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER,
             SanValidationProblem.NONE, "The movetext ends after a move number which is invalid.");
       }
 
@@ -285,17 +282,12 @@ public abstract class MovetextUtility {
 
       // we add the found information to the move lists
       switch (havingMoveProcess) {
-        case WHITE:
-          whiteHalfMoveList.add(new PgnHalfMove(sanAndMoveSuffix.san(), sanAndMoveSuffix.moveSuffixAnnotation(),
-              commentProcess.comment()));
-          break;
-        case BLACK:
-          blackHalfMoveList.add(new PgnHalfMove(sanAndMoveSuffix.san(), sanAndMoveSuffix.moveSuffixAnnotation(),
-              commentProcess.comment()));
-          break;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
+        case WHITE -> whiteHalfMoveList.add(
+            new PgnHalfMove(sanAndMoveSuffix.san(), sanAndMoveSuffix.moveSuffixAnnotation(), commentProcess.comment()));
+        case BLACK -> blackHalfMoveList.add(
+            new PgnHalfMove(sanAndMoveSuffix.san(), sanAndMoveSuffix.moveSuffixAnnotation(), commentProcess.comment()));
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
       }
 
       if (sanAnnotatedProcess.isExhausted() || commentProcess.isExhausted()) {
@@ -324,14 +316,14 @@ public abstract class MovetextUtility {
           case WHITE:
             // move number is mandatory
             if (!movetextProcess.startsWith(expectedMoveNumberSegmentProcess)) {
-              throw new PgnReaderStrictValidationException(
-                  PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED,
+              throw new StrictPgnParserValidationException(
+                  StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED,
                   SanValidationProblem.NONE, "The movetext does not continue with move number \""
                       + expectedMoveNumberSegmentProcess + " \" as expected");
             }
             if (movetextProcess.length() == expectedMoveNumberSegmentProcess.length()) {
-              throw new PgnReaderStrictValidationException(
-                  PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, SanValidationProblem.NONE,
+              throw new StrictPgnParserValidationException(
+                  StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, SanValidationProblem.NONE,
                   "The movetext ends after a move number which is invalid.");
             }
             movetextProcess = NonNullWrapperCommon.substring(movetextProcess,
@@ -340,8 +332,8 @@ public abstract class MovetextUtility {
           case BLACK:
             // move number for the black move is only specified if it's the first move of the game
             if (movetextProcess.startsWith(expectedMoveNumberSegmentProcess)) {
-              throw new PgnReaderStrictValidationException(
-                  PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
+              throw new StrictPgnParserValidationException(
+                  StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
                   SanValidationProblem.NONE, "Move number specified for Black non initial move.");
             }
             break;
@@ -356,7 +348,7 @@ public abstract class MovetextUtility {
   }
 
   private static List<PgnHalfMove> calculateHalfMoveList(MovetextParse model, Side havingMove)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
     final List<PgnHalfMove> halfMoveParseList = new ArrayList<>();
 
     if (model.whiteHalfMoveList().isEmpty() && model.blackHalfMoveList().isEmpty()) {
@@ -455,7 +447,7 @@ public abstract class MovetextUtility {
   }
 
   private static SanAndMoveSuffix calculateSanAndMoveSuffix(String sanAnnotated)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
 
     final var indexOfExclamationMark = sanAnnotated.indexOf(MoveSuffixAnnotationLetter.EXCLAMATION_MARK.getLetter());
     final var indexOfQuestionMark = sanAnnotated.indexOf(MoveSuffixAnnotationLetter.QUESTION_MARK.getLetter());
@@ -473,7 +465,7 @@ public abstract class MovetextUtility {
     if (firstIndexOfMoveSuffixAnnotationLetter == 0) {
       // no SAN at all
       // 1. ??
-      throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY,
+      throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY,
           SanValidationProblem.NONE,
           "The movetext is invalid because a SAN possibly annotated was expected but no SAN was found.");
     }
@@ -513,7 +505,7 @@ public abstract class MovetextUtility {
     for (var i = 0; i < san.length(); i++) {
       final var currentLetter = NonNullWrapperCommon.toString(san.charAt(i));
       if (!SanLetter.exists(currentLetter)) {
-        throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             SanValidationProblem.NONE,
             "The movetext is invalid because a SAN contains an invalid character of \"" + currentLetter + "\".");
       }
@@ -522,23 +514,23 @@ public abstract class MovetextUtility {
 
   private static MoveSuffixAnnotation validateMoveSuffixAnnotation(String moveSuffixAnnotation) {
     if (!MoveSuffixAnnotation.exists(moveSuffixAnnotation)) {
-      throw new PgnReaderStrictValidationException(
-          PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, SanValidationProblem.NONE,
+      throw new StrictPgnParserValidationException(
+          StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, SanValidationProblem.NONE,
           "An invalid move annotation suffix of \"" + moveSuffixAnnotation + "\" was found. Valid values are \""
               + MoveSuffixAnnotation.calculateValueList() + "\".");
     }
     return MoveSuffixAnnotation.calculate(moveSuffixAnnotation);
   }
 
-  private static void validateSanLength(String san) throws PgnReaderStrictValidationException {
+  private static void validateSanLength(String san) throws StrictPgnParserValidationException {
     if (san.length() < SAN_MIN_LENGTH || san.length() > SAN_MAX_LENGTH) {
-      throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID,
+      throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID,
           SanValidationProblem.NONE, "The movetext ends unexpectedly afer a SAN followed by a space.");
     }
   }
 
   private static SanAnnotatedProcess calculateSanAnnotated(String movetextPart)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
     // mistake - we only parse if we have something remainig
     // <empty> -> segment value is "", exhausted=true, remaining value is ""
     if (movetextPart.isEmpty()) {
@@ -551,14 +543,14 @@ public abstract class MovetextUtility {
       // validation exception
       // <space><anything>
       if (indexOfFirstSpace == 0) {
-        throw new PgnReaderStrictValidationException(PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             SanValidationProblem.NONE, "The movetext is invalid because it contains a SAN beginning with a space.");
       }
       // validation exception
       // abc<space> -> segment value is "abc", exhausted=false, remaining value is ""
       if (indexOfFirstSpace == movetextPart.length() - 1) {
-        throw new PgnReaderStrictValidationException(
-            PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, SanValidationProblem.NONE,
+        throw new StrictPgnParserValidationException(
+            StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, SanValidationProblem.NONE,
             "The movetext is invalid because it ends after a SAN and an optional annotation with a space.");
       }
 

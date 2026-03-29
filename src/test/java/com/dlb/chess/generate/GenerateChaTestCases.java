@@ -18,10 +18,10 @@ import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 
 public class GenerateChaTestCases implements EnumConstants {
@@ -56,7 +56,7 @@ public class GenerateChaTestCases implements EnumConstants {
 
           final String pgnFileName = testCase.pgnFileName();
 
-          final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(folderPath, pgnFileName);
+          final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
           final ApiBoard board = new Board(pgnFile.startFen());
 

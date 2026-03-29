@@ -11,16 +11,16 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
-import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
-import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
   private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH, "movementSpecification");
+      .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "movementSpecification");
 
   private static final Path PGN_TEST_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH = NonNullWrapperCommon
       .resolve(PGN_CUSTOM_TEST_FOLDER_PATH, "commentary/leadingCommentary/exception");
@@ -29,36 +29,36 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @Test
   void testLeadingCommentaryException() {
     checkLeadingCommentaryException("01_movetext_commentary_ends_after_start_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_ENDS_AFTER_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_ENDS_AFTER_START_BRACE);
     checkLeadingCommentaryException("02_1_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkLeadingCommentaryException("02_1_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkLeadingCommentaryException("02_3_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkLeadingCommentaryException("03_movetext_commentary_not_followed_by_space.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
     checkLeadingCommentaryException("04_movetext_commentary_followed_by_space_but_ending.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING);
     checkLeadingCommentaryException("05_movetext_commentary_followed_by_two_spaces.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES);
 
     // here for initial commentary MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_VALUE is
     // MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING (later having higher precedence)
     checkLeadingCommentaryException("06_movetext_commentary_not_followed_by_value.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING);
 
     checkLeadingCommentaryException("07_movetext_commentary_end_brace_without_start_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   private static void checkLeadingCommentaryException(String pgnFileName,
-      PgnReaderStrictValidationProblem expectedProblem) {
+      StrictPgnParserValidationProblem expectedProblem) {
     var isException = false;
     try {
-      PgnStrictCacheForTestCases.getPgn(PGN_TEST_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH, pgnFileName);
-    } catch (final PgnReaderStrictValidationException pre) {
-      assertEquals(expectedProblem, pre.getPgnReaderStrictValidationProblem());
+      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH, pgnFileName);
+    } catch (final StrictPgnParserValidationException pre) {
+      assertEquals(expectedProblem, pre.getStrictPgnParserValidationProblem());
       isException = true;
     }
     assertTrue(isException);
@@ -70,44 +70,44 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @SuppressWarnings("static-method")
   void testNonLeadingCommentaryException() {
     checkNonLeadingCommentaryException("01_movetext_commentary_ends_after_start_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_ENDS_AFTER_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_ENDS_AFTER_START_BRACE);
     checkNonLeadingCommentaryException("02_1_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkNonLeadingCommentaryException("02_2_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkNonLeadingCommentaryException("02_3_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkNonLeadingCommentaryException("02_4_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkNonLeadingCommentaryException("03_1_movetext_commentary_not_followed_by_space.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
     checkNonLeadingCommentaryException("03_2_movetext_commentary_not_followed_by_space.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
     checkNonLeadingCommentaryException("04_movetext_commentary_followed_by_space_but_ending.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING);
     checkNonLeadingCommentaryException("05_1_movetext_commentary_followed_by_two_spaces.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES);
     checkNonLeadingCommentaryException("05_2_movetext_commentary_followed_by_two_spaces.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES);
     checkNonLeadingCommentaryException("06_movetext_commentary_not_followed_by_value.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_VALUE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_VALUE);
     checkNonLeadingCommentaryException("07_movetext_commentary_start_brace_not_followed_by_end_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkNonLeadingCommentaryException("07_1_movetext_commentary_end_brace_without_start_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
     checkNonLeadingCommentaryException("07_2_movetext_commentary_end_brace_without_start_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
     checkNonLeadingCommentaryException("07_3_movetext_commentary_end_brace_without_start_brace.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   private static void checkNonLeadingCommentaryException(String pgnFileName,
-      PgnReaderStrictValidationProblem expectedProblem) {
+      StrictPgnParserValidationProblem expectedProblem) {
     var isException = false;
     try {
-      PgnStrictCacheForTestCases.getPgn(PGN_TEST_NON_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH, pgnFileName);
-    } catch (final PgnReaderStrictValidationException pre) {
-      assertEquals(expectedProblem, pre.getPgnReaderStrictValidationProblem());
+      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_NON_LEADING_COMMENTARY_EXCEPTION_FOLDER_PATH, pgnFileName);
+    } catch (final StrictPgnParserValidationException pre) {
+      assertEquals(expectedProblem, pre.getStrictPgnParserValidationProblem());
       isException = true;
     }
     assertTrue(isException);
@@ -120,20 +120,20 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @Test
   void testMoveSuffixAnnotationException() {
     checkMoveSuffixAnnotationException("01_example.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
     checkMoveSuffixAnnotationException("02_example.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
     checkMoveSuffixAnnotationException("03_example.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
   }
 
   private static void checkMoveSuffixAnnotationException(String pgnFileName,
-      PgnReaderStrictValidationProblem expectedProblem) {
+      StrictPgnParserValidationProblem expectedProblem) {
     var isException = false;
     try {
-      PgnStrictCacheForTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH, pgnFileName);
-    } catch (final PgnReaderStrictValidationException pre) {
-      assertEquals(expectedProblem, pre.getPgnReaderStrictValidationProblem());
+      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH, pgnFileName);
+    } catch (final StrictPgnParserValidationException pre) {
+      assertEquals(expectedProblem, pre.getStrictPgnParserValidationProblem());
       isException = true;
     }
     assertTrue(isException);
@@ -145,18 +145,18 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @SuppressWarnings({ "static-method" })
   @Test
   void testCombinedException() {
-    checkCombinedException("01_example.pgn", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
-    checkCombinedException("02_example.pgn", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkCombinedException("01_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
+    checkCombinedException("02_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
     checkCombinedException("03_example.pgn",
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
   }
 
-  private static void checkCombinedException(String pgnFileName, PgnReaderStrictValidationProblem expectedProblem) {
+  private static void checkCombinedException(String pgnFileName, StrictPgnParserValidationProblem expectedProblem) {
     var isException = false;
     try {
-      PgnStrictCacheForTestCases.getPgn(PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH, pgnFileName);
-    } catch (final PgnReaderStrictValidationException pre) {
-      assertEquals(expectedProblem, pre.getPgnReaderStrictValidationProblem());
+      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH, pgnFileName);
+    } catch (final StrictPgnParserValidationException pre) {
+      assertEquals(expectedProblem, pre.getStrictPgnParserValidationProblem());
       isException = true;
     }
     assertTrue(isException);
@@ -182,7 +182,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   }
 
   private static void checkLeadingCommentarySuccess(String pgnFileName, String leadingCommentary) {
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(PGN_TEST_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH,
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH,
         pgnFileName);
     assertEquals(leadingCommentary, pgnFile.leadingCommentary());
   }
@@ -222,7 +222,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   }
 
   private static void checkNonLeadingCommentarySuccess(String pgnFileName, List<String> commentaryListExpected) {
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(PGN_TEST_NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH,
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH,
         pgnFileName);
 
     assertEquals("", pgnFile.leadingCommentary());
@@ -274,7 +274,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
   private static void checkCombinedCommentarySuccess(String pgnFileName, String leadingCommentary,
       List<String> commentaryListExpected) {
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(PGN_TEST_COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH,
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH,
         pgnFileName);
 
     assertEquals(leadingCommentary, pgnFile.leadingCommentary());
@@ -296,7 +296,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
   private static void checkMoveSuffixAnnotationSuccess(String pgnFileName,
       List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected) {
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH,
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH,
         pgnFileName);
 
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
@@ -321,7 +321,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   private static void checkCombinedSuccess(String pgnFileName, String leadingCommentaryExpected,
       List<String> sanListExpected, List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected,
       List<String> commentaryListExpected) {
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH, pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH, pgnFileName);
 
     assertEquals(leadingCommentaryExpected, pgnFile.leadingCommentary());
 

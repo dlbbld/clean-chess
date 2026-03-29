@@ -13,9 +13,9 @@ import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.utility.TagUtility;
 
 public abstract class GeneratePgnInformationUtility {
@@ -58,7 +58,7 @@ public abstract class GeneratePgnInformationUtility {
       @SuppressWarnings("null") @NonNull final String fileName = file.getName();
       logger.info("Processing " + fileName);
 
-      final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(inputFolderPath, fileName);
+      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(inputFolderPath, fileName);
       final StringBuilder newLine = new StringBuilder();
 
       newLine.append(fileName).append(";");

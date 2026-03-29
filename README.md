@@ -59,6 +59,23 @@ dependencies {
 }
 ```
 
+# Basic usage example
+```java
+  final Board board = new Board();
+
+  board.performMove("e4"); // specifying the SAN
+  board.performMoves("e5", "Bc4"); // specifying multiple SAN's
+
+  final var newMove = new MoveSpecification(Side.BLACK, Square.F8, Square.C5);
+  board.performMove(newMove); // move specification without SAN
+
+  board.unperformMove(); // undoes last move
+
+  board.performMoves("Bc5", "Qf3", "h6", "Qxf7#");
+
+  System.out.println(board.isCheckmate()); // true
+```
+
 # Motivation for the API
 Below I write my motivation for programming this chess API.
 
@@ -321,26 +338,12 @@ Positions can also often be dead due to forced moves.
   System.out.println(board.isDeadPositionFull()); // DEAD_POSITION
 ```
 
-# Java chess API
-## Board
-```java
-  final Board board = new Board();
-
-  board.performMove("e4"); // specifying the SAN
-  board.performMoves("e5", "Bc4"); // specifying multiple SAN's
-
-  final var newMove = new MoveSpecification(Side.BLACK, Square.F8, Square.C5);
-  board.performMove(newMove); // move specification without SAN
-
-  board.unperformMove(); // undoes last move
-
-  board.performMoves("Bc5", "Qf3", "h6", "Qxf7#");
-
-  System.out.println(board.isCheckmate()); // true
-```
+# PGN functionality
       
-## PGN reader
-The PGN reader supports any PGNs except PGNs with move variations.
+## PGN parser
+      
+### PGN lenient parser
+The common PGN parser - the PGN lenient is trying to read the PGN with best effort, ignoring whitespace and errors as much as possible. Only PGNs with move variations are not supported.
 
 ```java
   final var pgn = """
@@ -369,7 +372,7 @@ The PGN reader supports any PGNs except PGNs with move variations.
       1/2-1/2
       """;
 
-  final PgnFile pgnFile = PgnReader.readPgn(pgn);
+  final PgnFile pgnFile = LenientPgnParser.parse(pgn);
 
   // play through the game
   final Board board = new Board();
@@ -377,17 +380,26 @@ The PGN reader supports any PGNs except PGNs with move variations.
     board.performMove(halfMove.san());
   }
 
-  System.out.println(board.getSan()); // SAN of last move, R1c2
+    System.out.println(board.getLegalMovesSan()); // print legal moves
+    // [Kf6, Kf8, Kg6, Kg8, Kh6, Kh7, Kh8, Na5, Na7, Nb4, Nb8, Nd4, Nd8, Ne5, Rd2, Re1, Re3+, Rf2, Rxc2, Rxe4, Rxg2+,
+    // a5, b5, b6, d5, e5, e6, f5, f6, g4]
 ```
 
 Reading PGN files from the file system:
 
 ```java
-	final var folderPath = ConfigurationConstants.TEMP_FOLDER_PATH.resolve("myPgnFolder");
-	if (FileUtility.exists(folderPath, "myPgnFile.pgn")) {
-	  final PgnFile pgnFile = PgnReader.readPgn(folderPath, "myPgnFile.pgn");
-	  System.out.println(PgnCreate.createPgnFileString(pgnFile));
-	}
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final PgnFile pgnFile = LenientPgnParser.parse(path);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile)); // prints contents of the PGN as parsed
+```
+
+### PGN strict parser
+The PGN strict parser only allows PGN adhering to the PGN export format.
+
+```java
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final PgnFile pgnFile = StrictPgnParser.parse(path);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
 ```
       
 ## PGN creation
@@ -395,11 +407,13 @@ Reading PGN files from the file system:
 You can create the PGN for a game played in the API or export an imported PGN. The result will comply with the PGN export format, containing all required tags, formatting etc., for exported PGNs.
 
 ```java
-  final Board board = new Board();
-  board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
-  final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-  System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    PgnWriter.writePgnFile(pgnFile, path); // creates file with below content
 ```
 
 Output
@@ -413,4 +427,25 @@ Output
 [Result "*"]
 
 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+```
+
+## PGN validation
+
+### PGN lenient validation
+Checks weather a PGN can be parsed using the PGN lenient parser.
+
+```java
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final LenientPgnParserValidationResult result = LenientPgnParser.validate(path);
+    System.out.println(result.isValid()); // true
+```
+
+### PGN strict validation
+
+Checks weather a PGN adhers to the export format per the PGN specification.
+
+```java
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final StrictPgnParserValidationResult result = StrictPgnParser.validate(path);
+    System.out.println(result.isValid()); // true
 ```

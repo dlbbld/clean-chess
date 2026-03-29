@@ -8,7 +8,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 
 public abstract class PgnTestConstants {
 
-  public static final boolean IS_RESTRICT_PGN_READER_API_AGAINST_EACH_OTHER_TEST = true;
+  public static final boolean IS_RESTRICT_LENIENT_PGN_PARSER_API_AGAINST_EACH_OTHER_TEST = true;
   public static final boolean IS_RESTRICT_BOARD_API_AGAINST_EACH_OTHER_TEST = true;
   public static final boolean IS_RESTRICT_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST = true;
   public static final boolean IS_RESTRICT_PGN_WRITER_TEST = true;
@@ -22,17 +22,17 @@ public abstract class PgnTestConstants {
   public static final Path PGN_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgn");
 
-  public static final Path PGN_READER_NON_STRICT_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/nonStrict");
+  public static final Path LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient");
 
-  public static final Path PGN_READER_STRICT_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/strict");
+  public static final Path STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/strict");
 
-  public static final Path PGN_READER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/lineBreaks");
+  public static final Path LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient/lineBreaks");
 
-  public static final Path PGN_READER_UTF8_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnReader/utf8");
+  public static final Path LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient/utf8");
 
   public static final Path PGN_EXPORT_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnExport");

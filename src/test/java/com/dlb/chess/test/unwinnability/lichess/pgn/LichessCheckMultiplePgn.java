@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
-import com.dlb.chess.pgn.reader.PgnReaderStrict;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.StrictPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.utility.TagUtility;
 
 //manual to create multiple pgn file
@@ -86,7 +86,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
                 && currentPgnFileString.indexOf("[Termination \"Time forfeit\"]") != -1
                 && (currentPgnFileString.indexOf("[Result \"1-0\"]") != -1
                     || currentPgnFileString.indexOf("[Result \"0-1\"]") != -1)) {
-              final PgnFile pgnFile = PgnReaderStrict.readPgn(currentPgnFileLines);
+              final PgnFile pgnFile = StrictPgnParser.parse(currentPgnFileLines);
               if (!AbstractLichessCheck.calculateIsTimeForfeitCandidate(pgnFile)) {
                 final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
                 logger.printf(Level.INFO, "Invalid parsing of %s", siteValue);

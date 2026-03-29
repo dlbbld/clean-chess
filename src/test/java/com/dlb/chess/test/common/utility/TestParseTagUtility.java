@@ -7,10 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.fen.constants.FenConstants;
-import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
-import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
-import com.dlb.chess.pgn.reader.model.Tag;
-import com.dlb.chess.pgn.reader.utility.ParseTagStrictUtility;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.model.Tag;
+import com.dlb.chess.pgn.parser.utility.StrictParseTagUtility;
 
 class TestParseTagUtility {
 
@@ -49,8 +49,8 @@ class TestParseTagUtility {
   private static void checkTagFormat(String tag, boolean isValid) {
     var isException = false;
     try {
-      ParseTagStrictUtility.validateTag(tag);
-    } catch (@SuppressWarnings("unused") final PgnReaderStrictValidationException e) {
+      StrictParseTagUtility.validateTag(tag);
+    } catch (@SuppressWarnings("unused") final StrictPgnParserValidationException e) {
       isException = true;
     }
     if (isValid) {
@@ -101,13 +101,13 @@ class TestParseTagUtility {
   private static void checkTagValues(String tagStr, String expectedTagName, String expectedTagValue) {
     var isException = false;
     try {
-      ParseTagStrictUtility.validateTag(tagStr);
-    } catch (@SuppressWarnings("unused") final PgnReaderStrictValidationException e) {
+      StrictParseTagUtility.validateTag(tagStr);
+    } catch (@SuppressWarnings("unused") final StrictPgnParserValidationException e) {
       isException = true;
     }
     assertFalse(isException);
 
-    final Tag tag = ParseTagStrictUtility.validateTag(tagStr);
+    final Tag tag = StrictParseTagUtility.validateTag(tagStr);
     assertEquals(expectedTagName, tag.name());
     assertEquals(expectedTagValue, tag.value());
   }
@@ -150,12 +150,12 @@ class TestParseTagUtility {
   @SuppressWarnings("static-method")
   @Test
   void testTagNameFirstCharacter() {
-    checkException("[_vent \"Live Chess\"]", PgnReaderStrictValidationProblem.TAG_NAME_FIRST_CHARACTER);
-    checkException("[+vent \"Live Chess\"]", PgnReaderStrictValidationProblem.TAG_NAME_FIRST_CHARACTER);
-    checkException("[#vent \"Live Chess\"]", PgnReaderStrictValidationProblem.TAG_NAME_FIRST_CHARACTER);
-    checkException("[=vent \"Live Chess\"]", PgnReaderStrictValidationProblem.TAG_NAME_FIRST_CHARACTER);
-    checkException("[:vent \"Live Chess\"]", PgnReaderStrictValidationProblem.TAG_NAME_FIRST_CHARACTER);
-    checkException("[-vent \"Live Chess\"]", PgnReaderStrictValidationProblem.TAG_NAME_FIRST_CHARACTER);
+    checkException("[_vent \"Live Chess\"]", StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER);
+    checkException("[+vent \"Live Chess\"]", StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER);
+    checkException("[#vent \"Live Chess\"]", StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER);
+    checkException("[=vent \"Live Chess\"]", StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER);
+    checkException("[:vent \"Live Chess\"]", StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER);
+    checkException("[-vent \"Live Chess\"]", StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER);
   }
 
   @SuppressWarnings("static-method")
@@ -173,26 +173,26 @@ class TestParseTagUtility {
   @Test
   void testSquareBrackes() {
     checkException("Event \"Live Chess\"]",
-        PgnReaderStrictValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET);
+        StrictPgnParserValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET);
     checkException("]Event \"Live Chess\"]",
-        PgnReaderStrictValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET);
+        StrictPgnParserValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET);
 
     checkException("[Event \"Live Chess\"",
-        PgnReaderStrictValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
+        StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
     checkException("[Event \"Live Chess\"[",
-        PgnReaderStrictValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
+        StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
   }
 
   private static void checkTagNameLength(String tagLine) {
-    checkException(tagLine, PgnReaderStrictValidationProblem.TAG_NAME_EXCEEDS_MAXIMUM_LENGTH);
+    checkException(tagLine, StrictPgnParserValidationProblem.TAG_NAME_EXCEEDS_MAXIMUM_LENGTH);
   }
 
-  private static void checkException(String tagLine, PgnReaderStrictValidationProblem validationProblem) {
+  private static void checkException(String tagLine, StrictPgnParserValidationProblem validationProblem) {
     var isException = false;
     try {
-      ParseTagStrictUtility.validateTag(tagLine);
-    } catch (final PgnReaderStrictValidationException e) {
-      assertEquals(e.getPgnReaderStrictValidationProblem(), validationProblem);
+      StrictParseTagUtility.validateTag(tagLine);
+    } catch (final StrictPgnParserValidationException e) {
+      assertEquals(e.getStrictPgnParserValidationProblem(), validationProblem);
       isException = true;
     }
     assertTrue(isException);

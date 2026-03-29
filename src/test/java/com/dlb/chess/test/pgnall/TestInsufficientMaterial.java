@@ -16,10 +16,10 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
@@ -56,7 +56,7 @@ class TestInsufficientMaterial implements EnumConstants {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(folderPath, pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
     final ApiBoard boardFromFen = new Board(pgnFile.startFen());
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       boardFromFen.performMove(halfMove.san());

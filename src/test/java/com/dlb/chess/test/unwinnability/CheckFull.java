@@ -24,18 +24,13 @@ public class CheckFull {
     }
 
     switch (unwinnableFull) {
-      case WINNABLE:
-        assertNotEquals(Winnable.NO, winnable);
-        break;
-      case UNWINNABLE:
+      case WINNABLE -> assertNotEquals(Winnable.NO, winnable);
+      case UNWINNABLE -> {
         final var isIncomplete = winnable == Winnable.NO || winnable == Winnable.UNKNOWN;
         assertTrue(isIncomplete);
-        break;
-      case UNDETERMINED:
-        assertEquals(Winnable.UNKNOWN, winnable);
-        break;
-      default:
-        throw new IllegalArgumentException();
+      }
+      case UNDETERMINED -> assertEquals(Winnable.UNKNOWN, winnable);
+      default -> throw new IllegalArgumentException();
     }
   }
 }
