@@ -35,9 +35,13 @@ public class StrictPgnParser extends AbstractPgnParser {
 
   public static final String EMPTY_LINE = "";
 
-  public static PgnFile parse(String pgn) {
+  public static PgnFile parseText(String pgn) {
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
     return parse(lines);
+  }
+
+  public static PgnFile parse(String pgnFilePath) {
+    return parse(NonNullWrapperCommon.get(pgnFilePath));
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
@@ -72,6 +76,15 @@ public class StrictPgnParser extends AbstractPgnParser {
     Collections.sort(tagList);
 
     return new PgnFile(tagList, startFen, movetextParse.leadingCommentary(), movetextParse.halfMoveParseList());
+  }
+
+  public static StrictPgnParserValidationResult validateText(String pgn) {
+    final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
+    return validate(lines);
+  }
+
+  public static StrictPgnParserValidationResult validate(String pgnFilePath) {
+    return validate(NonNullWrapperCommon.get(pgnFilePath));
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {

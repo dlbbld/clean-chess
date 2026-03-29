@@ -1,0 +1,1 @@
+package com.dlb.chess.test.common;

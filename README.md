@@ -342,64 +342,64 @@ Positions can also often be dead due to forced moves.
       
 ## PGN parser
       
-### PGN lenient parser
-The common PGN parser - the PGN lenient is trying to read the PGN with best effort, ignoring whitespace and errors as much as possible. Only PGNs with move variations are not supported.
+### Lenient PGN parser
+The common PGN parser - trying to read the file with best effort. For example below space after "[" is ignored etc. Only PGNs with move variations are not supported.
 
 ```java
-  final var pgn = """
-      [Event "Spassky - Fischer World Championship Match"]
-      [Site "Reykjavik ISL"]
-      [Date "1972.08.22"]
-      [EventDate "?"]
-      [Round "17"]
-      [Result "1/2-1/2"]
-      [White "Boris Spassky"]
-      [Black "Robert James Fischer"]
-      [ECO "B09"]
-      [WhiteElo "?"]
-      [BlackElo "?"]
-      [PlyCount "89"]
+   final var pgn = """
+        [ Event "Spring Classic"]
 
-      1. e4 d6 2. d4 g6 3. Nc3 Nf6 4. f4 Bg7 5. Nf3 c5 6. dxc5 Qa5
-      7. Bd3 Qxc5 8. Qe2 O-O 9. Be3 Qa5 10. O-O Bg4 11. Rad1 Nc6
-      12. Bc4 Nh5 13. Bb3 Bxc3 14. bxc3 Qxc3 15. f5 Nf6 16. h3 Bxf3
-      17. Qxf3 Na5 18. Rd3 Qc7 19. Bh6 Nxb3 20. cxb3 Qc5+ 21. Kh1
-      Qe5 22. Bxf8 Rxf8 23. Re3 Rc8 24. fxg6 hxg6 25. Qf4 Qxf4
-      26. Rxf4 Nd7 27. Rf2 Ne5 28. Kh2 Rc1 29. Ree2 Nc6 30. Rc2 Re1
-      31. Rfe2 Ra1 32. Kg3 Kg7 33. Rcd2 Rf1 34. Rf2 Re1 35. Rfe2 Rf1
-      36. Re3 a6 37. Rc3 Re1 38. Rc4 Rf1 39. Rdc2 Ra1 40. Rf2 Re1
-      41. Rfc2 g5 42. Rc1 Re2 43. R1c2 Re1 44. Rc1 Re2 45. R1c2
-      1/2-1/2
-      """;
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5
+                """;
 
-  final PgnFile pgnFile = LenientPgnParser.parse(pgn);
-
-  // play through the game
-  final Board board = new Board();
-  for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-    board.performMove(halfMove.san());
-  }
-
-    System.out.println(board.getLegalMovesSan()); // print legal moves
-    // [Kf6, Kf8, Kg6, Kg8, Kh6, Kh7, Kh8, Na5, Na7, Nb4, Nb8, Nd4, Nd8, Ne5, Rd2, Re1, Re3+, Rf2, Rxc2, Rxe4, Rxg2+,
-    // a5, b5, b6, d5, e5, e6, f5, f6, g4]
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+    System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // false
 ```
 
-Reading PGN files from the file system:
+When parsing fails, error messages are designed to be as descriptive as possible.
 
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final PgnFile pgnFile = LenientPgnParser.parse(path);
-    System.out.println(PgnCreate.createPgnFileString(pgnFile)); // prints contents of the PGN as parsed
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf4
+        Nf6
+          3. Bc4 Bc5
+                """;
+
+    final PgnFile pgnFile;
+    try {
+      pgnFile = LenientPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+    } catch (final LenientPgnParserValidationException e) {
+      System.out.println(e.getMessage());
+      // The validation for 2. Nf4 failed. Reason: The move specification is invalid because there is no knight which
+      // can move to square f4.
+      return;
+    }
 ```
 
-### PGN strict parser
-The PGN strict parser only allows PGN adhering to the PGN export format.
+### Strict PGN parser
+The strict PGN parser does not allow inconsistencies as the lenient PGN parser. It expects the PGN to be in the export format according to the PGN specification.
 
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final PgnFile pgnFile = StrictPgnParser.parse(path);
-    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
+        """;
+
+    final PgnFile pgnFile;
+    try {
+      pgnFile = StrictPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+    } catch (final StrictPgnParserValidationException e) {
+      System.out.println(e.getMessage());
+      // The left square bracked [must be followed by the tag name, but a space was found.
+      return;
+    }
 ```
       
 ## PGN creation

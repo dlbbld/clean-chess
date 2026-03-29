@@ -170,9 +170,13 @@ public class LenientPgnParser extends AbstractPgnParser {
     }
   }
 
-  public static PgnFile parse(String pgn) {
+  public static PgnFile parseText(String pgn) {
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
     return parse(lines);
+  }
+
+  public static PgnFile parse(String pgnFilePath) {
+    return parse(NonNullWrapperCommon.get(pgnFilePath));
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
@@ -218,9 +222,13 @@ public class LenientPgnParser extends AbstractPgnParser {
     return new PgnFile(tagList, startFen, movetextParse.leadingCommentary(), movetextParse.halfMoveParseList());
   }
 
-  public static LenientPgnParserValidationResult validate(String pgn) {
+  public static LenientPgnParserValidationResult validateText(String pgn) {
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
     return validate(lines);
+  }
+
+  public static LenientPgnParserValidationResult validate(String pgnFilePath) {
+    return validate(NonNullWrapperCommon.get(pgnFilePath));
   }
 
   public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {

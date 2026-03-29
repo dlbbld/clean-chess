@@ -40,7 +40,7 @@ class TestThreefoldClaimAheadUtility {
     }
 
     {
-      final PgnFile pgnFile = LenientPgnParser.parse("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3");
+      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3");
       final Board board = GeneralUtility.calculateBoard(pgnFile);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
@@ -49,7 +49,7 @@ class TestThreefoldClaimAheadUtility {
     }
 
     {
-      final PgnFile pgnFile = LenientPgnParser.parse("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6");
+      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6");
       final Board board = GeneralUtility.calculateBoard(pgnFile);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
@@ -59,7 +59,7 @@ class TestThreefoldClaimAheadUtility {
 
     // White can claim ahead first
     {
-      final PgnFile pgnFile = LenientPgnParser.parse("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8");
+      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8");
       final Board board = GeneralUtility.calculateBoard(pgnFile);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
@@ -78,7 +78,7 @@ class TestThreefoldClaimAheadUtility {
 
     // Black can claim ahead first
     {
-      final PgnFile pgnFile = LenientPgnParser.parse("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1");
+      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1");
       final Board board = GeneralUtility.calculateBoard(pgnFile);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
@@ -97,7 +97,7 @@ class TestThreefoldClaimAheadUtility {
 
     // White can claim ahead first, then Black can claim ahead
     {
-      final PgnFile pgnFile = LenientPgnParser.parse("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1 Nb8");
+      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1 Nb8");
       final Board board = GeneralUtility.calculateBoard(pgnFile);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
@@ -124,7 +124,7 @@ class TestThreefoldClaimAheadUtility {
 
     // Black can claim ahead first, then White can claim ahead
     {
-      final PgnFile pgnFile = LenientPgnParser.parse("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8 Nf3");
+      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8 Nf3");
       final Board board = GeneralUtility.calculateBoard(pgnFile);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
