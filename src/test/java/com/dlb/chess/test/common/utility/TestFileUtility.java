@@ -33,8 +33,7 @@ public class TestFileUtility {
       Chinese: 你好
       Hindi: नमस्ते
       Russian: Привет
-      Special: €, ©, ™, ✓, ∞
-      """;
+      Special: €, ©, ™, ✓, ∞""";
 
   @SuppressWarnings("static-method")
   @Test
