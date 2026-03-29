@@ -8,6 +8,10 @@ public class FileSystemAccessException extends ChessApiRuntimeException {
     super(BASE_MESSAGE);
   }
 
+  public FileSystemAccessException(Throwable cause) {
+    super(BASE_MESSAGE, cause);
+  }
+
   public FileSystemAccessException(String message, Throwable cause) {
     super(calculateMessage(BASE_MESSAGE, message), cause);
   }

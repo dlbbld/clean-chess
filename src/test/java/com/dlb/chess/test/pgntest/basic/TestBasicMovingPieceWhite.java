@@ -42,26 +42,13 @@ class TestBasicMovingPieceWhite extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_white_moving_piece_rook.pgn":
-          checkMovingPiece(WHITE, A1, A2, WHITE_ROOK, board);
-          break;
-        case "02_white_moving_piece_knight.pgn":
-          checkMovingPiece(WHITE, B1, C3, WHITE_KNIGHT, board);
-          break;
-        case "03_white_moving_piece_bishop.pgn":
-          checkMovingPiece(WHITE, C1, B2, WHITE_BISHOP, board);
-          break;
-        case "04_white_moving_piece_queen.pgn":
-          checkMovingPiece(WHITE, D1, D3, WHITE_QUEEN, board);
-          break;
-        case "05_white_moving_piece_king.pgn":
-          checkMovingPiece(WHITE, E1, E2, WHITE_KING, board);
-          break;
-        case "06_white_moving_piece_pawn.pgn":
-          checkMovingPiece(WHITE, E2, E4, WHITE_PAWN, board);
-          break;
-        default:
-          throw new IllegalArgumentException();
+        case "01_white_moving_piece_rook.pgn" -> checkMovingPiece(WHITE, A1, A2, WHITE_ROOK, board);
+        case "02_white_moving_piece_knight.pgn" -> checkMovingPiece(WHITE, B1, C3, WHITE_KNIGHT, board);
+        case "03_white_moving_piece_bishop.pgn" -> checkMovingPiece(WHITE, C1, B2, WHITE_BISHOP, board);
+        case "04_white_moving_piece_queen.pgn" -> checkMovingPiece(WHITE, D1, D3, WHITE_QUEEN, board);
+        case "05_white_moving_piece_king.pgn" -> checkMovingPiece(WHITE, E1, E2, WHITE_KING, board);
+        case "06_white_moving_piece_pawn.pgn" -> checkMovingPiece(WHITE, E2, E4, WHITE_PAWN, board);
+        default -> throw new IllegalArgumentException();
       }
     }
   }

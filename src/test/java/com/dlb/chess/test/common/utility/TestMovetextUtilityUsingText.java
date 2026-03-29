@@ -12,8 +12,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.model.MovetextParse;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
-import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.utility.MovetextUtility;
 
 class TestMovetextUtilityUsingText extends AbstractTestMovetextUtility {
@@ -25,92 +25,92 @@ class TestMovetextUtilityUsingText extends AbstractTestMovetextUtility {
   void testInitialException() {
 
     checkInitialException(" 1. e4 e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
-    checkInitialException(". e4 e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
-    checkInitialException(" e4 e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
-    checkInitialException("e4 e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+    checkInitialException(". e4 e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+    checkInitialException(" e4 e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+    checkInitialException("e4 e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
     checkInitialException("2. e4 e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
 
     checkInitialException("0. e4 e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
     checkInitialException("x. e4 e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
     checkInitialException("78902342. e4 e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT);
 
     checkInitialException("1. e4 e5 3. d4 d5",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
     checkInitialException("1. e4 e5 2. d4 d5 2. Nc3 Nc6",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
     checkInitialException("1. e4 e5 2. d4 d5 1. Nc3 Nc6",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
     checkInitialException("1. e4 e5 2. d4 d5 3. Nc3 Nc6 99. Nf3 Nf6",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
     checkInitialException("1. e4 e5 2. d4 d5 3. Nc3 Nc6 1. Nf3 Nf6",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
 
-    checkInitialException("1. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
-    checkInitialException("1. e", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1.  e4", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
-    checkInitialException("1. e4 ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
-    checkInitialException("1. e4 e5 ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+    checkInitialException("1. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
+    checkInitialException("1. e", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1.  e4", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
+    checkInitialException("1. e4 ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+    checkInitialException("1. e4 e5 ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
     checkInitialException("1. e4 e5  2.",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
-    checkInitialException("1. e4 e5 2. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
-    checkInitialException("1. e4 e5 2. d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. e4 e5 2.  d4", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+    checkInitialException("1. e4 e5 2. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
+    checkInitialException("1. e4 e5 2. d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. e4 e5 2.  d4", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
     checkInitialException("1. e4 e5 2. d4 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
-    checkInitialException("1. e4 e5 2. d4 d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. e4 e5 2. d4  d5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+    checkInitialException("1. e4 e5 2. d4 d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. e4 e5 2. d4  d5", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
     checkInitialException("1. e4 e5 2. d4 d5 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
 
-    checkInitialException("1. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
-    checkInitialException("1. e4 e5 2. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
-    checkInitialException("1. e4 e5 2. d4 d5 3. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
+    checkInitialException("1. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
+    checkInitialException("1. e4 e5 2. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
+    checkInitialException("1. e4 e5 2. d4 d5 3. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER);
 
-    checkInitialException("1. ! e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY);
-    checkInitialException("1. !! e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY);
-    checkInitialException("1. e5 ?", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY);
-    checkInitialException("1. e4 ??", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY);
+    checkInitialException("1. ! e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY);
+    checkInitialException("1. !! e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY);
+    checkInitialException("1. e5 ?", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY);
+    checkInitialException("1. e4 ??", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY);
 
-    checkInitialException("1. e e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. d e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. 1 e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. e e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. d e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. 1 e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
 
-    checkInitialException("1. e2345678 e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. aaaaaaaa e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. -------- e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
-    checkInitialException("1. +-=Oe822 e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. e2345678 e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. aaaaaaaa e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. -------- e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+    checkInitialException("1. +-=Oe822 e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
     checkInitialException("1. eeeeeeeeeeeeeeeeeeeeeeeee e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID);
 
-    checkInitialException("1. e4!!! e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    checkInitialException("1. e4!-? e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    checkInitialException("1. e4?a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    checkInitialException("1. e4!a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4!!! e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4!-? e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4?a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4!a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
 
-    checkInitialException("1. e4 e5!!!", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    checkInitialException("1. e4!-? e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    checkInitialException("1. e4?a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    checkInitialException("1. e4!a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4 e5!!!", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4!-? e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4?a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
+    checkInitialException("1. e4!a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
 
-    checkInitialException("1. e4! ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
-    checkInitialException("1. e4?? ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
-    checkInitialException("1. e4 e5? ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+    checkInitialException("1. e4! ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+    checkInitialException("1. e4?? ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+    checkInitialException("1. e4 e5? ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
     checkInitialException("1. e4 e5?? ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER);
 
   }
 
-  private static void checkInitialException(String movetextPart, PgnReaderStrictValidationProblem expected) {
+  private static void checkInitialException(String movetextPart, StrictPgnParserValidationProblem expected) {
     var isException = false;
     try {
       parseMoveList(movetextPart);
-    } catch (final PgnReaderStrictValidationException e) {
-      final PgnReaderStrictValidationProblem actual = e.getPgnReaderStrictValidationProblem();
+    } catch (final StrictPgnParserValidationException e) {
+      final StrictPgnParserValidationProblem actual = e.getStrictPgnParserValidationProblem();
       assertEquals(expected, actual);
       isException = true;
     }
@@ -120,214 +120,214 @@ class TestMovetextUtilityUsingText extends AbstractTestMovetextUtility {
   @SuppressWarnings({ "static-method" })
   @Test
   void testNonInitialException() {
-    checkNonInitialException("2. e4", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT,
+    checkNonInitialException("2. e4", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT,
         1, WHITE);
-    checkNonInitialException("1. e4", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT,
+    checkNonInitialException("1. e4", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT,
         2, WHITE);
     checkNonInitialException("25. e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 50, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 50, WHITE);
     checkNonInitialException("50. e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 25, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 25, WHITE);
 
     checkNonInitialException("2... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 1, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 1, BLACK);
     checkNonInitialException("1... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 2, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 2, BLACK);
     checkNonInitialException("25... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 50, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 50, BLACK);
     checkNonInitialException("50... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 25, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_CORRECT, 25, BLACK);
 
     checkNonInitialException("1... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 1, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 1, WHITE);
     checkNonInitialException("2... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 2, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 2, WHITE);
     checkNonInitialException("50... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 50, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 50, WHITE);
     checkNonInitialException("25... e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 25, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE, 25, WHITE);
 
     checkNonInitialException("1. e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 1, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 1, BLACK);
     checkNonInitialException("2. e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 2, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 2, BLACK);
     checkNonInitialException("50. e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 50, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 50, BLACK);
     checkNonInitialException("25. e4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 25, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE, 25, BLACK);
 
-    checkNonInitialException("1... e4 ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER,
+    checkNonInitialException("1... e4 ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER,
         1, BLACK);
-    checkNonInitialException("1... e4 2. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 1, BLACK);
+    checkNonInitialException("1... e4 2. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 1, BLACK);
 
     checkNonInitialException("1... e4 3",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 1, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 1, BLACK);
     checkNonInitialException("1... e4 3.",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 1, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 1, BLACK);
     checkNonInitialException("1... e4 3. d4",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 1, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 1, BLACK);
 
     // WHITE
-    checkNonInitialException("10. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, WHITE);
-    checkNonInitialException("10. e", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
-    checkNonInitialException("10.  e4", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10, WHITE);
-    checkNonInitialException("10. e4 ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER,
+    checkNonInitialException("10. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, WHITE);
+    checkNonInitialException("10. e", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
+    checkNonInitialException("10.  e4", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10, WHITE);
+    checkNonInitialException("10. e4 ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER,
         10, WHITE);
     checkNonInitialException("10. e4 e5 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
     checkNonInitialException("10. e4 e5  11.",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 10, WHITE);
-    checkNonInitialException("10. e4 e5 11. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 10, WHITE);
+    checkNonInitialException("10. e4 e5 11. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
         WHITE);
-    checkNonInitialException("10. e4 e5 11. d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10. e4 e5 11. d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         WHITE);
-    checkNonInitialException("10. e4 e5 11.  d4", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10,
+    checkNonInitialException("10. e4 e5 11.  d4", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10,
         WHITE);
     checkNonInitialException("10. e4 e5 11. d4 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
-    checkNonInitialException("10. e4 e5 11. d4 d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
+    checkNonInitialException("10. e4 e5 11. d4 d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         WHITE);
-    checkNonInitialException("10. e4 e5 11. d4  d5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
+    checkNonInitialException("10. e4 e5 11. d4  d5", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
         10, WHITE);
     checkNonInitialException("10. e4 e5 11. d4 d5 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
 
-    checkNonInitialException("10. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, WHITE);
-    checkNonInitialException("10. e4 e5 11. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
+    checkNonInitialException("10. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, WHITE);
+    checkNonInitialException("10. e4 e5 11. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
         WHITE);
     checkNonInitialException("10. e4 e5 11. d4 d5 12. ",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, WHITE);
 
-    checkNonInitialException("10. ! e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
-    checkNonInitialException("10. !! e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
-    checkNonInitialException("10. e5 ?", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
-    checkNonInitialException("10. e4 ??", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
+    checkNonInitialException("10. ! e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
+    checkNonInitialException("10. !! e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
+    checkNonInitialException("10. e5 ?", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
+    checkNonInitialException("10. e4 ??", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, WHITE);
 
-    checkNonInitialException("10. e e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
-    checkNonInitialException("10. d e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
-    checkNonInitialException("10. 1 e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
+    checkNonInitialException("10. e e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
+    checkNonInitialException("10. d e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
+    checkNonInitialException("10. 1 e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
 
-    checkNonInitialException("10. e2345678 e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10. e2345678 e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         WHITE);
-    checkNonInitialException("10. aaaaaaaa e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10. aaaaaaaa e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         WHITE);
-    checkNonInitialException("10. -------- e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10. -------- e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         WHITE);
-    checkNonInitialException("10. +-=Oe822 e5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10. +-=Oe822 e5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         WHITE);
     checkNonInitialException("10. eeeeeeeeeeeeeeeeeeeeeeeee e5",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, WHITE);
 
-    checkNonInitialException("10. e4!!! e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+    checkNonInitialException("10. e4!!! e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
         10, WHITE);
-    checkNonInitialException("10. e4!-? e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+    checkNonInitialException("10. e4!-? e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
         10, WHITE);
-    checkNonInitialException("10. e4?a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+    checkNonInitialException("10. e4?a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
         10, WHITE);
-    checkNonInitialException("10. e4!a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
-        10, WHITE);
-
-    checkNonInitialException("10. e4 e5!!!", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
-        10, WHITE);
-    checkNonInitialException("10. e4!-? e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
-        10, WHITE);
-    checkNonInitialException("10. e4?a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
-        10, WHITE);
-    checkNonInitialException("10. e4!a e5", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+    checkNonInitialException("10. e4!a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
         10, WHITE);
 
-    checkNonInitialException("10. e4! ", PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER,
+    checkNonInitialException("10. e4 e5!!!", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+        10, WHITE);
+    checkNonInitialException("10. e4!-? e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+        10, WHITE);
+    checkNonInitialException("10. e4?a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+        10, WHITE);
+    checkNonInitialException("10. e4!a e5", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+        10, WHITE);
+
+    checkNonInitialException("10. e4! ", StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER,
         10, WHITE);
     checkNonInitialException("10. e4?? ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
     checkNonInitialException("10. e4 e5? ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
     checkNonInitialException("10. e4 e5?? ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, WHITE);
 
     // BLACK
-    checkNonInitialException("10... ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, BLACK);
-    checkNonInitialException("10... e", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10...  e4", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10, BLACK);
+    checkNonInitialException("10... ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, BLACK);
+    checkNonInitialException("10... e", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10...  e4", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10, BLACK);
     checkNonInitialException("10... e4 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
     checkNonInitialException("10... e4 11. e5 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
     checkNonInitialException("10... e4 e5  11.",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 10, BLACK);
-    checkNonInitialException("10... e4 11. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED, 10, BLACK);
+    checkNonInitialException("10... e4 11. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
         BLACK);
-    checkNonInitialException("10... e4 11. d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10... e4 11.  d4", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10,
+    checkNonInitialException("10... e4 11. d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... e4 11.  d4", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10,
         BLACK);
     checkNonInitialException("10... e4 11. d4 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
-    checkNonInitialException("10... e4 11. d4 d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+    checkNonInitialException("10... e4 11. d4 d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         BLACK);
-    checkNonInitialException("10... e4 11. d4  d5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10,
+    checkNonInitialException("10... e4 11. d4  d5", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID, 10,
         BLACK);
     checkNonInitialException("10... e4 11. d4 d5 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
 
-    checkNonInitialException("10... ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, BLACK);
-    checkNonInitialException("10... e4 11. ", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
+    checkNonInitialException("10... ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, BLACK);
+    checkNonInitialException("10... e4 11. ", StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10,
         BLACK);
     checkNonInitialException("10... e4 11. d4 d5 12. ",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_ENDS_AFTER, 10, BLACK);
 
-    checkNonInitialException("10... !", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
-    checkNonInitialException("10... !!", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
-    checkNonInitialException("10... e5 11. ?", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
-    checkNonInitialException("10... e4 11. ??", PgnReaderStrictValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
+    checkNonInitialException("10... !", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
+    checkNonInitialException("10... !!", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
+    checkNonInitialException("10... e5 11. ?", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
+    checkNonInitialException("10... e4 11. ??", StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY, 10, BLACK);
 
-    checkNonInitialException("10... e", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10... d", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10... 1", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... e", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... d", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... 1", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
 
-    checkNonInitialException("10... e2345678", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10... aaaaaaaa", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10... --------", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
-    checkNonInitialException("10... +-=Oe822", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... e2345678", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... aaaaaaaa", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... --------", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+    checkNonInitialException("10... +-=Oe822", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
     checkNonInitialException("10... eeeeeeeeeeeeeeeeeeeeeeeee",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10, BLACK);
 
-    checkNonInitialException("10... e4!!!", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+    checkNonInitialException("10... e4!!!", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
         10, BLACK);
-    checkNonInitialException("10... e4!-?", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+    checkNonInitialException("10... e4!-?", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
         10, BLACK);
-    checkNonInitialException("10... e4?a", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10,
+    checkNonInitialException("10... e4?a", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10,
         BLACK);
-    checkNonInitialException("10... e4!a", PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10,
+    checkNonInitialException("10... e4!a", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10,
         BLACK);
 
     checkNonInitialException("10... e4 11. e5!!!",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10, BLACK);
     checkNonInitialException("10... e4 11. e5!-?",
-        PgnReaderStrictValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID, 10, BLACK);
 
     // special case
-    checkNonInitialException("10... e4 11. a?a5", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10... e4 11. a?a5", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         BLACK);
-    checkNonInitialException("10... e4 11. a!a", PgnReaderStrictValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
+    checkNonInitialException("10... e4 11. a!a", StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID, 10,
         BLACK);
 
     checkNonInitialException("10... e4! ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
     checkNonInitialException("10... e4?? ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
     checkNonInitialException("10... e4 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
     checkNonInitialException("10... e4 11. e5 ",
-        PgnReaderStrictValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
+        StrictPgnParserValidationProblem.MOVETEXT_SAN_FOLLOWED_BY_SPACE_BUT_ENDS_AFTER, 10, BLACK);
   }
 
-  private static void checkNonInitialException(String movetextPart, PgnReaderStrictValidationProblem expected,
+  private static void checkNonInitialException(String movetextPart, StrictPgnParserValidationProblem expected,
       int startFullMoveNumber, Side havingMove) {
     var isException = false;
     try {
       MovetextUtility.parseMovetextAfterInitialComment(movetextPart, startFullMoveNumber, havingMove, true);
-    } catch (final PgnReaderStrictValidationException e) {
-      final PgnReaderStrictValidationProblem actual = e.getPgnReaderStrictValidationProblem();
+    } catch (final StrictPgnParserValidationException e) {
+      final StrictPgnParserValidationProblem actual = e.getStrictPgnParserValidationProblem();
       assertEquals(expected, actual);
       isException = true;
     }

@@ -15,8 +15,8 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 
 public abstract class GeneralUtility {
 
@@ -60,7 +60,7 @@ public abstract class GeneralUtility {
 
   public static ApiBoard calculateBoard(Path folderPath, String pgnFileName) {
 
-    final PgnFile pgnFile = PgnReader.readPgn(folderPath, pgnFileName);
+    final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
 
     return calculateBoard(pgnFile);
   }

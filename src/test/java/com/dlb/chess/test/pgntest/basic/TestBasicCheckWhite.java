@@ -51,53 +51,27 @@ class TestBasicCheckWhite extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_white_check_rook_direct_adjacent.pgn":
-          checkNonCaptureCheck(WHITE, D3, D6, WHITE_ROOK, board);
-          break;
-        case "02_white_check_rook_direct_range.pgn":
-          checkNonCaptureCheck(WHITE, B3, B6, WHITE_ROOK, board);
-          break;
-        case "03_white_check_rook_discover.pgn":
-          checkNonCaptureCheck(WHITE, B5, D5, WHITE_ROOK, board);
-          break;
-        case "04_white_check_knight_direct.pgn":
-          checkNonCaptureCheck(WHITE, D5, F6, WHITE_KNIGHT, board);
-          break;
-        case "05_white_check_knight_discover_orthogonal.pgn":
-          checkNonCaptureCheck(WHITE, D5, B6, WHITE_KNIGHT, board);
-          break;
-        case "06_white_check_knight_discover_diagonal.pgn":
-          checkNonCaptureCheck(WHITE, B5, A3, WHITE_KNIGHT, board);
-          break;
-        case "07_white_check_bishop_direct_adjacent.pgn":
-          checkNonCaptureCheck(WHITE, C4, F7, WHITE_BISHOP, board);
-          break;
-        case "08_white_check_bishop_direct_range.pgn":
-          checkNonCaptureCheck(WHITE, F1, B5, WHITE_BISHOP, board);
-          break;
-        case "09_white_check_bishop_discover.pgn":
-          checkNonCaptureCheck(WHITE, B5, C4, WHITE_BISHOP, board);
-          break;
-        case "10_white_check_queen_direct_orthogonal_adjacent.pgn":
-          checkNonCaptureCheck(WHITE, D6, E7, WHITE_QUEEN, board);
-          break;
-        case "11_white_check_queen_direct_orthogonal_range.pgn":
-          checkNonCaptureCheck(WHITE, D2, E3, WHITE_QUEEN, board);
-          break;
-        case "12_white_check_queen_direct_diagonal_adjacent.pgn":
-          checkNonCaptureCheck(WHITE, B3, F7, WHITE_QUEEN, board);
-          break;
-        case "13_white_check_queen_direct_diagonal_range.pgn":
-          checkNonCaptureCheck(WHITE, D1, H5, WHITE_QUEEN, board);
-          break;
-        case "14_white_check_king_discover_orthogonal.pgn":
-          checkNonCaptureCheck(WHITE, E2, F3, WHITE_KING, board);
-          break;
-        case "15_white_check_king_discover_diagonal.pgn":
-          checkNonCaptureCheck(WHITE, B5, B4, WHITE_KING, board);
-          break;
-        default:
-          throw new IllegalArgumentException();
+        case "01_white_check_rook_direct_adjacent.pgn" -> checkNonCaptureCheck(WHITE, D3, D6, WHITE_ROOK, board);
+        case "02_white_check_rook_direct_range.pgn" -> checkNonCaptureCheck(WHITE, B3, B6, WHITE_ROOK, board);
+        case "03_white_check_rook_discover.pgn" -> checkNonCaptureCheck(WHITE, B5, D5, WHITE_ROOK, board);
+        case "04_white_check_knight_direct.pgn" -> checkNonCaptureCheck(WHITE, D5, F6, WHITE_KNIGHT, board);
+        case "05_white_check_knight_discover_orthogonal.pgn" -> checkNonCaptureCheck(WHITE, D5, B6, WHITE_KNIGHT,
+            board);
+        case "06_white_check_knight_discover_diagonal.pgn" -> checkNonCaptureCheck(WHITE, B5, A3, WHITE_KNIGHT, board);
+        case "07_white_check_bishop_direct_adjacent.pgn" -> checkNonCaptureCheck(WHITE, C4, F7, WHITE_BISHOP, board);
+        case "08_white_check_bishop_direct_range.pgn" -> checkNonCaptureCheck(WHITE, F1, B5, WHITE_BISHOP, board);
+        case "09_white_check_bishop_discover.pgn" -> checkNonCaptureCheck(WHITE, B5, C4, WHITE_BISHOP, board);
+        case "10_white_check_queen_direct_orthogonal_adjacent.pgn" -> checkNonCaptureCheck(WHITE, D6, E7, WHITE_QUEEN,
+            board);
+        case "11_white_check_queen_direct_orthogonal_range.pgn" -> checkNonCaptureCheck(WHITE, D2, E3, WHITE_QUEEN,
+            board);
+        case "12_white_check_queen_direct_diagonal_adjacent.pgn" -> checkNonCaptureCheck(WHITE, B3, F7, WHITE_QUEEN,
+            board);
+        case "13_white_check_queen_direct_diagonal_range.pgn" -> checkNonCaptureCheck(WHITE, D1, H5, WHITE_QUEEN,
+            board);
+        case "14_white_check_king_discover_orthogonal.pgn" -> checkNonCaptureCheck(WHITE, E2, F3, WHITE_KING, board);
+        case "15_white_check_king_discover_diagonal.pgn" -> checkNonCaptureCheck(WHITE, B5, B4, WHITE_KING, board);
+        default -> throw new IllegalArgumentException();
       }
     }
   }

@@ -313,15 +313,10 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       board.performMove(moveRepresentation.moveSpecification());
       if (board.isCheckmate()) {
         switch (sidePerformingTheMove) {
-          case WHITE:
-            gameTermination.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
-            break;
-          case BLACK:
-            gameTermination.add(GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE);
-            break;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
+          case WHITE -> gameTermination.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
+          case BLACK -> gameTermination.add(GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE);
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
         }
       } else if (board.isStalemate()) {
         gameTermination.add(GameStatusAnalysis.STALEMATE);

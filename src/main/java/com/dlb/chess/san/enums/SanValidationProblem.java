@@ -1,6 +1,7 @@
 package com.dlb.chess.san.enums;
 
 public enum SanValidationProblem {
+  UNKNOWN_ERROR(false),
   NONE(false),
 
   BLANK(false),

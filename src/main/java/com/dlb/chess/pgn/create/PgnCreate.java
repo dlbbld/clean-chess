@@ -18,11 +18,11 @@ import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.enums.ResultTagValue;
-import com.dlb.chess.pgn.reader.enums.SetUpTagValue;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.pgn.reader.model.Tag;
+import com.dlb.chess.pgn.parser.enums.ResultTagValue;
+import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
 

@@ -50,25 +50,24 @@ public abstract class SemiOpenFilesUtility implements EnumConstants {
     final List<Square> result = new ArrayList<>();
 
     switch (sideHavingSemiOpenFile) {
-      case WHITE:
+      case WHITE -> {
         result.add(Square.calculate(file, RANK_7));
         result.add(Square.calculate(file, RANK_6));
         result.add(Square.calculate(file, RANK_5));
         result.add(Square.calculate(file, RANK_4));
         result.add(Square.calculate(file, RANK_3));
         result.add(Square.calculate(file, RANK_2));
-        break;
-      case BLACK:
+      }
+      case BLACK -> {
         result.add(Square.calculate(file, RANK_2));
         result.add(Square.calculate(file, RANK_3));
         result.add(Square.calculate(file, RANK_4));
         result.add(Square.calculate(file, RANK_5));
         result.add(Square.calculate(file, RANK_6));
         result.add(Square.calculate(file, RANK_7));
-        break;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
+      }
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
     }
 
     return result;

@@ -22,14 +22,14 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.common.utility.PgnExtensionUtility;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.pgn.reader.enums.ResultTagValue;
-import com.dlb.chess.pgn.reader.enums.StandardTag;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.pgn.reader.model.Tag;
+import com.dlb.chess.pgn.parser.enums.ResultTagValue;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class CreateAmbronaHelpMateTestCases {
@@ -90,7 +90,7 @@ public class CreateAmbronaHelpMateTestCases {
 
     if (havingHelpMate.containsKey(pgnFileName)) {
 
-      final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(folderExisting, pgnFileName);
+      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderExisting, pgnFileName);
 
       final Side helpMatingSide = analysis.havingMove();
       final var newResultTagValue = switch (helpMatingSide) {

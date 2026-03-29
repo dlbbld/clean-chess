@@ -56,9 +56,6 @@ public abstract class YawnMoveUtility {
         // we add the last entry, which also ends the sequence
         performedIndex = sequence.endPerformedIndex();
         sequenceLength = numberOfHalfMovesThreshold;
-        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
-            performedIndex, sequenceLength);
-        result.add(entry);
 
         // we add the entry reaching the threshold if sequence below fifty moves
       } else if (numberOfHalfMovesThreshold < ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD
@@ -67,9 +64,6 @@ public abstract class YawnMoveUtility {
         // we can add the move per index as last entry
         performedIndex = sequence.endPerformedIndex();
         sequenceLength = halfMoveClockEnd;
-        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
-            performedIndex, sequenceLength);
-        result.add(entry);
       } else {
 
         // we add the half move when the fifty-move rule becomes effective
@@ -105,10 +99,10 @@ public abstract class YawnMoveUtility {
           performedIndex = sequence.endPerformedIndex();
           sequenceLength = halfMoveClockEnd;
         }
-        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
-            performedIndex, sequenceLength);
-        result.add(entry);
       }
+      entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+          performedIndex, sequenceLength);
+      result.add(entry);
       resultList.add(result);
     }
 

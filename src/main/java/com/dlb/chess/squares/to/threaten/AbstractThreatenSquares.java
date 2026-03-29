@@ -26,31 +26,20 @@ public abstract class AbstractThreatenSquares extends AbstractToSquares {
       if (staticPosition.isOwnPiece(fromSquare, havingMove)) {
         final Piece piece = staticPosition.get(fromSquare);
         switch (piece.getPieceType()) {
-          case BISHOP:
-            squareSet
-                .addAll(BishopThreatenSquares.calculateBishopThreatenSquares(staticPosition, fromSquare, havingMove));
-            break;
-          case KING:
-            squareSet.addAll(KingNonCastlingThreatenSquares.calculateKingNonCastlingThreatenSquares(staticPosition,
-                fromSquare, havingMove));
-            break;
-          case KNIGHT:
-            squareSet
-                .addAll(KnightThreatenSquares.calculateKnightThreatenSquares(staticPosition, fromSquare, havingMove));
-            break;
-          case PAWN:
-            squareSet.addAll(PawnThreatenSquares.calculatePawnThreatenSquares(staticPosition, fromSquare, havingMove));
-            break;
-          case QUEEN:
-            squareSet
-                .addAll(QueenThreatenSquares.calculateQueenThreatenSquares(staticPosition, fromSquare, havingMove));
-            break;
-          case ROOK:
-            squareSet.addAll(RookThreatenSquares.calculateRookThreatenSquares(staticPosition, fromSquare, havingMove));
-            break;
-          case NONE:
-          default:
-            throw new IllegalArgumentException();
+          case BISHOP -> squareSet
+              .addAll(BishopThreatenSquares.calculateBishopThreatenSquares(staticPosition, fromSquare, havingMove));
+          case KING -> squareSet.addAll(KingNonCastlingThreatenSquares
+              .calculateKingNonCastlingThreatenSquares(staticPosition, fromSquare, havingMove));
+          case KNIGHT -> squareSet
+              .addAll(KnightThreatenSquares.calculateKnightThreatenSquares(staticPosition, fromSquare, havingMove));
+          case PAWN -> squareSet
+              .addAll(PawnThreatenSquares.calculatePawnThreatenSquares(staticPosition, fromSquare, havingMove));
+          case QUEEN -> squareSet
+              .addAll(QueenThreatenSquares.calculateQueenThreatenSquares(staticPosition, fromSquare, havingMove));
+          case ROOK -> squareSet
+              .addAll(RookThreatenSquares.calculateRookThreatenSquares(staticPosition, fromSquare, havingMove));
+          case NONE -> throw new IllegalArgumentException();
+          default -> throw new IllegalArgumentException();
         }
       }
     }

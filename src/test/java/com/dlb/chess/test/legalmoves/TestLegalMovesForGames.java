@@ -8,8 +8,8 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestLegalMovesForGames {
@@ -986,7 +986,7 @@ class TestLegalMovesForGames {
   }
 
   private static void generateGame(PgnTest pgnTest, String pgnFileName) {
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
     final var board = new Board();
     for (final PgnHalfMove move : pgnFile.halfMoveList()) {
       board.performMove(move.san());

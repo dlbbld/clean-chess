@@ -33,15 +33,10 @@ class TestMobilitySolution implements EnumConstants {
     DARK_SQUARE_SET = new TreeSet<>();
     for (final Square square : Square.BOARD_SQUARE_LIST) {
       switch (square.getSquareType()) {
-        case LIGHT_SQUARE:
-          LIGHT_SQUARE_SET.add(square);
-          break;
-        case DARK_SQUARE:
-          DARK_SQUARE_SET.add(square);
-          break;
-        case NONE:
-        default:
-          throw new IllegalArgumentException();
+        case LIGHT_SQUARE -> LIGHT_SQUARE_SET.add(square);
+        case DARK_SQUARE -> DARK_SQUARE_SET.add(square);
+        case NONE -> throw new IllegalArgumentException();
+        default -> throw new IllegalArgumentException();
       }
     }
   }
@@ -373,15 +368,10 @@ class TestMobilitySolution implements EnumConstants {
           break;
         case KING:
           switch (piecePlacement.side()) {
-            case WHITE:
-              assertEquals(new TreeSet<>(whiteKingToSquareList), squaresWithValueOne);
-              break;
-            case BLACK:
-              assertEquals(new TreeSet<>(blackKingToSquareList), squaresWithValueOne);
-              break;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
+            case WHITE -> assertEquals(new TreeSet<>(whiteKingToSquareList), squaresWithValueOne);
+            case BLACK -> assertEquals(new TreeSet<>(blackKingToSquareList), squaresWithValueOne);
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
           }
           break;
         case NONE:
@@ -407,15 +397,10 @@ class TestMobilitySolution implements EnumConstants {
           break;
         case KING:
           switch (piecePlacement.side()) {
-            case WHITE:
-              assertEquals(new TreeSet<>(whiteKingToSquareList), squaresWithValueOne);
-              break;
-            case BLACK:
-              assertEquals(new TreeSet<>(blackKingToSquareList), squaresWithValueOne);
-              break;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
+            case WHITE -> assertEquals(new TreeSet<>(whiteKingToSquareList), squaresWithValueOne);
+            case BLACK -> assertEquals(new TreeSet<>(blackKingToSquareList), squaresWithValueOne);
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
           }
           break;
         case ROOK:
@@ -449,15 +434,10 @@ class TestMobilitySolution implements EnumConstants {
           break;
         case BISHOP:
           switch (piecePlacement.squareOriginal().getSquareType()) {
-            case LIGHT_SQUARE:
-              assertEquals(LIGHT_SQUARE_SET, squaresWithValueOne);
-              break;
-            case DARK_SQUARE:
-              assertEquals(DARK_SQUARE_SET, squaresWithValueOne);
-              break;
-            case NONE:
-            default:
-              throw new IllegalArgumentException();
+            case LIGHT_SQUARE -> assertEquals(LIGHT_SQUARE_SET, squaresWithValueOne);
+            case DARK_SQUARE -> assertEquals(DARK_SQUARE_SET, squaresWithValueOne);
+            case NONE -> throw new IllegalArgumentException();
+            default -> throw new IllegalArgumentException();
           }
           break;
         case NONE:

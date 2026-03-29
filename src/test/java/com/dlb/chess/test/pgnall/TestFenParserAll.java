@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.pgn.reader.AbstractPgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.AbstractPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.custom.AbstractTestFenParser;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
@@ -50,9 +50,9 @@ class TestFenParserAll extends AbstractTestFenParser {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(folderPath, pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final List<MoveSpecification> moveList = AbstractPgnReader.calculateMoveSpecificationList(pgnFile);
+    final List<MoveSpecification> moveList = AbstractPgnParser.calculateMoveSpecificationList(pgnFile);
     checkGames(pgnFile.startFen().fen(), moveList, false);
   }
 

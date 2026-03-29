@@ -2,22 +2,22 @@ package com.dlb.chess.utility;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.movetext.model.ReadComment;
-import com.dlb.chess.pgn.reader.enums.PgnReaderStrictValidationProblem;
-import com.dlb.chess.pgn.reader.exceptions.PgnReaderStrictValidationException;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
 public abstract class CommentaryUtility {
 
   public static ReadComment parseComment(String movetextPart, boolean isStrict)
-      throws PgnReaderStrictValidationException {
+      throws StrictPgnParserValidationException {
     if (movetextPart.isEmpty()) {
       return new ReadComment("", true, "");
     }
 
     final var firstLetter = NonNullWrapperCommon.toString(movetextPart.charAt(0));
     if (CommentaryUtility.COMMENTARY_END_BRACE.equals(firstLetter)) {
-      throw new PgnReaderStrictValidationException(
-          PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE, SanValidationProblem.NONE,
+      throw new StrictPgnParserValidationException(
+          StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE, SanValidationProblem.NONE,
           "Movetext starts with commentary end brace");
     }
 
@@ -31,8 +31,8 @@ public abstract class CommentaryUtility {
     // first we check if there are characters at all following the commentary start brace
     // if not throw an exception
     if (movetextPart.length() == 1) {
-      throw new PgnReaderStrictValidationException(
-          PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_ENDS_AFTER_START_BRACE, SanValidationProblem.NONE,
+      throw new StrictPgnParserValidationException(
+          StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_ENDS_AFTER_START_BRACE, SanValidationProblem.NONE,
           "Movetext ends after commentary start brace");
     }
 
@@ -52,21 +52,21 @@ public abstract class CommentaryUtility {
           // we have more characters in the string
           final var nextLetter = NonNullWrapperCommon.toString(movetextPart.charAt(i + 1));
           if (!MovetextUtility.VALUE_SEPARATION_LETTER.equals(nextLetter)) {
-            throw new PgnReaderStrictValidationException(
-                PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE, SanValidationProblem.NONE,
+            throw new StrictPgnParserValidationException(
+                StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE, SanValidationProblem.NONE,
                 "The movetext doesnt continue with a space after a comment");
           }
           // now we have a space as continuation but we need to check further
           if (i == movetextPart.length() - 2) {
             // the movetext ends after the space, this is not valid
-            throw new PgnReaderStrictValidationException(
-                PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING,
+            throw new StrictPgnParserValidationException(
+                StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_SPACE_BUT_ENDING,
                 SanValidationProblem.NONE, "The movetext ends with a space after a comment which is not allowed");
           }
           final var overNextLetter = NonNullWrapperCommon.toString(movetextPart.charAt(i + 2));
           if (MovetextUtility.VALUE_SEPARATION_LETTER.equals(overNextLetter)) {
-            throw new PgnReaderStrictValidationException(
-                PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES, SanValidationProblem.NONE,
+            throw new StrictPgnParserValidationException(
+                StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_FOLLOWED_BY_TWO_SPACES, SanValidationProblem.NONE,
                 "A commentary is followed by two spaces which is not allowed");
           }
           // now we have a valid continuation
@@ -83,8 +83,8 @@ public abstract class CommentaryUtility {
         return new ReadComment(commentary, false, continuationLeftTrim);
       }
     }
-    throw new PgnReaderStrictValidationException(
-        PgnReaderStrictValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
+    throw new StrictPgnParserValidationException(
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
         SanValidationProblem.NONE, "Found commentary start brace without commentary end brace");
   }
 

@@ -14,9 +14,8 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   void testWhiteMovingPiece() {
     final ApiBoard board = new Board();
-    MoveSpecification move;
+    MoveSpecification move = new MoveSpecification(BLACK, E2, E4);
 
-    move = new MoveSpecification(BLACK, E2, E4);
     check(board, move, MoveCheck.BASIC_NOT_HAVING_MOVE);
 
     move = new MoveSpecification(BLACK, E7, E8);
@@ -848,9 +847,8 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     board.performMove("e4");
 
-    MoveSpecification move;
+    MoveSpecification move = new MoveSpecification(WHITE, E7, E5);
 
-    move = new MoveSpecification(WHITE, E7, E5);
     check(board, move, MoveCheck.BASIC_NOT_HAVING_MOVE);
 
     move = new MoveSpecification(WHITE, E2, E1);

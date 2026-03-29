@@ -10,8 +10,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -48,7 +48,7 @@ class TestWinnability {
     final var pgnFileName = "pawn_wall_norgaard_example_2.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
-    final PgnFile pgnFile = PgnReader.readPgn(pgnTest.getFolderPath(), pgnFileName);
+    final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
@@ -72,17 +72,10 @@ class TestWinnability {
   private static void check(UnwinnableQuick unwinnableQuickSide, Side side, ApiBoard board) {
     final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, side);
     switch (unwinnableQuickSide) {
-      case UNWINNABLE:
-        assertEquals(Winnable.NO, winnable);
-        break;
-      case WINNABLE:
-        assertEquals(Winnable.YES, winnable);
-        break;
-      case POSSIBLY_WINNABLE:
-        assertEquals(Winnable.UNKNOWN, winnable);
-        break;
-      default:
-        throw new IllegalArgumentException();
+      case UNWINNABLE -> assertEquals(Winnable.NO, winnable);
+      case WINNABLE -> assertEquals(Winnable.YES, winnable);
+      case POSSIBLY_WINNABLE -> assertEquals(Winnable.UNKNOWN, winnable);
+      default -> throw new IllegalArgumentException();
     }
   }
 }

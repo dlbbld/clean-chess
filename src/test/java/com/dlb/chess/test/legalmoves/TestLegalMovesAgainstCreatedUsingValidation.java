@@ -25,11 +25,11 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.squares.to.potential.AbstractPotentialToSquares;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.PgnTestConstants;
 
@@ -68,7 +68,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFile = PgnStrictCacheForTestCases.getPgn(folderPath, pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
     final ApiBoard board = new Board(pgnFile.startFen());
     checkLegalMoves(board);

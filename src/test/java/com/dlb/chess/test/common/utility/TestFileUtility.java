@@ -3,7 +3,6 @@ package com.dlb.chess.test.common.utility;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class TestFileUtility {
 
   @SuppressWarnings("static-method")
   @Test
-  void testReadUtf8File() throws IOException {
+  void testReadUtf8File() {
     final List<String> expectedLines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(TEST_CONTENT, "\\n"));
     final List<String> actualLines = FileUtility.readFileLines(TEST_SOURCE_FILE_PATH);
 
@@ -51,6 +50,6 @@ public class TestFileUtility {
   void testWriteUtf8File() {
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(TEST_CONTENT, "\\n"));
     FileUtility.writeFile(TEST_DESTINATION_FILE_PATH, lines);
-    assertTrue(FileComparison.check(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
+    assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
   }
 }

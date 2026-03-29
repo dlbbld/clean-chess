@@ -24,21 +24,30 @@ public abstract class FileUtility {
   /**
    * Reading a file linewise, without including linebreaks or adding spaces after a line break.
    */
-  public static List<String> readFileLines(Path folderPath, String fileName) throws IOException {
+  public static List<String> readFileLines(Path folderPath, String fileName) {
     return readFileLines(calculateFilePath(folderPath, fileName));
   }
 
-  public static List<String> readFileLines(Path filePath) throws IOException {
+  public static List<String> readFileLines(Path filePath) {
     final List<String> fileLines = new ArrayList<>();
+
     final var file = filePath.toFile();
-    if (!file.isFile()) {
-      throw new IllegalArgumentException("\"" + filePath + "\" is not a file");
+
+    if (!file.exists()) {
+      throw new FileSystemAccessException("File \"" + filePath + "\" was not found.");
     }
-    try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8);) {
+
+    if (!file.isFile()) {
+      throw new FileSystemAccessException("\"" + filePath + "\" is not a file.");
+    }
+
+    try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8)) {
       while (myReader.hasNextLine()) {
         final String currentLine = NonNullWrapperCommon.nextLine(myReader);
         fileLines.add(currentLine);
       }
+    } catch (final IOException ioe) {
+      throw new FileSystemAccessException("Reading file \"" + filePath + "\" failed.", ioe);
     }
 
     return fileLines;

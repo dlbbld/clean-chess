@@ -68,15 +68,10 @@ public class MoveToSan extends AbstractSan {
       boolean isCheck) {
     final StringBuilder buildSan = new StringBuilder();
     switch (moveSpecification.castlingMove()) {
-      case KING_SIDE:
-        buildSan.append(CastlingConstants.SAN_CASTLING_KING_SIDE);
-        break;
-      case QUEEN_SIDE:
-        buildSan.append(CastlingConstants.SAN_CASTLING_QUEEN_SIDE);
-        break;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
+      case KING_SIDE -> buildSan.append(CastlingConstants.SAN_CASTLING_KING_SIDE);
+      case QUEEN_SIDE -> buildSan.append(CastlingConstants.SAN_CASTLING_QUEEN_SIDE);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
     }
 
     appendCheckOrCheckmate(buildSan, isCheckmate, isCheck);

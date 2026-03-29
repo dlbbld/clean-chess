@@ -1,17 +1,20 @@
 package com.dlb.chess;
 
+import java.nio.file.Paths;
+
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.pgn.reader.PgnReader;
-import com.dlb.chess.pgn.reader.model.PgnFile;
+import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.parser.StrictPgnParser;
+import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
+import com.dlb.chess.pgn.writer.PgnWriter;
 
 public class ReadMeForRepository {
 
@@ -26,8 +29,14 @@ public class ReadMeForRepository {
 
     checkBoard();
 
-    checkPgnReader();
+    createExamplePgnFileForParsing();
+    checkLenientPgnParser();
+    checkStrictPgnParserExample();
+
     checkPgnWriter();
+
+    checkLenientPgnValidate();
+    checkStrictPgnValidate();
   }
 
   private static void checkThreefoldClaimAhead() {
@@ -157,12 +166,12 @@ public class ReadMeForRepository {
     System.out.println(board.isCheckmate()); // true
   }
 
-  private static void checkPgnReader() {
-    checkPgnReaderExample1();
-    checkPgnReaderExample2();
+  private static void checkLenientPgnParser() {
+    checkLenientPgnParserExample1();
+    checkLenientPgnParserExample2();
   }
 
-  private static void checkPgnReaderExample1() {
+  private static void checkLenientPgnParserExample1() {
     final var pgn = """
         [Event "Spassky - Fischer World Championship Match"]
         [Site "Reykjavik ISL"]
@@ -189,7 +198,7 @@ public class ReadMeForRepository {
         1/2-1/2
         """;
 
-    final PgnFile pgnFile = PgnReader.readPgn(pgn);
+    final PgnFile pgnFile = LenientPgnParser.parse(pgn);
 
     // play through the game
     final Board board = new Board();
@@ -197,23 +206,59 @@ public class ReadMeForRepository {
       board.performMove(halfMove.san());
     }
 
-    System.out.println(board.getSan()); // SAN of last move, R1c2
+    System.out.println(board.getLegalMovesSan()); // print legal moves
+    // [Kf6, Kf8, Kg6, Kg8, Kh6, Kh7, Kh8, Na5, Na7, Nb4, Nb8, Nd4, Nd8, Ne5, Rd2, Re1, Re3+, Rf2, Rxc2, Rxe4, Rxg2+,
+    // a5, b5, b6, d5, e5, e6, f5, f6, g4]
   }
 
-  private static void checkPgnReaderExample2() {
-    final var folderPath = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "myPgnFolder");
-    if (FileUtility.exists(folderPath, "myPgnFile.pgn")) {
-      final PgnFile pgnFile = PgnReader.readPgn(folderPath, "myPgnFile.pgn");
-      System.out.println(PgnCreate.createPgnFileString(pgnFile));
-    }
+  @SuppressWarnings("null")
+  private static void createExamplePgnFileForParsing() {
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    PgnWriter.writePgnFile(pgnFile, path);
   }
 
+  @SuppressWarnings("null")
+  private static void checkLenientPgnParserExample2() {
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final PgnFile pgnFile = LenientPgnParser.parse(path);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile)); // prints contents of the PGN as parsed
+  }
+
+  @SuppressWarnings("null")
+  private static void checkStrictPgnParserExample() {
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final PgnFile pgnFile = StrictPgnParser.parse(path);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+  }
+
+  @SuppressWarnings("null")
   private static void checkPgnWriter() {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    PgnWriter.writePgnFile(pgnFile, path);
+  }
+
+  @SuppressWarnings("null")
+  private static void checkLenientPgnValidate() {
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final LenientPgnParserValidationResult result = LenientPgnParser.validate(path);
+    System.out.println(result.isValid()); // true
+  }
+
+  @SuppressWarnings("null")
+  private static void checkStrictPgnValidate() {
+    final var path = Paths.get("C:\\temp\\myFile.pgn");
+    final StrictPgnParserValidationResult result = StrictPgnParser.validate(path);
+    System.out.println(result.isValid()); // true
   }
 
 }

@@ -10,8 +10,8 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.pgn.reader.model.PgnFile;
-import com.dlb.chess.test.pgn.reader.PgnStrictCacheForTestCases;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.utility.TagUtility;
 
 public class LichessCheckSinglePgn extends AbstractLichessCheck {
@@ -50,7 +50,7 @@ public class LichessCheckSinglePgn extends AbstractLichessCheck {
       final PgnFile pgnFile;
 
       try {
-        pgnFile = PgnStrictCacheForTestCases.getPgn(pngOutFolderPath, NonNullWrapperCommon.getName(file));
+        pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pngOutFolderPath, NonNullWrapperCommon.getName(file));
         if (calculateIsTimeForfeitCandidate(pgnFile)) {
           if (calculateIsIncorrectResult(pgnFile)) {
             final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
