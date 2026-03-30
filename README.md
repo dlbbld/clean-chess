@@ -404,7 +404,9 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
       
 ## PGN creation
 
-You can create the PGN for a game played in the API or export an imported PGN. The result will comply with the PGN export format, containing all required tags, formatting etc., for exported PGNs.
+### Basic example
+
+You can create the PGN for a game played in the API or export an imported PGN.
 
 ```java
     final Board board = new Board();
@@ -428,6 +430,22 @@ Output
 
 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
 ```
+
+### PGN format
+
+The PGN is created in the unique export format as defined by the PGN specification so passes validation by the lenient and strict PGN parser.
+
+```java
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+
+    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile);
+    System.out.println(LenientPgnParser.validateText(pgnFileString).isValid()); // true
+    System.out.println(StrictPgnParser.validateText(pgnFileString).isValid()); // true
+```
+
 
 ## PGN validation
 

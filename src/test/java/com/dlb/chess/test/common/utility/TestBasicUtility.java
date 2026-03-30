@@ -148,4 +148,20 @@ class TestBasicUtility {
     final List<String> actualResult = BasicUtility.calculateWrappedLines(line, lineLength);
     assertEquals(expectedResult, actualResult);
   }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testConvertToString() {
+    final var expected = """
+        line 1
+
+        line 3""";
+
+    final List<String> lines = Arrays.asList("line 1", "", "line 3");
+
+    final String actual = BasicUtility.convertToString(lines);
+
+    assertEquals(expected, actual);
+
+  }
 }

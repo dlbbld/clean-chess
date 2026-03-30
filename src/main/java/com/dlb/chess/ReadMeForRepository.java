@@ -22,22 +22,22 @@ public class ReadMeForRepository {
 
   public static void main(String[] args) {
 
-    checkThreefoldClaimAhead();
-    checkThreefoldOnTheBoard();
-    checkFiftyMoves();
-
-    checkUnwinnability();
-    checkDeadPosition();
-
-    checkBoard();
-
-    checkLenientPgnParser();
-    checkStrictPgnParser();
-
+    // checkThreefoldClaimAhead();
+    // checkThreefoldOnTheBoard();
+    // checkFiftyMoves();
+    //
+    // checkUnwinnability();
+    // checkDeadPosition();
+    //
+    // checkBoard();
+    //
+    // checkLenientPgnParser();
+    // checkStrictPgnParser();
+    //
     checkPgnWriter();
-
-    checkLenientPgnValidate();
-    checkStrictPgnValidate();
+    //
+    // checkLenientPgnValidate();
+    // checkStrictPgnValidate();
   }
 
   private static void checkThreefoldClaimAhead() {
@@ -248,8 +248,13 @@ public class ReadMeForRepository {
     }
   }
 
-  @SuppressWarnings("null")
   private static void checkPgnWriter() {
+    checkPgnWriterBasic();
+    checkPgnWriterFormat();
+  }
+
+  @SuppressWarnings("null")
+  private static void checkPgnWriterBasic() {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
@@ -257,6 +262,17 @@ public class ReadMeForRepository {
 
     final var path = Paths.get("C:\\temp\\myFile.pgn");
     PgnWriter.writePgnFile(pgnFile, path);
+  }
+
+  private static void checkPgnWriterFormat() {
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+
+    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile);
+    System.out.println(LenientPgnParser.validateText(pgnFileString).isValid()); // true
+    System.out.println(StrictPgnParser.validateText(pgnFileString).isValid()); // true
   }
 
   @SuppressWarnings("null")
