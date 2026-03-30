@@ -345,6 +345,8 @@ Positions can also often be dead due to forced moves.
 ### Lenient PGN parser
 The common PGN parser - trying to read the file with best effort. For example below space after "[" is ignored etc. Only PGNs with move variations are not supported.
 
+#### PGN valid
+
 ```java
    final var pgn = """
         [ Event "Spring Classic"]
@@ -355,8 +357,41 @@ The common PGN parser - trying to read the file with best effort. For example be
                 """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // false
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    board.performMove("a3");
+
 ```
+
+#### PGN transformation to export format
+
+The parser does a bit more than a standard parser should do. It converts the imported PGN to a PGN object which when exported will adhere to the export format. That is it for example adds missing tags and sorts them if necessary.
+
+```java
+    final var pgn = """
+                [Black "Jane Doe"]
+                [White "John Doe"]
+                [ Event "Spring Classic"]
+
+                1. e4 e5   2. Nf3
+                Nf6
+                3. Bc4 Bc5
+        """;
+
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    // [Event "Spring Classic"]
+    // [Site "?"]
+    // [Date "?"]
+    // [Round "?"]
+    // [White "John Doe"]
+    // [Black "Jane Doe"]
+    // [Result "*"]
+    //
+    // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+    // 
+```
+
+#### PGN invalid
 
 When parsing fails, error messages are designed to be as descriptive as possible.
 
@@ -381,8 +416,38 @@ When parsing fails, error messages are designed to be as descriptive as possible
     }
 ```
 
+#### File parsing
+
+```java
+    final PgnFile pgnFile = LenientPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    System.out.println(board.isCheckmate());
+```
+
 ### Strict PGN parser
 The strict PGN parser does not allow inconsistencies as the lenient PGN parser. It expects the PGN to be in the export format according to the PGN specification.
+
+#### PGN valid
+
+```java
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+        """;
+
+    final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    board.performMove("a3");
+```
+    
+#### PGN invalid syntax
 
 ```java
     final var pgn = """
@@ -401,10 +466,39 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
       return;
     }
 ```
+
+#### PGN invalid form
+
+```java
+    final var pgn = """
+        [Event "Spring Classic"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
+        """;
+
+    final PgnFile pgnFile;
+    try {
+      pgnFile = StrictPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+    } catch (final StrictPgnParserValidationException e) {
+      System.out.println(e.getMessage());
+      // Not all tags from the seven tag roster (Event, Site, Date, Round, White, Black, Result) are set. The first not
+      // found tag is "Site".
+      return;
+    }
+```
+
+#### File parsing
+
+```java
+    final PgnFile pgnFile = StrictPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    System.out.println(board.isThreefoldRepetition());
+```
       
 ## PGN creation
 
-### Basic example
+### Create PGN for game
 
 You can create the PGN for a game played in the API or export an imported PGN.
 
@@ -413,22 +507,17 @@ You can create the PGN for a game played in the API or export an imported PGN.
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    PgnWriter.writePgnFile(pgnFile, path); // creates file with below content
-```
-
-Output
-```
-[Event "?"]
-[Site "?"]
-[Date "2022.05.10"]
-[Round "?"]
-[White "?"]
-[Black "?"]
-[Result "*"]
-
-1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+	 System.out.println(pgnFile);
+    // [Event "?"]
+    // [Site "?"]
+    // [Date "2026.03.30"]
+    // [Round "?"]
+    // [White "?"]
+    // [Black "?"]
+    // [Result "*"]
+    //
+    // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+    //
 ```
 
 ### PGN format
@@ -446,24 +535,105 @@ The PGN is created in the unique export format as defined by the PGN specificati
     System.out.println(StrictPgnParser.validateText(pgnFileString).isValid()); // true
 ```
 
+## PGN export
 
+A PGN can be written to the file system as below.
+
+```java
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    PgnWriter.writePgnFile(pgnFile, "C:\\temp\\myFile.pgn");
+```
+    
 ## PGN validation
 
 ### PGN lenient validation
 Checks weather a PGN can be parsed using the PGN lenient parser.
 
+#### PGN valid
+
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final LenientPgnParserValidationResult result = LenientPgnParser.validate(path);
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // true
+```
+
+#### PGN invalid
+
+```java
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5 4. X1
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // false
+    System.out.println(result.message());
+    // The movetext is invalid because a SAN contains an invalid character of "X".
+```
+
+#### File validation
+
+```java
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText("C:\\temp\\myFile.pgn");
+    System.out.println(result.isValid());
 ```
 
 ### PGN strict validation
 
 Checks weather a PGN adhers to the export format per the PGN specification.
 
+#### PGN valid
+
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final StrictPgnParserValidationResult result = StrictPgnParser.validate(path);
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+        """;
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // true
+```
+
+#### PGN invalid
+
+```java
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 2. Bc4 Bc5 *
+        """;
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // false
+    System.out.println(result.message());
+    // The movetext does not continue with move number "3. " as expected
+```
+    
+#### File validation
+
+```java
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText("C:\\temp\\myFile.pgn");
+    System.out.println(result.isValid());
 ```

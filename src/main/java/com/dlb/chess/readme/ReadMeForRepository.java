@@ -1,6 +1,4 @@
-package com.dlb.chess;
-
-import java.nio.file.Paths;
+package com.dlb.chess.readme;
 
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.board.Board;
@@ -22,22 +20,25 @@ public class ReadMeForRepository {
 
   public static void main(String[] args) {
 
-    // checkThreefoldClaimAhead();
-    // checkThreefoldOnTheBoard();
-    // checkFiftyMoves();
-    //
-    // checkUnwinnability();
-    // checkDeadPosition();
-    //
-    // checkBoard();
-    //
-    // checkLenientPgnParser();
-    // checkStrictPgnParser();
-    //
-    checkPgnWriter();
-    //
-    // checkLenientPgnValidate();
-    // checkStrictPgnValidate();
+    checkThreefoldClaimAhead();
+    checkThreefoldOnTheBoard();
+    checkFiftyMoves();
+
+    checkUnwinnability();
+    checkDeadPosition();
+
+    checkBoard();
+
+    prepareCreatePgnFileInFileSystem();
+
+    checkLenientPgnParser();
+    checkStrictPgnParser();
+
+    checkPgnCreation();
+    checkPgnExport();
+
+    checkLenientPgnValidate();
+    checkStrictPgnValidate();
   }
 
   private static void checkThreefoldClaimAhead() {
@@ -167,9 +168,19 @@ public class ReadMeForRepository {
     System.out.println(board.isCheckmate()); // true
   }
 
+  private static void prepareCreatePgnFileInFileSystem() {
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    PgnWriter.writePgnFile(pgnFile, "C:\\temp\\myFile.pgn");
+  }
+
   private static void checkLenientPgnParser() {
     checkLenientPgnParserIsLenient();
-    checkLenientPgnParserFailureDescription();
+    checkLenientPgnParserIsLenientIsCreatingExportFormat();
+    checkLenientPgnParserFailure();
+    checkLenientPgnParserFile();
   }
 
   private static void checkLenientPgnParserIsLenient() {
@@ -182,10 +193,36 @@ public class ReadMeForRepository {
                 """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // false
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    board.performMove("a3");
   }
 
-  private static void checkLenientPgnParserFailureDescription() {
+  private static void checkLenientPgnParserIsLenientIsCreatingExportFormat() {
+    final var pgn = """
+                [Black "Jane Doe"]
+                [White "John Doe"]
+                [ Event "Spring Classic"]
+
+                1. e4 e5   2. Nf3
+                Nf6
+                3. Bc4 Bc5
+        """;
+
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    // [Event "Spring Classic"]
+    // [Site "?"]
+    // [Date "?"]
+    // [Round "?"]
+    // [White "John Doe"]
+    // [Black "Jane Doe"]
+    // [Result "*"]
+    //
+    // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+    //
+  }
+
+  private static void checkLenientPgnParserFailure() {
     final var pgn = """
         [ Event "Spring Classic"]
 
@@ -206,9 +243,35 @@ public class ReadMeForRepository {
     }
   }
 
+  private static void checkLenientPgnParserFile() {
+    final PgnFile pgnFile = LenientPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    System.out.println(board.isCheckmate());
+  }
+
   private static void checkStrictPgnParser() {
+    checkStrictPgnParserSuccess();
     checkStrictPgnParserIsStrictSyntax();
     checkStrictPgnParserIsStrictForm();
+    checkStrictPgnParserFile();
+  }
+
+  private static void checkStrictPgnParserSuccess() {
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+        """;
+
+    final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    board.performMove("a3");
   }
 
   private static void checkStrictPgnParserIsStrictSyntax() {
@@ -248,23 +311,36 @@ public class ReadMeForRepository {
     }
   }
 
-  private static void checkPgnWriter() {
-    checkPgnWriterBasic();
-    checkPgnWriterFormat();
+  private static void checkStrictPgnParserFile() {
+    final PgnFile pgnFile = StrictPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    System.out.println(board.isThreefoldRepetition());
   }
 
-  @SuppressWarnings("null")
-  private static void checkPgnWriterBasic() {
+  private static void checkPgnCreation() {
+    checkPgnCreationBasic();
+    checkPgnCreationFormat();
+  }
+
+  private static void checkPgnCreationBasic() {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    PgnWriter.writePgnFile(pgnFile, path);
+    System.out.println(pgnFile);
+    // [Event "?"]
+    // [Site "?"]
+    // [Date "2026.03.30"]
+    // [Round "?"]
+    // [White "?"]
+    // [Black "?"]
+    // [Result "*"]
+    //
+    // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+    //
   }
 
-  private static void checkPgnWriterFormat() {
+  private static void checkPgnCreationFormat() {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
@@ -275,18 +351,94 @@ public class ReadMeForRepository {
     System.out.println(StrictPgnParser.validateText(pgnFileString).isValid()); // true
   }
 
-  @SuppressWarnings("null")
+  private static void checkPgnExport() {
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    PgnWriter.writePgnFile(pgnFile, "C:\\temp\\myFile.pgn");
+  }
+
   private static void checkLenientPgnValidate() {
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final LenientPgnParserValidationResult result = LenientPgnParser.validate(path);
+    checkLenientPgnValidateValid();
+    checkLenientPgnValidateInvalid();
+    checkLenientPgnValidateFile();
+  }
+
+  private static void checkLenientPgnValidateValid() {
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // true
   }
 
-  @SuppressWarnings("null")
+  private static void checkLenientPgnValidateInvalid() {
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5 4. X1
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // false
+    System.out.println(result.message());
+    // The movetext is invalid because a SAN contains an invalid character of "X".
+  }
+
+  private static void checkLenientPgnValidateFile() {
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText("C:\\temp\\myFile.pgn");
+    System.out.println(result.isValid());
+  }
+
   private static void checkStrictPgnValidate() {
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final StrictPgnParserValidationResult result = StrictPgnParser.validate(path);
+    checkStrictPgnValidateValid();
+    checkStrictPgnValidateInvalid();
+    checkStrictPgnValidateFile();
+  }
+
+  private static void checkStrictPgnValidateValid() {
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+        """;
+
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // true
   }
 
+  private static void checkStrictPgnValidateInvalid() {
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 2. Bc4 Bc5 *
+        """;
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // false
+    System.out.println(result.message());
+    // The movetext does not continue with move number "3. " as expected
+  }
+
+  private static void checkStrictPgnValidateFile() {
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText("C:\\temp\\myFile.pgn");
+    System.out.println(result.isValid());
+  }
 }

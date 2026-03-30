@@ -170,6 +170,11 @@ public class NonNullWrapperCommon {
     return checkResult(list[index]);
   }
 
+  @SuppressWarnings("null")
+  public static Path get(final String filePath) {
+    return Paths.get(filePath); // not null by API
+  }
+
   @NonNull
   public static <E> E getFirst(List<E> list) {
     return checkResult(list.get(0));
@@ -243,8 +248,4 @@ public class NonNullWrapperCommon {
     return directoryPath.resolve(filePath);
   }
 
-  @SuppressWarnings("null")
-  public static Path get(final String filePath) {
-    return Paths.get(filePath); // not null by API
-  }
 }

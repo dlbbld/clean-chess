@@ -3,6 +3,8 @@ package com.dlb.chess.utility;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
@@ -18,11 +20,11 @@ import com.dlb.chess.model.SanAndMoveSuffix;
 import com.dlb.chess.movetext.model.MovetextParseResult;
 import com.dlb.chess.movetext.model.ReadComment;
 import com.dlb.chess.movetext.model.SanAnnotatedProcess;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.enums.ResultTagValue;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.utility.LenientParseTagUtility;
 import com.dlb.chess.san.enums.SanLetter;
 import com.dlb.chess.san.enums.SanValidationProblem;
@@ -153,8 +155,10 @@ public abstract class MovetextUtility {
     try {
       return validateMovetextInternal(startFen, movetext);
     } catch (final StrictPgnParserValidationException e) {
-      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
-          SanValidationProblem.NONE, "The validation failed with the following message: " + e.getMessage());
+      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      throw new LenientPgnParserValidationException(
+          LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION, SanValidationProblem.NONE,
+          message);
     }
   }
 
@@ -318,8 +322,8 @@ public abstract class MovetextUtility {
             if (!movetextProcess.startsWith(expectedMoveNumberSegmentProcess)) {
               throw new StrictPgnParserValidationException(
                   StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED,
-                  SanValidationProblem.NONE, "The movetext does not continue with move number \""
-                      + expectedMoveNumberSegmentProcess + " \" as expected");
+                  SanValidationProblem.NONE, "The movetext numbering does not continue with \""
+                      + expectedMoveNumberSegmentProcess + "\" as expected");
             }
             if (movetextProcess.length() == expectedMoveNumberSegmentProcess.length()) {
               throw new StrictPgnParserValidationException(
