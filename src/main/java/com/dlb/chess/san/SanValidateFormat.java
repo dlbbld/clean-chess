@@ -38,6 +38,40 @@ public abstract class SanValidateFormat extends AbstractSan {
 
   public static SanParse validateFormat(String san) {
 
+    // fast pre-checks to reject obviously invalid strings in a single pass
+    if (san.length() > 7) {
+      throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
+    }
+    int countX = 0;
+    int countEquals = 0;
+    int equalsIndex = -1;
+    int countCheckOrCheckmate = 0;
+    int countK = 0;
+    int countRNBQ = 0;
+    int countDigits = 0;
+    int countFiles = 0;
+    for (int i = 0; i < san.length(); i++) {
+      switch (san.charAt(i)) {
+        case 'x' -> countX++;
+        case '=' -> { countEquals++; equalsIndex = i; }
+        case '+', '#' -> countCheckOrCheckmate++;
+        case 'K' -> countK++;
+        case 'R', 'N', 'B', 'Q' -> countRNBQ++;
+        case '1', '2', '3', '4', '5', '6', '7', '8' -> countDigits++;
+        case 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' -> countFiles++;
+        default -> {
+          // other characters are handled by the format parsers below
+        }
+      }
+    }
+    if (countX > 1 || countEquals > 1 || countCheckOrCheckmate > 1 || countK > 1 || countRNBQ > 1
+        || countDigits > 2 || countFiles > 2) {
+      throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
+    }
+    if (countEquals == 1 && equalsIndex != san.length() - 2 && equalsIndex != san.length() - 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
+    }
+
     for (final SanType sanType : SanType.values()) {
       final SanConversionCheck sanSanConversion = parseForSanType(san, sanType);
       if (sanSanConversion.isMatch()) {
@@ -178,7 +212,7 @@ public abstract class SanValidateFormat extends AbstractSan {
     final var promotionPieceTypeIndex = sanFormat.getPromotionPieceTypeIndex();
     if (promotionPieceTypeIndex != -1) {
       final var checkPromotionPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(promotionPieceTypeIndex));
-      if (!NotationMovingPiece.exists(checkPromotionPieceTypeLetter)) {
+      if (!NotationPromotionPiece.exists(checkPromotionPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
       promotionPieceType = NotationPromotionPiece.calculate(checkPromotionPieceTypeLetter).getPromotionPieceType();

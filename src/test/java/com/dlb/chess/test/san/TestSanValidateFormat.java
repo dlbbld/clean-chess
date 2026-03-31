@@ -1,7 +1,6 @@
 package com.dlb.chess.test.san;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -268,8 +267,26 @@ class TestSanValidateFormat {
 
   @SuppressWarnings("static-method")
   @Test
+  // Thus that is a funny idea to promote to a king we can not allow this because
+  // to represent the promotion piece we have currently defined only valid
+  // promotion pieces.
+  void testPromotionToKing() {
+    checkException("d8=K");
+    checkException("d1=K");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  // We allow this at this stage and parse later
+  void testPromotionMiddleOfBoard() {
+    checkValid("d8=Q");
+    checkValid("d1=N");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testValid() {
-    // for pawn mves we are here not checking if valid destination or promotion rank
+    // for pawn moves we are here not checking if valid destination or promotion rank
     // so we can use the same test for white and black
 
     // (1a) pawnNonCapturingNonPromotionMoves d3 not d8
@@ -605,7 +622,23 @@ class TestSanValidateFormat {
     }
   }
 
+  private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
+    final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
+
+    final SanParse calculatedSanExtractWhite = SanValidateFormat.validateFormat(san);
+    assertEquals(expectedSanExtract, calculatedSanExtractWhite);
+
+  }
+
+  private static void checkValid(String san) {
+    checkValidateFormat(san, false);
+  }
+
   private static void checkException(String san) {
+    checkValidateFormat(san, true);
+  }
+
+  private static void checkValidateFormat(String san, boolean isExceptionExpected) {
     boolean isException;
     try {
       SanValidateFormat.validateFormat(san);
@@ -614,15 +647,7 @@ class TestSanValidateFormat {
       isException = true;
       assertEquals(SanValidationProblem.FORMAT, e.getSanValidationProblem());
     }
-    assertTrue(isException);
-  }
-
-  private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
-    final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
-
-    final SanParse calculatedSanExtractWhite = SanValidateFormat.validateFormat(san);
-    assertEquals(expectedSanExtract, calculatedSanExtractWhite);
-
+    assertEquals(isExceptionExpected, isException);
   }
 
 }
