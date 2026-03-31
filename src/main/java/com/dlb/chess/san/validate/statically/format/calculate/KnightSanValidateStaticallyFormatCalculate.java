@@ -14,8 +14,7 @@ public class KnightSanValidateStaticallyFormatCalculate extends AbstractSanValid
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final String enumName : calculateForPiece(KNIGHT)) {
-      final SanValidationFromTo model = calculateFromFileAndOrRankTo(enumName, KNIGHT);
+    for (final SanValidationFromTo model : calculateForPiece()) {
       populateMap(sanValidateMap, model, KNIGHT);
     }
 

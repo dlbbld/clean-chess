@@ -14,8 +14,7 @@ public class RookSanValidateStaticallyFormatCalculate extends AbstractSanValidat
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final String enumName : calculateForPiece(ROOK)) {
-      final SanValidationFromTo model = calculateFromFileAndOrRankTo(enumName, ROOK);
+    for (final SanValidationFromTo model : calculateForPiece()) {
       populateMap(sanValidateMap, model, ROOK);
     }
 

@@ -14,8 +14,7 @@ public class BishopSanValidateStaticallyFormatCalculate extends AbstractSanValid
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final String enumName : calculateForPiece(BISHOP)) {
-      final SanValidationFromTo model = calculateFromFileAndOrRankTo(enumName, BISHOP);
+    for (final SanValidationFromTo model : calculateForPiece()) {
       populateMap(sanValidateMap, model, BISHOP);
     }
 
