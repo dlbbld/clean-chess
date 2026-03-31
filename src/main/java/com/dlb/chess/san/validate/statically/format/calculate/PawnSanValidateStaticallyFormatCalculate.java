@@ -19,7 +19,7 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
     // -capturing from any rank
     // -prommotion on every rank
     // validation for such moves takes place in the next step
-    for (final SanValidationFromTo model : calculateForPieceWithoutDisambiguation()) {
+    for (final SanValidationFromTo model : calculateWithoutDisambiguation()) {
       populatePawnPromotionMap(sanValidateMap, model, false);
       populatePawnNonPromotionMap(sanValidateMap, model, false);
     }
@@ -28,7 +28,7 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
       if (fromFile == File.NONE) {
         continue;
       }
-      for (final SanValidationFromTo model : calculateForPieceWithFile()) {
+      for (final SanValidationFromTo model : calculateWithFile()) {
         populatePawnPromotionMap(sanValidateMap, model, true);
         populatePawnNonPromotionMap(sanValidateMap, model, true);
       }

@@ -11,7 +11,7 @@ import com.dlb.chess.san.validate.statically.strict.calculate.AbstractSanValidat
 
 public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanValidateStaticallyStrictCalculate {
 
-  public static List<SanValidationFromTo> calculateForPieceWithoutDisambiguation() {
+  public static List<SanValidationFromTo> calculateWithoutDisambiguation() {
     final List<SanValidationFromTo> result = new ArrayList<>();
     for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
       result.add(new SanValidationFromTo(FILE_NONE, RANK_NONE, toSquare));
@@ -19,7 +19,7 @@ public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanVal
     return result;
   }
 
-  public static List<SanValidationFromTo> calculateForPieceWithFile() {
+  public static List<SanValidationFromTo> calculateWithFile() {
     final List<SanValidationFromTo> result = new ArrayList<>();
     for (final File fromFile : File.values()) {
       if (fromFile == File.NONE) {
@@ -32,7 +32,7 @@ public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanVal
     return result;
   }
 
-  public static List<SanValidationFromTo> calculateForPieceWithRank() {
+  public static List<SanValidationFromTo> calculateWithRank() {
     final List<SanValidationFromTo> result = new ArrayList<>();
     for (final Rank fromRank : Rank.values()) {
       if (fromRank == Rank.NONE) {
@@ -45,7 +45,7 @@ public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanVal
     return result;
   }
 
-  public static List<SanValidationFromTo> calculateForPieceWithSquare() {
+  public static List<SanValidationFromTo> calculateWithSquare() {
     final List<SanValidationFromTo> result = new ArrayList<>();
     for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
       for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
@@ -57,10 +57,10 @@ public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanVal
 
   static List<SanValidationFromTo> calculateForPiece() {
     final List<SanValidationFromTo> result = new ArrayList<>();
-    result.addAll(calculateForPieceWithoutDisambiguation());
-    result.addAll(calculateForPieceWithFile());
-    result.addAll(calculateForPieceWithRank());
-    result.addAll(calculateForPieceWithSquare());
+    result.addAll(calculateWithoutDisambiguation());
+    result.addAll(calculateWithFile());
+    result.addAll(calculateWithRank());
+    result.addAll(calculateWithSquare());
     return result;
   }
 

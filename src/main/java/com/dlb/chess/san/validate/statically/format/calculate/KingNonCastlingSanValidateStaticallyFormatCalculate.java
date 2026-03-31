@@ -14,7 +14,7 @@ public class KingNonCastlingSanValidateStaticallyFormatCalculate extends Abstrac
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final SanValidationFromTo model : calculateForPieceWithoutDisambiguation()) {
+    for (final SanValidationFromTo model : calculateWithoutDisambiguation()) {
       populateMap(sanValidateMap, model, KING);
     }
 
