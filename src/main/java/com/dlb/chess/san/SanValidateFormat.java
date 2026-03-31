@@ -84,8 +84,7 @@ public abstract class SanValidateFormat extends AbstractSan {
 
     // movingPieceTypeIndex
     final var movingPieceTypeIndex = sanFormat.getMovingPieceTypeIndex();
-    if (movingPieceTypeIndex != -1) {
-      // pawn moves have index -1 so we omit them here
+    if (!sanFormat.isPawn()) {
       final var checkMovingPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(movingPieceTypeIndex));
       if (!NotationMovingPiece.exists(checkMovingPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;

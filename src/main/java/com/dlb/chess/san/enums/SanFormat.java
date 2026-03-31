@@ -21,36 +21,36 @@ public enum SanFormat {
   // length, piece, fromFile, fromRank, x, toFile, toRank, =, new piece
 
   // d3
-  PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT(2, -1, -1, -1, -1, 0, 1, -1, -1),
+  PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT(2, -1, -1, -1, -1, 0, 1, -1, -1, true),
   // dxe5
-  PAWN_CAPTURING_NON_PROMOTION_FORMAT(4, -1, 0, -1, 1, 2, 3, -1, -1),
+  PAWN_CAPTURING_NON_PROMOTION_FORMAT(4, -1, 0, -1, 1, 2, 3, -1, -1, true),
   // d8=Q
-  PAWN_NON_CAPTURING_PROMOTION_FORMAT(4, -1, -1, -1, -1, 0, 1, 2, 3),
+  PAWN_NON_CAPTURING_PROMOTION_FORMAT(4, -1, -1, -1, -1, 0, 1, 2, 3, true),
   // dxe8=Q
-  PAWN_CAPTURING_PROMOTION_FORMAT(6, -1, 0, -1, 1, 2, 3, 4, 5),
+  PAWN_CAPTURING_PROMOTION_FORMAT(6, -1, 0, -1, 1, 2, 3, 4, 5, true),
   // Qe5
-  PIECE_NON_CAPTURING_NEITHER_FORMAT(3, 0, -1, -1, -1, 1, 2, -1, -1),
+  PIECE_NON_CAPTURING_NEITHER_FORMAT(3, 0, -1, -1, -1, 1, 2, -1, -1, false),
   // Qae5
-  PIECE_NON_CAPTURING_FILE_FORMAT(4, 0, 1, -1, -1, 2, 3, -1, -1),
+  PIECE_NON_CAPTURING_FILE_FORMAT(4, 0, 1, -1, -1, 2, 3, -1, -1, false),
   // Q2e5
-  PIECE_NON_CAPTURING_RANK_FORMAT(4, 0, -1, 1, -1, 2, 3, -1, -1),
+  PIECE_NON_CAPTURING_RANK_FORMAT(4, 0, -1, 1, -1, 2, 3, -1, -1, false),
   // Qc3e5
-  PIECE_NON_CAPTURING_SQUARE_FORMAT(5, 0, 1, 2, -1, 3, 4, -1, -1),
+  PIECE_NON_CAPTURING_SQUARE_FORMAT(5, 0, 1, 2, -1, 3, 4, -1, -1, false),
   // Qxe5
-  PIECE_CAPTURING_NEITHER_FORMAT(4, 0, -1, -1, 1, 2, 3, -1, -1),
+  PIECE_CAPTURING_NEITHER_FORMAT(4, 0, -1, -1, 1, 2, 3, -1, -1, false),
   // Qaxe5
-  PIECE_CAPTURING_FILE_FORMAT(5, 0, 1, -1, 2, 3, 4, -1, -1),
+  PIECE_CAPTURING_FILE_FORMAT(5, 0, 1, -1, 2, 3, 4, -1, -1, false),
   // Q2xe5
-  PIECE_CAPTURING_RANK_FORMAT(5, 0, -1, 1, 2, 3, 4, -1, -1),
+  PIECE_CAPTURING_RANK_FORMAT(5, 0, -1, 1, 2, 3, 4, -1, -1, false),
   // Qc3xe5
-  PIECE_CAPTURING_SQUARE_FORMAT(6, 0, 1, 2, 3, 4, 5, -1, -1),
+  PIECE_CAPTURING_SQUARE_FORMAT(6, 0, 1, 2, 3, 4, 5, -1, -1, false),
   // Ke5
-  KING_NON_CASTLING_NON_CAPTURING_FORMAT(3, 0, -1, -1, -1, 1, 2, -1, -1),
+  KING_NON_CASTLING_NON_CAPTURING_FORMAT(3, 0, -1, -1, -1, 1, 2, -1, -1, false),
   // Kxe5
-  KING_NON_CASTLING_CAPTURING_FORMAT(4, 0, -1, -1, 1, 2, 3, -1, -1),
+  KING_NON_CASTLING_CAPTURING_FORMAT(4, 0, -1, -1, 1, 2, 3, -1, -1, false),
   // O-O or O-O-O
-  KING_CASTLING_QUEEN_SIDE_FORMAT(5, -1, -1, -1, -1, -1, -1, -1, -1),
-  KING_CASTLING_KING_SIDE_FORMAT(3, -1, -1, -1, -1, -1, -1, -1, -1);
+  KING_CASTLING_QUEEN_SIDE_FORMAT(5, -1, -1, -1, -1, -1, -1, -1, -1, false),
+  KING_CASTLING_KING_SIDE_FORMAT(3, -1, -1, -1, -1, -1, -1, -1, -1, false);
 
   private final int length;
   private final int movingPieceTypeIndex;
@@ -61,9 +61,10 @@ public enum SanFormat {
   private final int toRankIndex;
   private final int promotionSymbolIndex;
   private final int promotionPieceTypeIndex;
+  private final boolean isPawn;
 
   SanFormat(int length, int movingPieceTypeIndex, int fromFileIndex, int fromRankIndex, int captureSymbolIndex,
-      int toFileIndex, int toRankIndex, int promotionSymbolIndex, int promotionPieceTypeIndex) {
+      int toFileIndex, int toRankIndex, int promotionSymbolIndex, int promotionPieceTypeIndex, boolean isPawn) {
     this.length = length;
     this.movingPieceTypeIndex = movingPieceTypeIndex;
     this.fromFileIndex = fromFileIndex;
@@ -73,6 +74,7 @@ public enum SanFormat {
     this.toRankIndex = toRankIndex;
     this.promotionSymbolIndex = promotionSymbolIndex;
     this.promotionPieceTypeIndex = promotionPieceTypeIndex;
+    this.isPawn = isPawn;
   }
 
   public int getLength() {
@@ -109,6 +111,10 @@ public enum SanFormat {
 
   public int getPromotionPieceTypeIndex() {
     return promotionPieceTypeIndex;
+  }
+
+  public boolean isPawn() {
+    return isPawn;
   }
 
   public static boolean calculateIsCapture(SanFormat sanFormat) {

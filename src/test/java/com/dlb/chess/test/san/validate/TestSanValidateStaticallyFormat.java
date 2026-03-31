@@ -27,6 +27,8 @@ import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStatica
 //at this stage we allow a lot of invalid SAN's which are then checked later
 class TestSanValidateStaticallyFormat implements EnumConstants {
 
+  private static int countGeneratedTestSan = 0;
+
   @SuppressWarnings("static-method")
   @Test
   void testInvalidFormat() {
@@ -266,7 +268,7 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
   void testAgainstUsingGenerated() {
     // pieces - none
     for (final PieceType pieceType : PieceType.values()) {
-      if (pieceType == PieceType.NONE) {
+      if (pieceType == PieceType.NONE || pieceType == PieceType.PAWN) {
         continue;
       }
       for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
@@ -280,7 +282,7 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
 
     // pieces - file
     for (final PieceType pieceType : PieceType.values()) {
-      if (pieceType == PieceType.NONE) {
+      if (pieceType == PieceType.NONE || pieceType == PieceType.PAWN || pieceType == PieceType.KING) {
         continue;
       }
       for (final File fromFile : File.values()) {
@@ -300,7 +302,7 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
 
     // pieces - rank
     for (final PieceType pieceType : PieceType.values()) {
-      if (pieceType == PieceType.NONE) {
+      if (pieceType == PieceType.NONE || pieceType == PieceType.PAWN || pieceType == PieceType.KING) {
         continue;
       }
       for (final Rank fromRank : Rank.values()) {
@@ -320,7 +322,7 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
 
     // pieces - square
     for (final PieceType pieceType : PieceType.values()) {
-      if (pieceType == PieceType.NONE) {
+      if (pieceType == PieceType.NONE || pieceType == PieceType.PAWN || pieceType == PieceType.KING) {
         continue;
       }
       for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
@@ -395,8 +397,10 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
     }
 
     // castling
-    checkAgainstUsingGenerated(CastlingConstants.SAN_CASTLING_KING_SIDE);
-    checkAgainstUsingGenerated(CastlingConstants.SAN_CASTLING_QUEEN_SIDE);
+    checkAgainstUsingGeneratedCastling(CastlingConstants.SAN_CASTLING_KING_SIDE);
+    checkAgainstUsingGeneratedCastling(CastlingConstants.SAN_CASTLING_QUEEN_SIDE);
+
+    assertEquals(SanValidateStaticallyFormat.getSanValidationMap().size(), countGeneratedTestSan);
   }
 
   private static void checkAgainstUsingGenerated(String sanBase, int indexToInsertCaptureSymbol) {
@@ -417,9 +421,16 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       assertFalse(isPassStaticallySanValidationWhite);
     }
+    countGeneratedTestSan++;
   }
 
   private static void checkAgainstUsingGeneratedPawn(String sanBase) {
+    for (final String sanVariation : calculateSanVariationList(sanBase)) {
+      checkAgainstUsingGenerated(sanVariation);
+    }
+  }
+
+  private static void checkAgainstUsingGeneratedCastling(String sanBase) {
     for (final String sanVariation : calculateSanVariationList(sanBase)) {
       checkAgainstUsingGenerated(sanVariation);
     }
