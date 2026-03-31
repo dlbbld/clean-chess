@@ -12,9 +12,8 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.SanConversion;
+import com.dlb.chess.san.SanCalculate;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
-import com.dlb.chess.san.enums.SanLetter;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.model.SanValidationFromTo;
 
@@ -67,173 +66,12 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
     return new SanValidationFromTo(fromFile, fromRank, toSquare);
   }
 
-  public static SanType calculateSanType(boolean isCapture, File fromFile, Rank fromRank, PieceType movingPieceType,
-      PromotionPieceType promotionPieceType) {
-
-    if (!isCapture) {
-      switch (movingPieceType) {
-        case BISHOP:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
-        case KING:
-          return SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE;
-        case KNIGHT:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.KNIGHT_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.KNIGHT_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE;
-        case PAWN:
-          if (promotionPieceType == PromotionPieceType.NONE) {
-            return SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
-          }
-          return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
-        case QUEEN:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
-            }
-
-            return SanType.QUEEN_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
-        case ROOK:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.ROOK_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.ROOK_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
-        default:
-        case NONE:
-          throw new IllegalArgumentException();
-      }
-    }
-
-    // now capture
-    switch (movingPieceType) {
-      case BISHOP:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.BISHOP_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.BISHOP_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.BISHOP_CAPTURING_RANK_MOVE;
-        }
-        return SanType.BISHOP_CAPTURING_SQUARE_MOVE;
-      case KING:
-        return SanType.KING_NON_CASTLING_CAPTURING_MOVE;
-      case KNIGHT:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.KNIGHT_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.KNIGHT_CAPTURING_RANK_MOVE;
-        }
-        return SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
-      case PAWN:
-        if (promotionPieceType == PromotionPieceType.NONE) {
-          return SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
-        }
-        return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
-      case QUEEN:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.QUEEN_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.QUEEN_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.QUEEN_CAPTURING_RANK_MOVE;
-        }
-        return SanType.QUEEN_CAPTURING_SQUARE_MOVE;
-      case ROOK:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.ROOK_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.ROOK_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.ROOK_CAPTURING_RANK_MOVE;
-        }
-        return SanType.ROOK_CAPTURING_SQUARE_MOVE;
-      default:
-      case NONE:
-        throw new IllegalArgumentException();
-    }
-  }
-
   static SanValidationFromTo calculateFromFileXorRankTo(String enumName, PieceType movingPieceType) {
     if (enumName.length() == 5) {
       throw new ProgrammingMistakeException(
           "The file/rank of the " + movingPieceType.getName() + " enum does not meet the expectation");
     }
     return calculateFromFileAndOrRankTo(enumName, movingPieceType);
-  }
-
-  static String calculateSan(File fromFile, Rank fromRank, Square toSquare, PromotionPieceType promotionPieceType,
-      boolean isCapture, CheckmateOrCheck checkmateOrCheck, PieceType movingPieceType) {
-    final StringBuilder san = new StringBuilder();
-
-    if (movingPieceType != PAWN) {
-      san.append(movingPieceType.getLetter());
-    }
-    if (fromFile != File.NONE) {
-      san.append(fromFile.getLetter());
-    }
-    if (fromRank != Rank.NONE) {
-      san.append(fromRank.getNumber());
-    }
-    if (isCapture) {
-      san.append(SanLetter.CAPTURE.getLetter());
-    }
-
-    san.append(toSquare.getName());
-
-    if (promotionPieceType != PromotionPieceType.NONE) {
-      san.append(SanLetter.PROMOTION.getLetter());
-      san.append(promotionPieceType.getPieceType().getLetter());
-    }
-    switch (checkmateOrCheck) {
-      case CHECKMATE:
-        san.append(SanLetter.CHECKMATE.getLetter());
-        break;
-      case CHECK:
-        san.append(SanLetter.CHECK.getLetter());
-        break;
-      case NONE:
-        break;
-      default:
-        throw new IllegalArgumentException();
-
-    }
-    return NonNullWrapperCommon.toString(san);
   }
 
   public static void populateMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model,
@@ -261,9 +99,9 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
     final Rank fromRank = model.fromRank();
     final Square toSquare = model.toSquare();
 
-    final String san = calculateSan(fromFile, fromRank, toSquare, promotionPieceType, isCapture, checkmateOrCheck,
-        movingPieceType);
-    final var sanType = calculateSanType(isCapture, fromFile, fromRank, movingPieceType, promotionPieceType);
+    final String san = SanCalculate.calculateSan(fromFile, fromRank, toSquare, promotionPieceType, isCapture,
+        checkmateOrCheck, movingPieceType);
+    final var sanType = SanCalculate.calculateSanType(isCapture, fromFile, fromRank, movingPieceType, promotionPieceType);
     final SanParse sanParse = new SanParse(sanType,
         new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, checkmateOrCheck));
     sanValidateMap.put(san, sanParse);

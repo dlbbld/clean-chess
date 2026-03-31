@@ -239,6 +239,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
     final var sanParse = SanValidateStaticallyFormat.get(san);
     if (sanParse != null) {
+      // for the cache has already calculated the SanParse for the san, the hope is a small performance improvement
+      // using the cache
       validateNonPositionRelatedExtended(sanParse, havingMove);
       return sanParse;
     }
@@ -247,7 +249,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     // the validations are checked to be exactly the same (statically and runtime), so we can do this
     SanValidateFormat.validateFormat(san);
 
-    throw new ProgrammingMistakeException("The static and runtime format validation are not equal");
+    throw new ProgrammingMistakeException(
+        "The san format validation missed to throw an exception for the san \"" + san + "\"");
   }
 
   public static SanParse validateNonPositionRelatedExtended(String san, Side havingMove) throws SanValidationException {
