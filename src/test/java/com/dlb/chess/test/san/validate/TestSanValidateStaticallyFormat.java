@@ -222,28 +222,81 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
-  void testInvalidMovement() {
+  void testMovingOntoItself() {
     // rook
-    checkExists("R2a1");
-    checkExists("Ra2a1");
-    checkExists("Rc2b2");
+    checkExists("Ra1a1");
 
     // knight
-    checkExists("Nb3a1");
-    checkExists("Naa1");
+    checkExists("Na1a1");
+
+    // bishop
+    checkExists("Ba1a1");
+
+    // queen
+    checkExists("Qa1a1");
+
+    // king
+    // for the king we don't allow this
+    // so to have to treat less cases - could also be allowed
+    checkNotExists("Ka1a1");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testRankFileSpecification() {
+    // rook
+    checkExists("Raa1");
+    checkExists("R1a1");
+    checkExists("Ra2a1");
+
+    // knight
+    checkExists("Nab3");
+    checkExists("N1b3");
+    checkExists("Na1b3");
+
+    // bishop
+    checkExists("Bba1");
+    checkExists("B2a1");
+    checkExists("Bb2a1");
+
+    // queen
+    checkExists("Qaa1");
+    checkExists("Q1a1");
+    checkExists("Qb2a1");
+
+    // king
+    // for the king we don't allow this
+    // so to have to treat less cases - could also be allowed
+    checkNotExists("K1a1");
+    checkNotExists("Kaa1");
+    checkNotExists("Ka2a1");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testInvalidMovement() {
+    // rook
+    checkExists("Rb2a1");
+
+    // knight
+    checkExists("Nda1");
     checkExists("N4a1");
+    checkExists("Nd4a1");
 
     // bishop
     checkExists("Baa1");
-    checkExists("B2a1");
-    checkExists("Bb3a1");
+    checkExists("B1a1");
+    checkExists("Ba2a1");
 
     // queen
-    checkExists("Qb4a1");
+    checkExists("Qb3a1");
 
     // king
-    // all valid
-
+    // for the king we don't allow this
+    // so to have to treat less cases - could also be allowed
+    checkNotExists("Kca1");
+    checkNotExists("K2a1");
+    checkNotExists("Ka3a1");
   }
 
   private static void checkExists(String san) {
