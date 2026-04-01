@@ -1,18 +1,11 @@
 package com.dlb.chess.test.san.validate;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Map.Entry;
-
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.SanValidateFormat;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
 //at this stage we allow a lot of invalid SAN's which are then checked later
@@ -294,29 +287,6 @@ class TestSanValidateStaticallyFormat implements EnumConstants {
 
   private static void checkNotExists(String san) {
     assertFalse(SanValidateStaticallyFormat.exists(san));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testCacheComposition() {
-    for (final Entry<String, SanParse> entry : NonNullWrapperCommon
-        .entrySet(SanValidateStaticallyFormat.getSanValidationMap())) {
-      checkStaticallyAgainstRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry));
-    }
-  }
-
-  private static void checkStaticallyAgainstRuntime(String san, SanParse composedResult) {
-    // In the cache we create the possible moves as objects and therefrom create the san and the SanParse.
-    // Here we check that the composed SanParse equals the calculated SanParse, sort of an idempotency.
-    boolean isException;
-    try {
-      final SanParse calculatedResult = SanValidateFormat.validateFormat(san);
-      assertEquals(calculatedResult, composedResult);
-      isException = false;
-    } catch (@SuppressWarnings("unused") final SanValidationException e) {
-      isException = true;
-    }
-    assertFalse(isException);
   }
 
 }

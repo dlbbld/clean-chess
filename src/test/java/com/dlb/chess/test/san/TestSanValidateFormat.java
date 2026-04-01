@@ -16,6 +16,7 @@ import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.reference.SanValidateFormatReference;
 
 class TestSanValidateFormat {
 
@@ -625,9 +626,9 @@ class TestSanValidateFormat {
   private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
     final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
 
-    final SanParse calculatedSanExtractWhite = SanValidateFormat.validateFormat(san);
-    assertEquals(expectedSanExtract, calculatedSanExtractWhite);
-
+    final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san);
+    assertEquals(expectedSanExtract, calculatedSanExtract);
+    assertEquals(validateFormatReference(san), calculatedSanExtract);
   }
 
   private static void checkValid(String san) {
@@ -640,14 +641,32 @@ class TestSanValidateFormat {
 
   private static void checkValidateFormat(String san, boolean isExceptionExpected) {
     boolean isException;
+    SanParse result = null;
     try {
-      SanValidateFormat.validateFormat(san);
+      result = SanValidateFormat.validateFormat(san);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
       assertEquals(SanValidationProblem.FORMAT, e.getSanValidationProblem());
     }
     assertEquals(isExceptionExpected, isException);
+
+    boolean isExceptionRef;
+    SanParse resultRef = null;
+    try {
+      resultRef = validateFormatReference(san);
+      isExceptionRef = false;
+    } catch (@SuppressWarnings("unused") final SanValidationException e) {
+      isExceptionRef = true;
+    }
+    assertEquals(isException, isExceptionRef);
+    if (!isException) {
+      assertEquals(result, resultRef);
+    }
+  }
+
+  private static SanParse validateFormatReference(String san) {
+    return SanValidateFormatReference.validateFormat(san);
   }
 
 }

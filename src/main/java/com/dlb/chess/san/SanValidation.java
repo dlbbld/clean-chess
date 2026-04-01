@@ -29,14 +29,8 @@ import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
 public class SanValidation extends AbstractSan implements EnumConstants {
-
-  private static long callCount = 0;
-  private static long cacheHitCount = 0;
-  private static long totalCacheLookupNanos = 0;
-  private static long totalValidateFormatNanos = 0;
 
   public static MoveSpecification calculateMoveSpecificationForSan(String san, ApiBoard board)
       throws SanValidationException {
@@ -241,38 +235,9 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
   public static SanParse validateNonPositionRelatedStatically(String san, Side havingMove)
       throws SanValidationException {
-
-    final var cacheLookupStart = System.nanoTime();
-    final var sanParse = SanValidateStaticallyFormat.get(san);
-
-    if (sanParse != null) {
-      totalCacheLookupNanos += System.nanoTime() - cacheLookupStart;
-      cacheHitCount++;
-
-      final var validateFormatStart = System.nanoTime();
-      SanValidateFormat.validateFormat(san);
-      totalValidateFormatNanos += System.nanoTime() - validateFormatStart;
-
-      // for the cache has already calculated the SanParse for the san, the hope is a small performance improvement
-      // using the cache
-      validateNonPositionRelatedExtended(sanParse, havingMove);
-
-      callCount++;
-      if (callCount % 1_000 == 0) {
-        System.out.println("validateNonPositionRelatedStatically calls: " + callCount + " | cache hits: "
-            + cacheHitCount + " | total cache lookup: " + totalCacheLookupNanos + " ns" + " | total validateFormat: "
-            + totalValidateFormatNanos + " ns");
-      }
-
-      return sanParse;
-    }
-
-    // The cache holds exactly the string the validateFormat accepts (we know by active tests) so we know the below
-    // method will throw an exception when getting here.
-    SanValidateFormat.validateFormat(san);
-
-    throw new ProgrammingMistakeException(
-        "The san format validation missed to throw an exception for the san \"" + san + "\"");
+    final var sanParse = SanValidateFormat.validateFormat(san);
+    validateNonPositionRelatedExtended(sanParse, havingMove);
+    return sanParse;
   }
 
   public static SanParse validateNonPositionRelatedExtended(String san, Side havingMove) throws SanValidationException {

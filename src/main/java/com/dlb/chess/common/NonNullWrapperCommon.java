@@ -205,6 +205,11 @@ public class NonNullWrapperCommon {
     return map.entrySet();
   }
 
+  @SuppressWarnings("null")
+  public static <E, F> Set<E> keySet(Map<E, F> map) {
+    return map.keySet();
+  }
+
   public static <T> List<T> unmodifiableList(List<? extends T> list) {
     return checkResult(Collections.unmodifiableList(list));
   }
