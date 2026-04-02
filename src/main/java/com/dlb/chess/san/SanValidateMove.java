@@ -56,7 +56,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
     // in a first step we need to check the castling
     // this is the only move where the to square is not set so we can afterwards set
     // the to square
-    if (SanFormat.calculateIsKingCastlingMove(sanType.getSanFormat())) {
+    if (SanType.calculateIsKingCastlingMove(sanType)) {
       return;
     }
 

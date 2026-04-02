@@ -18,122 +18,30 @@ package com.dlb.chess.san.enums;
 
 public enum SanFormat {
 
-  // length, piece, fromFile, fromRank, x, toFile, toRank, =, new piece
+  // (1a) d3
+  PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT,
+  // (1b) dxe5
+  PAWN_CAPTURING_NON_PROMOTION_FORMAT,
+  // (1c) d8=Q
+  PAWN_NON_CAPTURING_PROMOTION_FORMAT,
+  // (1d) dxe8=Q
+  PAWN_CAPTURING_PROMOTION_FORMAT,
+  // (2) Qe5, Qae5, Q2e5, Qc3e5 / Qxe5, Qaxe5, Q2xe5, Qc3xe5 (and same for rook, knight, bishop)
+  PIECE_NON_CAPTURING_NEITHER_FORMAT,
+  PIECE_NON_CAPTURING_FILE_FORMAT,
+  PIECE_NON_CAPTURING_RANK_FORMAT,
+  PIECE_NON_CAPTURING_SQUARE_FORMAT,
+  PIECE_CAPTURING_NEITHER_FORMAT,
+  PIECE_CAPTURING_FILE_FORMAT,
+  PIECE_CAPTURING_RANK_FORMAT,
+  PIECE_CAPTURING_SQUARE_FORMAT,
+  // (3a) Ke5
+  KING_NON_CASTLING_NON_CAPTURING_FORMAT,
+  // (3b) Kxe5
+  KING_NON_CASTLING_CAPTURING_FORMAT,
+  // (3c) O-O-O
+  KING_CASTLING_QUEEN_SIDE_FORMAT,
+  // (3d) O-O
+  KING_CASTLING_KING_SIDE_FORMAT;
 
-  // d3
-  PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT(2, -1, -1, -1, -1, 0, 1, -1, -1, true),
-  // dxe5
-  PAWN_CAPTURING_NON_PROMOTION_FORMAT(4, -1, 0, -1, 1, 2, 3, -1, -1, true),
-  // d8=Q
-  PAWN_NON_CAPTURING_PROMOTION_FORMAT(4, -1, -1, -1, -1, 0, 1, 2, 3, true),
-  // dxe8=Q
-  PAWN_CAPTURING_PROMOTION_FORMAT(6, -1, 0, -1, 1, 2, 3, 4, 5, true),
-  // Qe5
-  PIECE_NON_CAPTURING_NEITHER_FORMAT(3, 0, -1, -1, -1, 1, 2, -1, -1, false),
-  // Qae5
-  PIECE_NON_CAPTURING_FILE_FORMAT(4, 0, 1, -1, -1, 2, 3, -1, -1, false),
-  // Q2e5
-  PIECE_NON_CAPTURING_RANK_FORMAT(4, 0, -1, 1, -1, 2, 3, -1, -1, false),
-  // Qc3e5
-  PIECE_NON_CAPTURING_SQUARE_FORMAT(5, 0, 1, 2, -1, 3, 4, -1, -1, false),
-  // Qxe5
-  PIECE_CAPTURING_NEITHER_FORMAT(4, 0, -1, -1, 1, 2, 3, -1, -1, false),
-  // Qaxe5
-  PIECE_CAPTURING_FILE_FORMAT(5, 0, 1, -1, 2, 3, 4, -1, -1, false),
-  // Q2xe5
-  PIECE_CAPTURING_RANK_FORMAT(5, 0, -1, 1, 2, 3, 4, -1, -1, false),
-  // Qc3xe5
-  PIECE_CAPTURING_SQUARE_FORMAT(6, 0, 1, 2, 3, 4, 5, -1, -1, false),
-  // Ke5
-  KING_NON_CASTLING_NON_CAPTURING_FORMAT(3, 0, -1, -1, -1, 1, 2, -1, -1, false),
-  // Kxe5
-  KING_NON_CASTLING_CAPTURING_FORMAT(4, 0, -1, -1, 1, 2, 3, -1, -1, false),
-  // O-O or O-O-O
-  KING_CASTLING_QUEEN_SIDE_FORMAT(5, -1, -1, -1, -1, -1, -1, -1, -1, false),
-  KING_CASTLING_KING_SIDE_FORMAT(3, -1, -1, -1, -1, -1, -1, -1, -1, false);
-
-  private final int length;
-  private final int movingPieceTypeIndex;
-  private final int fromFileIndex;
-  private final int fromRankIndex;
-  private final int captureSymbolIndex;
-  private final int toFileIndex;
-  private final int toRankIndex;
-  private final int promotionSymbolIndex;
-  private final int promotionPieceTypeIndex;
-  private final boolean isPawn;
-
-  SanFormat(int length, int movingPieceTypeIndex, int fromFileIndex, int fromRankIndex, int captureSymbolIndex,
-      int toFileIndex, int toRankIndex, int promotionSymbolIndex, int promotionPieceTypeIndex, boolean isPawn) {
-    this.length = length;
-    this.movingPieceTypeIndex = movingPieceTypeIndex;
-    this.fromFileIndex = fromFileIndex;
-    this.fromRankIndex = fromRankIndex;
-    this.captureSymbolIndex = captureSymbolIndex;
-    this.toFileIndex = toFileIndex;
-    this.toRankIndex = toRankIndex;
-    this.promotionSymbolIndex = promotionSymbolIndex;
-    this.promotionPieceTypeIndex = promotionPieceTypeIndex;
-    this.isPawn = isPawn;
-  }
-
-  public int getLength() {
-    return length;
-  }
-
-  public int getMovingPieceTypeIndex() {
-    return movingPieceTypeIndex;
-  }
-
-  public int getFromFileIndex() {
-    return fromFileIndex;
-  }
-
-  public int getFromRankIndex() {
-    return fromRankIndex;
-  }
-
-  public int getCaptureSymbolIndex() {
-    return captureSymbolIndex;
-  }
-
-  public int getToFileIndex() {
-    return toFileIndex;
-  }
-
-  public int getToRankIndex() {
-    return toRankIndex;
-  }
-
-  public int getPromotionSymbolIndex() {
-    return promotionSymbolIndex;
-  }
-
-  public int getPromotionPieceTypeIndex() {
-    return promotionPieceTypeIndex;
-  }
-
-  public boolean isPawn() {
-    return isPawn;
-  }
-
-  public static boolean calculateIsCapture(SanFormat sanFormat) {
-    return sanFormat.getCaptureSymbolIndex() != -1;
-  }
-
-  public static boolean calculateIsKingCastlingMove(SanFormat sanFormat) {
-    return switch (sanFormat) {
-      case KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT -> true;
-      case KING_NON_CASTLING_CAPTURING_FORMAT, KING_NON_CASTLING_NON_CAPTURING_FORMAT, PAWN_CAPTURING_NON_PROMOTION_FORMAT, PAWN_CAPTURING_PROMOTION_FORMAT, PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT, PAWN_NON_CAPTURING_PROMOTION_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_RANK_FORMAT, PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_NON_CAPTURING_RANK_FORMAT -> false;
-      default -> false;
-    };
-  }
-
-  public static boolean calculateIsKingNonCastlingMove(SanFormat sanFormat) {
-    return switch (sanFormat) {
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT, KING_NON_CASTLING_CAPTURING_FORMAT -> true;
-      case KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT, PAWN_CAPTURING_NON_PROMOTION_FORMAT, PAWN_CAPTURING_PROMOTION_FORMAT, PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT, PAWN_NON_CAPTURING_PROMOTION_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_RANK_FORMAT, PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_NON_CAPTURING_RANK_FORMAT -> false;
-      default -> false;
-    };
-  }
 }

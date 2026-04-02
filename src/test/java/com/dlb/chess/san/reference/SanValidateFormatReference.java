@@ -57,16 +57,17 @@ public abstract class SanValidateFormatReference {
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
 
     final SanFormat sanFormat = sanType.getSanFormat();
+    final SanFormatProperties properties = SanFormatPropertiesMap.MAP.get(sanFormat);
 
     // length
-    final var formatLength = sanFormat.getLength();
+    final var formatLength = properties.length();
     // additional check or checkmate symbol allowed
     if (san.length() != formatLength && san.length() != formatLength + 1
         || san.length() == formatLength + 1 && !calculateIsAllowedLastChar(san)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
-    final CheckmateOrCheck checkmateOrCheck = calculateCheckmateOrCheck(san, sanFormat);
+    final CheckmateOrCheck checkmateOrCheck = calculateCheckmateOrCheck(san, formatLength);
 
     // castling needs a special treatment
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
@@ -89,8 +90,8 @@ public abstract class SanValidateFormatReference {
     }
 
     // movingPieceTypeIndex
-    final var movingPieceTypeIndex = sanFormat.getMovingPieceTypeIndex();
-    if (!sanFormat.isPawn()) {
+    final var movingPieceTypeIndex = properties.movingPieceTypeIndex();
+    if (!properties.isPawn()) {
       final var checkMovingPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(movingPieceTypeIndex));
       if (!NotationMovingPiece.exists(checkMovingPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
@@ -103,7 +104,7 @@ public abstract class SanValidateFormatReference {
 
     // fromFileIndex
     final File fromFile;
-    final var fromFileIndex = sanFormat.getFromFileIndex();
+    final var fromFileIndex = properties.fromFileIndex();
     if (fromFileIndex != -1) {
       final var checkLetter = NonNullWrapperCommon.toString(san.charAt(fromFileIndex));
       if (!File.exists(checkLetter)) {
@@ -116,7 +117,7 @@ public abstract class SanValidateFormatReference {
 
     // fromRankIndex
     final Rank fromRank;
-    final var fromRankIndex = sanFormat.getFromRankIndex();
+    final var fromRankIndex = properties.fromRankIndex();
     if (fromRankIndex != -1) {
       final var checkLetter = NonNullWrapperCommon.toString(san.charAt(fromRankIndex));
       if (!BasicUtility.isInt(checkLetter)) {
@@ -132,7 +133,7 @@ public abstract class SanValidateFormatReference {
     }
 
     // captureSymbolIndex
-    final var captureSymbolIndex = sanFormat.getCaptureSymbolIndex();
+    final var captureSymbolIndex = properties.captureSymbolIndex();
     if (captureSymbolIndex != -1) {
       final var checkLetter = NonNullWrapperCommon.toString(san.charAt(captureSymbolIndex));
       if (!SanLetter.CAPTURE.getLetter().equals(checkLetter)) {
@@ -142,7 +143,7 @@ public abstract class SanValidateFormatReference {
 
     // toFileIndex
     final File toFile;
-    final var toFileIndex = sanFormat.getToFileIndex();
+    final var toFileIndex = properties.toFileIndex();
     if (toFileIndex != -1) {
       final var checkLetter = NonNullWrapperCommon.toString(san.charAt(toFileIndex));
       if (!File.exists(checkLetter)) {
@@ -155,7 +156,7 @@ public abstract class SanValidateFormatReference {
 
     // toRankIndex
     final Rank toRank;
-    final var toRankIndex = sanFormat.getToRankIndex();
+    final var toRankIndex = properties.toRankIndex();
     if (toRankIndex != -1) {
       final var checkLetter = NonNullWrapperCommon.toString(san.charAt(toRankIndex));
       if (!BasicUtility.isInt(checkLetter)) {
@@ -171,7 +172,7 @@ public abstract class SanValidateFormatReference {
     }
 
     // promotionSymbolIndex
-    final var promotionSymbolIndex = sanFormat.getPromotionSymbolIndex();
+    final var promotionSymbolIndex = properties.promotionSymbolIndex();
     if (promotionSymbolIndex != -1) {
       final var checkLetter = NonNullWrapperCommon.toString(san.charAt(promotionSymbolIndex));
       if (!SanLetter.PROMOTION.getLetter().equals(checkLetter)) {
@@ -181,7 +182,7 @@ public abstract class SanValidateFormatReference {
 
     // promotionPieceTypeIndex
     final PromotionPieceType promotionPieceType;
-    final var promotionPieceTypeIndex = sanFormat.getPromotionPieceTypeIndex();
+    final var promotionPieceTypeIndex = properties.promotionPieceTypeIndex();
     if (promotionPieceTypeIndex != -1) {
       final var checkPromotionPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(promotionPieceTypeIndex));
       if (!NotationPromotionPiece.exists(checkPromotionPieceTypeLetter)) {
@@ -210,8 +211,8 @@ public abstract class SanValidateFormatReference {
     return ALLOWED_LAST_LETTER_SYMBOLS.contains(lastLetter);
   }
 
-  private static CheckmateOrCheck calculateCheckmateOrCheck(String san, SanFormat sanFormat) {
-    if (san.length() != sanFormat.getLength() + 1) {
+  private static CheckmateOrCheck calculateCheckmateOrCheck(String san, int formatLength) {
+    if (san.length() != formatLength + 1) {
       return CheckmateOrCheck.NONE;
     }
     final var lastLetter = NonNullWrapperCommon.toString(san.charAt(san.length() - 1));

@@ -299,9 +299,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
   private static void validateCaptureIsCapture(ApiBoard board, Side havingMove, SanType sanType,
       SanConversion sanConversion) {
-    final SanFormat sanFormat = sanType.getSanFormat();
-    final var isCapture = SanFormat.calculateIsCapture(sanFormat);
-    if (isCapture) {
+    if (sanType.isCapture()) {
       // here only we are outside castling, so we can calculate the to square!
       final Square toSquare = sanConversion.toSquare();
       final Piece pieceOnToSquare = board.getStaticPosition().get(toSquare);
@@ -340,7 +338,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     final SanFormat sanFormat = sanType.getSanFormat();
 
     // for castling we need to filter the castling moves
-    if (SanFormat.calculateIsKingCastlingMove(sanFormat)) {
+    if (SanType.calculateIsKingCastlingMove(sanType)) {
       return filterCastlingMove(board.getLegalMoveSet());
     }
 
