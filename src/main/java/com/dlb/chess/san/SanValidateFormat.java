@@ -23,6 +23,9 @@ public abstract class SanValidateFormat extends AbstractSan {
 
   public static void validateFormatBasic(String san) {
     // fast pre-checks to reject obviously invalid strings in a single pass
+    if (san.isBlank()) {
+      throw new SanValidationException(SanValidationProblem.BLANK, Message.getString("validation.san.format"));
+    }
     if (san.length() > 7) {
       throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
     }
@@ -61,6 +64,7 @@ public abstract class SanValidateFormat extends AbstractSan {
   }
 
   public static SanParse validateFormat(String san) {
+
     validateFormatBasic(san);
 
     // Strip the optional trailing check (+) or checkmate (#) symbol to get the core SAN string
