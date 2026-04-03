@@ -1,8 +1,10 @@
 package com.dlb.chess.common.utility;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
+import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
@@ -12,6 +14,36 @@ public abstract class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
+          && pieceOnSquare.getPieceType() == pieceType) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition,
+      File file) {
+    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+      if (boardSquare.getFile() != file) {
+        continue;
+      }
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
+          && pieceOnSquare.getPieceType() == pieceType) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition,
+      Rank rank) {
+    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+      if (boardSquare.getRank() != rank) {
+        continue;
+      }
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
           && pieceOnSquare.getPieceType() == pieceType) {

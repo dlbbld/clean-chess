@@ -319,7 +319,7 @@ class TestSanValidateStaticallyStrict implements EnumConstants {
   }
 
   @SuppressWarnings("static-method")
-  // TODO today think disabled test @Test
+  @Test
   void testAgainstUsingGenerated() {
     // pieces - none
     for (final PieceType pieceType : PieceType.values()) {

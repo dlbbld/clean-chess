@@ -238,6 +238,15 @@ class TestSanValidateAgainstLegalMoves {
 
   @SuppressWarnings("static-method")
   @Test
+  void testPieceFile2OnlyOneLegalMoveMore() {
+
+    final ApiBoard board = new Board();
+    board.performMoves("e4", "e5", "d3", "Bb4+", "Nc3", "Nf6");
+    checkException(board, "Nge2", SanValidationProblem.PIECE_FILE_ONLY_ONE_LEGAL_MOVE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testPieceFile3MustUseRank() {
     {
       final ApiBoard board = new Board();
@@ -724,6 +733,15 @@ class TestSanValidateAgainstLegalMoves {
 
   @SuppressWarnings("static-method")
   @Test
+  void testPieceSquare1NoLegalMoveMore() {
+    final ApiBoard board = new Board("kn6/3p4/8/8/1Qp1pQ2/3p4/3Q4/2K5 w - - 0 100");
+
+    // queen
+    checkException(board, "Qd2d4", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testPieceSquare2OnlyOneLegalMove() {
     final ApiBoard board = new Board();
 
@@ -754,6 +772,15 @@ class TestSanValidateAgainstLegalMoves {
     // queen
     checkException(board, "Qd8d7", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_LEGAL_MOVE);
 
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPieceSquare2OnlyOneLegalMoveMore() {
+    final ApiBoard board = new Board("kn6/3p4/3Q4/3p4/1Qp1p3/8/3Q4/2K5 w - - 0 100");
+
+    // queen
+    checkException(board, "Qd2d4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_LEGAL_MOVE);
   }
 
   @SuppressWarnings("static-method")
@@ -816,6 +843,15 @@ class TestSanValidateAgainstLegalMoves {
 
   @SuppressWarnings("static-method")
   @Test
+  void testPieceSquare3OnlyOnPieceOnFileMore() {
+    final ApiBoard board = new Board("kn6/3p4/8/8/1Q3Q2/3Q4/8/2K5 w - - 0 100");
+
+    // queen
+    checkException(board, "Qd2d4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testPieceSquare4OnlyOnPieceOnRank() {
     {
       final ApiBoard board = new Board();
@@ -870,15 +906,6 @@ class TestSanValidateAgainstLegalMoves {
 
       board.performMove("Q6c7");
     }
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testOverspecification() {
-
-    final ApiBoard board = new Board();
-    board.performMoves("e4", "e5", "d3", "Bb4+", "Nc3", "Nf6");
-    checkException(board, "Nge2", SanValidationProblem.PIECE_FILE_ONLY_ONE_LEGAL_MOVE);
   }
 
   private static void checkException(ApiBoard board, String san, SanValidationProblem expectedValidation) {

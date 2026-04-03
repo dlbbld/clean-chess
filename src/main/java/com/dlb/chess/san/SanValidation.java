@@ -18,6 +18,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
@@ -130,6 +131,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     final var sanConversion = sanParse.sanConversion();
     final SanFormat sanFormat = sanType.getSanFormat();
 
+    validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(), board.getStaticPosition());
     validateMovingOntoOwnPiece(havingMove, sanFormat, sanConversion, board.getStaticPosition());
     validateNoCaptureIsNoCapture(havingMove, sanFormat, sanConversion, board.getStaticPosition());
 
@@ -262,6 +264,62 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     SanValidateMove.validatePromotion(havingMove, sanParse);
 
     return sanParse;
+  }
+
+  private static void validatePieceExists(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
+      PieceType movingPieceType, StaticPosition staticPosition) {
+    switch (sanFormat) {
+      case KING_CASTLING_KING_SIDE_FORMAT:
+      case KING_CASTLING_QUEEN_SIDE_FORMAT:
+      case KING_NON_CASTLING_CAPTURING_FORMAT:
+      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
+        return;
+      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
+      case PAWN_CAPTURING_PROMOTION_FORMAT:
+      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
+      case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
+        return;
+      case PIECE_CAPTURING_NEITHER_FORMAT:
+      case PIECE_NON_CAPTURING_NEITHER_FORMAT:
+        if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
+          throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NO_PIECE_EXISTS,
+              Message.getString("validation.san.notPawn.specification.none.otherThanKing.noPieceExists",
+                  havingMove.getName(), movingPieceType.getName()));
+        }
+        break;
+      case PIECE_CAPTURING_FILE_FORMAT:
+      case PIECE_NON_CAPTURING_FILE_FORMAT:
+        if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
+            sanConversion.fromFile())) {
+          throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_PIECE_EXISTS,
+              Message.getString("validation.san.notPawn.specification.file.noPieceExists", havingMove.getName(),
+                  movingPieceType.getName(), sanConversion.fromFile().getLetter()));
+        }
+        break;
+      case PIECE_CAPTURING_RANK_FORMAT:
+      case PIECE_NON_CAPTURING_RANK_FORMAT:
+        if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
+            sanConversion.fromRank())) {
+          throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_PIECE_EXISTS,
+              Message.getString("validation.san.notPawn.specification.rank.noPieceExists", havingMove.getName(),
+                  movingPieceType.getName(), NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
+        }
+        break;
+      case PIECE_CAPTURING_SQUARE_FORMAT:
+      case PIECE_NON_CAPTURING_SQUARE_FORMAT:
+        final Square fromSquare = Square.calculate(sanConversion.fromFile(), sanConversion.fromRank());
+        final Piece pieceOnFromSquare = staticPosition.get(fromSquare);
+        if (pieceOnFromSquare == Piece.NONE || pieceOnFromSquare.getSide() != havingMove
+            || pieceOnFromSquare.getPieceType() != movingPieceType) {
+          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_PIECE_EXISTS,
+              Message.getString("validation.san.notPawn.specification.square.noPieceExists", havingMove.getName(),
+                  movingPieceType.getName(), fromSquare.getName()));
+        }
+        break;
+      default:
+        throw new IllegalArgumentException();
+
+    }
   }
 
   private static void validateMovingOntoOwnPiece(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
