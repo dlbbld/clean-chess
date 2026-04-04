@@ -6,7 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.san.SanValidation;
+import com.dlb.chess.san.SanValidateFormat;
+import com.dlb.chess.san.SanValidateMove;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
@@ -275,7 +276,8 @@ class TestSanValidateMovementDirect extends AbstractTestSanValidate {
   private static void checkException(Side havingMove, String san, SanValidationProblem problem) {
     boolean isException;
     try {
-      SanValidation.validateNonPositionRelatedExtended(san, havingMove);
+      final var sanParse = SanValidateFormat.validateFormat(san);
+      SanValidateMove.validateMovement(havingMove, sanParse);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

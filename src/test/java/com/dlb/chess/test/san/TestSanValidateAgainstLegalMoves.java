@@ -172,7 +172,7 @@ class TestSanValidateAgainstLegalMoves {
     checkException(board, "Raa3", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
 
     // knight
-    checkException(board, "Nac3", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
+    checkException(board, "Nbc4", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
 
     // bishop
     checkException(board, "Bcb3", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
@@ -186,7 +186,7 @@ class TestSanValidateAgainstLegalMoves {
     checkException(board, "Raa6", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
 
     // knight
-    checkException(board, "Nac6", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
+    checkException(board, "Nbc5", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
 
     // bishop
     checkException(board, "Bcb6", SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE);
@@ -454,7 +454,7 @@ class TestSanValidateAgainstLegalMoves {
 
     // white
     // rook
-    checkException(board, "R2a4", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
+    checkException(board, "R1a4", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
     // knight
     checkException(board, "N1b3", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
@@ -463,21 +463,21 @@ class TestSanValidateAgainstLegalMoves {
     checkException(board, "B1d4", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
     // queen
-    checkException(board, "Q2d3", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
+    checkException(board, "Q1d3", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
     // black
     board.performMoves("e4");
     // rook
-    checkException(board, "R7a5", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
+    checkException(board, "R8a5", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
     // knight
-    checkException(board, "N5c6", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
+    checkException(board, "N8c5", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
     // bishop
-    checkException(board, "B3d5", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
+    checkException(board, "B8d5", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
     // queen
-    checkException(board, "Q1d6", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
+    checkException(board, "Q8d6", SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE);
 
   }
 
@@ -709,7 +709,7 @@ class TestSanValidateAgainstLegalMoves {
     // white
     // rook no square specification allowed
     // knight
-    checkException(board, "Na1b3", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
+    checkException(board, "Nb1c4", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
 
     // bishop
     checkException(board, "Bc1a3", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
@@ -721,7 +721,7 @@ class TestSanValidateAgainstLegalMoves {
     board.performMoves("e4");
     // rook no square specification allowed
     // knight
-    checkException(board, "Nc6d4", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
+    checkException(board, "Ng8d4", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
 
     // bishop
     checkException(board, "Bf8h6", SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE);
@@ -801,12 +801,12 @@ class TestSanValidateAgainstLegalMoves {
       board.performMoves("Nf3", "Nf6", "Nc3", "Nc6", "Nd4", "Nd5");
       // two white knights
 
-      checkException(board, "Nc3b5", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+      checkException(board, "Nc3b5", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
 
       board.performMove("Ncb5");
       // two black knights
 
-      checkException(board, "Nd5xb4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+      checkException(board, "Nd5xb4", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
 
       board.performMove("Ndxb4");
 
@@ -815,12 +815,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // two white bishops
 
-      checkException(board, "Bh6f4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+      checkException(board, "Bh6f4", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
 
       board.performMove("Bhf4");
       // two black bishops
 
-      checkException(board, "Bd4e5", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+      checkException(board, "Bd4e5", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
 
       board.performMove("Bde5");
 
@@ -829,12 +829,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // two white queens
 
-      checkException(board, "Qa6c6", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+      checkException(board, "Qa6c6", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
 
       board.performMove("Qac6");
       // two black queens
 
-      checkException(board, "Qd4xf4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+      checkException(board, "Qd4xf4", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
 
       board.performMove("Qdxf4");
 
@@ -847,7 +847,7 @@ class TestSanValidateAgainstLegalMoves {
     final ApiBoard board = new Board("kn6/3p4/8/8/1Q3Q2/3Q4/8/2K5 w - - 0 100");
 
     // queen
-    checkException(board, "Qd2d4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_FILE);
+    checkException(board, "Qd3d4", SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY);
   }
 
   @SuppressWarnings("static-method")
@@ -869,13 +869,13 @@ class TestSanValidateAgainstLegalMoves {
           "Na8", "Nf5", "N8c7");
       // two white knights
 
-      checkException(board, "Nf5d4", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_RANK);
+      checkException(board, "Nf5d4", SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY);
 
       board.performMove("N5d4");
       // two black knights
       board.performMoves("Na8", "Nf5");
 
-      checkException(board, "Na8c7", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_RANK);
+      checkException(board, "Na8c7", SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY);
 
       board.performMove("N8c7");
 
@@ -883,12 +883,12 @@ class TestSanValidateAgainstLegalMoves {
           "Ne3", "a1=B", "Bf5", "Bxb2", "Bg4", "Bf6");
       // two white bishops
 
-      checkException(board, "Bg4h3", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_RANK);
+      checkException(board, "Bg4h3", SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY);
 
       board.performMove("B4h3");
       // two black bishops
 
-      checkException(board, "Bf6g7", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_RANK);
+      checkException(board, "Bf6g7", SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY);
 
       board.performMove("B6g7");
 
@@ -896,13 +896,13 @@ class TestSanValidateAgainstLegalMoves {
           "Rb1", "cxb1=Q", "Qd3", "Qb6");
       // two white queens
 
-      checkException(board, "Qd3c2", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_RANK);
+      checkException(board, "Qd3c2", SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY);
 
       board.performMove("Q3c2");
       // two black queens
       board.performMoves("Ne6", "Qd3");
 
-      checkException(board, "Qb6c7", SanValidationProblem.PIECE_SQUARE_ONLY_ONE_PIECE_ON_RANK);
+      checkException(board, "Qb6c7", SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY);
 
       board.performMove("Q6c7");
     }

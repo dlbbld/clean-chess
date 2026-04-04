@@ -37,9 +37,9 @@ public class MoveToSan extends AbstractSan {
 
     final Set<LegalMove> legalMoveSetForPieceAndToSquare = filterLegalMovesCandidates(legalMoveSetForMovingPiece,
         moveSpecification.toSquare());
-    final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromSameFile(
+    final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(
         moveSpecification.fromSquare().getFile(), legalMoveSetForPieceAndToSquare);
-    final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromSameRank(
+    final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(
         moveSpecification.fromSquare().getRank(), legalMoveSetForPieceAndToSquare);
     final var hasOtherFilesHavingLegalMoves = calculateHasOtherFilesHavingLegalMoves(
         moveSpecification.fromSquare().getFile(), legalMoveSetForPieceAndToSquare);

@@ -15,7 +15,6 @@ import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
-import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -166,11 +165,19 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
 
     switch (sanType.getSanFormat()) {
       case KING_NON_CASTLING_CAPTURING_FORMAT, KING_NON_CASTLING_NON_CAPTURING_FORMAT -> throw new IllegalArgumentException();
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT, PAWN_NON_CAPTURING_PROMOTION_FORMAT -> validatePawnRankTo(
-          havingMove, toSquare);
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT, PAWN_CAPTURING_PROMOTION_FORMAT -> {
+      case PAWN_CAPTURING_PROMOTION_FORMAT -> {
         validatePawnRankTo(havingMove, toSquare);
         validatePawnFromAndToFile(havingMove, sanConversion.fromFile(), toSquare);
+      }
+      case PAWN_NON_CAPTURING_PROMOTION_FORMAT -> {
+        validatePawnRankTo(havingMove, toSquare);
+      }
+      case PAWN_CAPTURING_NON_PROMOTION_FORMAT -> {
+        validatePawnRankTo(havingMove, toSquare);
+        validatePawnFromAndToFile(havingMove, sanConversion.fromFile(), toSquare);
+      }
+      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT -> {
+        validatePawnRankTo(havingMove, toSquare);
       }
       case PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT, PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_FILE_FORMAT, PIECE_NON_CAPTURING_RANK_FORMAT, PIECE_CAPTURING_RANK_FORMAT, PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT, KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
