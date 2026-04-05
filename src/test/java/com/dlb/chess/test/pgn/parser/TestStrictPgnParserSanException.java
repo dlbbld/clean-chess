@@ -24,7 +24,7 @@ class TestStrictPgnParserSanException extends AbstractTestStrictPgnParserExcepti
     checkException("01_initial_position.pgn", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
     checkException("02_initial_position.pgn", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
 
-    checkException("03_custom_position_white_start.pgn", SanValidationProblem.CAPTURING_NO_PIECE);
+    checkException("03_custom_position_white_start.pgn", SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE);
     checkException("04_custom_position_black_start.pgn", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
 
   }

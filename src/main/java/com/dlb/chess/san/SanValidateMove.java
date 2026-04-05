@@ -23,16 +23,6 @@ import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 
 public abstract class SanValidateMove extends AbstractSan implements EnumConstants {
 
-  public static void validateMovingOntoItself(SanParse sanParse) {
-    if (sanParse.sanType().getMovingPieceType() != PieceType.PAWN) {
-      final Square fromSquare = AbstractSan.calculateFromSquare(sanParse.sanConversion());
-      if (fromSquare != Square.NONE && fromSquare == sanParse.sanConversion().toSquare()) {
-        throw new SanValidationException(SanValidationProblem.MOVING_ONTO_ITSELF,
-            Message.getString("validation.san.movingOntoItself"));
-      }
-    }
-  }
-
   public static void validateMovement(Side havingMove, SanParse sanParse) {
     if (sanParse.sanType().getMovingPieceType() != PieceType.PAWN) {
       validateNonPawnMovement(sanParse);

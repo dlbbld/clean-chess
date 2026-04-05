@@ -238,7 +238,7 @@ class TestSanValidateMovementDirect extends AbstractTestSanValidate {
   }
 
   static void checkExceptionMovingOntoItself(Side havingMove, String san) {
-    checkException(havingMove, san, SanValidationProblem.MOVING_ONTO_ITSELF);
+    checkException(havingMove, san, SanValidationProblem.PIECE_SQUARE_MOVING_ONTO_ITSELF);
   }
 
   static void checkExceptionFormat(Side havingMove, String san) {

@@ -911,7 +911,7 @@ class TestSanValidateAgainstLegalMoves {
   private static void checkException(ApiBoard board, String san, SanValidationProblem expectedValidation) {
     boolean isException;
     try {
-      SanValidation.calculateMoveSpecificationForSan(san, board);
+      SanValidation.validateSan(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

@@ -1,4 +1,4 @@
-package com.dlb.chess.san.validate.statically.strict.enums;
+package com.dlb.chess.test.san.validate.statically.strict.enums;
 
 public enum KingNonCastlingSanValidateStaticallyStrict {
   KA1,

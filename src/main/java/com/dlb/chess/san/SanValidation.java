@@ -33,9 +33,9 @@ import com.dlb.chess.san.model.SanParse;
 
 public class SanValidation extends AbstractSan implements EnumConstants {
 
-  public static MoveSpecification calculateMoveSpecificationForSan(String san, ApiBoard board)
-      throws SanValidationException {
-    final SanParse sanParse = validateNonPositionRelatedStatically(san, board.getHavingMove());
+  public static MoveSpecification validateSan(String san, ApiBoard board) throws SanValidationException {
+    final var sanParse = SanValidateFormat.validateFormat(san);
+    validateNonPositionRelated(sanParse, board.getHavingMove());
     return validatePositionRelated(board, sanParse);
   }
 
@@ -235,25 +235,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     return checkmateOrCheck;
   }
 
-  public static SanParse validateNonPositionRelatedStatically(String san, Side havingMove)
-      throws SanValidationException {
-    final var sanParse = SanValidateFormat.validateFormat(san);
-    validateNonPositionRelatedExtended(sanParse, havingMove);
-    return sanParse;
-  }
-
-  public static SanParse validateNonPositionRelatedExtended(String san, Side havingMove) throws SanValidationException {
-
-    final var sanParse = SanValidateFormat.validateFormat(san);
-
-    return validateNonPositionRelatedExtended(sanParse, havingMove);
-  }
-
-  public static SanParse validateNonPositionRelatedExtended(SanParse sanParse, Side havingMove)
-      throws SanValidationException {
-
-    // check for moving onto itself
-    SanValidateMove.validateMovingOntoItself(sanParse);
+  public static SanParse validateNonPositionRelated(SanParse sanParse, Side havingMove) throws SanValidationException {
 
     // check for invalid movements
     // pieces which can never move from the specified file, rank or square to the destination square
@@ -317,6 +299,10 @@ public class SanValidation extends AbstractSan implements EnumConstants {
           throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_PIECE_EXISTS,
               Message.getString("validation.san.notPawn.specification.square.noPieceExists", havingMove.getName(),
                   movingPieceType.getName(), fromSquare.getName()));
+        }
+        if (sanConversion.toSquare() == fromSquare) {
+          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_MOVING_ONTO_ITSELF,
+              Message.getString("validation.san.notPawn.specification.square.movingOntoItself"));
         }
         break;
       default:
@@ -383,7 +369,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       } else {
         // not a capture capture
         if (pieceOnToSquare == Piece.NONE) {
-          throw new SanValidationException(SanValidationProblem.CAPTURING_NO_PIECE,
+          throw new SanValidationException(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE,
               Message.getString("validation.san.allExceptCastling.captureIsNoCapture", toSquare.getName()));
         }
         if (pieceOnToSquare.getSide() == havingMove.getOppositeSide() && pieceOnToSquare.getPieceType() == KING) {
@@ -396,7 +382,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
   private static Set<LegalMove> calculateLegalMovesCandidates(ApiBoard board, Side havingMove, SanParse sanParse) {
     final var sanType = sanParse.sanType();
-    final SanFormat sanFormat = sanType.getSanFormat();
 
     // for castling we need to filter the castling moves
     if (SanType.calculateIsKingCastlingMove(sanType)) {

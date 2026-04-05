@@ -84,7 +84,7 @@ class TestSanValidateMovingOntoOwnPiece {
   private static void checkException(String san, ApiBoard board) {
     boolean isException;
     try {
-      SanValidation.calculateMoveSpecificationForSan(san, board);
+      SanValidation.validateSan(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

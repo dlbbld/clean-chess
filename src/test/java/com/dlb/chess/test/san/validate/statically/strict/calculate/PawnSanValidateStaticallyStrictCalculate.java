@@ -1,4 +1,4 @@
-package com.dlb.chess.san.validate.statically.strict.calculate;
+package com.dlb.chess.test.san.validate.statically.strict.calculate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,8 +13,8 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.model.SanValidationFromTo;
-import com.dlb.chess.san.validate.statically.strict.enums.PawnBlackSanValidateStaticallyStrict;
-import com.dlb.chess.san.validate.statically.strict.enums.PawnWhiteSanValidateStaticallyStrict;
+import com.dlb.chess.test.san.validate.statically.strict.enums.PawnBlackSanValidateStaticallyStrict;
+import com.dlb.chess.test.san.validate.statically.strict.enums.PawnWhiteSanValidateStaticallyStrict;
 import com.google.common.collect.ImmutableMap;
 
 public class PawnSanValidateStaticallyStrictCalculate extends AbstractSanValidateStaticallyStrictCalculate {
