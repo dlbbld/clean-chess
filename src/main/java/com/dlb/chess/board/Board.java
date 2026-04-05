@@ -140,10 +140,20 @@ public class Board extends AbstractBoard {
     return this.performedLegalMoveList.isEmpty();
   }
 
+  private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
+    return performMove(moveSpecification, false);
+  }
+
   @Override
   public boolean performMove(MoveSpecification moveSpecification) throws InvalidMoveException {
+    return performMove(moveSpecification, true);
+  }
 
-    ValidateNewMove.validateNewMove(this, moveSpecification);
+  private boolean performMove(MoveSpecification moveSpecification, boolean isValidate) throws InvalidMoveException {
+
+    if (isValidate) {
+      ValidateNewMove.validateNewMove(this, moveSpecification);
+    }
 
     final CastlingRightBoth beforeCastlingRightBoth = NonNullWrapperCommon.getLast(dynamicPositionList)
         .castlingRightBoth();
@@ -221,10 +231,11 @@ public class Board extends AbstractBoard {
       if (san == null) {
         throw new IllegalArgumentException("The SAN cannot be null");
       }
-      final MoveSpecification moveSpecification = SanValidation.calculateMoveSpecificationForSan(san, this);
-      this.performMove(moveSpecification);
+      final MoveSpecification moveSpecification = SanValidation.validateSan(san, this);
+      this.performMoveWithoutValidation(moveSpecification);
       if (!san.equals(this.getSan())) {
-        throw new ProgrammingMistakeException("The provided SAN and generated SAN are not equals");
+        throw new ProgrammingMistakeException(
+            "The provided SAN and generated SAN are different, this should not happen");
       }
     }
     return true;

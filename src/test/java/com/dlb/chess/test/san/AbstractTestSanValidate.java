@@ -28,7 +28,7 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
   }
 
   static void checkExceptionMovingOntoItself(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.MOVING_ONTO_ITSELF);
+    checkException(san, board, SanValidationProblem.PIECE_SQUARE_MOVING_ONTO_ITSELF);
   }
 
   static void checkExceptionFormat(String san, ApiBoard board) {
@@ -66,7 +66,7 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
   private static void checkException(String san, ApiBoard board, SanValidationProblem problem) {
     boolean isException;
     try {
-      SanValidation.calculateMoveSpecificationForSan(san, board);
+      SanValidation.validateSan(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
