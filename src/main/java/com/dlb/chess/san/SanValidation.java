@@ -132,10 +132,12 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     final SanFormat sanFormat = sanType.getSanFormat();
 
     validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(), board.getStaticPosition());
-    validateMovingOntoOwnPiece(havingMove, sanFormat, sanConversion, board.getStaticPosition());
-    validateNoCaptureIsNoCapture(havingMove, sanFormat, sanConversion, board.getStaticPosition());
 
-    // check if designated captures are captures
+    SanValidateMove.validatePromotion(sanParse, havingMove);
+
+    validateMovingOntoOwnPiece(havingMove, sanFormat, sanConversion, board.getStaticPosition());
+
+    validateNoCaptureIsNoCapture(havingMove, sanFormat, sanConversion, board.getStaticPosition());
     validateCaptureIsCapture(board, havingMove, sanType, sanConversion);
 
     // validate san against legal moves
@@ -246,8 +248,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     // TODO finally remove
     // SanValidateMove.validateMovement(sanParse, havingMove);
 
-    SanValidateMove.validatePromotion(sanParse, havingMove);
-
     return sanParse;
   }
 
@@ -259,11 +259,26 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       case KING_NON_CASTLING_CAPTURING_FORMAT:
       case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
         return;
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_CAPTURING_PROMOTION_FORMAT:
       case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
-        return;
+      case PAWN_NON_CAPTURING_PROMOTION_FORMAT: {
+        // for non-capturing pawn moves, the pawn must be on the to-square's file
+        final File pawnFile = sanConversion.toSquare().getFile();
+        if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
+          throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
+              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
+        }
+        break;
+      }
+      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
+      case PAWN_CAPTURING_PROMOTION_FORMAT: {
+        // for capturing pawn moves, the SAN specifies the from-file explicitly
+        final File pawnFile = sanConversion.fromFile();
+        if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
+          throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
+              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
+        }
+        break;
+      }
       case PIECE_CAPTURING_NEITHER_FORMAT:
       case PIECE_NON_CAPTURING_NEITHER_FORMAT:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
