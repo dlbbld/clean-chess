@@ -61,6 +61,46 @@ class TestSanValidatePawnCapturingDiagonal {
     checkException("hxf5", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
   }
 
+  // --- White forward capture (same file) ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWhiteForwardCapture() {
+    // white pawn on b3 — bxb4 is forward, not diagonal
+    final ApiBoard board = new Board("4k3/8/8/8/1p6/1P6/8/4K3 w - - 0 100");
+    checkException("bxb4", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWhiteForwardCaptureVariousFiles() {
+    // white pawns on a2, d4, h3
+    final ApiBoard board = new Board("4k3/8/8/3p4/3P4/7P/P7/4K3 w - - 0 100");
+    checkException("axa3", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+    checkException("dxd5", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+    checkException("hxh4", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+  }
+
+  // --- Black forward capture (same file) ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBlackForwardCapture() {
+    // black pawn on e5 — exe4 is forward, not diagonal
+    final ApiBoard board = new Board("4k3/8/8/4p3/4P3/8/8/4K3 b - - 0 100");
+    checkException("exe4", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBlackForwardCaptureVariousFiles() {
+    // black pawns on a7, d5, h6
+    final ApiBoard board = new Board("4k3/p7/7p/3p4/8/8/8/4K3 b - - 0 100");
+    checkException("axa6", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+    checkException("dxd4", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+    checkException("hxh5", board, SanValidationProblem.PAWN_CAPTURING_DIAGONAL);
+  }
+
   // --- Black capturing ---
 
   @SuppressWarnings("static-method")
