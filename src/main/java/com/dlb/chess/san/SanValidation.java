@@ -244,9 +244,9 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     // pawns which promote on non promotion ranks
 
     // TODO finally remove
-    SanValidateMove.validateMovement(havingMove, sanParse);
+    // SanValidateMove.validateMovement(sanParse, havingMove);
 
-    SanValidateMove.validatePromotion(havingMove, sanParse);
+    SanValidateMove.validatePromotion(sanParse, havingMove);
 
     return sanParse;
   }

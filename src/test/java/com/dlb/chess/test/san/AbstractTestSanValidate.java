@@ -20,7 +20,7 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
     var isException = false;
     try {
       final SanParse sanParse = SanValidateFormat.validateFormat(san);
-      SanValidateMove.validateMovement(havingMove, sanParse);
+      SanValidateMove.validateMovement(sanParse, havingMove);
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isException = true;
     }
@@ -33,34 +33,6 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
 
   static void checkExceptionFormat(String san, ApiBoard board) {
     checkException(san, board, SanValidationProblem.FORMAT);
-  }
-
-  static void checkExceptionNonPawnFromFile(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
-  }
-
-  static void checkExceptionNonPawnFromRank(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
-  }
-
-  static void checkExceptionNonPawnFromSquare(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
-  }
-
-  static void checkExceptionPawnToRank(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_MOVEMENT_PAWN_TO_RANK);
-  }
-
-  static void checkExceptionPawnFromFile(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_MOVEMENT_PAWN_FROM_FILE);
-  }
-
-  static void checkExceptionPromotionRank(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_PROMOTION_RANK_PAWN);
-  }
-
-  static void checkExceptionPromotionPiece(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.INVALID_PROMOTION_NO_PROMOTION_PIECE);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem problem) {
