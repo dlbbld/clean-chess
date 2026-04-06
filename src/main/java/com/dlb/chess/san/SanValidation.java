@@ -280,6 +280,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
               Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
         }
         validatePawnDestinationRank(havingMove, sanConversion.toSquare().getRank());
+        validatePawnCapturingDiagonal(havingMove, sanConversion.fromFile(), sanConversion.toSquare().getFile());
         validatePawnFromSquareCapturing(havingMove, sanConversion.fromFile(), sanConversion.toSquare(),
             staticPosition);
         break;
@@ -341,6 +342,34 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       throw new SanValidationException(SanValidationProblem.PAWN_DESTINATION_RANK,
           Message.getString("validation.san.pawn.destinationRank", havingMove.getName(),
               NonNullWrapperCommon.valueOf(destinationRank.getNumber())));
+    }
+  }
+
+  private static void validatePawnCapturingDiagonal(Side havingMove, File fromFile, File toFile) {
+    boolean isAdjacentLeft = File.calculateHasLeftFile(havingMove, fromFile)
+        && File.calculateLeftFile(havingMove, fromFile) == toFile;
+    boolean isAdjacentRight = File.calculateHasRightFile(havingMove, fromFile)
+        && File.calculateRightFile(havingMove, fromFile) == toFile;
+
+    if (!isAdjacentLeft && !isAdjacentRight) {
+      // build educational message showing which files ARE valid
+      if (File.calculateHasLeftFile(havingMove, fromFile) && File.calculateHasRightFile(havingMove, fromFile)) {
+        final File leftFile = File.calculateLeftFile(havingMove, fromFile);
+        final File rightFile = File.calculateRightFile(havingMove, fromFile);
+        throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL,
+            Message.getString("validation.san.pawn.capturingDiagonal", fromFile.getLetter(), leftFile.getLetter(),
+                rightFile.getLetter()));
+      }
+      // pawn on edge file (a or h) — only one adjacent file
+      final File adjacentFile;
+      if (File.calculateHasLeftFile(havingMove, fromFile)) {
+        adjacentFile = File.calculateLeftFile(havingMove, fromFile);
+      } else {
+        adjacentFile = File.calculateRightFile(havingMove, fromFile);
+      }
+      throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL,
+          Message.getString("validation.san.pawn.capturingDiagonalEdge", fromFile.getLetter(),
+              adjacentFile.getLetter()));
     }
   }
 
