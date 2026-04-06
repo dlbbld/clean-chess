@@ -47,7 +47,7 @@ class TestSanValidatePawnExists {
   void testBlack() {
 
     {
-      final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
+      final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
 
       checkException("h8", board);
       checkException("h7", board);

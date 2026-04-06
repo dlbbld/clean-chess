@@ -267,6 +267,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
           throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
               Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
         }
+        validatePawnDestinationRank(havingMove, sanConversion.toSquare().getRank());
         break;
       }
       case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
@@ -277,6 +278,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
           throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
               Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
         }
+        validatePawnDestinationRank(havingMove, sanConversion.toSquare().getRank());
         break;
       }
       case PIECE_CAPTURING_NEITHER_FORMAT:
@@ -323,6 +325,19 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       default:
         throw new IllegalArgumentException();
 
+    }
+  }
+
+  private static void validatePawnDestinationRank(Side havingMove, Rank destinationRank) {
+    final boolean isInvalid = switch (havingMove) {
+      case WHITE -> destinationRank == Rank.RANK_1 || destinationRank == Rank.RANK_2;
+      case BLACK -> destinationRank == Rank.RANK_7 || destinationRank == Rank.RANK_8;
+      case NONE -> throw new IllegalArgumentException();
+    };
+    if (isInvalid) {
+      throw new SanValidationException(SanValidationProblem.PAWN_DESTINATION_RANK,
+          Message.getString("validation.san.pawn.destinationRank", havingMove.getName(),
+              NonNullWrapperCommon.valueOf(destinationRank.getNumber())));
     }
   }
 
