@@ -7,10 +7,8 @@ import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.SanValidateFormat;
-import com.dlb.chess.san.SanValidation;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.test.san.validate.statically.strict.calculate.SanValidateStaticallyStrict;
@@ -22,20 +20,19 @@ class TestSanValidateNonPositionRelatedSupersetStrict extends AbstractTestSanVal
   void testStaticallySubsetRuntime() {
     for (final Entry<String, SanParse> entry : NonNullWrapperCommon
         .entrySet(SanValidateStaticallyStrict.getSanValidationWhiteMap())) {
-      checkStaticallySubsetRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry), WHITE);
+      checkStaticallySubsetRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry));
     }
     for (final Entry<String, SanParse> entry : NonNullWrapperCommon
         .entrySet(SanValidateStaticallyStrict.getSanValidationBlackMap())) {
-      checkStaticallySubsetRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry), BLACK);
+      checkStaticallySubsetRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry));
     }
   }
 
-  private static void checkStaticallySubsetRuntime(String san, SanParse staticResult, Side side) {
+  private static void checkStaticallySubsetRuntime(String san, SanParse staticResult) {
 
     boolean isRuntimeException;
     try {
       final var sanParse = SanValidateFormat.validateFormat(san);
-      SanValidation.validateNonPositionRelated(sanParse, side);
       assertEquals(sanParse, staticResult);
       isRuntimeException = false;
     } catch (@SuppressWarnings("unused") final SanValidationException e) {

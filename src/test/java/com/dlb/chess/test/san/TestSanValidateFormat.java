@@ -268,12 +268,61 @@ class TestSanValidateFormat {
 
   @SuppressWarnings("static-method")
   @Test
+  void testPromotionValid() {
+
+    checkValid("d1");
+    checkValid("cxd1");
+
+    checkValid("d8");
+    checkValid("cxd8");
+
+    checkValid("d8=R");
+    checkValid("d8=B");
+    checkValid("d8=N");
+    checkValid("d8=Q");
+
+    checkValid("cxd8=R");
+    checkValid("cxd8=B");
+    checkValid("cxd8=N");
+    checkValid("cxd8=Q");
+
+    checkValid("c1=R");
+    checkValid("c1=B");
+    checkValid("c1=N");
+    checkValid("c1=Q");
+
+    checkValid("cxb1=R");
+    checkValid("cxb1=B");
+    checkValid("cxb1=N");
+    checkValid("cxb1=Q");
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  // Thus that is a funny idea to promote to a king we can not allow this because
+  // to represent the promotion piece we have currently defined only valid
+  // promotion pieces.
+  void testPromotionMissingPromotionPiece() {
+    checkException("d8=");
+    checkException("d1=");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   // Thus that is a funny idea to promote to a king we can not allow this because
   // to represent the promotion piece we have currently defined only valid
   // promotion pieces.
   void testPromotionToKing() {
     checkException("d8=K");
     checkException("d1=K");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPromotionToPawn() {
+    checkException("d8=P");
+    checkException("d1=P");
   }
 
   @SuppressWarnings("static-method")

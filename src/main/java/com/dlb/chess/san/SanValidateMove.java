@@ -272,7 +272,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
 
   private static void validatePawnPromotionMissingPiece(Side havingMove, Rank rank) {
     if (Rank.calculateIsPromotionRank(havingMove, rank)) {
-      throw new SanValidationException(SanValidationProblem.INVALID_PROMOTION_NO_PROMOTION_PIECE,
+      throw new SanValidationException(SanValidationProblem.PAWN_PROMOTION_NO_PROMOTION_PIECE,
           Message.getString("validation.san.pawn.invalidNoPromotionPiece"));
     }
   }
@@ -282,7 +282,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
       final Rank promotionRank = Rank.calculatePromotionRank(havingMove);
       final String promotionRankNumber = NonNullWrapperCommon.valueOf(promotionRank.getNumber());
 
-      throw new SanValidationException(SanValidationProblem.INVALID_PROMOTION_RANK_PAWN,
+      throw new SanValidationException(SanValidationProblem.PAWN_PROMOTION_MIDDLE_OF_THE_BOARD,
           Message.getString("validation.san.pawn.invalidPromotionRank", havingMove.getName(), PieceType.PAWN.getName(),
               promotionRankNumber));
     }

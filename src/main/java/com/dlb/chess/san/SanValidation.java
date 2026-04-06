@@ -35,8 +35,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
   public static MoveSpecification validateSan(String san, ApiBoard board) throws SanValidationException {
     final var sanParse = SanValidateFormat.validateFormat(san);
-    validateNonPositionRelated(sanParse, board.getHavingMove());
-    return validatePositionRelated(board, sanParse);
+    return validateAgainstPosition(board, sanParse);
   }
 
   private static MoveSpecification calculateMoveSpecificationForSan(ApiBoard board, Side havingMove,
@@ -123,8 +122,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     }
   }
 
-  private static MoveSpecification validatePositionRelated(ApiBoard board, SanParse sanParse)
-      throws SanValidationException {
+  private static MoveSpecification validateAgainstPosition(ApiBoard board, SanParse sanParse) throws SanValidationException {
 
     final Side havingMove = board.getHavingMove();
     final var sanType = sanParse.sanType();
@@ -237,20 +235,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     return checkmateOrCheck;
   }
 
-  public static SanParse validateNonPositionRelated(SanParse sanParse, Side havingMove) throws SanValidationException {
-
-    // check for invalid movements
-    // pieces which can never move from the specified file, rank or square to the destination square
-    // pawns which moves forwards or diagonally to ranks they can never move to
-    // pawns which captures from non adjacent files
-    // pawns which promote on non promotion ranks
-
-    // TODO finally remove
-    // SanValidateMove.validateMovement(sanParse, havingMove);
-
-    return sanParse;
-  }
-
   private static void validatePieceExists(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
       PieceType movingPieceType, StaticPosition staticPosition) {
     switch (sanFormat) {
@@ -281,8 +265,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         }
         validatePawnDestinationRank(havingMove, sanConversion.toSquare().getRank());
         validatePawnCapturingDiagonal(havingMove, sanConversion.fromFile(), sanConversion.toSquare().getFile());
-        validatePawnFromSquareCapturing(havingMove, sanConversion.fromFile(), sanConversion.toSquare(),
-            staticPosition);
+        validatePawnFromSquareCapturing(havingMove, sanConversion.fromFile(), sanConversion.toSquare(), staticPosition);
         break;
       }
       case PIECE_CAPTURING_NEITHER_FORMAT:
@@ -333,22 +316,22 @@ public class SanValidation extends AbstractSan implements EnumConstants {
   }
 
   private static void validatePawnDestinationRank(Side havingMove, Rank destinationRank) {
-    final boolean isInvalid = switch (havingMove) {
+    final var isInvalid = switch (havingMove) {
       case WHITE -> destinationRank == Rank.RANK_1 || destinationRank == Rank.RANK_2;
       case BLACK -> destinationRank == Rank.RANK_7 || destinationRank == Rank.RANK_8;
       case NONE -> throw new IllegalArgumentException();
     };
     if (isInvalid) {
-      throw new SanValidationException(SanValidationProblem.PAWN_DESTINATION_RANK,
+      throw new SanValidationException(SanValidationProblem.PAWN_NON_REACHABLE_RANK,
           Message.getString("validation.san.pawn.destinationRank", havingMove.getName(),
               NonNullWrapperCommon.valueOf(destinationRank.getNumber())));
     }
   }
 
   private static void validatePawnCapturingDiagonal(Side havingMove, File fromFile, File toFile) {
-    boolean isAdjacentLeft = File.calculateHasLeftFile(havingMove, fromFile)
+    final var isAdjacentLeft = File.calculateHasLeftFile(havingMove, fromFile)
         && File.calculateLeftFile(havingMove, fromFile) == toFile;
-    boolean isAdjacentRight = File.calculateHasRightFile(havingMove, fromFile)
+    final var isAdjacentRight = File.calculateHasRightFile(havingMove, fromFile)
         && File.calculateRightFile(havingMove, fromFile) == toFile;
 
     if (!isAdjacentLeft && !isAdjacentRight) {
@@ -367,9 +350,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       } else {
         adjacentFile = File.calculateRightFile(havingMove, fromFile);
       }
-      throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL,
-          Message.getString("validation.san.pawn.capturingDiagonalEdge", fromFile.getLetter(),
-              adjacentFile.getLetter()));
+      throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL, Message
+          .getString("validation.san.pawn.capturingDiagonalEdge", fromFile.getLetter(), adjacentFile.getLetter()));
     }
   }
 
@@ -389,8 +371,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       final Piece pieceOnTwoBack = staticPosition.get(twoBackSquare);
       final Piece expectedPawn = PieceType.calculate(havingMove, PieceType.PAWN);
 
-      final boolean pawnOnOneBack = pieceOnOneBack == expectedPawn;
-      final boolean pawnOnTwoBackAndPathClear = pieceOnTwoBack == expectedPawn && pieceOnOneBack == Piece.NONE;
+      final var pawnOnOneBack = pieceOnOneBack == expectedPawn;
+      final var pawnOnTwoBackAndPathClear = pieceOnTwoBack == expectedPawn && pieceOnOneBack == Piece.NONE;
 
       if (!pawnOnOneBack && !pawnOnTwoBackAndPathClear) {
         throw new SanValidationException(SanValidationProblem.PAWN_FROM_SQUARE,

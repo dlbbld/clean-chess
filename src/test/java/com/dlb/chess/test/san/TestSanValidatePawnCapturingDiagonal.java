@@ -14,6 +14,13 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 
 class TestSanValidatePawnCapturingDiagonal {
 
+  @SuppressWarnings("static-method")
+  @Test
+  void testMissingValidation() {
+    final ApiBoard board = new Board("8/P3k3/8/3p4/3P4/7P/8/4K3 w - - 0 100");
+    checkValid("a8", board);
+  }
+
   // --- White capturing ---
 
   @SuppressWarnings("static-method")
