@@ -80,6 +80,60 @@ class TestSanValidateFormatDetailed {
     checkException("dxea=Q", SanValidationProblem.FORMAT);
   }
 
+  // --- Pawn format: missing promotion on rank 1/8 ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPawnMissingPromotionNonCapturing() {
+    // rank 8 without =piece
+    checkException("d8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("a8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    // rank 1 without =piece
+    checkException("d1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("a1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPawnMissingPromotionCapturing() {
+    // capture to rank 8 without =piece
+    checkException("dxe8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("axb8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    // capture to rank 1 without =piece
+    checkException("dxe1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("axb1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+  }
+
+  // --- Pawn format: promotion on wrong rank (treated as length error) ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPawnPromotionMiddleOfBoardNonCapturing() {
+    // =piece on non-promotion rank
+    checkException("d3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("d4=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("d7=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPawnPromotionMiddleOfBoardCapturing() {
+    // capture with =piece on non-promotion rank
+    checkException("dxe5=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("dxe3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+  }
+
+  // --- Pawn format: valid promotion (should not throw) ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPawnPromotionValid() {
+    checkValid("d8=Q");
+    checkValid("d1=Q");
+    checkValid("dxe8=Q");
+    checkValid("dxe1=N");
+  }
+
   // --- Pawn format: length ---
 
   @SuppressWarnings("static-method")

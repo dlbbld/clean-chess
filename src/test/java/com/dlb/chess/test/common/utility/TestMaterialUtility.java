@@ -31,8 +31,8 @@ class TestMaterialUtility {
   // Black has knight: K vs k+n
   private static final String FEN_BLACK_KNIGHT = "1n2k3/8/8/8/8/8/8/4K3 w - - 0 1";
 
-  // White has bishop on d1 (dark square): K+B vs k
-  private static final String FEN_WHITE_BISHOP_DARK = "4k3/8/8/8/8/8/8/3BK3 w - - 0 1";
+  // White has bishop on c1 (dark square): K+B vs k
+  private static final String FEN_WHITE_BISHOP_DARK = "4k3/8/8/8/8/8/8/2B1K3 w - - 0 1";
 
   // White has bishop on f1 (light square): K+B vs k
   private static final String FEN_WHITE_BISHOP_LIGHT = "4k3/8/8/8/8/8/8/4KB2 w - - 0 1";
@@ -55,8 +55,8 @@ class TestMaterialUtility {
   // White has knight + bishop: K+N+B vs k
   private static final String FEN_WHITE_KNIGHT_BISHOP = "4k3/8/8/8/8/8/8/1NB1K3 w - - 0 1";
 
-  // White has 2 bishops on opposite colors: c1=dark, f4=light: K+B+B vs k
-  private static final String FEN_WHITE_OPPOSITE_BISHOPS = "4k3/8/8/8/5B2/8/8/2B1K3 w - - 0 1";
+  // White has 2 bishops on opposite colors: c1=dark, f5=light: K+B+B vs k
+  private static final String FEN_WHITE_OPPOSITE_BISHOPS = "4k3/8/8/5B2/8/8/8/2B1K3 w - - 0 1";
 
   // White has 2 pawns: K+PP vs k
   private static final String FEN_WHITE_TWO_PAWNS = "4k3/8/8/8/8/8/PP6/4K3 w - - 0 1";
@@ -270,19 +270,6 @@ class TestMaterialUtility {
 
     assertTrue(MaterialUtility.calculateIsOwnPiece(Side.BLACK, Piece.BLACK_PAWN));
     assertFalse(MaterialUtility.calculateIsOwnPiece(Side.BLACK, Piece.WHITE_PAWN));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testIsOwnPieceButNotKing() {
-    assertTrue(MaterialUtility.calculateIsOwnPieceButNotKing(Side.WHITE, Piece.WHITE_ROOK));
-    assertTrue(MaterialUtility.calculateIsOwnPieceButNotKing(Side.WHITE, Piece.WHITE_PAWN));
-    assertFalse(MaterialUtility.calculateIsOwnPieceButNotKing(Side.WHITE, Piece.WHITE_KING));
-    assertFalse(MaterialUtility.calculateIsOwnPieceButNotKing(Side.WHITE, Piece.BLACK_ROOK));
-    assertFalse(MaterialUtility.calculateIsOwnPieceButNotKing(Side.WHITE, Piece.NONE));
-
-    assertTrue(MaterialUtility.calculateIsOwnPieceButNotKing(Side.BLACK, Piece.BLACK_QUEEN));
-    assertFalse(MaterialUtility.calculateIsOwnPieceButNotKing(Side.BLACK, Piece.BLACK_KING));
   }
 
   @SuppressWarnings("static-method")

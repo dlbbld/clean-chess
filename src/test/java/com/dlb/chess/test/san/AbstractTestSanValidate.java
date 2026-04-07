@@ -35,6 +35,10 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
     checkException(san, board, SanValidationProblem.FORMAT);
   }
 
+  static void checkExceptionFormat(String san, SanValidationProblem problem, ApiBoard board) {
+    checkException(san, board, problem);
+  }
+
   private static void checkException(String san, ApiBoard board, SanValidationProblem problem) {
     boolean isException;
     try {

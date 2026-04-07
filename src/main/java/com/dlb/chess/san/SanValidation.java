@@ -131,8 +131,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
     validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(), board.getStaticPosition());
 
-    SanValidateMove.validatePromotion(sanParse, havingMove);
-
     validateMovingOntoOwnPiece(havingMove, sanFormat, sanConversion, board.getStaticPosition());
 
     validateNoCaptureIsNoCapture(havingMove, sanFormat, sanConversion, board.getStaticPosition());

@@ -46,15 +46,10 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPawnNonPromotion() {
-    final ApiBoard board = new Board();
+    final ApiBoard board = new Board("8/8/8/2Rpk3/2R5/4K3/8/8 b - - 0 100");
 
-    // whitecheck(board, "e5", SanValidationPositionRelatedProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);check(board,
-    // "exd7", SanValidationPositionRelatedProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
-
-    // black
-    board.performMoves("e4");
     checkException(board, "d4", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
-    checkException(board, "exd2", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
+    checkException(board, "dxc4", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
 
   }
 
@@ -63,12 +58,12 @@ class TestSanValidateAgainstLegalMoves {
   void testPawnPromotion() {
     // black
     {
-      final ApiBoard board = new Board("8/8/8/5k2/5p2/8/2P5/1K6 b - - 0 100");
-      checkException(board, "f1=Q", SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE);
+      final ApiBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
+      checkException(board, "f1=N+", SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE);
     }
     {
-      final ApiBoard board = new Board("8/8/8/5k2/5p2/8/2P5/1K3N2 b - - 0 100");
-      checkException(board, "exf1=Q", SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE);
+      final ApiBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
+      checkException(board, "fxg1=Q+", SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE);
     }
 
   }

@@ -21,10 +21,10 @@ class TestSanValidatePawnDestinationRank {
       final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
 
       checkException("d2", board);
-      checkException("d1", board);
+      checkException("d1=Q", board);
 
       checkException("dxc2", board);
-      checkException("dxc1", board);
+      checkException("dxc1=Q", board);
 
     }
 
@@ -38,10 +38,10 @@ class TestSanValidatePawnDestinationRank {
       final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
 
       checkException("f7", board);
-      checkException("f8", board);
+      checkException("f8=Q", board);
 
       checkException("fxg7", board);
-      checkException("fxg8", board);
+      checkException("fxg8=Q", board);
 
     }
 

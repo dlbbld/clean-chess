@@ -15,8 +15,7 @@ public abstract class MaterialUtility implements EnumConstants {
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
-          && pieceOnSquare.getPieceType() == pieceType) {
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == pieceType) {
         return true;
       }
     }
@@ -30,8 +29,7 @@ public abstract class MaterialUtility implements EnumConstants {
         continue;
       }
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
-          && pieceOnSquare.getPieceType() == pieceType) {
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == pieceType) {
         return true;
       }
     }
@@ -45,8 +43,7 @@ public abstract class MaterialUtility implements EnumConstants {
         continue;
       }
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
-          && pieceOnSquare.getPieceType() == pieceType) {
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == pieceType) {
         return true;
       }
     }
@@ -110,10 +107,6 @@ public abstract class MaterialUtility implements EnumConstants {
         && calculateNumberOfPieces(side, staticPosition, KING) == 1;
   }
 
-  public static boolean calculateIsOwnPieceButNotKing(Side side, Piece pieceOnSquare) {
-    return calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() != KING;
-  }
-
   public static boolean calculateIsOwnPiece(Side side, Piece pieceOnSquare) {
     return pieceOnSquare != Piece.NONE && pieceOnSquare.getSide() == side;
   }
@@ -123,13 +116,19 @@ public abstract class MaterialUtility implements EnumConstants {
   }
 
   public static boolean calculateHasKingOnly(Side side, StaticPosition staticPosition) {
+    var countKing = 0;
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
-        return false;
+      if (pieceOnSquare == Piece.NONE || pieceOnSquare.getSide() != side) {
+        continue;
       }
+      if (pieceOnSquare.getPieceType() == KING) {
+        countKing++;
+        continue;
+      }
+      return false;
     }
-    return true;
+    return countKing == 1;
   }
 
   public static boolean calculateHasKingAndBishopsOnly(Side side, StaticPosition staticPosition,
@@ -272,24 +271,26 @@ public abstract class MaterialUtility implements EnumConstants {
   private static boolean calculateHasKingAndAnotherPieceOnly(Side side, PieceType anotherPieceType,
       StaticPosition staticPosition) {
 
-    if (anotherPieceType == KING) {
-      throw new IllegalArgumentException("Checking for king and king makes no sense");
-    }
-
+    var countKing = 0;
     var countAnotherPieces = 0;
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
-        if (pieceOnSquare.getPieceType() != anotherPieceType) {
-          return false;
-        }
-        countAnotherPieces++;
-        if (countAnotherPieces > 1) {
-          return false;
-        }
+      if (pieceOnSquare == Piece.NONE || pieceOnSquare.getSide() != side) {
+        continue;
+      }
+      if (pieceOnSquare.getPieceType() == KING) {
+        countKing++;
+        continue;
+      }
+      if (pieceOnSquare.getPieceType() != anotherPieceType) {
+        return false;
+      }
+      countAnotherPieces++;
+      if (countAnotherPieces > 1) {
+        return false;
       }
     }
-    return true;
+    return countKing == 1 && countAnotherPieces == 1;
   }
 
 }

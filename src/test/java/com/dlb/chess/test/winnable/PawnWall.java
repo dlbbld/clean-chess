@@ -531,8 +531,8 @@ public class PawnWall {
       SquareType squareType) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)
-          && pieceOnSquare.getPieceType() == PieceType.BISHOP && boardSquare.getSquareType() == squareType) {
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
+          && boardSquare.getSquareType() == squareType) {
         return true;
       }
     }

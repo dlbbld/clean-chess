@@ -20,24 +20,23 @@ class TestSanValidatePawnExists {
     {
       final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
 
-      checkException("c1", board);
+      checkException("c1", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
       checkException("c2", board);
       checkException("c3", board);
       checkException("c4", board);
       checkException("c5", board);
       checkException("c6", board);
       checkException("c7", board);
-      checkException("c8", board);
+      checkException("c8", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
 
-      checkException("fxg1", board);
+      checkException("fxg1", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
       checkException("fxg2", board);
       checkException("fxg3", board);
       checkException("fxg4", board);
       checkException("fxg5", board);
       checkException("fxg6", board);
       checkException("fxg7", board);
-      checkException("fxg8", board);
-
+      checkException("fxg8", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
     }
 
   }
@@ -49,23 +48,23 @@ class TestSanValidatePawnExists {
     {
       final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
 
-      checkException("h8", board);
+      checkException("h8", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
       checkException("h7", board);
       checkException("h6", board);
       checkException("h5", board);
       checkException("h4", board);
       checkException("h3", board);
       checkException("h2", board);
-      checkException("h1", board);
+      checkException("h1", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
 
-      checkException("bxa8", board);
+      checkException("bxa8", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
       checkException("bxa7", board);
       checkException("bxa6", board);
       checkException("bxa5", board);
       checkException("bxa4", board);
       checkException("bxa3", board);
       checkException("bxa2", board);
-      checkException("bxa1", board);
+      checkException("bxa1", board, SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
 
     }
 

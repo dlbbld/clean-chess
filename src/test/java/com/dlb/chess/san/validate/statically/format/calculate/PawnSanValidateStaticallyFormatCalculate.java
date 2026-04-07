@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.dlb.chess.board.enums.File;
+import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.model.SanValidationFromTo;
@@ -14,14 +15,13 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
   static ImmutableMap<String, SanParse> calculateSanMap() {
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    // format-wise we allow
-    // -moving to squares not allowed
-    // -capturing from any rank
-    // -prommotion on every rank
-    // validation for such moves takes place in the next step
+    // promotion only on rank 1 and 8, non-promotion only on ranks 2-7
     for (final SanValidationFromTo model : calculateWithoutDisambiguation()) {
-      populatePawnPromotionMap(sanValidateMap, model, false);
-      populatePawnNonPromotionMap(sanValidateMap, model, false);
+      if (isPromotionRank(model)) {
+        populatePawnPromotionMap(sanValidateMap, model, false);
+      } else {
+        populatePawnNonPromotionMap(sanValidateMap, model, false);
+      }
     }
 
     for (final File fromFile : File.values()) {
@@ -29,12 +29,20 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
         continue;
       }
       for (final SanValidationFromTo model : calculateWithFile()) {
-        populatePawnPromotionMap(sanValidateMap, model, true);
-        populatePawnNonPromotionMap(sanValidateMap, model, true);
+        if (isPromotionRank(model)) {
+          populatePawnPromotionMap(sanValidateMap, model, true);
+        } else {
+          populatePawnNonPromotionMap(sanValidateMap, model, true);
+        }
       }
     }
 
     return NonNullWrapperCommon.copyOfMap(sanValidateMap);
+  }
+
+  private static boolean isPromotionRank(SanValidationFromTo model) {
+    final Rank toRank = model.toSquare().getRank();
+    return toRank == Rank.RANK_1 || toRank == Rank.RANK_8;
   }
 
 }

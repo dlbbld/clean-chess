@@ -116,6 +116,10 @@ public abstract class SanValidateFormat extends AbstractSan {
     return c >= '1' && c <= '8';
   }
 
+  private static boolean isPromotionRank(final char c) {
+    return c == '1' || c == '8';
+  }
+
   private static boolean isPieceLetterRbnq(final char c) {
     return c == 'R' || c == 'N' || c == 'B' || c == 'Q';
   }
@@ -190,6 +194,11 @@ public abstract class SanValidateFormat extends AbstractSan {
               Message.getString("validation.san.format.pawn.secondCharacter",
                   NonNullWrapperCommon.toString(toRankChar)));
         }
+        if (isPromotionRank(toRankChar)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION,
+              Message.getString("validation.san.format.pawn.missingPromotion",
+                  NonNullWrapperCommon.toString(toRankChar), core.charAt(0) + NonNullWrapperCommon.toString(toRankChar) + "=Q"));
+        }
         yield new SanParse(SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE,
             new SanConversion(File.NONE, Rank.NONE, Square.calculate(parseFile(core.charAt(0)), parseRank(toRankChar)),
                 PromotionPieceType.NONE, checkmateOrCheck));
@@ -210,6 +219,11 @@ public abstract class SanValidateFormat extends AbstractSan {
                 Message.getString("validation.san.format.pawn.captureToRank",
                     NonNullWrapperCommon.toString(toRankChar)));
           }
+          if (isPromotionRank(toRankChar)) {
+            throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION,
+                Message.getString("validation.san.format.pawn.missingPromotion",
+                    NonNullWrapperCommon.toString(toRankChar), core + "=Q"));
+          }
           yield new SanParse(SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE,
               new SanConversion(parseFile(core.charAt(0)), Rank.NONE,
                   Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE,
@@ -222,6 +236,10 @@ public abstract class SanValidateFormat extends AbstractSan {
             throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_RANK,
                 Message.getString("validation.san.format.pawn.promotionRank",
                     NonNullWrapperCommon.toString(toRankChar)));
+          }
+          if (!isPromotionRank(toRankChar)) {
+            throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH,
+                Message.getString("validation.san.format.pawn.length"));
           }
           yield new SanParse(SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE,
               new SanConversion(File.NONE, Rank.NONE,
@@ -250,6 +268,10 @@ public abstract class SanValidateFormat extends AbstractSan {
           throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_CAPTURE_TO_RANK,
               Message.getString("validation.san.format.pawn.captureToRank",
                   NonNullWrapperCommon.toString(toRankChar)));
+        }
+        if (!isPromotionRank(toRankChar)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH,
+              Message.getString("validation.san.format.pawn.length"));
         }
         yield new SanParse(SanType.PAWN_CAPTURING_PROMOTION_MOVE,
             new SanConversion(parseFile(core.charAt(0)), Rank.NONE,
