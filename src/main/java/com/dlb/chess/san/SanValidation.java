@@ -30,6 +30,7 @@ import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.squares.to.potential.AbstractPotentialToSquares;
 
 public class SanValidation extends AbstractSan implements EnumConstants {
 
@@ -143,7 +144,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     // (4) if the san uses rank specification instead of file specification
 
     final Set<LegalMove> legalMovesCandidates = calculateLegalMovesCandidates(board, havingMove, sanParse);
-    validateAgainstLegalMoves(havingMove, legalMovesCandidates, sanType, sanConversion);
+    validateAgainstLegalMoves(board.getStaticPosition(), havingMove, legalMovesCandidates, sanType, sanConversion);
 
     // eight step - we now construct the move and check against the identified legal
     // move it represents
@@ -557,8 +558,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     }
   }
 
-  private static void validateAgainstLegalMoves(Side havingMove, Set<LegalMove> legalMovesCandidates, SanType sanType,
-      SanConversion sanConversion) {
+  private static void validateAgainstLegalMoves(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, SanType sanType, SanConversion sanConversion) {
 
     // we need an early return for castling first so for the remaining cases we can
     // calculate the to square
@@ -624,6 +625,17 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         break;
       case PIECE_NON_CAPTURING_FILE_FORMAT:
       case PIECE_CAPTURING_FILE_FORMAT: {
+        final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
+            sanFormat,
+            sanConversion);
+        final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove,
+            toSquare,
+            pieceCandidates);
+        if (movementCandidates.isEmpty()) {
+          throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE,
+              Message.getString("validation.san.notPawn.specification.file.invalidMovement", pieceType.getName(),
+                  sanConversion.fromFile().getLetter(), toSquare.getName()));
+        }
         // if no legal move from specified file throw an exception (no legal move)
         if (calculateNumberOfLegalMovesFromFile(sanConversion.fromFile(), legalMovesCandidates) == 0) {
           throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE,
@@ -676,6 +688,17 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         break;
       case PIECE_NON_CAPTURING_RANK_FORMAT:
       case PIECE_CAPTURING_RANK_FORMAT: {
+        final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
+            sanFormat,
+            sanConversion);
+        final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove,
+            toSquare,
+            pieceCandidates);
+        if (movementCandidates.isEmpty()) {
+          throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK,
+              Message.getString("validation.san.notPawn.specification.rank.invalidMovement", pieceType.getName(),
+                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+        }
         // if no legal move from specified rank throw an exception (no legal move)
         if (calculateNumberOfLegalMovesFromRank(sanConversion.fromRank(), legalMovesCandidates) == 0) {
           throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE,
@@ -743,6 +766,17 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       case PIECE_CAPTURING_SQUARE_FORMAT: {
         // if no legal move from specified square throw an exception (no legal move)
         final Square fromSquare = calculateFromSquare(sanConversion);
+        final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
+            sanFormat,
+            sanConversion);
+        final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove,
+            toSquare,
+            pieceCandidates);
+        if (movementCandidates.isEmpty()) {
+          throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE,
+              Message.getString("validation.san.notPawn.specification.square.invalidMovement", pieceType.getName(),
+                  fromSquare.getName(), toSquare.getName()));
+        }
         if (calculateNumberOfLegalMovesFromSquare(fromSquare, legalMovesCandidates) == 0) {
           throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE,
               Message.getString("validation.san.noLegalMove.fromSquare", pieceType.getName(), fromSquare.getName(),
@@ -777,6 +811,59 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       default:
         throw new IllegalArgumentException();
     }
+  }
+
+  private static Set<Square> calculatePieceCandidateSquareSet(StaticPosition staticPosition, Side havingMove,
+      PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion) {
+    final Set<Square> result = new TreeSet<>();
+    for (final Square square : Square.values()) {
+      if (square == Square.NONE) {
+        continue;
+      }
+      if (!staticPosition.isOwnPiece(square, havingMove, pieceType)) {
+        continue;
+      }
+      switch (sanFormat) {
+        case PIECE_NON_CAPTURING_NEITHER_FORMAT:
+        case PIECE_CAPTURING_NEITHER_FORMAT:
+          result.add(square);
+          break;
+        case PIECE_NON_CAPTURING_FILE_FORMAT:
+        case PIECE_CAPTURING_FILE_FORMAT:
+          if (square.getFile() == sanConversion.fromFile()) {
+            result.add(square);
+          }
+          break;
+        case PIECE_NON_CAPTURING_RANK_FORMAT:
+        case PIECE_CAPTURING_RANK_FORMAT:
+          if (square.getRank() == sanConversion.fromRank()) {
+            result.add(square);
+          }
+          break;
+        case PIECE_NON_CAPTURING_SQUARE_FORMAT:
+        case PIECE_CAPTURING_SQUARE_FORMAT:
+          if (square == calculateFromSquare(sanConversion)) {
+            result.add(square);
+          }
+          break;
+        default:
+          throw new IllegalArgumentException();
+      }
+    }
+    return result;
+  }
+
+  private static Set<Square> filterCandidateSquaresForPotentialMove(StaticPosition staticPosition, Side havingMove,
+      Square toSquare, Set<Square> candidateSquares) {
+    final Set<Square> result = new TreeSet<>();
+    for (final Square candidateSquare : candidateSquares) {
+      final Set<Square> potentialToSquares = AbstractPotentialToSquares.calculatePotentialToSquare(staticPosition,
+          Square.NONE, havingMove, candidateSquare);
+      if (potentialToSquares.contains(toSquare)) {
+        result.add(candidateSquare);
+      }
+    }
+    return result;
   }
 
   private static Set<LegalMove> filterLegalMovesCandidatesForFrom(SanFormat sanFormat, SanConversion sanConversion,

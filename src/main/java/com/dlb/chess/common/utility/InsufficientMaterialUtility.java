@@ -33,6 +33,9 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
+        if (pieceOnSquare.getPieceType() == KING) {
+          continue;
+        }
         if (pieceOnSquare.getPieceType() == BISHOP && boardSquare.getSquareType() == squareType) {
           continue;
         }
@@ -54,6 +57,9 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
+        if (pieceOnSquare.getPieceType() == KING) {
+          continue;
+        }
         if (pieceOnSquare.getPieceType() == QUEEN) {
           continue;
         }

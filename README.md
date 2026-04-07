@@ -1,13 +1,10 @@
 clean-chess
 ===========
 
-clean-chess has the following features:
-* Threefold repetition and fifty-moves report
-* Implementation of [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) in Java (unwinnability and dead position detection)
-* Java chess API, including PGN support
+clean-chess is a java chess library with the main feature of implementing the 
+[Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess).
 
-The name refers to clean code since the code relies on extensive tests as recommended in clean code.
-
+clean-chess is not a chess engine, it does not calculate moves for a given position.
 
 # Building/Installing
 ## From source
@@ -76,8 +73,8 @@ dependencies {
   System.out.println(board.isCheckmate()); // true
 ```
 
-# Motivation for the API
-Below I write my motivation for programming this chess API.
+# Motivation for the chess library
+Below I write my motivation for programming this chess library.
 
 ## Threefold repetition and fifty-moves
 When I wanted to check a game for the occurrence of a threefold repetition or the fifty moves, I could not find any software
@@ -93,9 +90,9 @@ For this reason, I implemented a report which shows the threefolds and fifty mov
 Current chess programs cannot correctly determine unwinnability and dead positions for all positions, and as a result, the game result for some games is incorrect.
 The [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) provides an algorithm to close the gap. I implemented the algorithm in Java.
 
-## Java chess API
-There are several Java chess API, but because this chess API is about game-deciding situations of having a potential draw or not, I did not
-want to rely on other chess APIs, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer. And because these tests must be accurate, I spent a lot of time making the PGN reader
+## Java chess library
+There are several Java chess libraries, but because this chess libary is about game-deciding situations of having a potential draw or not, I did not
+want to rely on other chess libraries, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer. And because these tests must be accurate, I spent a lot of time making the PGN reader
 accurate for every situation.
 
 # Threefold repetition and fifty-moves
@@ -210,13 +207,13 @@ The halfmove series always indicates the first halfmove with (0.5), fifty halfmo
 and finally, the last halfmove in the series.
 
 # Unwinnability and dead position
-The API implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. Also, all relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which elaborates on the subject in every aspect.
+The library implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. Also, all relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which elaborates on the subject in every aspect.
 
 A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
 If the position is unwinnable for both players, it's a dead position.
 
 ## Methods
-The API provides an implementation of CHA. So for both situations, there is a quick and a full method.
+The library provides an implementation of CHA. So for both situations, there is a quick and a full method.
 
 The quick method is speedy by design but might miss some corrections. The full method is slower but 100% accurate.
 
@@ -252,7 +249,7 @@ Performance: The comment from the Unwinnablity section for UNDETERMINED applies 
 
 #### Insufficient material
 The most common situations of unwinnable are if one side has insufficient material.
-These are treated correctly by all standard chess APIs.
+These are treated correctly by all standard chess libraries.
 For example, if White flags with the king and rook against the lone king of Black. Then, Black cannot potentially mate with the king alone.
 [Position](https://lichess.org/analysis/8/8/4k3/3R4/2K5/8/8/8_w_-_-_0_50)
 
@@ -264,7 +261,7 @@ For example, if White flags with the king and rook against the lone king of Blac
 
 #### Pawn walls
 Pawn walls are blocked positions, both players cannot mate and cannot make progress, so they are dead positions. They are not detected
-by most common chess APIs. 
+by most common chess libraries. 
 [Game](https://lichess.org/c3ew66ZV#123)
 
 ```java
@@ -309,7 +306,7 @@ The following is an example of a position where the quick algorithm says POSSIBL
 Because dead positions are just unwinnable positions for both sides, there is not much more substantially to say.
 
 #### Insufficient material
-The most straightforward dead position is when one player already has insufficient material, and the other becomes insufficient due to capture. All chess APIs detect this case.
+The most straightforward dead position is when one player already has insufficient material, and the other becomes insufficient due to capture. All chess libraries detect this case.
 
 [Position](https://lichess.org/analysis/8/8/3kn3/8/2K5/8/8/8_w_-_-_0_50)
 ```java
@@ -319,7 +316,7 @@ The most straightforward dead position is when one player already has insufficie
 ```
 
 #### Pawn walls
-Pawn walls are dead positions, but most common chess APIs do not detect them. Here is another example.
+Pawn walls are dead positions, but most common chess libraries do not detect them. Here is another example.
 [Game](https://lichess.org/V08kX4kz#121)
 
 ```java
@@ -500,7 +497,7 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
 
 ### Create PGN for game
 
-You can create the PGN for a game played in the API or export an imported PGN.
+You can create the PGN for a game played in the library or export an imported PGN.
 
 ```java
     final Board board = new Board();
