@@ -49,9 +49,12 @@ public abstract class SanValidateFormat extends AbstractSan {
         case 'R', 'N', 'B', 'Q' -> countRbnq++;
         case '1', '2', '3', '4', '5', '6', '7', '8' -> countDigits++;
         case 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' -> countFiles++;
-        default -> {
-          // other characters are handled by the format parsers below
+        case 'O', '-' -> {
+          // castling characters, counted implicitly by parseCastling
         }
+        default -> throw new SanValidationException(SanValidationProblem.FORMAT_INVALID_CHARACTER,
+            Message.getString("validation.san.format.invalidCharacter",
+                NonNullWrapperCommon.toString(san.charAt(i))));
       }
     }
     if (countX > 1 || countEquals > 1 || countCheckOrCheckmate > 1 || countK > 1 || countRbnq > 1 || countDigits > 2
@@ -90,7 +93,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     if (isPieceLetterRbnq(first)) {
       return parsePieceMoveRbnq(core, checkmateOrCheck);
     }
-    throw invalidFormat();
+    throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
+        Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
   }
 
   private static CheckmateOrCheck parseCheckmateOrCheck(final String san) {
@@ -158,7 +162,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     if (core.equals(CastlingConstants.SAN_CASTLING_KING_SIDE)) {
       return new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE, sanConversion);
     }
-    throw invalidFormat();
+    throw new SanValidationException(SanValidationProblem.FORMAT_CASTLING,
+        Message.getString("validation.san.format.castling"));
   }
 
   /**
@@ -181,7 +186,9 @@ public abstract class SanValidateFormat extends AbstractSan {
         // [file][rank] – non-capturing, non-promotion e.g. "d3"
         final var toRankChar = core.charAt(1);
         if (!isRankDigit(toRankChar)) {
-          throw invalidFormat();
+          throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER,
+              Message.getString("validation.san.format.pawn.secondCharacter",
+                  NonNullWrapperCommon.toString(toRankChar)));
         }
         yield new SanParse(SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE,
             new SanConversion(File.NONE, Rank.NONE, Square.calculate(parseFile(core.charAt(0)), parseRank(toRankChar)),
@@ -193,8 +200,15 @@ public abstract class SanValidateFormat extends AbstractSan {
           // [fromFile]x[toFile][toRank] – capturing, non-promotion e.g. "dxe5"
           final var toFileChar = core.charAt(2);
           final var toRankChar = core.charAt(3);
-          if (!isFileLetter(toFileChar) || !isRankDigit(toRankChar)) {
-            throw invalidFormat();
+          if (!isFileLetter(toFileChar)) {
+            throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_FILE,
+                Message.getString("validation.san.format.pawn.captureToFile",
+                    NonNullWrapperCommon.toString(toFileChar)));
+          }
+          if (!isRankDigit(toRankChar)) {
+            throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK,
+                Message.getString("validation.san.format.pawn.captureToRank",
+                    NonNullWrapperCommon.toString(toRankChar)));
           }
           yield new SanParse(SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE,
               new SanConversion(parseFile(core.charAt(0)), Rank.NONE,
@@ -205,25 +219,37 @@ public abstract class SanValidateFormat extends AbstractSan {
           // [toFile][toRank]=[promPiece] – non-capturing, promotion e.g. "d8=Q"
           final var toRankChar = core.charAt(1);
           if (!isRankDigit(toRankChar)) {
-            throw invalidFormat();
+            throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_RANK,
+                Message.getString("validation.san.format.pawn.promotionRank",
+                    NonNullWrapperCommon.toString(toRankChar)));
           }
           yield new SanParse(SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE,
               new SanConversion(File.NONE, Rank.NONE,
                   Square.calculate(parseFile(core.charAt(0)), parseRank(toRankChar)),
                   parsePromotionPiece(core.charAt(3)), checkmateOrCheck));
         }
-        throw invalidFormat();
+        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER,
+            Message.getString("validation.san.format.pawn.secondCharacter",
+                NonNullWrapperCommon.toString(core.charAt(1))));
       }
 
       case 6 -> {
         // [fromFile]x[toFile][toRank]=[promPiece] – capturing, promotion e.g. "dxe8=Q"
         if (core.charAt(1) != 'x' || core.charAt(4) != '=') {
-          throw invalidFormat();
+          throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_CAPTURE_STRUCTURE,
+              Message.getString("validation.san.format.pawn.promotionCaptureStructure"));
         }
         final var toFileChar = core.charAt(2);
         final var toRankChar = core.charAt(3);
-        if (!isFileLetter(toFileChar) || !isRankDigit(toRankChar)) {
-          throw invalidFormat();
+        if (!isFileLetter(toFileChar)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_CAPTURE_TO_FILE,
+              Message.getString("validation.san.format.pawn.captureToFile",
+                  NonNullWrapperCommon.toString(toFileChar)));
+        }
+        if (!isRankDigit(toRankChar)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_CAPTURE_TO_RANK,
+              Message.getString("validation.san.format.pawn.captureToRank",
+                  NonNullWrapperCommon.toString(toRankChar)));
         }
         yield new SanParse(SanType.PAWN_CAPTURING_PROMOTION_MOVE,
             new SanConversion(parseFile(core.charAt(0)), Rank.NONE,
@@ -231,7 +257,8 @@ public abstract class SanValidateFormat extends AbstractSan {
                 checkmateOrCheck));
       }
 
-      default -> throw invalidFormat();
+      default -> throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH,
+          Message.getString("validation.san.format.pawn.length"));
     };
   }
 
@@ -254,7 +281,8 @@ public abstract class SanValidateFormat extends AbstractSan {
         final var toFileChar = core.charAt(1);
         final var toRankChar = core.charAt(2);
         if (!isFileLetter(toFileChar) || !isRankDigit(toRankChar)) {
-          throw invalidFormat();
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_DESTINATION,
+              Message.getString("validation.san.format.king.destination"));
         }
         yield new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE, new SanConversion(File.NONE, Rank.NONE,
             Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE, checkmateOrCheck));
@@ -263,18 +291,22 @@ public abstract class SanValidateFormat extends AbstractSan {
       case 4 -> {
         // Kx[toFile][toRank] – capturing e.g. "Kxe5"
         if (core.charAt(1) != 'x') {
-          throw invalidFormat();
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SECOND_CHARACTER,
+              Message.getString("validation.san.format.king.secondCharacter",
+                  NonNullWrapperCommon.toString(core.charAt(1))));
         }
         final var toFileChar = core.charAt(2);
         final var toRankChar = core.charAt(3);
         if (!isFileLetter(toFileChar) || !isRankDigit(toRankChar)) {
-          throw invalidFormat();
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION,
+              Message.getString("validation.san.format.king.captureDestination"));
         }
         yield new SanParse(SanType.KING_NON_CASTLING_CAPTURING_MOVE, new SanConversion(File.NONE, Rank.NONE,
             Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE, checkmateOrCheck));
       }
 
-      default -> throw invalidFormat();
+      default -> throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
+          Message.getString("validation.san.format.king.length"));
     };
   }
 
@@ -306,14 +338,16 @@ public abstract class SanValidateFormat extends AbstractSan {
   private static SanParse parsePieceMoveRbnq(final String core, final CheckmateOrCheck checkmateOrCheck) {
     // Valid core lengths: piece(1) + middle(0–3) + destination(2) = 3 to 6
     if (core.length() < 3 || core.length() > 6) {
-      throw invalidFormat();
+      throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_LENGTH,
+          Message.getString("validation.san.format.piece.length"));
     }
 
     // The destination square is always the last two characters
     final var toFileChar = core.charAt(core.length() - 2);
     final var toRankChar = core.charAt(core.length() - 1);
     if (!isFileLetter(toFileChar) || !isRankDigit(toRankChar)) {
-      throw invalidFormat();
+      throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_DESTINATION,
+          Message.getString("validation.san.format.piece.destination"));
     }
     final var toSquare = Square.calculate(parseFile(toFileChar), parseRank(toRankChar));
     final var piece = parsePieceLetter(core.charAt(0));
@@ -343,7 +377,8 @@ public abstract class SanValidateFormat extends AbstractSan {
           yield new SanParse(pieceMoveSanType(piece, false, true, false),
               new SanConversion(File.NONE, parseRank(m), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
         }
-        throw invalidFormat();
+        throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
+            Message.getString("validation.san.format.piece.middle", NonNullWrapperCommon.toString(m)));
       }
 
       case 2 -> {
@@ -364,7 +399,9 @@ public abstract class SanValidateFormat extends AbstractSan {
           yield new SanParse(pieceMoveSanType(piece, true, true, false),
               new SanConversion(parseFile(m0), parseRank(m1), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
         }
-        throw invalidFormat();
+        throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
+            Message.getString("validation.san.format.piece.middle2",
+                NonNullWrapperCommon.toString(m0), NonNullWrapperCommon.toString(m1)));
       }
 
       case 3 -> {
@@ -373,13 +410,16 @@ public abstract class SanValidateFormat extends AbstractSan {
         final var m1 = core.charAt(2);
         final var m2 = core.charAt(3);
         if (!isFileLetter(m0) || !isRankDigit(m1) || m2 != 'x') {
-          throw invalidFormat();
+          throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
+              Message.getString("validation.san.format.piece.middle3",
+                  NonNullWrapperCommon.toString(m0), NonNullWrapperCommon.toString(m1),
+                  NonNullWrapperCommon.toString(m2)));
         }
         yield new SanParse(pieceMoveSanType(piece, true, true, true),
             new SanConversion(parseFile(m0), parseRank(m1), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
       }
 
-      default -> throw invalidFormat(); // unreachable: mid is exactly 0–3 given the length check above
+      default -> throw new ProgrammingMistakeException("Unreachable: mid is exactly 0-3 given the length check above");
     };
   }
 
