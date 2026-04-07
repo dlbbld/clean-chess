@@ -15,7 +15,6 @@ import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
-import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -24,29 +23,12 @@ import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 
 public abstract class SanValidateMove extends AbstractSan implements EnumConstants {
 
-  public static void validateMovingOntoItself(SanParse sanParse) {
-    if (sanParse.sanType().getMovingPieceType() != PieceType.PAWN) {
-      final Square fromSquare = AbstractSan.calculateFromSquare(sanParse.sanConversion());
-      if (fromSquare != Square.NONE && fromSquare == sanParse.sanConversion().toSquare()) {
-        throw new SanValidationException(SanValidationProblem.MOVING_ONTO_ITSELF,
-            Message.getString("validation.san.movingOntoItself"));
-      }
-    }
-  }
-
-  public static void validateMovement(Side havingMove, SanParse sanParse) {
+  public static void validateMovement(SanParse sanParse, Side havingMove) {
     if (sanParse.sanType().getMovingPieceType() != PieceType.PAWN) {
       validateNonPawnMovement(sanParse);
       return;
     }
     validatePawnMovement(havingMove, sanParse);
-  }
-
-  public static void validatePromotion(Side havingMove, SanParse sanParse) {
-    if (sanParse.sanType().getMovingPieceType() != PieceType.PAWN) {
-      return;
-    }
-    validatePawnPromotion(havingMove, sanParse);
   }
 
   private static void validateNonPawnMovement(SanParse sanParse) {
@@ -56,7 +38,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
     // in a first step we need to check the castling
     // this is the only move where the to square is not set so we can afterwards set
     // the to square
-    if (SanFormat.calculateIsKingCastlingMove(sanType.getSanFormat())) {
+    if (SanType.calculateIsKingCastlingMove(sanType)) {
       return;
     }
 
@@ -166,30 +148,20 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
 
     switch (sanType.getSanFormat()) {
       case KING_NON_CASTLING_CAPTURING_FORMAT, KING_NON_CASTLING_NON_CAPTURING_FORMAT -> throw new IllegalArgumentException();
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT, PAWN_NON_CAPTURING_PROMOTION_FORMAT -> validatePawnRankTo(
-          havingMove, toSquare);
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT, PAWN_CAPTURING_PROMOTION_FORMAT -> {
+      case PAWN_CAPTURING_PROMOTION_FORMAT -> {
         validatePawnRankTo(havingMove, toSquare);
         validatePawnFromAndToFile(havingMove, sanConversion.fromFile(), toSquare);
       }
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT, PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_FILE_FORMAT, PIECE_NON_CAPTURING_RANK_FORMAT, PIECE_CAPTURING_RANK_FORMAT, PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT, KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    }
-  }
-
-  private static void validatePawnPromotion(Side havingMove, SanParse sanParse) {
-
-    final SanType sanType = sanParse.sanType();
-    final SanConversion sanConversion = sanParse.sanConversion();
-
-    final Square toSquare = sanConversion.toSquare();
-
-    switch (sanType.getSanFormat()) {
-      case KING_NON_CASTLING_CAPTURING_FORMAT, KING_NON_CASTLING_NON_CAPTURING_FORMAT -> throw new IllegalArgumentException();
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT, PAWN_CAPTURING_NON_PROMOTION_FORMAT -> validatePawnPromotionMissingPiece(
-          havingMove, toSquare.getRank());
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT, PAWN_CAPTURING_PROMOTION_FORMAT -> validatePawnPromotionRank(havingMove,
-          toSquare.getRank());
+      case PAWN_NON_CAPTURING_PROMOTION_FORMAT -> {
+        validatePawnRankTo(havingMove, toSquare);
+      }
+      case PAWN_CAPTURING_NON_PROMOTION_FORMAT -> {
+        validatePawnRankTo(havingMove, toSquare);
+        validatePawnFromAndToFile(havingMove, sanConversion.fromFile(), toSquare);
+      }
+      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT -> {
+        validatePawnRankTo(havingMove, toSquare);
+      }
       case PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT, PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_FILE_FORMAT, PIECE_NON_CAPTURING_RANK_FORMAT, PIECE_CAPTURING_RANK_FORMAT, PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT, KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     }
@@ -271,24 +243,6 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
       }
     }
     return false;
-  }
-
-  private static void validatePawnPromotionMissingPiece(Side havingMove, Rank rank) {
-    if (Rank.calculateIsPromotionRank(havingMove, rank)) {
-      throw new SanValidationException(SanValidationProblem.INVALID_PROMOTION_NO_PROMOTION_PIECE,
-          Message.getString("validation.san.pawn.invalidNoPromotionPiece"));
-    }
-  }
-
-  private static void validatePawnPromotionRank(Side havingMove, Rank rank) {
-    if (!Rank.calculateIsPromotionRank(havingMove, rank)) {
-      final Rank promotionRank = Rank.calculatePromotionRank(havingMove);
-      final String promotionRankNumber = NonNullWrapperCommon.valueOf(promotionRank.getNumber());
-
-      throw new SanValidationException(SanValidationProblem.INVALID_PROMOTION_RANK_PAWN,
-          Message.getString("validation.san.pawn.invalidPromotionRank", havingMove.getName(), PieceType.PAWN.getName(),
-              promotionRankNumber));
-    }
   }
 
 }

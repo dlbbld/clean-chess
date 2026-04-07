@@ -1,13 +1,10 @@
 clean-chess
 ===========
 
-clean-chess has the following features:
-* Threefold repetition and fifty-moves report
-* Implementation of [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) in Java (unwinnability and dead position detection)
-* Java chess API, including PGN support
+clean-chess is a java chess library with the main feature of implementing the 
+[Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess).
 
-The name refers to clean code since the code relies on extensive tests as recommended in clean code.
-
+clean-chess is not a chess engine, it does not calculate moves for a given position.
 
 # Building/Installing
 ## From source
@@ -76,8 +73,8 @@ dependencies {
   System.out.println(board.isCheckmate()); // true
 ```
 
-# Motivation for the API
-Below I write my motivation for programming this chess API.
+# Motivation for the chess library
+Below I write my motivation for programming this chess library.
 
 ## Threefold repetition and fifty-moves
 When I wanted to check a game for the occurrence of a threefold repetition or the fifty moves, I could not find any software
@@ -93,9 +90,9 @@ For this reason, I implemented a report which shows the threefolds and fifty mov
 Current chess programs cannot correctly determine unwinnability and dead positions for all positions, and as a result, the game result for some games is incorrect.
 The [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) provides an algorithm to close the gap. I implemented the algorithm in Java.
 
-## Java chess API
-There are several Java chess API, but because this chess API is about game-deciding situations of having a potential draw or not, I did not
-want to rely on other chess APIs, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer. And because these tests must be accurate, I spent a lot of time making the PGN reader
+## Java chess library
+There are several Java chess libraries, but because this chess libary is about game-deciding situations of having a potential draw or not, I did not
+want to rely on other chess libraries, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer. And because these tests must be accurate, I spent a lot of time making the PGN reader
 accurate for every situation.
 
 # Threefold repetition and fifty-moves
@@ -210,13 +207,13 @@ The halfmove series always indicates the first halfmove with (0.5), fifty halfmo
 and finally, the last halfmove in the series.
 
 # Unwinnability and dead position
-The API implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. Also, all relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which elaborates on the subject in every aspect.
+The library implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. Also, all relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which elaborates on the subject in every aspect.
 
 A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
 If the position is unwinnable for both players, it's a dead position.
 
 ## Methods
-The API provides an implementation of CHA. So for both situations, there is a quick and a full method.
+The library provides an implementation of CHA. So for both situations, there is a quick and a full method.
 
 The quick method is speedy by design but might miss some corrections. The full method is slower but 100% accurate.
 
@@ -252,7 +249,7 @@ Performance: The comment from the Unwinnablity section for UNDETERMINED applies 
 
 #### Insufficient material
 The most common situations of unwinnable are if one side has insufficient material.
-These are treated correctly by all standard chess APIs.
+These are treated correctly by all standard chess libraries.
 For example, if White flags with the king and rook against the lone king of Black. Then, Black cannot potentially mate with the king alone.
 [Position](https://lichess.org/analysis/8/8/4k3/3R4/2K5/8/8/8_w_-_-_0_50)
 
@@ -264,7 +261,7 @@ For example, if White flags with the king and rook against the lone king of Blac
 
 #### Pawn walls
 Pawn walls are blocked positions, both players cannot mate and cannot make progress, so they are dead positions. They are not detected
-by most common chess APIs. 
+by most common chess libraries. 
 [Game](https://lichess.org/c3ew66ZV#123)
 
 ```java
@@ -309,7 +306,7 @@ The following is an example of a position where the quick algorithm says POSSIBL
 Because dead positions are just unwinnable positions for both sides, there is not much more substantially to say.
 
 #### Insufficient material
-The most straightforward dead position is when one player already has insufficient material, and the other becomes insufficient due to capture. All chess APIs detect this case.
+The most straightforward dead position is when one player already has insufficient material, and the other becomes insufficient due to capture. All chess libraries detect this case.
 
 [Position](https://lichess.org/analysis/8/8/3kn3/8/2K5/8/8/8_w_-_-_0_50)
 ```java
@@ -319,7 +316,7 @@ The most straightforward dead position is when one player already has insufficie
 ```
 
 #### Pawn walls
-Pawn walls are dead positions, but most common chess APIs do not detect them. Here is another example.
+Pawn walls are dead positions, but most common chess libraries do not detect them. Here is another example.
 [Game](https://lichess.org/V08kX4kz#121)
 
 ```java
@@ -342,69 +339,187 @@ Positions can also often be dead due to forced moves.
       
 ## PGN parser
       
-### PGN lenient parser
-The common PGN parser - the PGN lenient is trying to read the PGN with best effort, ignoring whitespace and errors as much as possible. Only PGNs with move variations are not supported.
+### Lenient PGN parser
+The common PGN parser - trying to read the file with best effort. For example below space after "[" is ignored etc. Only PGNs with move variations are not supported.
+
+#### PGN valid
 
 ```java
-  final var pgn = """
-      [Event "Spassky - Fischer World Championship Match"]
-      [Site "Reykjavik ISL"]
-      [Date "1972.08.22"]
-      [EventDate "?"]
-      [Round "17"]
-      [Result "1/2-1/2"]
-      [White "Boris Spassky"]
-      [Black "Robert James Fischer"]
-      [ECO "B09"]
-      [WhiteElo "?"]
-      [BlackElo "?"]
-      [PlyCount "89"]
+   final var pgn = """
+        [ Event "Spring Classic"]
 
-      1. e4 d6 2. d4 g6 3. Nc3 Nf6 4. f4 Bg7 5. Nf3 c5 6. dxc5 Qa5
-      7. Bd3 Qxc5 8. Qe2 O-O 9. Be3 Qa5 10. O-O Bg4 11. Rad1 Nc6
-      12. Bc4 Nh5 13. Bb3 Bxc3 14. bxc3 Qxc3 15. f5 Nf6 16. h3 Bxf3
-      17. Qxf3 Na5 18. Rd3 Qc7 19. Bh6 Nxb3 20. cxb3 Qc5+ 21. Kh1
-      Qe5 22. Bxf8 Rxf8 23. Re3 Rc8 24. fxg6 hxg6 25. Qf4 Qxf4
-      26. Rxf4 Nd7 27. Rf2 Ne5 28. Kh2 Rc1 29. Ree2 Nc6 30. Rc2 Re1
-      31. Rfe2 Ra1 32. Kg3 Kg7 33. Rcd2 Rf1 34. Rf2 Re1 35. Rfe2 Rf1
-      36. Re3 a6 37. Rc3 Re1 38. Rc4 Rf1 39. Rdc2 Ra1 40. Rf2 Re1
-      41. Rfc2 g5 42. Rc1 Re2 43. R1c2 Re1 44. Rc1 Re2 45. R1c2
-      1/2-1/2
-      """;
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5
+                """;
 
-  final PgnFile pgnFile = LenientPgnParser.parse(pgn);
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    board.performMove("a3");
 
-  // play through the game
-  final Board board = new Board();
-  for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-    board.performMove(halfMove.san());
-  }
-
-    System.out.println(board.getLegalMovesSan()); // print legal moves
-    // [Kf6, Kf8, Kg6, Kg8, Kh6, Kh7, Kh8, Na5, Na7, Nb4, Nb8, Nd4, Nd8, Ne5, Rd2, Re1, Re3+, Rf2, Rxc2, Rxe4, Rxg2+,
-    // a5, b5, b6, d5, e5, e6, f5, f6, g4]
 ```
 
-Reading PGN files from the file system:
+#### PGN transformation to export format
+
+The parser does a bit more than a standard parser should do. It converts the imported PGN to a PGN object which when exported will adhere to the export format. That is it for example adds missing tags and sorts them if necessary.
 
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final PgnFile pgnFile = LenientPgnParser.parse(path);
-    System.out.println(PgnCreate.createPgnFileString(pgnFile)); // prints contents of the PGN as parsed
-```
+    final var pgn = """
+                [Black "Jane Doe"]
+                [White "John Doe"]
+                [ Event "Spring Classic"]
 
-### PGN strict parser
-The PGN strict parser only allows PGN adhering to the PGN export format.
+                1. e4 e5   2. Nf3
+                Nf6
+                3. Bc4 Bc5
+        """;
 
-```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final PgnFile pgnFile = StrictPgnParser.parse(path);
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
     System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    // [Event "Spring Classic"]
+    // [Site "?"]
+    // [Date "?"]
+    // [Round "?"]
+    // [White "John Doe"]
+    // [Black "Jane Doe"]
+    // [Result "*"]
+    //
+    // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+    // 
+```
+
+#### PGN invalid
+
+When parsing fails, error messages are designed to be as descriptive as possible.
+
+```java
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf4
+        Nf6
+          3. Bc4 Bc5
+                """;
+
+    final PgnFile pgnFile;
+    try {
+      pgnFile = LenientPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+    } catch (final LenientPgnParserValidationException e) {
+      System.out.println(e.getMessage());
+      // The validation for 2. Nf4 failed. Reason: The move specification is invalid because there is no knight which
+      // can move to square f4.
+      return;
+    }
+```
+
+#### File parsing
+
+```java
+    final PgnFile pgnFile = LenientPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    System.out.println(board.isCheckmate());
+```
+
+### Strict PGN parser
+The strict PGN parser does not allow inconsistencies as the lenient PGN parser. It expects the PGN to be in the export format according to the PGN specification.
+
+#### PGN valid
+
+```java
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+        """;
+
+    final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    board.performMove("a3");
+```
+    
+#### PGN invalid syntax
+
+```java
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
+        """;
+
+    final PgnFile pgnFile;
+    try {
+      pgnFile = StrictPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+    } catch (final StrictPgnParserValidationException e) {
+      System.out.println(e.getMessage());
+      // The left square bracked [must be followed by the tag name, but a space was found.
+      return;
+    }
+```
+
+#### PGN invalid form
+
+```java
+    final var pgn = """
+        [Event "Spring Classic"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
+        """;
+
+    final PgnFile pgnFile;
+    try {
+      pgnFile = StrictPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+    } catch (final StrictPgnParserValidationException e) {
+      System.out.println(e.getMessage());
+      // Not all tags from the seven tag roster (Event, Site, Date, Round, White, Black, Result) are set. The first not
+      // found tag is "Site".
+      return;
+    }
+```
+
+#### File parsing
+
+```java
+    final PgnFile pgnFile = StrictPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    System.out.println(board.isThreefoldRepetition());
 ```
       
 ## PGN creation
 
-You can create the PGN for a game played in the API or export an imported PGN. The result will comply with the PGN export format, containing all required tags, formatting etc., for exported PGNs.
+### Create PGN for game
+
+You can create the PGN for a game played in the library or export an imported PGN.
+
+```java
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+	 System.out.println(pgnFile);
+    // [Event "?"]
+    // [Site "?"]
+    // [Date "2026.03.30"]
+    // [Round "?"]
+    // [White "?"]
+    // [Black "?"]
+    // [Result "*"]
+    //
+    // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+    //
+```
+
+### PGN format
+
+The PGN is created in the unique export format as defined by the PGN specification so passes validation by the lenient and strict PGN parser.
 
 ```java
     final Board board = new Board();
@@ -412,40 +527,110 @@ You can create the PGN for a game played in the API or export an imported PGN. T
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
 
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    PgnWriter.writePgnFile(pgnFile, path); // creates file with below content
+    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile);
+    System.out.println(LenientPgnParser.validateText(pgnFileString).isValid()); // true
+    System.out.println(StrictPgnParser.validateText(pgnFileString).isValid()); // true
 ```
 
-Output
-```
-[Event "?"]
-[Site "?"]
-[Date "2022.05.10"]
-[Round "?"]
-[White "?"]
-[Black "?"]
-[Result "*"]
+## PGN export
 
-1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
-```
+A PGN can be written to the file system as below.
 
+```java
+    final Board board = new Board();
+    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    PgnWriter.writePgnFile(pgnFile, "C:\\temp\\myFile.pgn");
+```
+    
 ## PGN validation
 
 ### PGN lenient validation
 Checks weather a PGN can be parsed using the PGN lenient parser.
 
+#### PGN valid
+
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final LenientPgnParserValidationResult result = LenientPgnParser.validate(path);
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // true
+```
+
+#### PGN invalid
+
+```java
+    final var pgn = """
+        [ Event "Spring Classic"]
+
+        1. e4 e5   2. Nf3
+        Nf6
+          3. Bc4 Bc5 4. X1
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // false
+    System.out.println(result.message());
+    // The movetext is invalid because a SAN contains an invalid character of "X".
+```
+
+#### File validation
+
+```java
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText("C:\\temp\\myFile.pgn");
+    System.out.println(result.isValid());
 ```
 
 ### PGN strict validation
 
 Checks weather a PGN adhers to the export format per the PGN specification.
 
+#### PGN valid
+
 ```java
-    final var path = Paths.get("C:\\temp\\myFile.pgn");
-    final StrictPgnParserValidationResult result = StrictPgnParser.validate(path);
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+        """;
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // true
+```
+
+#### PGN invalid
+
+```java
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Site "Somewhere"]
+        [Date "2024.01.01"]
+        [Round "1"]
+        [White "Player1"]
+        [Black "Player2"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 2. Bc4 Bc5 *
+        """;
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // false
+    System.out.println(result.message());
+    // The movetext does not continue with move number "3. " as expected
+```
+    
+#### File validation
+
+```java
+    final StrictPgnParserValidationResult result = StrictPgnParser.validateText("C:\\temp\\myFile.pgn");
+    System.out.println(result.isValid());
 ```

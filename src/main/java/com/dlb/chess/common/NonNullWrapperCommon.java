@@ -2,6 +2,7 @@ package com.dlb.chess.common;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -143,7 +144,7 @@ public class NonNullWrapperCommon {
   @SuppressWarnings("null")
   @NonNull
   public static String[] split(String str, String regex) {
-    return checkResult(str.split(regex));
+    return checkResult(str.split(regex, -1));
   }
 
   public static Logger getLogger(Class<?> theClass) {
@@ -167,6 +168,11 @@ public class NonNullWrapperCommon {
   @NonNull
   public static <E> E get(E[] list, int index) {
     return checkResult(list[index]);
+  }
+
+  @SuppressWarnings("null")
+  public static Path get(final String filePath) {
+    return Paths.get(filePath); // not null by API
   }
 
   @NonNull
@@ -197,6 +203,11 @@ public class NonNullWrapperCommon {
   @SuppressWarnings("null")
   public static <E, F> Set<Map.Entry<E, F>> entrySet(Map<E, F> map) {
     return map.entrySet();
+  }
+
+  @SuppressWarnings("null")
+  public static <E, F> Set<E> keySet(Map<E, F> map) {
+    return map.keySet();
   }
 
   public static <T> List<T> unmodifiableList(List<? extends T> list) {

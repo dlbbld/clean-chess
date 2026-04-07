@@ -32,7 +32,10 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
       StaticPosition staticPosition, SquareType squareType) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
+        if (pieceOnSquare.getPieceType() == KING) {
+          continue;
+        }
         if (pieceOnSquare.getPieceType() == BISHOP && boardSquare.getSquareType() == squareType) {
           continue;
         }
@@ -53,7 +56,10 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
   private static boolean calculateHasZeroOrMultipleQueenOnly(Side side, StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare)) {
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
+        if (pieceOnSquare.getPieceType() == KING) {
+          continue;
+        }
         if (pieceOnSquare.getPieceType() == QUEEN) {
           continue;
         }
@@ -85,7 +91,7 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
       StaticPosition staticPosition) {
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPieceButNotKing(side, pieceOnSquare) && pieceOnSquare.getPieceType() == BISHOP
+      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == BISHOP
           && boardSquare.getSquareType() == squareType) {
         return true;
       }

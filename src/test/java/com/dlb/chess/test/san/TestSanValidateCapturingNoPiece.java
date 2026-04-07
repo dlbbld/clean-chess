@@ -83,11 +83,11 @@ class TestSanValidateCapturingNoPiece {
   private static void checkException(String san, ApiBoard board) {
     boolean isException;
     try {
-      SanValidation.calculateMoveSpecificationForSan(san, board);
+      SanValidation.validateSan(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      assertEquals(SanValidationProblem.CAPTURING_NO_PIECE, e.getSanValidationProblem());
+      assertEquals(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

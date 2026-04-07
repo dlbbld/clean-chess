@@ -204,11 +204,6 @@ public abstract class BasicUtility {
   }
 
   public static String convertToString(List<String> list) {
-    final StringBuilder result = new StringBuilder();
-    for (final String line : list) {
-      result.append(line).append("\n");
-    }
-    return NonNullWrapperCommon.toString(result);
-
+    return NonNullWrapperCommon.join("\n", list);
   }
 }

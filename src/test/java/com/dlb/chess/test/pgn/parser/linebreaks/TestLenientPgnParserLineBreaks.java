@@ -61,7 +61,7 @@ public class TestLenientPgnParserLineBreaks {
 
         """;
 
-    final PgnFile pgnFileExpected = LenientPgnParser.parse(pgn);
+    final PgnFile pgnFileExpected = LenientPgnParser.parseText(pgn);
     checkFile(pgnFileExpected, "01_linux.pgn");
     checkFile(pgnFileExpected, "02_windows.pgn");
     checkFile(pgnFileExpected, "03_mixed.pgn");

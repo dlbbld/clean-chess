@@ -74,7 +74,7 @@ public class TestPgnExportLineBreaks {
 
     logger.info(TEST_SOURCE_FILE_PATH.getFileName());
 
-    final PgnFile pgnFile = LenientPgnParser.parse(pgn);
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
     PgnWriter.writePgnFile(pgnFile, TEST_DESTINATION_FILE_PATH);
 
     assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));

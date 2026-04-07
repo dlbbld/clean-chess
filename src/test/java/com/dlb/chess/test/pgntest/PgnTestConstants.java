@@ -9,7 +9,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 public abstract class PgnTestConstants {
 
   public static final boolean IS_RESTRICT_LENIENT_PGN_PARSER_API_AGAINST_EACH_OTHER_TEST = true;
-  public static final boolean IS_RESTRICT_BOARD_API_AGAINST_EACH_OTHER_TEST = true;
+  public static final boolean IS_RESTRICT_BOARD_API_AGAINST_EACH_OTHER_TEST = false;
   public static final boolean IS_RESTRICT_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST = true;
   public static final boolean IS_RESTRICT_PGN_WRITER_TEST = true;
   public static final boolean IS_RESTRICT_STARTING_POSITION_NONE_AGAINST_INITIAL_FEN_TEST = true;

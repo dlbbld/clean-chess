@@ -15,6 +15,17 @@ class TestSanValidateMovingOntoOwnPiece {
 
   @SuppressWarnings("static-method")
   @Test
+  void testUnderstanding() {
+    final ApiBoard board = new Board("8/3k4/3r4/R7/4K3/8/8/R7 b - - 0 1");
+
+    checkException("Rd6", board);
+    board.performMoves("Rc6");
+    // rook
+    checkException("Ra1", board);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testWhite() {
 
     final ApiBoard board = new Board();
@@ -73,7 +84,7 @@ class TestSanValidateMovingOntoOwnPiece {
   private static void checkException(String san, ApiBoard board) {
     boolean isException;
     try {
-      SanValidation.calculateMoveSpecificationForSan(san, board);
+      SanValidation.validateSan(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

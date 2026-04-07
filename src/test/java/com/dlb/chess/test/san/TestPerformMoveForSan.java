@@ -245,7 +245,7 @@ class TestPerformMoveForSan implements EnumConstants {
   }
 
   private static void checkMoveSpecificationTest(ApiBoard board, String san, MoveSpecification expectedMove) {
-    final MoveSpecification parsedMoveAsIs = SanValidation.calculateMoveSpecificationForSan(san, board);
+    final MoveSpecification parsedMoveAsIs = SanValidation.validateSan(san, board);
     assertEquals(expectedMove, parsedMoveAsIs);
 
     board.performMove(expectedMove);

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.san.enums.SanValidationProblem;
 
 class TestSanValidateOntoItself extends AbstractTestSanValidate {
 
@@ -19,7 +20,7 @@ class TestSanValidateOntoItself extends AbstractTestSanValidate {
     checkExceptionMovingOntoItself("Nb1b1", board);
     checkExceptionMovingOntoItself("Bc1c1", board);
     checkExceptionMovingOntoItself("Qd1d1", board);
-    checkExceptionFormat("Ke1e1", board);
+    checkExceptionFormat("Ke1e1", SanValidationProblem.FORMAT_KING_LENGTH, board);
 
     board.performMove("e4");
 
@@ -27,7 +28,7 @@ class TestSanValidateOntoItself extends AbstractTestSanValidate {
     checkExceptionMovingOntoItself("Nb8b8", board);
     checkExceptionMovingOntoItself("Bc8c8", board);
     checkExceptionMovingOntoItself("Qd8d8", board);
-    checkExceptionFormat("Ke8e8", board);
+    checkExceptionFormat("Ke8e8", SanValidationProblem.FORMAT_KING_LENGTH, board);
 
     board.performMove("e5");
 
@@ -70,9 +71,9 @@ class TestSanValidateOntoItself extends AbstractTestSanValidate {
     // kings after moved
     board.performMove("Kd1");
     board.performMove("Kd8");
-    checkExceptionFormat("Kd1d1", board);
+    checkExceptionFormat("Kd1d1", SanValidationProblem.FORMAT_KING_LENGTH, board);
     board.performMove("Ke2");
-    checkExceptionFormat("Kd8d8", board);
+    checkExceptionFormat("Kd8d8", SanValidationProblem.FORMAT_KING_LENGTH, board);
     board.performMove("Ke8");
 
   }

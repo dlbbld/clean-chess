@@ -40,7 +40,7 @@ public abstract class AbstractSan {
     return legalMovesForToQuare;
   }
 
-  public static Set<LegalMove> filterLegalMovesCandidates(Set<LegalMove> legalMoveSet, File fromFile) {
+  public static Set<LegalMove> calculateLegalMovesCandidates(Set<LegalMove> legalMoveSet, File fromFile) {
     final Set<LegalMove> legalMovesForToQuare = new TreeSet<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       if (moveCandidate.moveSpecification().fromSquare().getFile() == fromFile) {
@@ -60,15 +60,75 @@ public abstract class AbstractSan {
     return false;
   }
 
-  public static int calculateNumberOfLegalMovesFromSameFile(File file, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromSameFile(file, legalMoveSet).size();
+  public static int calculateNumberOfLegalMovesFromFile(File file, Set<LegalMove> legalMoveSet) {
+    return calculateLegalMovesFromFile(file, legalMoveSet).size();
   }
 
-  private static Set<LegalMove> calculateLegalMovesFromSameFile(File file, Set<LegalMove> legalMoveSet) {
+  private static Set<LegalMove> calculateLegalMovesFromFile(File file, Set<LegalMove> legalMoveSet) {
     final Set<LegalMove> filteredSet = new TreeSet<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       final File candidateFromFile = moveCandidate.moveSpecification().fromSquare().getFile();
       if (candidateFromFile == file) {
+        filteredSet.add(moveCandidate);
+      }
+    }
+    return filteredSet;
+  }
+
+  public static int calculateNumberOfLegalMovesFromOtherFiles(File file, Set<LegalMove> legalMoveSet) {
+    return calculateLegalMovesFromOtherFiles(file, legalMoveSet).size();
+  }
+
+  private static Set<LegalMove> calculateLegalMovesFromOtherFiles(File file, Set<LegalMove> legalMoveSet) {
+    final Set<LegalMove> filteredSet = new TreeSet<>();
+    for (final LegalMove moveCandidate : legalMoveSet) {
+      final File candidateFromFile = moveCandidate.moveSpecification().fromSquare().getFile();
+      if (candidateFromFile != file) {
+        filteredSet.add(moveCandidate);
+      }
+    }
+    return filteredSet;
+  }
+
+  public static int calculateNumberOfLegalMovesFromRank(Rank rank, Set<LegalMove> legalMoveSet) {
+    return calculateLegalMovesFromRank(rank, legalMoveSet).size();
+  }
+
+  private static Set<LegalMove> calculateLegalMovesFromRank(Rank rank, Set<LegalMove> legalMoveSet) {
+    final Set<LegalMove> filteredSet = new TreeSet<>();
+    for (final LegalMove moveCandidate : legalMoveSet) {
+      final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
+      if (candidateFromRank == rank) {
+        filteredSet.add(moveCandidate);
+      }
+    }
+    return filteredSet;
+  }
+
+  public static int calculateNumberOfLegalMovesFromOtherRanks(Rank rank, Set<LegalMove> legalMoveSet) {
+    return calculateLegalMovesFromOtherRanks(rank, legalMoveSet).size();
+  }
+
+  private static Set<LegalMove> calculateLegalMovesFromOtherRanks(Rank rank, Set<LegalMove> legalMoveSet) {
+    final Set<LegalMove> filteredSet = new TreeSet<>();
+    for (final LegalMove moveCandidate : legalMoveSet) {
+      final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
+      if (candidateFromRank != rank) {
+        filteredSet.add(moveCandidate);
+      }
+    }
+    return filteredSet;
+  }
+
+  public static int calculateNumberOfLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
+    return calculateLegalMovesFromSquare(square, legalMoveSet).size();
+  }
+
+  private static Set<LegalMove> calculateLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
+    final Set<LegalMove> filteredSet = new TreeSet<>();
+    for (final LegalMove moveCandidate : legalMoveSet) {
+      final Square candidateFromSquare = moveCandidate.moveSpecification().fromSquare();
+      if (candidateFromSquare == square) {
         filteredSet.add(moveCandidate);
       }
     }
@@ -83,21 +143,6 @@ public abstract class AbstractSan {
       }
     }
     return false;
-  }
-
-  public static int calculateNumberOfLegalMovesFromSameRank(Rank rank, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromSameRank(rank, legalMoveSet).size();
-  }
-
-  private static Set<LegalMove> calculateLegalMovesFromSameRank(Rank rank, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
-      final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
-      if (candidateFromRank == rank) {
-        filteredSet.add(moveCandidate);
-      }
-    }
-    return filteredSet;
   }
 
   public static void appendCheckOrCheckmate(StringBuilder buildSan, boolean isCheckmate, boolean isCheck) {

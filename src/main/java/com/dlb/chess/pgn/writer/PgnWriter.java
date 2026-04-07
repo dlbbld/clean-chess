@@ -4,12 +4,17 @@ import java.nio.file.Path;
 import java.util.List;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
 
 public class PgnWriter {
+
+  public static void writePgnFile(PgnFile pgnFile, String pgnFilePath) {
+    writePgnFile(pgnFile, NonNullWrapperCommon.get(pgnFilePath));
+  }
 
   public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName) {
     final Path filePath = FileUtility.calculateFilePath(folderPath, pgnFileName);
