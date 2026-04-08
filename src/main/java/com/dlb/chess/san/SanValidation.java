@@ -132,10 +132,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
     validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(), board.getStaticPosition());
 
-    validateOwnPieceOnDestinationSquare(havingMove, sanType, sanFormat, sanConversion, board.getStaticPosition());
-
-    validateNoCaptureIsNoCapture(havingMove, sanFormat, sanConversion, board.getStaticPosition());
-    validateCaptureIsCapture(board, havingMove, sanType, sanConversion);
+    validateDestinationSquareSemantics(board, havingMove, sanType, sanConversion);
 
     // validate san against legal moves
     // (1) if the san specifies a possible legal move
@@ -398,77 +395,59 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     }
   }
 
-  private static void validateOwnPieceOnDestinationSquare(Side havingMove, SanType sanType, SanFormat sanFormat,
-      SanConversion sanConversion, StaticPosition staticPosition) {
-    switch (sanFormat) {
-      case KING_CASTLING_KING_SIDE:
-      case KING_CASTLING_QUEEN_SIDE:
-        return;
-      case KING_NON_CASTLING_CAPTURING:
-      case PAWN_CAPTURING_NON_PROMOTION:
-      case PAWN_CAPTURING_PROMOTION:
-      case PIECE_CAPTURING_SQUARE:
-      case PIECE_CAPTURING_FILE:
-      case PIECE_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_RANK:
-      case KING_NON_CASTLING_NON_CAPTURING:
-      case PAWN_NON_CAPTURING_NON_PROMOTION:
-      case PAWN_NON_CAPTURING_PROMOTION:
-      case PIECE_NON_CAPTURING_SQUARE:
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_NON_CAPTURING_RANK:
-        // only in non castling case we can calculate the to square!
-        final Square toSquare = sanConversion.toSquare();
-        if (staticPosition.isOwnPiece(toSquare, havingMove)) {
-          if (sanType.isCapture()) {
-            throw new SanValidationException(SanValidationProblem.CAPTURING_OWN_PIECE,
-                Message.getString("validation.san.allExceptCastling.capturingOwnPiece", toSquare.getName()));
-          }
-          throw new SanValidationException(SanValidationProblem.MOVING_ONTO_OWN_PIECE,
-              Message.getString("validation.san.allExceptCastling.movingOntoOwnPiece", toSquare.getName()));
-        }
-        break;
-      default:
-        throw new IllegalArgumentException();
+  private static void validateDestinationSquareSemantics(ApiBoard board, Side havingMove, SanType sanType,
+      SanConversion sanConversion) {
+    if (SanType.calculateIsKingCastlingMove(sanType)) {
+      return;
+    }
 
+    final Square toSquare = sanConversion.toSquare();
+    final StaticPosition staticPosition = board.getStaticPosition();
+    final Piece pieceOnToSquare = staticPosition.get(toSquare);
+
+    if (pieceOnToSquare != Piece.NONE) {
+      // own piece on destination
+      if (pieceOnToSquare.getSide() == havingMove) {
+        if (sanType.isCapture()) {
+          throw new SanValidationException(SanValidationProblem.CAPTURING_OWN_PIECE,
+              Message.getString("validation.san.allExceptCastling.capturingOwnPiece", toSquare.getName()));
+        }
+        throw new SanValidationException(SanValidationProblem.MOVING_ONTO_OWN_PIECE,
+            Message.getString("validation.san.allExceptCastling.movingOntoOwnPiece", toSquare.getName()));
+      }
+
+      // opponent piece on destination
+      if (sanType.isCapture() && pieceOnToSquare.getPieceType() == KING) {
+        throw new SanValidationException(SanValidationProblem.CAPTURING_OPPONENT_KING,
+            Message.getString("validation.san.allExceptCastling.capturingOpponentKing", toSquare.getName()));
+      }
+      if (!sanType.isCapture()) {
+        throw new SanValidationException(SanValidationProblem.NON_CAPTURING_MOVING_ONTO_OPPONENT_PIECE,
+            Message.getString("validation.san.allExceptCastling.noCaptureIsCapture", toSquare.getName()));
+      }
+      return;
+    }
+
+    // empty destination
+    if (sanType.isCapture()) {
+      if (calculateIsEnPassantCapture(board, havingMove, sanType, sanConversion, toSquare)) {
+        return;
+      }
+      throw new SanValidationException(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE,
+          Message.getString("validation.san.allExceptCastling.captureIsNoCapture", toSquare.getName()));
     }
   }
 
-  private static void validateCaptureIsCapture(ApiBoard board, Side havingMove, SanType sanType,
-      SanConversion sanConversion) {
-    if (sanType.isCapture()) {
-      // here only we are outside castling, so we can calculate the to square!
-      final Square toSquare = sanConversion.toSquare();
-      final Piece pieceOnToSquare = board.getStaticPosition().get(toSquare);
-      final boolean isEnPassantCapture;
-      if (sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) {
-        final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
-        final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
-        final MoveSpecification pawnCapturingNonPromotionMove = new MoveSpecification(havingMove, fromSquare, toSquare);
-        isEnPassantCapture = EnPassantCaptureUtility.calculateIsEnPassantCapture(board.getStaticPosition(),
-            pawnCapturingNonPromotionMove);
-      } else {
-        isEnPassantCapture = false;
-      }
-      if (isEnPassantCapture) {
-        if (pieceOnToSquare != Piece.NONE) {
-          // double check
-          throw new ProgrammingMistakeException(
-              "For a move identified as en passant capture the to square must be empty, but is not");
-        }
-      } else {
-        // not a capture capture
-        if (pieceOnToSquare == Piece.NONE) {
-          throw new SanValidationException(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE,
-              Message.getString("validation.san.allExceptCastling.captureIsNoCapture", toSquare.getName()));
-        }
-        if (pieceOnToSquare.getSide() == havingMove.getOppositeSide() && pieceOnToSquare.getPieceType() == KING) {
-          throw new SanValidationException(SanValidationProblem.CAPTURING_OPPONENT_KING,
-              Message.getString("validation.san.allExceptCastling.capturingOpponentKing", toSquare.getName()));
-        }
-      }
+  private static boolean calculateIsEnPassantCapture(ApiBoard board, Side havingMove, SanType sanType,
+      SanConversion sanConversion, Square toSquare) {
+    if (sanType != SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) {
+      return false;
     }
+    final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
+    final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
+    final MoveSpecification pawnCapturingNonPromotionMove = new MoveSpecification(havingMove, fromSquare, toSquare);
+    return EnPassantCaptureUtility.calculateIsEnPassantCapture(board.getStaticPosition(),
+        pawnCapturingNonPromotionMove);
   }
 
   private static Set<LegalMove> calculateLegalMovesCandidates(ApiBoard board, Side havingMove, SanParse sanParse) {
@@ -521,41 +500,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
           "At this point it is expected that filtering the legal moves against the SAN result in exactly one legal move");
     }
     return calculateOnlyElement(filtered3);
-  }
-
-  private static void validateNoCaptureIsNoCapture(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
-      StaticPosition staticPosition) {
-
-    switch (sanFormat) {
-      case KING_CASTLING_KING_SIDE:
-      case KING_CASTLING_QUEEN_SIDE:
-        return;
-      case KING_NON_CASTLING_CAPTURING:
-      case PAWN_CAPTURING_NON_PROMOTION:
-      case PAWN_CAPTURING_PROMOTION:
-      case PIECE_CAPTURING_SQUARE:
-      case PIECE_CAPTURING_FILE:
-      case PIECE_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_RANK:
-        return;
-      case KING_NON_CASTLING_NON_CAPTURING:
-      case PAWN_NON_CAPTURING_NON_PROMOTION:
-      case PAWN_NON_CAPTURING_PROMOTION:
-      case PIECE_NON_CAPTURING_SQUARE:
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_NON_CAPTURING_RANK:
-        // only in non castling case we can calculate the to square!
-        final Square toSquare = sanConversion.toSquare();
-        if (staticPosition.isOpponentPiece(toSquare, havingMove)) {
-          throw new SanValidationException(SanValidationProblem.NON_CAPTURING_MOVING_ONTO_OPPONENT_PIECE,
-              Message.getString("validation.san.allExceptCastling.noCaptureIsCapture", toSquare.getName()));
-        }
-        break;
-      default:
-        throw new IllegalArgumentException();
-
-    }
   }
 
   private static void validateAgainstLegalMoves(StaticPosition staticPosition, Side havingMove,
