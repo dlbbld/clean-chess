@@ -1,4 +1,4 @@
-package com.dlb.chess.san;
+package com.dlb.chess.san.validate;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
@@ -11,6 +11,7 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;

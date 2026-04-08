@@ -1,4 +1,4 @@
-package com.dlb.chess.san;
+package com.dlb.chess.san.validate;
 
 import java.util.Set;
 
@@ -8,6 +8,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.exceptions.SanValidationException;

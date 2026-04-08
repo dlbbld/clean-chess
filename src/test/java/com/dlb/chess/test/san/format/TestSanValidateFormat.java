@@ -10,13 +10,13 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.reference.SanValidateFormatReference;
+import com.dlb.chess.san.validate.SanValidateFormat;
 
 class TestSanValidateFormat {
 

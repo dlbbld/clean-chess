@@ -1,4 +1,4 @@
-package com.dlb.chess.san;
+package com.dlb.chess.san.validate;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -22,6 +22,8 @@ import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.san.AbstractSan;
+import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;

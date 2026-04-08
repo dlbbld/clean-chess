@@ -1,4 +1,4 @@
-package com.dlb.chess.san;
+package com.dlb.chess.san.validate;
 
 import java.util.Set;
 
@@ -15,6 +15,7 @@ import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.PawnDiagonalBoardMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;

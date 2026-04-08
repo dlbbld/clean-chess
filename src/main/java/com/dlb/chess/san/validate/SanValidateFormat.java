@@ -1,4 +1,4 @@
-package com.dlb.chess.san;
+package com.dlb.chess.san.validate;
 
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
@@ -13,6 +13,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;

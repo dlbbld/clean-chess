@@ -16,7 +16,6 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanLetter;
@@ -25,6 +24,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanConversionCheck;
 import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.validate.SanValidateFormat;
 
 /**
  * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original
