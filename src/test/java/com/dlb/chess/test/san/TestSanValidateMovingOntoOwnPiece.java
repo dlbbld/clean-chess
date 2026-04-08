@@ -1,27 +1,21 @@
 package com.dlb.chess.test.san;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.san.SanValidation;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
 
-class TestSanValidateMovingOntoOwnPiece {
+class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
 
   @SuppressWarnings("static-method")
   @Test
   void testUnderstanding() {
     final ApiBoard board = new Board("8/3k4/3r4/R7/4K3/8/8/R7 b - - 0 1");
 
-    checkException("Rd6", board);
+    checkExceptionMovingOntoOwnPiece("Rd6", board);
     board.performMoves("Rc6");
     // rook
-    checkException("Ra1", board);
+    checkExceptionMovingOntoOwnPiece("Ra1", board);
   }
 
   @SuppressWarnings("static-method")
@@ -31,25 +25,25 @@ class TestSanValidateMovingOntoOwnPiece {
     final ApiBoard board = new Board();
 
     // rook
-    checkException("Rxa2", board);
+    checkExceptionCapturingOwnPiece("Rxa2", board);
 
     // knight
-    checkException("Nxd2", board);
+    checkExceptionCapturingOwnPiece("Nxd2", board);
 
     // bishop
-    checkException("Bxa2", board);
+    checkExceptionCapturingOwnPiece("Bxa2", board);
 
     // queen
-    checkException("Qxd2", board);
+    checkExceptionCapturingOwnPiece("Qxd2", board);
 
     // king
-    checkException("Kxf1", board);
+    checkExceptionCapturingOwnPiece("Kxf1", board);
 
     board.performMoves("Nc3");
     board.performMoves("a6");
 
     // pawn
-    checkException("bxc3", board);
+    checkExceptionCapturingOwnPiece("bxc3", board);
   }
 
   @SuppressWarnings("static-method")
@@ -60,37 +54,24 @@ class TestSanValidateMovingOntoOwnPiece {
     board.performMoves("e4");
 
     // rook
-    checkException("Rxa7", board);
+    checkExceptionCapturingOwnPiece("Rxa7", board);
 
     // knight
-    checkException("Nxd7", board);
+    checkExceptionCapturingOwnPiece("Nxd7", board);
 
     // bishop
-    checkException("Bxa7", board);
+    checkExceptionCapturingOwnPiece("Bxa7", board);
 
     // queen
-    checkException("Qxd7", board);
+    checkExceptionCapturingOwnPiece("Qxd7", board);
 
     // king
-    checkException("Kxf7", board);
+    checkExceptionCapturingOwnPiece("Kxf7", board);
 
     board.performMoves("Nc6");
     board.performMoves("d4");
 
     // pawn
-    checkException("bxc6", board);
+    checkExceptionCapturingOwnPiece("bxc6", board);
   }
-
-  private static void checkException(String san, ApiBoard board) {
-    boolean isException;
-    try {
-      SanValidation.validateSan(san, board);
-      isException = false;
-    } catch (final SanValidationException e) {
-      isException = true;
-      assertEquals(SanValidationProblem.MOVING_ONTO_ONE_PIECE, e.getSanValidationProblem());
-    }
-    assertTrue(isException);
-  }
-
 }

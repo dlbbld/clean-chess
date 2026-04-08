@@ -132,7 +132,7 @@ public class SanValidation extends AbstractSan implements EnumConstants {
 
     validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(), board.getStaticPosition());
 
-    validateMovingOntoOwnPiece(havingMove, sanFormat, sanConversion, board.getStaticPosition());
+    validateOwnPieceOnDestinationSquare(havingMove, sanType, sanFormat, sanConversion, board.getStaticPosition());
 
     validateNoCaptureIsNoCapture(havingMove, sanFormat, sanConversion, board.getStaticPosition());
     validateCaptureIsCapture(board, havingMove, sanType, sanConversion);
@@ -398,8 +398,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     }
   }
 
-  private static void validateMovingOntoOwnPiece(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
-      StaticPosition staticPosition) {
+  private static void validateOwnPieceOnDestinationSquare(Side havingMove, SanType sanType, SanFormat sanFormat,
+      SanConversion sanConversion, StaticPosition staticPosition) {
     switch (sanFormat) {
       case KING_CASTLING_KING_SIDE_FORMAT:
       case KING_CASTLING_QUEEN_SIDE_FORMAT:
@@ -421,7 +421,11 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         // only in non castling case we can calculate the to square!
         final Square toSquare = sanConversion.toSquare();
         if (staticPosition.isOwnPiece(toSquare, havingMove)) {
-          throw new SanValidationException(SanValidationProblem.MOVING_ONTO_ONE_PIECE,
+          if (sanType.isCapture()) {
+            throw new SanValidationException(SanValidationProblem.CAPTURING_OWN_PIECE,
+                Message.getString("validation.san.allExceptCastling.capturingOwnPiece", toSquare.getName()));
+          }
+          throw new SanValidationException(SanValidationProblem.MOVING_ONTO_OWN_PIECE,
               Message.getString("validation.san.allExceptCastling.movingOntoOwnPiece", toSquare.getName()));
         }
         break;
