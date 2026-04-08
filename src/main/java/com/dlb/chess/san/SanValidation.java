@@ -464,8 +464,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
               Message.getString("validation.san.allExceptCastling.captureIsNoCapture", toSquare.getName()));
         }
         if (pieceOnToSquare.getSide() == havingMove.getOppositeSide() && pieceOnToSquare.getPieceType() == KING) {
-          throw new ProgrammingMistakeException(
-              "Capturing the opponent king requires making a move from an illegal position and that is not supported");
+          throw new SanValidationException(SanValidationProblem.CAPTURING_OPPONENT_KING,
+              Message.getString("validation.san.allExceptCastling.capturingOpponentKing", toSquare.getName()));
         }
       }
     }
@@ -589,227 +589,226 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         throw new ProgrammingMistakeException("Invalid program flow, the castling must be handled at this point");
       case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
       case KING_NON_CASTLING_CAPTURING_FORMAT:
-        if (legalMovesCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.KING_NON_CASTLING_NO_LEGAL_MOVE,
-              Message.getString("validation.san.notPawn.specification.none.king.noLegalMove", toSquare.getName()));
-        }
+        validateAgainstLegalMovesForKing(legalMovesCandidates, toSquare);
         break;
       case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
       case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-        if (legalMovesCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE,
-              Message.getString("validation.san.pawn.noLegalMove", pieceType.getName(), toSquare.getName()));
-        }
+        validateAgainstLegalMovesForPawnNonPromotion(legalMovesCandidates, pieceType, toSquare);
         break;
       case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
       case PAWN_CAPTURING_PROMOTION_FORMAT:
-        if (legalMovesCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE,
-              Message.getString("validation.san.pawn.noLegalMove", pieceType.getName(), toSquare.getName()));
-        }
+        validateAgainstLegalMovesForPawnPromotion(legalMovesCandidates, pieceType, toSquare);
         break;
       case PIECE_NON_CAPTURING_NEITHER_FORMAT:
       case PIECE_CAPTURING_NEITHER_FORMAT:
-        // if no legal move from any square throw an exception (no legal move)
-        if (legalMovesCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NO_LEGAL_MOVE,
-              Message.getString("validation.san.notPawn.specification.none.otherThanKing.noLegalMove",
-                  pieceType.getName(), toSquare.getName()));
-        }
-        // if more than one legal move from any square throw an exception (ambiguous)
-        if (legalMovesCandidates.size() > 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_MULTIPLE_LEGAL_MOVES,
-              Message.getString("validation.san.notPawn.specification.none.moreThanOneLegalMove", pieceType.getName(),
-                  toSquare.getName()));
-        }
+        validateAgainstLegalMovesForPieceNeither(legalMovesCandidates, pieceType, toSquare);
         break;
       case PIECE_NON_CAPTURING_FILE_FORMAT:
       case PIECE_CAPTURING_FILE_FORMAT: {
-        final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
-            sanFormat,
-            sanConversion);
-        final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove,
-            toSquare,
-            pieceCandidates);
-        if (movementCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE,
-              Message.getString("validation.san.notPawn.specification.file.invalidMovement", pieceType.getName(),
-                  sanConversion.fromFile().getLetter(), toSquare.getName()));
-        }
-        // if no legal move from specified file throw an exception (no legal move)
-        if (calculateNumberOfLegalMovesFromFile(sanConversion.fromFile(), legalMovesCandidates) == 0) {
-          throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE,
-              Message.getString("validation.san.noLegalMove.fromFile", pieceType.getName(),
-                  sanConversion.fromFile().getLetter(), toSquare.getName()));
-        }
-        // we have: there is a piece on specified file
-        // if only one legal move from any square throw an exception (file not required as only move)
-        if (legalMovesCandidates.size() == 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_FILE_ONLY_ONE_LEGAL_MOVE,
-              Message.getString("validation.san.overspecification.file"));
-        }
-        // we have: there is a piece on specified file
-        // we have: there is more than one legal move
-        // if the file is the only file having legal moves throw an exception (use rank)
-        final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(sanConversion.fromFile(),
-            legalMovesCandidates);
-        if (!calculateHasOtherFilesHavingLegalMoves(sanConversion.fromFile(), legalMovesCandidates)) {
-          // now we must have more than one legal move from the file, for we have total more than one legal moves and
-          // only moves from the file
-          if (numberOfLegalMovesFromSameFile < 2) {
-            throw new ProgrammingMistakeException("A programming assumption about the rank turned out to be wrong");
-          }
-          throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
-              Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-                  sanConversion.fromFile().getLetter(), toSquare.getName()));
-        }
-        // we have: there is a piece on specified file
-        // we have: there is more than one legal move
-        // we have: there are also legal moves from other files possible
-        // if more than one legal move from the file throw an exception (rank/file or square needed)
-        if (numberOfLegalMovesFromSameFile >= 2) {
-          if (pieceType == ROOK) {
-            // because rooks move orthogonal only in this case again the rank must be used
-            throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
-                Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-                    sanConversion.fromFile().getLetter(), toSquare.getName()));
-          }
-          throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK_OR_SQUARE,
-              Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-                  sanConversion.fromFile().getLetter(), toSquare.getName()));
-
-        }
-        // we have: there is a piece on specified file
-        // we have: there is more than one legal move
-        // we have: there are also legal moves from other files possible
-        // we have: there is only one move possible from the file
-        // we are ok
+        validateAgainstLegalMovesForPieceFile(staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat,
+            sanConversion, toSquare);
       }
         break;
       case PIECE_NON_CAPTURING_RANK_FORMAT:
       case PIECE_CAPTURING_RANK_FORMAT: {
-        final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
-            sanFormat,
-            sanConversion);
-        final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove,
-            toSquare,
-            pieceCandidates);
-        if (movementCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK,
-              Message.getString("validation.san.notPawn.specification.rank.invalidMovement", pieceType.getName(),
-                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
-        }
-        // if no legal move from specified rank throw an exception (no legal move)
-        if (calculateNumberOfLegalMovesFromRank(sanConversion.fromRank(), legalMovesCandidates) == 0) {
-          throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE,
-              Message.getString("validation.san.noLegalMove.fromRank", pieceType.getName(),
-                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
-        }
-        // we have: there is a piece on specified rank
-        // if only one legal move from any square throw an exception (rank not required as only move)
-        if (legalMovesCandidates.size() == 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_RANK_ONLY_ONE_LEGAL_MOVE,
-              Message.getString("validation.san.overspecification.rank"));
-        }
-        // we have: there is a piece on specified rank
-        // we have: there is more than one legal move
-        // if the rank is the only rank having legal moves throw an exception (use file)
-        final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(sanConversion.fromRank(),
-            legalMovesCandidates);
-        if (!calculateHasOtherRanksHavingLegalMoves(sanConversion.fromRank(), legalMovesCandidates)) {
-          // now we must have more than one legal move from the file, for we have total more than one legal moves and
-          // only moves from the file
-          if (numberOfLegalMovesFromSameRank < 2) {
-            throw new ProgrammingMistakeException("A programming assumption about the file turned out to be wrong");
-          }
-          throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
-              Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
-                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
-        }
-        // we have: there is a piece on specified rank
-        // we have: there is more than one legal move
-        // we have: there are also legal moves from other ranks possible
-        // if more than one legal move from the rank throw an exception (rank/file or square needed)
-        if (numberOfLegalMovesFromSameRank >= 2) {
-          throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE_OR_SQUARE,
-              Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
-                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
-
-        }
-        // we have: there is a piece on specified rank
-        // we have: there is more than one legal move
-        // we have: there are also legal moves from other ranks possible
-        // we have: there is only one move possible from the rank
-        // we need to check if the file could be used instead
-
-        File onlyPossibleFromFile = calculateOnlyPossibleFile(legalMovesCandidates, sanConversion);
-        for (final LegalMove legalMove : legalMovesCandidates) {
-          if (legalMove.moveSpecification().fromSquare().getRank() == sanConversion.fromRank()) {
-            onlyPossibleFromFile = legalMove.moveSpecification().fromSquare().getFile();
-            break;
-          }
-        }
-        if (onlyPossibleFromFile == File.NONE) {
-          throw new ProgrammingMistakeException(
-              "The program made the wrong assumption that the from file is determined at this point");
-        }
-        final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(onlyPossibleFromFile,
-            legalMovesCandidates);
-
-        if (numberOfLegalMovesFromSameFile == 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
-              Message.getString("validation.san.rankInsteadOfFileUsed"));
-        }
+        validateAgainstLegalMovesForPieceRank(staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat,
+            sanConversion, toSquare);
       }
         break;
       case PIECE_NON_CAPTURING_SQUARE_FORMAT:
       case PIECE_CAPTURING_SQUARE_FORMAT: {
-        // if no legal move from specified square throw an exception (no legal move)
-        final Square fromSquare = calculateFromSquare(sanConversion);
-        final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
-            sanFormat,
-            sanConversion);
-        final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove,
-            toSquare,
-            pieceCandidates);
-        if (movementCandidates.isEmpty()) {
-          throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE,
-              Message.getString("validation.san.notPawn.specification.square.invalidMovement", pieceType.getName(),
-                  fromSquare.getName(), toSquare.getName()));
-        }
-        if (calculateNumberOfLegalMovesFromSquare(fromSquare, legalMovesCandidates) == 0) {
-          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE,
-              Message.getString("validation.san.noLegalMove.fromSquare", pieceType.getName(), fromSquare.getName(),
-                  sanConversion.toSquare().getName()));
-        }
-
-        // we have: there is a piece on specified square
-        // if only one legal move from any square throw an exception (square not required as only move)
-        if (legalMovesCandidates.size() == 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_ONLY_ONE_LEGAL_MOVE,
-              Message.getString("validation.san.overspecification.square.square"));
-        }
-
-        final var numberOfLegalMovesFromOtherFiles = calculateNumberOfLegalMovesFromOtherFiles(sanConversion.fromFile(),
-            legalMovesCandidates);
-
-        final var numberOfLegalMovesFromFile = calculateNumberOfLegalMovesFromFile(sanConversion.fromFile(),
-            legalMovesCandidates);
-
-        if (numberOfLegalMovesFromFile == 2 && numberOfLegalMovesFromOtherFiles == 0) {
-          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY,
-              Message.getString("validation.san.overspecification.square.file"));
-        }
-
-        if (numberOfLegalMovesFromFile == 1 && numberOfLegalMovesFromOtherFiles >= 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY,
-              Message.getString("validation.san.overspecification.square.rank"));
-        }
-
+        validateAgainstLegalMovesForPieceSquare(staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat,
+            sanConversion, toSquare);
       }
         break;
       default:
         throw new IllegalArgumentException();
+    }
+  }
+
+  private static void validateAgainstLegalMovesForKing(Set<LegalMove> legalMovesCandidates, Square toSquare) {
+    if (legalMovesCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.KING_NON_CASTLING_NO_LEGAL_MOVE,
+          Message.getString("validation.san.notPawn.specification.none.king.noLegalMove", toSquare.getName()));
+    }
+  }
+
+  private static void validateAgainstLegalMovesForPawnNonPromotion(Set<LegalMove> legalMovesCandidates,
+      PieceType pieceType, Square toSquare) {
+    if (legalMovesCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE,
+          Message.getString("validation.san.pawn.noLegalMove", pieceType.getName(), toSquare.getName()));
+    }
+  }
+
+  private static void validateAgainstLegalMovesForPawnPromotion(Set<LegalMove> legalMovesCandidates, PieceType pieceType,
+      Square toSquare) {
+    if (legalMovesCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE,
+          Message.getString("validation.san.pawn.noLegalMove", pieceType.getName(), toSquare.getName()));
+    }
+  }
+
+  private static void validateAgainstLegalMovesForPieceNeither(Set<LegalMove> legalMovesCandidates, PieceType pieceType,
+      Square toSquare) {
+    if (legalMovesCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NO_LEGAL_MOVE,
+          Message.getString("validation.san.notPawn.specification.none.otherThanKing.noLegalMove", pieceType.getName(),
+              toSquare.getName()));
+    }
+    if (legalMovesCandidates.size() > 1) {
+      throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_MULTIPLE_LEGAL_MOVES,
+          Message.getString("validation.san.notPawn.specification.none.moreThanOneLegalMove", pieceType.getName(),
+              toSquare.getName()));
+    }
+  }
+
+  private static void validateAgainstLegalMovesForPieceFile(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      Square toSquare) {
+    final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
+        sanFormat, sanConversion);
+    final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove, toSquare,
+        pieceCandidates);
+    if (movementCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE,
+          Message.getString("validation.san.notPawn.specification.file.invalidMovement", pieceType.getName(),
+              sanConversion.fromFile().getLetter(), toSquare.getName()));
+    }
+
+    final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(sanConversion.fromFile(),
+        legalMovesCandidates);
+    if (numberOfLegalMovesFromSameFile == 0) {
+      throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_LEGAL_MOVE,
+          Message.getString("validation.san.noLegalMove.fromFile", pieceType.getName(),
+              sanConversion.fromFile().getLetter(), toSquare.getName()));
+    }
+
+    if (legalMovesCandidates.size() == 1) {
+      throw new SanValidationException(SanValidationProblem.PIECE_FILE_ONLY_ONE_LEGAL_MOVE,
+          Message.getString("validation.san.overspecification.file"));
+    }
+
+    if (!calculateHasOtherFilesHavingLegalMoves(sanConversion.fromFile(), legalMovesCandidates)) {
+      if (numberOfLegalMovesFromSameFile < 2) {
+        throw new ProgrammingMistakeException("A programming assumption about the rank turned out to be wrong");
+      }
+      throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
+          Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
+              sanConversion.fromFile().getLetter(), toSquare.getName()));
+    }
+
+    if (numberOfLegalMovesFromSameFile >= 2) {
+      if (pieceType == ROOK) {
+        throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
+            Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
+                sanConversion.fromFile().getLetter(), toSquare.getName()));
+      }
+      throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK_OR_SQUARE,
+          Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
+              sanConversion.fromFile().getLetter(), toSquare.getName()));
+    }
+  }
+
+  private static void validateAgainstLegalMovesForPieceRank(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      Square toSquare) {
+    final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
+        sanFormat, sanConversion);
+    final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove, toSquare,
+        pieceCandidates);
+    if (movementCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK,
+          Message.getString("validation.san.notPawn.specification.rank.invalidMovement", pieceType.getName(),
+              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+    }
+
+    final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(sanConversion.fromRank(),
+        legalMovesCandidates);
+    if (numberOfLegalMovesFromSameRank == 0) {
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE,
+          Message.getString("validation.san.noLegalMove.fromRank", pieceType.getName(),
+              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+    }
+
+    if (legalMovesCandidates.size() == 1) {
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_ONLY_ONE_LEGAL_MOVE,
+          Message.getString("validation.san.overspecification.rank"));
+    }
+
+    if (!calculateHasOtherRanksHavingLegalMoves(sanConversion.fromRank(), legalMovesCandidates)) {
+      if (numberOfLegalMovesFromSameRank < 2) {
+        throw new ProgrammingMistakeException("A programming assumption about the file turned out to be wrong");
+      }
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
+          Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
+              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+    }
+
+    if (numberOfLegalMovesFromSameRank >= 2) {
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE_OR_SQUARE,
+          Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
+              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+    }
+
+    File onlyPossibleFromFile = calculateOnlyPossibleFile(legalMovesCandidates, sanConversion);
+    for (final LegalMove legalMove : legalMovesCandidates) {
+      if (legalMove.moveSpecification().fromSquare().getRank() == sanConversion.fromRank()) {
+        onlyPossibleFromFile = legalMove.moveSpecification().fromSquare().getFile();
+        break;
+      }
+    }
+    if (onlyPossibleFromFile == File.NONE) {
+      throw new ProgrammingMistakeException(
+          "The program made the wrong assumption that the from file is determined at this point");
+    }
+    final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(onlyPossibleFromFile,
+        legalMovesCandidates);
+
+    if (numberOfLegalMovesFromSameFile == 1) {
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
+          Message.getString("validation.san.rankInsteadOfFileUsed"));
+    }
+  }
+
+  private static void validateAgainstLegalMovesForPieceSquare(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      Square toSquare) {
+    final Square fromSquare = calculateFromSquare(sanConversion);
+    final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
+        sanFormat, sanConversion);
+    final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove, toSquare,
+        pieceCandidates);
+    if (movementCandidates.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE,
+          Message.getString("validation.san.notPawn.specification.square.invalidMovement", pieceType.getName(),
+              fromSquare.getName(), toSquare.getName()));
+    }
+    if (calculateNumberOfLegalMovesFromSquare(fromSquare, legalMovesCandidates) == 0) {
+      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE,
+          Message.getString("validation.san.noLegalMove.fromSquare", pieceType.getName(), fromSquare.getName(),
+              sanConversion.toSquare().getName()));
+    }
+
+    if (legalMovesCandidates.size() == 1) {
+      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_ONLY_ONE_LEGAL_MOVE,
+          Message.getString("validation.san.overspecification.square.square"));
+    }
+
+    final var numberOfLegalMovesFromOtherFiles = calculateNumberOfLegalMovesFromOtherFiles(sanConversion.fromFile(),
+        legalMovesCandidates);
+
+    final var numberOfLegalMovesFromFile = calculateNumberOfLegalMovesFromFile(sanConversion.fromFile(),
+        legalMovesCandidates);
+
+    if (numberOfLegalMovesFromFile == 2 && numberOfLegalMovesFromOtherFiles == 0) {
+      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY,
+          Message.getString("validation.san.overspecification.square.file"));
+    }
+
+    if (numberOfLegalMovesFromFile == 1 && numberOfLegalMovesFromOtherFiles >= 1) {
+      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY,
+          Message.getString("validation.san.overspecification.square.rank"));
     }
   }
 

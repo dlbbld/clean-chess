@@ -121,6 +121,19 @@ public enum Piece {
     throw new ProgrammingMistakeException();
   }
 
+  public static Piece calculate(Side side, PieceType pieceType) {
+    return switch (pieceType) {
+      case ROOK -> calculateRookPiece(side);
+      case KNIGHT -> calculateKnightPiece(side);
+      case BISHOP -> calculateBishopPiece(side);
+      case QUEEN -> calculateQueenPiece(side);
+      case KING -> calculateKingPiece(side);
+      case PAWN -> calculatePawnPiece(side);
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
+
   private void check() {
     if (this == NONE) {
       throw new NonePointerException();

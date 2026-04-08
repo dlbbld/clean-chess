@@ -30,13 +30,15 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
 
   private static boolean calculateHasZeroOrMultipleSquareBishopOnlyForSpecifiedColor(Side side,
       StaticPosition staticPosition, SquareType squareType) {
+    final Piece king = Piece.calculate(side, KING);
+    final Piece bishop = Piece.calculate(side, BISHOP);
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
-        if (pieceOnSquare.getPieceType() == KING) {
+        if (pieceOnSquare == king) {
           continue;
         }
-        if (pieceOnSquare.getPieceType() == BISHOP && boardSquare.getSquareType() == squareType) {
+        if (pieceOnSquare == bishop && boardSquare.getSquareType() == squareType) {
           continue;
         }
         return false;
@@ -54,13 +56,15 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
   }
 
   private static boolean calculateHasZeroOrMultipleQueenOnly(Side side, StaticPosition staticPosition) {
+    final Piece king = Piece.calculate(side, KING);
+    final Piece queen = Piece.calculate(side, QUEEN);
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
-        if (pieceOnSquare.getPieceType() == KING) {
+        if (pieceOnSquare == king) {
           continue;
         }
-        if (pieceOnSquare.getPieceType() == QUEEN) {
+        if (pieceOnSquare == queen) {
           continue;
         }
         return false;
@@ -89,10 +93,10 @@ public abstract class InsufficientMaterialUtility implements EnumConstants {
 
   private static boolean calculateHasBishopForSpecifiedColor(Side side, SquareType squareType,
       StaticPosition staticPosition) {
+    final Piece bishop = Piece.calculate(side, BISHOP);
     for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == BISHOP
-          && boardSquare.getSquareType() == squareType) {
+      if (pieceOnSquare == bishop && boardSquare.getSquareType() == squareType) {
         return true;
       }
     }
