@@ -46,21 +46,21 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
     final Square toSquare = sanConversion.toSquare();
 
     switch (sanType.getSanFormat()) {
-      case KING_NON_CASTLING_CAPTURING_FORMAT, KING_NON_CASTLING_NON_CAPTURING_FORMAT -> validateNonPawnMovement(
+      case KING_NON_CASTLING_CAPTURING, KING_NON_CASTLING_NON_CAPTURING -> validateNonPawnMovement(
           pieceType, toSquare);
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT, PAWN_CAPTURING_PROMOTION_FORMAT, PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT, PAWN_NON_CAPTURING_PROMOTION_FORMAT -> throw new IllegalArgumentException();
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT -> validateNonPawnMovement(pieceType,
+      case PAWN_CAPTURING_NON_PROMOTION, PAWN_CAPTURING_PROMOTION, PAWN_NON_CAPTURING_NON_PROMOTION, PAWN_NON_CAPTURING_PROMOTION -> throw new IllegalArgumentException();
+      case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER -> validateNonPawnMovement(pieceType,
           toSquare);
-      case PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_FILE_FORMAT -> validateNonPawnMovement(pieceType,
+      case PIECE_NON_CAPTURING_FILE, PIECE_CAPTURING_FILE -> validateNonPawnMovement(pieceType,
           sanConversion.fromFile(), toSquare);
-      case PIECE_NON_CAPTURING_RANK_FORMAT, PIECE_CAPTURING_RANK_FORMAT -> validateNonPawnMovement(pieceType,
+      case PIECE_NON_CAPTURING_RANK, PIECE_CAPTURING_RANK -> validateNonPawnMovement(pieceType,
           sanConversion.fromRank(), toSquare);
-      case PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT -> {
+      case PIECE_NON_CAPTURING_SQUARE, PIECE_CAPTURING_SQUARE -> {
         // in these two cases only the from square is defined in the SAN
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
         validateNonPawnMovement(pieceType, fromSquare, toSquare);
       }
-      case KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT -> throw new ProgrammingMistakeException(
+      case KING_CASTLING_QUEEN_SIDE, KING_CASTLING_KING_SIDE -> throw new ProgrammingMistakeException(
           "Not possible to come here, already returned");
       default -> throw new IllegalArgumentException();
     }
@@ -147,22 +147,22 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
     final Square toSquare = sanConversion.toSquare();
 
     switch (sanType.getSanFormat()) {
-      case KING_NON_CASTLING_CAPTURING_FORMAT, KING_NON_CASTLING_NON_CAPTURING_FORMAT -> throw new IllegalArgumentException();
-      case PAWN_CAPTURING_PROMOTION_FORMAT -> {
+      case KING_NON_CASTLING_CAPTURING, KING_NON_CASTLING_NON_CAPTURING -> throw new IllegalArgumentException();
+      case PAWN_CAPTURING_PROMOTION -> {
         validatePawnRankTo(havingMove, toSquare);
         validatePawnFromAndToFile(havingMove, sanConversion.fromFile(), toSquare);
       }
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT -> {
+      case PAWN_NON_CAPTURING_PROMOTION -> {
         validatePawnRankTo(havingMove, toSquare);
       }
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT -> {
+      case PAWN_CAPTURING_NON_PROMOTION -> {
         validatePawnRankTo(havingMove, toSquare);
         validatePawnFromAndToFile(havingMove, sanConversion.fromFile(), toSquare);
       }
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT -> {
+      case PAWN_NON_CAPTURING_NON_PROMOTION -> {
         validatePawnRankTo(havingMove, toSquare);
       }
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT, PIECE_CAPTURING_NEITHER_FORMAT, PIECE_NON_CAPTURING_FILE_FORMAT, PIECE_CAPTURING_FILE_FORMAT, PIECE_NON_CAPTURING_RANK_FORMAT, PIECE_CAPTURING_RANK_FORMAT, PIECE_NON_CAPTURING_SQUARE_FORMAT, PIECE_CAPTURING_SQUARE_FORMAT, KING_CASTLING_QUEEN_SIDE_FORMAT, KING_CASTLING_KING_SIDE_FORMAT -> throw new IllegalArgumentException();
+      case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER, PIECE_NON_CAPTURING_FILE, PIECE_CAPTURING_FILE, PIECE_NON_CAPTURING_RANK, PIECE_CAPTURING_RANK, PIECE_NON_CAPTURING_SQUARE, PIECE_CAPTURING_SQUARE, KING_CASTLING_QUEEN_SIDE, KING_CASTLING_KING_SIDE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     }
   }

@@ -70,7 +70,7 @@ public abstract class SanValidateFormatReference {
     final CheckmateOrCheck checkmateOrCheck = calculateCheckmateOrCheck(san, formatLength);
 
     // castling needs a special treatment
-    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       // startsWith for the optional final check or checkmate symbol, length is checked
       if (!san.startsWith(CastlingConstants.SAN_CASTLING_QUEEN_SIDE)) {
         return SanConversionCheck.IS_NO_MATCH;
@@ -79,7 +79,7 @@ public abstract class SanValidateFormatReference {
           checkmateOrCheck);
       return new SanConversionCheck(true, sanConversion);
     }
-    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
       // startsWith for the optional final check or checkmate symbol, length is checked
       if (!san.startsWith(CastlingConstants.SAN_CASTLING_KING_SIDE)) {
         return SanConversionCheck.IS_NO_MATCH;

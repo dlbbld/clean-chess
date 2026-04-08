@@ -42,20 +42,20 @@ public class SanValidation extends AbstractSan implements EnumConstants {
   private static MoveSpecification calculateMoveSpecificationForSan(ApiBoard board, Side havingMove,
       SanFormat sanFormat, SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
 
-    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       return new MoveSpecification(havingMove, CastlingMove.QUEEN_SIDE);
     }
-    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
       return new MoveSpecification(havingMove, CastlingMove.KING_SIDE);
     }
 
     final Square toSquare = sanConversion.toSquare();
 
     switch (sanFormat) {
-      case KING_CASTLING_QUEEN_SIDE_FORMAT:
-      case KING_CASTLING_KING_SIDE_FORMAT:
+      case KING_CASTLING_QUEEN_SIDE:
+      case KING_CASTLING_KING_SIDE:
         throw new ProgrammingMistakeException("Castling is handled before switch");
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT: {
+      case PAWN_NON_CAPTURING_NON_PROMOTION: {
         if (!Rank.calculateIsPawnTwoSquareAdvanceRank(havingMove, toSquare.getRank())) {
           // one square advance, san information is enough
           // from file equals to file and from rank is the rank before to rank
@@ -79,40 +79,40 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         final var fromSquare = potentialJumpOverSquare;
         return new MoveSpecification(havingMove, fromSquare, toSquare);
       }
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT: {
+      case PAWN_CAPTURING_NON_PROMOTION: {
         // from file is in the san and from rank is the rank before to rank
 
         final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
         return new MoveSpecification(havingMove, fromSquare, toSquare);
       }
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT: {
+      case PAWN_NON_CAPTURING_PROMOTION: {
         // from file equals to file and from rank is the rank before to rank
         final File fromFile = toSquare.getFile(); // moving straight forward
         final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
         final Square fromSquare = Square.calculate(fromFile, fromRank);
         return new MoveSpecification(havingMove, fromSquare, toSquare, sanConversion.promotionPieceType());
       }
-      case PAWN_CAPTURING_PROMOTION_FORMAT: {
+      case PAWN_CAPTURING_PROMOTION: {
         // from file is in the san and from rank is the rank before to rank
         final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
         return new MoveSpecification(havingMove, fromSquare, toSquare, sanConversion.promotionPieceType());
       }
-      case PIECE_CAPTURING_SQUARE_FORMAT: {
+      case PIECE_CAPTURING_SQUARE: {
         // san is enough to determine from square
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
         return new MoveSpecification(havingMove, fromSquare, toSquare);
       }
-      case KING_NON_CASTLING_CAPTURING_FORMAT:
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
-      case PIECE_CAPTURING_FILE_FORMAT:
-      case PIECE_CAPTURING_NEITHER_FORMAT:
-      case PIECE_CAPTURING_RANK_FORMAT:
-      case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-      case PIECE_NON_CAPTURING_FILE_FORMAT:
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-      case PIECE_NON_CAPTURING_RANK_FORMAT: {
+      case KING_NON_CASTLING_CAPTURING:
+      case KING_NON_CASTLING_NON_CAPTURING:
+      case PIECE_CAPTURING_FILE:
+      case PIECE_CAPTURING_NEITHER:
+      case PIECE_CAPTURING_RANK:
+      case PIECE_NON_CAPTURING_SQUARE:
+      case PIECE_NON_CAPTURING_FILE:
+      case PIECE_NON_CAPTURING_NEITHER:
+      case PIECE_NON_CAPTURING_RANK: {
         // legal move is required to determine from square
         final Square fromSquare = legalMoveOnlyCandidate.fromSquare();
         return new MoveSpecification(havingMove, fromSquare, toSquare);
@@ -237,13 +237,13 @@ public class SanValidation extends AbstractSan implements EnumConstants {
   private static void validatePieceExists(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
       PieceType movingPieceType, StaticPosition staticPosition) {
     switch (sanFormat) {
-      case KING_CASTLING_KING_SIDE_FORMAT:
-      case KING_CASTLING_QUEEN_SIDE_FORMAT:
-      case KING_NON_CASTLING_CAPTURING_FORMAT:
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
+      case KING_CASTLING_KING_SIDE:
+      case KING_CASTLING_QUEEN_SIDE:
+      case KING_NON_CASTLING_CAPTURING:
+      case KING_NON_CASTLING_NON_CAPTURING:
         return;
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT: {
+      case PAWN_NON_CAPTURING_NON_PROMOTION:
+      case PAWN_NON_CAPTURING_PROMOTION: {
         // for non-capturing pawn moves, the pawn must be on the to-square's file
         final File pawnFile = sanConversion.toSquare().getFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
@@ -254,8 +254,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         validatePawnFromSquareNonCapturing(havingMove, sanConversion.toSquare(), staticPosition);
         break;
       }
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_CAPTURING_PROMOTION_FORMAT: {
+      case PAWN_CAPTURING_NON_PROMOTION:
+      case PAWN_CAPTURING_PROMOTION: {
         // for capturing pawn moves, the SAN specifies the from-file explicitly
         final File pawnFile = sanConversion.fromFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
@@ -267,16 +267,16 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         validatePawnFromSquareCapturing(havingMove, sanConversion.fromFile(), sanConversion.toSquare(), staticPosition);
         break;
       }
-      case PIECE_CAPTURING_NEITHER_FORMAT:
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT:
+      case PIECE_CAPTURING_NEITHER:
+      case PIECE_NON_CAPTURING_NEITHER:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
           throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NO_PIECE_EXISTS,
               Message.getString("validation.san.notPawn.specification.none.otherThanKing.noPieceExists",
                   havingMove.getName(), movingPieceType.getName()));
         }
         break;
-      case PIECE_CAPTURING_FILE_FORMAT:
-      case PIECE_NON_CAPTURING_FILE_FORMAT:
+      case PIECE_CAPTURING_FILE:
+      case PIECE_NON_CAPTURING_FILE:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromFile())) {
           throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_PIECE_EXISTS,
@@ -284,8 +284,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
                   movingPieceType.getName(), sanConversion.fromFile().getLetter()));
         }
         break;
-      case PIECE_CAPTURING_RANK_FORMAT:
-      case PIECE_NON_CAPTURING_RANK_FORMAT:
+      case PIECE_CAPTURING_RANK:
+      case PIECE_NON_CAPTURING_RANK:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromRank())) {
           throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_PIECE_EXISTS,
@@ -293,8 +293,8 @@ public class SanValidation extends AbstractSan implements EnumConstants {
                   movingPieceType.getName(), NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
         }
         break;
-      case PIECE_CAPTURING_SQUARE_FORMAT:
-      case PIECE_NON_CAPTURING_SQUARE_FORMAT:
+      case PIECE_CAPTURING_SQUARE:
+      case PIECE_NON_CAPTURING_SQUARE:
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), sanConversion.fromRank());
         final Piece pieceOnFromSquare = staticPosition.get(fromSquare);
         if (pieceOnFromSquare == Piece.NONE || pieceOnFromSquare.getSide() != havingMove
@@ -401,23 +401,23 @@ public class SanValidation extends AbstractSan implements EnumConstants {
   private static void validateOwnPieceOnDestinationSquare(Side havingMove, SanType sanType, SanFormat sanFormat,
       SanConversion sanConversion, StaticPosition staticPosition) {
     switch (sanFormat) {
-      case KING_CASTLING_KING_SIDE_FORMAT:
-      case KING_CASTLING_QUEEN_SIDE_FORMAT:
+      case KING_CASTLING_KING_SIDE:
+      case KING_CASTLING_QUEEN_SIDE:
         return;
-      case KING_NON_CASTLING_CAPTURING_FORMAT:
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_CAPTURING_PROMOTION_FORMAT:
-      case PIECE_CAPTURING_SQUARE_FORMAT:
-      case PIECE_CAPTURING_FILE_FORMAT:
-      case PIECE_CAPTURING_NEITHER_FORMAT:
-      case PIECE_CAPTURING_RANK_FORMAT:
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
-      case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-      case PIECE_NON_CAPTURING_FILE_FORMAT:
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-      case PIECE_NON_CAPTURING_RANK_FORMAT:
+      case KING_NON_CASTLING_CAPTURING:
+      case PAWN_CAPTURING_NON_PROMOTION:
+      case PAWN_CAPTURING_PROMOTION:
+      case PIECE_CAPTURING_SQUARE:
+      case PIECE_CAPTURING_FILE:
+      case PIECE_CAPTURING_NEITHER:
+      case PIECE_CAPTURING_RANK:
+      case KING_NON_CASTLING_NON_CAPTURING:
+      case PAWN_NON_CAPTURING_NON_PROMOTION:
+      case PAWN_NON_CAPTURING_PROMOTION:
+      case PIECE_NON_CAPTURING_SQUARE:
+      case PIECE_NON_CAPTURING_FILE:
+      case PIECE_NON_CAPTURING_NEITHER:
+      case PIECE_NON_CAPTURING_RANK:
         // only in non castling case we can calculate the to square!
         final Square toSquare = sanConversion.toSquare();
         if (staticPosition.isOwnPiece(toSquare, havingMove)) {
@@ -527,24 +527,24 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       StaticPosition staticPosition) {
 
     switch (sanFormat) {
-      case KING_CASTLING_KING_SIDE_FORMAT:
-      case KING_CASTLING_QUEEN_SIDE_FORMAT:
+      case KING_CASTLING_KING_SIDE:
+      case KING_CASTLING_QUEEN_SIDE:
         return;
-      case KING_NON_CASTLING_CAPTURING_FORMAT:
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_CAPTURING_PROMOTION_FORMAT:
-      case PIECE_CAPTURING_SQUARE_FORMAT:
-      case PIECE_CAPTURING_FILE_FORMAT:
-      case PIECE_CAPTURING_NEITHER_FORMAT:
-      case PIECE_CAPTURING_RANK_FORMAT:
+      case KING_NON_CASTLING_CAPTURING:
+      case PAWN_CAPTURING_NON_PROMOTION:
+      case PAWN_CAPTURING_PROMOTION:
+      case PIECE_CAPTURING_SQUARE:
+      case PIECE_CAPTURING_FILE:
+      case PIECE_CAPTURING_NEITHER:
+      case PIECE_CAPTURING_RANK:
         return;
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
-      case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-      case PIECE_NON_CAPTURING_FILE_FORMAT:
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-      case PIECE_NON_CAPTURING_RANK_FORMAT:
+      case KING_NON_CASTLING_NON_CAPTURING:
+      case PAWN_NON_CAPTURING_NON_PROMOTION:
+      case PAWN_NON_CAPTURING_PROMOTION:
+      case PIECE_NON_CAPTURING_SQUARE:
+      case PIECE_NON_CAPTURING_FILE:
+      case PIECE_NON_CAPTURING_NEITHER:
+      case PIECE_NON_CAPTURING_RANK:
         // only in non castling case we can calculate the to square!
         final Square toSquare = sanConversion.toSquare();
         if (staticPosition.isOpponentPiece(toSquare, havingMove)) {
@@ -564,14 +564,14 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     // we need an early return for castling first so for the remaining cases we can
     // calculate the to square
     final SanFormat sanFormat = sanType.getSanFormat();
-    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       if (!isContained(legalMovesCandidates, havingMove, sanFormat)) {
         throw new SanValidationException(SanValidationProblem.KING_CASTLING_QUEEN_SIDE_NOT_POSSIBLE,
             Message.getString("validation.san.castling.queenSide"));
       }
       return;
     }
-    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
       if (!isContained(legalMovesCandidates, havingMove, sanFormat)) {
         throw new SanValidationException(SanValidationProblem.KING_CASTLING_KING_SIDE_NOT_POSSIBLE,
             Message.getString("validation.san.castling.kingSide"));
@@ -584,39 +584,39 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     final PieceType pieceType = sanType.getMovingPieceType();
 
     switch (sanFormat) {
-      case KING_CASTLING_QUEEN_SIDE_FORMAT:
-      case KING_CASTLING_KING_SIDE_FORMAT:
+      case KING_CASTLING_QUEEN_SIDE:
+      case KING_CASTLING_KING_SIDE:
         throw new ProgrammingMistakeException("Invalid program flow, the castling must be handled at this point");
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
-      case KING_NON_CASTLING_CAPTURING_FORMAT:
+      case KING_NON_CASTLING_NON_CAPTURING:
+      case KING_NON_CASTLING_CAPTURING:
         validateAgainstLegalMovesForKing(legalMovesCandidates, toSquare);
         break;
-      case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-      case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
+      case PAWN_NON_CAPTURING_NON_PROMOTION:
+      case PAWN_CAPTURING_NON_PROMOTION:
         validateAgainstLegalMovesForPawnNonPromotion(legalMovesCandidates, pieceType, toSquare);
         break;
-      case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
-      case PAWN_CAPTURING_PROMOTION_FORMAT:
+      case PAWN_NON_CAPTURING_PROMOTION:
+      case PAWN_CAPTURING_PROMOTION:
         validateAgainstLegalMovesForPawnPromotion(legalMovesCandidates, pieceType, toSquare);
         break;
-      case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-      case PIECE_CAPTURING_NEITHER_FORMAT:
+      case PIECE_NON_CAPTURING_NEITHER:
+      case PIECE_CAPTURING_NEITHER:
         validateAgainstLegalMovesForPieceNeither(legalMovesCandidates, pieceType, toSquare);
         break;
-      case PIECE_NON_CAPTURING_FILE_FORMAT:
-      case PIECE_CAPTURING_FILE_FORMAT: {
+      case PIECE_NON_CAPTURING_FILE:
+      case PIECE_CAPTURING_FILE: {
         validateAgainstLegalMovesForPieceFile(staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat,
             sanConversion, toSquare);
       }
         break;
-      case PIECE_NON_CAPTURING_RANK_FORMAT:
-      case PIECE_CAPTURING_RANK_FORMAT: {
+      case PIECE_NON_CAPTURING_RANK:
+      case PIECE_CAPTURING_RANK: {
         validateAgainstLegalMovesForPieceRank(staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat,
             sanConversion, toSquare);
       }
         break;
-      case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-      case PIECE_CAPTURING_SQUARE_FORMAT: {
+      case PIECE_NON_CAPTURING_SQUARE:
+      case PIECE_CAPTURING_SQUARE: {
         validateAgainstLegalMovesForPieceSquare(staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat,
             sanConversion, toSquare);
       }
@@ -823,24 +823,24 @@ public class SanValidation extends AbstractSan implements EnumConstants {
         continue;
       }
       switch (sanFormat) {
-        case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-        case PIECE_CAPTURING_NEITHER_FORMAT:
+        case PIECE_NON_CAPTURING_NEITHER:
+        case PIECE_CAPTURING_NEITHER:
           result.add(square);
           break;
-        case PIECE_NON_CAPTURING_FILE_FORMAT:
-        case PIECE_CAPTURING_FILE_FORMAT:
+        case PIECE_NON_CAPTURING_FILE:
+        case PIECE_CAPTURING_FILE:
           if (square.getFile() == sanConversion.fromFile()) {
             result.add(square);
           }
           break;
-        case PIECE_NON_CAPTURING_RANK_FORMAT:
-        case PIECE_CAPTURING_RANK_FORMAT:
+        case PIECE_NON_CAPTURING_RANK:
+        case PIECE_CAPTURING_RANK:
           if (square.getRank() == sanConversion.fromRank()) {
             result.add(square);
           }
           break;
-        case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-        case PIECE_CAPTURING_SQUARE_FORMAT:
+        case PIECE_NON_CAPTURING_SQUARE:
+        case PIECE_CAPTURING_SQUARE:
           if (square == calculateFromSquare(sanConversion)) {
             result.add(square);
           }
@@ -869,10 +869,10 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       Set<LegalMove> legalMoveSet) {
 
     switch (sanFormat) {
-      case KING_CASTLING_QUEEN_SIDE_FORMAT:
-      case KING_CASTLING_KING_SIDE_FORMAT:
-      case KING_NON_CASTLING_CAPTURING_FORMAT:
-      case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
+      case KING_CASTLING_QUEEN_SIDE:
+      case KING_CASTLING_KING_SIDE:
+      case KING_NON_CASTLING_CAPTURING:
+      case KING_NON_CASTLING_NON_CAPTURING:
         // no from restriction
         return new TreeSet<>(legalMoveSet);
       // $CASES-OMITTED$
@@ -896,41 +896,41 @@ public class SanValidation extends AbstractSan implements EnumConstants {
       final var isFromRankMatch = candidateFromRank == sanFromRank;
 
       switch (sanFormat) {
-        case KING_CASTLING_QUEEN_SIDE_FORMAT:
-        case KING_CASTLING_KING_SIDE_FORMAT:
-        case KING_NON_CASTLING_CAPTURING_FORMAT:
-        case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
+        case KING_CASTLING_QUEEN_SIDE:
+        case KING_CASTLING_KING_SIDE:
+        case KING_NON_CASTLING_CAPTURING:
+        case KING_NON_CASTLING_NON_CAPTURING:
           throw new ProgrammingMistakeException("Handled before");
-        case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-        case PAWN_CAPTURING_PROMOTION_FORMAT:
+        case PAWN_CAPTURING_NON_PROMOTION:
+        case PAWN_CAPTURING_PROMOTION:
           if (isFromFileMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
           break;
-        case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-        case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
+        case PAWN_NON_CAPTURING_NON_PROMOTION:
+        case PAWN_NON_CAPTURING_PROMOTION:
           // no from restriction
           legalMovesForFrom.add(moveCandidate);
           break;
-        case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-        case PIECE_CAPTURING_NEITHER_FORMAT:
+        case PIECE_NON_CAPTURING_NEITHER:
+        case PIECE_CAPTURING_NEITHER:
           // no from restriction
           legalMovesForFrom.add(moveCandidate);
           break;
-        case PIECE_NON_CAPTURING_FILE_FORMAT:
-        case PIECE_CAPTURING_FILE_FORMAT:
+        case PIECE_NON_CAPTURING_FILE:
+        case PIECE_CAPTURING_FILE:
           if (isFromFileMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
           break;
-        case PIECE_NON_CAPTURING_RANK_FORMAT:
-        case PIECE_CAPTURING_RANK_FORMAT:
+        case PIECE_NON_CAPTURING_RANK:
+        case PIECE_CAPTURING_RANK:
           if (isFromRankMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
           break;
-        case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-        case PIECE_CAPTURING_SQUARE_FORMAT:
+        case PIECE_NON_CAPTURING_SQUARE:
+        case PIECE_CAPTURING_SQUARE:
           if (isFromFileMatch && isFromRankMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
@@ -947,24 +947,24 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     final Set<LegalMove> legalMovesForPromotion = new TreeSet<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       switch (sanFormat) {
-        case KING_CASTLING_KING_SIDE_FORMAT:
-        case KING_CASTLING_QUEEN_SIDE_FORMAT:
-        case KING_NON_CASTLING_CAPTURING_FORMAT:
-        case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
-        case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-        case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-        case PIECE_CAPTURING_SQUARE_FORMAT:
-        case PIECE_CAPTURING_FILE_FORMAT:
-        case PIECE_CAPTURING_NEITHER_FORMAT:
-        case PIECE_CAPTURING_RANK_FORMAT:
-        case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-        case PIECE_NON_CAPTURING_FILE_FORMAT:
-        case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-        case PIECE_NON_CAPTURING_RANK_FORMAT:
+        case KING_CASTLING_KING_SIDE:
+        case KING_CASTLING_QUEEN_SIDE:
+        case KING_NON_CASTLING_CAPTURING:
+        case KING_NON_CASTLING_NON_CAPTURING:
+        case PAWN_CAPTURING_NON_PROMOTION:
+        case PAWN_NON_CAPTURING_NON_PROMOTION:
+        case PIECE_CAPTURING_SQUARE:
+        case PIECE_CAPTURING_FILE:
+        case PIECE_CAPTURING_NEITHER:
+        case PIECE_CAPTURING_RANK:
+        case PIECE_NON_CAPTURING_SQUARE:
+        case PIECE_NON_CAPTURING_FILE:
+        case PIECE_NON_CAPTURING_NEITHER:
+        case PIECE_NON_CAPTURING_RANK:
           legalMovesForPromotion.add(moveCandidate);
           break;
-        case PAWN_CAPTURING_PROMOTION_FORMAT:
-        case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
+        case PAWN_CAPTURING_PROMOTION:
+        case PAWN_NON_CAPTURING_PROMOTION:
           if (moveCandidate.moveSpecification().promotionPieceType() == sanConversion.promotionPieceType()) {
             legalMovesForPromotion.add(moveCandidate);
           }
@@ -981,30 +981,30 @@ public class SanValidation extends AbstractSan implements EnumConstants {
     final Set<LegalMove> legalMovesForCastling = new TreeSet<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       switch (sanFormat) {
-        case KING_CASTLING_KING_SIDE_FORMAT:
+        case KING_CASTLING_KING_SIDE:
           if (moveCandidate.moveSpecification().castlingMove() == CastlingMove.KING_SIDE) {
             legalMovesForCastling.add(moveCandidate);
           }
           break;
-        case KING_CASTLING_QUEEN_SIDE_FORMAT:
+        case KING_CASTLING_QUEEN_SIDE:
           if (moveCandidate.moveSpecification().castlingMove() == CastlingMove.QUEEN_SIDE) {
             legalMovesForCastling.add(moveCandidate);
           }
           break;
-        case KING_NON_CASTLING_CAPTURING_FORMAT:
-        case KING_NON_CASTLING_NON_CAPTURING_FORMAT:
-        case PAWN_CAPTURING_NON_PROMOTION_FORMAT:
-        case PAWN_NON_CAPTURING_NON_PROMOTION_FORMAT:
-        case PIECE_CAPTURING_SQUARE_FORMAT:
-        case PIECE_CAPTURING_FILE_FORMAT:
-        case PIECE_CAPTURING_NEITHER_FORMAT:
-        case PIECE_CAPTURING_RANK_FORMAT:
-        case PIECE_NON_CAPTURING_SQUARE_FORMAT:
-        case PIECE_NON_CAPTURING_FILE_FORMAT:
-        case PIECE_NON_CAPTURING_NEITHER_FORMAT:
-        case PIECE_NON_CAPTURING_RANK_FORMAT:
-        case PAWN_CAPTURING_PROMOTION_FORMAT:
-        case PAWN_NON_CAPTURING_PROMOTION_FORMAT:
+        case KING_NON_CASTLING_CAPTURING:
+        case KING_NON_CASTLING_NON_CAPTURING:
+        case PAWN_CAPTURING_NON_PROMOTION:
+        case PAWN_NON_CAPTURING_NON_PROMOTION:
+        case PIECE_CAPTURING_SQUARE:
+        case PIECE_CAPTURING_FILE:
+        case PIECE_CAPTURING_NEITHER:
+        case PIECE_CAPTURING_RANK:
+        case PIECE_NON_CAPTURING_SQUARE:
+        case PIECE_NON_CAPTURING_FILE:
+        case PIECE_NON_CAPTURING_NEITHER:
+        case PIECE_NON_CAPTURING_RANK:
+        case PAWN_CAPTURING_PROMOTION:
+        case PAWN_NON_CAPTURING_PROMOTION:
           legalMovesForCastling.add(moveCandidate);
           break;
         default:
@@ -1050,18 +1050,18 @@ public class SanValidation extends AbstractSan implements EnumConstants {
   private static LegalMove calculateCastlingMove(Side havingMove, SanFormat sanFormat) {
     switch (havingMove) {
       case WHITE:
-        if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE_FORMAT) {
+        if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
           return CastlingConstants.WHITE_KING_SIDE_CASTLING_MOVE;
         }
-        if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
+        if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
           return CastlingConstants.WHITE_QUEEN_SIDE_CASTLING_MOVE;
         }
         throw new IllegalArgumentException();
       case BLACK:
-        if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE_FORMAT) {
+        if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
           return CastlingConstants.BLACK_KING_SIDE_CASTLING_MOVE;
         }
-        if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
+        if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
           return CastlingConstants.BLACK_QUEEN_SIDE_CASTLING_MOVE;
         }
         throw new IllegalArgumentException();
