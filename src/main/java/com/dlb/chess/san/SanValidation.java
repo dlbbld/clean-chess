@@ -303,10 +303,6 @@ public class SanValidation extends AbstractSan implements EnumConstants {
               Message.getString("validation.san.notPawn.specification.square.noPieceExists", havingMove.getName(),
                   movingPieceType.getName(), fromSquare.getName()));
         }
-        if (sanConversion.toSquare() == fromSquare) {
-          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_MOVING_ONTO_ITSELF,
-              Message.getString("validation.san.notPawn.specification.square.movingOntoItself"));
-        }
         break;
       default:
         throw new IllegalArgumentException();
