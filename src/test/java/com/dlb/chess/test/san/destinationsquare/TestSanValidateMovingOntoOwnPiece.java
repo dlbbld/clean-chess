@@ -1,9 +1,10 @@
-package com.dlb.chess.test.san;
+package com.dlb.chess.test.san.destinationsquare;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.test.san.AbstractTestSanValidate;
 
 class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
 

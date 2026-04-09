@@ -1,12 +1,13 @@
-package com.dlb.chess.test.san;
+package com.dlb.chess.test.san.destinationsquare;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.test.san.AbstractTestSanValidate;
 
-class TestSanValidateOntoItself extends AbstractTestSanValidate {
+class TestSanValidateMovingOntoItself extends AbstractTestSanValidate {
 
   @SuppressWarnings("static-method")
   @Test

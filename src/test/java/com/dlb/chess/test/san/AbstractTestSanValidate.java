@@ -27,11 +27,11 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
     assertFalse(isException);
   }
 
-  static void checkExceptionMovingOntoOwnPiece(String san, ApiBoard board) {
+  public static void checkExceptionMovingOntoOwnPiece(String san, ApiBoard board) {
     checkException(san, board, SanValidationProblem.MOVING_ONTO_OWN_PIECE);
   }
 
-  static void checkExceptionCapturingOwnPiece(String san, ApiBoard board) {
+  public static void checkExceptionCapturingOwnPiece(String san, ApiBoard board) {
     checkException(san, board, SanValidationProblem.CAPTURING_OWN_PIECE);
   }
 
@@ -39,7 +39,7 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
     checkException(san, board, SanValidationProblem.FORMAT);
   }
 
-  static void checkExceptionFormat(String san, SanValidationProblem problem, ApiBoard board) {
+  public static void checkExceptionFormat(String san, SanValidationProblem problem, ApiBoard board) {
     checkException(san, board, problem);
   }
 
