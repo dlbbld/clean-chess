@@ -1,4 +1,4 @@
-package com.dlb.chess.test.san;
+package com.dlb.chess.test.san.pawn;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
