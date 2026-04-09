@@ -20,7 +20,10 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveCalculation;
+import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.model.SanConversion;
+import com.dlb.chess.moves.legal.AbstractLegalMoves;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToSan;
@@ -204,7 +207,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       case PAWN_NON_CAPTURING_PROMOTION, PAWN_CAPTURING_PROMOTION -> validateAgainstLegalMovesForPawnPromotion(
           legalMovesCandidates, pieceType, toSquare);
       case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER -> validateAgainstLegalMovesForPieceNeither(
-          legalMovesCandidates, pieceType, toSquare);
+          staticPosition, havingMove, legalMovesCandidates, pieceType, toSquare);
       case PIECE_NON_CAPTURING_FILE, PIECE_CAPTURING_FILE -> validateAgainstLegalMovesForPieceFile(staticPosition,
           havingMove, legalMovesCandidates, pieceType, sanFormat, sanConversion, toSquare);
       case PIECE_NON_CAPTURING_RANK, PIECE_CAPTURING_RANK -> validateAgainstLegalMovesForPieceRank(staticPosition,
@@ -238,17 +241,64 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     }
   }
 
-  private static void validateAgainstLegalMovesForPieceNeither(Set<LegalMove> legalMovesCandidates, PieceType pieceType,
-      Square toSquare) {
+  private static void validateAgainstLegalMovesForPieceNeither(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, PieceType pieceType, Square toSquare) {
     if (legalMovesCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NO_LEGAL_MOVE,
-          Message.getString("validation.san.notPawn.specification.none.otherThanKing.noLegalMove", pieceType.getName(),
+      final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForPieceNeither(staticPosition,
+          havingMove, pieceType, toSquare);
+
+      if (pseudoLegalMoves.isEmpty()) {
+        if (countPiecesOfType(staticPosition, havingMove, pieceType) == 1) {
+          throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_SINGLE,
+              Message.getString("validation.san.notPawn.specification.none.notReachable.single", pieceType.getName(),
+                  toSquare.getName()));
+        }
+        throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_MULTIPLE,
+            Message.getString("validation.san.notPawn.specification.none.notReachable.multiple", pieceType.getName(),
+                toSquare.getName()));
+      }
+      if (pseudoLegalMoves.size() == 1) {
+        final Square fromSquare = pseudoLegalMoves.iterator().next().moveSpecification().fromSquare();
+        throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_KING_IN_CHECK_SINGLE,
+            Message.getString("validation.san.notPawn.specification.none.kingInCheck.single", pieceType.getName(),
+                fromSquare.getName(), toSquare.getName()));
+      }
+      throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_KING_IN_CHECK_MULTIPLE,
+          Message.getString("validation.san.notPawn.specification.none.kingInCheck.multiple", pieceType.getName(),
               toSquare.getName()));
     }
     if (legalMovesCandidates.size() > 1) {
       throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_MULTIPLE_LEGAL_MOVES, Message.getString(
           "validation.san.notPawn.specification.none.moreThanOneLegalMove", pieceType.getName(), toSquare.getName()));
     }
+  }
+
+  private static Set<PseudoLegalMove> calculatePseudoLegalMovesForPieceNeither(StaticPosition staticPosition,
+      Side havingMove, PieceType pieceType, Square toSquare) {
+    final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
+    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+      if (!staticPosition.isOwnPiece(fromSquare, havingMove, pieceType)) {
+        continue;
+      }
+      final Set<Square> potentialToSquares = AbstractPotentialToSquares.calculatePotentialToSquare(staticPosition,
+          Square.NONE, havingMove, fromSquare);
+      if (potentialToSquares.contains(toSquare)) {
+        final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
+            fromSquare, Set.of(toSquare));
+        allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
+      }
+    }
+    return allPseudoLegal;
+  }
+
+  private static int countPiecesOfType(StaticPosition staticPosition, Side havingMove, PieceType pieceType) {
+    var count = 0;
+    for (final Square square : Square.BOARD_SQUARE_LIST) {
+      if (staticPosition.isOwnPiece(square, havingMove, pieceType)) {
+        count++;
+      }
+    }
+    return count;
   }
 
   private static void validateAgainstLegalMovesForPieceFile(StaticPosition staticPosition, Side havingMove,
