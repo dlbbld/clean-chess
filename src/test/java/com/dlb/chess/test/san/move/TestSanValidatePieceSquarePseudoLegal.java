@@ -38,7 +38,7 @@ class TestSanValidatePieceSquarePseudoLegal {
   void testWhiteKingInCheck() {
     // White bishop on e4 pinned along e-file (king e1, rook e8). Be4d5 would expose king.
     final ApiBoard board = new Board("4r2k/8/8/8/4B3/8/8/4K3 w - - 0 1");
-    checkException("Be4d5", board, SanValidationProblem.PIECE_SQUARE_KING_IN_CHECK);
+    checkException("Be4d5", board, SanValidationProblem.PIECE_SQUARE_KING_EXPOSED_TO_CHECK);
   }
 
   @SuppressWarnings("static-method")
@@ -46,7 +46,25 @@ class TestSanValidatePieceSquarePseudoLegal {
   void testBlackKingInCheck() {
     // Black bishop on e5 pinned along e-file (king e8, rook e1). Be5d4 would expose king.
     final ApiBoard board = new Board("4k3/8/8/4b3/8/8/8/4R2K b - - 0 1");
-    checkException("Be5d4", board, SanValidationProblem.PIECE_SQUARE_KING_IN_CHECK);
+    checkException("Be5d4", board, SanValidationProblem.PIECE_SQUARE_KING_EXPOSED_TO_CHECK);
+  }
+
+  // --- King left in check ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWhiteKingLeftInCheck() {
+    // White king e1 in check from black rook e8. White bishop on c4 can reach Bc4d5 but doesn't resolve check.
+    final ApiBoard board = new Board("4r2k/8/8/8/2B5/8/8/4K3 w - - 0 1");
+    checkException("Bc4d5", board, SanValidationProblem.PIECE_SQUARE_KING_LEFT_IN_CHECK);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBlackKingLeftInCheck() {
+    // Black king e8 in check from white rook e1. Black bishop on c5 can reach Bc5d4 but doesn't resolve check.
+    final ApiBoard board = new Board("4k3/8/8/2b5/8/8/8/4R2K b - - 0 1");
+    checkException("Bc5d4", board, SanValidationProblem.PIECE_SQUARE_KING_LEFT_IN_CHECK);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem expectedProblem) {

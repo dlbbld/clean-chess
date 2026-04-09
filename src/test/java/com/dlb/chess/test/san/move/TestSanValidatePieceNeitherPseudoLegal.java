@@ -56,7 +56,7 @@ class TestSanValidatePieceNeitherPseudoLegal {
   void testWhiteKingInCheckSingle() {
     // White bishop on e4 pinned along e-file (king e1, rook e8). Bishop can reach d5 but would expose king.
     final ApiBoard board = new Board("4r2k/8/8/8/4B3/8/8/4K3 w - - 0 1");
-    checkException("Bd5", board, SanValidationProblem.PIECE_NEITHER_KING_IN_CHECK_SINGLE);
+    checkException("Bd5", board, SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_SINGLE);
   }
 
   @SuppressWarnings("static-method")
@@ -64,7 +64,7 @@ class TestSanValidatePieceNeitherPseudoLegal {
   void testBlackKingInCheckSingle() {
     // Black bishop on e5 pinned along e-file (king e8, rook e1). Bishop can reach d4 but would expose king.
     final ApiBoard board = new Board("4k3/8/8/4b3/8/8/8/4R2K b - - 0 1");
-    checkException("Bd4", board, SanValidationProblem.PIECE_NEITHER_KING_IN_CHECK_SINGLE);
+    checkException("Bd4", board, SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_SINGLE);
   }
 
   // --- King in check, multiple pseudo-legal moves ---
@@ -75,7 +75,7 @@ class TestSanValidatePieceNeitherPseudoLegal {
     // White knights on d2 and f2, pinned on separate diagonals from e1 (bishops b4 and g3).
     // Both can reach e4 but each would expose king on its diagonal.
     final ApiBoard board = new Board("k7/8/8/8/1b6/6b1/3N1N2/4K3 w - - 0 1");
-    checkException("Ne4", board, SanValidationProblem.PIECE_NEITHER_KING_IN_CHECK_MULTIPLE);
+    checkException("Ne4", board, SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_MULTIPLE);
   }
 
   @SuppressWarnings("static-method")
@@ -84,7 +84,47 @@ class TestSanValidatePieceNeitherPseudoLegal {
     // Black knights on d7 and f7, pinned on separate diagonals from e8 (bishops b5 and g6).
     // Both can reach e5 but each would expose king on its diagonal.
     final ApiBoard board = new Board("4k3/3n1n2/6B1/1B6/8/8/8/K7 b - - 0 1");
-    checkException("Ne5", board, SanValidationProblem.PIECE_NEITHER_KING_IN_CHECK_MULTIPLE);
+    checkException("Ne5", board, SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_MULTIPLE);
+  }
+
+  // --- King left in check, single pseudo-legal move ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWhiteKingLeftInCheckSingle() {
+    // White king e1 in check from black rook e8. Single white bishop on c4 can reach d5
+    // but doesn't resolve check.
+    final ApiBoard board = new Board("4r2k/8/8/8/2B5/8/8/4K3 w - - 0 1");
+    checkException("Bd5", board, SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_SINGLE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBlackKingLeftInCheckSingle() {
+    // Black king e8 in check from white rook e1. Single black bishop on c5 can reach d4
+    // but doesn't resolve check.
+    final ApiBoard board = new Board("4k3/8/8/2b5/8/8/8/4R2K b - - 0 1");
+    checkException("Bd4", board, SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_SINGLE);
+  }
+
+  // --- King left in check, multiple pseudo-legal moves ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWhiteKingLeftInCheckMultiple() {
+    // White king a1 in check from black rook a8. Two white rooks on d3 and d6, both can reach d5
+    // but neither resolves check on a-file.
+    final ApiBoard board = new Board("r6k/8/3R4/8/8/3R4/8/K7 w - - 0 1");
+    checkException("Rd5", board, SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_MULTIPLE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBlackKingLeftInCheckMultiple() {
+    // Black king a8 in check from white rook a1. Two black rooks on d3 and d6, both can reach d5
+    // but neither resolves check on a-file.
+    final ApiBoard board = new Board("k7/8/3r4/8/8/3r4/8/R6K b - - 0 1");
+    checkException("Rd5", board, SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_MULTIPLE);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem expectedProblem) {
