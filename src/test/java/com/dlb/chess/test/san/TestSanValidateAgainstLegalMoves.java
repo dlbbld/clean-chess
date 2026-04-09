@@ -75,30 +75,30 @@ class TestSanValidateAgainstLegalMoves {
 
     // white
     // rook
-    checkException(board, "Raa3", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Raa3", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // knight
-    checkException(board, "Nbc4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Nbc4", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // bishop
-    checkException(board, "Bcb3", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Bcb3", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // queen
-    checkException(board, "Qdd3", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Qdd3", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // black
     board.performMoves("e4");
     // rook
-    checkException(board, "Raa6", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Raa6", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // knight
-    checkException(board, "Nbc5", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Nbc5", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // bishop
-    checkException(board, "Bcb6", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Bcb6", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
     // queen
-    checkException(board, "Qdd4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE);
+    checkException(board, "Qdd4", SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE);
 
   }
 
