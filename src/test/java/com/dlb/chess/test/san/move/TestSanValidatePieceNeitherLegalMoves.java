@@ -18,16 +18,16 @@ class TestSanValidatePieceNeitherLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testWhiteNotReachableSingle() {
-    // Single white bishop on c1, blocked by pawns. Cannot reach e3.
-    final ApiBoard board = new Board("k7/8/8/8/8/8/PPPPPPPP/2B1K3 w - - 0 1");
+    // Single white bishop on c1, blocked by own knights on b2 and d2. Cannot reach e3.
+    final ApiBoard board = new Board("k7/8/8/8/PPPPPPPP/8/1N1N4/2B1K3 w - - 0 1");
     checkException("Be3", board, SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_SINGLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testBlackNotReachableSingle() {
-    // Single black bishop on c8, blocked by pawns. Cannot reach e6.
-    final ApiBoard board = new Board("2b1k3/pppppppp/8/8/8/8/8/4K3 b - - 0 1");
+    // Single black bishop on c8, blocked by own knights on b7 and d7. Cannot reach e6.
+    final ApiBoard board = new Board("2b1k3/1n1n4/8/pppppppp/8/8/8/4K3 b - - 0 1");
     checkException("Be6", board, SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_SINGLE);
   }
 
@@ -36,16 +36,16 @@ class TestSanValidatePieceNeitherLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testWhiteNotReachableMultiple() {
-    // Two white knights on b1 and g1, blocked by pawns. Neither can reach e5.
-    final ApiBoard board = new Board("k7/8/8/8/8/8/PPPPPPPP/1N2K1N1 w - - 0 1");
+    // Two white knights on b1 and g1, blocked by pawns on 4th rank. Neither can reach e5.
+    final ApiBoard board = new Board("k7/8/8/8/PPPPPPPP/8/8/1N2K1N1 w - - 0 1");
     checkException("Ne5", board, SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_MULTIPLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testBlackNotReachableMultiple() {
-    // Two black knights on b8 and g8, blocked by pawns. Neither can reach e4.
-    final ApiBoard board = new Board("1n2k1n1/pppppppp/8/8/8/8/8/4K3 b - - 0 1");
+    // Two black knights on b8 and g8, blocked by pawns on 5th rank. Neither can reach e4.
+    final ApiBoard board = new Board("1n2k1n1/8/8/pppppppp/8/8/8/4K3 b - - 0 1");
     checkException("Ne4", board, SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_MULTIPLE);
   }
 
