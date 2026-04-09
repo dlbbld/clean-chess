@@ -34,8 +34,7 @@ public class SanValidation extends AbstractSan {
 
     final Set<LegalMove> legalMovesCandidates = SanValidateLegalMoves.calculateLegalMovesCandidates(board, havingMove,
         sanParse);
-    SanValidateLegalMoves.validateAgainstLegalMoves(board.getStaticPosition(), havingMove, legalMovesCandidates,
-        sanType, sanConversion);
+    SanValidateLegalMoves.validateAgainstLegalMoves(board, havingMove, legalMovesCandidates, sanType, sanConversion);
 
     final LegalMove legalMoveOnlyCandidate = SanValidateLegalMoves.calculateOnlyPossibleLegalMove(sanFormat,
         sanConversion, legalMovesCandidates);

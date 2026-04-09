@@ -6,6 +6,8 @@ import java.util.TreeSet;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
+import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -22,6 +24,8 @@ import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.enums.MoveCheck;
+import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.model.PseudoLegalReason;
@@ -175,23 +179,23 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     return calculateOnlyElement(filtered3);
   }
 
-  public static void validateAgainstLegalMoves(StaticPosition staticPosition, Side havingMove,
+  public static void validateAgainstLegalMoves(ApiBoard board, Side havingMove,
       Set<LegalMove> legalMovesCandidates, SanType sanType, SanConversion sanConversion) {
+
+    final StaticPosition staticPosition = board.getStaticPosition();
 
     // we need an early return for castling first so for the remaining cases we can
     // calculate the to square
     final SanFormat sanFormat = sanType.getSanFormat();
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       if (!isContained(legalMovesCandidates, havingMove, sanFormat)) {
-        throw new SanValidationException(SanValidationProblem.KING_CASTLING_QUEEN_SIDE_NOT_POSSIBLE,
-            Message.getString("validation.san.castling.queenSide"));
+        throwCastlingException(board, havingMove, "Queen-side", CastlingMove.QUEEN_SIDE);
       }
       return;
     }
     if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
       if (!isContained(legalMovesCandidates, havingMove, sanFormat)) {
-        throw new SanValidationException(SanValidationProblem.KING_CASTLING_KING_SIDE_NOT_POSSIBLE,
-            Message.getString("validation.san.castling.kingSide"));
+        throwCastlingException(board, havingMove, "King-side", CastlingMove.KING_SIDE);
       }
       return;
     }
@@ -282,6 +286,62 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_MULTIPLE_LEGAL_MOVES, Message.getString(
           "validation.san.notPawn.specification.none.moreThanOneLegalMove", pieceType.getName(), toSquare.getName()));
     }
+  }
+
+  private static void throwCastlingException(ApiBoard board, Side havingMove, String sideLabel,
+      CastlingMove castlingMove) {
+    final CastlingRight castlingRight = board.getCastlingRight(havingMove);
+    final MoveCheck moveCheck = castlingMove == CastlingMove.QUEEN_SIDE
+        ? CastlingUtility.calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, castlingRight)
+        : CastlingUtility.calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, castlingRight);
+
+    final CastlingRightLoss castlingRightLoss;
+    final String message;
+
+    switch (moveCheck) {
+      case CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE:
+        castlingRightLoss = CastlingRightLoss.NONE;
+        message = Message.getString("validation.san.castling.kingOrRookNotOnRequiredSquare", sideLabel);
+        break;
+      case CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE: {
+        final CastlingRightBoth crb = board.getCastlingRightBoth();
+        castlingRightLoss = castlingMove == CastlingMove.QUEEN_SIDE
+            ? (havingMove == Side.WHITE ? crb.whiteQueenSideLoss() : crb.blackQueenSideLoss())
+            : (havingMove == Side.WHITE ? crb.whiteKingSideLoss() : crb.blackKingSideLoss());
+        final String rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
+        message = switch (castlingRightLoss) {
+          case KING_MOVED -> Message.getString("validation.san.castling.noRight.kingMoved", sideLabel);
+          case ROOK_MOVED -> Message.getString("validation.san.castling.noRight.rookMoved", sideLabel, rookLabel);
+          case ROOK_CAPTURED -> Message.getString("validation.san.castling.noRight.rookCaptured", sideLabel, rookLabel);
+          case CASTLED -> Message.getString("validation.san.castling.noRight.castled", sideLabel);
+          default -> Message.getString("validation.san.castling.noRight.unknown", sideLabel);
+        };
+        break;
+      }
+      case CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY:
+        castlingRightLoss = CastlingRightLoss.NONE;
+        message = Message.getString("validation.san.castling.squaresNotEmpty", sideLabel);
+        break;
+      case CASTLING_PRIORITY_4_KING_IN_CHECK:
+        castlingRightLoss = CastlingRightLoss.NONE;
+        message = Message.getString("validation.san.castling.kingInCheck", sideLabel);
+        break;
+      case CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK:
+        castlingRightLoss = CastlingRightLoss.NONE;
+        message = Message.getString("validation.san.castling.kingWouldTravelThroughCheck", sideLabel);
+        break;
+      case CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK:
+        castlingRightLoss = CastlingRightLoss.NONE;
+        message = Message.getString("validation.san.castling.kingWouldEndInCheck", sideLabel);
+        break;
+      case SUCCESS:
+        throw new ProgrammingMistakeException("Castling check returned SUCCESS but move is not in legal moves");
+      default:
+        throw new ProgrammingMistakeException("Unexpected castling check result: " + moveCheck);
+    }
+
+    throw new SanValidationException(SanValidationProblem.KING_CASTLING_NOT_POSSIBLE, message, moveCheck,
+        castlingRightLoss);
   }
 
   private static PseudoLegalReason calculatePseudoLegalReason(StaticPosition staticPosition, Side havingMove) {

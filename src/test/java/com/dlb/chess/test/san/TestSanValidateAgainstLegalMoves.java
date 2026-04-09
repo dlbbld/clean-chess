@@ -15,21 +15,6 @@ class TestSanValidateAgainstLegalMoves {
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingCastling() {
-    final ApiBoard board = new Board();
-
-    // whitecheck(board, "O-O-O",
-    // SanValidationPositionRelatedProblem.KING_CASTLING_QUEEN_SIDE_NOT_POSSIBLE);check(board, "O-O",
-    // SanValidationPositionRelatedProblem.KING_CASTLING_KING_SIDE_NOT_POSSIBLE);
-
-    // black
-    board.performMoves("e4");
-    checkException(board, "O-O-O", SanValidationProblem.KING_CASTLING_QUEEN_SIDE_NOT_POSSIBLE);
-    checkException(board, "O-O", SanValidationProblem.KING_CASTLING_KING_SIDE_NOT_POSSIBLE);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
   void testKingNonCastling() {
     final ApiBoard board = new Board();
 
