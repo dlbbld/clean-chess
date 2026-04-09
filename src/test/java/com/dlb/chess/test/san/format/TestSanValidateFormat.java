@@ -571,16 +571,15 @@ class TestSanValidateFormat {
   private static void checkValidateFormat(String san, boolean isExceptionExpected,
       SanValidationProblem expectedProblem) {
     checkValidateFormatTest(san, isExceptionExpected, expectedProblem);
-    checkValidateFormatReference(san, isExceptionExpected, expectedProblem);
+    checkValidateFormatReference(san, isExceptionExpected);
 
   }
 
   private static void checkValidateFormatTest(String san, boolean isExceptionExpected,
       SanValidationProblem expectedProblem) {
     boolean isException;
-    SanParse result = null;
     try {
-      result = SanValidateFormat.validateFormat(san);
+      SanValidateFormat.validateFormat(san);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
@@ -590,13 +589,11 @@ class TestSanValidateFormat {
     assertEquals(isExceptionExpected, isException);
   }
 
-  private static void checkValidateFormatReference(String san, boolean isExceptionExpected,
-      SanValidationProblem expectedProblem) {
+  private static void checkValidateFormatReference(String san, boolean isExceptionExpected) {
 
     boolean isException;
-    SanParse result = null;
     try {
-      result = validateFormatReference(san);
+      validateFormatReference(san);
       isException = false;
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isException = true;

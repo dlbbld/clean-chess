@@ -18,6 +18,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
@@ -246,8 +247,8 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static void validateAgainstLegalMovesForPieceNeither(StaticPosition staticPosition, Side havingMove,
       Set<LegalMove> legalMovesCandidates, PieceType pieceType, Square toSquare) {
     if (legalMovesCandidates.isEmpty()) {
-      final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForPieceNeither(staticPosition,
-          havingMove, pieceType, toSquare);
+      final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForPieceNeither(staticPosition, havingMove,
+          pieceType, toSquare);
 
       if (pseudoLegalMoves.isEmpty()) {
         if (countPiecesOfType(staticPosition, havingMove, pieceType) == 1) {
@@ -262,7 +263,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
       final var msgKey = reason == PseudoLegalReason.KING_LEFT_IN_CHECK ? "kingLeftInCheck" : "kingExposedToCheck";
       if (pseudoLegalMoves.size() == 1) {
-        final Square fromSquare = pseudoLegalMoves.iterator().next().moveSpecification().fromSquare();
+        final Square fromSquare = SetUtility.getOnly(pseudoLegalMoves).moveSpecification().fromSquare();
         final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
             ? SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_SINGLE
             : SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_SINGLE;
@@ -301,7 +302,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, Set.of(toSquare));
+            fromSquare, NonNullWrapperCommon.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -340,7 +341,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, Set.of(toSquare));
+            fromSquare, NonNullWrapperCommon.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -369,7 +370,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, Set.of(toSquare));
+            fromSquare, NonNullWrapperCommon.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -386,7 +387,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         pieceCandidates);
     if (movementCandidates.isEmpty()) {
       if (countPiecesOfTypeOnFile(staticPosition, havingMove, pieceType, fromFile) == 1) {
-        final Square pieceSquare = pieceCandidates.iterator().next();
+        final Square pieceSquare = SetUtility.getOnly(pieceCandidates);
         throw new SanValidationException(SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE,
             Message.getString("validation.san.notPawn.specification.file.notReachable.single", pieceType.getName(),
                 pieceSquare.getName(), toSquare.getName()));
@@ -403,7 +404,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
       final var msgKey = reason == PseudoLegalReason.KING_LEFT_IN_CHECK ? "kingLeftInCheck" : "kingExposedToCheck";
       if (pseudoLegalMoves.size() == 1) {
-        final Square pieceSquare = pseudoLegalMoves.iterator().next().moveSpecification().fromSquare();
+        final Square pieceSquare = SetUtility.getOnly(pseudoLegalMoves).moveSpecification().fromSquare();
         final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
             ? SanValidationProblem.PIECE_FILE_KING_LEFT_IN_CHECK_SINGLE
             : SanValidationProblem.PIECE_FILE_KING_EXPOSED_TO_CHECK_SINGLE;
@@ -455,7 +456,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         pieceCandidates);
     if (movementCandidates.isEmpty()) {
       if (countPiecesOfTypeOnRank(staticPosition, havingMove, pieceType, fromRank) == 1) {
-        final Square pieceSquare = pieceCandidates.iterator().next();
+        final Square pieceSquare = SetUtility.getOnly(pieceCandidates);
         throw new SanValidationException(SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE,
             Message.getString("validation.san.notPawn.specification.rank.notReachable.single", pieceType.getName(),
                 pieceSquare.getName(), toSquare.getName()));
@@ -472,7 +473,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
       final var msgKey = reason == PseudoLegalReason.KING_LEFT_IN_CHECK ? "kingLeftInCheck" : "kingExposedToCheck";
       if (pseudoLegalMoves.size() == 1) {
-        final Square pieceSquare = pseudoLegalMoves.iterator().next().moveSpecification().fromSquare();
+        final Square pieceSquare = SetUtility.getOnly(pseudoLegalMoves).moveSpecification().fromSquare();
         final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
             ? SanValidationProblem.PIECE_RANK_KING_LEFT_IN_CHECK_SINGLE
             : SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_SINGLE;

@@ -27,9 +27,9 @@ import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.SanValidateFormat;
 
 /**
- * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original
- * type-enumeration approach (iterating over all {@link SanType} values) as an oracle against which
- * the direct-parse implementation can be verified in tests.
+ * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original type-enumeration approach
+ * (iterating over all {@link SanType} values) as an oracle against which the direct-parse implementation can be
+ * verified in tests.
  */
 public abstract class SanValidateFormatReference {
 
@@ -57,7 +57,7 @@ public abstract class SanValidateFormatReference {
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
 
     final SanFormat sanFormat = sanType.getSanFormat();
-    final SanFormatProperties properties = SanFormatPropertiesMap.MAP.get(sanFormat);
+    final SanFormatProperties properties = NonNullWrapperCommon.get(SanFormatPropertiesMap.MAP, sanFormat);
 
     // length
     final var formatLength = properties.length();
@@ -172,17 +172,13 @@ public abstract class SanValidateFormatReference {
     }
 
     // pawn promotion rank enforcement
-    if (sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) {
-      if (toRank == Rank.RANK_1 || toRank == Rank.RANK_8) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
+    if ((sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
+        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && (toRank == Rank.RANK_1 || toRank == Rank.RANK_8)) {
+      return SanConversionCheck.IS_NO_MATCH;
     }
-    if (sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE) {
-      if (toRank != Rank.RANK_1 && toRank != Rank.RANK_8) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
+    if ((sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE)
+        && (toRank != Rank.RANK_1 && toRank != Rank.RANK_8)) {
+      return SanConversionCheck.IS_NO_MATCH;
     }
 
     // promotionSymbolIndex

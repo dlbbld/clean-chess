@@ -83,7 +83,7 @@ class TestSanValidateFormatBasic {
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      System.out.println("SAN: " + san + " -> " + e.getMessage());
+      System.out.println("SAN: " + san + " -> " + e.getMessage() + " (invalid char: '" + invalidChar + "')");
       assertEquals(SanValidationProblem.FORMAT_INVALID_CHARACTER, e.getSanValidationProblem());
     }
     assertTrue(isException);

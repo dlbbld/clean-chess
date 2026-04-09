@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
+import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMoveCalculation;
@@ -104,7 +104,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
-    final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
+    final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
     assertEquals(new MoveSpecification(WHITE, E2, D3), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
@@ -122,7 +122,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
-    final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
+    final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
     assertEquals(new MoveSpecification(WHITE, A1, B2), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
@@ -203,7 +203,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
-    final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
+    final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
     assertEquals(new MoveSpecification(BLACK, E7, D6), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
@@ -221,7 +221,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
-    final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
+    final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
     assertEquals(new MoveSpecification(BLACK, A8, B7), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }

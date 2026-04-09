@@ -253,4 +253,9 @@ public class NonNullWrapperCommon {
     return directoryPath.resolve(filePath);
   }
 
+  @SuppressWarnings("null")
+  public static <E> Set<E> setOf(E item) {
+    return Set.of(item);
+  }
+
 }
