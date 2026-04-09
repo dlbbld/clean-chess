@@ -330,6 +330,35 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     return allPseudoLegal;
   }
 
+  private static int countPiecesOfTypeOnRank(StaticPosition staticPosition, Side havingMove, PieceType pieceType,
+      Rank rank) {
+    var count = 0;
+    for (final Square square : Square.BOARD_SQUARE_LIST) {
+      if (square.getRank() == rank && staticPosition.isOwnPiece(square, havingMove, pieceType)) {
+        count++;
+      }
+    }
+    return count;
+  }
+
+  private static Set<PseudoLegalMove> calculatePseudoLegalMovesForPieceRank(StaticPosition staticPosition,
+      Side havingMove, PieceType pieceType, Rank rank, Square toSquare) {
+    final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
+    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+      if (fromSquare.getRank() != rank || !staticPosition.isOwnPiece(fromSquare, havingMove, pieceType)) {
+        continue;
+      }
+      final Set<Square> potentialToSquares = AbstractPotentialToSquares.calculatePotentialToSquare(staticPosition,
+          Square.NONE, havingMove, fromSquare);
+      if (potentialToSquares.contains(toSquare)) {
+        final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
+            fromSquare, Set.of(toSquare));
+        allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
+      }
+    }
+    return allPseudoLegal;
+  }
+
   private static void validateAgainstLegalMovesForPieceFile(StaticPosition staticPosition, Side havingMove,
       Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
       Square toSquare) {
@@ -394,22 +423,36 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static void validateAgainstLegalMovesForPieceRank(StaticPosition staticPosition, Side havingMove,
       Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
       Square toSquare) {
+    final Rank fromRank = sanConversion.fromRank();
     final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
         sanFormat, sanConversion);
     final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove, toSquare,
         pieceCandidates);
     if (movementCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK,
-          Message.getString("validation.san.notPawn.specification.rank.invalidMovement", pieceType.getName(),
-              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+      if (countPiecesOfTypeOnRank(staticPosition, havingMove, pieceType, fromRank) == 1) {
+        final Square pieceSquare = pieceCandidates.iterator().next();
+        throw new SanValidationException(SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE,
+            Message.getString("validation.san.notPawn.specification.rank.notReachable.single", pieceType.getName(),
+                pieceSquare.getName(), toSquare.getName()));
+      }
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE,
+          Message.getString("validation.san.notPawn.specification.rank.notReachable.multiple", pieceType.getName(),
+              NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
     }
 
-    final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(sanConversion.fromRank(),
-        legalMovesCandidates);
+    final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(fromRank, legalMovesCandidates);
     if (numberOfLegalMovesFromSameRank == 0) {
-      throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_LEGAL_MOVE,
-          Message.getString("validation.san.noLegalMove.fromRank", pieceType.getName(),
-              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+      final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForPieceRank(staticPosition, havingMove,
+          pieceType, fromRank, toSquare);
+      if (pseudoLegalMoves.size() == 1) {
+        final Square pieceSquare = pseudoLegalMoves.iterator().next().moveSpecification().fromSquare();
+        throw new SanValidationException(SanValidationProblem.PIECE_RANK_KING_IN_CHECK_SINGLE,
+            Message.getString("validation.san.notPawn.specification.rank.kingInCheck.single", pieceType.getName(),
+                pieceSquare.getName(), toSquare.getName()));
+      }
+      throw new SanValidationException(SanValidationProblem.PIECE_RANK_KING_IN_CHECK_MULTIPLE,
+          Message.getString("validation.san.notPawn.specification.rank.kingInCheck.multiple", pieceType.getName(),
+              NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {

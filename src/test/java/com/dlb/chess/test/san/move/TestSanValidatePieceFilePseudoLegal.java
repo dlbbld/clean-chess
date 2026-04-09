@@ -11,7 +11,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
 
-class TestSanValidatePieceFileLegalMoves {
+class TestSanValidatePieceFilePseudoLegal {
 
   // --- Not reachable, single piece on file ---
 

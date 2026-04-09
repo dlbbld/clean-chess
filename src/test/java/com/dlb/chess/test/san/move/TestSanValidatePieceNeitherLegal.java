@@ -11,7 +11,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
 
-class TestSanValidateAgainstLegalMovesNeither {
+class TestSanValidatePieceNeitherLegal {
 
   @SuppressWarnings("static-method")
   @Test

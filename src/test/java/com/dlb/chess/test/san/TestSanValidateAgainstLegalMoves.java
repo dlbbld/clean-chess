@@ -360,30 +360,30 @@ class TestSanValidateAgainstLegalMoves {
 
     // white
     // rook
-    checkException(board, "R1a4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "R1a4", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // knight
-    checkException(board, "N1b3", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "N1b3", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // bishop
-    checkException(board, "B1d4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "B1d4", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // queen
-    checkException(board, "Q1d3", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "Q1d3", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE);
 
     // black
     board.performMoves("e4");
     // rook
-    checkException(board, "R8a5", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "R8a5", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // knight
-    checkException(board, "N8c5", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "N8c5", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // bishop
-    checkException(board, "B8d5", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "B8d5", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // queen
-    checkException(board, "Q8d6", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "Q8d6", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE);
 
   }
 
