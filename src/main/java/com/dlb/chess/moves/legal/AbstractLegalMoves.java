@@ -13,6 +13,8 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveCalculation;
+import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.moves.legal.king.KingLegalMoves;
 import com.dlb.chess.moves.legal.pawn.PawnLegalMoves;
 import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
@@ -68,27 +70,34 @@ public abstract class AbstractLegalMoves implements EnumConstants {
 
   public static Set<LegalMove> calculateLegalMoveSet(StaticPosition staticPosition, Side havingMove, Square fromSquare,
       Set<Square> toSquareSet) {
+    return calculateLegalMoveCalculation(staticPosition, havingMove, fromSquare, toSquareSet).legalMoveSet();
+  }
+
+  public static LegalMoveCalculation calculateLegalMoveCalculation(StaticPosition staticPosition, Side havingMove,
+      Square fromSquare, Set<Square> toSquareSet) {
 
     final Piece movingPiece = staticPosition.get(fromSquare);
 
     final Set<LegalMove> legalMoveSet = new TreeSet<>();
+    final Set<PseudoLegalMove> pseudoLegalMoveSet = new TreeSet<>();
 
     for (final Square toSquare : toSquareSet) {
       final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare, toSquare);
+      final Piece pieceCaptured = staticPosition.isEmpty(toSquare) ? Piece.NONE : staticPosition.get(toSquare);
+
+      if (pieceCaptured != Piece.NONE && pieceCaptured.getPieceType() == PieceType.KING) {
+        continue;
+      }
+
       if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {
-        if (staticPosition.isEmpty(moveSpecification.toSquare())) {
-          final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, Piece.NONE);
-          legalMoveSet.add(legalMove);
-        } else {
-          final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-          if (pieceCaptured.getPieceType() != PieceType.KING) {
-            final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
-            legalMoveSet.add(legalMove);
-          }
-        }
+        final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+        legalMoveSet.add(legalMove);
+      } else {
+        final PseudoLegalMove pseudoLegalMove = new PseudoLegalMove(moveSpecification, movingPiece, pieceCaptured);
+        pseudoLegalMoveSet.add(pseudoLegalMove);
       }
     }
-    return legalMoveSet;
+    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet);
   }
 
 }
