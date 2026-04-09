@@ -17,6 +17,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
+import com.dlb.chess.model.PseudoLegalReason;
 import com.dlb.chess.moves.legal.AbstractLegalMoves;
 import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
 import com.dlb.chess.squares.to.potential.KingNonCastlingPotentialToSquares;
@@ -41,6 +42,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -55,6 +57,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -70,6 +73,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -102,6 +106,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
     assertEquals(new MoveSpecification(WHITE, E2, D3), move.moveSpecification());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -119,6 +124,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
     assertEquals(new MoveSpecification(WHITE, A1, B2), move.moveSpecification());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   // --- Black ---
@@ -135,6 +141,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -149,6 +156,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -164,6 +172,7 @@ class TestPseudoLegalMoves implements EnumConstants {
 
     assertTrue(calc.legalMoveSet().isEmpty());
     assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -196,6 +205,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
     assertEquals(new MoveSpecification(BLACK, E7, D6), move.moveSpecification());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
   @SuppressWarnings("static-method")
@@ -213,6 +223,41 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = calc.pseudoLegalMoveSet().iterator().next();
     assertEquals(new MoveSpecification(BLACK, A8, B7), move.moveSpecification());
+    assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
+  }
+
+  // --- King left in check ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWhiteKingLeftInCheck() {
+    // White king e1 in check from black rook e8. White knight on b1 can move to c3
+    // but that doesn't resolve the check on the e-file.
+    final ApiBoard board = new Board("4r2k/8/8/8/8/8/8/1N2K3 w - - 0 1");
+    final StaticPosition sp = board.getStaticPosition();
+
+    final Set<Square> toSquares = KnightPotentialToSquares.calculateKnightPotentialToSquares(sp, B1, WHITE);
+    final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(sp, WHITE, B1, toSquares);
+
+    assertTrue(calc.legalMoveSet().isEmpty());
+    assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_LEFT_IN_CHECK, calc.pseudoLegalReason());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBlackKingLeftInCheck() {
+    // Black king e8 in check from white rook e1. Black knight on b8 can move to c6
+    // but that doesn't resolve the check on the e-file.
+    final ApiBoard board = new Board("1n2k3/8/8/8/8/8/8/4R2K b - - 0 1");
+    final StaticPosition sp = board.getStaticPosition();
+
+    final Set<Square> toSquares = KnightPotentialToSquares.calculateKnightPotentialToSquares(sp, B8, BLACK);
+    final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(sp, BLACK, B8, toSquares);
+
+    assertTrue(calc.legalMoveSet().isEmpty());
+    assertFalse(calc.pseudoLegalMoveSet().isEmpty());
+    assertEquals(PseudoLegalReason.KING_LEFT_IN_CHECK, calc.pseudoLegalReason());
   }
 
 }

@@ -15,6 +15,7 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
+import com.dlb.chess.model.PseudoLegalReason;
 import com.dlb.chess.moves.legal.king.KingLegalMoves;
 import com.dlb.chess.moves.legal.pawn.PawnLegalMoves;
 import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
@@ -97,7 +98,16 @@ public abstract class AbstractLegalMoves implements EnumConstants {
         pseudoLegalMoveSet.add(pseudoLegalMove);
       }
     }
-    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet);
+    final PseudoLegalReason pseudoLegalReason;
+    if (!legalMoveSet.isEmpty() || pseudoLegalMoveSet.isEmpty()) {
+      pseudoLegalReason = PseudoLegalReason.NONE;
+    } else if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition,
+        havingMove.getOppositeSide())) {
+      pseudoLegalReason = PseudoLegalReason.KING_LEFT_IN_CHECK;
+    } else {
+      pseudoLegalReason = PseudoLegalReason.KING_EXPOSED_TO_CHECK;
+    }
+    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet, pseudoLegalReason);
   }
 
 }

@@ -561,7 +561,7 @@ class TestSanValidateFormat {
   }
 
   private static void checkValid(String san) {
-    checkValidateFormat(san, false, null);
+    checkValidateFormat(san, false, SanValidationProblem.NONE);
   }
 
   private static void checkException(String san, SanValidationProblem expectedProblem) {
