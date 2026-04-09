@@ -8,6 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -263,44 +264,46 @@ public class FenParserAdvanced implements EnumConstants {
   private static CastlingRightBoth validateCastlingRightBoth(String castlingRightBothStr)
       throws FenAdvancedValidationException {
 
-    switch (castlingRightBothStr) {
-      case "-":
-        return CastlingConstants.CASTLING_NONE_NONE;
-      case "K":
-        return CastlingConstants.CASTLING_K_NONE;
-      case "Q":
-        return CastlingConstants.CASTLING_Q_NONE;
-      case "k":
-        return CastlingConstants.CASTLING_NONE_K;
-      case "q":
-        return CastlingConstants.CASTLING_NONE_Q;
-      case "KQ":
-        return CastlingConstants.CASTLING_KQ_NONE;
-      case "Kk":
-        return CastlingConstants.CASTLING_K_K;
-      case "Kq":
-        return CastlingConstants.CASTLING_K_Q;
-      case "Qk":
-        return CastlingConstants.CASTLING_Q_K;
-      case "Qq":
-        return CastlingConstants.CASTLING_Q_Q;
-      case "kq":
-        return CastlingConstants.CASTLING_NONE_KQ;
-      case "KQk":
-        return CastlingConstants.CASTLING_KQ_K;
-      case "KQq":
-        return CastlingConstants.CASTLING_KQ_Q;
-      case "Kkq":
-        return CastlingConstants.CASTLING_K_KQ;
-      case "Qkq":
-        return CastlingConstants.CASTLING_Q_KQ;
-      case "KQkq":
-        return CastlingConstants.CASTLING_KQ_KQ;
-      default:
-        break;
+    final boolean whiteKingSide = castlingRightBothStr.contains("K");
+    final boolean whiteQueenSide = castlingRightBothStr.contains("Q");
+    final boolean blackKingSide = castlingRightBothStr.contains("k");
+    final boolean blackQueenSide = castlingRightBothStr.contains("q");
+
+    final CastlingRight castlingRightWhite;
+    if (whiteKingSide && whiteQueenSide) {
+      castlingRightWhite = CastlingRight.KING_AND_QUEEN_SIDE;
+    } else if (whiteKingSide) {
+      castlingRightWhite = CastlingRight.KING_SIDE;
+    } else if (whiteQueenSide) {
+      castlingRightWhite = CastlingRight.QUEEN_SIDE;
+    } else {
+      castlingRightWhite = CastlingRight.NONE;
     }
-    throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
-        "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
+
+    final CastlingRight castlingRightBlack;
+    if (blackKingSide && blackQueenSide) {
+      castlingRightBlack = CastlingRight.KING_AND_QUEEN_SIDE;
+    } else if (blackKingSide) {
+      castlingRightBlack = CastlingRight.KING_SIDE;
+    } else if (blackQueenSide) {
+      castlingRightBlack = CastlingRight.QUEEN_SIDE;
+    } else {
+      castlingRightBlack = CastlingRight.NONE;
+    }
+
+    // validate the string is a valid combination
+    final String expected = (whiteKingSide ? "K" : "") + (whiteQueenSide ? "Q" : "") + (blackKingSide ? "k" : "")
+        + (blackQueenSide ? "q" : "");
+    if (expected.isEmpty() && !"-".equals(castlingRightBothStr) || !expected.isEmpty() && !expected.equals(castlingRightBothStr)) {
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
+          "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
+    }
+
+    return new CastlingRightBoth(castlingRightWhite, castlingRightBlack,
+        whiteKingSide ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT,
+        whiteQueenSide ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT,
+        blackKingSide ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT,
+        blackQueenSide ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
   }
 
   private static Square validateEnPassantCaptureTargetSquare(StaticPosition staticPosition,

@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -390,37 +391,66 @@ public abstract class CastlingUtility implements EnumConstants {
     final CastlingRight oldCastlingRightHavingMove = CastlingUtility.getCastlingRight(lastCastlingRightBoth,
         havingMove);
 
+    // carry forward existing loss reasons
+    final CastlingRightLoss oldKingSideLossHavingMoveBefore = getKingSideLoss(lastCastlingRightBoth, havingMoveBefore);
+    final CastlingRightLoss oldQueenSideLossHavingMoveBefore = getQueenSideLoss(lastCastlingRightBoth,
+        havingMoveBefore);
+    final CastlingRightLoss oldKingSideLossHavingMove = getKingSideLoss(lastCastlingRightBoth, havingMove);
+    final CastlingRightLoss oldQueenSideLossHavingMove = getQueenSideLoss(lastCastlingRightBoth, havingMove);
+
     final CastlingRight newCastlingRightHavingMoveBefore;
     final CastlingRight newCastlingRightHavingMove;
+    CastlingRightLoss newKingSideLossHavingMoveBefore = oldKingSideLossHavingMoveBefore;
+    CastlingRightLoss newQueenSideLossHavingMoveBefore = oldQueenSideLossHavingMoveBefore;
+    CastlingRightLoss newKingSideLossHavingMove = oldKingSideLossHavingMove;
+    CastlingRightLoss newQueenSideLossHavingMove = oldQueenSideLossHavingMove;
 
     // as always, the castling needs a separate treatment
     final MoveSpecification moveSpecification = legalMove.moveSpecification();
     if (calculateIsCastlingMove(moveSpecification)) {
       newCastlingRightHavingMoveBefore = CastlingRight.NONE;
       newCastlingRightHavingMove = oldCastlingRightHavingMove;
+      if (oldKingSideLossHavingMoveBefore == CastlingRightLoss.NONE) {
+        newKingSideLossHavingMoveBefore = CastlingRightLoss.CASTLED;
+      }
+      if (oldQueenSideLossHavingMoveBefore == CastlingRightLoss.NONE) {
+        newQueenSideLossHavingMoveBefore = CastlingRightLoss.CASTLED;
+      }
     } else {
       switch (oldCastlingRightHavingMoveBefore) {
         case KING_AND_QUEEN_SIDE:
           if (calculateHasKingMoved(legalMove)) {
             newCastlingRightHavingMoveBefore = CastlingRight.NONE;
+            newKingSideLossHavingMoveBefore = CastlingRightLoss.KING_MOVED;
+            newQueenSideLossHavingMoveBefore = CastlingRightLoss.KING_MOVED;
           } else if (calculateHasKingSideRookMoved(legalMove)) {
             newCastlingRightHavingMoveBefore = CastlingRight.QUEEN_SIDE;
+            newKingSideLossHavingMoveBefore = CastlingRightLoss.ROOK_MOVED;
           } else if (calculateHasQueenSideRookMoved(legalMove)) {
             newCastlingRightHavingMoveBefore = CastlingRight.KING_SIDE;
+            newQueenSideLossHavingMoveBefore = CastlingRightLoss.ROOK_MOVED;
           } else {
             newCastlingRightHavingMoveBefore = CastlingRight.KING_AND_QUEEN_SIDE;
           }
           break;
         case KING_SIDE:
-          if (calculateHasKingMoved(legalMove) || calculateHasKingSideRookMoved(legalMove)) {
+          if (calculateHasKingMoved(legalMove)) {
             newCastlingRightHavingMoveBefore = CastlingRight.NONE;
+            newKingSideLossHavingMoveBefore = CastlingRightLoss.KING_MOVED;
+          } else if (calculateHasKingSideRookMoved(legalMove)) {
+            newCastlingRightHavingMoveBefore = CastlingRight.NONE;
+            newKingSideLossHavingMoveBefore = CastlingRightLoss.ROOK_MOVED;
           } else {
             newCastlingRightHavingMoveBefore = CastlingRight.KING_SIDE;
           }
           break;
         case QUEEN_SIDE:
-          if (calculateHasKingMoved(legalMove) || calculateHasQueenSideRookMoved(legalMove)) {
+          if (calculateHasKingMoved(legalMove)) {
             newCastlingRightHavingMoveBefore = CastlingRight.NONE;
+            newQueenSideLossHavingMoveBefore = CastlingRightLoss.KING_MOVED;
+          } else if (calculateHasQueenSideRookMoved(legalMove)) {
+            newCastlingRightHavingMoveBefore = CastlingRight.NONE;
+            newQueenSideLossHavingMoveBefore = CastlingRightLoss.ROOK_MOVED;
           } else {
             newCastlingRightHavingMoveBefore = CastlingRight.QUEEN_SIDE;
           }
@@ -436,8 +466,10 @@ public abstract class CastlingUtility implements EnumConstants {
         case KING_AND_QUEEN_SIDE:
           if (calculateHasCapturedOpponentRookKingSide(legalMove)) {
             newCastlingRightHavingMove = CastlingRight.QUEEN_SIDE;
+            newKingSideLossHavingMove = CastlingRightLoss.ROOK_CAPTURED;
           } else if (calculateHasCapturedOpponentRookQueenSide(legalMove)) {
             newCastlingRightHavingMove = CastlingRight.KING_SIDE;
+            newQueenSideLossHavingMove = CastlingRightLoss.ROOK_CAPTURED;
           } else {
             newCastlingRightHavingMove = CastlingRight.KING_AND_QUEEN_SIDE;
           }
@@ -445,6 +477,7 @@ public abstract class CastlingUtility implements EnumConstants {
         case KING_SIDE:
           if (calculateHasCapturedOpponentRookKingSide(legalMove)) {
             newCastlingRightHavingMove = CastlingRight.NONE;
+            newKingSideLossHavingMove = CastlingRightLoss.ROOK_CAPTURED;
           } else {
             newCastlingRightHavingMove = CastlingRight.KING_SIDE;
           }
@@ -452,6 +485,7 @@ public abstract class CastlingUtility implements EnumConstants {
         case QUEEN_SIDE:
           if (calculateHasCapturedOpponentRookQueenSide(legalMove)) {
             newCastlingRightHavingMove = CastlingRight.NONE;
+            newQueenSideLossHavingMove = CastlingRightLoss.ROOK_CAPTURED;
           } else {
             newCastlingRightHavingMove = CastlingRight.QUEEN_SIDE;
           }
@@ -464,7 +498,9 @@ public abstract class CastlingUtility implements EnumConstants {
       }
     }
 
-    return lookupStaticCastlingRightBoth(havingMove, newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
+    return constructCastlingRightBoth(havingMove, newCastlingRightHavingMoveBefore, newCastlingRightHavingMove,
+        newKingSideLossHavingMoveBefore, newQueenSideLossHavingMoveBefore, newKingSideLossHavingMove,
+        newQueenSideLossHavingMove);
   }
 
   private static boolean calculateHasKingMoved(LegalMove legalMove) {
@@ -519,6 +555,31 @@ public abstract class CastlingUtility implements EnumConstants {
     return false;
   }
 
+  private static CastlingRightLoss getKingSideLoss(CastlingRightBoth castlingRightBoth, Side side) {
+    return side == Side.WHITE ? castlingRightBoth.whiteKingSideLoss() : castlingRightBoth.blackKingSideLoss();
+  }
+
+  private static CastlingRightLoss getQueenSideLoss(CastlingRightBoth castlingRightBoth, Side side) {
+    return side == Side.WHITE ? castlingRightBoth.whiteQueenSideLoss() : castlingRightBoth.blackQueenSideLoss();
+  }
+
+  private static CastlingRightBoth constructCastlingRightBoth(Side havingMove,
+      CastlingRight newCastlingRightHavingMoveBefore, CastlingRight newCastlingRightHavingMove,
+      CastlingRightLoss kingSideLossHavingMoveBefore, CastlingRightLoss queenSideLossHavingMoveBefore,
+      CastlingRightLoss kingSideLossHavingMove, CastlingRightLoss queenSideLossHavingMove) {
+    return switch (havingMove) {
+      case BLACK -> new CastlingRightBoth(newCastlingRightHavingMoveBefore, newCastlingRightHavingMove,
+          kingSideLossHavingMoveBefore, queenSideLossHavingMoveBefore, kingSideLossHavingMove,
+          queenSideLossHavingMove);
+      case WHITE -> new CastlingRightBoth(newCastlingRightHavingMove, newCastlingRightHavingMoveBefore,
+          kingSideLossHavingMove, queenSideLossHavingMove, kingSideLossHavingMoveBefore,
+          queenSideLossHavingMoveBefore);
+      case NONE -> throw new IllegalArgumentException();
+    };
+  }
+
+  // kept for callers that don't need loss reasons
+  @SuppressWarnings("unused")
   private static CastlingRightBoth lookupStaticCastlingRightBoth(Side havingMove,
       CastlingRight newCastlingRightHavingMoveBefore, CastlingRight newCastlingRightHavingMove) {
 
