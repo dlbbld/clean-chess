@@ -159,8 +159,8 @@ class TestSanValidateFormatDetailed {
   @SuppressWarnings("static-method")
   @Test
   void testKingSecondCharacter() {
-    // "Kae5" — length 4 king, second char 'a' is not 'x'
-    checkException("Kae5", SanValidationProblem.FORMAT_KING_SECOND_CHARACTER);
+    // "Kae5" — length 4 king, looks like file disambiguation which is never valid for king
+    checkException("Kae5", SanValidationProblem.FORMAT_KING_FILE_SPECIFIED);
   }
 
   @SuppressWarnings("static-method")

@@ -92,7 +92,7 @@ public abstract class SanValidateFormat extends AbstractSan {
       return parseKingMove(core, checkmateOrCheck);
     }
     if (isPieceLetterRbnq(first)) {
-      return parsePieceMoveRbnq(core, checkmateOrCheck);
+      return parseRbnqMove(core, checkmateOrCheck);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
         Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
@@ -313,19 +313,89 @@ public abstract class SanValidateFormat extends AbstractSan {
 
       case 4 -> {
         // Kx[toFile][toRank] – capturing e.g. "Kxe5"
-        if (core.charAt(1) != 'x') {
+        // But first check for disambiguation patterns (never valid for king)
+        final var secondChar4 = core.charAt(1);
+        final var thirdChar4 = core.charAt(2);
+        final var fourthChar4 = core.charAt(3);
+        // K[file][toFile][toRank] — file disambiguation
+        if (isFileLetter(secondChar4) && isFileLetter(thirdChar4) && isRankDigit(fourthChar4)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_FILE_SPECIFIED,
+              Message.getString("validation.san.format.king.fileSpecified"));
+        }
+        // K[rank][toFile][toRank] — rank disambiguation
+        if (isRankDigit(secondChar4) && isFileLetter(thirdChar4) && isRankDigit(fourthChar4)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_RANK_SPECIFIED,
+              Message.getString("validation.san.format.king.rankSpecified"));
+        }
+        if (secondChar4 != 'x') {
           throw new SanValidationException(SanValidationProblem.FORMAT_KING_SECOND_CHARACTER,
               Message.getString("validation.san.format.king.secondCharacter",
-                  NonNullWrapperCommon.toString(core.charAt(1))));
+                  NonNullWrapperCommon.toString(secondChar4)));
         }
-        final var toFileChar = core.charAt(2);
-        final var toRankChar = core.charAt(3);
-        if (!isFileLetter(toFileChar) || !isRankDigit(toRankChar)) {
+        if (!isFileLetter(thirdChar4) || !isRankDigit(fourthChar4)) {
           throw new SanValidationException(SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION,
               Message.getString("validation.san.format.king.captureDestination"));
         }
         yield new SanParse(SanType.KING_NON_CASTLING_CAPTURING_MOVE, new SanConversion(File.NONE, Rank.NONE,
-            Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE, checkmateOrCheck));
+            Square.calculate(parseFile(thirdChar4), parseRank(fourthChar4)), PromotionPieceType.NONE, checkmateOrCheck));
+      }
+
+      case 5 -> {
+        // K[file]x[toFile][toRank] or K[rank]x[toFile][toRank] or K[file][rank][toFile][toRank]
+        final var secondChar5 = core.charAt(1);
+        final var thirdChar5 = core.charAt(2);
+        final var fourthChar5 = core.charAt(3);
+        final var fifthChar5 = core.charAt(4);
+        // K[file]x[toFile][toRank] — file disambiguation + capture
+        if (isFileLetter(secondChar5) && thirdChar5 == 'x' && isFileLetter(fourthChar5) && isRankDigit(fifthChar5)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_FILE_SPECIFIED,
+              Message.getString("validation.san.format.king.fileSpecified"));
+        }
+        // K[rank]x[toFile][toRank] — rank disambiguation + capture
+        if (isRankDigit(secondChar5) && thirdChar5 == 'x' && isFileLetter(fourthChar5) && isRankDigit(fifthChar5)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_RANK_SPECIFIED,
+              Message.getString("validation.san.format.king.rankSpecified"));
+        }
+        // K[file][rank][toFile][toRank] — square disambiguation
+        if (isFileLetter(secondChar5) && isRankDigit(thirdChar5) && isFileLetter(fourthChar5)
+            && isRankDigit(fifthChar5)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED,
+              Message.getString("validation.san.format.king.squareSpecified"));
+        }
+        throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
+            Message.getString("validation.san.format.king.length"));
+      }
+
+      case 6 -> {
+        // K[file]x[toFile][toRank] or K[rank]x[toFile][toRank] or K[file][rank][toFile][toRank]
+        // or K[file][rank]x[toFile][toRank] (square disambiguation + capture)
+        final var c1 = core.charAt(1);
+        final var c2 = core.charAt(2);
+        final var c3 = core.charAt(3);
+        final var c4 = core.charAt(4);
+        final var c5 = core.charAt(5);
+        // Kfxa1 — file disambiguation + capture
+        if (isFileLetter(c1) && c2 == 'x' && isFileLetter(c3) && isRankDigit(c4)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_FILE_SPECIFIED,
+              Message.getString("validation.san.format.king.fileSpecified"));
+        }
+        // K2xf3 — rank disambiguation + capture
+        if (isRankDigit(c1) && c2 == 'x' && isFileLetter(c3) && isRankDigit(c4)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_RANK_SPECIFIED,
+              Message.getString("validation.san.format.king.rankSpecified"));
+        }
+        // Ka2b3 — square disambiguation, non-capturing
+        if (isFileLetter(c1) && isRankDigit(c2) && isFileLetter(c3) && isRankDigit(c4)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED,
+              Message.getString("validation.san.format.king.squareSpecified"));
+        }
+        // Ka2xb3 — square disambiguation + capture
+        if (isFileLetter(c1) && isRankDigit(c2) && c3 == 'x' && isFileLetter(c4) && isRankDigit(c5)) {
+          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED,
+              Message.getString("validation.san.format.king.squareSpecified"));
+        }
+        throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
+            Message.getString("validation.san.format.king.length"));
       }
 
       default -> throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
@@ -358,7 +428,7 @@ public abstract class SanValidateFormat extends AbstractSan {
    * <p>
    * All four piece types (Q, R, N, B) accept every combination above.
    */
-  private static SanParse parsePieceMoveRbnq(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parseRbnqMove(final String core, final CheckmateOrCheck checkmateOrCheck) {
     // Valid core lengths: piece(1) + middle(0–3) + destination(2) = 3 to 6
     if (core.length() < 3 || core.length() > 6) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_LENGTH,

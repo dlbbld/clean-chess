@@ -20,7 +20,7 @@ class TestSanValidateOntoItself extends AbstractTestSanValidate {
     checkExceptionMovingOntoOwnPiece("Nb1b1", board);
     checkExceptionMovingOntoOwnPiece("Bc1c1", board);
     checkExceptionMovingOntoOwnPiece("Qd1d1", board);
-    checkExceptionFormat("Ke1e1", SanValidationProblem.FORMAT_KING_LENGTH, board);
+    checkExceptionFormat("Ke1e1", SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED, board);
 
     board.performMove("e4");
 
@@ -28,7 +28,7 @@ class TestSanValidateOntoItself extends AbstractTestSanValidate {
     checkExceptionMovingOntoOwnPiece("Nb8b8", board);
     checkExceptionMovingOntoOwnPiece("Bc8c8", board);
     checkExceptionMovingOntoOwnPiece("Qd8d8", board);
-    checkExceptionFormat("Ke8e8", SanValidationProblem.FORMAT_KING_LENGTH, board);
+    checkExceptionFormat("Ke8e8", SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED, board);
 
     board.performMove("e5");
 
@@ -71,9 +71,9 @@ class TestSanValidateOntoItself extends AbstractTestSanValidate {
     // kings after moved
     board.performMove("Kd1");
     board.performMove("Kd8");
-    checkExceptionFormat("Kd1d1", SanValidationProblem.FORMAT_KING_LENGTH, board);
+    checkExceptionFormat("Kd1d1", SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED, board);
     board.performMove("Ke2");
-    checkExceptionFormat("Kd8d8", SanValidationProblem.FORMAT_KING_LENGTH, board);
+    checkExceptionFormat("Kd8d8", SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED, board);
     board.performMove("Ke8");
 
   }
