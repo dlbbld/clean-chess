@@ -1,4 +1,4 @@
-package com.dlb.chess.test.san;
+package com.dlb.chess.test.san.pawn;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.san.SanValidation;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.san.validate.SanValidation;
 
 class TestSanValidatePawnCapturingDiagonal {
 

@@ -41,7 +41,7 @@ import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.moves.utility.StandardMoveUtility;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
-import com.dlb.chess.san.SanValidation;
+import com.dlb.chess.san.validate.SanValidation;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 
 public class Board extends AbstractBoard {

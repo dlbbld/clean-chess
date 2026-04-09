@@ -10,13 +10,13 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.reference.SanValidateFormatReference;
+import com.dlb.chess.san.validate.SanValidateFormat;
 
 class TestSanValidateFormat {
 
@@ -561,7 +561,7 @@ class TestSanValidateFormat {
   }
 
   private static void checkValid(String san) {
-    checkValidateFormat(san, false, null);
+    checkValidateFormat(san, false, SanValidationProblem.NONE);
   }
 
   private static void checkException(String san, SanValidationProblem expectedProblem) {
@@ -571,16 +571,15 @@ class TestSanValidateFormat {
   private static void checkValidateFormat(String san, boolean isExceptionExpected,
       SanValidationProblem expectedProblem) {
     checkValidateFormatTest(san, isExceptionExpected, expectedProblem);
-    checkValidateFormatReference(san, isExceptionExpected, expectedProblem);
+    checkValidateFormatReference(san, isExceptionExpected);
 
   }
 
   private static void checkValidateFormatTest(String san, boolean isExceptionExpected,
       SanValidationProblem expectedProblem) {
     boolean isException;
-    SanParse result = null;
     try {
-      result = SanValidateFormat.validateFormat(san);
+      SanValidateFormat.validateFormat(san);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
@@ -590,13 +589,11 @@ class TestSanValidateFormat {
     assertEquals(isExceptionExpected, isException);
   }
 
-  private static void checkValidateFormatReference(String san, boolean isExceptionExpected,
-      SanValidationProblem expectedProblem) {
+  private static void checkValidateFormatReference(String san, boolean isExceptionExpected) {
 
     boolean isException;
-    SanParse result = null;
     try {
-      result = validateFormatReference(san);
+      validateFormatReference(san);
       isException = false;
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isException = true;

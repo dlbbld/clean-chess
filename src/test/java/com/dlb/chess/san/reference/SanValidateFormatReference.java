@@ -16,7 +16,6 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanLetter;
@@ -25,11 +24,12 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanConversionCheck;
 import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.validate.SanValidateFormat;
 
 /**
- * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original
- * type-enumeration approach (iterating over all {@link SanType} values) as an oracle against which
- * the direct-parse implementation can be verified in tests.
+ * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original type-enumeration approach
+ * (iterating over all {@link SanType} values) as an oracle against which the direct-parse implementation can be
+ * verified in tests.
  */
 public abstract class SanValidateFormatReference {
 
@@ -57,7 +57,7 @@ public abstract class SanValidateFormatReference {
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
 
     final SanFormat sanFormat = sanType.getSanFormat();
-    final SanFormatProperties properties = SanFormatPropertiesMap.MAP.get(sanFormat);
+    final SanFormatProperties properties = NonNullWrapperCommon.get(SanFormatPropertiesMap.MAP, sanFormat);
 
     // length
     final var formatLength = properties.length();
@@ -70,7 +70,7 @@ public abstract class SanValidateFormatReference {
     final CheckmateOrCheck checkmateOrCheck = calculateCheckmateOrCheck(san, formatLength);
 
     // castling needs a special treatment
-    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       // startsWith for the optional final check or checkmate symbol, length is checked
       if (!san.startsWith(CastlingConstants.SAN_CASTLING_QUEEN_SIDE)) {
         return SanConversionCheck.IS_NO_MATCH;
@@ -79,7 +79,7 @@ public abstract class SanValidateFormatReference {
           checkmateOrCheck);
       return new SanConversionCheck(true, sanConversion);
     }
-    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE_FORMAT) {
+    if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
       // startsWith for the optional final check or checkmate symbol, length is checked
       if (!san.startsWith(CastlingConstants.SAN_CASTLING_KING_SIDE)) {
         return SanConversionCheck.IS_NO_MATCH;
@@ -172,17 +172,13 @@ public abstract class SanValidateFormatReference {
     }
 
     // pawn promotion rank enforcement
-    if (sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) {
-      if (toRank == Rank.RANK_1 || toRank == Rank.RANK_8) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
+    if ((sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
+        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && (toRank == Rank.RANK_1 || toRank == Rank.RANK_8)) {
+      return SanConversionCheck.IS_NO_MATCH;
     }
-    if (sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE) {
-      if (toRank != Rank.RANK_1 && toRank != Rank.RANK_8) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
+    if ((sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE)
+        && (toRank != Rank.RANK_1 && toRank != Rank.RANK_8)) {
+      return SanConversionCheck.IS_NO_MATCH;
     }
 
     // promotionSymbolIndex

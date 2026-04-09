@@ -11,9 +11,9 @@ import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.validate.SanValidateFormat;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
 /**

@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.san.validate.SanValidateFormat;
 
 class TestSanValidateFormatBasic {
 
@@ -83,7 +83,7 @@ class TestSanValidateFormatBasic {
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      System.out.println("SAN: " + san + " -> " + e.getMessage());
+      System.out.println("SAN: " + san + " -> " + e.getMessage() + " (invalid char: '" + invalidChar + "')");
       assertEquals(SanValidationProblem.FORMAT_INVALID_CHARACTER, e.getSanValidationProblem());
     }
     assertTrue(isException);

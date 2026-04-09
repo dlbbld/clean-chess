@@ -17,11 +17,11 @@ class TestLenientPgnParserSanException extends AbstractTestLenientPgnParserExcep
   @SuppressWarnings("static-method")
   @Test
   void testException() {
-    checkException("01_initial_position.pgn", SanValidationProblem.MOVING_ONTO_ONE_PIECE);
-    checkException("02_initial_position.pgn", SanValidationProblem.PIECE_NEITHER_NO_LEGAL_MOVE);
+    checkException("01_initial_position.pgn", SanValidationProblem.MOVING_ONTO_OWN_PIECE);
+    checkException("02_initial_position.pgn", SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_MULTIPLE);
 
-    checkException("03_custom_position_white_start.pgn", SanValidationProblem.PIECE_NEITHER_NO_LEGAL_MOVE);
-    checkException("04_custom_position_black_start.pgn", SanValidationProblem.PIECE_NEITHER_NO_LEGAL_MOVE);
+    checkException("03_custom_position_white_start.pgn", SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_MULTIPLE);
+    checkException("04_custom_position_black_start.pgn", SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_SINGLE);
 
   }
 

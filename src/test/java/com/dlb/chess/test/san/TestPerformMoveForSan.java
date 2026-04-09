@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.san.SanValidation;
+import com.dlb.chess.san.validate.SanValidation;
 
 class TestPerformMoveForSan implements EnumConstants {
 
