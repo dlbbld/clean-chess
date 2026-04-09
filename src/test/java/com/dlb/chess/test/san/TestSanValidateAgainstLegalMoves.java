@@ -615,25 +615,25 @@ class TestSanValidateAgainstLegalMoves {
     // white
     // rook no square specification allowed
     // knight
-    checkException(board, "Nb1c4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Nb1c4", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
 
     // bishop
-    checkException(board, "Bc1a3", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Bc1a3", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
 
     // queen
-    checkException(board, "Qd1d4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Qd1d4", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
 
     // black
     board.performMoves("e4");
     // rook no square specification allowed
     // knight
-    checkException(board, "Ng8d4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Ng8d4", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
 
     // bishop
-    checkException(board, "Bf8h6", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Bf8h6", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
 
     // queen
-    checkException(board, "Qd8d5", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Qd8d5", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
 
   }
 
@@ -643,7 +643,7 @@ class TestSanValidateAgainstLegalMoves {
     final ApiBoard board = new Board("kn6/3p4/8/8/1Qp1pQ2/3p4/3Q4/2K5 w - - 0 100");
 
     // queen
-    checkException(board, "Qd2d4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE);
+    checkException(board, "Qd2d4", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
   }
 
   @SuppressWarnings("static-method")

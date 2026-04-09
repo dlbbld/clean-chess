@@ -503,14 +503,14 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove, toSquare,
         pieceCandidates);
     if (movementCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE,
-          Message.getString("validation.san.notPawn.specification.square.invalidMovement", pieceType.getName(),
+      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE,
+          Message.getString("validation.san.notPawn.specification.square.notReachable", pieceType.getName(),
               fromSquare.getName(), toSquare.getName()));
     }
     if (calculateNumberOfLegalMovesFromSquare(fromSquare, legalMovesCandidates) == 0) {
-      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_LEGAL_MOVE,
-          Message.getString("validation.san.noLegalMove.fromSquare", pieceType.getName(), fromSquare.getName(),
-              sanConversion.toSquare().getName()));
+      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_KING_IN_CHECK,
+          Message.getString("validation.san.notPawn.specification.square.kingInCheck", pieceType.getName(),
+              fromSquare.getName(), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
