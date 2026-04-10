@@ -788,14 +788,13 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public CastlingRight getCastlingRight(Side havingMove) {
+  public CastlingRight getCastlingRightWhite() {
+    return getDynamicPosition().castlingRightWhite();
+  }
 
-    return switch (havingMove) {
-      case WHITE -> getDynamicPosition().castlingRightWhite();
-      case BLACK -> getDynamicPosition().castlingRightBlack();
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+  @Override
+  public CastlingRight getCastlingRightBlack() {
+    return getDynamicPosition().castlingRightBlack();
   }
 
 }

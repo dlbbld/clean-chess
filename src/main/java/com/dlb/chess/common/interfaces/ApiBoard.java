@@ -115,6 +115,10 @@ public interface ApiBoard {
    */
   boolean isEnPassantCapturePossible();
 
+  CastlingRight getCastlingRightWhite();
+
+  CastlingRight getCastlingRightBlack();
+
   CastlingRight getCastlingRight(Side havingMove);
 
   int getPerformedHalfMoveCount();

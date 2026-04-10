@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
@@ -60,6 +61,17 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
       result.add(moveRepresentation);
     }
     return result;
+  }
+
+  @Override
+  public CastlingRight getCastlingRight(Side havingMove) {
+
+    return switch (havingMove) {
+      case WHITE -> getDynamicPosition().castlingRightWhite();
+      case BLACK -> getDynamicPosition().castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   @Override

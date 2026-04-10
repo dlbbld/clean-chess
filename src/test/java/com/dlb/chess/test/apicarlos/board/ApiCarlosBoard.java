@@ -356,22 +356,22 @@ public class ApiCarlosBoard extends AbstractBoard {
     return ApiCarlosImplementationUtility.calculateIsEnPassantCapturePossible(this.board);
   }
 
-  @SuppressWarnings("null")
   @Override
-  public CastlingRight getCastlingRight(Side havingMove) {
-    final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board.getCastleRight();
-    return switch (havingMove) {
-      case WHITE -> {
-        final CastleRight castlingRightWhite = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.WHITE);
-        yield mapCastlingRight(castlingRightWhite);
-      }
-      case BLACK -> {
-        final CastleRight castlingRightBlack = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.BLACK);
-        yield mapCastlingRight(castlingRightBlack);
-      }
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+  public @NonNull CastlingRight getCastlingRightWhite() {
+    @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
+        .getCastleRight();
+    @SuppressWarnings("null") final CastleRight castlingRightWhite = castlingRightMap
+        .get(com.github.bhlangonijr.chesslib.Side.WHITE);
+    return mapCastlingRight(castlingRightWhite);
+  }
+
+  @Override
+  public @NonNull CastlingRight getCastlingRightBlack() {
+    @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
+        .getCastleRight();
+    @SuppressWarnings("null") final CastleRight castlingRightBlack = castlingRightMap
+        .get(com.github.bhlangonijr.chesslib.Side.BLACK);
+    return mapCastlingRight(castlingRightBlack);
   }
 
   private static CastlingRight mapCastlingRight(CastleRight carlosCastlingRight) {
