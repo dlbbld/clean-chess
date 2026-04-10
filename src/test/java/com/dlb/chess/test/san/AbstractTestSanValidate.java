@@ -1,31 +1,15 @@
 package com.dlb.chess.test.san;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.SanValidateFormat;
-import com.dlb.chess.san.validate.SanValidateMove;
 import com.dlb.chess.san.validate.SanValidation;
 
 public abstract class AbstractTestSanValidate implements EnumConstants {
-
-  static void checkValid(Side havingMove, String san) {
-    var isException = false;
-    try {
-      final SanParse sanParse = SanValidateFormat.validateFormat(san);
-      SanValidateMove.validateMovement(sanParse, havingMove);
-    } catch (@SuppressWarnings("unused") final SanValidationException e) {
-      isException = true;
-    }
-    assertFalse(isException);
-  }
 
   public static void checkExceptionMovingOntoOwnPiece(String san, ApiBoard board) {
     checkException(san, board, SanValidationProblem.MOVING_ONTO_OWN_PIECE);

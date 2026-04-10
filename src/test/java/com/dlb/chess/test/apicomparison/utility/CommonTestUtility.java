@@ -2,6 +2,7 @@ package com.dlb.chess.test.apicomparison.utility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
 
@@ -85,7 +86,8 @@ public abstract class CommonTestUtility implements EnumConstants {
 
     assertEquals(boardFirst.isEnPassantCapturePossible(), boardSecond.isEnPassantCapturePossible());
 
-    assertEquals(boardFirst.getCastlingRightBoth(), boardSecond.getCastlingRightBoth());
+    assertEquals(boardFirst.getCastlingRightWhite(), boardSecond.getCastlingRightWhite());
+    assertEquals(boardFirst.getCastlingRightBlack(), boardSecond.getCastlingRightBlack());
     // in super
     // assertEquals(boardFirst.getCastlingRight(WHITE), boardSecond.getCastlingRight(WHITE));
     // in super

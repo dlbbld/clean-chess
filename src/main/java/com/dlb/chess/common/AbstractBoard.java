@@ -14,7 +14,6 @@ import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -62,6 +61,17 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
       result.add(moveRepresentation);
     }
     return result;
+  }
+
+  @Override
+  public CastlingRight getCastlingRight(Side havingMove) {
+
+    return switch (havingMove) {
+      case WHITE -> getDynamicPosition().castlingRightWhite();
+      case BLACK -> getDynamicPosition().castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   @Override
@@ -150,11 +160,6 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
       return true;
     }
     return canClaimThreefoldRepetitionRuleWithOwnMove();
-  }
-
-  @Override
-  public CastlingRight getCastlingRight(Side havingMove) {
-    return CastlingUtility.getCastlingRight(this.getCastlingRightBoth(), havingMove);
   }
 
   @Override

@@ -14,7 +14,6 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -116,7 +115,9 @@ public interface ApiBoard {
    */
   boolean isEnPassantCapturePossible();
 
-  CastlingRightBoth getCastlingRightBoth();
+  CastlingRight getCastlingRightWhite();
+
+  CastlingRight getCastlingRightBlack();
 
   CastlingRight getCastlingRight(Side havingMove);
 

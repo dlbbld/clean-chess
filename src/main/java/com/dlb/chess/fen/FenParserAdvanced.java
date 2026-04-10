@@ -18,7 +18,6 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
-import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
@@ -89,8 +88,8 @@ public class FenParserAdvanced implements EnumConstants {
     final var fullMoveNumberStr = fenRaw.fullMoveNumber();
     final var fullMoveNumber = validateFullMoveNumber(fullMoveNumberStr);
 
-    return new Fen(fen, staticPosition, havingMove, castlingRightBoth, enPassantCaptureTargetSquare, halfMoveClock,
-        fullMoveNumber);
+    return new Fen(fen, staticPosition, havingMove, castlingRightBoth.castlingRightWhite(),
+        castlingRightBoth.castlingRightBlack(), enPassantCaptureTargetSquare, halfMoveClock, fullMoveNumber);
   }
 
   // important semantically
@@ -253,8 +252,8 @@ public class FenParserAdvanced implements EnumConstants {
     throw new ProgrammingMistakeException("Check the regular expression");
   }
 
-  private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition, String castlingRightBothStr)
-      throws FenAdvancedValidationException {
+  private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition,
+      String castlingRightBothStr) throws FenAdvancedValidationException {
     final CastlingRightBoth castlingRightBoth = validateCastlingRightBoth(castlingRightBothStr);
     validateCastlingRightAgainstStaticPosition(staticPosition, castlingRightBoth);
     return castlingRightBoth;
@@ -263,44 +262,24 @@ public class FenParserAdvanced implements EnumConstants {
   private static CastlingRightBoth validateCastlingRightBoth(String castlingRightBothStr)
       throws FenAdvancedValidationException {
 
-    switch (castlingRightBothStr) {
-      case "-":
-        return CastlingConstants.CASTLING_NONE_NONE;
-      case "K":
-        return CastlingConstants.CASTLING_K_NONE;
-      case "Q":
-        return CastlingConstants.CASTLING_Q_NONE;
-      case "k":
-        return CastlingConstants.CASTLING_NONE_K;
-      case "q":
-        return CastlingConstants.CASTLING_NONE_Q;
-      case "KQ":
-        return CastlingConstants.CASTLING_KQ_NONE;
-      case "Kk":
-        return CastlingConstants.CASTLING_K_K;
-      case "Kq":
-        return CastlingConstants.CASTLING_K_Q;
-      case "Qk":
-        return CastlingConstants.CASTLING_Q_K;
-      case "Qq":
-        return CastlingConstants.CASTLING_Q_Q;
-      case "kq":
-        return CastlingConstants.CASTLING_NONE_KQ;
-      case "KQk":
-        return CastlingConstants.CASTLING_KQ_K;
-      case "KQq":
-        return CastlingConstants.CASTLING_KQ_Q;
-      case "Kkq":
-        return CastlingConstants.CASTLING_K_KQ;
-      case "Qkq":
-        return CastlingConstants.CASTLING_Q_KQ;
-      case "KQkq":
-        return CastlingConstants.CASTLING_KQ_KQ;
-      default:
-        break;
+    final var hasK = castlingRightBothStr.contains("K");
+    final var hasQ = castlingRightBothStr.contains("Q");
+    final var hask = castlingRightBothStr.contains("k");
+    final var hasq = castlingRightBothStr.contains("q");
+
+    final var expected = (hasK ? "K" : "") + (hasQ ? "Q" : "") + (hask ? "k" : "") + (hasq ? "q" : "");
+    if (expected.isEmpty() && !"-".equals(castlingRightBothStr)
+        || !expected.isEmpty() && !expected.equals(castlingRightBothStr)) {
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
+          "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
     }
-    throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
-        "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
+
+    final var white = hasK && hasQ ? CastlingRight.KING_AND_QUEEN_SIDE
+        : hasK ? CastlingRight.KING_SIDE : hasQ ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
+    final var black = hask && hasq ? CastlingRight.KING_AND_QUEEN_SIDE
+        : hask ? CastlingRight.KING_SIDE : hasq ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
+
+    return new CastlingRightBoth(white, black);
   }
 
   private static Square validateEnPassantCaptureTargetSquare(StaticPosition staticPosition,

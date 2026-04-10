@@ -31,8 +31,8 @@ public class FenBoard implements EnumConstants {
 
     // castling rights
 
-    final CastlingRight whiteCastlingRight = board.getCastlingRight(WHITE);
-    final CastlingRight blackCastlingRight = board.getCastlingRight(BLACK);
+    final CastlingRight whiteCastlingRight = board.getCastlingRightWhite();
+    final CastlingRight blackCastlingRight = board.getCastlingRightBlack();
 
     if (whiteCastlingRight == CastlingRight.NONE && blackCastlingRight == CastlingRight.NONE) {
       // only in this case we print a "-"

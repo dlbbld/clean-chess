@@ -6,9 +6,9 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.google.common.collect.ImmutableList;
@@ -29,7 +29,7 @@ public class FenConstants implements EnumConstants {
   public static final int MAX_FULL_MOVE_NUMBER = (Integer.MAX_VALUE - 1) / 2;
 
   public static final Fen FEN_INITIAL = new Fen(FEN_INITIAL_STR, StaticPosition.INITIAL_POSITION, WHITE,
-      CastlingConstants.CASTLING_KQ_KQ, Square.NONE, 0, 1);
+      CastlingRight.KING_AND_QUEEN_SIDE, CastlingRight.KING_AND_QUEEN_SIDE, Square.NONE, 0, 1);
 
   public static final ImmutableList<String> POSSIBLE_FEN_AFTER_FIRST_HALF_MOVE;
 

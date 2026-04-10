@@ -9,12 +9,12 @@ import java.util.TreeSet;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.AbstractBoard;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -24,7 +24,6 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
@@ -101,7 +100,7 @@ public class ApiCarlosBoard extends AbstractBoard {
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
-        getCastlingRightBoth()));
+        getCastlingRightWhite(), getCastlingRightBlack()));
 
     // TODO timely dependency, must be after the above code is very very dangerous
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
@@ -357,44 +356,30 @@ public class ApiCarlosBoard extends AbstractBoard {
     return ApiCarlosImplementationUtility.calculateIsEnPassantCapturePossible(this.board);
   }
 
-  @SuppressWarnings("null")
   @Override
-  public CastlingRightBoth getCastlingRightBoth() {
-    final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board.getCastleRight();
-    final CastleRight castlingRightWhite = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.WHITE);
-    final CastleRight castlingRightBlack = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.BLACK);
+  public @NonNull CastlingRight getCastlingRightWhite() {
+    @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
+        .getCastleRight();
+    @SuppressWarnings("null") final CastleRight castlingRightWhite = castlingRightMap
+        .get(com.github.bhlangonijr.chesslib.Side.WHITE);
+    return mapCastlingRight(castlingRightWhite);
+  }
 
-    // because we have object comparison (for performance!) we lookup here the statically defined castling right
-    // generating a new castling right map would not work!!
-    return switch (castlingRightWhite) {
-      case KING_AND_QUEEN_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_KQ_K;
-        case NONE -> CastlingConstants.CASTLING_KQ_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case KING_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_K_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_K_K;
-        case NONE -> CastlingConstants.CASTLING_K_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_K_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case NONE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_NONE_K;
-        case NONE -> CastlingConstants.CASTLING_NONE_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case QUEEN_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_Q_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_Q_K;
-        case NONE -> CastlingConstants.CASTLING_Q_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_Q_Q;
-        default -> throw new IllegalArgumentException();
-      };
+  @Override
+  public @NonNull CastlingRight getCastlingRightBlack() {
+    @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
+        .getCastleRight();
+    @SuppressWarnings("null") final CastleRight castlingRightBlack = castlingRightMap
+        .get(com.github.bhlangonijr.chesslib.Side.BLACK);
+    return mapCastlingRight(castlingRightBlack);
+  }
+
+  private static CastlingRight mapCastlingRight(CastleRight carlosCastlingRight) {
+    return switch (carlosCastlingRight) {
+      case KING_AND_QUEEN_SIDE -> CastlingRight.KING_AND_QUEEN_SIDE;
+      case KING_SIDE -> CastlingRight.KING_SIDE;
+      case QUEEN_SIDE -> CastlingRight.QUEEN_SIDE;
+      case NONE -> CastlingRight.NONE;
       default -> throw new IllegalArgumentException();
     };
   }
