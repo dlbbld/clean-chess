@@ -14,7 +14,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.AbstractBoard;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.CastlingConstants;
+import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -364,37 +364,15 @@ public class ApiCarlosBoard extends AbstractBoard {
     final CastleRight castlingRightWhite = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.WHITE);
     final CastleRight castlingRightBlack = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.BLACK);
 
-    // because we have object comparison (for performance!) we lookup here the statically defined castling right
-    // generating a new castling right map would not work!!
-    return switch (castlingRightWhite) {
-      case KING_AND_QUEEN_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_KQ_K;
-        case NONE -> CastlingConstants.CASTLING_KQ_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case KING_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_K_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_K_K;
-        case NONE -> CastlingConstants.CASTLING_K_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_K_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case NONE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_NONE_K;
-        case NONE -> CastlingConstants.CASTLING_NONE_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case QUEEN_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_Q_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_Q_K;
-        case NONE -> CastlingConstants.CASTLING_Q_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_Q_Q;
-        default -> throw new IllegalArgumentException();
-      };
+    return new CastlingRightBoth(mapCastlingRight(castlingRightWhite), mapCastlingRight(castlingRightBlack));
+  }
+
+  private static CastlingRight mapCastlingRight(CastleRight carlosCastlingRight) {
+    return switch (carlosCastlingRight) {
+      case KING_AND_QUEEN_SIDE -> CastlingRight.KING_AND_QUEEN_SIDE;
+      case KING_SIDE -> CastlingRight.KING_SIDE;
+      case QUEEN_SIDE -> CastlingRight.QUEEN_SIDE;
+      case NONE -> CastlingRight.NONE;
       default -> throw new IllegalArgumentException();
     };
   }

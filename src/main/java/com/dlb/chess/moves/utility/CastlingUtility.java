@@ -553,50 +553,10 @@ public abstract class CastlingUtility implements EnumConstants {
 
   private static CastlingRightBoth lookupStaticCastlingRightBoth(Side havingMove,
       CastlingRight newCastlingRightHavingMoveBefore, CastlingRight newCastlingRightHavingMove) {
-
-    final CastlingRight castlingRightWhite;
-    final var castlingRightBlack = switch (havingMove) {
-      case BLACK -> {
-        castlingRightWhite = newCastlingRightHavingMoveBefore;
-        yield newCastlingRightHavingMove;
-      }
-      case WHITE -> {
-        castlingRightWhite = newCastlingRightHavingMove;
-        yield newCastlingRightHavingMoveBefore;
-      }
+    return switch (havingMove) {
+      case BLACK -> new CastlingRightBoth(newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
+      case WHITE -> new CastlingRightBoth(newCastlingRightHavingMove, newCastlingRightHavingMoveBefore);
       case NONE -> throw new IllegalArgumentException();
-    };
-
-    return switch (castlingRightWhite) {
-      case KING_AND_QUEEN_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_KQ_K;
-        case NONE -> CastlingConstants.CASTLING_KQ_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_KQ_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case KING_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_K_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_K_K;
-        case NONE -> CastlingConstants.CASTLING_K_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_K_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case NONE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_NONE_K;
-        case NONE -> CastlingConstants.CASTLING_NONE_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_NONE_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      case QUEEN_SIDE -> switch (castlingRightBlack) {
-        case KING_AND_QUEEN_SIDE -> CastlingConstants.CASTLING_Q_KQ;
-        case KING_SIDE -> CastlingConstants.CASTLING_Q_K;
-        case NONE -> CastlingConstants.CASTLING_Q_NONE;
-        case QUEEN_SIDE -> CastlingConstants.CASTLING_Q_Q;
-        default -> throw new IllegalArgumentException();
-      };
-      default -> throw new IllegalArgumentException();
     };
   }
 

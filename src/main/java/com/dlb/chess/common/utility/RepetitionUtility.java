@@ -41,7 +41,7 @@ public abstract class RepetitionUtility {
       return false;
     }
     final var other = (DynamicPosition) obj;
-    return dynamicPosition.castlingRightBoth() == other.castlingRightBoth()
+    return dynamicPosition.castlingRightBoth().equals(other.castlingRightBoth())
         // && dynamicPosition.isEnPassantCapturePossible() == other.isEnPassantCapturePossible()
         && dynamicPosition.havingMove() == other.havingMove()
         && dynamicPosition.staticPosition().equals(other.staticPosition());
@@ -55,7 +55,7 @@ public abstract class RepetitionUtility {
       return false;
     }
     final var other = (DynamicPosition) obj;
-    return dynamicPosition.castlingRightBoth() == other.castlingRightBoth()
+    return dynamicPosition.castlingRightBoth().equals(other.castlingRightBoth())
         && dynamicPosition.isEnPassantCapturePossible() == other.isEnPassantCapturePossible()
         && dynamicPosition.havingMove() == other.havingMove()
         && dynamicPosition.staticPosition().equals(other.staticPosition());

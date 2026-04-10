@@ -263,44 +263,24 @@ public class FenParserAdvanced implements EnumConstants {
   private static CastlingRightBoth validateCastlingRightBoth(String castlingRightBothStr)
       throws FenAdvancedValidationException {
 
-    switch (castlingRightBothStr) {
-      case "-":
-        return CastlingConstants.CASTLING_NONE_NONE;
-      case "K":
-        return CastlingConstants.CASTLING_K_NONE;
-      case "Q":
-        return CastlingConstants.CASTLING_Q_NONE;
-      case "k":
-        return CastlingConstants.CASTLING_NONE_K;
-      case "q":
-        return CastlingConstants.CASTLING_NONE_Q;
-      case "KQ":
-        return CastlingConstants.CASTLING_KQ_NONE;
-      case "Kk":
-        return CastlingConstants.CASTLING_K_K;
-      case "Kq":
-        return CastlingConstants.CASTLING_K_Q;
-      case "Qk":
-        return CastlingConstants.CASTLING_Q_K;
-      case "Qq":
-        return CastlingConstants.CASTLING_Q_Q;
-      case "kq":
-        return CastlingConstants.CASTLING_NONE_KQ;
-      case "KQk":
-        return CastlingConstants.CASTLING_KQ_K;
-      case "KQq":
-        return CastlingConstants.CASTLING_KQ_Q;
-      case "Kkq":
-        return CastlingConstants.CASTLING_K_KQ;
-      case "Qkq":
-        return CastlingConstants.CASTLING_Q_KQ;
-      case "KQkq":
-        return CastlingConstants.CASTLING_KQ_KQ;
-      default:
-        break;
+    final boolean hasK = castlingRightBothStr.contains("K");
+    final boolean hasQ = castlingRightBothStr.contains("Q");
+    final boolean hask = castlingRightBothStr.contains("k");
+    final boolean hasq = castlingRightBothStr.contains("q");
+
+    final String expected = (hasK ? "K" : "") + (hasQ ? "Q" : "") + (hask ? "k" : "") + (hasq ? "q" : "");
+    if (expected.isEmpty() && !"-".equals(castlingRightBothStr)
+        || !expected.isEmpty() && !expected.equals(castlingRightBothStr)) {
+      throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
+          "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
     }
-    throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
-        "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
+
+    final CastlingRight white = hasK && hasQ ? CastlingRight.KING_AND_QUEEN_SIDE
+        : hasK ? CastlingRight.KING_SIDE : hasQ ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
+    final CastlingRight black = hask && hasq ? CastlingRight.KING_AND_QUEEN_SIDE
+        : hask ? CastlingRight.KING_SIDE : hasq ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
+
+    return new CastlingRightBoth(white, black);
   }
 
   private static Square validateEnPassantCaptureTargetSquare(StaticPosition staticPosition,
