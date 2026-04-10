@@ -6,9 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.StaticPosition;
-import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.CastlingRight;
-import com.dlb.chess.model.CastlingRightBoth;
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
@@ -286,8 +285,8 @@ class TestFenParserAdvanced implements EnumConstants {
 
     assertEquals(StaticPosition.INITIAL_POSITION, actual.staticPosition());
     assertEquals(WHITE, actual.havingMove());
-    assertEquals(new CastlingRightBoth(CastlingRight.KING_AND_QUEEN_SIDE, CastlingRight.KING_AND_QUEEN_SIDE),
-        actual.castlingRightBoth());
+    assertEquals(CastlingRight.KING_AND_QUEEN_SIDE, actual.castlingRightWhite());
+    assertEquals(CastlingRight.KING_AND_QUEEN_SIDE, actual.castlingRightBlack());
     assertEquals(Square.NONE, actual.enPassantCaptureTargetSquare());
     assertEquals(0L, actual.halfMoveClock());
     assertEquals(1L, actual.fullMoveNumber());

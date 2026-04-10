@@ -14,7 +14,6 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -115,8 +114,6 @@ public interface ApiBoard {
    *         the pawn of the first player en passant by the second player is a legal move, false otherwise.
    */
   boolean isEnPassantCapturePossible();
-
-  CastlingRightBoth getCastlingRightBoth();
 
   CastlingRight getCastlingRight(Side havingMove);
 

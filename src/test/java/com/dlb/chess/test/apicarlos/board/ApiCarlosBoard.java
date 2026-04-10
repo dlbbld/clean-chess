@@ -9,12 +9,12 @@ import java.util.TreeSet;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.AbstractBoard;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -24,7 +24,6 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
@@ -101,7 +100,7 @@ public class ApiCarlosBoard extends AbstractBoard {
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
-        getCastlingRightBoth()));
+        getCastlingRight(Side.WHITE), getCastlingRight(Side.BLACK)));
 
     // TODO timely dependency, must be after the above code is very very dangerous
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
@@ -359,12 +358,20 @@ public class ApiCarlosBoard extends AbstractBoard {
 
   @SuppressWarnings("null")
   @Override
-  public CastlingRightBoth getCastlingRightBoth() {
+  public CastlingRight getCastlingRight(Side havingMove) {
     final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board.getCastleRight();
-    final CastleRight castlingRightWhite = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.WHITE);
-    final CastleRight castlingRightBlack = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.BLACK);
-
-    return new CastlingRightBoth(mapCastlingRight(castlingRightWhite), mapCastlingRight(castlingRightBlack));
+    return switch (havingMove) {
+      case WHITE -> {
+        final CastleRight castlingRightWhite = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.WHITE);
+        yield mapCastlingRight(castlingRightWhite);
+      }
+      case BLACK -> {
+        final CastleRight castlingRightBlack = castlingRightMap.get(com.github.bhlangonijr.chesslib.Side.BLACK);
+        yield mapCastlingRight(castlingRightBlack);
+      }
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static CastlingRight mapCastlingRight(CastleRight carlosCastlingRight) {

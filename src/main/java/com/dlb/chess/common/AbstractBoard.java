@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
@@ -14,7 +13,6 @@ import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -150,11 +148,6 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
       return true;
     }
     return canClaimThreefoldRepetitionRuleWithOwnMove();
-  }
-
-  @Override
-  public CastlingRight getCastlingRight(Side havingMove) {
-    return CastlingUtility.getCastlingRight(this.getCastlingRightBoth(), havingMove);
   }
 
   @Override

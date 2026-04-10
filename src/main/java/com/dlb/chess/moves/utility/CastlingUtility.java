@@ -18,7 +18,8 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
-import com.dlb.chess.model.CastlingRightBoth;
+import com.dlb.chess.fen.model.Fen;
+import com.dlb.chess.model.CastlingRightBothUpdate;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.google.common.collect.ImmutableList;
@@ -381,16 +382,16 @@ public abstract class CastlingUtility implements EnumConstants {
     return calculateIsCastlingQueenSide(moveSpecification) || calculateIsCastlingKingSide(moveSpecification);
   }
 
-  public static CastlingRightBoth calculateCastlingRightBoth(CastlingRightBoth lastCastlingRightBoth,
-      LegalMove legalMove) {
+  public static CastlingRightBothUpdate calculateCastlingRightBoth(CastlingRight lastCastlingRightWhite,
+      CastlingRight lastCastlingRightBlack, LegalMove legalMove) {
 
     final Side havingMoveBefore = legalMove.moveSpecification().havingMove();
     final Side havingMove = havingMoveBefore.getOppositeSide();
 
-    final CastlingRight oldCastlingRightHavingMoveBefore = CastlingUtility.getCastlingRight(lastCastlingRightBoth,
-        havingMoveBefore);
-    final CastlingRight oldCastlingRightHavingMove = CastlingUtility.getCastlingRight(lastCastlingRightBoth,
-        havingMove);
+    final CastlingRight oldCastlingRightHavingMoveBefore = CastlingUtility.getCastlingRight(lastCastlingRightWhite,
+        lastCastlingRightBlack, havingMoveBefore);
+    final CastlingRight oldCastlingRightHavingMove = CastlingUtility.getCastlingRight(lastCastlingRightWhite,
+        lastCastlingRightBlack, havingMove);
 
     final CastlingRight newCastlingRightHavingMoveBefore;
     final CastlingRight newCastlingRightHavingMove;
@@ -469,8 +470,8 @@ public abstract class CastlingUtility implements EnumConstants {
     return lookupStaticCastlingRightBoth(havingMove, newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
   }
 
-  public static CastlingRightLoss calculateCastlingRightLoss(LegalMove legalMove,
-      CastlingRightLoss previousLoss, Side side, CastlingMove castlingSide) {
+  public static CastlingRightLoss calculateCastlingRightLoss(LegalMove legalMove, CastlingRightLoss previousLoss,
+      Side side, CastlingMove castlingSide) {
     if (previousLoss != CastlingRightLoss.NONE) {
       return previousLoss;
     }
@@ -482,19 +483,13 @@ public abstract class CastlingUtility implements EnumConstants {
       if (calculateHasKingMoved(legalMove)) {
         return CastlingRightLoss.KING_MOVED;
       }
-      if (castlingSide == CastlingMove.KING_SIDE && calculateHasKingSideRookMoved(legalMove)) {
+      if (castlingSide == CastlingMove.KING_SIDE && calculateHasKingSideRookMoved(legalMove)
+          || castlingSide == CastlingMove.QUEEN_SIDE && calculateHasQueenSideRookMoved(legalMove)) {
         return CastlingRightLoss.ROOK_MOVED;
       }
-      if (castlingSide == CastlingMove.QUEEN_SIDE && calculateHasQueenSideRookMoved(legalMove)) {
-        return CastlingRightLoss.ROOK_MOVED;
-      }
-    } else {
-      if (castlingSide == CastlingMove.KING_SIDE && calculateHasCapturedOpponentRookKingSide(legalMove)) {
-        return CastlingRightLoss.ROOK_CAPTURED;
-      }
-      if (castlingSide == CastlingMove.QUEEN_SIDE && calculateHasCapturedOpponentRookQueenSide(legalMove)) {
-        return CastlingRightLoss.ROOK_CAPTURED;
-      }
+    } else if (castlingSide == CastlingMove.KING_SIDE && calculateHasCapturedOpponentRookKingSide(legalMove)
+        || castlingSide == CastlingMove.QUEEN_SIDE && calculateHasCapturedOpponentRookQueenSide(legalMove)) {
+      return CastlingRightLoss.ROOK_CAPTURED;
     }
     return CastlingRightLoss.NONE;
   }
@@ -551,11 +546,11 @@ public abstract class CastlingUtility implements EnumConstants {
     return false;
   }
 
-  private static CastlingRightBoth lookupStaticCastlingRightBoth(Side havingMove,
+  private static CastlingRightBothUpdate lookupStaticCastlingRightBoth(Side havingMove,
       CastlingRight newCastlingRightHavingMoveBefore, CastlingRight newCastlingRightHavingMove) {
     return switch (havingMove) {
-      case BLACK -> new CastlingRightBoth(newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
-      case WHITE -> new CastlingRightBoth(newCastlingRightHavingMove, newCastlingRightHavingMoveBefore);
+      case BLACK -> new CastlingRightBothUpdate(newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
+      case WHITE -> new CastlingRightBothUpdate(newCastlingRightHavingMove, newCastlingRightHavingMoveBefore);
       case NONE -> throw new IllegalArgumentException();
     };
   }
@@ -672,10 +667,27 @@ public abstract class CastlingUtility implements EnumConstants {
     };
   }
 
-  public static CastlingRight getCastlingRight(CastlingRightBoth castlingRightBoth, Side side) {
+  public static CastlingRight getCastlingRight(CastlingRight castlingRightWhite, CastlingRight castlingRightBlack,
+      Side side) {
     return switch (side) {
-      case WHITE -> castlingRightBoth.castlingRightWhite();
-      case BLACK -> castlingRightBoth.castlingRightBlack();
+      case WHITE -> castlingRightWhite;
+      case BLACK -> castlingRightBlack;
+      case NONE -> throw new IllegalArgumentException();
+    };
+  }
+
+  public static CastlingRight getCastlingRight(CastlingRightBothUpdate bothUpdate, Side side) {
+    return switch (side) {
+      case WHITE -> bothUpdate.castlingRightWhite();
+      case BLACK -> bothUpdate.castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+    };
+  }
+
+  public static CastlingRight getCastlingRight(Fen fen, Side side) {
+    return switch (side) {
+      case WHITE -> fen.castlingRightWhite();
+      case BLACK -> fen.castlingRightBlack();
       case NONE -> throw new IllegalArgumentException();
     };
   }

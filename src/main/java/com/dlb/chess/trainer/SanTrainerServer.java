@@ -1,7 +1,6 @@
 package com.dlb.chess.trainer;
 
 import java.io.IOException;
-import java.io.OutputStream;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -22,6 +21,7 @@ import com.dlb.chess.san.validate.SanValidation;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
 
+@SuppressWarnings("null")
 public class SanTrainerServer {
 
   private static ApiBoard board = new Board();
@@ -29,8 +29,8 @@ public class SanTrainerServer {
   private static final Path HTML_PATH = Path.of("C:/Users/danie/claude/index.html");
 
   public static void main(String[] args) throws IOException {
-    final int port = 8080;
-    final HttpServer server = HttpServer.create(new InetSocketAddress(port), 0);
+    final var port = 8080;
+    final var server = HttpServer.create(new InetSocketAddress(port), 0);
 
     server.createContext("/", SanTrainerServer::serveIndex);
     server.createContext("/api/move", SanTrainerServer::handleMove);
@@ -47,10 +47,10 @@ public class SanTrainerServer {
       exchange.sendResponseHeaders(405, -1);
       return;
     }
-    final byte[] html = Files.readAllBytes(HTML_PATH);
+    final var html = Files.readAllBytes(HTML_PATH);
     exchange.getResponseHeaders().set("Content-Type", "text/html; charset=UTF-8");
     exchange.sendResponseHeaders(200, html.length);
-    try (OutputStream os = exchange.getResponseBody()) {
+    try (var os = exchange.getResponseBody()) {
       os.write(html);
     }
   }
@@ -61,7 +61,8 @@ public class SanTrainerServer {
       return;
     }
 
-    final String body = new String(exchange.getRequestBody().readAllBytes(), StandardCharsets.UTF_8);
+    @SuppressWarnings("resource") final String body = new String(exchange.getRequestBody().readAllBytes(),
+        StandardCharsets.UTF_8);
     final String san = extractJsonValue(body, "san");
 
     String json;
@@ -73,17 +74,17 @@ public class SanTrainerServer {
       final String from = moveSpec.fromSquare().getName();
       final String to = moveSpec.toSquare().getName();
 
-      final boolean gameOver = board.isCheckmate() || board.isStalemate() || board.getLegalMoveSet().isEmpty();
-      String gameOverMsg = "";
+      final var gameOver = board.isCheckmate() || board.isStalemate() || board.getLegalMoveSet().isEmpty();
+      var gameOverMsg = "";
       if (board.isCheckmate()) {
         gameOverMsg = "Checkmate! White wins!";
       } else if (board.isStalemate()) {
         gameOverMsg = "Stalemate! Draw.";
       }
 
-      json = "{" + jsonPair("whiteSan", san) + "," + jsonPair("fenAfterWhite", fen) + ","
-          + jsonPair("whiteFrom", from) + "," + jsonPair("whiteTo", to) + ","
-          + jsonBool("gameOver", gameOver) + "," + jsonPair("gameOverMessage", gameOverMsg) + "}";
+      json = "{" + jsonPair("whiteSan", san) + "," + jsonPair("fenAfterWhite", fen) + "," + jsonPair("whiteFrom", from)
+          + "," + jsonPair("whiteTo", to) + "," + jsonBool("gameOver", gameOver) + ","
+          + jsonPair("gameOverMessage", gameOverMsg) + "}";
 
     } catch (final SanValidationException e) {
       final SanValidationProblem problem = e.getSanValidationProblem();
@@ -113,30 +114,30 @@ public class SanTrainerServer {
     final String from = randomMove.moveSpecification().fromSquare().getName();
     final String to = randomMove.moveSpecification().toSquare().getName();
 
-    final boolean gameOver = board.isCheckmate() || board.isStalemate() || board.getLegalMoveSet().isEmpty();
-    String gameOverMsg = "";
+    final var gameOver = board.isCheckmate() || board.isStalemate() || board.getLegalMoveSet().isEmpty();
+    var gameOverMsg = "";
     if (board.isCheckmate()) {
       gameOverMsg = "Checkmate! Black wins!";
     } else if (board.isStalemate()) {
       gameOverMsg = "Stalemate! Draw.";
     }
 
-    final String json = "{" + jsonPair("blackSan", blackSan) + "," + jsonPair("fenAfterBlack", fen) + ","
-        + jsonPair("blackFrom", from) + "," + jsonPair("blackTo", to) + ","
-        + jsonBool("gameOver", gameOver) + "," + jsonPair("gameOverMessage", gameOverMsg) + "}";
+    final var json = "{" + jsonPair("blackSan", blackSan) + "," + jsonPair("fenAfterBlack", fen) + ","
+        + jsonPair("blackFrom", from) + "," + jsonPair("blackTo", to) + "," + jsonBool("gameOver", gameOver) + ","
+        + jsonPair("gameOverMessage", gameOverMsg) + "}";
 
     sendJson(exchange, json);
   }
 
   private static void handleReset(HttpExchange exchange) throws IOException {
     board = new Board();
-    final String json = "{" + jsonPair("fen", board.getFen()) + "}";
+    final var json = "{" + jsonPair("fen", board.getFen()) + "}";
     sendJson(exchange, json);
   }
 
   private static String extractJsonValue(String json, String key) {
-    final String search = "\"" + key + "\"";
-    int idx = json.indexOf(search);
+    final var search = "\"" + key + "\"";
+    var idx = json.indexOf(search);
     if (idx < 0) {
       return "";
     }
@@ -148,7 +149,7 @@ public class SanTrainerServer {
     if (idx < 0) {
       return "";
     }
-    final int end = json.indexOf('"', idx + 1);
+    final var end = json.indexOf('"', idx + 1);
     if (end < 0) {
       return "";
     }
@@ -168,11 +169,11 @@ public class SanTrainerServer {
   }
 
   private static void sendJson(HttpExchange exchange, String json) throws IOException {
-    final byte[] bytes = json.getBytes(StandardCharsets.UTF_8);
+    final var bytes = json.getBytes(StandardCharsets.UTF_8);
     exchange.getResponseHeaders().set("Content-Type", "application/json; charset=UTF-8");
     exchange.getResponseHeaders().set("Access-Control-Allow-Origin", "*");
     exchange.sendResponseHeaders(200, bytes.length);
-    try (OutputStream os = exchange.getResponseBody()) {
+    try (var os = exchange.getResponseBody()) {
       os.write(bytes);
     }
   }

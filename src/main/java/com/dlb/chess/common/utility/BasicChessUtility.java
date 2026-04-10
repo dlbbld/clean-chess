@@ -13,9 +13,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.fen.FenParserRaw;
-import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
 
 public abstract class BasicChessUtility {
 
@@ -58,13 +56,11 @@ public abstract class BasicChessUtility {
 
     result.append(dynamicPosition.isEnPassantCapturePossible()).append("-");
 
-    final CastlingRightBoth castlingRightBoth = dynamicPosition.castlingRightBoth();
-
-    final CastlingRight whiteCastlingRight = CastlingUtility.getCastlingRight(castlingRightBoth, Side.WHITE);
+    final CastlingRight whiteCastlingRight = dynamicPosition.castlingRightWhite();
     result.append(whiteCastlingRight.getHasKingSide()).append("-");
     result.append(whiteCastlingRight.getHasQueenSide()).append("-");
 
-    final CastlingRight blackCastlingRight = CastlingUtility.getCastlingRight(castlingRightBoth, Side.BLACK);
+    final CastlingRight blackCastlingRight = dynamicPosition.castlingRightBlack();
     result.append(blackCastlingRight.getHasKingSide()).append("-");
     result.append(blackCastlingRight.getHasQueenSide());
 

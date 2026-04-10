@@ -34,7 +34,7 @@ import com.dlb.chess.fen.FenBoard;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBoth;
+import com.dlb.chess.model.CastlingRightBothUpdate;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.legal.AbstractLegalMoves;
 import com.dlb.chess.moves.utility.CastlingUtility;
@@ -78,9 +78,7 @@ public class Board extends AbstractBoard {
     // values used in the following not to be get from board methods!!!
     final StaticPosition initialStaticPosition = initialFenUse.staticPosition();
     final Side initialHavingMove = initialFenUse.havingMove();
-    final CastlingRightBoth initialCastlingRightBoth = initialFenUse.castlingRightBoth();
-    final CastlingRight initialCastlingRight = CastlingUtility.getCastlingRight(initialCastlingRightBoth,
-        initialHavingMove);
+    final CastlingRight initialCastlingRight = CastlingUtility.getCastlingRight(initialFenUse, initialHavingMove);
     final var initialEnPassantCaptureTargetSquare = initialFenUse.enPassantCaptureTargetSquare();
     final var initialIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(
         initialEnPassantCaptureTargetSquare, initialHavingMove, initialStaticPosition);
@@ -114,11 +112,13 @@ public class Board extends AbstractBoard {
     this.dynamicPositionList = new ArrayList<>();
     // attention - must be after we calculated the legal moves - we need them to check if en passant capture is possible
     // order of instructions dependency!!
+    final CastlingRight initialCastlingRightWhite = CastlingUtility.getCastlingRight(initialFenUse, Side.WHITE);
+    final CastlingRight initialCastlingRightBlack = CastlingUtility.getCastlingRight(initialFenUse, Side.BLACK);
     if (initialFenUse.equals(FenConstants.FEN_INITIAL)) {
       this.dynamicPositionList.add(DynamicPositionConstants.INITIAL);
     } else {
       this.dynamicPositionList.add(new DynamicPosition(initialHavingMove, initialStaticPosition,
-          initialIsEnPassantCapturePossible, initialCastlingRightBoth));
+          initialIsEnPassantCapturePossible, initialCastlingRightWhite, initialCastlingRightBlack));
     }
     this.halfMoveClockList = new ArrayList<>();
     this.halfMoveClockList.add(initialFenUse.halfMoveClock());
@@ -135,20 +135,18 @@ public class Board extends AbstractBoard {
     this.whiteQueenSideLossList = new ArrayList<>();
     this.blackKingSideLossList = new ArrayList<>();
     this.blackQueenSideLossList = new ArrayList<>();
-    final CastlingRight crWhite = initialCastlingRightBoth.castlingRightWhite();
-    final CastlingRight crBlack = initialCastlingRightBoth.castlingRightBlack();
-    this.whiteKingSideLossList.add(
-        crWhite == CastlingRight.KING_AND_QUEEN_SIDE || crWhite == CastlingRight.KING_SIDE
-            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
-    this.whiteQueenSideLossList.add(
-        crWhite == CastlingRight.KING_AND_QUEEN_SIDE || crWhite == CastlingRight.QUEEN_SIDE
-            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
-    this.blackKingSideLossList.add(
-        crBlack == CastlingRight.KING_AND_QUEEN_SIDE || crBlack == CastlingRight.KING_SIDE
-            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
-    this.blackQueenSideLossList.add(
-        crBlack == CastlingRight.KING_AND_QUEEN_SIDE || crBlack == CastlingRight.QUEEN_SIDE
-            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.whiteKingSideLossList.add(initialCastlingRightWhite == CastlingRight.KING_AND_QUEEN_SIDE
+        || initialCastlingRightWhite == CastlingRight.KING_SIDE ? CastlingRightLoss.NONE
+            : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.whiteQueenSideLossList.add(initialCastlingRightWhite == CastlingRight.KING_AND_QUEEN_SIDE
+        || initialCastlingRightWhite == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NONE
+            : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.blackKingSideLossList.add(initialCastlingRightBlack == CastlingRight.KING_AND_QUEEN_SIDE
+        || initialCastlingRightBlack == CastlingRight.KING_SIDE ? CastlingRightLoss.NONE
+            : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.blackQueenSideLossList.add(initialCastlingRightBlack == CastlingRight.KING_AND_QUEEN_SIDE
+        || initialCastlingRightBlack == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NONE
+            : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
 
   }
 
@@ -180,8 +178,10 @@ public class Board extends AbstractBoard {
       ValidateNewMove.validateNewMove(this, moveSpecification);
     }
 
-    final CastlingRightBoth beforeCastlingRightBoth = NonNullWrapperCommon.getLast(dynamicPositionList)
-        .castlingRightBoth();
+    final CastlingRight beforeCastlingRightWhite = NonNullWrapperCommon.getLast(dynamicPositionList)
+        .castlingRightWhite();
+    final CastlingRight beforeCastlingRightBlack = NonNullWrapperCommon.getLast(dynamicPositionList)
+        .castlingRightBlack();
 
     final LegalMove moveToPerform = calculateLegalMove(this.getStaticPosition(), moveSpecification);
     final MoveSpecification moveSpecificationForMoveToPerform = moveToPerform.moveSpecification();
@@ -189,30 +189,31 @@ public class Board extends AbstractBoard {
     // values used in the following not to be get from board methods!!!
     final StaticPosition afterStaticPosition = createPositionAfterMove(this.getStaticPosition(), moveSpecification);
     final Side afterHavingMove = moveSpecificationForMoveToPerform.havingMove().getOppositeSide();
-    final CastlingRightBoth afterCastlingRightBoth = CastlingUtility.calculateCastlingRightBoth(beforeCastlingRightBoth,
-        moveToPerform);
-    final CastlingRight afterCastlingRight = CastlingUtility.getCastlingRight(afterCastlingRightBoth, afterHavingMove);
+    final CastlingRightBothUpdate afterCastlingRightBoth = CastlingUtility
+        .calculateCastlingRightBoth(beforeCastlingRightWhite, beforeCastlingRightBlack, moveToPerform);
+    final CastlingRight afterCastlingRightHavingMove = CastlingUtility.getCastlingRight(afterCastlingRightBoth,
+        afterHavingMove);
     final var afterEnPassantCaptureTargetSquare = EnPassantCaptureUtility
         .calculateEnPassantCaptureTargetSquare(moveToPerform);
     final var afterIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(afterEnPassantCaptureTargetSquare,
         afterHavingMove, afterStaticPosition);
 
     // update castling loss reasons
-    this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(whiteKingSideLossList),
-        Side.WHITE, CastlingMove.KING_SIDE));
-    this.whiteQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(whiteQueenSideLossList),
-        Side.WHITE, CastlingMove.QUEEN_SIDE));
-    this.blackKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(blackKingSideLossList),
-        Side.BLACK, CastlingMove.KING_SIDE));
-    this.blackQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(blackQueenSideLossList),
-        Side.BLACK, CastlingMove.QUEEN_SIDE));
+    this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
+        NonNullWrapperCommon.getLast(whiteKingSideLossList), Side.WHITE, CastlingMove.KING_SIDE));
+    this.whiteQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
+        NonNullWrapperCommon.getLast(whiteQueenSideLossList), Side.WHITE, CastlingMove.QUEEN_SIDE));
+    this.blackKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
+        NonNullWrapperCommon.getLast(blackKingSideLossList), Side.BLACK, CastlingMove.KING_SIDE));
+    this.blackQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
+        NonNullWrapperCommon.getLast(blackQueenSideLossList), Side.BLACK, CastlingMove.QUEEN_SIDE));
 
     // now changing board class state, so performing the move!
     this.performedLegalMoveList.add(moveToPerform);
 
     // now we have a depencency on instruction execution: the move must be performed before calling the legal moves
     final Set<LegalMove> legalMovesAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
-        afterHavingMove, afterCastlingRight, afterEnPassantCaptureTargetSquare);
+        afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
     this.legalMoveListSet.add(legalMovesAfterMove);
 
     final Set<Square> threatenedSquareSet = AbstractThreatenSquares.calculateThreatenedSquares(afterStaticPosition,
@@ -229,8 +230,9 @@ public class Board extends AbstractBoard {
     final var isStalemate = !isCheck && legalMovesAfterMove.isEmpty();
     this.isStalemateList.add(isStalemate);
 
-    final DynamicPosition newDynamicPosition = new DynamicPosition(afterHavingMove, afterStaticPosition,
-        afterIsEnPassantCapturePossible, afterCastlingRightBoth);
+    final var newDynamicPosition = new DynamicPosition(afterHavingMove, afterStaticPosition,
+        afterIsEnPassantCapturePossible, afterCastlingRightBoth.castlingRightWhite(),
+        afterCastlingRightBoth.castlingRightBlack());
     this.dynamicPositionList.add(newDynamicPosition);
 
     // order of instructions dependency!! - must be after adding the move
@@ -682,11 +684,6 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public CastlingRightBoth getCastlingRightBoth() {
-    return NonNullWrapperCommon.getLast(dynamicPositionList).castlingRightBoth();
-  }
-
-  @Override
   public int getPerformedHalfMoveCount() {
     return performedLegalMoveList.size();
   }
@@ -787,6 +784,17 @@ public class Board extends AbstractBoard {
       case WHITE -> castlingSide == CastlingMove.KING_SIDE ? getWhiteKingSideLoss() : getWhiteQueenSideLoss();
       case BLACK -> castlingSide == CastlingMove.KING_SIDE ? getBlackKingSideLoss() : getBlackQueenSideLoss();
       case NONE -> throw new IllegalArgumentException();
+    };
+  }
+
+  @Override
+  public CastlingRight getCastlingRight(Side havingMove) {
+
+    return switch (havingMove) {
+      case WHITE -> getDynamicPosition().castlingRightWhite();
+      case BLACK -> getDynamicPosition().castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
     };
   }
 
