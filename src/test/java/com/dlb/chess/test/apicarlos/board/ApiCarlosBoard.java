@@ -100,7 +100,7 @@ public class ApiCarlosBoard extends AbstractBoard {
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
-        getCastlingRight(Side.WHITE), getCastlingRight(Side.BLACK)));
+        getCastlingRightWhite(), getCastlingRightBlack()));
 
     // TODO timely dependency, must be after the above code is very very dangerous
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);

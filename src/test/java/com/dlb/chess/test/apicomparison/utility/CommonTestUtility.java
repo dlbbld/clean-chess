@@ -86,8 +86,8 @@ public abstract class CommonTestUtility implements EnumConstants {
 
     assertEquals(boardFirst.isEnPassantCapturePossible(), boardSecond.isEnPassantCapturePossible());
 
-    assertEquals(boardFirst.getCastlingRight(Side.WHITE), boardSecond.getCastlingRight(Side.WHITE));
-    assertEquals(boardFirst.getCastlingRight(Side.BLACK), boardSecond.getCastlingRight(Side.BLACK));
+    assertEquals(boardFirst.getCastlingRightWhite(), boardSecond.getCastlingRightWhite());
+    assertEquals(boardFirst.getCastlingRightBlack(), boardSecond.getCastlingRightBlack());
     // in super
     // assertEquals(boardFirst.getCastlingRight(WHITE), boardSecond.getCastlingRight(WHITE));
     // in super

@@ -20,7 +20,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Ke2");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.KING_MOVED, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.KING_MOVED, board.getWhiteQueenSideLoss());
   }
@@ -31,7 +31,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Ke7");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.KING_MOVED, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.KING_MOVED, board.getBlackQueenSideLoss());
   }
@@ -44,7 +44,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("h4", "e5", "Rh3");
 
-    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.ROOK_MOVED, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteQueenSideLoss());
   }
@@ -55,7 +55,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "h5", "d4", "Rh6");
 
-    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.ROOK_MOVED, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.NONE, board.getBlackQueenSideLoss());
   }
@@ -68,7 +68,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("a4", "e5", "Ra3");
 
-    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.ROOK_MOVED, board.getWhiteQueenSideLoss());
   }
@@ -79,7 +79,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "a5", "d4", "Ra6");
 
-    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.NONE, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.ROOK_MOVED, board.getBlackQueenSideLoss());
   }
@@ -92,7 +92,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.CASTLED, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.CASTLED, board.getWhiteQueenSideLoss());
   }
@@ -103,7 +103,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Nc3", "Bc5", "Bc4", "O-O");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.CASTLED, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.CASTLED, board.getBlackQueenSideLoss());
   }
@@ -116,7 +116,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("d4", "d5", "Nc3", "Nc6", "Bf4", "Bf5", "Qd2", "Qd7", "O-O-O");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.CASTLED, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.CASTLED, board.getWhiteQueenSideLoss());
   }
@@ -127,7 +127,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("e4", "d5", "d4", "Nc6", "Nf3", "Bf5", "Nc3", "Qd7", "Bc4", "O-O-O");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.CASTLED, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.CASTLED, board.getBlackQueenSideLoss());
   }
@@ -140,8 +140,8 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     // FEN with no castling rights at all
     final Board board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1");
 
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.WHITE));
-    assertEquals(CastlingRight.NONE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.NONE, board.getCastlingRightWhite());
+    assertEquals(CastlingRight.NONE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.UNKNOWN_FEN_IMPORT, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.UNKNOWN_FEN_IMPORT, board.getWhiteQueenSideLoss());
     assertEquals(CastlingRightLoss.UNKNOWN_FEN_IMPORT, board.getBlackKingSideLoss());
@@ -154,8 +154,8 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     // FEN with only white king-side and black queen-side castling rights
     final Board board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w Kq - 0 1");
 
-    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRight(Side.WHITE));
-    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRightWhite());
+    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.UNKNOWN_FEN_IMPORT, board.getWhiteQueenSideLoss());
     assertEquals(CastlingRightLoss.UNKNOWN_FEN_IMPORT, board.getBlackKingSideLoss());
@@ -168,8 +168,8 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     // FEN with all castling rights — no losses
     final Board board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1");
 
-    assertEquals(CastlingRight.KING_AND_QUEEN_SIDE, board.getCastlingRight(Side.WHITE));
-    assertEquals(CastlingRight.KING_AND_QUEEN_SIDE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.KING_AND_QUEEN_SIDE, board.getCastlingRightWhite());
+    assertEquals(CastlingRight.KING_AND_QUEEN_SIDE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteQueenSideLoss());
     assertEquals(CastlingRightLoss.NONE, board.getBlackKingSideLoss());
@@ -185,7 +185,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("b3", "a5", "Bb2", "a4", "Bxg7", "a3", "Bxh8");
 
-    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.ROOK_CAPTURED, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.NONE, board.getBlackQueenSideLoss());
   }
@@ -197,7 +197,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("a4", "b5", "axb5", "c5", "b6", "c4", "b7", "c3", "bxa8=Q");
 
-    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRight(Side.BLACK));
+    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRightBlack());
     assertEquals(CastlingRightLoss.NONE, board.getBlackKingSideLoss());
     assertEquals(CastlingRightLoss.ROOK_CAPTURED, board.getBlackQueenSideLoss());
   }
@@ -209,7 +209,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("a3", "b6", "a4", "Bb7", "a5", "Bxg2", "a6", "Bxh1");
 
-    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.QUEEN_SIDE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.ROOK_CAPTURED, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteQueenSideLoss());
   }
@@ -223,7 +223,7 @@ class TestValidateNewMoveCastlingLost implements EnumConstants {
     final Board board = new Board();
     board.performMoves("h3", "a5", "h4", "a4", "h5", "a3", "h6", "axb2", "hxg7", "bxa1=Q");
 
-    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRight(Side.WHITE));
+    assertEquals(CastlingRight.KING_SIDE, board.getCastlingRightWhite());
     assertEquals(CastlingRightLoss.NONE, board.getWhiteKingSideLoss());
     assertEquals(CastlingRightLoss.ROOK_CAPTURED, board.getWhiteQueenSideLoss());
   }

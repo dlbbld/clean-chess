@@ -29,8 +29,8 @@ public class UnwinnableSemiStatic {
 
     // en passant is possible
     // a player has castling rights
-    if (board.isEnPassantCapturePossible() || board.getCastlingRight(Side.WHITE) != CastlingRight.NONE
-        || board.getCastlingRight(Side.BLACK) != CastlingRight.NONE) {
+    if (board.isEnPassantCapturePossible() || board.getCastlingRightWhite() != CastlingRight.NONE
+        || board.getCastlingRightBlack() != CastlingRight.NONE) {
       return false;
     }
 
