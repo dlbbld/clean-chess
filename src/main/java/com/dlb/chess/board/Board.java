@@ -8,7 +8,9 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -58,6 +60,10 @@ public class Board extends AbstractBoard {
   private final List<String> sanList;
   private final List<String> lanList;
   private final List<HalfMove> halfMoveList;
+  private final List<CastlingRightLoss> whiteKingSideLossList;
+  private final List<CastlingRightLoss> whiteQueenSideLossList;
+  private final List<CastlingRightLoss> blackKingSideLossList;
+  private final List<CastlingRightLoss> blackQueenSideLossList;
 
   public Board(Fen initialFen) {
 
@@ -125,6 +131,25 @@ public class Board extends AbstractBoard {
 
     this.halfMoveList = new ArrayList<>();
 
+    this.whiteKingSideLossList = new ArrayList<>();
+    this.whiteQueenSideLossList = new ArrayList<>();
+    this.blackKingSideLossList = new ArrayList<>();
+    this.blackQueenSideLossList = new ArrayList<>();
+    final CastlingRight crWhite = initialCastlingRightBoth.castlingRightWhite();
+    final CastlingRight crBlack = initialCastlingRightBoth.castlingRightBlack();
+    this.whiteKingSideLossList.add(
+        crWhite == CastlingRight.KING_AND_QUEEN_SIDE || crWhite == CastlingRight.KING_SIDE
+            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.whiteQueenSideLossList.add(
+        crWhite == CastlingRight.KING_AND_QUEEN_SIDE || crWhite == CastlingRight.QUEEN_SIDE
+            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.blackKingSideLossList.add(
+        crBlack == CastlingRight.KING_AND_QUEEN_SIDE || crBlack == CastlingRight.KING_SIDE
+            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+    this.blackQueenSideLossList.add(
+        crBlack == CastlingRight.KING_AND_QUEEN_SIDE || crBlack == CastlingRight.QUEEN_SIDE
+            ? CastlingRightLoss.NONE : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
+
   }
 
   public Board() {
@@ -171,6 +196,16 @@ public class Board extends AbstractBoard {
         .calculateEnPassantCaptureTargetSquare(moveToPerform);
     final var afterIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(afterEnPassantCaptureTargetSquare,
         afterHavingMove, afterStaticPosition);
+
+    // update castling loss reasons
+    this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
+        NonNullWrapperCommon.getLast(whiteKingSideLossList), Side.WHITE, CastlingMove.KING_SIDE));
+    this.whiteQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
+        NonNullWrapperCommon.getLast(whiteQueenSideLossList), Side.WHITE, CastlingMove.QUEEN_SIDE));
+    this.blackKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
+        NonNullWrapperCommon.getLast(blackKingSideLossList), Side.BLACK, CastlingMove.KING_SIDE));
+    this.blackQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
+        NonNullWrapperCommon.getLast(blackQueenSideLossList), Side.BLACK, CastlingMove.QUEEN_SIDE));
 
     // now changing board class state, so performing the move!
     this.performedLegalMoveList.add(moveToPerform);
@@ -344,6 +379,11 @@ public class Board extends AbstractBoard {
     this.lanList.remove(lanList.size() - 1);
 
     this.halfMoveList.remove(halfMoveList.size() - 1);
+
+    this.whiteKingSideLossList.remove(whiteKingSideLossList.size() - 1);
+    this.whiteQueenSideLossList.remove(whiteQueenSideLossList.size() - 1);
+    this.blackKingSideLossList.remove(blackKingSideLossList.size() - 1);
+    this.blackQueenSideLossList.remove(blackQueenSideLossList.size() - 1);
 
   }
 
@@ -724,6 +764,30 @@ public class Board extends AbstractBoard {
         && Objects.equals(legalMoveListSet, other.legalMoveListSet)
         && Objects.equals(performedLegalMoveList, other.performedLegalMoveList)
         && Objects.equals(repetitionCountList, other.repetitionCountList) && Objects.equals(sanList, other.sanList);
+  }
+
+  public CastlingRightLoss getWhiteKingSideLoss() {
+    return NonNullWrapperCommon.getLast(whiteKingSideLossList);
+  }
+
+  public CastlingRightLoss getWhiteQueenSideLoss() {
+    return NonNullWrapperCommon.getLast(whiteQueenSideLossList);
+  }
+
+  public CastlingRightLoss getBlackKingSideLoss() {
+    return NonNullWrapperCommon.getLast(blackKingSideLossList);
+  }
+
+  public CastlingRightLoss getBlackQueenSideLoss() {
+    return NonNullWrapperCommon.getLast(blackQueenSideLossList);
+  }
+
+  public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingSide) {
+    return switch (side) {
+      case WHITE -> castlingSide == CastlingMove.KING_SIDE ? getWhiteKingSideLoss() : getWhiteQueenSideLoss();
+      case BLACK -> castlingSide == CastlingMove.KING_SIDE ? getBlackKingSideLoss() : getBlackQueenSideLoss();
+      case NONE -> throw new IllegalArgumentException();
+    };
   }
 
 }

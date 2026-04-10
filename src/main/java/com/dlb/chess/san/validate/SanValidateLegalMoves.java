@@ -25,7 +25,6 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.enums.MoveCheck;
-import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.model.PseudoLegalReason;
@@ -304,10 +303,9 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         message = Message.getString("validation.san.castling.kingOrRookNotOnRequiredSquare", sideLabel);
         break;
       case CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE: {
-        final CastlingRightBoth crb = board.getCastlingRightBoth();
-        castlingRightLoss = castlingMove == CastlingMove.QUEEN_SIDE
-            ? (havingMove == Side.WHITE ? crb.whiteQueenSideLoss() : crb.blackQueenSideLoss())
-            : (havingMove == Side.WHITE ? crb.whiteKingSideLoss() : crb.blackKingSideLoss());
+        castlingRightLoss = board instanceof com.dlb.chess.board.Board concreteBoard
+            ? concreteBoard.getCastlingRightLoss(havingMove, castlingMove)
+            : CastlingRightLoss.NONE;
         final String rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
         message = switch (castlingRightLoss) {
           case KING_MOVED -> Message.getString("validation.san.castling.noRight.kingMoved", sideLabel);
