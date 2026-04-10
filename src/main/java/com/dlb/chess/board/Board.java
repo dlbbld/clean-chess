@@ -34,7 +34,7 @@ import com.dlb.chess.fen.FenBoard;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBothUpdate;
+import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.legal.AbstractLegalMoves;
 import com.dlb.chess.moves.utility.CastlingUtility;
@@ -189,7 +189,7 @@ public class Board extends AbstractBoard {
     // values used in the following not to be get from board methods!!!
     final StaticPosition afterStaticPosition = createPositionAfterMove(this.getStaticPosition(), moveSpecification);
     final Side afterHavingMove = moveSpecificationForMoveToPerform.havingMove().getOppositeSide();
-    final CastlingRightBothUpdate afterCastlingRightBoth = CastlingUtility
+    final CastlingRightBoth afterCastlingRightBoth = CastlingUtility
         .calculateCastlingRightBoth(beforeCastlingRightWhite, beforeCastlingRightBlack, moveToPerform);
     final CastlingRight afterCastlingRightHavingMove = CastlingUtility.getCastlingRight(afterCastlingRightBoth,
         afterHavingMove);

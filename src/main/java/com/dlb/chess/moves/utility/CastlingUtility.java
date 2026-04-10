@@ -19,7 +19,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.model.CastlingRightBothUpdate;
+import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 import com.google.common.collect.ImmutableList;
@@ -382,7 +382,7 @@ public abstract class CastlingUtility implements EnumConstants {
     return calculateIsCastlingQueenSide(moveSpecification) || calculateIsCastlingKingSide(moveSpecification);
   }
 
-  public static CastlingRightBothUpdate calculateCastlingRightBoth(CastlingRight lastCastlingRightWhite,
+  public static CastlingRightBoth calculateCastlingRightBoth(CastlingRight lastCastlingRightWhite,
       CastlingRight lastCastlingRightBlack, LegalMove legalMove) {
 
     final Side havingMoveBefore = legalMove.moveSpecification().havingMove();
@@ -546,11 +546,11 @@ public abstract class CastlingUtility implements EnumConstants {
     return false;
   }
 
-  private static CastlingRightBothUpdate lookupStaticCastlingRightBoth(Side havingMove,
+  private static CastlingRightBoth lookupStaticCastlingRightBoth(Side havingMove,
       CastlingRight newCastlingRightHavingMoveBefore, CastlingRight newCastlingRightHavingMove) {
     return switch (havingMove) {
-      case BLACK -> new CastlingRightBothUpdate(newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
-      case WHITE -> new CastlingRightBothUpdate(newCastlingRightHavingMove, newCastlingRightHavingMoveBefore);
+      case BLACK -> new CastlingRightBoth(newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
+      case WHITE -> new CastlingRightBoth(newCastlingRightHavingMove, newCastlingRightHavingMoveBefore);
       case NONE -> throw new IllegalArgumentException();
     };
   }
@@ -676,7 +676,7 @@ public abstract class CastlingUtility implements EnumConstants {
     };
   }
 
-  public static CastlingRight getCastlingRight(CastlingRightBothUpdate bothUpdate, Side side) {
+  public static CastlingRight getCastlingRight(CastlingRightBoth bothUpdate, Side side) {
     return switch (side) {
       case WHITE -> bothUpdate.castlingRightWhite();
       case BLACK -> bothUpdate.castlingRightBlack();

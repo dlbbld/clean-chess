@@ -30,7 +30,7 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.fen.model.FenRaw;
-import com.dlb.chess.model.CastlingRightBothUpdate;
+import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
 public class FenParserAdvanced implements EnumConstants {
@@ -76,7 +76,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     final var castlingRightBothStr = fenRaw.castlingRightBothStr();
-    final CastlingRightBothUpdate castlingRightBoth = validateCastlingRightBoth(staticPosition, castlingRightBothStr);
+    final CastlingRightBoth castlingRightBoth = validateCastlingRightBoth(staticPosition, castlingRightBothStr);
 
     final var enPassantCaptureTargetSquareStr = fenRaw.enPassantCaptureTargetSquare();
     final Square enPassantCaptureTargetSquare = validateEnPassantCaptureTargetSquare(staticPosition,
@@ -252,14 +252,14 @@ public class FenParserAdvanced implements EnumConstants {
     throw new ProgrammingMistakeException("Check the regular expression");
   }
 
-  private static CastlingRightBothUpdate validateCastlingRightBoth(StaticPosition staticPosition,
+  private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition,
       String castlingRightBothStr) throws FenAdvancedValidationException {
-    final CastlingRightBothUpdate castlingRightBoth = validateCastlingRightBoth(castlingRightBothStr);
+    final CastlingRightBoth castlingRightBoth = validateCastlingRightBoth(castlingRightBothStr);
     validateCastlingRightAgainstStaticPosition(staticPosition, castlingRightBoth);
     return castlingRightBoth;
   }
 
-  private static CastlingRightBothUpdate validateCastlingRightBoth(String castlingRightBothStr)
+  private static CastlingRightBoth validateCastlingRightBoth(String castlingRightBothStr)
       throws FenAdvancedValidationException {
 
     final var hasK = castlingRightBothStr.contains("K");
@@ -279,7 +279,7 @@ public class FenParserAdvanced implements EnumConstants {
     final var black = hask && hasq ? CastlingRight.KING_AND_QUEEN_SIDE
         : hask ? CastlingRight.KING_SIDE : hasq ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
 
-    return new CastlingRightBothUpdate(white, black);
+    return new CastlingRightBoth(white, black);
   }
 
   private static Square validateEnPassantCaptureTargetSquare(StaticPosition staticPosition,
@@ -444,7 +444,7 @@ public class FenParserAdvanced implements EnumConstants {
   }
 
   private static void validateCastlingRightAgainstStaticPosition(StaticPosition staticPosition,
-      CastlingRightBothUpdate castlingRightBoth) throws FenAdvancedValidationException {
+      CastlingRightBoth castlingRightBoth) throws FenAdvancedValidationException {
 
     final List<Side> sideToCheckList = new ArrayList<>();
     sideToCheckList.add(WHITE);
