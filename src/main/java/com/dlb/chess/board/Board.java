@@ -198,14 +198,14 @@ public class Board extends AbstractBoard {
         afterHavingMove, afterStaticPosition);
 
     // update castling loss reasons
-    this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
-        NonNullWrapperCommon.getLast(whiteKingSideLossList), Side.WHITE, CastlingMove.KING_SIDE));
-    this.whiteQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
-        NonNullWrapperCommon.getLast(whiteQueenSideLossList), Side.WHITE, CastlingMove.QUEEN_SIDE));
-    this.blackKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
-        NonNullWrapperCommon.getLast(blackKingSideLossList), Side.BLACK, CastlingMove.KING_SIDE));
-    this.blackQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(beforeCastlingRightBoth, moveToPerform,
-        NonNullWrapperCommon.getLast(blackQueenSideLossList), Side.BLACK, CastlingMove.QUEEN_SIDE));
+    this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(whiteKingSideLossList),
+        Side.WHITE, CastlingMove.KING_SIDE));
+    this.whiteQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(whiteQueenSideLossList),
+        Side.WHITE, CastlingMove.QUEEN_SIDE));
+    this.blackKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(blackKingSideLossList),
+        Side.BLACK, CastlingMove.KING_SIDE));
+    this.blackQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform, NonNullWrapperCommon.getLast(blackQueenSideLossList),
+        Side.BLACK, CastlingMove.QUEEN_SIDE));
 
     // now changing board class state, so performing the move!
     this.performedLegalMoveList.add(moveToPerform);

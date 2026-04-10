@@ -18,7 +18,6 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
-import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
@@ -263,21 +262,21 @@ public class FenParserAdvanced implements EnumConstants {
   private static CastlingRightBoth validateCastlingRightBoth(String castlingRightBothStr)
       throws FenAdvancedValidationException {
 
-    final boolean hasK = castlingRightBothStr.contains("K");
-    final boolean hasQ = castlingRightBothStr.contains("Q");
-    final boolean hask = castlingRightBothStr.contains("k");
-    final boolean hasq = castlingRightBothStr.contains("q");
+    final var hasK = castlingRightBothStr.contains("K");
+    final var hasQ = castlingRightBothStr.contains("Q");
+    final var hask = castlingRightBothStr.contains("k");
+    final var hasq = castlingRightBothStr.contains("q");
 
-    final String expected = (hasK ? "K" : "") + (hasQ ? "Q" : "") + (hask ? "k" : "") + (hasq ? "q" : "");
+    final var expected = (hasK ? "K" : "") + (hasQ ? "Q" : "") + (hask ? "k" : "") + (hasq ? "q" : "");
     if (expected.isEmpty() && !"-".equals(castlingRightBothStr)
         || !expected.isEmpty() && !expected.equals(castlingRightBothStr)) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE,
           "the castling right part of \"" + castlingRightBothStr + "\" is not valid");
     }
 
-    final CastlingRight white = hasK && hasQ ? CastlingRight.KING_AND_QUEEN_SIDE
+    final var white = hasK && hasQ ? CastlingRight.KING_AND_QUEEN_SIDE
         : hasK ? CastlingRight.KING_SIDE : hasQ ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
-    final CastlingRight black = hask && hasq ? CastlingRight.KING_AND_QUEEN_SIDE
+    final var black = hask && hasq ? CastlingRight.KING_AND_QUEEN_SIDE
         : hask ? CastlingRight.KING_SIDE : hasq ? CastlingRight.QUEEN_SIDE : CastlingRight.NONE;
 
     return new CastlingRightBoth(white, black);

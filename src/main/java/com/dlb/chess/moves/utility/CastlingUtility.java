@@ -469,8 +469,8 @@ public abstract class CastlingUtility implements EnumConstants {
     return lookupStaticCastlingRightBoth(havingMove, newCastlingRightHavingMoveBefore, newCastlingRightHavingMove);
   }
 
-  public static CastlingRightLoss calculateCastlingRightLoss(CastlingRightBoth lastCastlingRightBoth,
-      LegalMove legalMove, CastlingRightLoss previousLoss, Side side, CastlingMove castlingSide) {
+  public static CastlingRightLoss calculateCastlingRightLoss(LegalMove legalMove,
+      CastlingRightLoss previousLoss, Side side, CastlingMove castlingSide) {
     if (previousLoss != CastlingRightLoss.NONE) {
       return previousLoss;
     }
