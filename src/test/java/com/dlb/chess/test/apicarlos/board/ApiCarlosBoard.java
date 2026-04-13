@@ -9,7 +9,9 @@ import java.util.TreeSet;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -584,4 +586,8 @@ public class ApiCarlosBoard extends AbstractBoard {
     return performedLegalMoveList;
   }
 
+  @Override
+  public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingMove) {
+    return CastlingRightLoss.NOT_IMPLEMENTED;
+  }
 }

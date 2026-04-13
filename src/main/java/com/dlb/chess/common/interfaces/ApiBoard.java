@@ -4,7 +4,9 @@ import java.util.List;
 import java.util.Set;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -152,5 +154,7 @@ public interface ApiBoard {
   boolean isFirstMove();
 
   Square getEnPassantCaptureTargetSquare();
+
+  CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingMove);
 
 }

@@ -136,16 +136,16 @@ public class Board extends AbstractBoard {
     this.blackKingSideLossList = new ArrayList<>();
     this.blackQueenSideLossList = new ArrayList<>();
     this.whiteKingSideLossList.add(initialCastlingRightWhite == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightWhite == CastlingRight.KING_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightWhite == CastlingRight.KING_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     this.whiteQueenSideLossList.add(initialCastlingRightWhite == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightWhite == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightWhite == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     this.blackKingSideLossList.add(initialCastlingRightBlack == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightBlack == CastlingRight.KING_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightBlack == CastlingRight.KING_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     this.blackQueenSideLossList.add(initialCastlingRightBlack == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightBlack == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightBlack == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
 
   }
@@ -779,6 +779,7 @@ public class Board extends AbstractBoard {
     return NonNullWrapperCommon.getLast(blackQueenSideLossList);
   }
 
+  @Override
   public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingSide) {
     return switch (side) {
       case WHITE -> castlingSide == CastlingMove.KING_SIDE ? getWhiteKingSideLoss() : getWhiteQueenSideLoss();
