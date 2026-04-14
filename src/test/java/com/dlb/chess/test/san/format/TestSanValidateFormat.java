@@ -35,17 +35,17 @@ class TestSanValidateFormat {
 
     // d8=Q — invalid first, second (rank), structure, promotion piece
     checkException("18=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_PROMOTION_RANK);
-    checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
-    checkException("d8=K", SanValidationProblem.FORMAT);
+    checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
+    checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_SYMBOL);
+    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // dxe8=Q — invalid chars replaced with valid SAN chars
     checkException("1xe8=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("d=e8=Q", SanValidationProblem.FORMAT);
-    checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK);
     checkException("dxeR=Q", SanValidationProblem.FORMAT);
     checkException("dxe8xQ", SanValidationProblem.FORMAT);
-    checkException("dxe8=K", SanValidationProblem.FORMAT);
+    checkException("dxe8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // Qe5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
@@ -291,8 +291,8 @@ class TestSanValidateFormat {
   @SuppressWarnings("static-method")
   @Test
   void testPromotionToKing() {
-    checkException("d8=K", SanValidationProblem.FORMAT);
-    checkException("d1=K", SanValidationProblem.FORMAT);
+    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
+    checkException("d1=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
   }
 
   @SuppressWarnings("static-method")
@@ -376,7 +376,7 @@ class TestSanValidateFormat {
     }
     {
       final var san = "d7=Q";
-      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH);
+      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
     }
     // (1d) pawnCapturingPromotionMoves dxe8=Q
     {
@@ -395,7 +395,7 @@ class TestSanValidateFormat {
     }
     {
       final var san = "dxe7=Q";
-      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH);
+      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
     }
     // (2a) queenNonCapturingMoves Qe5, Qae5, Q2e5, Qc3e5
     {

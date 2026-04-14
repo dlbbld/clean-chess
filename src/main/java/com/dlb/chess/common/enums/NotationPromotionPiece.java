@@ -20,6 +20,10 @@ public enum NotationPromotionPiece {
     return promotionPieceType;
   }
 
+  public static boolean exists(char promotionPieceLetter) {
+    return exists(NonNullWrapperCommon.toString(promotionPieceLetter));
+  }
+
   public static boolean exists(String promotionPieceLetter) {
     for (final NotationPromotionPiece option : values()) {
       if (option.getPromotionPieceType().getPieceType().getLetter().equals(promotionPieceLetter)) {

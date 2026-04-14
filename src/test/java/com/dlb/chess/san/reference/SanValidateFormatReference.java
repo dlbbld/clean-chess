@@ -51,7 +51,7 @@ public abstract class SanValidateFormatReference {
       }
     }
 
-    throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
+    throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format.nonSpecific"));
   }
 
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
