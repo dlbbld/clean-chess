@@ -505,6 +505,7 @@ public abstract class MovetextUtility {
     validateSanLength(san);
   }
 
+  // TODO to messages.properties
   private static void validateSanCharacters(String san) {
     for (var i = 0; i < san.length(); i++) {
       final var currentLetter = san.charAt(i);
