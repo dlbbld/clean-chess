@@ -23,9 +23,9 @@ class TestSanValidateAgainstLegalMovesCastling {
     // King moved off e1 via FEN
     final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R w - - 0 1");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE,
-        CastlingRightLoss.NOT_LOST);
+        CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     checkCastlingException("O-O-O", board, MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE,
-        CastlingRightLoss.NOT_LOST);
+        CastlingRightLoss.UNKNOWN_FEN_IMPORT);
   }
 
   @SuppressWarnings("static-method")
@@ -34,7 +34,7 @@ class TestSanValidateAgainstLegalMovesCastling {
     // King-side rook not on h1
     final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K1R1 w Q - 0 1");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE,
-        CastlingRightLoss.NOT_LOST);
+        CastlingRightLoss.UNKNOWN_FEN_IMPORT);
   }
 
   // --- Priority 2: No castling right - king moved ---
