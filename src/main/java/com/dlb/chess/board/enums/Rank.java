@@ -186,11 +186,16 @@ public enum Rank {
   }
 
   public static Rank calculateGroundRank(Side havingMove) {
-    if (havingMove == Side.NONE) {
-      throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case WHITE -> RANK_1;
+      case BLACK -> RANK_8;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
 
-    return calculatePromotionRank(havingMove.getOppositeSide());
+  public static boolean calculateIsAnyPromotionRank(Rank rank) {
+    return rank == RANK_8 || rank == RANK_1;
   }
 
   public static boolean calculateIsPromotionRank(Side havingMove, Rank rank) {

@@ -173,11 +173,11 @@ public abstract class SanValidateFormatReference {
 
     // pawn promotion rank enforcement
     if ((sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && (toRank == Rank.RANK_1 || toRank == Rank.RANK_8)) {
+        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && Rank.calculateIsAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
     if ((sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE)
-        && (toRank != Rank.RANK_1 && toRank != Rank.RANK_8)) {
+        && !Rank.calculateIsAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
