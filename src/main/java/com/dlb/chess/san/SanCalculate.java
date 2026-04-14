@@ -7,8 +7,8 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 
 public class SanCalculate implements EnumConstants {
@@ -37,19 +37,9 @@ public class SanCalculate implements EnumConstants {
       san.append(SanSymbol.PROMOTION.getSymbol());
       san.append(promotionPieceType.getPieceType().getLetter());
     }
-    switch (sanTerminalMarker) {
-      case CHECKMATE:
-        san.append(SanSymbol.CHECKMATE.getSymbol());
-        break;
-      case CHECK:
-        san.append(SanSymbol.CHECK.getSymbol());
-        break;
-      case NONE:
-        break;
-      default:
-        throw new IllegalArgumentException();
 
-    }
+    AbstractSan.appendSanTerminalMarker(san, sanTerminalMarker);
+
     return NonNullWrapperCommon.toString(san);
   }
 

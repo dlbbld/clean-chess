@@ -29,7 +29,9 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
 import com.dlb.chess.test.apicarlos.utility.MoveConversionUtility;
 import com.dlb.chess.test.apicomparison.utility.BoardConversionUtitlity;
@@ -279,11 +281,10 @@ public class ApiCarlosBoard extends AbstractBoard {
       final var promotionPieceSymbol = promotionPieceFenSymbol.toUpperCase();
       lan.append(promotionPieceSymbol);
     }
-    if (isCheckmate()) {
-      lan.append(SanSymbol.CHECKMATE.getSymbol());
-    } else if (isCheck()) {
-      lan.append(SanSymbol.CHECK.getSymbol());
-    }
+
+    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck(), isCheckmate());
+    AbstractSan.appendSanTerminalMarker(lan, sanTerminalMarker);
+
     return NonNullWrapperCommon.toString(lan);
   }
 

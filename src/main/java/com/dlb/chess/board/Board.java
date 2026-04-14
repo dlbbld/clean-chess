@@ -41,8 +41,10 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.moves.utility.StandardMoveUtility;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.validate.SanValidation;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 
@@ -246,9 +248,11 @@ public class Board extends AbstractBoard {
 
     final Set<LegalMove> legalMoveBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveListSet,
         legalMoveListSet.size() - 2);
-    this.sanList
-        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, isCheck, isCheckmate));
-    this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, isCheck, isCheckmate));
+
+    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck, isCheckmate);
+
+    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, sanTerminalMarker));
+    this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
     this.halfMoveList.add(halfMove);

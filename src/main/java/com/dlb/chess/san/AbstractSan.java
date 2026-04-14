@@ -10,6 +10,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 
 public abstract class AbstractSan {
@@ -145,11 +146,30 @@ public abstract class AbstractSan {
     return false;
   }
 
-  public static void appendCheckOrCheckmate(StringBuilder buildSan, boolean isCheck, boolean isCheckmate) {
-    if (isCheckmate) {
-      buildSan.append(SanSymbol.CHECKMATE.getSymbol());
-    } else if (isCheck) {
-      buildSan.append(SanSymbol.CHECK.getSymbol());
+  public static void appendSanTerminalMarker(StringBuilder buildSan, SanTerminalMarker sanTerminalMarker) {
+    switch (sanTerminalMarker) {
+      case NONE:
+        break;
+      case CHECK:
+        buildSan.append(SanSymbol.CHECK.getSymbol());
+        break;
+      case CHECKMATE:
+        buildSan.append(SanSymbol.CHECKMATE.getSymbol());
+        break;
+      default:
+        throw new IllegalArgumentException();
     }
+  }
+
+  public static SanTerminalMarker calculateSanTerminalMarker(boolean isCheck, boolean isCheckmate) {
+    // attention - checkmate is also a check, so checkmate must be checked first
+    if (isCheckmate) {
+      return SanTerminalMarker.CHECKMATE;
+    }
+    // attenion - check must be checked after checkmate, because checkmate is also a check
+    if (isCheck) {
+      return SanTerminalMarker.CHECK;
+    }
+    return SanTerminalMarker.NONE;
   }
 }

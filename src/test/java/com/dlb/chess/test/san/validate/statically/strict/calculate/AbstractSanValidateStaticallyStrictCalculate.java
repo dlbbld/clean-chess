@@ -93,17 +93,17 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
   }
 
   static void populateMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model,
-      PromotionPieceType promotionPieceType, boolean isCapture, SanTerminalMarker checkmateOrCheck,
+      PromotionPieceType promotionPieceType, boolean isCapture, SanTerminalMarker sanTerminalMarker,
       PieceType movingPieceType) {
     final File fromFile = model.fromFile();
     final Rank fromRank = model.fromRank();
     final Square toSquare = model.toSquare();
 
     final String san = SanCalculate.calculateSan(fromFile, fromRank, toSquare, promotionPieceType, isCapture,
-        checkmateOrCheck, movingPieceType);
+        sanTerminalMarker, movingPieceType);
     final var sanType = SanCalculate.calculateSanType(isCapture, fromFile, fromRank, movingPieceType, promotionPieceType);
     final SanParse sanParse = new SanParse(sanType,
-        new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, checkmateOrCheck));
+        new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker));
     sanValidateMap.put(san, sanParse);
   }
 

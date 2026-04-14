@@ -8,10 +8,11 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 
 public class MoveToLan extends AbstractSan {
 
-  public static String calculateLanLastMove(LegalMove lastMove, boolean isCheck, boolean isCheckmate) {
+  public static String calculateLanLastMove(LegalMove lastMove, SanTerminalMarker sanTerminalMarker) {
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     // if castling we can return the LAN here already
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
@@ -61,7 +62,7 @@ public class MoveToLan extends AbstractSan {
       default:
         throw new IllegalArgumentException();
     }
-    appendCheckOrCheckmate(buildSan, isCheck, isCheckmate);
+    appendSanTerminalMarker(buildSan, sanTerminalMarker);
 
     return NonNullWrapperCommon.toString(buildSan);
   }

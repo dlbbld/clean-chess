@@ -16,18 +16,19 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.san.enums.SanSourceSpecification;
 import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 
 public class MoveToSan extends AbstractSan {
 
   public static String calculateSanLastMove(LegalMove lastMove, Set<LegalMove> legalMoveBeforeLastHalfMoveSet,
-      boolean isCheck, boolean isCheckmate) {
+      SanTerminalMarker sanTerminalMarker) {
 
     // first - check if castling move
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      return calculateSanLastMoveCastling(moveSpecification, isCheckmate, isCheck);
+      return calculateSanLastMoveCastling(moveSpecification, sanTerminalMarker);
     }
-    return calculateSanLastMoveNonCastling(lastMove, legalMoveBeforeLastHalfMoveSet, isCheck, isCheckmate);
+    return calculateSanLastMoveNonCastling(lastMove, legalMoveBeforeLastHalfMoveSet, sanTerminalMarker);
   }
 
   private static SanSourceSpecification calculateSourceSpecification(LegalMove legalMove,
@@ -64,8 +65,8 @@ public class MoveToSan extends AbstractSan {
     return SanSourceSpecification.SOURCE_REQUIRED_SQUARE;
   }
 
-  private static String calculateSanLastMoveCastling(MoveSpecification moveSpecification, boolean isCheckmate,
-      boolean isCheck) {
+  private static String calculateSanLastMoveCastling(MoveSpecification moveSpecification,
+      SanTerminalMarker sanTerminalMarker) {
     final StringBuilder buildSan = new StringBuilder();
     switch (moveSpecification.castlingMove()) {
       case KING_SIDE -> buildSan.append(CastlingConstants.SAN_CASTLING_KING_SIDE);
@@ -74,12 +75,12 @@ public class MoveToSan extends AbstractSan {
       default -> throw new IllegalArgumentException();
     }
 
-    appendCheckOrCheckmate(buildSan, isCheck, isCheckmate);
+    appendSanTerminalMarker(buildSan, sanTerminalMarker);
     return NonNullWrapperCommon.toString(buildSan);
   }
 
   private static String calculateSanLastMoveNonCastling(LegalMove lastMove,
-      Set<LegalMove> legalMoveBeforeLastHalfMoveSet, boolean isCheck, boolean isCheckmate) {
+      Set<LegalMove> legalMoveBeforeLastHalfMoveSet, SanTerminalMarker sanTerminalMarker) {
 
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     final Piece movingPiece = lastMove.movingPiece();
@@ -160,7 +161,7 @@ public class MoveToSan extends AbstractSan {
       default:
         throw new IllegalArgumentException();
     }
-    appendCheckOrCheckmate(buildSan, isCheck, isCheckmate);
+    appendSanTerminalMarker(buildSan, sanTerminalMarker);
     return NonNullWrapperCommon.toString(buildSan);
   }
 

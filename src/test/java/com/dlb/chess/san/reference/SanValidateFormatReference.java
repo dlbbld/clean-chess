@@ -13,9 +13,9 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -216,11 +216,11 @@ public abstract class SanValidateFormatReference {
       return SanTerminalMarker.NONE;
     }
     final var lastLetter = san.charAt(san.length() - 1);
-    if (SanSymbol.CHECKMATE.getSymbol() == lastLetter) {
-      return SanTerminalMarker.CHECKMATE;
-    }
     if (SanSymbol.CHECK.getSymbol() == lastLetter) {
       return SanTerminalMarker.CHECK;
+    }
+    if (SanSymbol.CHECKMATE.getSymbol() == lastLetter) {
+      return SanTerminalMarker.CHECKMATE;
     }
 
     throw new ProgrammingMistakeException(

@@ -74,8 +74,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     validateFormatBasic(san);
 
     // Strip the optional trailing check (+) or checkmate (#) symbol to get the core SAN string
-    final var checkmateOrCheck = parseSanTerminalMarker(san);
-    final var core = checkmateOrCheck == SanTerminalMarker.NONE ? san : san.substring(0, san.length() - 1);
+    final var sanTerminalMarker = parseSanTerminalMarker(san);
+    final var core = sanTerminalMarker == SanTerminalMarker.NONE ? san : san.substring(0, san.length() - 1);
 
     if (core.isEmpty()) {
       throw invalidFormat();
@@ -85,16 +85,16 @@ public abstract class SanValidateFormat extends AbstractSan {
 
     // Dispatch on the first character to the appropriate parser
     if (first == 'O') {
-      return parseCastling(core, checkmateOrCheck);
+      return parseCastling(core, sanTerminalMarker);
     }
     if (isFileLetter(first)) {
-      return parsePawnMove(core, checkmateOrCheck);
+      return parsePawnMove(core, sanTerminalMarker);
     }
     if (first == 'K') {
-      return parseKingMove(core, checkmateOrCheck);
+      return parseKingMove(core, sanTerminalMarker);
     }
     if (isPieceLetterRbnq(first)) {
-      return parseRbnqMove(core, checkmateOrCheck);
+      return parseRbnqMove(core, sanTerminalMarker);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
         Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
@@ -167,7 +167,7 @@ public abstract class SanValidateFormat extends AbstractSan {
 
   /**
    * Parses a castling SAN string: {@code "O-O"} (king-side) or {@code "O-O-O"} (queen-side). The optional trailing
-   * check/checkmate symbol has already been stripped into {@code checkmateOrCheck}.
+   * check/checkmate symbol has already been stripped into {@code sanTerminalMarker}.
    */
   private static SanParse parseCastling(final String core, final SanTerminalMarker sanTerminalMarker) {
     final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
@@ -377,8 +377,9 @@ public abstract class SanValidateFormat extends AbstractSan {
           throw new SanValidationException(SanValidationProblem.FORMAT_KING_DESTINATION,
               Message.getString("validation.san.format.king.destination"));
         }
-        yield new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE, new SanConversion(File.NONE, Rank.NONE,
-            Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE, sanTerminalMarker));
+        yield new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE,
+            new SanConversion(File.NONE, Rank.NONE, Square.calculate(parseFile(toFileChar), parseRank(toRankChar)),
+                PromotionPieceType.NONE, sanTerminalMarker));
       }
 
       case 4 -> {
