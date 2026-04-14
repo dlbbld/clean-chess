@@ -3,19 +3,19 @@ package com.dlb.chess.san.validate;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
 public abstract class SanValidateCheck extends AbstractSan {
 
-  public static void validateCheckmateOrCheck(ApiBoard board, CheckmateOrCheck sanCheckmateOrCheck,
+  public static void validateSanTerminalMarker(ApiBoard board, SanTerminalMarker sanSanTerminalMarker,
       MoveSpecification moveSpecification) {
-    final CheckmateOrCheck boardCheckmateOrCheck = calculateBoardCheckmateOrCheck(board, moveSpecification);
+    final SanTerminalMarker boardSanTerminalMarker = calculateBoardSanTerminalMarker(board, moveSpecification);
 
-    switch (sanCheckmateOrCheck) {
+    switch (sanSanTerminalMarker) {
       case CHECKMATE:
-        switch (boardCheckmateOrCheck) {
+        switch (boardSanTerminalMarker) {
           case CHECKMATE:
             return;
           case CHECK:
@@ -28,7 +28,7 @@ public abstract class SanValidateCheck extends AbstractSan {
             throw new IllegalArgumentException();
         }
       case CHECK:
-        switch (boardCheckmateOrCheck) {
+        switch (boardSanTerminalMarker) {
           case CHECKMATE:
             throw new SanValidationException(SanValidationProblem.CHECK_BUT_CHECKMATE,
                 "It's checkmate but check is specified");
@@ -42,7 +42,7 @@ public abstract class SanValidateCheck extends AbstractSan {
         }
         break;
       case NONE:
-        switch (boardCheckmateOrCheck) {
+        switch (boardSanTerminalMarker) {
           case CHECKMATE:
             throw new SanValidationException(SanValidationProblem.NONE_BUT_CHECKMATE,
                 "It's checkmate but that is not specified");
@@ -60,19 +60,19 @@ public abstract class SanValidateCheck extends AbstractSan {
     }
   }
 
-  private static CheckmateOrCheck calculateBoardCheckmateOrCheck(ApiBoard board, MoveSpecification moveSpecification) {
+  private static SanTerminalMarker calculateBoardSanTerminalMarker(ApiBoard board, MoveSpecification moveSpecification) {
     board.performMove(moveSpecification);
 
-    CheckmateOrCheck checkmateOrCheck;
+    SanTerminalMarker sanTerminalMarker;
     if (board.isCheckmate()) {
-      checkmateOrCheck = CheckmateOrCheck.CHECKMATE;
+      sanTerminalMarker = SanTerminalMarker.CHECKMATE;
     } else if (board.isCheck()) {
-      checkmateOrCheck = CheckmateOrCheck.CHECK;
+      sanTerminalMarker = SanTerminalMarker.CHECK;
     } else {
-      checkmateOrCheck = CheckmateOrCheck.NONE;
+      sanTerminalMarker = SanTerminalMarker.NONE;
     }
     board.unperformMove();
 
-    return checkmateOrCheck;
+    return sanTerminalMarker;
   }
 }

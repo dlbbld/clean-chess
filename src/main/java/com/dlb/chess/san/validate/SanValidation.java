@@ -44,7 +44,7 @@ public class SanValidation extends AbstractSan {
       throw new ProgrammingMistakeException("A mistake happened in the move construction");
     }
 
-    SanValidateCheck.validateCheckmateOrCheck(board, sanConversion.checkmateOrCheck(), moveSpecification);
+    SanValidateCheck.validateSanTerminalMarker(board, sanConversion.sanTerminalMarker(), moveSpecification);
 
     return moveSpecification;
   }

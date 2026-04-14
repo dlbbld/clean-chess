@@ -1,6 +1,6 @@
 package com.dlb.chess.san.enums;
 
-public enum CheckmateOrCheck {
+public enum SanTerminalMarker {
 
   NONE,
   CHECK,

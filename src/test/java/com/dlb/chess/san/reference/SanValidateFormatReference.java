@@ -13,7 +13,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanType;
@@ -57,7 +57,7 @@ public abstract class SanValidateFormatReference {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
-    final CheckmateOrCheck checkmateOrCheck = calculateCheckmateOrCheck(san, formatLength);
+    final SanTerminalMarker sanTerminalMarker = calculateSanTerminalMarker(san, formatLength);
 
     // castling needs a special treatment
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
@@ -66,7 +66,7 @@ public abstract class SanValidateFormatReference {
         return SanConversionCheck.IS_NO_MATCH;
       }
       final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-          checkmateOrCheck);
+          sanTerminalMarker);
       return new SanConversionCheck(true, sanConversion);
     }
     if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
@@ -75,7 +75,7 @@ public abstract class SanValidateFormatReference {
         return SanConversionCheck.IS_NO_MATCH;
       }
       final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-          checkmateOrCheck);
+          sanTerminalMarker);
       return new SanConversionCheck(true, sanConversion);
     }
 
@@ -202,7 +202,7 @@ public abstract class SanValidateFormatReference {
       throw new ProgrammingMistakeException(
           "Incorrect file/rank calculation - either file and rank are both set for non-castling moves or both not set for castling moves");
     }
-    final var sanConversion = new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, checkmateOrCheck);
+    final var sanConversion = new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker);
     return new SanConversionCheck(true, sanConversion);
   }
 
@@ -211,16 +211,16 @@ public abstract class SanValidateFormatReference {
     return lastLetter == SanSymbol.CHECK.getSymbol() || lastLetter == SanSymbol.CHECKMATE.getSymbol();
   }
 
-  private static CheckmateOrCheck calculateCheckmateOrCheck(String san, int formatLength) {
+  private static SanTerminalMarker calculateSanTerminalMarker(String san, int formatLength) {
     if (san.length() != formatLength + 1) {
-      return CheckmateOrCheck.NONE;
+      return SanTerminalMarker.NONE;
     }
     final var lastLetter = san.charAt(san.length() - 1);
     if (SanSymbol.CHECKMATE.getSymbol() == lastLetter) {
-      return CheckmateOrCheck.CHECKMATE;
+      return SanTerminalMarker.CHECKMATE;
     }
     if (SanSymbol.CHECK.getSymbol() == lastLetter) {
-      return CheckmateOrCheck.CHECK;
+      return SanTerminalMarker.CHECK;
     }
 
     throw new ProgrammingMistakeException(

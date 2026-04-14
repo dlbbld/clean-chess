@@ -7,14 +7,14 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanType;
 
 public class SanCalculate implements EnumConstants {
 
   public static String calculateSan(File fromFile, Rank fromRank, Square toSquare,
-      PromotionPieceType promotionPieceType, boolean isCapture, CheckmateOrCheck checkmateOrCheck,
+      PromotionPieceType promotionPieceType, boolean isCapture, SanTerminalMarker sanTerminalMarker,
       PieceType movingPieceType) {
     final StringBuilder san = new StringBuilder();
 
@@ -37,7 +37,7 @@ public class SanCalculate implements EnumConstants {
       san.append(SanSymbol.PROMOTION.getSymbol());
       san.append(promotionPieceType.getPieceType().getLetter());
     }
-    switch (checkmateOrCheck) {
+    switch (sanTerminalMarker) {
       case CHECKMATE:
         san.append(SanSymbol.CHECKMATE.getSymbol());
         break;

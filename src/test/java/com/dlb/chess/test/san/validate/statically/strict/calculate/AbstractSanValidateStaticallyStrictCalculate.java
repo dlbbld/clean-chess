@@ -13,7 +13,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.SanCalculate;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.model.SanValidationFromTo;
 
@@ -87,13 +87,13 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
 
   private static void populateMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model, boolean isCapture,
       PromotionPieceType promotionPieceType, PieceType movingPieceType) {
-    populateMap(sanValidateMap, model, promotionPieceType, isCapture, CheckmateOrCheck.NONE, movingPieceType);
-    populateMap(sanValidateMap, model, promotionPieceType, isCapture, CheckmateOrCheck.CHECKMATE, movingPieceType);
-    populateMap(sanValidateMap, model, promotionPieceType, isCapture, CheckmateOrCheck.CHECK, movingPieceType);
+    populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.NONE, movingPieceType);
+    populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECKMATE, movingPieceType);
+    populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECK, movingPieceType);
   }
 
   static void populateMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model,
-      PromotionPieceType promotionPieceType, boolean isCapture, CheckmateOrCheck checkmateOrCheck,
+      PromotionPieceType promotionPieceType, boolean isCapture, SanTerminalMarker checkmateOrCheck,
       PieceType movingPieceType) {
     final File fromFile = model.fromFile();
     final Rank fromRank = model.fromRank();
@@ -109,18 +109,18 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
 
   public static void populatePawnNonPromotionMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model,
       boolean isCapture) {
-    populateMap(sanValidateMap, model, PromotionPieceType.NONE, isCapture, CheckmateOrCheck.NONE, PAWN);
-    populateMap(sanValidateMap, model, PromotionPieceType.NONE, isCapture, CheckmateOrCheck.CHECKMATE, PAWN);
-    populateMap(sanValidateMap, model, PromotionPieceType.NONE, isCapture, CheckmateOrCheck.CHECK, PAWN);
+    populateMap(sanValidateMap, model, PromotionPieceType.NONE, isCapture, SanTerminalMarker.NONE, PAWN);
+    populateMap(sanValidateMap, model, PromotionPieceType.NONE, isCapture, SanTerminalMarker.CHECKMATE, PAWN);
+    populateMap(sanValidateMap, model, PromotionPieceType.NONE, isCapture, SanTerminalMarker.CHECK, PAWN);
   }
 
   public static void populatePawnPromotionMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model,
       boolean isCapture) {
     for (final PromotionPieceType promotionPieceType : PromotionPieceType.values()) {
       if (promotionPieceType != PromotionPieceType.NONE) {
-        populateMap(sanValidateMap, model, promotionPieceType, isCapture, CheckmateOrCheck.NONE, PAWN);
-        populateMap(sanValidateMap, model, promotionPieceType, isCapture, CheckmateOrCheck.CHECKMATE, PAWN);
-        populateMap(sanValidateMap, model, promotionPieceType, isCapture, CheckmateOrCheck.CHECK, PAWN);
+        populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.NONE, PAWN);
+        populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECKMATE, PAWN);
+        populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECK, PAWN);
       }
     }
   }

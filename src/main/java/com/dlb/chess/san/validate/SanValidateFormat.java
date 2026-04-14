@@ -14,7 +14,7 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -74,8 +74,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     validateFormatBasic(san);
 
     // Strip the optional trailing check (+) or checkmate (#) symbol to get the core SAN string
-    final var checkmateOrCheck = parseCheckmateOrCheck(san);
-    final var core = checkmateOrCheck == CheckmateOrCheck.NONE ? san : san.substring(0, san.length() - 1);
+    final var checkmateOrCheck = parseSanTerminalMarker(san);
+    final var core = checkmateOrCheck == SanTerminalMarker.NONE ? san : san.substring(0, san.length() - 1);
 
     if (core.isEmpty()) {
       throw invalidFormat();
@@ -100,15 +100,15 @@ public abstract class SanValidateFormat extends AbstractSan {
         Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
   }
 
-  private static CheckmateOrCheck parseCheckmateOrCheck(final String san) {
+  private static SanTerminalMarker parseSanTerminalMarker(final String san) {
     final var last = san.charAt(san.length() - 1);
     if (last == '#') {
-      return CheckmateOrCheck.CHECKMATE;
+      return SanTerminalMarker.CHECKMATE;
     }
     if (last == '+') {
-      return CheckmateOrCheck.CHECK;
+      return SanTerminalMarker.CHECK;
     }
-    return CheckmateOrCheck.NONE;
+    return SanTerminalMarker.NONE;
   }
 
   private static boolean isFileLetter(final char c) {
@@ -169,9 +169,9 @@ public abstract class SanValidateFormat extends AbstractSan {
    * Parses a castling SAN string: {@code "O-O"} (king-side) or {@code "O-O-O"} (queen-side). The optional trailing
    * check/checkmate symbol has already been stripped into {@code checkmateOrCheck}.
    */
-  private static SanParse parseCastling(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parseCastling(final String core, final SanTerminalMarker sanTerminalMarker) {
     final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-        checkmateOrCheck);
+        sanTerminalMarker);
     if (CastlingConstants.SAN_CASTLING_QUEEN_SIDE.equals(core)) {
       return new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE, sanConversion);
     }
@@ -182,7 +182,7 @@ public abstract class SanValidateFormat extends AbstractSan {
         Message.getString("validation.san.format.castling"));
   }
 
-  private static SanParse parsePawnMove(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parsePawnMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     // too short
     if (core.length() == 1) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_GENERAL,
@@ -192,17 +192,17 @@ public abstract class SanValidateFormat extends AbstractSan {
     final var secondChar = core.charAt(1);
 
     if (isRankDigit(secondChar)) {
-      return parsePawnForwardMove(core, checkmateOrCheck);
+      return parsePawnForwardMove(core, sanTerminalMarker);
     }
     if (isCaptureSymbol(secondChar)) {
-      return parsePawnCaptureMove(core, checkmateOrCheck);
+      return parsePawnCaptureMove(core, sanTerminalMarker);
     }
 
     throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER,
         Message.getString("validation.san.format.pawn.secondCharacter", NonNullWrapperCommon.toString(secondChar)));
   }
 
-  private static SanParse parsePawnForwardMove(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parsePawnForwardMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     final var length = core.length();
     final var firstChar = core.charAt(0);
     final var secondChar = core.charAt(1);
@@ -218,7 +218,7 @@ public abstract class SanValidateFormat extends AbstractSan {
 
       // valid
       return new SanParse(SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE, new SanConversion(File.NONE, Rank.NONE,
-          Square.calculate(parseFile(firstChar), parseRank(secondChar)), PromotionPieceType.NONE, checkmateOrCheck));
+          Square.calculate(parseFile(firstChar), parseRank(secondChar)), PromotionPieceType.NONE, sanTerminalMarker));
     }
 
     // promotion e.g. d8=Q
@@ -261,10 +261,10 @@ public abstract class SanValidateFormat extends AbstractSan {
     // valid
     return new SanParse(SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE,
         new SanConversion(File.NONE, Rank.NONE, Square.calculate(parseFile(firstChar), parseRank(secondChar)),
-            parsePromotionPiece(fourthChar), checkmateOrCheck));
+            parsePromotionPiece(fourthChar), sanTerminalMarker));
   }
 
-  private static SanParse parsePawnCaptureMove(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parsePawnCaptureMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     final var length = core.length();
     final var firstChar = core.charAt(0);
 
@@ -307,7 +307,7 @@ public abstract class SanValidateFormat extends AbstractSan {
 
       // valid
       return new SanParse(SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE, new SanConversion(parseFile(firstChar), Rank.NONE,
-          Square.calculate(parseFile(thirdChar), parseRank(fourthChar)), PromotionPieceType.NONE, checkmateOrCheck));
+          Square.calculate(parseFile(thirdChar), parseRank(fourthChar)), PromotionPieceType.NONE, sanTerminalMarker));
     }
 
     // promotion e.g. dxe8=Q
@@ -352,7 +352,7 @@ public abstract class SanValidateFormat extends AbstractSan {
     return new SanParse(SanType.PAWN_CAPTURING_PROMOTION_MOVE,
         new SanConversion(parseFile(firstChar), Rank.NONE,
             Square.calculate(parseFile(thirdChar), parseRank(fourthChar)), parsePromotionPiece(sixthChar),
-            checkmateOrCheck));
+            sanTerminalMarker));
   }
 
   /**
@@ -366,7 +366,7 @@ public abstract class SanValidateFormat extends AbstractSan {
    *   length 4: Kx[file][rank]  non-castling, capturing       e.g. Kxe5
    * </pre>
    */
-  private static SanParse parseKingMove(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parseKingMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     return switch (core.length()) {
 
       case 3 -> {
@@ -378,7 +378,7 @@ public abstract class SanValidateFormat extends AbstractSan {
               Message.getString("validation.san.format.king.destination"));
         }
         yield new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE, new SanConversion(File.NONE, Rank.NONE,
-            Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE, checkmateOrCheck));
+            Square.calculate(parseFile(toFileChar), parseRank(toRankChar)), PromotionPieceType.NONE, sanTerminalMarker));
       }
 
       case 4 -> {
@@ -407,7 +407,7 @@ public abstract class SanValidateFormat extends AbstractSan {
         }
         yield new SanParse(SanType.KING_NON_CASTLING_CAPTURING_MOVE,
             new SanConversion(File.NONE, Rank.NONE, Square.calculate(parseFile(thirdChar4), parseRank(fourthChar4)),
-                PromotionPieceType.NONE, checkmateOrCheck));
+                PromotionPieceType.NONE, sanTerminalMarker));
       }
 
       case 5 -> {
@@ -498,7 +498,7 @@ public abstract class SanValidateFormat extends AbstractSan {
    * <p>
    * All four piece types (Q, R, N, B) accept every combination above.
    */
-  private static SanParse parseRbnqMove(final String core, final CheckmateOrCheck checkmateOrCheck) {
+  private static SanParse parseRbnqMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     // Valid core lengths: piece(1) + middle(0–3) + destination(2) = 3 to 6
     if (core.length() < 3 || core.length() > 6) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_LENGTH,
@@ -521,24 +521,24 @@ public abstract class SanValidateFormat extends AbstractSan {
       case 0 ->
           // "Qe5" – no disambiguation, no capture
           new SanParse(pieceMoveSanType(piece, false, false, false),
-              new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
 
       case 1 -> {
         final var m = core.charAt(1);
         if (m == 'x') {
           // "Qxe5" – no disambiguation, capture
           yield new SanParse(pieceMoveSanType(piece, false, false, true),
-              new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
         }
         if (isFileLetter(m)) {
           // "Qae5" – file disambiguation, no capture
           yield new SanParse(pieceMoveSanType(piece, true, false, false),
-              new SanConversion(parseFile(m), Rank.NONE, toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(parseFile(m), Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
         }
         if (isRankDigit(m)) {
           // "Q2e5" – rank disambiguation, no capture
           yield new SanParse(pieceMoveSanType(piece, false, true, false),
-              new SanConversion(File.NONE, parseRank(m), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(File.NONE, parseRank(m), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
         }
         throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
             Message.getString("validation.san.format.piece.middle", NonNullWrapperCommon.toString(m)));
@@ -550,17 +550,17 @@ public abstract class SanValidateFormat extends AbstractSan {
         if (isFileLetter(m0) && m1 == 'x') {
           // "Qaxe5" – file disambiguation, capture
           yield new SanParse(pieceMoveSanType(piece, true, false, true),
-              new SanConversion(parseFile(m0), Rank.NONE, toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(parseFile(m0), Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
         }
         if (isRankDigit(m0) && m1 == 'x') {
           // "Q2xe5" – rank disambiguation, capture
           yield new SanParse(pieceMoveSanType(piece, false, true, true),
-              new SanConversion(File.NONE, parseRank(m0), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(File.NONE, parseRank(m0), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
         }
         if (isFileLetter(m0) && isRankDigit(m1)) {
           // "Qc3e5" – square disambiguation (file + rank), no capture
           yield new SanParse(pieceMoveSanType(piece, true, true, false),
-              new SanConversion(parseFile(m0), parseRank(m1), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+              new SanConversion(parseFile(m0), parseRank(m1), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
         }
         throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
             Message.getString("validation.san.format.piece.middle2", NonNullWrapperCommon.toString(m0),
@@ -578,7 +578,7 @@ public abstract class SanValidateFormat extends AbstractSan {
                   NonNullWrapperCommon.toString(m1), NonNullWrapperCommon.toString(m2)));
         }
         yield new SanParse(pieceMoveSanType(piece, true, true, true),
-            new SanConversion(parseFile(m0), parseRank(m1), toSquare, PromotionPieceType.NONE, checkmateOrCheck));
+            new SanConversion(parseFile(m0), parseRank(m1), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
       }
 
       default -> throw new ProgrammingMistakeException("Unreachable: mid is exactly 0-3 given the length check above");
