@@ -22,7 +22,7 @@ public class RepetitionOutput {
 
     final var countRepetition = RepetitionUtility.getCountRepetition(lastHalfMove, enPassantCaptureRule);
 
-    result.append("repPos=" + countRepetition + ": ");
+    result.append("repPos=").append(countRepetition).append(": ");
     for (var i = 0; i < halfMoveList.size(); i++) {
       final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
       result.append(HalfMoveUtility.calculateMoveNumberAndSanWithoutSpace(halfMove));

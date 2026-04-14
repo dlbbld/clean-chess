@@ -1,8 +1,5 @@
 package com.dlb.chess.san.reference;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -18,7 +15,7 @@ import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanLetter;
+import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -33,14 +30,6 @@ import com.dlb.chess.san.validate.SanValidateFormat;
  */
 public abstract class SanValidateFormatReference {
 
-  private static final List<String> ALLOWED_LAST_LETTER_SYMBOLS;
-
-  static {
-    ALLOWED_LAST_LETTER_SYMBOLS = new ArrayList<>();
-    ALLOWED_LAST_LETTER_SYMBOLS.add(SanLetter.CHECK.getLetter());
-    ALLOWED_LAST_LETTER_SYMBOLS.add(SanLetter.CHECKMATE.getLetter());
-  }
-
   public static SanParse validateFormat(String san) {
     SanValidateFormat.validateFormatBasic(san);
 
@@ -51,7 +40,8 @@ public abstract class SanValidateFormatReference {
       }
     }
 
-    throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format.nonSpecific"));
+    throw new SanValidationException(SanValidationProblem.FORMAT,
+        Message.getString("validation.san.format.nonSpecific"));
   }
 
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
@@ -135,8 +125,8 @@ public abstract class SanValidateFormatReference {
     // captureSymbolIndex
     final var captureSymbolIndex = properties.captureSymbolIndex();
     if (captureSymbolIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(captureSymbolIndex));
-      if (!SanLetter.CAPTURE.getLetter().equals(checkLetter)) {
+      final var checkLetter = san.charAt(captureSymbolIndex);
+      if (SanSymbol.CAPTURE.getSymbol() != checkLetter) {
         return SanConversionCheck.IS_NO_MATCH;
       }
     }
@@ -184,8 +174,8 @@ public abstract class SanValidateFormatReference {
     // promotionSymbolIndex
     final var promotionSymbolIndex = properties.promotionSymbolIndex();
     if (promotionSymbolIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(promotionSymbolIndex));
-      if (!SanLetter.PROMOTION.getLetter().equals(checkLetter)) {
+      final var checkLetter = san.charAt(promotionSymbolIndex);
+      if (SanSymbol.PROMOTION.getSymbol() != checkLetter) {
         return SanConversionCheck.IS_NO_MATCH;
       }
     }
@@ -217,19 +207,19 @@ public abstract class SanValidateFormatReference {
   }
 
   private static boolean calculateIsAllowedLastChar(String san) {
-    final var lastLetter = NonNullWrapperCommon.toString(san.charAt(san.length() - 1));
-    return ALLOWED_LAST_LETTER_SYMBOLS.contains(lastLetter);
+    final var lastLetter = san.charAt(san.length() - 1);
+    return lastLetter == SanSymbol.CHECK.getSymbol() || lastLetter == SanSymbol.CHECKMATE.getSymbol();
   }
 
   private static CheckmateOrCheck calculateCheckmateOrCheck(String san, int formatLength) {
     if (san.length() != formatLength + 1) {
       return CheckmateOrCheck.NONE;
     }
-    final var lastLetter = NonNullWrapperCommon.toString(san.charAt(san.length() - 1));
-    if (SanLetter.CHECKMATE.getLetter().equals(lastLetter)) {
+    final var lastLetter = san.charAt(san.length() - 1);
+    if (SanSymbol.CHECKMATE.getSymbol() == lastLetter) {
       return CheckmateOrCheck.CHECKMATE;
     }
-    if (SanLetter.CHECK.getLetter().equals(lastLetter)) {
+    if (SanSymbol.CHECK.getSymbol() == lastLetter) {
       return CheckmateOrCheck.CHECK;
     }
 

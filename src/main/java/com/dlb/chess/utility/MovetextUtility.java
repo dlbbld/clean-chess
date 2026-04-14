@@ -26,7 +26,7 @@ import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.utility.LenientParseTagUtility;
-import com.dlb.chess.san.enums.SanLetter;
+import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
 public abstract class MovetextUtility {
@@ -507,8 +507,8 @@ public abstract class MovetextUtility {
 
   private static void validateSanCharacters(String san) {
     for (var i = 0; i < san.length(); i++) {
-      final var currentLetter = NonNullWrapperCommon.toString(san.charAt(i));
-      if (!SanLetter.exists(currentLetter)) {
+      final var currentLetter = san.charAt(i);
+      if (!SanSymbol.exists(currentLetter)) {
         throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             SanValidationProblem.NONE,
             "The movetext is invalid because a SAN contains an invalid character of \"" + currentLetter + "\".");
@@ -627,9 +627,10 @@ public abstract class MovetextUtility {
 
   private static String normalizeCheckAndCheckmate(String partToAdapt) {
     String result = partToAdapt;
-    result = NonNullWrapperCommon.replace(result, " " + SanLetter.CHECK.getLetter(), SanLetter.CHECK.getLetter());
-    result = NonNullWrapperCommon.replace(result, " " + SanLetter.CHECKMATE.getLetter(),
-        SanLetter.CHECKMATE.getLetter());
+    result = NonNullWrapperCommon.replace(result, " " + SanSymbol.CHECK.getSymbolString(),
+        SanSymbol.CHECK.getSymbolString());
+    result = NonNullWrapperCommon.replace(result, " " + SanSymbol.CHECKMATE.getSymbolString(),
+        SanSymbol.CHECKMATE.getSymbolString());
     return result;
   }
 

@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanLetter;
+import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanType;
 
 public abstract class AbstractSan {
@@ -145,11 +145,11 @@ public abstract class AbstractSan {
     return false;
   }
 
-  public static void appendCheckOrCheckmate(StringBuilder buildSan, boolean isCheckmate, boolean isCheck) {
+  public static void appendCheckOrCheckmate(StringBuilder buildSan, boolean isCheck, boolean isCheckmate) {
     if (isCheckmate) {
-      buildSan.append(SanLetter.CHECKMATE.getLetter());
+      buildSan.append(SanSymbol.CHECKMATE.getSymbol());
     } else if (isCheck) {
-      buildSan.append(SanLetter.CHECK.getLetter());
+      buildSan.append(SanSymbol.CHECK.getSymbol());
     }
   }
 }

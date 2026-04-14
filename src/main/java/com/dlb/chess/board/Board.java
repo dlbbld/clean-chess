@@ -247,8 +247,8 @@ public class Board extends AbstractBoard {
     final Set<LegalMove> legalMoveBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveListSet,
         legalMoveListSet.size() - 2);
     this.sanList
-        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, isCheckmate, isCheck));
-    this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, isCheckmate, isCheck));
+        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, isCheck, isCheckmate));
+    this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, isCheck, isCheckmate));
 
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
     this.halfMoveList.add(halfMove);

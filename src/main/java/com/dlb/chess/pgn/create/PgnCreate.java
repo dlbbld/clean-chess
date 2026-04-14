@@ -147,12 +147,11 @@ public class PgnCreate {
       } else if (currentHavingMove == Side.WHITE) {
         // write following move numbers (before White move)
         final var fullMoveNumberPart = currentFullMoveNumber + ".";
-        result.append(" " + fullMoveNumberPart);
+        result.append(" ").append(fullMoveNumberPart);
       }
 
       final String san = halfMove.san();
-      result.append(" " + san);
-
+      result.append(" ").append(san);
       if (halfMove.moveSuffixAnnotation() != MoveSuffixAnnotation.NONE) {
         result.append(halfMove.moveSuffixAnnotation().getSuffix());
       }

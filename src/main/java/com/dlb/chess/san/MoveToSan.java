@@ -14,20 +14,20 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.san.enums.SanLetter;
 import com.dlb.chess.san.enums.SanSourceSpecification;
+import com.dlb.chess.san.enums.SanSymbol;
 
 public class MoveToSan extends AbstractSan {
 
   public static String calculateSanLastMove(LegalMove lastMove, Set<LegalMove> legalMoveBeforeLastHalfMoveSet,
-      boolean isCheckmate, boolean isCheck) {
+      boolean isCheck, boolean isCheckmate) {
 
     // first - check if castling move
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       return calculateSanLastMoveCastling(moveSpecification, isCheckmate, isCheck);
     }
-    return calculateSanLastMoveNonCastling(lastMove, legalMoveBeforeLastHalfMoveSet, isCheckmate, isCheck);
+    return calculateSanLastMoveNonCastling(lastMove, legalMoveBeforeLastHalfMoveSet, isCheck, isCheckmate);
   }
 
   private static SanSourceSpecification calculateSourceSpecification(LegalMove legalMove,
@@ -74,12 +74,12 @@ public class MoveToSan extends AbstractSan {
       default -> throw new IllegalArgumentException();
     }
 
-    appendCheckOrCheckmate(buildSan, isCheckmate, isCheck);
+    appendCheckOrCheckmate(buildSan, isCheck, isCheckmate);
     return NonNullWrapperCommon.toString(buildSan);
   }
 
   private static String calculateSanLastMoveNonCastling(LegalMove lastMove,
-      Set<LegalMove> legalMoveBeforeLastHalfMoveSet, boolean isCheckmate, boolean isCheck) {
+      Set<LegalMove> legalMoveBeforeLastHalfMoveSet, boolean isCheck, boolean isCheckmate) {
 
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     final Piece movingPiece = lastMove.movingPiece();
@@ -103,22 +103,22 @@ public class MoveToSan extends AbstractSan {
       case KING:
         buildSan.append(pieceLetter);
         if (isCapture) {
-          buildSan.append(SanLetter.CAPTURE.getLetter());
+          buildSan.append(SanSymbol.CAPTURE.getSymbol());
         }
         buildSan.append(toSquareName);
         break;
       case PAWN:
         if (!PromotionUtility.calculateIsPromotion(moveSpecification)) {
           if (isCapture) {
-            buildSan.append(fromFileLetter + SanLetter.CAPTURE.getLetter());
+            buildSan.append(fromFileLetter).append(SanSymbol.CAPTURE.getSymbol());
           }
           buildSan.append(toSquareName);
         } else {
           final var promotionPieceLetter = moveSpecification.promotionPieceType().getPieceType().getLetter();
           if (isCapture) {
-            buildSan.append(fromFileLetter + SanLetter.CAPTURE.getLetter());
+            buildSan.append(fromFileLetter).append(SanSymbol.CAPTURE.getSymbol());
           }
-          buildSan.append(toSquareName + SanLetter.PROMOTION.getLetter() + promotionPieceLetter);
+          buildSan.append(toSquareName).append(SanSymbol.PROMOTION.getSymbol()).append(promotionPieceLetter);
         }
         break;
       case ROOK:
@@ -151,7 +151,7 @@ public class MoveToSan extends AbstractSan {
         }
 
         if (isCapture) {
-          buildSan.append(SanLetter.CAPTURE.getLetter());
+          buildSan.append(SanSymbol.CAPTURE.getSymbol());
         }
 
         buildSan.append(toSquareName);
@@ -160,7 +160,7 @@ public class MoveToSan extends AbstractSan {
       default:
         throw new IllegalArgumentException();
     }
-    appendCheckOrCheckmate(buildSan, isCheckmate, isCheck);
+    appendCheckOrCheckmate(buildSan, isCheck, isCheckmate);
     return NonNullWrapperCommon.toString(buildSan);
   }
 

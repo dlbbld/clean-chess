@@ -102,11 +102,11 @@ public abstract class SanValidateFormat extends AbstractSan {
 
   private static CheckmateOrCheck parseCheckmateOrCheck(final String san) {
     final var last = san.charAt(san.length() - 1);
-    if (last == '+') {
-      return CheckmateOrCheck.CHECK;
-    }
     if (last == '#') {
       return CheckmateOrCheck.CHECKMATE;
+    }
+    if (last == '+') {
+      return CheckmateOrCheck.CHECK;
     }
     return CheckmateOrCheck.NONE;
   }
@@ -172,10 +172,10 @@ public abstract class SanValidateFormat extends AbstractSan {
   private static SanParse parseCastling(final String core, final CheckmateOrCheck checkmateOrCheck) {
     final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
         checkmateOrCheck);
-    if (core.equals(CastlingConstants.SAN_CASTLING_QUEEN_SIDE)) {
+    if (CastlingConstants.SAN_CASTLING_QUEEN_SIDE.equals(core)) {
       return new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE, sanConversion);
     }
-    if (core.equals(CastlingConstants.SAN_CASTLING_KING_SIDE)) {
+    if (CastlingConstants.SAN_CASTLING_KING_SIDE.equals(core)) {
       return new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE, sanConversion);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_CASTLING,
@@ -217,9 +217,8 @@ public abstract class SanValidateFormat extends AbstractSan {
       }
 
       // valid
-      return new SanParse(SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.calculate(parseFile(firstChar), parseRank(secondChar)),
-              PromotionPieceType.NONE, checkmateOrCheck));
+      return new SanParse(SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE, new SanConversion(File.NONE, Rank.NONE,
+          Square.calculate(parseFile(firstChar), parseRank(secondChar)), PromotionPieceType.NONE, checkmateOrCheck));
     }
 
     // promotion e.g. d8=Q

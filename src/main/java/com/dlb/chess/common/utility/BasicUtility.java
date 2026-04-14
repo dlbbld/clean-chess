@@ -148,7 +148,7 @@ public abstract class BasicUtility {
         // +1 for the space we also need to append
         final var block = blockArray[i];
         if (wrappedLine.length() + 1 + block.length() <= lineLength) {
-          wrappedLine.append(" " + block);
+          wrappedLine.append(" ").append(block);
         } else {
           result.add(NonNullWrapperCommon.toString(wrappedLine));
           wrappedLine = new StringBuilder();

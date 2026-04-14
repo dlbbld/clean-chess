@@ -2,7 +2,7 @@ package com.dlb.chess.san.enums;
 
 public enum CheckmateOrCheck {
 
-  CHECKMATE,
+  NONE,
   CHECK,
-  NONE
+  CHECKMATE;
 }

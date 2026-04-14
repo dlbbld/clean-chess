@@ -107,8 +107,8 @@ public class SanTrainerServer {
     final LegalMove randomMove = moveList.get(RANDOM.nextInt(moveList.size()));
 
     board.performMove(randomMove.moveSpecification());
-    final String blackSan = MoveToSan.calculateSanLastMove(randomMove, legalMovesBeforeBlack, board.isCheckmate(),
-        board.isCheck());
+    final String blackSan = MoveToSan.calculateSanLastMove(randomMove, legalMovesBeforeBlack, board.isCheck(),
+        board.isCheckmate());
 
     final String fen = board.getFen();
     final String from = randomMove.moveSpecification().fromSquare().getName();

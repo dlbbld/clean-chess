@@ -7,11 +7,11 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.san.enums.SanLetter;
+import com.dlb.chess.san.enums.SanSymbol;
 
 public class MoveToLan extends AbstractSan {
 
-  public static String calculateLanLastMove(LegalMove lastMove, boolean isCheckmate, boolean isCheck) {
+  public static String calculateLanLastMove(LegalMove lastMove, boolean isCheck, boolean isCheckmate) {
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     // if castling we can return the LAN here already
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
@@ -35,12 +35,12 @@ public class MoveToLan extends AbstractSan {
       case PAWN:
         buildSan.append(fromSquareName);
         if (isCapture) {
-          buildSan.append(SanLetter.CAPTURE.getLetter());
+          buildSan.append(SanSymbol.CAPTURE.getSymbol());
         }
         buildSan.append(toSquareName);
         if (PromotionUtility.calculateIsPromotion(moveSpecification)) {
           final var promotionPieceLetter = moveSpecification.promotionPieceType().getPieceType().getLetter();
-          buildSan.append(SanLetter.PROMOTION.getLetter());
+          buildSan.append(SanSymbol.PROMOTION.getSymbol());
           buildSan.append(promotionPieceLetter);
         }
         break;
@@ -53,7 +53,7 @@ public class MoveToLan extends AbstractSan {
         buildSan.append(pieceLetter);
         buildSan.append(fromSquareName);
         if (isCapture) {
-          buildSan.append(SanLetter.CAPTURE.getLetter());
+          buildSan.append(SanSymbol.CAPTURE.getSymbol());
         }
         buildSan.append(toSquareName);
         break;
@@ -61,7 +61,7 @@ public class MoveToLan extends AbstractSan {
       default:
         throw new IllegalArgumentException();
     }
-    appendCheckOrCheckmate(buildSan, isCheckmate, isCheck);
+    appendCheckOrCheckmate(buildSan, isCheck, isCheckmate);
 
     return NonNullWrapperCommon.toString(buildSan);
   }
