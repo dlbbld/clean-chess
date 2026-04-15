@@ -14,10 +14,7 @@ class TestSpecialReverseMethods implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testSquareDirections() {
-    for (final Square square : Square.values()) {
-      if (square == Square.NONE) {
-        continue;
-      }
+    for (final Square square : Square.REAL) {
       for (final Side side : Side.REAL) {
         if (Square.calculateHasLeftDiagonalSquare(side, square)) {
           final Square calculatedSquare = Square.calculateLeftDiagonalSquare(side, square);

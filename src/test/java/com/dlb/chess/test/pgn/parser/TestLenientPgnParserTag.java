@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.enums.ResultTagValue;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
 class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {

@@ -2,6 +2,7 @@ package com.dlb.chess.board.enums;
 
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.google.common.collect.ImmutableList;
 
 public enum Piece {
   WHITE_ROOK('R', PieceType.ROOK, Side.WHITE),
@@ -17,6 +18,10 @@ public enum Piece {
   BLACK_KING('k', PieceType.KING, Side.BLACK),
   BLACK_PAWN('p', PieceType.PAWN, Side.BLACK),
   NONE('\0', PieceType.NONE, Side.NONE);
+
+  @SuppressWarnings("null")
+  public static final ImmutableList<Piece> REAL = ImmutableList.of(WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN,
+      WHITE_KING, WHITE_PAWN, BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_PAWN);
 
   private final char letter;
   private final PieceType pieceType;

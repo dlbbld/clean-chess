@@ -32,12 +32,12 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       case KING_NON_CASTLING_NON_CAPTURING:
       case KING_CASTLING_QUEEN_SIDE:
       case KING_CASTLING_KING_SIDE:
-        throw new IllegalArgumentException();
+        return;
       case PAWN_CAPTURING_NON_PROMOTION:
       case PAWN_CAPTURING_PROMOTION:
       case PAWN_NON_CAPTURING_NON_PROMOTION:
       case PAWN_NON_CAPTURING_PROMOTION:
-        throw new IllegalArgumentException();
+        return;
       case PIECE_NON_CAPTURING_NEITHER:
       case PIECE_CAPTURING_NEITHER:
         return;

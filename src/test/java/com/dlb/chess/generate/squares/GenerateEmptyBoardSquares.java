@@ -46,10 +46,8 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
   private static void generateBoardSquareListCode() {
     final List<Square> allButEmpty = new ArrayList<>();
-    for (final Square fromSquare : Square.values()) {
-      if (fromSquare != Square.NONE) {
-        allButEmpty.add(fromSquare);
-      }
+    for (final Square fromSquare : Square.REAL) {
+      allButEmpty.add(fromSquare);
     }
     System.out.println(calculateSquareLiteralList(allButEmpty));
   }
@@ -62,7 +60,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     final List<String> variableNames = calculateVariableNames(pieceType);
 
     // generate static methods
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       System.out.println();
 
       final var methodName = generateMethodName(Side.NONE, fromSquare);
@@ -114,7 +112,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
         + " = NonNullWrapperCommon.newEnumMap(Square.class);\n" + "");
 
     // call the generated static methods
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       final var methodName = generateMethodName(Side.NONE, fromSquare);
       System.out.println(methodName + "(" + variableName + ");");
     }

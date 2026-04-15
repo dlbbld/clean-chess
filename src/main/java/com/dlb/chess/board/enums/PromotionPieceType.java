@@ -1,6 +1,7 @@
 package com.dlb.chess.board.enums;
 
 import com.dlb.chess.common.exceptions.NonePointerException;
+import com.google.common.collect.ImmutableList;
 
 public enum PromotionPieceType {
   ROOK(PieceType.ROOK),
@@ -8,6 +9,9 @@ public enum PromotionPieceType {
   BISHOP(PieceType.BISHOP),
   QUEEN(PieceType.QUEEN),
   NONE(PieceType.NONE);
+
+  @SuppressWarnings("null")
+  public static final ImmutableList<PromotionPieceType> REAL = ImmutableList.of(ROOK, KNIGHT, BISHOP, QUEEN);
 
   private final PieceType pieceType;
 

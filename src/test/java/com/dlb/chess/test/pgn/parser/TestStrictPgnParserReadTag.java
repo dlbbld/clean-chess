@@ -13,7 +13,7 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.common.utility.AbstractTestMovetextUtility;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
 class TestStrictPgnParserReadTag extends AbstractTestMovetextUtility {

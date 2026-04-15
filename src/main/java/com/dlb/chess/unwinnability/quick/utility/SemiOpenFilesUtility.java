@@ -13,10 +13,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 
 public abstract class SemiOpenFilesUtility implements EnumConstants {
   public static boolean calculateHasSemiOpenFile(StaticPosition staticPosition) {
-    for (final File file : File.values()) {
-      if (file == File.NONE) {
-        continue;
-      }
+    for (final File file : File.REAL) {
       if (calculateIsSemiOpenFile(staticPosition, file)) {
         return true;
       }

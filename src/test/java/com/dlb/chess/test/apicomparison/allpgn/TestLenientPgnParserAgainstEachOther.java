@@ -19,7 +19,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnRestrictTestConstants;
 
 class TestLenientPgnParserAgainstEachOther {
 
@@ -33,7 +33,7 @@ class TestLenientPgnParserAgainstEachOther {
   void test() throws Exception {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (PgnTestConstants.IS_RESTRICT_LENIENT_PGN_PARSER_API_AGAINST_EACH_OTHER_TEST) {
+        if (PgnRestrictTestConstants.IS_RESTRICT_LENIENT_PGN_PARSER_API_AGAINST_EACH_OTHER_TEST) {
           switch (testCaseList.pgnTest()) {
             case BASIC_CHECK_WHITE:
             case BASIC_CHECK_BLACK:

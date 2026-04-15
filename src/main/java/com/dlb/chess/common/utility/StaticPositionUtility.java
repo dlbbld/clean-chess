@@ -28,7 +28,7 @@ public abstract class StaticPositionUtility implements EnumConstants {
   }
 
   public static Square calculateKingSquare(StaticPosition staticPosition, Side side) {
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (!staticPosition.isEmpty(square)) {
         final Piece piece = staticPosition.get(square);
         if (piece.getPieceType() == KING && piece.getSide() == side) {
@@ -42,7 +42,7 @@ public abstract class StaticPositionUtility implements EnumConstants {
 
   // here we allow king off the board
   public static Square checkKingSquare(StaticPosition staticPosition, Side side) {
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (staticPosition.isOwnKing(square, side)) {
         return square;
       }

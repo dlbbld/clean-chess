@@ -384,7 +384,7 @@ public class GenerateKnightSanValidateStrict extends AbstractGenerateSanValidate
 
     // third and fourth innner quadrat
     // remaining squares
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       if (THIRD_QUADRAT_SQUARES.contains(toSquare) || FOURTH_QUADRAT_SQUARES.contains(toSquare)) {
         appendOnlyMove(resultSet, toSquare);
 
@@ -417,7 +417,7 @@ public class GenerateKnightSanValidateStrict extends AbstractGenerateSanValidate
   @Override
   Set<String> calculateEnumConstantFormal() {
     final Set<String> resultSet = new TreeSet<>();
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       final Set<EmptyBoardMove> emptyBoardMoveSet = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMovesTo(KNIGHT,
           toSquare);
       final List<Square> fromSquareList = calculateFromSquareList(emptyBoardMoveSet);

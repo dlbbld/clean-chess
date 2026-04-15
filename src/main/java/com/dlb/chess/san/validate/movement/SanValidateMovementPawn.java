@@ -49,8 +49,8 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
     final var isInvalid = !Rank.calculateIsValidRank(havingMove, destinationRank);
     if (isInvalid) {
       final var messageKey = switch (havingMove) {
-        case WHITE -> "validation.san.pawn.destinationRankWhite";
-        case BLACK -> "validation.san.pawn.destinationRankBlack";
+        case WHITE -> "validation.san.movement.pawn.destinationRankWhite";
+        case BLACK -> "validation.san.movement.pawn.destinationRankBlack";
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };

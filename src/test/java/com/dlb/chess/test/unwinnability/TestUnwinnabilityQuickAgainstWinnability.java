@@ -10,6 +10,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgntest.constants.PgnRestrictTestConstants;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
@@ -31,6 +32,10 @@ class TestUnwinnabilityQuickAgainstWinnability {
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
+        if (PgnRestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST
+            && !testCaseList.pgnTest().getIsBasicTest()) {
+          continue;
+        }
         if (!hasFound) {
           if (IS_START_FROM_PGN_FILE) {
             if (START_FROM_PGN_FILE_NAME.equals(testCase.pgnFileName())) {

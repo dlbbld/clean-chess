@@ -22,7 +22,7 @@ public abstract class AbstractThreatenSquares extends AbstractToSquares {
 
     final Set<Square> squareSet = new TreeSet<>();
 
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (staticPosition.isOwnPiece(fromSquare, havingMove)) {
         final Piece piece = staticPosition.get(fromSquare);
         switch (piece.getPieceType()) {

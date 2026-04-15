@@ -13,7 +13,7 @@ public class GenerateSquareFlip {
     System.out.println("return switch (square) {");
     System.out.println("case NONE -> throw new NonePointerException();");
 
-    for (final Square squareToFlip : Square.BOARD_SQUARE_LIST) {
+    for (final Square squareToFlip : Square.REAL) {
       final Square squareFlipped = Square.calculate(9 - squareToFlip.getFile().getNumber(),
           9 - squareToFlip.getRank().getNumber());
       System.out.println(

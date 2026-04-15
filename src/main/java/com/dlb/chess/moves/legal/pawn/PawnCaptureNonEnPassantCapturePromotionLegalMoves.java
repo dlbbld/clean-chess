@@ -27,10 +27,7 @@ class PawnCaptureNonEnPassantCapturePromotionLegalMoves extends PawnLegalMoves {
     for (final Square diagonalSquareTo : diagonalSquareToSet) {
       if (Rank.calculateIsPromotionRank(havingMove, diagonalSquareTo.getRank())
           && staticPosition.isOpponentPiece(diagonalSquareTo, havingMove)) {
-        for (final PromotionPieceType promotionPieceType : PromotionPieceType.values()) {
-          if (promotionPieceType == PromotionPieceType.NONE) {
-            continue;
-          }
+        for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
           final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare, diagonalSquareTo,
               promotionPieceType);
           if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {

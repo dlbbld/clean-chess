@@ -3,7 +3,7 @@ package com.dlb.chess.test.pgntest.enums;
 import java.nio.file.Path;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public enum PgnTest {
 

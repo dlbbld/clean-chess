@@ -251,10 +251,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
   }
 
   static boolean calculateIsUnwinnableAccordingLemma6(Side color, StaticPosition staticPosition) {
-    for (final SquareType squareType : SquareType.values()) {
-      if (squareType == SquareType.NONE) {
-        continue;
-      }
+    for (final SquareType squareType : SquareType.REAL) {
       if (MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
           && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
           && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
@@ -286,10 +283,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     // or the intended winner has just bishops of the same square color and
     // the intended loser does not have knights or bishops of the opposite color
 
-    for (final SquareType squareType : SquareType.values()) {
-      if (squareType == SquareType.NONE) {
-        continue;
-      }
+    for (final SquareType squareType : SquareType.REAL) {
       if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)
           && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
               .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType())) {

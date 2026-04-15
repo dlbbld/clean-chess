@@ -162,7 +162,7 @@ public abstract class EnumConversionUtility implements EnumConstants {
 
     final String name = getSquareName(squareApiCarlos);
 
-    for (final Square square : Square.values()) {
+    for (final Square square : Square.REAL) {
       if (square.getName().equals(name)) {
         return square;
       }
@@ -174,7 +174,7 @@ public abstract class EnumConversionUtility implements EnumConstants {
 
     final String name = getSquareName(squareApiCarlos);
 
-    for (final Square square : Square.values()) {
+    for (final Square square : Square.REAL) {
       if (square.getName().equals(name)) {
         return true;
       }

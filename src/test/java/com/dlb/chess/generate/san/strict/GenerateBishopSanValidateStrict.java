@@ -27,7 +27,7 @@ public class GenerateBishopSanValidateStrict extends AbstractGenerateSanValidate
 
     final Set<String> resultSet = new TreeSet<>();
 
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
 
       appendOnlyMove(resultSet, toSquare);
 
@@ -80,7 +80,7 @@ public class GenerateBishopSanValidateStrict extends AbstractGenerateSanValidate
   @Override
   Set<String> calculateEnumConstantFormal() {
     final Set<String> resultSet = new TreeSet<>();
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       final Set<EmptyBoardMove> emptyBoardMoveSet = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMovesTo(BISHOP,
           toSquare);
       final List<Square> fromSquareList = calculateFromSquareList(emptyBoardMoveSet);

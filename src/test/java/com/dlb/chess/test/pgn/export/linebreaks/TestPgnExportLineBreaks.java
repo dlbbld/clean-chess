@@ -13,7 +13,7 @@ import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.test.FileComparison;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class TestPgnExportLineBreaks {
 

@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
+import com.google.common.collect.ImmutableList;
 
 public enum MoveSuffixAnnotation {
 
@@ -15,6 +16,10 @@ public enum MoveSuffixAnnotation {
   INTERESTING_MOVE("!?"),
   BRILLIANT_MOVE("!!"),
   NONE("");
+
+  @SuppressWarnings("null")
+  public static final ImmutableList<MoveSuffixAnnotation> REAL = ImmutableList.of(MISTAKE, GOOD_MOVE, BLUNDER,
+      DUBIOUS_MOVE, INTERESTING_MOVE, BRILLIANT_MOVE);
 
   private final String suffix;
 
@@ -27,8 +32,8 @@ public enum MoveSuffixAnnotation {
   }
 
   public static boolean exists(String suffix) {
-    for (final MoveSuffixAnnotation suffixEnum : values()) {
-      if (suffixEnum != NONE && suffixEnum.getSuffix().equals(suffix)) {
+    for (final MoveSuffixAnnotation suffixEnum : REAL) {
+      if (suffixEnum.getSuffix().equals(suffix)) {
         return true;
       }
     }
@@ -39,8 +44,8 @@ public enum MoveSuffixAnnotation {
     if (!exists(suffix)) {
       throw new IllegalArgumentException("No enum exists for this suffix");
     }
-    for (final MoveSuffixAnnotation suffixEnum : values()) {
-      if (suffixEnum != NONE && suffixEnum.getSuffix().equals(suffix)) {
+    for (final MoveSuffixAnnotation suffixEnum : REAL) {
+      if (suffixEnum.getSuffix().equals(suffix)) {
         return suffixEnum;
       }
     }
@@ -49,10 +54,8 @@ public enum MoveSuffixAnnotation {
 
   public static String calculateValueList() {
     final List<String> list = new ArrayList<>();
-    for (final MoveSuffixAnnotation suffixEnum : values()) {
-      if (suffixEnum != NONE) {
-        list.add(suffixEnum.getSuffix());
-      }
+    for (final MoveSuffixAnnotation suffixEnum : REAL) {
+      list.add(suffixEnum.getSuffix());
     }
     return BasicUtility.calculateCommaSeparatedList(list);
   }

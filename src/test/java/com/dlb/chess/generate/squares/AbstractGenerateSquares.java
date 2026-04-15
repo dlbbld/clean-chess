@@ -24,7 +24,7 @@ public abstract class AbstractGenerateSquares implements EnumConstants {
     System.out.println(AbstractGenerateSquares.BEGIN_GENERATED_CODE);
 
     // generate static methods
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       System.out.println();
 
       final var methodName = generateMethodName(side, fromSquare);
@@ -64,7 +64,7 @@ public abstract class AbstractGenerateSquares implements EnumConstants {
         + " = NonNullWrapperCommon.newEnumMap(Square.class);");
 
     // call the generated static methods
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       final var methodName = generateMethodName(side, fromSquare);
       System.out.println(methodName + "(" + variableName + ");");
     }

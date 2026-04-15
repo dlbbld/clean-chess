@@ -55,7 +55,7 @@ public abstract class AbstractEmptyBoardSquares {
    */
   public static Set<EmptyBoardMove> calculatePawnEmptyBoardMoves(Side havingMove) {
     final Set<EmptyBoardMove> emptyBoardMoves = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves.addAll(calculateEmptyBoardMovesFromSet(fromSquare,
           PawnAnyAdvanceEmptyBoardSquares.getPawnSquares(havingMove, fromSquare)));
     }
@@ -68,7 +68,7 @@ public abstract class AbstractEmptyBoardSquares {
 
   private static Set<EmptyBoardMove> calculateRookEmptyBoardMoves() {
     final Set<EmptyBoardMove> emptyBoardMoves = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves
           .addAll(calculateOrthogonalEmptyBoardMoves(fromSquare, RookEmptyBoardSquares.getRookSquares(fromSquare)));
     }
@@ -81,7 +81,7 @@ public abstract class AbstractEmptyBoardSquares {
 
   private static Set<EmptyBoardMove> calculateKnightEmptyBoardMoves() {
     final Set<EmptyBoardMove> emptyBoardMoves = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves
           .addAll(calculateEmptyBoardMovesFromSet(fromSquare, KnightEmptyBoardSquares.getKnightSquares(fromSquare)));
     }
@@ -94,7 +94,7 @@ public abstract class AbstractEmptyBoardSquares {
 
   private static Set<EmptyBoardMove> calculateBishopEmptyBoardMoves() {
     final Set<EmptyBoardMove> emptyBoardMoves = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves
           .addAll(calculateDiagonalEmptyBoardMoves(fromSquare, BishopEmptyBoardSquares.getBishopSquares(fromSquare)));
     }
@@ -112,11 +112,11 @@ public abstract class AbstractEmptyBoardSquares {
 
   private static Set<EmptyBoardMove> calculateQueenEmptyBoardMoves() {
     final Set<EmptyBoardMove> emptyBoardMoves = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves
           .addAll(calculateOrthogonalEmptyBoardMoves(fromSquare, QueenEmptyBoardSquares.getQueenSquares(fromSquare)));
     }
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves
           .addAll(calculateDiagonalEmptyBoardMoves(fromSquare, QueenEmptyBoardSquares.getQueenSquares(fromSquare)));
     }
@@ -129,7 +129,7 @@ public abstract class AbstractEmptyBoardSquares {
 
   private static Set<EmptyBoardMove> calculateKingEmptyBoardMoves() {
     final Set<EmptyBoardMove> emptyBoardMoves = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       emptyBoardMoves.addAll(
           calculateEmptyBoardMovesFromSet(fromSquare, KingNonCastlingEmptyBoardSquares.getKingSquares(fromSquare)));
     }

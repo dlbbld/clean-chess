@@ -34,10 +34,7 @@ class SemiStaticFunctions {
     final Set<Square> result = new TreeSet<>();
 
     final Set<Square> regionPiece = SemiStaticFunctions.region(piecePlacement, ms);
-    for (final Square square : Square.values()) {
-      if (square == Square.NONE) {
-        continue;
-      }
+    for (final Square square : Square.REAL) {
       final Set<Square> predecessorsCaptureSet = MobilityFunctions.predecessorsCapture(piecePlacement, square);
 
       if (!BasicUtility.calculateIsDisjoint(predecessorsCaptureSet, regionPiece)) {

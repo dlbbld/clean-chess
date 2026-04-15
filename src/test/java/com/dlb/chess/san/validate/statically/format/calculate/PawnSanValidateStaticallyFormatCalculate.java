@@ -24,10 +24,7 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
       }
     }
 
-    for (final File fromFile : File.values()) {
-      if (fromFile == File.NONE) {
-        continue;
-      }
+    for (final File fromFile : File.REAL) {
       for (final SanValidationFromTo model : calculateWithFile()) {
         if (isPromotionRank(model)) {
           populatePawnPromotionMap(sanValidateMap, model, true);

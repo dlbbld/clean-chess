@@ -11,7 +11,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserException {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon

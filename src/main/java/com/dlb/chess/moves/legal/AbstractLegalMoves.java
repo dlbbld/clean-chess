@@ -59,7 +59,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
       CastlingRight castlingRight, final Square enPassantCaptureTargetSquare) {
 
     final Set<LegalMove> resultSet = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (staticPosition.isOwnPiece(fromSquare, havingMove)) {
         final Set<LegalMove> currentMovingPieceSet = calculateLegalMovesBottomUp(staticPosition,
             enPassantCaptureTargetSquare, castlingRight, havingMove, fromSquare);

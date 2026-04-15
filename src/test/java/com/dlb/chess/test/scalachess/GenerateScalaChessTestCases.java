@@ -210,7 +210,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   }
 
   protected static void generateFixedScalaSquareRelatedCode() {
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       System.out.println("case \"" + square.getName() + "\" => return Pos." + square + "");
     }
   }

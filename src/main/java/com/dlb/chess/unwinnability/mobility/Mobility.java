@@ -36,10 +36,7 @@ public class Mobility {
 
     // set MP->s := 0
     final List<PiecePlacement> piecePlacementList = new ArrayList<>();
-    for (final Square square : Square.values()) {
-      if (square == Square.NONE) {
-        continue;
-      }
+    for (final Square square : Square.REAL) {
       if (!board.getStaticPosition().isEmpty(square)) {
         final Piece piece = board.getStaticPosition().get(square);
         final PiecePlacement p = new PiecePlacement(piece.getPieceType(), piece.getSide(), square);
@@ -49,10 +46,7 @@ public class Mobility {
 
     final var mobility = new MobilitySolution();
     for (final PiecePlacement piecePlacement : piecePlacementList) {
-      for (final Square square : Square.values()) {
-        if (square == Square.NONE) {
-          continue;
-        }
+      for (final Square square : Square.REAL) {
         mobility.put(piecePlacement, square, VariableState.ZERO);
       }
     }
@@ -66,10 +60,7 @@ public class Mobility {
     // Rcs := 0
     final var reachability = new Reachability();
     for (final Side side : Side.REAL) {
-      for (final Square square : Square.values()) {
-        if (square == Square.NONE) {
-          continue;
-        }
+      for (final Square square : Square.REAL) {
         reachability.put(side, square, VariableState.ZERO);
       }
     }
@@ -94,8 +85,8 @@ public class Mobility {
 
         // clearable by moving
         var isClearabilityForMoving = false;
-        for (final Square evaluateToSquare : Square.values()) {
-          if (evaluateToSquare == Square.NONE || evaluateToSquare == candidateClearability.squareOriginal()) {
+        for (final Square evaluateToSquare : Square.REAL) {
+          if (evaluateToSquare == candidateClearability.squareOriginal()) {
             continue;
           }
           if (mobility.get(candidateClearability, evaluateToSquare) == VariableState.ONE) {

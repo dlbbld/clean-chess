@@ -36,7 +36,7 @@ public class GenerateRookSanValidateStrict extends AbstractGenerateSanValidateSt
     }
 
     // remaining squares
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       if (!processedList.contains(toSquare)) {
         appendOnlyMove(resultSet, toSquare);
         appendMoveWithAllFiles(resultSet, toSquare);
@@ -49,7 +49,7 @@ public class GenerateRookSanValidateStrict extends AbstractGenerateSanValidateSt
   @Override
   Set<String> calculateEnumConstantFormal() {
     final Set<String> resultSet = new TreeSet<>();
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       final Set<EmptyBoardMove> emptyBoardMoveSet = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMovesTo(ROOK,
           toSquare);
       final List<Square> fromSquareList = calculateFromSquareList(emptyBoardMoveSet);

@@ -2,6 +2,7 @@ package com.dlb.chess.board.enums;
 
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.google.common.collect.ImmutableList;
 
 public enum Rank {
   RANK_1(1),
@@ -13,6 +14,10 @@ public enum Rank {
   RANK_7(7),
   RANK_8(8),
   NONE(0);
+
+  @SuppressWarnings("null")
+  public static final ImmutableList<Rank> REAL = ImmutableList.of(RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6,
+      RANK_7, RANK_8);
 
   private final int number;
 

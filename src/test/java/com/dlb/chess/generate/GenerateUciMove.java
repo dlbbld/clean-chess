@@ -17,7 +17,7 @@ public class GenerateUciMove implements EnumConstants {
   public static void main(String[] args) {
 
     System.out.println("// Non promotion moves");
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
 
       // rook
       {
@@ -70,10 +70,7 @@ public class GenerateUciMove implements EnumConstants {
 
   private static void printPromotionMoves(Square fromSquare, Set<Square> toSquareSet) {
     for (final Square toSquare : toSquareSet) {
-      for (final PromotionPieceType promotionPieceType : PromotionPieceType.values()) {
-        if (promotionPieceType == PromotionPieceType.NONE) {
-          continue;
-        }
+      for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
         printMoveMinimum(fromSquare, toSquare, promotionPieceType);
       }
     }

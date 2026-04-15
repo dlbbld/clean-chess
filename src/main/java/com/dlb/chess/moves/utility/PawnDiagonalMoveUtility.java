@@ -12,7 +12,7 @@ public abstract class PawnDiagonalMoveUtility {
   public static Set<PawnDiagonalBoardMove> calculatePawnDiagonalMoves(Side side) {
     final Set<PawnDiagonalBoardMove> diagonalBoardMoveSetSide = new TreeSet<>();
 
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       final Set<Square> diagonalSquareSet = PawnDiagonalSquares.getPawnDiagonalSquares(side, fromSquare);
       for (final Square diagonalSquare : diagonalSquareSet) {
         diagonalBoardMoveSetSide.add(new PawnDiagonalBoardMove(fromSquare, diagonalSquare));
