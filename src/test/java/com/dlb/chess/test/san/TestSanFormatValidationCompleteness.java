@@ -119,10 +119,7 @@ class TestSanFormatValidationCompleteness {
         .entrySet(SanValidateStaticallyFormat.getSanValidationMap())) {
       final String san = NonNullWrapperCommon.getKey(entry);
       final SanParse expected = NonNullWrapperCommon.getValue(entry);
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         final SanParse actual = SanValidateFormat.validateFormat(san, side);
         assertEquals(expected, actual, "validateFormat result differs from static map for SAN: \"" + san + "\"");
       }
@@ -209,10 +206,7 @@ class TestSanFormatValidationCompleteness {
 
     boolean isValid;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
       isValid = true;

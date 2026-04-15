@@ -41,15 +41,13 @@ public class PawnWall {
         return false;
       }
       // if one side has a bishop we only allow only opponent pawns of different colour
-      for (final Side side : Side.values()) {
-        if (side != Side.NONE) {
-          for (final SquareType squareType : SquareType.values()) {
-            if (squareType != SquareType.NONE
-                && calculateHasOneOrMultipleBishopForSpecifiedColor(side, staticPosition, squareType)
-                && !calculateHasOnlyPawnsForSpecifiedColor(side.getOppositeSide(), staticPosition,
-                    squareType.getOppositeSquareType())) {
-              return false;
-            }
+      for (final Side side : Side.BOTH) {
+        for (final SquareType squareType : SquareType.values()) {
+          if (squareType != SquareType.NONE
+              && calculateHasOneOrMultipleBishopForSpecifiedColor(side, staticPosition, squareType)
+              && !calculateHasOnlyPawnsForSpecifiedColor(side.getOppositeSide(), staticPosition,
+                  squareType.getOppositeSquareType())) {
+            return false;
           }
         }
       }

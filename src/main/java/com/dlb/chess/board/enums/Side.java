@@ -3,12 +3,16 @@ package com.dlb.chess.board.enums;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.internationalization.Message;
+import com.google.common.collect.ImmutableList;
 
 public enum Side {
 
   WHITE(true, false, Message.getString("color.white.name"), "w"),
   BLACK(false, true, Message.getString("color.black.name"), "b"),
   NONE(false, false, "", " ");
+
+  @SuppressWarnings("null")
+  public static final ImmutableList<Side> BOTH = ImmutableList.of(WHITE, BLACK);
 
   private final boolean isWhite;
   private final boolean isBlack;
@@ -59,8 +63,8 @@ public enum Side {
   }
 
   public static boolean exists(String fenLetter) {
-    for (final Side side : values()) {
-      if (side != NONE && side.getFenLetter().equals(fenLetter)) {
+    for (final Side side : BOTH) {
+      if (side.getFenLetter().equals(fenLetter)) {
         return true;
       }
     }
@@ -71,8 +75,8 @@ public enum Side {
     if (!exists(fenLetter)) {
       throw new IllegalArgumentException("No piece for this letter exists");
     }
-    for (final Side side : values()) {
-      if (side != NONE && side.getFenLetter().equals(fenLetter)) {
+    for (final Side side : BOTH) {
+      if (side.getFenLetter().equals(fenLetter)) {
         return side;
       }
     }

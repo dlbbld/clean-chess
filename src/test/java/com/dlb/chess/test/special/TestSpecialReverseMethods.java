@@ -18,10 +18,7 @@ class TestSpecialReverseMethods implements EnumConstants {
       if (square == Square.NONE) {
         continue;
       }
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         if (Square.calculateHasLeftDiagonalSquare(side, square)) {
           final Square calculatedSquare = Square.calculateLeftDiagonalSquare(side, square);
           assertTrue(Square.calculateIsLeftDiagonalSquare(side, square, calculatedSquare));

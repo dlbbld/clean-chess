@@ -75,10 +75,7 @@ class TestSanValidateFormatKingDisambiguation {
   private static void checkException(String san, SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
       isException = false;

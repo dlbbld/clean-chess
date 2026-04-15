@@ -65,10 +65,7 @@ public class Mobility {
 
     // Rcs := 0
     final var reachability = new Reachability();
-    for (final Side side : Side.values()) {
-      if (side == Side.NONE) {
-        continue;
-      }
+    for (final Side side : Side.BOTH) {
       for (final Square square : Square.values()) {
         if (square == Square.NONE) {
           continue;

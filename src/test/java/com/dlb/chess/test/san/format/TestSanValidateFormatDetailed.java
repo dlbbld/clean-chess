@@ -239,10 +239,7 @@ class TestSanValidateFormatDetailed {
   private static void checkException(String san, SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
       isException = false;
@@ -257,10 +254,7 @@ class TestSanValidateFormatDetailed {
   private static void checkValid(String san) {
     var isException = false;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
     } catch (@SuppressWarnings("unused") final SanValidationException e) {

@@ -91,10 +91,7 @@ class TestSanValidateFormatFirstCharacter {
   private static void checkExceptionFormat(String san) {
     boolean isException;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
       isException = false;
@@ -109,10 +106,7 @@ class TestSanValidateFormatFirstCharacter {
   private static void checkException(String san) {
     boolean isException;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
       isException = false;
@@ -127,10 +121,7 @@ class TestSanValidateFormatFirstCharacter {
   private static void checkValid(String san) {
     var isException = false;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
     } catch (@SuppressWarnings("unused") final SanValidationException e) {

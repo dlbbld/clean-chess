@@ -564,10 +564,7 @@ class TestSanValidateFormat {
   private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
     final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
 
-    for (final Side side : Side.values()) {
-      if (side == Side.NONE) {
-        continue;
-      }
+    for (final Side side : Side.BOTH) {
 
       final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san, side);
       assertEquals(expectedSanExtract, calculatedSanExtract);
@@ -594,10 +591,7 @@ class TestSanValidateFormat {
       SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         SanValidateFormat.validateFormat(san, side);
       }
       isException = false;

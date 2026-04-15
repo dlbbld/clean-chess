@@ -33,10 +33,7 @@ class TestSanValidateNonPositionRelatedSupersetStrict extends AbstractTestSanVal
 
     boolean isRuntimeException;
     try {
-      for (final Side side : Side.values()) {
-        if (side == Side.NONE) {
-          continue;
-        }
+      for (final Side side : Side.BOTH) {
         final var sanParse = SanValidateFormat.validateFormat(san, side);
         assertEquals(sanParse, staticResult);
       }
