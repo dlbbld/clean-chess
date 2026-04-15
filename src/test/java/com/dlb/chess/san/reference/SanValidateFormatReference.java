@@ -10,7 +10,6 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanFormat;
@@ -82,7 +81,7 @@ public abstract class SanValidateFormatReference {
     // movingPieceTypeIndex
     final var movingPieceTypeIndex = properties.movingPieceTypeIndex();
     if (!properties.isPawn()) {
-      final var checkMovingPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(movingPieceTypeIndex));
+      final var checkMovingPieceTypeLetter = san.charAt(movingPieceTypeIndex);
       if (!NotationMovingPiece.exists(checkMovingPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -96,7 +95,7 @@ public abstract class SanValidateFormatReference {
     final File fromFile;
     final var fromFileIndex = properties.fromFileIndex();
     if (fromFileIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(fromFileIndex));
+      final var checkLetter = san.charAt(fromFileIndex);
       if (!File.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -109,15 +108,11 @@ public abstract class SanValidateFormatReference {
     final Rank fromRank;
     final var fromRankIndex = properties.fromRankIndex();
     if (fromRankIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(fromRankIndex));
-      if (!BasicUtility.isInt(checkLetter)) {
+      final var checkLetter = san.charAt(fromRankIndex);
+      if (!Rank.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
-      final var checkRankNumber = BasicUtility.parseInt(checkLetter);
-      if (!Rank.exists(checkRankNumber)) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
-      fromRank = Rank.calculateRank(checkRankNumber);
+      fromRank = Rank.calculateRank(checkLetter);
     } else {
       fromRank = Rank.NONE;
     }
@@ -135,7 +130,7 @@ public abstract class SanValidateFormatReference {
     final File toFile;
     final var toFileIndex = properties.toFileIndex();
     if (toFileIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(toFileIndex));
+      final var checkLetter = san.charAt(toFileIndex);
       if (!File.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -148,15 +143,11 @@ public abstract class SanValidateFormatReference {
     final Rank toRank;
     final var toRankIndex = properties.toRankIndex();
     if (toRankIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(toRankIndex));
-      if (!BasicUtility.isInt(checkLetter)) {
+      final var checkLetter = san.charAt(toRankIndex);
+      if (!Rank.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
-      final var checkRankNumber = BasicUtility.parseInt(checkLetter);
-      if (!Rank.exists(checkRankNumber)) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
-      toRank = Rank.calculateRank(checkRankNumber);
+      toRank = Rank.calculateRank(checkLetter);
     } else {
       toRank = Rank.NONE;
     }
@@ -184,7 +175,7 @@ public abstract class SanValidateFormatReference {
     final PromotionPieceType promotionPieceType;
     final var promotionPieceTypeIndex = properties.promotionPieceTypeIndex();
     if (promotionPieceTypeIndex != -1) {
-      final var checkPromotionPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(promotionPieceTypeIndex));
+      final var checkPromotionPieceTypeLetter = san.charAt(promotionPieceTypeIndex);
       if (!NotationPromotionPiece.exists(checkPromotionPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }

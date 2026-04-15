@@ -32,7 +32,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         final File pawnFile = sanConversion.toSquare().getFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
           throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
-              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
+              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetterString()));
         }
         validatePawnDestinationRank(havingMove, sanConversion.toSquare().getRank());
         validatePawnFromSquareNonCapturing(havingMove, sanConversion.toSquare(), staticPosition);
@@ -44,7 +44,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         final File pawnFile = sanConversion.fromFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
           throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
-              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetter()));
+              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetterString()));
         }
         validatePawnDestinationRank(havingMove, sanConversion.toSquare().getRank());
         validatePawnCapturingDiagonal(havingMove, sanConversion.fromFile(), sanConversion.toSquare().getFile());
@@ -65,7 +65,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
             sanConversion.fromFile())) {
           throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_PIECE_EXISTS,
               Message.getString("validation.san.notPawn.specification.file.noPieceExists", havingMove.getName(),
-                  movingPieceType.getName(), sanConversion.fromFile().getLetter()));
+                  movingPieceType.getName(), sanConversion.fromFile().getLetterString()));
         }
         break;
       case PIECE_CAPTURING_RANK:
@@ -119,8 +119,8 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         final File leftFile = File.calculateLeftFile(havingMove, fromFile);
         final File rightFile = File.calculateRightFile(havingMove, fromFile);
         throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL,
-            Message.getString("validation.san.pawn.capturingDiagonal", fromFile.getLetter(), leftFile.getLetter(),
-                rightFile.getLetter()));
+            Message.getString("validation.san.pawn.capturingDiagonal", fromFile.getLetterString(),
+                leftFile.getLetterString(), rightFile.getLetterString()));
       }
       // pawn on edge file (a or h) — only one adjacent file
       final File adjacentFile;
@@ -129,8 +129,8 @@ public abstract class SanValidatePieceExists extends AbstractSan {
       } else {
         adjacentFile = File.calculateRightFile(havingMove, fromFile);
       }
-      throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL, Message
-          .getString("validation.san.pawn.capturingDiagonalEdge", fromFile.getLetter(), adjacentFile.getLetter()));
+      throw new SanValidationException(SanValidationProblem.PAWN_CAPTURING_DIAGONAL, Message.getString(
+          "validation.san.pawn.capturingDiagonalEdge", fromFile.getLetterString(), adjacentFile.getLetterString()));
     }
   }
 

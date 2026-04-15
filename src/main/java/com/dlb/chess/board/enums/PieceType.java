@@ -1,24 +1,23 @@
 package com.dlb.chess.board.enums;
 
-import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.internationalization.Message;
 
 public enum PieceType {
-  ROOK(ChessConstants.ROOK_LETTER, 5, Message.getString("pieceType.rook.name")),
-  KNIGHT(ChessConstants.KNIGHT_LETTER, 3, Message.getString("pieceType.knight.name")),
-  BISHOP(ChessConstants.BISHOP_LETTER, 3, Message.getString("pieceType.bishop.name")),
-  QUEEN(ChessConstants.QUEEN_LETTER, 9, Message.getString("pieceType.queen.name")),
+  ROOK('R', 5, Message.getString("pieceType.rook.name")),
+  KNIGHT('N', 3, Message.getString("pieceType.knight.name")),
+  BISHOP('B', 3, Message.getString("pieceType.bishop.name")),
+  QUEEN('Q', 9, Message.getString("pieceType.queen.name")),
   // value is only used for move ordering for unwinnability
-  KING(ChessConstants.KING_LETTER, 0, Message.getString("pieceType.king.name")),
-  PAWN(ChessConstants.PAWN_LETTER, 1, Message.getString("pieceType.pawn.name")),
-  NONE(" ", -1, "");
+  KING('K', 0, Message.getString("pieceType.king.name")),
+  PAWN('P', 1, Message.getString("pieceType.pawn.name")),
+  NONE('\0', -1, "");
 
-  private final String letter;
+  private final char letter;
   private final int value;
   private final String name;
 
-  public String getLetter() {
+  public char getLetter() {
     check();
     return letter;
   }
@@ -33,7 +32,7 @@ public enum PieceType {
     return name;
   }
 
-  PieceType(String letter, int value, String name) {
+  PieceType(char letter, int value, String name) {
     this.letter = letter;
     this.value = value;
     this.name = name;

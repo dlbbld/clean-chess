@@ -7,7 +7,6 @@ import java.util.TreeSet;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
@@ -133,7 +132,7 @@ public class GenerateUciMove implements EnumConstants {
     enumElement.append(fromSquare.getName());
     enumElement.append(toSquare.getName());
     if (promotionPieceType != PromotionPieceType.NONE) {
-      final var promotionPieceTypeLetterLowerCase = NonNullWrapperCommon
+      final var promotionPieceTypeLetterLowerCase = Character
           .toLowerCase(promotionPieceType.getPieceType().getLetter());
       enumElement.append(promotionPieceTypeLetterLowerCase);
     }

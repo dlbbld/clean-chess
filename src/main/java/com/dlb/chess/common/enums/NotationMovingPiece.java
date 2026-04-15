@@ -20,21 +20,21 @@ public enum NotationMovingPiece {
     this.pieceType = pieceType;
   }
 
-  public static boolean exists(String movingPieceLetter) {
+  public static boolean exists(char movingPieceLetter) {
     for (final NotationMovingPiece movingPiece : values()) {
-      if (movingPiece.getPieceType().getLetter().equals(movingPieceLetter)) {
+      if (movingPiece.getPieceType().getLetter() == movingPieceLetter) {
         return true;
       }
     }
     return false;
   }
 
-  public static NotationMovingPiece calculate(String movingPieceLetter) {
+  public static NotationMovingPiece calculate(char movingPieceLetter) {
     if (!exists(movingPieceLetter)) {
       throw new IllegalArgumentException("For this letter no corresponding moving piece exists");
     }
     for (final NotationMovingPiece movingPiece : values()) {
-      if (movingPiece.getPieceType().getLetter().equals(movingPieceLetter)) {
+      if (movingPiece.getPieceType().getLetter() == movingPieceLetter) {
         return movingPiece;
       }
     }

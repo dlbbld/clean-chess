@@ -7,6 +7,7 @@ import com.dlb.chess.model.LegalMove;
 
 public abstract class CastlingConstants implements EnumConstants {
 
+  // TODO constants derive from SanSymbol
   public static final String SAN_CASTLING_KING_SIDE = "O-O";
 
   public static final String SAN_CASTLING_QUEEN_SIDE = "O-O-O";

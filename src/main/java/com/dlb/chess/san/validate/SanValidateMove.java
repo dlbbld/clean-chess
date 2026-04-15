@@ -47,11 +47,9 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
     final Square toSquare = sanConversion.toSquare();
 
     switch (sanType.getSanFormat()) {
-      case KING_NON_CASTLING_CAPTURING, KING_NON_CASTLING_NON_CAPTURING -> validateNonPawnMovement(
-          pieceType, toSquare);
+      case KING_NON_CASTLING_CAPTURING, KING_NON_CASTLING_NON_CAPTURING -> validateNonPawnMovement(pieceType, toSquare);
       case PAWN_CAPTURING_NON_PROMOTION, PAWN_CAPTURING_PROMOTION, PAWN_NON_CAPTURING_NON_PROMOTION, PAWN_NON_CAPTURING_PROMOTION -> throw new IllegalArgumentException();
-      case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER -> validateNonPawnMovement(pieceType,
-          toSquare);
+      case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER -> validateNonPawnMovement(pieceType, toSquare);
       case PIECE_NON_CAPTURING_FILE, PIECE_CAPTURING_FILE -> validateNonPawnMovement(pieceType,
           sanConversion.fromFile(), toSquare);
       case PIECE_NON_CAPTURING_RANK, PIECE_CAPTURING_RANK -> validateNonPawnMovement(pieceType,
@@ -99,7 +97,7 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
 
     throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE,
         Message.getString("validation.san.notPawn.specification.file.invalidMovement", movingPieceType.getName(),
-            fromFile.getLetter(), toSquare.getName()));
+            fromFile.getLetterString(), toSquare.getName()));
   }
 
   private static void validateNonPawnMovement(PieceType movingPieceType, Rank fromRank, Square toSquare) {
@@ -211,8 +209,9 @@ public abstract class SanValidateMove extends AbstractSan implements EnumConstan
     }
 
     if (!isAdjacentFileUsingDiagonalMoves) {
-      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_PAWN_FROM_FILE, Message.getString(
-          "validation.san.pawn.invalidFromAndToFileNotAdjacent", fromFile.getLetter(), toSquare.getFile().getLetter()));
+      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_PAWN_FROM_FILE,
+          Message.getString("validation.san.pawn.invalidFromAndToFileNotAdjacent", fromFile.getLetterString(),
+              toSquare.getFile().getLetterString()));
     }
   }
 

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 
 class TestBasicRank implements EnumConstants {
@@ -28,27 +27,28 @@ class TestBasicRank implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testMethodsDirect() throws Exception {
-    assertFalse(Rank.exists(-1));
-    assertFalse(Rank.exists(0));
-    assertFalse(Rank.exists(9));
+    assertFalse(Rank.exists('-'));
+    assertFalse(Rank.exists('\0'));
+    assertFalse(Rank.exists('0'));
+    assertFalse(Rank.exists('9'));
 
-    assertTrue(Rank.exists(ChessConstants.RANK_1_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_2_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_3_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_4_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_5_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_6_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_7_NUMBER));
-    assertTrue(Rank.exists(ChessConstants.RANK_8_NUMBER));
+    assertTrue(Rank.exists('1'));
+    assertTrue(Rank.exists('2'));
+    assertTrue(Rank.exists('3'));
+    assertTrue(Rank.exists('4'));
+    assertTrue(Rank.exists('5'));
+    assertTrue(Rank.exists('6'));
+    assertTrue(Rank.exists('7'));
+    assertTrue(Rank.exists('8'));
 
-    assertEquals(Rank.RANK_1, Rank.calculateRank(ChessConstants.RANK_1_NUMBER));
-    assertEquals(Rank.RANK_2, Rank.calculateRank(ChessConstants.RANK_2_NUMBER));
-    assertEquals(Rank.RANK_3, Rank.calculateRank(ChessConstants.RANK_3_NUMBER));
-    assertEquals(Rank.RANK_4, Rank.calculateRank(ChessConstants.RANK_4_NUMBER));
-    assertEquals(Rank.RANK_5, Rank.calculateRank(ChessConstants.RANK_5_NUMBER));
-    assertEquals(Rank.RANK_6, Rank.calculateRank(ChessConstants.RANK_6_NUMBER));
-    assertEquals(Rank.RANK_7, Rank.calculateRank(ChessConstants.RANK_7_NUMBER));
-    assertEquals(Rank.RANK_8, Rank.calculateRank(ChessConstants.RANK_8_NUMBER));
+    assertEquals(Rank.RANK_1, Rank.calculateRank('1'));
+    assertEquals(Rank.RANK_2, Rank.calculateRank('2'));
+    assertEquals(Rank.RANK_3, Rank.calculateRank('3'));
+    assertEquals(Rank.RANK_4, Rank.calculateRank('4'));
+    assertEquals(Rank.RANK_5, Rank.calculateRank('5'));
+    assertEquals(Rank.RANK_6, Rank.calculateRank('6'));
+    assertEquals(Rank.RANK_7, Rank.calculateRank('7'));
+    assertEquals(Rank.RANK_8, Rank.calculateRank('8'));
   }
 
   @SuppressWarnings("static-method")

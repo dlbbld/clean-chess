@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.PromotionPieceType;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.model.UciMove;
 
@@ -32,8 +31,7 @@ class TestUciMoveUtility {
       expectedText.append(uciMove.fromSquare().getName());
       expectedText.append(uciMove.toSquare().getName());
       if (uciMove.isPromotion()) {
-        final var pieceNameLowerCase = NonNullWrapperCommon
-            .toLowerCase(uciMove.promotionPieceType().getPieceType().getLetter());
+        final var pieceNameLowerCase = Character.toLowerCase(uciMove.promotionPieceType().getPieceType().getLetter());
         expectedText.append(pieceNameLowerCase);
       }
       assertEquals(expectedText.toString(), uciMove.text());

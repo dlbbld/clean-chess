@@ -6,7 +6,9 @@ public enum SanSymbol {
   CAPTURE('x'),
   PROMOTION('='),
   CHECK('+'),
-  CHECKMATE('#');
+  CHECKMATE('#'),
+  CASTLING_O('O'),
+  CASTLING_HYPHEN('-');
 
   private final char symbol;
   private final String symbolString;

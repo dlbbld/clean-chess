@@ -1,7 +1,6 @@
 package com.dlb.chess.common.enums;
 
 import com.dlb.chess.board.enums.PromotionPieceType;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public enum NotationPromotionPiece {
@@ -21,40 +20,36 @@ public enum NotationPromotionPiece {
   }
 
   public static boolean exists(char promotionPieceLetter) {
-    return exists(NonNullWrapperCommon.toString(promotionPieceLetter));
-  }
-
-  public static boolean exists(String promotionPieceLetter) {
     for (final NotationPromotionPiece option : values()) {
-      if (option.getPromotionPieceType().getPieceType().getLetter().equals(promotionPieceLetter)) {
+      if (option.getPromotionPieceType().getPieceType().getLetter() == promotionPieceLetter) {
         return true;
       }
     }
     return false;
   }
 
-  public static boolean existsIgnoreCase(String promotionPieceLetter) {
-    final var promotionPieceLetterUpperCase = NonNullWrapperCommon.toUpperCase(promotionPieceLetter);
+  public static boolean existsIgnoreCase(char promotionPieceLetter) {
+    final var promotionPieceLetterUpperCase = Character.toUpperCase(promotionPieceLetter);
     return exists(promotionPieceLetterUpperCase);
   }
 
-  public static NotationPromotionPiece calculate(String promotionPieceLetter) {
+  public static NotationPromotionPiece calculate(char promotionPieceLetter) {
     if (!exists(promotionPieceLetter)) {
       throw new IllegalArgumentException("For this letter not ignoring case no corresponding enum exists");
     }
     for (final NotationPromotionPiece option : values()) {
-      if (option.getPromotionPieceType().getPieceType().getLetter().equals(promotionPieceLetter)) {
+      if (option.getPromotionPieceType().getPieceType().getLetter() == promotionPieceLetter) {
         return option;
       }
     }
     throw new ProgrammingMistakeException();
   }
 
-  public static NotationPromotionPiece calculateIgnoreCase(String promotionPieceLetter) {
+  public static NotationPromotionPiece calculateIgnoreCase(char promotionPieceLetter) {
     if (!existsIgnoreCase(promotionPieceLetter)) {
       throw new IllegalArgumentException("For this letter ignoring case no corresponding enum exists");
     }
-    final var promotionPieceLetterUpperCase = NonNullWrapperCommon.toUpperCase(promotionPieceLetter);
+    final var promotionPieceLetterUpperCase = Character.toUpperCase(promotionPieceLetter);
     return calculate(promotionPieceLetterUpperCase);
   }
 }

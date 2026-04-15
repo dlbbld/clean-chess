@@ -1,32 +1,31 @@
 package com.dlb.chess.board.enums;
 
-import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public enum Rank {
-  RANK_1(ChessConstants.RANK_1_NUMBER),
-  RANK_2(ChessConstants.RANK_2_NUMBER),
-  RANK_3(ChessConstants.RANK_3_NUMBER),
-  RANK_4(ChessConstants.RANK_4_NUMBER),
-  RANK_5(ChessConstants.RANK_5_NUMBER),
-  RANK_6(ChessConstants.RANK_6_NUMBER),
-  RANK_7(ChessConstants.RANK_7_NUMBER),
-  RANK_8(ChessConstants.RANK_8_NUMBER),
-  NONE(0);
+  RANK_1('1'),
+  RANK_2('2'),
+  RANK_3('3'),
+  RANK_4('4'),
+  RANK_5('5'),
+  RANK_6('6'),
+  RANK_7('7'),
+  RANK_8('8'),
+  NONE('\0');
 
-  private final int number;
+  private final char number;
 
-  Rank(int number) {
+  Rank(char number) {
     this.number = number;
   }
 
-  public int getNumber() {
+  public char getNumber() {
     check();
     return number;
   }
 
-  public static boolean exists(int number) {
+  public static boolean exists(char number) {
     for (final Rank rank : values()) {
       if (rank == NONE) {
         continue;
@@ -38,7 +37,7 @@ public enum Rank {
     return false;
   }
 
-  public static Rank calculateRank(int number) {
+  public static Rank calculateRank(char number) {
     if (!exists(number)) {
       throw new IllegalArgumentException("For this number no corresponding non dummy Rank exists");
     }

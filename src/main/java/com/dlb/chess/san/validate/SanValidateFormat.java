@@ -10,7 +10,6 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
@@ -136,11 +135,11 @@ public abstract class SanValidateFormat extends AbstractSan {
   }
 
   private static File parseFile(final char c) {
-    return File.calculateFile(NonNullWrapperCommon.toString(c));
+    return File.calculateFile(c);
   }
 
   private static Rank parseRank(final char c) {
-    return Rank.calculateRank(BasicUtility.parseInt(NonNullWrapperCommon.toString(c)));
+    return Rank.calculateRank(c);
   }
 
   /**
@@ -148,15 +147,14 @@ public abstract class SanValidateFormat extends AbstractSan {
    * and P are not valid and cause a {@link SanValidationException} to be thrown.
    */
   private static PromotionPieceType parsePromotionPiece(final char c) {
-    final var letter = NonNullWrapperCommon.toString(c);
-    if (!NotationPromotionPiece.exists(letter)) {
+    if (!NotationPromotionPiece.exists(c)) {
       throw invalidFormat();
     }
-    return NotationPromotionPiece.calculate(letter).getPromotionPieceType();
+    return NotationPromotionPiece.calculate(c).getPromotionPieceType();
   }
 
   private static PieceType parsePieceLetter(final char c) {
-    return NotationMovingPiece.calculate(NonNullWrapperCommon.toString(c)).getPieceType();
+    return NotationMovingPiece.calculate(c).getPieceType();
   }
 
   /** Creates the format-validation exception used for any malformed SAN string. */

@@ -20,8 +20,10 @@ public class KnightDistance {
   }
 
   public static int distance(Square fromSquare, Square toSquare) {
-    final int[] knightPos = { fromSquare.getFile().getNumber(), fromSquare.getRank().getNumber() };
-    final int[] targetPos = { toSquare.getFile().getNumber(), toSquare.getRank().getNumber() };
+    final int[] knightPos = { Character.getNumericValue(fromSquare.getFile().getNumber()),
+        Character.getNumericValue(fromSquare.getRank().getNumber()) };
+    final int[] targetPos = { Character.getNumericValue(toSquare.getFile().getNumber()),
+        Character.getNumericValue(toSquare.getRank().getNumber()) };
 
     final var distance = minStepToReachTarget(knightPos, targetPos);
     return distance;

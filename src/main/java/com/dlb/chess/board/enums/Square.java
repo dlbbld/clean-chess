@@ -136,7 +136,8 @@ public enum Square implements Comparable<Square> {
 
   public static boolean exists(int fileNumber, int rankNumber) {
     for (final Square square : BOARD_SQUARE_LIST) {
-      if (square.getFile().getNumber() == fileNumber && square.getRank().getNumber() == rankNumber) {
+      if (Character.getNumericValue(square.getFile().getNumber()) == fileNumber
+          && Character.getNumericValue(square.getRank().getNumber()) == rankNumber) {
         return true;
       }
     }
@@ -173,7 +174,8 @@ public enum Square implements Comparable<Square> {
           "No board square exists for file number " + fileNumber + " and rank number " + rankNumber);
     }
     for (final Square square : BOARD_SQUARE_LIST) {
-      if (square.getFile().getNumber() == fileNumber && square.getRank().getNumber() == rankNumber) {
+      if (Character.getNumericValue(square.getFile().getNumber()) == fileNumber
+          && Character.getNumericValue(square.getRank().getNumber()) == rankNumber) {
         return square;
       }
     }

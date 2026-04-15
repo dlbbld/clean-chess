@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.dlb.chess.board.enums.File;
+import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
@@ -509,7 +512,8 @@ public abstract class MovetextUtility {
   private static void validateSanCharacters(String san) {
     for (var i = 0; i < san.length(); i++) {
       final var currentLetter = san.charAt(i);
-      if (!SanSymbol.exists(currentLetter)) {
+      if (!Piece.exists(currentLetter) && !File.exists(currentLetter) && !Rank.exists(currentLetter)
+          && !SanSymbol.exists(currentLetter)) {
         throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             SanValidationProblem.NONE,
             "The movetext is invalid because a SAN contains an invalid character of \"" + currentLetter + "\".");
@@ -530,7 +534,7 @@ public abstract class MovetextUtility {
   private static void validateSanLength(String san) throws StrictPgnParserValidationException {
     if (san.length() < SAN_MIN_LENGTH || san.length() > SAN_MAX_LENGTH) {
       throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID,
-          SanValidationProblem.NONE, "The movetext ends unexpectedly afer a SAN followed by a space.");
+          SanValidationProblem.NONE, "The movetext contains the SAN '" + san + "' with an invalid SAN length.");
     }
   }
 

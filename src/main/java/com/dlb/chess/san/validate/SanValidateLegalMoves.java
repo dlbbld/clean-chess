@@ -444,7 +444,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       }
       throw new SanValidationException(SanValidationProblem.PIECE_FILE_NOT_REACHABLE_MULTIPLE,
           Message.getString("validation.san.notPawn.specification.file.notReachable.multiple", pieceType.getName(),
-              fromFile.getLetter(), toSquare.getName()));
+              fromFile.getLetterString(), toSquare.getName()));
     }
 
     final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(fromFile, legalMovesCandidates);
@@ -467,7 +467,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           : SanValidationProblem.PIECE_FILE_KING_EXPOSED_TO_CHECK_MULTIPLE;
       throw new SanValidationException(problem,
           Message.getString("validation.san.notPawn.specification.file." + msgKey + ".multiple", pieceType.getName(),
-              fromFile.getLetter(), toSquare.getName()));
+              fromFile.getLetterString(), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
@@ -481,18 +481,18 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       }
       throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
           Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-              sanConversion.fromFile().getLetter(), toSquare.getName()));
+              sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameFile >= 2) {
       if (pieceType == ROOK) {
         throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
             Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-                sanConversion.fromFile().getLetter(), toSquare.getName()));
+                sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
       throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK_OR_SQUARE,
           Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-              sanConversion.fromFile().getLetter(), toSquare.getName()));
+              sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
   }
 
@@ -557,7 +557,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (pieceType == ROOK) {
         throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
             Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
-                sanConversion.fromFile().getLetter(), toSquare.getName()));
+                sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
       throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE_OR_SQUARE,
           Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),

@@ -73,7 +73,7 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
       promotionPieceType = PromotionPieceType.NONE;
     } else if (uciMove.name().length() == 5) {
       isPromotion = true;
-      final var promotionPieceLetter = NonNullWrapperCommon.toString(uciMove.name().charAt(4));
+      final var promotionPieceLetter = uciMove.name().charAt(4);
       promotionPieceType = NotationPromotionPiece.calculateIgnoreCase(promotionPieceLetter).getPromotionPieceType();
     } else {
       throw new IllegalArgumentException();
@@ -88,7 +88,7 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
     uciMove.append(fromSquare.getName());
     uciMove.append(toSquare.getName());
     if (promotionPieceType != PromotionPieceType.NONE) {
-      final var promotionPieceTypeLetterLowerCase = NonNullWrapperCommon
+      final var promotionPieceTypeLetterLowerCase = Character
           .toLowerCase(promotionPieceType.getPieceType().getLetter());
       uciMove.append(promotionPieceTypeLetterLowerCase);
     }

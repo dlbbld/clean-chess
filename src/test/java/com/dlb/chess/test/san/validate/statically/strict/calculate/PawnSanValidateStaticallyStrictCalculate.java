@@ -33,7 +33,7 @@ public class PawnSanValidateStaticallyStrictCalculate extends AbstractSanValidat
           yield Square.calculate(NonNullWrapperCommon.substring(parse, 1));
         }
         case 4 -> {
-          final String fileLetter = NonNullWrapperCommon.toString(parse.charAt(1));
+          final var fileLetter = parse.charAt(1);
           fromFile = File.calculateFile(fileLetter);
           yield Square.calculate(NonNullWrapperCommon.substring(parse, 2));
         }

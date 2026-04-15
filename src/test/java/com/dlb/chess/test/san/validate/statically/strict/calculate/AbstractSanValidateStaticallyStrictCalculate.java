@@ -10,7 +10,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.SanCalculate;
 import com.dlb.chess.san.enums.SanTerminalMarker;
@@ -32,23 +31,18 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
         toSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 1));
         break;
       case 4:
-        final var checkLetter = NonNullWrapperCommon.toString(parse.charAt(1));
+        final var checkLetter = parse.charAt(1);
 
         if (File.exists(checkLetter)) {
           fromFile = File.calculateFile(checkLetter);
           fromRank = Rank.NONE;
         } else {
-          if (!BasicUtility.isInt(checkLetter)) {
-            throw new ProgrammingMistakeException(
-                "The fourth letter in " + parse + " must be a valid file letter or rank number");
-          }
-          final var rankNumber = BasicUtility.parseInt(checkLetter);
-          if (!Rank.exists(rankNumber)) {
+          if (!Rank.exists(checkLetter)) {
             throw new ProgrammingMistakeException(
                 "The fourth letter in " + parse + " must be a valid file letter or rank number");
           }
           fromFile = File.NONE;
-          fromRank = Rank.calculateRank(rankNumber);
+          fromRank = Rank.calculateRank(checkLetter);
         }
         toSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 2));
         break;
@@ -101,7 +95,8 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
 
     final String san = SanCalculate.calculateSan(fromFile, fromRank, toSquare, promotionPieceType, isCapture,
         sanTerminalMarker, movingPieceType);
-    final var sanType = SanCalculate.calculateSanType(isCapture, fromFile, fromRank, movingPieceType, promotionPieceType);
+    final var sanType = SanCalculate.calculateSanType(isCapture, fromFile, fromRank, movingPieceType,
+        promotionPieceType);
     final SanParse sanParse = new SanParse(sanType,
         new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker));
     sanValidateMap.put(san, sanParse);

@@ -24,7 +24,6 @@ import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.FenRawValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
@@ -188,11 +187,12 @@ public class FenParserAdvanced implements EnumConstants {
       if (BasicConstants.BLANK.equals(letter)) {
         rankPieceList.add(Piece.NONE);
       } else {
-        if (!Piece.exists(letter)) {
+        final var letterChar = letter.charAt(0);
+        if (!Piece.exists(letterChar)) {
           throw new ProgrammingMistakeException(
               "An unknown piece was found which was not filtered before by regular expression");
         }
-        final Piece piece = Piece.calculate(letter);
+        final Piece piece = Piece.calculate(letterChar);
         rankPieceList.add(piece);
       }
     }
@@ -252,8 +252,8 @@ public class FenParserAdvanced implements EnumConstants {
     throw new ProgrammingMistakeException("Check the regular expression");
   }
 
-  private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition,
-      String castlingRightBothStr) throws FenAdvancedValidationException {
+  private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition, String castlingRightBothStr)
+      throws FenAdvancedValidationException {
     final CastlingRightBoth castlingRightBoth = validateCastlingRightBoth(castlingRightBothStr);
     validateCastlingRightAgainstStaticPosition(staticPosition, castlingRightBoth);
     return castlingRightBoth;
@@ -296,26 +296,23 @@ public class FenParserAdvanced implements EnumConstants {
       return Square.NONE;
     }
     if (enPassantCaptureTargetSquare.length() == 2) {
-      final var fileLetter = NonNullWrapperCommon.toString(enPassantCaptureTargetSquare.charAt(0));
+      final var fileLetter = enPassantCaptureTargetSquare.charAt(0);
       if (File.exists(fileLetter)) {
         final File file = File.calculateFile(fileLetter);
-        final var rankLetter = NonNullWrapperCommon.toString(enPassantCaptureTargetSquare.charAt(1));
-        if (BasicUtility.isInt(rankLetter)) {
-          final var checkRankNumber = BasicUtility.parseInt(rankLetter);
+        final var rankLetter = enPassantCaptureTargetSquare.charAt(1);
 
-          if (Rank.exists(checkRankNumber)) {
-            final Rank rank = Rank.calculateRank(checkRankNumber);
-            final Square square = Square.calculate(file, rank);
-            if (Square.calculateEnPassantCaptureTargetSquareList(havingMove).contains(square)) {
-              return square;
-            }
-            final Side oppositeSide = havingMove.getOppositeSide();
-            if (Square.calculateEnPassantCaptureTargetSquareList(oppositeSide).contains(square)) {
-              throw new FenAdvancedValidationException(
-                  FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR,
-                  "the en passant target square \"" + enPassantCaptureTargetSquare
-                      + "\" belongs to the player having the move, not the opponent");
-            }
+        if (Rank.exists(rankLetter)) {
+          final Rank rank = Rank.calculateRank(rankLetter);
+          final Square square = Square.calculate(file, rank);
+          if (Square.calculateEnPassantCaptureTargetSquareList(havingMove).contains(square)) {
+            return square;
+          }
+          final Side oppositeSide = havingMove.getOppositeSide();
+          if (Square.calculateEnPassantCaptureTargetSquareList(oppositeSide).contains(square)) {
+            throw new FenAdvancedValidationException(
+                FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_TARGET_SQUARE_WRONG_COLOR,
+                "the en passant target square \"" + enPassantCaptureTargetSquare
+                    + "\" belongs to the player having the move, not the opponent");
           }
         }
       }
