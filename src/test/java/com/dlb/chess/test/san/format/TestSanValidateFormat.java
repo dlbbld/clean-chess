@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
@@ -564,12 +563,9 @@ class TestSanValidateFormat {
   private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
     final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
 
-    for (final Side side : Side.BOTH) {
-
-      final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san, side);
-      assertEquals(expectedSanExtract, calculatedSanExtract);
-      assertEquals(validateFormatReference(san), calculatedSanExtract);
-    }
+    final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san);
+    assertEquals(expectedSanExtract, calculatedSanExtract);
+    assertEquals(validateFormatReference(san), calculatedSanExtract);
   }
 
   private static void checkValid(String san) {
@@ -591,9 +587,7 @@ class TestSanValidateFormat {
       SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      for (final Side side : Side.BOTH) {
-        SanValidateFormat.validateFormat(san, side);
-      }
+      SanValidateFormat.validateFormat(san);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

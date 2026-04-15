@@ -4,7 +4,6 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
@@ -69,7 +68,7 @@ public abstract class SanValidateFormat extends AbstractSan {
     }
   }
 
-  public static SanParse validateFormat(String san, Side havingMove) {
+  public static SanParse validateFormat(String san) {
 
     validateFormatBasic(san);
 
@@ -88,7 +87,7 @@ public abstract class SanValidateFormat extends AbstractSan {
       return parseCastling(core, sanTerminalMarker);
     }
     if (isFileLetter(first)) {
-      return parsePawnMove(core, sanTerminalMarker, havingMove);
+      return parsePawnMove(core, sanTerminalMarker);
     }
     if (first == 'K') {
       return parseKingMove(core, sanTerminalMarker);
@@ -181,7 +180,7 @@ public abstract class SanValidateFormat extends AbstractSan {
         Message.getString("validation.san.format.castling"));
   }
 
-  private static SanParse parsePawnMove(final String core, final SanTerminalMarker sanTerminalMarker, Side havingMove) {
+  private static SanParse parsePawnMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     // too short
     if (core.length() == 1) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_GENERAL,

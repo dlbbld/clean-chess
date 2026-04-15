@@ -7,7 +7,6 @@ import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -33,10 +32,8 @@ class TestSanValidateNonPositionRelatedSupersetStrict extends AbstractTestSanVal
 
     boolean isRuntimeException;
     try {
-      for (final Side side : Side.BOTH) {
-        final var sanParse = SanValidateFormat.validateFormat(san, side);
-        assertEquals(sanParse, staticResult);
-      }
+      final var sanParse = SanValidateFormat.validateFormat(san);
+      assertEquals(sanParse, staticResult);
       isRuntimeException = false;
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isRuntimeException = true;

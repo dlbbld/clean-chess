@@ -282,6 +282,14 @@ public enum Rank {
     return rank == calculateEnPassantCaptureToRank(havingMove);
   }
 
+  public static boolean calculateIsValidRank(Side havingMove, Rank rank) {
+    return switch (havingMove) {
+      case WHITE -> rank != Rank.RANK_1 && rank != Rank.RANK_2;
+      case BLACK -> rank != Rank.RANK_7 && rank != Rank.RANK_8;
+      case NONE -> throw new IllegalArgumentException();
+    };
+  }
+
   private void check() {
     if (this == NONE) {
       throw new NonePointerException();
