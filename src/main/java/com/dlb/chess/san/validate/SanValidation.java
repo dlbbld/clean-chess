@@ -15,7 +15,7 @@ import com.dlb.chess.san.model.SanParse;
 public class SanValidation extends AbstractSan {
 
   public static MoveSpecification validateSan(String san, ApiBoard board) throws SanValidationException {
-    final var sanParse = SanValidateFormat.validateFormat(san);
+    final var sanParse = SanValidateFormat.validateFormat(san, board.getHavingMove());
     return validateAgainstPosition(board, sanParse);
   }
 

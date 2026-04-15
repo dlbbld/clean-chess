@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -118,8 +119,13 @@ class TestSanFormatValidationCompleteness {
         .entrySet(SanValidateStaticallyFormat.getSanValidationMap())) {
       final String san = NonNullWrapperCommon.getKey(entry);
       final SanParse expected = NonNullWrapperCommon.getValue(entry);
-      final SanParse actual = SanValidateFormat.validateFormat(san);
-      assertEquals(expected, actual, "validateFormat result differs from static map for SAN: \"" + san + "\"");
+      for (final Side side : Side.values()) {
+        if (side == Side.NONE) {
+          continue;
+        }
+        final SanParse actual = SanValidateFormat.validateFormat(san, side);
+        assertEquals(expected, actual, "validateFormat result differs from static map for SAN: \"" + san + "\"");
+      }
     }
   }
 
@@ -203,7 +209,12 @@ class TestSanFormatValidationCompleteness {
 
     boolean isValid;
     try {
-      SanValidateFormat.validateFormat(san);
+      for (final Side side : Side.values()) {
+        if (side == Side.NONE) {
+          continue;
+        }
+        SanValidateFormat.validateFormat(san, side);
+      }
       isValid = true;
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isValid = false;

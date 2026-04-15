@@ -5,6 +5,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.internationalization.Message;
 
 public enum Side {
+
   WHITE(true, false, Message.getString("color.white.name"), "w"),
   BLACK(false, true, Message.getString("color.black.name"), "b"),
   NONE(false, false, "", " ");
@@ -78,4 +79,5 @@ public enum Side {
     // not possible to come here
     throw new ProgrammingMistakeException();
   }
+
 }

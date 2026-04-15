@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidateFormat;
@@ -238,7 +239,12 @@ class TestSanValidateFormatDetailed {
   private static void checkException(String san, SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      SanValidateFormat.validateFormat(san);
+      for (final Side side : Side.values()) {
+        if (side == Side.NONE) {
+          continue;
+        }
+        SanValidateFormat.validateFormat(san, side);
+      }
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
@@ -251,7 +257,12 @@ class TestSanValidateFormatDetailed {
   private static void checkValid(String san) {
     var isException = false;
     try {
-      SanValidateFormat.validateFormat(san);
+      for (final Side side : Side.values()) {
+        if (side == Side.NONE) {
+          continue;
+        }
+        SanValidateFormat.validateFormat(san, side);
+      }
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isException = true;
     }

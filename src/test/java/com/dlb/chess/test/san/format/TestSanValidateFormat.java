@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
@@ -404,11 +405,13 @@ class TestSanValidateFormat {
     }
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Qae5");
+          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "Qae5");
     }
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Q2e5");
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "Q2e5");
     }
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE,
@@ -442,11 +445,13 @@ class TestSanValidateFormat {
     }
     {
       checkValid(SanType.ROOK_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Rae5");
+          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "Rae5");
     }
     {
       checkValid(SanType.ROOK_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "R2e5");
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "R2e5");
     }
     // (3b) rookCapturingMoves Rxe5, Raxe5, R2xe5
     {
@@ -470,11 +475,13 @@ class TestSanValidateFormat {
     }
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_C, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Nce5");
+          new SanConversion(File.FILE_C, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "Nce5");
     }
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_4, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "N4e5");
+          new SanConversion(File.NONE, Rank.RANK_4, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "N4e5");
     }
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE,
@@ -508,11 +515,13 @@ class TestSanValidateFormat {
     }
     {
       checkValid(SanType.BISHOP_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_B, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Bbe5");
+          new SanConversion(File.FILE_B, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "Bbe5");
     }
     {
       checkValid(SanType.BISHOP_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "B2e5");
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
+          "B2e5");
     }
     // (5b) bishopCapturingMoves Bxe5, Bbxe5, B2xe5
     {
@@ -555,9 +564,15 @@ class TestSanValidateFormat {
   private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
     final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
 
-    final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san);
-    assertEquals(expectedSanExtract, calculatedSanExtract);
-    assertEquals(validateFormatReference(san), calculatedSanExtract);
+    for (final Side side : Side.values()) {
+      if (side == Side.NONE) {
+        continue;
+      }
+
+      final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san, side);
+      assertEquals(expectedSanExtract, calculatedSanExtract);
+      assertEquals(validateFormatReference(san), calculatedSanExtract);
+    }
   }
 
   private static void checkValid(String san) {
@@ -579,7 +594,12 @@ class TestSanValidateFormat {
       SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      SanValidateFormat.validateFormat(san);
+      for (final Side side : Side.values()) {
+        if (side == Side.NONE) {
+          continue;
+        }
+        SanValidateFormat.validateFormat(san, side);
+      }
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
