@@ -5,23 +5,23 @@ import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public enum File {
-  FILE_A('a', '1', true),
-  FILE_B('b', '2', false),
-  FILE_C('c', '3', false),
-  FILE_D('d', '4', false),
-  FILE_E('e', '5', false),
-  FILE_F('f', '6', false),
-  FILE_G('g', '7', false),
-  FILE_H('h', '8', true),
-  NONE('\0', '\0', false);
+  FILE_A('a', 1, true),
+  FILE_B('b', 2, false),
+  FILE_C('c', 3, false),
+  FILE_D('d', 4, false),
+  FILE_E('e', 5, false),
+  FILE_F('f', 6, false),
+  FILE_G('g', 7, false),
+  FILE_H('h', 8, true),
+  NONE('\0', 0, false);
 
   private final char letter;
   private final String letterString;
 
-  private final char number;
+  private final int number;
   private final boolean isBorderFile;
 
-  File(char letter, char number, boolean isBorderFile) {
+  File(char letter, int number, boolean isBorderFile) {
     this.letter = letter;
     this.letterString = NonNullWrapperCommon.valueOf(letter);
     this.number = number;

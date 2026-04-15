@@ -106,8 +106,8 @@ class TestDiagonalUtility implements EnumConstants {
 
     final List<Square> diagonal = new ArrayList<>();
 
-    final var fileNumber = Character.getNumericValue(square.getFile().getNumber());
-    final var rankNumber = Character.getNumericValue(square.getRank().getNumber());
+    final var fileNumber = square.getFile().getNumber();
+    final var rankNumber = square.getRank().getNumber();
 
     final var leftNumberOfSquares = Math.min(fileNumber, 9 - rankNumber) - 1;
     final var rightNumberOfSquares = Math.min(9 - fileNumber, rankNumber) - 1;

@@ -4,28 +4,32 @@ import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public enum Rank {
-  RANK_1('1'),
-  RANK_2('2'),
-  RANK_3('3'),
-  RANK_4('4'),
-  RANK_5('5'),
-  RANK_6('6'),
-  RANK_7('7'),
-  RANK_8('8'),
-  NONE('\0');
+  RANK_1(1),
+  RANK_2(2),
+  RANK_3(3),
+  RANK_4(4),
+  RANK_5(5),
+  RANK_6(6),
+  RANK_7(7),
+  RANK_8(8),
+  NONE(0);
 
-  private final char number;
+  private final int number;
 
-  Rank(char number) {
+  Rank(int number) {
     this.number = number;
   }
 
-  public char getNumber() {
+  public int getNumber() {
     check();
     return number;
   }
 
-  public static boolean exists(char number) {
+  public static boolean exists(char character) {
+    return exists(Character.getNumericValue(character));
+  }
+
+  public static boolean exists(int number) {
     for (final Rank rank : values()) {
       if (rank == NONE) {
         continue;
@@ -37,7 +41,11 @@ public enum Rank {
     return false;
   }
 
-  public static Rank calculateRank(char number) {
+  public static Rank calculateRank(char character) {
+    return calculateRank(Character.getNumericValue(character));
+  }
+
+  public static Rank calculateRank(int number) {
     if (!exists(number)) {
       throw new IllegalArgumentException("For this number no corresponding non dummy Rank exists");
     }
