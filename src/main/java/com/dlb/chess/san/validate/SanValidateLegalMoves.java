@@ -7,7 +7,6 @@ import java.util.TreeSet;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
-import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -24,7 +23,6 @@ import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.model.PseudoLegalReason;
@@ -178,8 +176,8 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     return calculateOnlyElement(filtered3);
   }
 
-  public static void validateAgainstLegalMoves(ApiBoard board, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, SanType sanType, SanConversion sanConversion) {
+  public static void validateAgainstLegalMoves(ApiBoard board, Side havingMove, Set<LegalMove> legalMovesCandidates,
+      SanType sanType, SanConversion sanConversion) {
 
     final StaticPosition staticPosition = board.getStaticPosition();
 
@@ -290,46 +288,40 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static void throwCastlingException(ApiBoard board, Side havingMove, String sideLabel,
       CastlingMove castlingMove) {
     final CastlingRight castlingRight = board.getCastlingRight(havingMove);
-    final MoveCheck moveCheck = castlingMove == CastlingMove.QUEEN_SIDE
+    final var moveCheck = castlingMove == CastlingMove.QUEEN_SIDE
         ? CastlingUtility.calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, castlingRight)
         : CastlingUtility.calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, castlingRight);
 
-    final CastlingRightLoss castlingRightLoss;
+    final var castlingRightLoss = board.getCastlingRightLoss(havingMove, castlingMove);
     final String message;
 
     switch (moveCheck) {
       case CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE:
-        castlingRightLoss = CastlingRightLoss.NONE;
         message = Message.getString("validation.san.castling.kingOrRookNotOnRequiredSquare", sideLabel);
         break;
       case CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE: {
-        castlingRightLoss = board instanceof com.dlb.chess.board.Board concreteBoard
-            ? concreteBoard.getCastlingRightLoss(havingMove, castlingMove)
-            : CastlingRightLoss.NONE;
-        final String rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
+        final var rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
         message = switch (castlingRightLoss) {
           case KING_MOVED -> Message.getString("validation.san.castling.noRight.kingMoved", sideLabel);
           case ROOK_MOVED -> Message.getString("validation.san.castling.noRight.rookMoved", sideLabel, rookLabel);
           case ROOK_CAPTURED -> Message.getString("validation.san.castling.noRight.rookCaptured", sideLabel, rookLabel);
           case CASTLED -> Message.getString("validation.san.castling.noRight.castled", sideLabel);
-          default -> Message.getString("validation.san.castling.noRight.unknown", sideLabel);
+          case UNKNOWN_FEN_IMPORT -> Message.getString("validation.san.castling.noRight.unknownFenImport", sideLabel);
+          case NOT_IMPLEMENTED -> Message.getString("validation.san.castling.noRight.notImplemented", sideLabel);
+          default -> throw new IllegalArgumentException();
         };
         break;
       }
       case CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY:
-        castlingRightLoss = CastlingRightLoss.NONE;
         message = Message.getString("validation.san.castling.squaresNotEmpty", sideLabel);
         break;
       case CASTLING_PRIORITY_4_KING_IN_CHECK:
-        castlingRightLoss = CastlingRightLoss.NONE;
         message = Message.getString("validation.san.castling.kingInCheck", sideLabel);
         break;
       case CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK:
-        castlingRightLoss = CastlingRightLoss.NONE;
         message = Message.getString("validation.san.castling.kingWouldTravelThroughCheck", sideLabel);
         break;
       case CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK:
-        castlingRightLoss = CastlingRightLoss.NONE;
         message = Message.getString("validation.san.castling.kingWouldEndInCheck", sideLabel);
         break;
       case SUCCESS:
@@ -452,7 +444,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       }
       throw new SanValidationException(SanValidationProblem.PIECE_FILE_NOT_REACHABLE_MULTIPLE,
           Message.getString("validation.san.notPawn.specification.file.notReachable.multiple", pieceType.getName(),
-              fromFile.getLetter(), toSquare.getName()));
+              fromFile.getLetterString(), toSquare.getName()));
     }
 
     final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(fromFile, legalMovesCandidates);
@@ -475,7 +467,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           : SanValidationProblem.PIECE_FILE_KING_EXPOSED_TO_CHECK_MULTIPLE;
       throw new SanValidationException(problem,
           Message.getString("validation.san.notPawn.specification.file." + msgKey + ".multiple", pieceType.getName(),
-              fromFile.getLetter(), toSquare.getName()));
+              fromFile.getLetterString(), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
@@ -489,18 +481,18 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       }
       throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
           Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-              sanConversion.fromFile().getLetter(), toSquare.getName()));
+              sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameFile >= 2) {
       if (pieceType == ROOK) {
         throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
             Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-                sanConversion.fromFile().getLetter(), toSquare.getName()));
+                sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
       throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK_OR_SQUARE,
           Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
-              sanConversion.fromFile().getLetter(), toSquare.getName()));
+              sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
   }
 
@@ -565,7 +557,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (pieceType == ROOK) {
         throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
             Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
-                sanConversion.fromFile().getLetter(), toSquare.getName()));
+                sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
       throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE_OR_SQUARE,
           Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),

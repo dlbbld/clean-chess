@@ -14,7 +14,9 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToSan;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -107,8 +109,11 @@ public class SanTrainerServer {
     final LegalMove randomMove = moveList.get(RANDOM.nextInt(moveList.size()));
 
     board.performMove(randomMove.moveSpecification());
-    final String blackSan = MoveToSan.calculateSanLastMove(randomMove, legalMovesBeforeBlack, board.isCheckmate(),
-        board.isCheck());
+
+    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(board.isCheck(),
+        board.isCheckmate());
+
+    final String blackSan = MoveToSan.calculateSanLastMove(randomMove, legalMovesBeforeBlack, sanTerminalMarker);
 
     final String fen = board.getFen();
     final String from = randomMove.moveSpecification().fromSquare().getName();

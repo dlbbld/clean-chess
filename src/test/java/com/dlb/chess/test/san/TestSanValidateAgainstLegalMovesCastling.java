@@ -23,9 +23,9 @@ class TestSanValidateAgainstLegalMovesCastling {
     // King moved off e1 via FEN
     final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R2K3R w - - 0 1");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     checkCastlingException("O-O-O", board, MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.UNKNOWN_FEN_IMPORT);
   }
 
   @SuppressWarnings("static-method")
@@ -34,7 +34,7 @@ class TestSanValidateAgainstLegalMovesCastling {
     // King-side rook not on h1
     final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K1R1 w Q - 0 1");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.UNKNOWN_FEN_IMPORT);
   }
 
   // --- Priority 2: No castling right - king moved ---
@@ -102,10 +102,10 @@ class TestSanValidateAgainstLegalMovesCastling {
     board.performMoves("e4", "e5");
     // King-side: f1 and g1 occupied
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
     // Queen-side: b1, c1, d1 occupied
     checkCastlingException("O-O-O", board, MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
   }
 
   @SuppressWarnings("static-method")
@@ -114,9 +114,9 @@ class TestSanValidateAgainstLegalMovesCastling {
     final ApiBoard board = new Board();
     board.performMoves("e4");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
     checkCastlingException("O-O-O", board, MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
   }
 
   // --- Priority 4: King in check ---
@@ -125,14 +125,14 @@ class TestSanValidateAgainstLegalMovesCastling {
   @Test
   void testKingInCheckWhite() {
     final ApiBoard board = new Board("rnbqk2r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1bPP/R1BQK2R w KQkq - 0 5");
-    checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_4_KING_IN_CHECK, CastlingRightLoss.NONE);
+    checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_4_KING_IN_CHECK, CastlingRightLoss.NOT_LOST);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingInCheckBlack() {
     final ApiBoard board = new Board("r1bqk2r/1ppp1pNp/p1n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 6");
-    checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_4_KING_IN_CHECK, CastlingRightLoss.NONE);
+    checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_4_KING_IN_CHECK, CastlingRightLoss.NOT_LOST);
   }
 
   // --- Priority 5: King would travel through check ---
@@ -142,7 +142,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   void testKingWouldTravelThroughCheckWhite() {
     final ApiBoard board = new Board("rnb1kbnr/pppp2pp/5q2/8/2B5/7N/PPPP2PP/RNBQK2R w KQkq - 0 25");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
   }
 
   @SuppressWarnings("static-method")
@@ -150,7 +150,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   void testKingWouldTravelThroughCheckBlack() {
     final ApiBoard board = new Board("rnbqk2r/ppppppbp/4Nnp1/8/8/8/PPPPPPPP/R1BQKBNR b KQkq - 0 25");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
   }
 
   // --- Priority 6: King would end in check ---
@@ -160,7 +160,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   void testKingWouldEndInCheckWhite() {
     final ApiBoard board = new Board("rnbqk1nr/pppp1ppp/4p3/2b5/2B1P3/5P1N/PPPP2PP/RNBQK2R w KQkq - 0 25");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
   }
 
   @SuppressWarnings("static-method")
@@ -168,7 +168,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   void testKingWouldEndInCheckBlack() {
     final ApiBoard board = new Board("rnbqk2r/ppppppbp/6pN/8/6n1/4P3/PPPP1PPP/RNBQKB1R b KQkq - 0 25");
     checkCastlingException("O-O", board, MoveCheck.CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK,
-        CastlingRightLoss.NONE);
+        CastlingRightLoss.NOT_LOST);
   }
 
   private static void checkCastlingException(String san, ApiBoard board, MoveCheck expectedMoveCheck,

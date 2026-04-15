@@ -4,15 +4,13 @@ import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.san.enums.SanLetter;
 
 public abstract class CastlingConstants implements EnumConstants {
 
-  public static final String SAN_CASTLING_KING_SIDE = SanLetter.CASTLING_O.getLetter()
-      + SanLetter.CASTLING_HYPHEN.getLetter() + SanLetter.CASTLING_O.getLetter();
+  // TODO constants derive from SanSymbol
+  public static final String SAN_CASTLING_KING_SIDE = "O-O";
 
-  public static final String SAN_CASTLING_QUEEN_SIDE = SAN_CASTLING_KING_SIDE + SanLetter.CASTLING_HYPHEN.getLetter()
-      + SanLetter.CASTLING_O.getLetter();
+  public static final String SAN_CASTLING_QUEEN_SIDE = "O-O-O";
 
   public static final LegalMove WHITE_KING_SIDE_CASTLING_MOVE = new LegalMove(
       new MoveSpecification(WHITE, CastlingMove.KING_SIDE));

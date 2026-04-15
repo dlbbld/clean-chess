@@ -7,14 +7,15 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
-import com.dlb.chess.san.enums.SanLetter;
+import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 
 public class SanCalculate implements EnumConstants {
 
-  public static String calculateSan(File fromFile, Rank fromRank, Square toSquare, PromotionPieceType promotionPieceType,
-      boolean isCapture, CheckmateOrCheck checkmateOrCheck, PieceType movingPieceType) {
+  public static String calculateSan(File fromFile, Rank fromRank, Square toSquare,
+      PromotionPieceType promotionPieceType, boolean isCapture, SanTerminalMarker sanTerminalMarker,
+      PieceType movingPieceType) {
     final StringBuilder san = new StringBuilder();
 
     if (movingPieceType != PAWN) {
@@ -27,28 +28,18 @@ public class SanCalculate implements EnumConstants {
       san.append(fromRank.getNumber());
     }
     if (isCapture) {
-      san.append(SanLetter.CAPTURE.getLetter());
+      san.append(SanSymbol.CAPTURE.getSymbol());
     }
 
     san.append(toSquare.getName());
 
     if (promotionPieceType != PromotionPieceType.NONE) {
-      san.append(SanLetter.PROMOTION.getLetter());
+      san.append(SanSymbol.PROMOTION.getSymbol());
       san.append(promotionPieceType.getPieceType().getLetter());
     }
-    switch (checkmateOrCheck) {
-      case CHECKMATE:
-        san.append(SanLetter.CHECKMATE.getLetter());
-        break;
-      case CHECK:
-        san.append(SanLetter.CHECK.getLetter());
-        break;
-      case NONE:
-        break;
-      default:
-        throw new IllegalArgumentException();
 
-    }
+    AbstractSan.appendSanTerminalMarker(san, sanTerminalMarker);
+
     return NonNullWrapperCommon.toString(san);
   }
 

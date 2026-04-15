@@ -65,7 +65,8 @@ class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserExce
 
     checkException("25_1_invalid_commentary.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
-    checkException("25_2_invalid_commentary.pgn", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
+    checkException("25_2_invalid_commentary.pgn",
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
     checkException("25_3_invalid_commentary.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkException("25_4_invalid_commentary.pgn",

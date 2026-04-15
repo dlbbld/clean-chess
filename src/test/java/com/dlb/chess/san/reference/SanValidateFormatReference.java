@@ -1,8 +1,5 @@
 package com.dlb.chess.san.reference;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -13,12 +10,11 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
 import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanLetter;
+import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -33,14 +29,6 @@ import com.dlb.chess.san.validate.SanValidateFormat;
  */
 public abstract class SanValidateFormatReference {
 
-  private static final List<String> ALLOWED_LAST_LETTER_SYMBOLS;
-
-  static {
-    ALLOWED_LAST_LETTER_SYMBOLS = new ArrayList<>();
-    ALLOWED_LAST_LETTER_SYMBOLS.add(SanLetter.CHECK.getLetter());
-    ALLOWED_LAST_LETTER_SYMBOLS.add(SanLetter.CHECKMATE.getLetter());
-  }
-
   public static SanParse validateFormat(String san) {
     SanValidateFormat.validateFormatBasic(san);
 
@@ -51,7 +39,8 @@ public abstract class SanValidateFormatReference {
       }
     }
 
-    throw new SanValidationException(SanValidationProblem.FORMAT, Message.getString("validation.san.format"));
+    throw new SanValidationException(SanValidationProblem.FORMAT,
+        Message.getString("validation.san.format.nonSpecific"));
   }
 
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
@@ -67,7 +56,7 @@ public abstract class SanValidateFormatReference {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
-    final CheckmateOrCheck checkmateOrCheck = calculateCheckmateOrCheck(san, formatLength);
+    final SanTerminalMarker sanTerminalMarker = calculateSanTerminalMarker(san, formatLength);
 
     // castling needs a special treatment
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
@@ -76,7 +65,7 @@ public abstract class SanValidateFormatReference {
         return SanConversionCheck.IS_NO_MATCH;
       }
       final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-          checkmateOrCheck);
+          sanTerminalMarker);
       return new SanConversionCheck(true, sanConversion);
     }
     if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
@@ -85,14 +74,14 @@ public abstract class SanValidateFormatReference {
         return SanConversionCheck.IS_NO_MATCH;
       }
       final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-          checkmateOrCheck);
+          sanTerminalMarker);
       return new SanConversionCheck(true, sanConversion);
     }
 
     // movingPieceTypeIndex
     final var movingPieceTypeIndex = properties.movingPieceTypeIndex();
     if (!properties.isPawn()) {
-      final var checkMovingPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(movingPieceTypeIndex));
+      final var checkMovingPieceTypeLetter = san.charAt(movingPieceTypeIndex);
       if (!NotationMovingPiece.exists(checkMovingPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -106,7 +95,7 @@ public abstract class SanValidateFormatReference {
     final File fromFile;
     final var fromFileIndex = properties.fromFileIndex();
     if (fromFileIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(fromFileIndex));
+      final var checkLetter = san.charAt(fromFileIndex);
       if (!File.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -119,15 +108,11 @@ public abstract class SanValidateFormatReference {
     final Rank fromRank;
     final var fromRankIndex = properties.fromRankIndex();
     if (fromRankIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(fromRankIndex));
-      if (!BasicUtility.isInt(checkLetter)) {
+      final var checkLetter = san.charAt(fromRankIndex);
+      if (!Rank.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
-      final var checkRankNumber = BasicUtility.parseInt(checkLetter);
-      if (!Rank.exists(checkRankNumber)) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
-      fromRank = Rank.calculateRank(checkRankNumber);
+      fromRank = Rank.calculateRank(checkLetter);
     } else {
       fromRank = Rank.NONE;
     }
@@ -135,8 +120,8 @@ public abstract class SanValidateFormatReference {
     // captureSymbolIndex
     final var captureSymbolIndex = properties.captureSymbolIndex();
     if (captureSymbolIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(captureSymbolIndex));
-      if (!SanLetter.CAPTURE.getLetter().equals(checkLetter)) {
+      final var checkLetter = san.charAt(captureSymbolIndex);
+      if (SanSymbol.CAPTURE.getSymbol() != checkLetter) {
         return SanConversionCheck.IS_NO_MATCH;
       }
     }
@@ -145,7 +130,7 @@ public abstract class SanValidateFormatReference {
     final File toFile;
     final var toFileIndex = properties.toFileIndex();
     if (toFileIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(toFileIndex));
+      final var checkLetter = san.charAt(toFileIndex);
       if (!File.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -158,34 +143,30 @@ public abstract class SanValidateFormatReference {
     final Rank toRank;
     final var toRankIndex = properties.toRankIndex();
     if (toRankIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(toRankIndex));
-      if (!BasicUtility.isInt(checkLetter)) {
+      final var checkLetter = san.charAt(toRankIndex);
+      if (!Rank.exists(checkLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
-      final var checkRankNumber = BasicUtility.parseInt(checkLetter);
-      if (!Rank.exists(checkRankNumber)) {
-        return SanConversionCheck.IS_NO_MATCH;
-      }
-      toRank = Rank.calculateRank(checkRankNumber);
+      toRank = Rank.calculateRank(checkLetter);
     } else {
       toRank = Rank.NONE;
     }
 
     // pawn promotion rank enforcement
     if ((sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && (toRank == Rank.RANK_1 || toRank == Rank.RANK_8)) {
+        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && Rank.calculateIsAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
     if ((sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE)
-        && (toRank != Rank.RANK_1 && toRank != Rank.RANK_8)) {
+        && !Rank.calculateIsAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
     // promotionSymbolIndex
     final var promotionSymbolIndex = properties.promotionSymbolIndex();
     if (promotionSymbolIndex != -1) {
-      final var checkLetter = NonNullWrapperCommon.toString(san.charAt(promotionSymbolIndex));
-      if (!SanLetter.PROMOTION.getLetter().equals(checkLetter)) {
+      final var checkLetter = san.charAt(promotionSymbolIndex);
+      if (SanSymbol.PROMOTION.getSymbol() != checkLetter) {
         return SanConversionCheck.IS_NO_MATCH;
       }
     }
@@ -194,7 +175,7 @@ public abstract class SanValidateFormatReference {
     final PromotionPieceType promotionPieceType;
     final var promotionPieceTypeIndex = properties.promotionPieceTypeIndex();
     if (promotionPieceTypeIndex != -1) {
-      final var checkPromotionPieceTypeLetter = NonNullWrapperCommon.toString(san.charAt(promotionPieceTypeIndex));
+      final var checkPromotionPieceTypeLetter = san.charAt(promotionPieceTypeIndex);
       if (!NotationPromotionPiece.exists(checkPromotionPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
@@ -212,25 +193,25 @@ public abstract class SanValidateFormatReference {
       throw new ProgrammingMistakeException(
           "Incorrect file/rank calculation - either file and rank are both set for non-castling moves or both not set for castling moves");
     }
-    final var sanConversion = new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, checkmateOrCheck);
+    final var sanConversion = new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker);
     return new SanConversionCheck(true, sanConversion);
   }
 
   private static boolean calculateIsAllowedLastChar(String san) {
-    final var lastLetter = NonNullWrapperCommon.toString(san.charAt(san.length() - 1));
-    return ALLOWED_LAST_LETTER_SYMBOLS.contains(lastLetter);
+    final var lastLetter = san.charAt(san.length() - 1);
+    return lastLetter == SanSymbol.CHECK.getSymbol() || lastLetter == SanSymbol.CHECKMATE.getSymbol();
   }
 
-  private static CheckmateOrCheck calculateCheckmateOrCheck(String san, int formatLength) {
+  private static SanTerminalMarker calculateSanTerminalMarker(String san, int formatLength) {
     if (san.length() != formatLength + 1) {
-      return CheckmateOrCheck.NONE;
+      return SanTerminalMarker.NONE;
     }
-    final var lastLetter = NonNullWrapperCommon.toString(san.charAt(san.length() - 1));
-    if (SanLetter.CHECKMATE.getLetter().equals(lastLetter)) {
-      return CheckmateOrCheck.CHECKMATE;
+    final var lastLetter = san.charAt(san.length() - 1);
+    if (SanSymbol.CHECK.getSymbol() == lastLetter) {
+      return SanTerminalMarker.CHECK;
     }
-    if (SanLetter.CHECK.getLetter().equals(lastLetter)) {
-      return CheckmateOrCheck.CHECK;
+    if (SanSymbol.CHECKMATE.getSymbol() == lastLetter) {
+      return SanTerminalMarker.CHECKMATE;
     }
 
     throw new ProgrammingMistakeException(

@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.CheckmateOrCheck;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
@@ -35,17 +35,17 @@ class TestSanValidateFormat {
 
     // d8=Q — invalid first, second (rank), structure, promotion piece
     checkException("18=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_PROMOTION_RANK);
-    checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
-    checkException("d8=K", SanValidationProblem.FORMAT);
+    checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
+    checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_SYMBOL);
+    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // dxe8=Q — invalid chars replaced with valid SAN chars
     checkException("1xe8=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("d=e8=Q", SanValidationProblem.FORMAT);
-    checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK);
     checkException("dxeR=Q", SanValidationProblem.FORMAT);
     checkException("dxe8xQ", SanValidationProblem.FORMAT);
-    checkException("dxe8=K", SanValidationProblem.FORMAT);
+    checkException("dxe8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // Qe5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
@@ -291,8 +291,8 @@ class TestSanValidateFormat {
   @SuppressWarnings("static-method")
   @Test
   void testPromotionToKing() {
-    checkException("d8=K", SanValidationProblem.FORMAT);
-    checkException("d1=K", SanValidationProblem.FORMAT);
+    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
+    checkException("d1=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
   }
 
   @SuppressWarnings("static-method")
@@ -319,21 +319,21 @@ class TestSanValidateFormat {
     {
       final var expectedSanType = SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.NONE, Rank.NONE, Square.D3, PromotionPieceType.NONE,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "d3";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var expectedSanType = SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.NONE, Rank.NONE, Square.D8, PromotionPieceType.KNIGHT,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "d8=N";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var expectedSanType = SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.NONE, Rank.NONE, Square.D1, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "d1=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
@@ -341,21 +341,21 @@ class TestSanValidateFormat {
     {
       final var expectedSanType = SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.FILE_D, Rank.NONE, Square.E5, PromotionPieceType.NONE,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "dxe5";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var expectedSanType = SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.FILE_D, Rank.NONE, Square.E8, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "dxe8=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var expectedSanType = SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.FILE_D, Rank.NONE, Square.E1, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "dxe1=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
@@ -363,191 +363,191 @@ class TestSanValidateFormat {
     {
       final var expectedSanType = SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.NONE, Rank.NONE, Square.D8, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "d8=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var expectedSanType = SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.NONE, Rank.NONE, Square.D1, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "d1=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var san = "d7=Q";
-      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH);
+      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
     }
     // (1d) pawnCapturingPromotionMoves dxe8=Q
     {
       final var expectedSanType = SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.FILE_D, Rank.NONE, Square.E8, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "dxe8=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var expectedSanType = SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       final var expectedSanConversion = new SanConversion(File.FILE_D, Rank.NONE, Square.E1, PromotionPieceType.QUEEN,
-          CheckmateOrCheck.NONE);
+          SanTerminalMarker.NONE);
       final var san = "dxe1=Q";
       checkValid(expectedSanType, expectedSanConversion, san);
     }
     {
       final var san = "dxe7=Q";
-      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH);
+      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
     }
     // (2a) queenNonCapturingMoves Qe5, Qae5, Q2e5, Qc3e5
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Qe5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Qe5");
     }
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Qae5");
+          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Qae5");
     }
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Q2e5");
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Q2e5");
     }
     {
       checkValid(SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE,
-          new SanConversion(File.FILE_C, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_C, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Qc3e5");
     }
     // (2b) queenCapturingMoves Qxe5, Qaxe5, Q2xe5, Qc3xe5
     {
       checkValid(SanType.QUEEN_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Qxe5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Qxe5");
     }
     {
       checkValid(SanType.QUEEN_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Qaxe5");
     }
     {
       checkValid(SanType.QUEEN_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Q2xe5");
     }
     {
       checkValid(SanType.QUEEN_CAPTURING_SQUARE_MOVE,
-          new SanConversion(File.FILE_C, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_C, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Qc3xe5");
     }
     // (3a) rookNonCapturingMoves Re5, Rae5, R2e5
     {
       checkValid(SanType.ROOK_NON_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Re5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Re5");
     }
     {
       checkValid(SanType.ROOK_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Rae5");
+          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Rae5");
     }
     {
       checkValid(SanType.ROOK_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "R2e5");
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "R2e5");
     }
     // (3b) rookCapturingMoves Rxe5, Raxe5, R2xe5
     {
       checkValid(SanType.ROOK_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Rxe5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Rxe5");
     }
     {
       checkValid(SanType.ROOK_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_A, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Raxe5");
     }
     {
       checkValid(SanType.ROOK_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "R2xe5");
     }
     // (4a) knightNonCapturingMoves Ne5, Nce5, N4e5, Nd3e5
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Ne5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Ne5");
     }
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_C, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Nce5");
+          new SanConversion(File.FILE_C, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Nce5");
     }
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_4, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "N4e5");
+          new SanConversion(File.NONE, Rank.RANK_4, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "N4e5");
     }
     {
       checkValid(SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE,
-          new SanConversion(File.FILE_D, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_D, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Nd3e5");
     }
     // (4b) knightCapturingMoves Nxe5, Ncxe5, N4xe5, Nd3xe5
     {
       checkValid(SanType.KNIGHT_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Nxe5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Nxe5");
     }
     {
       checkValid(SanType.KNIGHT_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_C, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_C, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Ncxe5");
     }
     {
       checkValid(SanType.KNIGHT_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_4, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.NONE, Rank.RANK_4, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "N4xe5");
     }
     {
       checkValid(SanType.KNIGHT_CAPTURING_SQUARE_MOVE,
-          new SanConversion(File.FILE_D, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_D, Rank.RANK_3, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Nd3xe5");
     }
     // (5a) bishopNonCapturingMoves Be5, Bbe5, B2e5
     {
       checkValid(SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Be5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Be5");
     }
     {
       checkValid(SanType.BISHOP_NON_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_B, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Bbe5");
+          new SanConversion(File.FILE_B, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Bbe5");
     }
     {
       checkValid(SanType.BISHOP_NON_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "B2e5");
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "B2e5");
     }
     // (5b) bishopCapturingMoves Bxe5, Bbxe5, B2xe5
     {
       checkValid(SanType.BISHOP_CAPTURING_NEITHER_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Bxe5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Bxe5");
     }
     {
       checkValid(SanType.BISHOP_CAPTURING_FILE_MOVE,
-          new SanConversion(File.FILE_B, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.FILE_B, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "Bbxe5");
     }
     {
       checkValid(SanType.BISHOP_CAPTURING_RANK_MOVE,
-          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.NONE, Rank.RANK_2, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           "B2xe5");
     }
     // (6a) kingNonCastlingNonCapturingMoves Ke5
     {
       checkValid(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Ke5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Ke5");
     }
     // (6b) kingNonCastlingCapturingMoves Kxe5
     {
       checkValid(SanType.KING_NON_CASTLING_CAPTURING_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, CheckmateOrCheck.NONE), "Kxe5");
+          new SanConversion(File.NONE, Rank.NONE, Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Kxe5");
     }
     // (6c) kingMovesCastling O-O and O-O-O
     {
       checkValid(SanType.KING_CASTLING_KING_SIDE_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           CastlingConstants.SAN_CASTLING_KING_SIDE);
     }
     {
       checkValid(SanType.KING_CASTLING_QUEEN_SIDE_MOVE,
-          new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE, CheckmateOrCheck.NONE),
+          new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE, SanTerminalMarker.NONE),
           CastlingConstants.SAN_CASTLING_QUEEN_SIDE);
     }
   }

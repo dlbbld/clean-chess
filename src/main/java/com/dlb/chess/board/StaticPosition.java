@@ -124,9 +124,9 @@ public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8, Piece e8, P
     return NonNullWrapperCommon.toString(output);
   }
 
-  private static String calculateSquareLetter(Piece piece) {
+  private static char calculateSquareLetter(Piece piece) {
     if (piece == Piece.NONE) {
-      return ".";
+      return '.';
     }
     return piece.getLetter();
   }

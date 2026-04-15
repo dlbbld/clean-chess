@@ -56,7 +56,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionRank() {
     // "da=Q" — second char 'a' is not a rank digit (non-capturing promotion path)
-    checkException("da=Q", SanValidationProblem.FORMAT_PAWN_PROMOTION_RANK);
+    checkException("da=Q", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
   }
 
   @SuppressWarnings("static-method")
@@ -86,22 +86,22 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnMissingPromotionNonCapturing() {
     // rank 8 without =piece
-    checkException("d8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
-    checkException("a8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("d8", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
+    checkException("a8", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
     // rank 1 without =piece
-    checkException("d1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
-    checkException("a1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("d1", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
+    checkException("a1", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPawnMissingPromotionCapturing() {
     // capture to rank 8 without =piece
-    checkException("dxe8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
-    checkException("axb8", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("dxe8", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
+    checkException("axb8", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
     // capture to rank 1 without =piece
-    checkException("dxe1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
-    checkException("axb1", SanValidationProblem.FORMAT_PAWN_MISSING_PROMOTION);
+    checkException("dxe1", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
+    checkException("axb1", SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL);
   }
 
   // --- Pawn format: promotion on wrong rank (treated as length error) ---
@@ -110,17 +110,17 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionMiddleOfBoardNonCapturing() {
     // =piece on non-promotion rank
-    checkException("d3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
-    checkException("d4=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
-    checkException("d7=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("d3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
+    checkException("d4=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
+    checkException("d7=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPawnPromotionMiddleOfBoardCapturing() {
     // capture with =piece on non-promotion rank
-    checkException("dxe5=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
-    checkException("dxe3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("dxe5=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
+    checkException("dxe3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
   }
 
   // --- Pawn format: valid promotion (should not throw) ---
@@ -140,9 +140,9 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnLength() {
     // length 3 starting with file — not a valid pawn length
-    checkException("d3e", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("d3e", SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
     // length 5 starting with file — not a valid pawn length
-    checkException("dxe5Q", SanValidationProblem.FORMAT_PAWN_LENGTH);
+    checkException("dxe5Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
   }
 
   // --- King format ---

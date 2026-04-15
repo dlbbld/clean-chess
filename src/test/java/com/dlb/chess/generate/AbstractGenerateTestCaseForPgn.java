@@ -21,7 +21,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     final Analysis analysis = Analyzer.calculateAnalysis(pgnFolderPath, pgnFileName);
 
     final StringBuilder result = new StringBuilder();
-    result.append("list.add(new " + PgnFileTestCase.class.getSimpleName() + "(");
+    result.append("list.add(new ").append(PgnFileTestCase.class.getSimpleName()).append("(");
 
     // begin values
     result.append("\"");

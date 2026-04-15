@@ -1,5 +1,7 @@
 package com.dlb.chess.san.exceptions;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.common.exceptions.UsageException;
 import com.dlb.chess.enums.MoveCheck;
@@ -8,11 +10,14 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 public class SanValidationException extends UsageException {
 
   private final SanValidationProblem sanValidationProblem;
-  private final MoveCheck moveCheck;
-  private final CastlingRightLoss castlingRightLoss;
+  private final @Nullable MoveCheck moveCheck;
+  private final @Nullable CastlingRightLoss castlingRightLoss;
 
   public SanValidationException(SanValidationProblem sanValidationProblem, String message) {
-    this(sanValidationProblem, message, MoveCheck.SUCCESS, CastlingRightLoss.NONE);
+    super(message);
+    this.sanValidationProblem = sanValidationProblem;
+    this.moveCheck = null;
+    this.castlingRightLoss = null;
   }
 
   public SanValidationException(SanValidationProblem sanValidationProblem, String message, MoveCheck moveCheck,
@@ -27,11 +32,11 @@ public class SanValidationException extends UsageException {
     return sanValidationProblem;
   }
 
-  public MoveCheck getMoveCheck() {
+  public @Nullable MoveCheck getMoveCheck() {
     return moveCheck;
   }
 
-  public CastlingRightLoss getCastlingRightLoss() {
+  public @Nullable CastlingRightLoss getCastlingRightLoss() {
     return castlingRightLoss;
   }
 

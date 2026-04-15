@@ -1,18 +1,17 @@
 package com.dlb.chess.board.enums;
 
-import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public enum Rank {
-  RANK_1(ChessConstants.RANK_1_NUMBER),
-  RANK_2(ChessConstants.RANK_2_NUMBER),
-  RANK_3(ChessConstants.RANK_3_NUMBER),
-  RANK_4(ChessConstants.RANK_4_NUMBER),
-  RANK_5(ChessConstants.RANK_5_NUMBER),
-  RANK_6(ChessConstants.RANK_6_NUMBER),
-  RANK_7(ChessConstants.RANK_7_NUMBER),
-  RANK_8(ChessConstants.RANK_8_NUMBER),
+  RANK_1(1),
+  RANK_2(2),
+  RANK_3(3),
+  RANK_4(4),
+  RANK_5(5),
+  RANK_6(6),
+  RANK_7(7),
+  RANK_8(8),
   NONE(0);
 
   private final int number;
@@ -26,6 +25,10 @@ public enum Rank {
     return number;
   }
 
+  public static boolean exists(char character) {
+    return exists(Character.getNumericValue(character));
+  }
+
   public static boolean exists(int number) {
     for (final Rank rank : values()) {
       if (rank == NONE) {
@@ -36,6 +39,10 @@ public enum Rank {
       }
     }
     return false;
+  }
+
+  public static Rank calculateRank(char character) {
+    return calculateRank(Character.getNumericValue(character));
   }
 
   public static Rank calculateRank(int number) {
@@ -186,11 +193,16 @@ public enum Rank {
   }
 
   public static Rank calculateGroundRank(Side havingMove) {
-    if (havingMove == Side.NONE) {
-      throw new IllegalArgumentException();
-    }
+    return switch (havingMove) {
+      case WHITE -> RANK_1;
+      case BLACK -> RANK_8;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
 
-    return calculatePromotionRank(havingMove.getOppositeSide());
+  public static boolean calculateIsAnyPromotionRank(Rank rank) {
+    return rank == RANK_8 || rank == RANK_1;
   }
 
   public static boolean calculateIsPromotionRank(Side havingMove, Rank rank) {

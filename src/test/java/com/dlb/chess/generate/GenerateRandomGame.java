@@ -334,7 +334,7 @@ public class GenerateRandomGame {
         moveList.append(" ");
       }
       if (halfMove.moveSpecification().havingMove().getIsWhite()) {
-        moveList.append(halfMove.fullMoveNumber() + ". ");
+        moveList.append(halfMove.fullMoveNumber()).append(". ");
       } else if (halfMove.moveSpecification().havingMove().getIsBlack()) {
         moveList.append(" ");
       } else {

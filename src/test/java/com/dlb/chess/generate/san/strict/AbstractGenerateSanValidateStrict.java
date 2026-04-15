@@ -11,7 +11,6 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.DiagonalLineUtility;
@@ -100,7 +99,7 @@ public abstract class AbstractGenerateSanValidateStrict implements EnumConstants
   }
 
   private String calculateMoveWithFile(Square toSquare, File file) {
-    final var fileLetterUpperCase = NonNullWrapperCommon.toUpperCase(file.getLetter());
+    final var fileLetterUpperCase = Character.toUpperCase(file.getLetter());
     final var piecePlusFile = getPieceType().getLetter() + fileLetterUpperCase;
     return piecePlusFile + toSquare.getName().toUpperCase();
   }

@@ -10,7 +10,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
-class TestSanValidateCheckmateOrCheck {
+class TestSanValidateSanTerminalMarker {
 
   @SuppressWarnings("static-method")
   @Test

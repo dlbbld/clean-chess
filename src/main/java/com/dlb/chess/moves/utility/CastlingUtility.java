@@ -472,7 +472,7 @@ public abstract class CastlingUtility implements EnumConstants {
 
   public static CastlingRightLoss calculateCastlingRightLoss(LegalMove legalMove, CastlingRightLoss previousLoss,
       Side side, CastlingMove castlingSide) {
-    if (previousLoss != CastlingRightLoss.NONE) {
+    if (previousLoss != CastlingRightLoss.NOT_LOST) {
       return previousLoss;
     }
     final Side havingMoveBefore = legalMove.moveSpecification().havingMove();
@@ -491,7 +491,7 @@ public abstract class CastlingUtility implements EnumConstants {
         || castlingSide == CastlingMove.QUEEN_SIDE && calculateHasCapturedOpponentRookQueenSide(legalMove)) {
       return CastlingRightLoss.ROOK_CAPTURED;
     }
-    return CastlingRightLoss.NONE;
+    return CastlingRightLoss.NOT_LOST;
   }
 
   private static boolean calculateHasKingMoved(LegalMove legalMove) {

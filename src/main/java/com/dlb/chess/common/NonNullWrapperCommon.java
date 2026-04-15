@@ -85,6 +85,10 @@ public class NonNullWrapperCommon {
     return checkResult(string.toUpperCase());
   }
 
+  public static String valueOf(char charValue) {
+    return checkResult(String.valueOf(charValue));
+  }
+
   public static String valueOf(double doubleValue) {
     return checkResult(String.valueOf(doubleValue));
   }

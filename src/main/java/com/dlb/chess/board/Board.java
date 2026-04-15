@@ -41,8 +41,10 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.moves.utility.StandardMoveUtility;
+import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.validate.SanValidation;
 import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 
@@ -136,16 +138,16 @@ public class Board extends AbstractBoard {
     this.blackKingSideLossList = new ArrayList<>();
     this.blackQueenSideLossList = new ArrayList<>();
     this.whiteKingSideLossList.add(initialCastlingRightWhite == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightWhite == CastlingRight.KING_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightWhite == CastlingRight.KING_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     this.whiteQueenSideLossList.add(initialCastlingRightWhite == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightWhite == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightWhite == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     this.blackKingSideLossList.add(initialCastlingRightBlack == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightBlack == CastlingRight.KING_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightBlack == CastlingRight.KING_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     this.blackQueenSideLossList.add(initialCastlingRightBlack == CastlingRight.KING_AND_QUEEN_SIDE
-        || initialCastlingRightBlack == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NONE
+        || initialCastlingRightBlack == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
 
   }
@@ -246,9 +248,11 @@ public class Board extends AbstractBoard {
 
     final Set<LegalMove> legalMoveBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveListSet,
         legalMoveListSet.size() - 2);
-    this.sanList
-        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, isCheckmate, isCheck));
-    this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, isCheckmate, isCheck));
+
+    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck, isCheckmate);
+
+    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, sanTerminalMarker));
+    this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
     this.halfMoveList.add(halfMove);
@@ -779,6 +783,7 @@ public class Board extends AbstractBoard {
     return NonNullWrapperCommon.getLast(blackQueenSideLossList);
   }
 
+  @Override
   public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingSide) {
     return switch (side) {
       case WHITE -> castlingSide == CastlingMove.KING_SIDE ? getWhiteKingSideLoss() : getWhiteQueenSideLoss();

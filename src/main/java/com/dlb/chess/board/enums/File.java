@@ -1,33 +1,41 @@
 package com.dlb.chess.board.enums;
 
-import com.dlb.chess.common.constants.ChessConstants;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public enum File {
-  FILE_A(ChessConstants.FILE_A_LETTER, 1, true),
-  FILE_B(ChessConstants.FILE_B_LETTER, 2, false),
-  FILE_C(ChessConstants.FILE_C_LETTER, 3, false),
-  FILE_D(ChessConstants.FILE_D_LETTER, 4, false),
-  FILE_E(ChessConstants.FILE_E_LETTER, 5, false),
-  FILE_F(ChessConstants.FILE_F_LETTER, 6, false),
-  FILE_G(ChessConstants.FILE_G_LETTER, 7, false),
-  FILE_H(ChessConstants.FILE_H_LETTER, 8, true),
-  NONE(" ", 0, false);
+  FILE_A('a', 1, true),
+  FILE_B('b', 2, false),
+  FILE_C('c', 3, false),
+  FILE_D('d', 4, false),
+  FILE_E('e', 5, false),
+  FILE_F('f', 6, false),
+  FILE_G('g', 7, false),
+  FILE_H('h', 8, true),
+  NONE('\0', 0, false);
 
-  private final String letter;
+  private final char letter;
+  private final String letterString;
+
   private final int number;
   private final boolean isBorderFile;
 
-  File(String letter, int number, boolean isBorderFile) {
+  File(char letter, int number, boolean isBorderFile) {
     this.letter = letter;
+    this.letterString = NonNullWrapperCommon.valueOf(letter);
     this.number = number;
     this.isBorderFile = isBorderFile;
   }
 
-  public String getLetter() {
+  public char getLetter() {
     check();
     return letter;
+  }
+
+  public String getLetterString() {
+    check();
+    return letterString;
   }
 
   public int getNumber() {
@@ -40,19 +48,19 @@ public enum File {
     return isBorderFile;
   }
 
-  public static boolean exists(String letter) {
+  public static boolean exists(char letter) {
     for (final File file : values()) {
       if (file == NONE) {
         continue;
       }
-      if (file.getLetter().equals(letter)) {
+      if (file.getLetter() == letter) {
         return true;
       }
     }
     return false;
   }
 
-  public static File calculateFile(String letter) {
+  public static File calculateFile(char letter) {
     if (!exists(letter)) {
       throw new IllegalArgumentException("For this letter no corresponding non dummy File exists");
     }
@@ -60,7 +68,7 @@ public enum File {
       if (file == NONE) {
         continue;
       }
-      if (file.getLetter().equals(letter)) {
+      if (file.getLetter() == letter) {
         return file;
       }
     }

@@ -9,7 +9,9 @@ import java.util.TreeSet;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -27,6 +29,9 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.san.AbstractSan;
+import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.apicarlos.NonNullWrapperApiCarlos;
 import com.dlb.chess.test.apicarlos.utility.MoveConversionUtility;
 import com.dlb.chess.test.apicomparison.utility.BoardConversionUtitlity;
@@ -266,21 +271,20 @@ public class ApiCarlosBoard extends AbstractBoard {
     }
     lan.append(move.getFrom().toString().toLowerCase());
     if (isCapture()) {
-      lan.append("x");
+      lan.append(SanSymbol.CAPTURE.getSymbol());
     }
     lan.append(move.getTo().toString().toLowerCase());
     if (calculateIsPromotion(moveBackup)) {
-      lan.append("=");
+      lan.append(SanSymbol.PROMOTION.getSymbol());
       final var promotionPiece = move.getPromotion();
       final var promotionPieceFenSymbol = promotionPiece.getFenSymbol();
       final var promotionPieceSymbol = promotionPieceFenSymbol.toUpperCase();
       lan.append(promotionPieceSymbol);
     }
-    if (isCheckmate()) {
-      lan.append("#");
-    } else if (isCheck()) {
-      lan.append("+");
-    }
+
+    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck(), isCheckmate());
+    AbstractSan.appendSanTerminalMarker(lan, sanTerminalMarker);
+
     return NonNullWrapperCommon.toString(lan);
   }
 
@@ -584,4 +588,8 @@ public class ApiCarlosBoard extends AbstractBoard {
     return performedLegalMoveList;
   }
 
+  @Override
+  public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingMove) {
+    return CastlingRightLoss.NOT_IMPLEMENTED;
+  }
 }

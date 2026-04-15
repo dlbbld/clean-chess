@@ -106,23 +106,25 @@ class TestDiagonalUtility implements EnumConstants {
 
     final List<Square> diagonal = new ArrayList<>();
 
-    final var leftNumberOfSquares = Math.min(square.getFile().getNumber(), 9 - square.getRank().getNumber()) - 1;
-    final var rightNumberOfSquares = Math.min(9 - square.getFile().getNumber(), square.getRank().getNumber()) - 1;
+    final var fileNumber = square.getFile().getNumber();
+    final var rankNumber = square.getRank().getNumber();
 
-    final var startingFileNumber = square.getFile().getNumber() - leftNumberOfSquares;
-    final var startingRankNumber = square.getRank().getNumber() + leftNumberOfSquares;
+    final var leftNumberOfSquares = Math.min(fileNumber, 9 - rankNumber) - 1;
+    final var rightNumberOfSquares = Math.min(9 - fileNumber, rankNumber) - 1;
 
-    final var endFileNumber = square.getFile().getNumber() + rightNumberOfSquares;
+    final var startingFileNumber = fileNumber - leftNumberOfSquares;
+    final var startingRankNumber = rankNumber + leftNumberOfSquares;
+    final var endFileNumber = fileNumber + rightNumberOfSquares;
 
     if (startingFileNumber > endFileNumber) {
       throw new TestSetupException("That is not possible");
     }
 
-    var rankNumber = startingRankNumber;
-    for (var fileNumber = startingFileNumber; fileNumber <= endFileNumber; fileNumber++) {
-      final Square diagonalSquare = Square.calculate(fileNumber, rankNumber);
+    var rankNumberProcess = startingRankNumber;
+    for (var fileNumberProcess = startingFileNumber; fileNumberProcess <= endFileNumber; fileNumberProcess++) {
+      final Square diagonalSquare = Square.calculate(fileNumberProcess, rankNumberProcess);
       diagonal.add(diagonalSquare);
-      rankNumber--;
+      rankNumberProcess--;
     }
 
     return diagonal;

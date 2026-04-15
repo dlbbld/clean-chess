@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 
 class TestBasicFile implements EnumConstants {
@@ -28,43 +27,43 @@ class TestBasicFile implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testMethodsDirect() throws Exception {
-    assertTrue(File.exists(ChessConstants.FILE_A_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_B_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_C_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_D_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_E_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_F_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_G_LETTER));
-    assertTrue(File.exists(ChessConstants.FILE_H_LETTER));
+    assertTrue(File.exists('a'));
+    assertTrue(File.exists('b'));
+    assertTrue(File.exists('c'));
+    assertTrue(File.exists('d'));
+    assertTrue(File.exists('e'));
+    assertTrue(File.exists('f'));
+    assertTrue(File.exists('g'));
+    assertTrue(File.exists('h'));
 
-    assertFalse(File.exists("i"));
-    assertFalse(File.exists("j"));
-    assertFalse(File.exists("k"));
-    assertFalse(File.exists("1"));
-    assertFalse(File.exists("2"));
-    assertFalse(File.exists("3"));
-    assertFalse(File.exists("-1"));
-    assertFalse(File.exists("0"));
-    assertFalse(File.exists("9"));
+    assertFalse(File.exists('i'));
+    assertFalse(File.exists('j'));
+    assertFalse(File.exists('k'));
+    assertFalse(File.exists('1'));
+    assertFalse(File.exists('2'));
+    assertFalse(File.exists('3'));
+    assertFalse(File.exists('-'));
+    assertFalse(File.exists('0'));
+    assertFalse(File.exists('9'));
 
-    assertEquals(File.FILE_A, File.calculateFile(ChessConstants.FILE_A_LETTER));
-    assertEquals(File.FILE_B, File.calculateFile(ChessConstants.FILE_B_LETTER));
-    assertEquals(File.FILE_C, File.calculateFile(ChessConstants.FILE_C_LETTER));
-    assertEquals(File.FILE_D, File.calculateFile(ChessConstants.FILE_D_LETTER));
-    assertEquals(File.FILE_E, File.calculateFile(ChessConstants.FILE_E_LETTER));
-    assertEquals(File.FILE_F, File.calculateFile(ChessConstants.FILE_F_LETTER));
-    assertEquals(File.FILE_G, File.calculateFile(ChessConstants.FILE_G_LETTER));
-    assertEquals(File.FILE_H, File.calculateFile(ChessConstants.FILE_H_LETTER));
+    assertEquals(File.FILE_A, File.calculateFile('a'));
+    assertEquals(File.FILE_B, File.calculateFile('b'));
+    assertEquals(File.FILE_C, File.calculateFile('c'));
+    assertEquals(File.FILE_D, File.calculateFile('d'));
+    assertEquals(File.FILE_E, File.calculateFile('e'));
+    assertEquals(File.FILE_F, File.calculateFile('f'));
+    assertEquals(File.FILE_G, File.calculateFile('g'));
+    assertEquals(File.FILE_H, File.calculateFile('h'));
 
-    checkException("i");
-    checkException("j");
-    checkException("k");
-    checkException("1");
-    checkException("2");
-    checkException("3");
-    checkException("-1");
-    checkException("0");
-    checkException("9");
+    checkException('i');
+    checkException('j');
+    checkException('k');
+    checkException('1');
+    checkException('2');
+    checkException('3');
+    checkException('-');
+    checkException('0');
+    checkException('9');
   }
 
   @SuppressWarnings("static-method")
@@ -228,7 +227,7 @@ class TestBasicFile implements EnumConstants {
 
   }
 
-  private static void checkException(String fileLetter) {
+  private static void checkException(char fileLetter) {
     boolean isException;
     try {
       File.calculateFile(fileLetter);
