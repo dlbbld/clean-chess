@@ -41,7 +41,7 @@ public class PawnWall {
         return false;
       }
       // if one side has a bishop we only allow only opponent pawns of different colour
-      for (final Side side : Side.BOTH) {
+      for (final Side side : Side.REAL) {
         for (final SquareType squareType : SquareType.values()) {
           if (squareType != SquareType.NONE
               && calculateHasOneOrMultipleBishopForSpecifiedColor(side, staticPosition, squareType)

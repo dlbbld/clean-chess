@@ -3,6 +3,7 @@ package com.dlb.chess.board.enums;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.google.common.collect.ImmutableList;
 
 public enum File {
   FILE_A('a', 1, true),
@@ -14,6 +15,10 @@ public enum File {
   FILE_G('g', 7, false),
   FILE_H('h', 8, true),
   NONE('\0', 0, false);
+
+  @SuppressWarnings("null")
+  public static final ImmutableList<File> REAL = ImmutableList.of(FILE_A, FILE_B, FILE_C, FILE_D, FILE_E, FILE_F,
+      FILE_G, FILE_H);
 
   private final char letter;
   private final String letterString;

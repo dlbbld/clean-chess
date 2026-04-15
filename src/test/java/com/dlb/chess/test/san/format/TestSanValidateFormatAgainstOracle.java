@@ -1,4 +1,4 @@
-package com.dlb.chess.test.san;
+package com.dlb.chess.test.san.format;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -27,7 +27,7 @@ import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStatica
  * O(1) lookup. The generation uses in-place backtracking to avoid allocating intermediate strings. Do not replace these
  * structures with higher-level abstractions.
  */
-class TestSanFormatValidationCompleteness {
+class TestSanValidateFormatAgainstOracle {
 
   // ---------------------------------------------------------------------------
   // Alphabet: every character that may appear in a SAN string (check/checkmate

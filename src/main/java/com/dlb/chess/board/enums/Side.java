@@ -12,7 +12,7 @@ public enum Side {
   NONE(false, false, "", " ");
 
   @SuppressWarnings("null")
-  public static final ImmutableList<Side> BOTH = ImmutableList.of(WHITE, BLACK);
+  public static final ImmutableList<Side> REAL = ImmutableList.of(WHITE, BLACK);
 
   private final boolean isWhite;
   private final boolean isBlack;
@@ -63,7 +63,7 @@ public enum Side {
   }
 
   public static boolean exists(String fenLetter) {
-    for (final Side side : BOTH) {
+    for (final Side side : REAL) {
       if (side.getFenLetter().equals(fenLetter)) {
         return true;
       }
@@ -75,7 +75,7 @@ public enum Side {
     if (!exists(fenLetter)) {
       throw new IllegalArgumentException("No piece for this letter exists");
     }
-    for (final Side side : BOTH) {
+    for (final Side side : REAL) {
       if (side.getFenLetter().equals(fenLetter)) {
         return side;
       }
