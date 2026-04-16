@@ -16,7 +16,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.constants.PgnRestrictTestConstants;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
@@ -119,7 +119,7 @@ public class PgnExpectedValue {
   private static final List<PgnFileTestCaseList> restricedTestCaseListList = new ArrayList<>();
 
   static {
-    logger.info(PgnRestrictTestConstants.PGN_TEST_INCLUSION.getMessage());
+    logger.info(RestrictTestConstants.PGN_TEST_INCLUSION.getMessage());
 
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = calculateTestCaseList(pgnTest);
@@ -127,7 +127,7 @@ public class PgnExpectedValue {
       allTestCaseListList.add(testCaseList);
 
       if (pgnTest == PgnTest.LONGEST_POSSIBLE) {
-        switch (PgnRestrictTestConstants.PGN_TEST_INCLUSION) {
+        switch (RestrictTestConstants.PGN_TEST_INCLUSION) {
           case ALL:
           case ONLY_LONGEST_POSSIBLE:
             restricedTestCaseListList.add(testCaseList);
@@ -138,7 +138,7 @@ public class PgnExpectedValue {
             throw new IllegalArgumentException();
         }
       } else {
-        switch (PgnRestrictTestConstants.PGN_TEST_INCLUSION) {
+        switch (RestrictTestConstants.PGN_TEST_INCLUSION) {
           case ALL:
           case ALL_EXCEPT_LONGEST_POSSIBLE:
             restricedTestCaseListList.add(testCaseList);

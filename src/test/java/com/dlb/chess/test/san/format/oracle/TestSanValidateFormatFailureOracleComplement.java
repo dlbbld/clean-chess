@@ -1,20 +1,21 @@
-package com.dlb.chess.test.san.format;
+package com.dlb.chess.test.san.format.oracle;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.util.Arrays;
-import java.util.Map;
+import java.util.HashSet;
 import java.util.Set;
+import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.SanValidateFormat;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
+import com.dlb.chess.test.RestrictTestConstants;
 
 /**
  * Exhaustive completeness test: enumerates every string that can plausibly be a SAN move (drawn from a restricted
@@ -27,7 +28,7 @@ import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStatica
  * O(1) lookup. The generation uses in-place backtracking to avoid allocating intermediate strings. Do not replace these
  * structures with higher-level abstractions.
  */
-class TestSanValidateFormatAgainstOracle {
+class TestSanValidateFormatFailureOracleComplement {
 
   // ---------------------------------------------------------------------------
   // Alphabet: every character that may appear in a SAN string (check/checkmate
@@ -42,6 +43,12 @@ class TestSanValidateFormatAgainstOracle {
 
   /** Longest SAN string to consider (e.g. "Qc3xe5" = 6 chars). */
   private static final int MAX_LENGTH = 6;
+
+  /**
+   * Castling moves emitted as-is. They use characters ({@code O}, {@code -}) that are outside the combinatoric
+   * {@link #ALPHABET}, so we handle them as literal extras rather than polluting the alphabet.
+   */
+  private static final Set<String> CASTLING_MOVES = Set.of("O-O", "O-O-O");
 
   /** How often to print a progress line to stdout. */
   private static final int PRINT_INTERVAL = 100_000;
@@ -102,32 +109,12 @@ class TestSanValidateFormatAgainstOracle {
   // Test entry point
   // ---------------------------------------------------------------------------
 
-  /**
-   * For every entry in the static SAN map, asserts that {@link SanValidateFormat#validateFormat} returns the identical
-   * {@link SanParse} that the map pre-computed.
-   *
-   * <p>
-   * This uses the static map as an oracle: if the new parser produces a different result for any known-valid SAN string
-   * (wrong {@link com.dlb.chess.san.enums.SanType}, wrong from-square, wrong promotion piece, etc.) the test will catch
-   * it immediately without having to enumerate strings manually.
-   */
+  // Completeness test done. Total checks: 9,737,475, total elapsed: 176.8 s
   @SuppressWarnings("static-method")
   @Test
-  void testConsistencyWithStaticMap() {
-    for (final Map.Entry<String, SanParse> entry : NonNullWrapperCommon
-        .entrySet(SanValidateStaticallyFormat.getSanValidationMap())) {
-      final String san = NonNullWrapperCommon.getKey(entry);
-      final SanParse expected = NonNullWrapperCommon.getValue(entry);
-      final SanParse actual = SanValidateFormat.validateFormat(san);
-      assertEquals(expected, actual, "validateFormat result differs from static map for SAN: \"" + san + "\"");
-    }
-  }
+  void testFailureOracleComplement() {
+    assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST);
 
-  // Completeness test done. Total checks: 9737473, total elapsed: 38461 ms
-  // TODO currently runs, reenable when tests stable again
-  @SuppressWarnings("static-method")
-  // @Test
-  void testCompleteness() {
     final Set<String> validSanSet = NonNullWrapperCommon.keySet(SanValidateStaticallyFormat.getSanValidationMap());
     final var startTime = System.currentTimeMillis();
 
@@ -135,11 +122,52 @@ class TestSanValidateFormatAgainstOracle {
     // that is updated deep inside a recursive method without using instance state.
     final long[] totalChecked = { 0 };
 
-    generateAndCheck(new char[MAX_LENGTH], 0, new int[NUM_CATS], validSanSet, totalChecked, startTime);
+    generateAllCandidates(san -> checkCandidate(san, validSanSet, totalChecked, startTime));
 
     final var totalElapsed = System.currentTimeMillis() - startTime;
-    System.out.println(
-        "Completeness test done. Total checks: " + totalChecked[0] + ", total elapsed: " + totalElapsed + " ms");
+    System.out.println("Completeness test done. Total checks: " + String.format("%,d", totalChecked[0])
+        + ", total elapsed: " + String.format("%.1f", totalElapsed / 1000.0) + " s");
+  }
+
+  /**
+   * Asserts that the candidate generator produces every SAN in the static SAN map that is within the generator's scope
+   * — i.e. castling moves plus SANs whose characters all lie in {@link #ALPHABET} (excluding terminal markers
+   * {@code +}/{@code #}). Without this guarantee, the failure oracle complement test could silently miss bugs where
+   * {@link SanValidateFormat#validateFormat} rejects valid SANs that the generator never exercises.
+   */
+  @SuppressWarnings("static-method")
+  @Test
+  void testGeneratorCoversStaticMap() {
+    final Set<String> missing = new HashSet<>();
+    for (final String san : NonNullWrapperCommon.keySet(SanValidateStaticallyFormat.getSanValidationMap())) {
+      if (isInGeneratorScope(san)) {
+        missing.add(san);
+      }
+    }
+    generateAllCandidates(missing::remove);
+    assertTrue(missing.isEmpty(), "Generator did not produce " + missing.size() + " SAN(s) from the static map, e.g.: "
+        + missing.stream().limit(10).toList());
+  }
+
+  private static boolean isInGeneratorScope(final String san) {
+    if (CASTLING_MOVES.contains(san)) {
+      return true;
+    }
+    for (var i = 0; i < san.length(); i++) {
+      final var c = san.charAt(i);
+      if (c >= CHAR_CATEGORY.length || CHAR_CATEGORY[c] == -1) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /** Emits castling first, then all combinatorically generated candidates. */
+  private static void generateAllCandidates(final Consumer<String> consumer) {
+    for (final String castling : CASTLING_MOVES) {
+      consumer.accept(castling);
+    }
+    generateCandidates(new char[MAX_LENGTH], 0, new int[NUM_CATS], consumer);
   }
 
   // ---------------------------------------------------------------------------
@@ -167,11 +195,11 @@ class TestSanValidateFormatAgainstOracle {
    * The {@code buffer} and {@code categoryCounts} arrays are mutated in-place to avoid allocating new objects on every
    * recursive call.
    */
-  private static void generateAndCheck(final char[] buffer, final int length, final int[] categoryCounts,
-      final Set<String> validSanSet, final long[] totalChecked, final long startTime) {
+  private static void generateCandidates(final char[] buffer, final int length, final int[] categoryCounts,
+      final Consumer<String> consumer) {
 
     if (length > 0) {
-      checkCandidate(new String(buffer, 0, length), validSanSet, totalChecked, startTime);
+      consumer.accept(new String(buffer, 0, length));
     }
     if (length == MAX_LENGTH) {
       return;
@@ -188,7 +216,7 @@ class TestSanValidateFormatAgainstOracle {
       if (categoryCounts[category] < CAT_MAX[category]) {
         buffer[length] = c;
         categoryCounts[category]++;
-        generateAndCheck(buffer, length + 1, categoryCounts, validSanSet, totalChecked, startTime);
+        generateCandidates(buffer, length + 1, categoryCounts, consumer);
         categoryCounts[category]--; // backtrack
       }
     }
@@ -220,7 +248,8 @@ class TestSanValidateFormatAgainstOracle {
     totalChecked[0]++;
     if (totalChecked[0] % PRINT_INTERVAL == 0) {
       final var elapsed = System.currentTimeMillis() - startTime;
-      System.out.println("Processed: " + totalChecked[0] + ", elapsed: " + elapsed + " ms - current SAN: " + san);
+      System.out.println("Processed: " + String.format("%,d", totalChecked[0]) + ", elapsed: "
+          + String.format("%.1f", elapsed / 1000.0) + " s - current SAN: " + san);
     }
   }
 

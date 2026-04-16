@@ -15,7 +15,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.constants.PgnRestrictTestConstants;
+import com.dlb.chess.test.RestrictTestConstants;
 
 class TestPgnExportIdempotency {
 
@@ -26,7 +26,7 @@ class TestPgnExportIdempotency {
   void test() {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (PgnRestrictTestConstants.IS_RESTRICT_PGN_EXPORT_IDEMPOTENCY_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
+        if (RestrictTestConstants.IS_RESTRICT_PGN_EXPORT_IDEMPOTENCY_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
           continue;
         }
 
