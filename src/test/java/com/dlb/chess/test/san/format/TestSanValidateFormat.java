@@ -16,13 +16,16 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.reference.SanValidateFormatReference;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 
 class TestSanValidateFormat {
 
   @SuppressWarnings("static-method")
   @Test
   void testInvalid() {
+    checkException("+", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+    checkException("#", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+
     // d3 — replace first char with valid non-file, second char with valid non-digit
     checkException("=3", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("dd", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
@@ -41,199 +44,199 @@ class TestSanValidateFormat {
 
     // dxe8=Q — invalid chars replaced with valid SAN chars
     checkException("1xe8=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("d=e8=Q", SanValidationProblem.FORMAT);
+    checkException("d=e8=Q", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK);
-    checkException("dxeR=Q", SanValidationProblem.FORMAT);
-    checkException("dxe8xQ", SanValidationProblem.FORMAT);
+    checkException("dxeR=Q", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("dxe8xQ", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("dxe8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // Qe5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("QK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Qe=", SanValidationProblem.FORMAT);
+    checkException("Qe=", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Qae5
     checkException("+ae5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("QKe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("QaK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("QaeR", SanValidationProblem.FORMAT);
+    checkException("QaeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Q2e5
     checkException("+2e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("QRe5", SanValidationProblem.FORMAT);
+    checkException("QRe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("Q2K5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Q2eR", SanValidationProblem.FORMAT);
+    checkException("Q2eR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Qc3e5
     checkException("+c3e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("QK3e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
-    checkException("QcRe5", SanValidationProblem.FORMAT);
+    checkException("QcRe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("Qc3K5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Qc3eR", SanValidationProblem.FORMAT);
+    checkException("Qc3eR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Qxe5
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("Q=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("QxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("QxeR", SanValidationProblem.FORMAT);
+    checkException("QxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Qaxe5
     checkException("+axe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("QKxe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Qa=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("QaxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("QaxeR", SanValidationProblem.FORMAT);
+    checkException("QaxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Q2xe5
     checkException("+2xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("QRxe5", SanValidationProblem.FORMAT);
+    checkException("QRxe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("Q2=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Q2xK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Q2xeR", SanValidationProblem.FORMAT);
+    checkException("Q2xeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Qc3xe5
     checkException("+c3xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("QK3xe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
-    checkException("QcRxe5", SanValidationProblem.FORMAT);
+    checkException("QcRxe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("Qc3=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Qc3xK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Qc3xeR", SanValidationProblem.FORMAT);
+    checkException("Qc3xeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Re5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("RK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("ReR", SanValidationProblem.FORMAT);
+    checkException("ReR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Rae5
     checkException("+ae5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("RKe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("RaK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("RaeR", SanValidationProblem.FORMAT);
+    checkException("RaeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // R2e5
     checkException("+2e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("RRe5", SanValidationProblem.FORMAT);
+    checkException("RRe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("R2K5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("R2eR", SanValidationProblem.FORMAT);
+    checkException("R2eR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Rxe5
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("R=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("RxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("RxeR", SanValidationProblem.FORMAT);
+    checkException("RxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Raxe5
     checkException("+axe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("RKxe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Ra=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("RaxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("RaxeR", SanValidationProblem.FORMAT);
+    checkException("RaxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // R2xe5
     checkException("+2xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("RRxe5", SanValidationProblem.FORMAT);
+    checkException("RRxe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("R2=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("R2xK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("R2xeR", SanValidationProblem.FORMAT);
+    checkException("R2xeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Ne5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("NK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("NeR", SanValidationProblem.FORMAT);
+    checkException("NeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Nce5
     checkException("+ce5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("NKe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("NcK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("NceR", SanValidationProblem.FORMAT);
+    checkException("NceR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // N4e5
     checkException("+4e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("NRe5", SanValidationProblem.FORMAT);
+    checkException("NRe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("N4K5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("N4eR", SanValidationProblem.FORMAT);
+    checkException("N4eR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Nd3e5
     checkException("+d3e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("NK3e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
-    checkException("NdRe5", SanValidationProblem.FORMAT);
+    checkException("NdRe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("Nd3K5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Nd3eR", SanValidationProblem.FORMAT);
+    checkException("Nd3eR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Nxe5
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("N=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("NxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("NxeR", SanValidationProblem.FORMAT);
+    checkException("NxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Ncxe5
     checkException("+cxe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("NKxe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Nc=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("NcxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("NcxeR", SanValidationProblem.FORMAT);
+    checkException("NcxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // N4xe5
     checkException("+4xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("NRxe5", SanValidationProblem.FORMAT);
+    checkException("NRxe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("N4=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("N4xK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("N4xeR", SanValidationProblem.FORMAT);
+    checkException("N4xeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Nd3xe5
     checkException("+d3xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("NK3xe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
-    checkException("NdRxe5", SanValidationProblem.FORMAT);
+    checkException("NdRxe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("Nd3=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Nd3xK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("Nd3xeR", SanValidationProblem.FORMAT);
+    checkException("Nd3xeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Be5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("BK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("BeR", SanValidationProblem.FORMAT);
+    checkException("BeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Bbe5
     checkException("+be5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("BKe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("BbK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("BbeR", SanValidationProblem.FORMAT);
+    checkException("BbeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // B2e5
     checkException("+2e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("BRe5", SanValidationProblem.FORMAT);
+    checkException("BRe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("B2K5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("B2eR", SanValidationProblem.FORMAT);
+    checkException("B2eR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Bxe5
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("B=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("BxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("BxeR", SanValidationProblem.FORMAT);
+    checkException("BxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Bbxe5
     checkException("+bxe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("BKxe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("Bb=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("BbxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("BbxeR", SanValidationProblem.FORMAT);
+    checkException("BbxeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // B2xe5
     checkException("+2xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("BRxe5", SanValidationProblem.FORMAT);
+    checkException("BRxe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("B2=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
     checkException("B2xK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("B2xeR", SanValidationProblem.FORMAT);
+    checkException("B2xeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
 
     // Ke5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("KK5", SanValidationProblem.FORMAT);
+    checkException("KK5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("KeR", SanValidationProblem.FORMAT_KING_DESTINATION);
 
     // Kxe5
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("K=e5", SanValidationProblem.FORMAT_KING_SECOND_CHARACTER);
-    checkException("KxK5", SanValidationProblem.FORMAT);
+    checkException("KxK5", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("KxeR", SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION);
 
     // O-O
@@ -243,7 +246,7 @@ class TestSanValidateFormat {
 
     // O-O-O
     checkException("+-O-O", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("O=O-O", SanValidationProblem.FORMAT);
+    checkException("O=O-O", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("O-x-O", SanValidationProblem.FORMAT_CASTLING);
     checkException("O-O=O", SanValidationProblem.FORMAT_CASTLING);
     checkException("O-O-x", SanValidationProblem.FORMAT_CASTLING);
@@ -284,8 +287,8 @@ class TestSanValidateFormat {
   @SuppressWarnings("static-method")
   @Test
   void testPromotionMissingPromotionPiece() {
-    checkException("d8=", SanValidationProblem.FORMAT);
-    checkException("d1=", SanValidationProblem.FORMAT);
+    checkException("d8=", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("d1=", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   @SuppressWarnings("static-method")
@@ -563,7 +566,7 @@ class TestSanValidateFormat {
   private static void checkValid(SanType expectedSanType, SanConversion expectedSanConversion, String san) {
     final SanParse expectedSanExtract = new SanParse(expectedSanType, expectedSanConversion);
 
-    final SanParse calculatedSanExtract = SanValidateFormat.validateFormat(san);
+    final var calculatedSanExtract = SanValidateFormat.validateFormat(san);
     assertEquals(expectedSanExtract, calculatedSanExtract);
     assertEquals(validateFormatReference(san), calculatedSanExtract);
   }
@@ -603,7 +606,7 @@ class TestSanValidateFormat {
     try {
       validateFormatReference(san);
       isException = false;
-    } catch (@SuppressWarnings("unused") final SanValidationException e) {
+    } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
       isException = true;
     }
     assertEquals(isExceptionExpected, isException);

@@ -11,6 +11,7 @@ import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.movement.SanValidateMovement;
 
 public class SanValidation extends AbstractSan {

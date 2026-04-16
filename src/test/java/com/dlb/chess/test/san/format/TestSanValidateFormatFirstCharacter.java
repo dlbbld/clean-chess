@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 
 class TestSanValidateFormatFirstCharacter {
 

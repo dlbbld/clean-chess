@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.reference.SanValidateFormatBasic;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 import com.dlb.chess.test.RestrictTestConstants;
 
@@ -48,7 +49,7 @@ class TestSanValidateFormatFailureOracleComplement {
    * Castling moves emitted as-is. They use characters ({@code O}, {@code -}) that are outside the combinatoric
    * {@link #ALPHABET}, so we handle them as literal extras rather than polluting the alphabet.
    */
-  private static final Set<String> CASTLING_MOVES = Set.of("O-O", "O-O-O");
+  private static final Set<String> CASTLING_MOVES = NonNullWrapperCommon.setOf("O-O", "O-O-O");
 
   /** How often to print a progress line to stdout. */
   private static final int PRINT_INTERVAL = 100_000;
@@ -235,6 +236,12 @@ class TestSanValidateFormatFailureOracleComplement {
       isValid = true;
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isValid = false;
+    }
+
+    // Anything rejected by the coarse basic check must also be rejected by validateFormat itself — basic is a
+    // strict superset filter, so its rejection is sufficient evidence for non-acceptance.
+    if (!SanValidateFormatBasic.isBasicFormatValid(san)) {
+      assertFalse(isValid, "isBasicFormatValid rejects \"" + san + "\" but validateFormat accepts it");
     }
 
     if (isValid) {

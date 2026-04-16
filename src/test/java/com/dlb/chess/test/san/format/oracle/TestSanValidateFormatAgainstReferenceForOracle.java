@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.reference.SanValidateFormatReference;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
 class TestSanValidateFormatAgainstReferenceForOracle {

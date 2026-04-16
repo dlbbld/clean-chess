@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 
 class TestSanValidateFormatDetailed {
 
@@ -31,7 +31,7 @@ class TestSanValidateFormatDetailed {
   void testPawnSecondCharacterLength4() {
     // length 4 pawn, second char neither x nor equals at position 2
     // "dae5" — countFiles > 2 (d, a, e)
-    checkException("dae5", SanValidationProblem.FORMAT);
+    checkException("dae5", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   // --- Pawn format: capture destination ---
@@ -47,7 +47,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnCaptureToRank() {
     // "dxea" — countFiles > 2 (d, e, a)
-    checkException("dxea", SanValidationProblem.FORMAT);
+    checkException("dxea", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   // --- Pawn format: promotion ---
@@ -63,7 +63,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionCaptureStructure() {
     // "dabcde" — countFiles > 2 (d,a,b,c,d,e)
-    checkException("dabcde", SanValidationProblem.FORMAT);
+    checkException("dabcde", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   @SuppressWarnings("static-method")
@@ -77,7 +77,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionCaptureToRank() {
     // "dxea=Q" — countFiles > 2 (d, e, a)
-    checkException("dxea=Q", SanValidationProblem.FORMAT);
+    checkException("dxea=Q", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   // --- Pawn format: missing promotion on rank 1/8 ---
@@ -185,7 +185,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPieceDestination() {
     // "QeR" — Q + R = countRbnq > 1
-    checkException("QeR", SanValidationProblem.FORMAT);
+    checkException("QeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   @SuppressWarnings("static-method")
@@ -206,14 +206,14 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPieceMiddle2() {
     // "Qabe5" — countFiles > 2 (a, b, e)
-    checkException("Qabe5", SanValidationProblem.FORMAT);
+    checkException("Qabe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPieceMiddle3() {
     // "Qa3ae5" — countFiles > 2 (a, a, e)
-    checkException("Qa3ae5", SanValidationProblem.FORMAT);
+    checkException("Qa3ae5", SanValidationProblem.FORMAT_NON_SPECIFIC);
   }
 
   // --- Castling format ---
