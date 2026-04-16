@@ -364,6 +364,7 @@ public abstract class SanValidateFormat extends AbstractSan {
    *   length 4: Kx[file][rank]  non-castling, capturing       e.g. Kxe5
    * </pre>
    */
+  // TODO align with piece parsing -> sequential
   private static SanParse parseKingMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     return switch (core.length()) {
 

@@ -40,6 +40,7 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
         return;
       case PIECE_NON_CAPTURING_NEITHER:
       case PIECE_CAPTURING_NEITHER:
+        // with source file and rank not restricted, all pieces can move to any square
         return;
       case PIECE_NON_CAPTURING_FILE:
       case PIECE_CAPTURING_FILE:
@@ -77,10 +78,10 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.knight.file";
-      case BISHOP -> "validation.san.movement.bishop.file";
-      case ROOK -> "validation.san.movement.rook.file";
-      case QUEEN -> "validation.san.movement.queen.file";
+      case KNIGHT -> "validation.san.movement.file.knight";
+      case BISHOP -> "validation.san.movement.file.bishop";
+      case ROOK -> "validation.san.movement.file.rook";
+      case QUEEN -> "validation.san.movement.file.queen";
       default -> throw new IllegalArgumentException();
     };
 
@@ -104,10 +105,10 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.knight.rank";
-      case BISHOP -> "validation.san.movement.bishop.rank";
-      case ROOK -> "validation.san.movement.rook.rank";
-      case QUEEN -> "validation.san.movement.queen.rank";
+      case KNIGHT -> "validation.san.movement.rank.knight";
+      case BISHOP -> "validation.san.movement.rank.bishop";
+      case ROOK -> "validation.san.movement.rank.rook";
+      case QUEEN -> "validation.san.movement.rank.queen";
       default -> throw new IllegalArgumentException();
     };
 
@@ -130,15 +131,19 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       }
     }
 
+    if (fromSquare == toSquare) {
+      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_ONTO_ITSELF, Message
+          .getString("validation.san.movement.square.ontoItself.general", fromSquare.getName(), toSquare.getName()));
+    }
+
     final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.knight.square";
-      case BISHOP -> "validation.san.movement.bishop.square";
-      case ROOK -> "validation.san.movement.rook.square";
-      case QUEEN -> "validation.san.movement.queen.square";
+      case KNIGHT -> "validation.san.movement.square.notOntoItself.knight";
+      case BISHOP -> "validation.san.movement.square.notOntoItself.bishop";
+      case ROOK -> "validation.san.movement.square.notOntoItself.rook";
+      case QUEEN -> "validation.san.movement.square.notOntoItself.queen";
       default -> throw new IllegalArgumentException();
     };
-
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE,
+    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_NOT_ONTO_ITSELF,
         Message.getString(messageKey, fromSquare.getName(), toSquare.getName()));
 
   }
