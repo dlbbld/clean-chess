@@ -40,7 +40,7 @@ class TestSanValidatePawnPromotion {
   void testWhiteNonCapturingPromotionWrongRank() {
     // white pawn on d3, d4=Q — rank 4 is not promotion rank
     final ApiBoard board = new Board("4k3/8/8/8/8/3P4/8/4K3 w - - 0 100");
-    checkException("d4=Q", board, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+    checkException("d4=Q", board, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
   }
 
   @SuppressWarnings("static-method")
@@ -48,8 +48,8 @@ class TestSanValidatePawnPromotion {
   void testWhiteNonCapturingPromotionWrongRankVariousRanks() {
     // white pawn on d2
     final ApiBoard board = new Board("4k3/8/8/8/8/8/3P4/4K3 w - - 0 100");
-    checkException("d3=Q", board, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
-    checkException("d4=Q", board, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+    checkException("d3=Q", board, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
+    checkException("d4=Q", board, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
   }
 
   @SuppressWarnings("static-method")
@@ -105,7 +105,7 @@ class TestSanValidatePawnPromotion {
   void testBlackNonCapturingPromotionWrongRank() {
     // black pawn on d6, d5=Q — rank 5 is not promotion rank
     final ApiBoard board = new Board("4k3/8/3p4/8/8/8/8/4K3 b - - 0 100");
-    checkException("d5=Q", board, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+    checkException("d5=Q", board, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
   }
 
   @SuppressWarnings("static-method")
@@ -113,8 +113,8 @@ class TestSanValidatePawnPromotion {
   void testBlackNonCapturingPromotionWrongRankVariousRanks() {
     // black pawn on d7
     final ApiBoard board = new Board("4k3/3p4/8/8/8/8/8/4K3 b - - 0 100");
-    checkException("d6=Q", board, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
-    checkException("d5=Q", board, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+    checkException("d6=Q", board, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
+    checkException("d5=Q", board, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
   }
 
   @SuppressWarnings("static-method")

@@ -50,9 +50,8 @@ class TestSanValidationProblemMessage {
     checkException("aa", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER,
         "For a pawn move, the second character must be a rank digit (1-8) or the capture symbol (x), but is 'a'.");
 
-    // pawn forward
-
-    checkException("e7=", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION,
+    // pawn forward non promotion
+    checkException("e7=", SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH,
         "A non promoting pawn forward move must have exactly 2 characters (excluding check/checkmate symbol).");
 
     // pawn forward promotion
@@ -68,7 +67,7 @@ class TestSanValidationProblemMessage {
     checkException("e8=P", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE,
         "For a pawn promotion, the promotion piece must be R, N, B, or Q, but is 'P'.");
 
-    checkException("e8=Qx", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_PROMOTION,
+    checkException("e8=Qx", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_OVERLENGTH,
         "A promoting pawn forward move must have exactly 4 characters (excluding check/checkmate symbol).");
 
     // pawn capture
@@ -84,7 +83,8 @@ class TestSanValidationProblemMessage {
     checkException("axbb", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK,
         "For a pawn capture, a rank digit (1-8) is expected after the destination file for the destination rank, but is 'b'.");
 
-    checkException("axb7=", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_CAPTURE_NON_PROMOTION,
+    // pawn capture non promotion
+    checkException("axb7=", SanValidationProblem.FORMAT_PAWN_CAPTURE_OVERLENGTH_NON_PROMOTION,
         "A non promoting pawn capturing move must have exactly 4 characters (excluding check/checkmate symbol).");
 
     // pawn capture promotion
@@ -100,7 +100,7 @@ class TestSanValidationProblemMessage {
     checkException("axb8=P", SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_PIECE,
         "For a pawn promotion, the promotion piece must be R, N, B, or Q, but is 'P'.");
 
-    checkException("axb8=Qx", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_CAPTURE_PROMOTION,
+    checkException("axb8=Qx", SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_OVERLENGTH,
         "A promoting pawn capturing move must have exactly 6 characters (excluding check/checkmate symbol).");
 
   }

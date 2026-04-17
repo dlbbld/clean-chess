@@ -110,9 +110,9 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionMiddleOfBoardNonCapturing() {
     // =piece on non-promotion rank
-    checkException("d3=Q", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
-    checkException("d4=Q", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
-    checkException("d7=Q", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+    checkException("d3=Q", SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
+    checkException("d4=Q", SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
+    checkException("d7=Q", SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
   }
 
   @SuppressWarnings("static-method")
@@ -140,7 +140,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnLength() {
     // length 3 starting with file — not a valid pawn length
-    checkException("d3e", SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+    checkException("d3e", SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
     // length 5 starting with file — not a valid pawn length
     checkException("dxe5Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
   }

@@ -51,8 +51,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
       // too long
       if (length > 2) {
-        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION,
-            Message.getString("validation.san.format.pawn.overlength.forward.nonPromotion"));
+        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH,
+            Message.getString("validation.san.format.pawn.forward.nonPromotion.overlength"));
       }
 
       // valid
@@ -96,8 +96,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // too long
     if (length > 4) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_PROMOTION,
-          Message.getString("validation.san.format.pawn.overlength.forward.promotion"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_OVERLENGTH,
+          Message.getString("validation.san.format.pawn.forward.promotion.overlength"));
     }
 
     // valid
@@ -114,29 +114,29 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     // too short
     if (length == 2) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NO_FILE,
-          Message.getString("validation.san.format.pawn.noCaptureToFile"));
+          Message.getString("validation.san.format.pawn.capture.noCaptureToFile"));
     }
 
     final var thirdChar = core.charAt(2);
 
     // file check
     if (!SanValidateFormat.isFileLetter(thirdChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE,
-          Message.getString("validation.san.format.pawn.wrongCaptureToFile", NonNullWrapperCommon.toString(thirdChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE, Message.getString(
+          "validation.san.format.pawn.capture.wrongCaptureToFile", NonNullWrapperCommon.toString(thirdChar)));
     }
 
     // too short
     if (length == 3) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NO_RANK,
-          Message.getString("validation.san.format.pawn.noCaptureToRank"));
+          Message.getString("validation.san.format.pawn.capture.noCaptureToRank"));
     }
 
     final var fourthChar = core.charAt(3);
 
     // rank check
     if (!SanValidateFormat.isRankDigit(fourthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK, Message
-          .getString("validation.san.format.pawn.wrongCaptureToRank", NonNullWrapperCommon.toString(fourthChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK, Message.getString(
+          "validation.san.format.pawn.capture.wrongCaptureToRank", NonNullWrapperCommon.toString(fourthChar)));
     }
 
     if (!isAnyPromotionRank(fourthChar)) {
@@ -144,8 +144,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
       // too long
       if (length > 4) {
-        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_CAPTURE_NON_PROMOTION,
-            Message.getString("validation.san.format.pawn.overlength.capture.nonPromotion"));
+        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_OVERLENGTH_NON_PROMOTION,
+            Message.getString("validation.san.format.pawn.capture.nonPromotion.overlength"));
       }
 
       // valid
@@ -189,8 +189,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // too long
     if (length > 6) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_CAPTURE_PROMOTION,
-          Message.getString("validation.san.format.pawn.overlength.capture.promotion"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_OVERLENGTH,
+          Message.getString("validation.san.format.pawn.capture.promotion.overlength"));
     }
 
     // valid

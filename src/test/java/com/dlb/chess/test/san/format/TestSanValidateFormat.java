@@ -379,7 +379,7 @@ class TestSanValidateFormat {
     }
     {
       final var san = "d7=Q";
-      checkException(san, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
+      checkException(san, SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
     }
     // (1d) pawnCapturingPromotionMoves dxe8=Q
     {
