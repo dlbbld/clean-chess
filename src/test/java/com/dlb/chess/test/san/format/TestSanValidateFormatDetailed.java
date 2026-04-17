@@ -22,7 +22,7 @@ class TestSanValidateFormatDetailed {
     checkValid("dxe5");
 
     // invalid: "dz" — 'z' is not a valid SAN character
-    checkException("dz", SanValidationProblem.FORMAT_INVALID_CHARACTER);
+    checkException("dz", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
     checkException("dR", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
   }
 
@@ -31,7 +31,7 @@ class TestSanValidateFormatDetailed {
   void testPawnSecondCharacterLength4() {
     // length 4 pawn, second char neither x nor equals at position 2
     // "dae5" — countFiles > 2 (d, a, e)
-    checkException("dae5", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("dae5", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
   }
 
   // --- Pawn format: capture destination ---
@@ -40,14 +40,14 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnCaptureToFile() {
     // "dx95" — '9' is not a valid SAN character
-    checkException("dx95", SanValidationProblem.FORMAT_INVALID_CHARACTER);
+    checkException("dx95", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPawnCaptureToRank() {
     // "dxea" — countFiles > 2 (d, e, a)
-    checkException("dxea", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("dxea", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
   }
 
   // --- Pawn format: promotion ---
@@ -63,21 +63,21 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionCaptureStructure() {
     // "dabcde" — countFiles > 2 (d,a,b,c,d,e)
-    checkException("dabcde", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("dabcde", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPawnPromotionCaptureToFile() {
     // "dx9e=Q" — '9' is not a valid SAN character
-    checkException("dx9e=Q", SanValidationProblem.FORMAT_INVALID_CHARACTER);
+    checkException("dx9e=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPawnPromotionCaptureToRank() {
     // "dxea=Q" — countFiles > 2 (d, e, a)
-    checkException("dxea=Q", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("dxea=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
   }
 
   // --- Pawn format: missing promotion on rank 1/8 ---
@@ -119,8 +119,8 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPawnPromotionMiddleOfBoardCapturing() {
     // capture with =piece on non-promotion rank
-    checkException("dxe5=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
-    checkException("dxe3=Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
+    checkException("dxe5=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH);
+    checkException("dxe3=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH);
   }
 
   // --- Pawn format: valid promotion (should not throw) ---
@@ -142,7 +142,7 @@ class TestSanValidateFormatDetailed {
     // length 3 starting with file — not a valid pawn length
     checkException("d3e", SanValidationProblem.FORMAT_PAWN_FORWARD_NON_PROMOTION_OVERLENGTH);
     // length 5 starting with file — not a valid pawn length
-    checkException("dxe5Q", SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
+    checkException("dxe5Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH);
   }
 
   // --- King format ---
@@ -151,7 +151,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testKingDestination() {
     // "K9e" — '9' is not a valid SAN character
-    checkException("K9e", SanValidationProblem.FORMAT_INVALID_CHARACTER);
+    checkException("K9e", SanValidationProblem.FORMAT_KING_DESTINATION);
     // "KR5" — 'R' is not a file letter
     checkException("KR5", SanValidationProblem.FORMAT_KING_DESTINATION);
   }
@@ -167,7 +167,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testKingCaptureDestination() {
     // "Kx9e" — '9' is not a valid SAN character
-    checkException("Kx9e", SanValidationProblem.FORMAT_INVALID_CHARACTER);
+    checkException("Kx9e", SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION);
   }
 
   @SuppressWarnings("static-method")
@@ -185,7 +185,7 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPieceDestination() {
     // "QeR" — Q + R = countRbnq > 1
-    checkException("QeR", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("QeR", SanValidationProblem.FORMAT_PIECE_DESTINATION);
   }
 
   @SuppressWarnings("static-method")
@@ -206,14 +206,14 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPieceMiddle2() {
     // "Qabe5" — countFiles > 2 (a, b, e)
-    checkException("Qabe5", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("Qabe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPieceMiddle3() {
     // "Qa3ae5" — countFiles > 2 (a, a, e)
-    checkException("Qa3ae5", SanValidationProblem.FORMAT_NON_SPECIFIC);
+    checkException("Qa3ae5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
   }
 
   // --- Castling format ---

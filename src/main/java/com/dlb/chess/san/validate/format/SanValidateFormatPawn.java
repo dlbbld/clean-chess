@@ -114,29 +114,29 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     // too short
     if (length == 2) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NO_FILE,
-          Message.getString("validation.san.format.pawn.capture.noCaptureToFile"));
+          Message.getString("validation.san.format.pawn.capture.noFile"));
     }
 
     final var thirdChar = core.charAt(2);
 
     // file check
     if (!SanValidateFormat.isFileLetter(thirdChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE, Message.getString(
-          "validation.san.format.pawn.capture.wrongCaptureToFile", NonNullWrapperCommon.toString(thirdChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE,
+          Message.getString("validation.san.format.pawn.capture.wrongFile", NonNullWrapperCommon.toString(thirdChar)));
     }
 
     // too short
     if (length == 3) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NO_RANK,
-          Message.getString("validation.san.format.pawn.capture.noCaptureToRank"));
+          Message.getString("validation.san.format.pawn.capture.noRank"));
     }
 
     final var fourthChar = core.charAt(3);
 
     // rank check
     if (!SanValidateFormat.isRankDigit(fourthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK, Message.getString(
-          "validation.san.format.pawn.capture.wrongCaptureToRank", NonNullWrapperCommon.toString(fourthChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK,
+          Message.getString("validation.san.format.pawn.capture.wrongRank", NonNullWrapperCommon.toString(fourthChar)));
     }
 
     if (!isAnyPromotionRank(fourthChar)) {
@@ -144,7 +144,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
       // too long
       if (length > 4) {
-        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_OVERLENGTH_NON_PROMOTION,
+        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH,
             Message.getString("validation.san.format.pawn.capture.nonPromotion.overlength"));
       }
 

@@ -5,14 +5,11 @@ public enum SanValidationProblem {
   NONE,
 
   FORMAT_BLANK,
-
-  // TODO remove when replaced with more specific ones
-  FORMAT_NON_SPECIFIC,
-  FORMAT_INVALID_CHARACTER,
-
   FORMAT_FIRST_CHARACTER,
 
   // pawn
+  // TODO it is still conceptually wrong to warn for white that d1 is missing promotion information, instead of saying
+  // invalid rank
   FORMAT_PAWN_NO_SECOND_CHARACTER,
   FORMAT_PAWN_WRONG_SECOND_CHARACTER,
 
@@ -33,7 +30,7 @@ public enum SanValidationProblem {
   FORMAT_PAWN_CAPTURE_WRONG_RANK,
 
   // pawn capture non promotion
-  FORMAT_PAWN_CAPTURE_OVERLENGTH_NON_PROMOTION,
+  FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH,
 
   // pawn capture promotion
   FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL,
@@ -41,20 +38,6 @@ public enum SanValidationProblem {
   FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_PIECE,
   FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_PIECE,
   FORMAT_PAWN_CAPTURE_PROMOTION_OVERLENGTH,
-
-  // TODO it is still conceptually wrong to warn for white that d1 is missing promotion information, instead of saying
-  // invalid rank
-
-  FORMAT_PAWN_PROMOTION_RANK,
-  FORMAT_PAWN_PROMOTION_SECOND_CHARACTER,
-  FORMAT_PAWN_PROMOTION_CAPTURE_STRUCTURE,
-  FORMAT_PAWN_PROMOTION_CAPTURE_TO_FILE,
-  FORMAT_PAWN_PROMOTION_CAPTURE_TO_RANK,
-
-  FORMAT_PAWN_LENGTH_GENERAL,
-
-  FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION,
-  FORMAT_PAWN_LENGTH_CAPTURE_PROMOTION,
 
   FORMAT_CASTLING,
 

@@ -76,7 +76,7 @@ class TestSanValidatePawnPromotion {
   void testWhiteCapturingPromotionWrongRank() {
     // white pawn on d4, black pawn on e5 — dxe5=Q, rank 5 is not promotion rank
     final ApiBoard board = new Board("4k3/8/8/4p3/3P4/8/8/4K3 w - - 0 100");
-    checkException("dxe5=Q", board, SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
+    checkException("dxe5=Q", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH);
   }
 
   // --- Black: promotion rank is 1 ---
@@ -141,7 +141,7 @@ class TestSanValidatePawnPromotion {
   void testBlackCapturingPromotionWrongRank() {
     // black pawn on e5, white pawn on d4 — exd4=Q, rank 4 is not promotion rank
     final ApiBoard board = new Board("4k3/8/8/4p3/3P4/8/8/4K3 b - - 0 100");
-    checkException("exd4=Q", board, SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION);
+    checkException("exd4=Q", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH);
   }
 
   private static void checkValid(String san, ApiBoard board) {

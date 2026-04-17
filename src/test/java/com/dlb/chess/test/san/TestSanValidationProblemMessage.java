@@ -84,7 +84,7 @@ class TestSanValidationProblemMessage {
         "For a pawn capture, a rank digit (1-8) is expected after the destination file for the destination rank, but is 'b'.");
 
     // pawn capture non promotion
-    checkException("axb7=", SanValidationProblem.FORMAT_PAWN_CAPTURE_OVERLENGTH_NON_PROMOTION,
+    checkException("axb7=", SanValidationProblem.FORMAT_PAWN_CAPTURE_NON_PROMOTION_OVERLENGTH,
         "A non promoting pawn capturing move must have exactly 4 characters (excluding check/checkmate symbol).");
 
     // pawn capture promotion
