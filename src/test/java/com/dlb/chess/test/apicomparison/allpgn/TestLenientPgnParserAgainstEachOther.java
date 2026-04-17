@@ -14,12 +14,12 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.PgnSan;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.apicarlos.pgn.parser.PgnParserApiCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.RestrictTestConstants;
 
 class TestLenientPgnParserAgainstEachOther {
 

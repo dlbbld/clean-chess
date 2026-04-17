@@ -84,7 +84,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
 
     for (final Square toSquare : toSquareSet) {
       final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare, toSquare);
-      final Piece pieceCaptured = staticPosition.isEmpty(toSquare) ? Piece.NONE : staticPosition.get(toSquare);
+      final var pieceCaptured = staticPosition.isEmpty(toSquare) ? Piece.NONE : staticPosition.get(toSquare);
 
       if (pieceCaptured != Piece.NONE && pieceCaptured.getPieceType() == PieceType.KING) {
         continue;

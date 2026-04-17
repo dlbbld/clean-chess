@@ -17,7 +17,7 @@ public abstract class SanValidateFormatBasic {
    * Returns {@code true} iff {@code san} passes the coarse character-class and length checks.
    */
   public static boolean isBasicFormatValid(String san) {
-    if (san.isBlank() || (san.length() > 7)) {
+    if (san.isBlank() || san.length() > 7) {
       return false;
     }
 

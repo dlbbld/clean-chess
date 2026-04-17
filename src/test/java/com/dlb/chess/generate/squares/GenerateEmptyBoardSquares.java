@@ -46,9 +46,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
   private static void generateBoardSquareListCode() {
     final List<Square> allButEmpty = new ArrayList<>();
-    for (final Square fromSquare : Square.REAL) {
-      allButEmpty.add(fromSquare);
-    }
+    allButEmpty.addAll(Square.REAL);
     System.out.println(calculateSquareLiteralList(allButEmpty));
   }
 

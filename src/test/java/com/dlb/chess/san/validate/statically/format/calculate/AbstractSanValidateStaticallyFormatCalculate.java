@@ -50,8 +50,7 @@ public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanVal
   }
 
   static List<SanValidationFromTo> calculateForPiece() {
-    final List<SanValidationFromTo> result = new ArrayList<>();
-    result.addAll(calculateWithoutDisambiguation());
+    final List<SanValidationFromTo> result = new ArrayList<>(calculateWithoutDisambiguation());
     result.addAll(calculateWithFile());
     result.addAll(calculateWithRank());
     result.addAll(calculateWithSquare());

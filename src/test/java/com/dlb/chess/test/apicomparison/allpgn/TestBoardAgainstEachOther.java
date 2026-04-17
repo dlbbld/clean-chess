@@ -9,13 +9,13 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.apicarlos.board.ApiCarlosBoard;
 import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.RestrictTestConstants;
 
 class TestBoardAgainstEachOther {
 
