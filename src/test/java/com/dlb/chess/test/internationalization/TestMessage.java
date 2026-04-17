@@ -40,6 +40,8 @@ class TestMessage implements EnumConstants {
   @Test
   void testPlaceholder() {
 
+    assertEquals("The piece cannot move in this way.", Message.getString("test.message.testWithoutPlaceholder"));
+
     assertEquals("The knight cannot move in this way.",
         Message.getString("test.message.testWithOnePlaceholder", "knight"));
 

@@ -22,7 +22,7 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class GeneratePythonTestCases implements EnumConstants {
 

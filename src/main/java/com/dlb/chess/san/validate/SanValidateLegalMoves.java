@@ -344,7 +344,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static Set<PseudoLegalMove> calculatePseudoLegalMovesForPieceNeither(StaticPosition staticPosition,
       Side havingMove, PieceType pieceType, Square toSquare) {
     final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (!staticPosition.isOwnPiece(fromSquare, havingMove, pieceType)) {
         continue;
       }
@@ -361,7 +361,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
 
   private static int countPiecesOfType(StaticPosition staticPosition, Side havingMove, PieceType pieceType) {
     var count = 0;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (staticPosition.isOwnPiece(square, havingMove, pieceType)) {
         count++;
       }
@@ -372,7 +372,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static int countPiecesOfTypeOnFile(StaticPosition staticPosition, Side havingMove, PieceType pieceType,
       File file) {
     var count = 0;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (square.getFile() == file && staticPosition.isOwnPiece(square, havingMove, pieceType)) {
         count++;
       }
@@ -383,7 +383,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static Set<PseudoLegalMove> calculatePseudoLegalMovesForPieceFile(StaticPosition staticPosition,
       Side havingMove, PieceType pieceType, File file, Square toSquare) {
     final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (fromSquare.getFile() != file || !staticPosition.isOwnPiece(fromSquare, havingMove, pieceType)) {
         continue;
       }
@@ -401,7 +401,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static int countPiecesOfTypeOnRank(StaticPosition staticPosition, Side havingMove, PieceType pieceType,
       Rank rank) {
     var count = 0;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (square.getRank() == rank && staticPosition.isOwnPiece(square, havingMove, pieceType)) {
         count++;
       }
@@ -412,7 +412,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static Set<PseudoLegalMove> calculatePseudoLegalMovesForPieceRank(StaticPosition staticPosition,
       Side havingMove, PieceType pieceType, Rank rank, Square toSquare) {
     final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (fromSquare.getRank() != rank || !staticPosition.isOwnPiece(fromSquare, havingMove, pieceType)) {
         continue;
       }
@@ -627,8 +627,8 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static Set<Square> calculatePieceCandidateSquareSet(StaticPosition staticPosition, Side havingMove,
       PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion) {
     final Set<Square> result = new TreeSet<>();
-    for (final Square square : Square.values()) {
-      if (square == Square.NONE || !staticPosition.isOwnPiece(square, havingMove, pieceType)) {
+    for (final Square square : Square.REAL) {
+      if (!staticPosition.isOwnPiece(square, havingMove, pieceType)) {
         continue;
       }
       switch (sanFormat) {

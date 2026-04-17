@@ -117,10 +117,8 @@ public abstract class AbstractGenerateSanValidateStrict implements EnumConstants
 
   private Set<String> calculateMoveWithAllFiles(Square toSquare) {
     final Set<String> enumConstantSet = new TreeSet<>();
-    for (final File file : File.values()) {
-      if (file != FILE_NONE) {
-        enumConstantSet.add(calculateMoveWithFile(toSquare, file));
-      }
+    for (final File file : File.REAL) {
+      enumConstantSet.add(calculateMoveWithFile(toSquare, file));
     }
     return enumConstantSet;
   }
@@ -141,8 +139,8 @@ public abstract class AbstractGenerateSanValidateStrict implements EnumConstants
 
   private Set<String> calculateMoveWithAllRanksExceptToSquareRank(Square toSquare) {
     final Set<String> enumConstantSet = new TreeSet<>();
-    for (final Rank rank : Rank.values()) {
-      if (rank != RANK_NONE && rank != toSquare.getRank()) {
+    for (final Rank rank : Rank.REAL) {
+      if (rank != toSquare.getRank()) {
         enumConstantSet.add(calculateMoveWithRank(toSquare, rank));
       }
     }

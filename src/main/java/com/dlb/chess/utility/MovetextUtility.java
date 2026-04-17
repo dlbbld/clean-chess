@@ -622,10 +622,8 @@ public abstract class MovetextUtility {
 
   private static String normalizeMoveSuffixAnnotations(String partToAdapt) {
     String result = partToAdapt;
-    for (final MoveSuffixAnnotation moveSuffix : MoveSuffixAnnotation.values()) {
-      if (moveSuffix != MoveSuffixAnnotation.NONE) {
-        result = NonNullWrapperCommon.replace(result, " " + moveSuffix.getSuffix(), moveSuffix.getSuffix());
-      }
+    for (final MoveSuffixAnnotation moveSuffix : MoveSuffixAnnotation.REAL) {
+      result = NonNullWrapperCommon.replace(result, " " + moveSuffix.getSuffix(), moveSuffix.getSuffix());
     }
     return result;
   }

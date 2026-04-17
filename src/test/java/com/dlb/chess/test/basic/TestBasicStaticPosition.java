@@ -18,7 +18,7 @@ class TestBasicStaticPosition implements EnumConstants {
   @Test
   void testClearNonEmpty() throws Exception {
     StaticPosition workingPosition = StaticPosition.INITIAL_POSITION;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (!workingPosition.isEmpty(square)) {
         workingPosition = workingPosition.createChangedPosition(square);
       }
@@ -40,7 +40,7 @@ class TestBasicStaticPosition implements EnumConstants {
   @Test
   void testFill() throws Exception {
     StaticPosition workingPosition = StaticPosition.EMPTY_POSITION;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       workingPosition = workingPosition.createChangedPosition(square, WHITE_PAWN);
     }
     final StaticPosition staticAllPawnPositionActual = new StaticPosition(WHITE_PAWN, WHITE_PAWN, WHITE_PAWN,
@@ -73,10 +73,7 @@ class TestBasicStaticPosition implements EnumConstants {
   void testBoardUseNoneSquareForPutMethod() {
     final StaticPosition emptyPosition = StaticPosition.EMPTY_POSITION;
 
-    for (final Piece piece : Piece.values()) {
-      if (piece == Piece.NONE) {
-        continue;
-      }
+    for (final Piece piece : Piece.REAL) {
       var isCorrectException = false;
       try {
         emptyPosition.createChangedPosition(Square.NONE, piece);
@@ -92,10 +89,7 @@ class TestBasicStaticPosition implements EnumConstants {
   void testBoardUseNonePieceForPutMethod() {
     final StaticPosition emptyPosition = StaticPosition.EMPTY_POSITION;
 
-    for (final Square square : Square.values()) {
-      if (square == Square.NONE) {
-        continue;
-      }
+    for (final Square square : Square.REAL) {
       var isCorrectException = false;
       try {
         emptyPosition.createChangedPosition(square, Piece.NONE);
@@ -111,14 +105,8 @@ class TestBasicStaticPosition implements EnumConstants {
   void testBoardPuttingPieces() {
     StaticPosition workingPosition = StaticPosition.EMPTY_POSITION;
 
-    for (final Square square : Square.values()) {
-      if (square == Square.NONE) {
-        continue;
-      }
-      for (final Piece piece : Piece.values()) {
-        if (piece == Piece.NONE) {
-          continue;
-        }
+    for (final Square square : Square.REAL) {
+      for (final Piece piece : Piece.REAL) {
         assertEquals(Piece.NONE, workingPosition.get(square));
         workingPosition = workingPosition.createChangedPosition(square, piece);
         assertEquals(piece, workingPosition.get(square));

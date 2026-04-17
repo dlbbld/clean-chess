@@ -13,7 +13,7 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.common.utility.AbstractTestMovetextUtility;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
 class TestStrictPgnParserReadTag extends AbstractTestMovetextUtility {
@@ -24,7 +24,8 @@ class TestStrictPgnParserReadTag extends AbstractTestMovetextUtility {
   @Test
   void test() {
     {
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_example_white_last_move.pgn");
+      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "01_example_white_last_move.pgn");
 
       assertEquals("Groningen", TagUtility.calculateTagValue(pgnFile, StandardTag.EVENT));
       assertEquals("Groningen NED", TagUtility.calculateTagValue(pgnFile, StandardTag.SITE));
@@ -40,7 +41,8 @@ class TestStrictPgnParserReadTag extends AbstractTestMovetextUtility {
     }
 
     {
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "02_example_black_last_move.pgn");
+      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "02_example_black_last_move.pgn");
 
       assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
     }

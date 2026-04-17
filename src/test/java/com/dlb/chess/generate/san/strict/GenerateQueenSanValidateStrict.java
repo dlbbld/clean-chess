@@ -25,7 +25,7 @@ public class GenerateQueenSanValidateStrict extends AbstractGenerateSanValidateS
 
     final Set<String> resultSet = new TreeSet<>();
 
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       // possible for all squares
       appendOnlyMove(resultSet, toSquare);
 
@@ -57,7 +57,7 @@ public class GenerateQueenSanValidateStrict extends AbstractGenerateSanValidateS
   @Override
   Set<String> calculateEnumConstantFormal() {
     final Set<String> resultSet = new TreeSet<>();
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       final Set<EmptyBoardMove> emptyBoardMoveSet = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMovesTo(QUEEN,
           toSquare);
       final List<Square> fromSquareList = calculateFromSquareList(emptyBoardMoveSet);

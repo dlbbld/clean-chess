@@ -111,12 +111,10 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
 
   public static void populatePawnPromotionMap(Map<String, SanParse> sanValidateMap, SanValidationFromTo model,
       boolean isCapture) {
-    for (final PromotionPieceType promotionPieceType : PromotionPieceType.values()) {
-      if (promotionPieceType != PromotionPieceType.NONE) {
-        populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.NONE, PAWN);
-        populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECKMATE, PAWN);
-        populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECK, PAWN);
-      }
+    for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
+      populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.NONE, PAWN);
+      populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECKMATE, PAWN);
+      populateMap(sanValidateMap, model, promotionPieceType, isCapture, SanTerminalMarker.CHECK, PAWN);
     }
   }
 }

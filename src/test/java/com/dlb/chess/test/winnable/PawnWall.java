@@ -41,15 +41,12 @@ public class PawnWall {
         return false;
       }
       // if one side has a bishop we only allow only opponent pawns of different colour
-      for (final Side side : Side.values()) {
-        if (side != Side.NONE) {
-          for (final SquareType squareType : SquareType.values()) {
-            if (squareType != SquareType.NONE
-                && calculateHasOneOrMultipleBishopForSpecifiedColor(side, staticPosition, squareType)
-                && !calculateHasOnlyPawnsForSpecifiedColor(side.getOppositeSide(), staticPosition,
-                    squareType.getOppositeSquareType())) {
-              return false;
-            }
+      for (final Side side : Side.REAL) {
+        for (final SquareType squareType : SquareType.REAL) {
+          if (calculateHasOneOrMultipleBishopForSpecifiedColor(side, staticPosition, squareType)
+              && !calculateHasOnlyPawnsForSpecifiedColor(side.getOppositeSide(), staticPosition,
+                  squareType.getOppositeSquareType())) {
+            return false;
           }
         }
       }
@@ -123,7 +120,7 @@ public class PawnWall {
 
   private static Set<Square> calculateAttackingSquareAsIs(ApiBoard board, Side side) {
     final Set<Square> attackingSquaresAsIs = new TreeSet<>();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
         if (Square.calculateHasLeftDiagonalSquare(side, square)) {
           final Square squareLeftDiagonal = Square.calculateLeftDiagonalSquare(side, square);
@@ -142,7 +139,7 @@ public class PawnWall {
     final Set<Square> attackingSquaresAll = new TreeSet<>();
 
     final StaticPosition staticPosition = board.getStaticPosition();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
         final Set<Square> attackingSquaresAfterMoving = new TreeSet<>();
         addAttackingSquaresAfterMovingForFile(attackingSquaresAfterMoving, square, staticPosition, side);
@@ -191,7 +188,7 @@ public class PawnWall {
 
   private static Set<Square> calculatePawnSquareAsIs(ApiBoard board, Side side) {
     final Set<Square> pawnSquaresAsIs = new TreeSet<>();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
         pawnSquaresAsIs.add(square);
       }
@@ -203,7 +200,7 @@ public class PawnWall {
     final Set<Square> pawnSquaresAll = new TreeSet<>();
 
     final StaticPosition staticPosition = board.getStaticPosition();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
         final Set<Square> pawnSquaresAfterMoving = new TreeSet<>();
         addPawnSquaresAfterMovingForFile(pawnSquaresAfterMoving, square, staticPosition, side);
@@ -242,7 +239,7 @@ public class PawnWall {
   }
 
   private static boolean calculateIsKingBehindPawnWall(StaticPosition blockedSquares, Square kingSquare, Side side) {
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (square.getFile() == kingSquare.getFile() && blockedSquares.isPawn(square)) {
         switch (side) {
           case WHITE:
@@ -267,7 +264,7 @@ public class PawnWall {
   protected static boolean calculateIsAllPawnsHavePawnAhead(ApiBoard board) {
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (staticPosition.isPawn(square)) {
         final Piece piece = staticPosition.get(square);
         if (!Square.calculateHasAheadSquare(piece.getSide(), square)) {
@@ -291,7 +288,7 @@ public class PawnWall {
   protected static boolean calculateIsAllPawnsCanReachPawnAhead(ApiBoard board) {
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (!staticPosition.isEmpty(square)) {
         final Piece piece = staticPosition.get(square);
         if (piece.getPieceType() == PieceType.PAWN && !calculateHasPawnAhead(staticPosition, square, piece.getSide())) {
@@ -331,7 +328,7 @@ public class PawnWall {
 
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (staticPosition.isPawn(square)) {
         final Piece piece = staticPosition.get(square);
         if (Square.calculateHasLeftDiagonalSquare(piece.getSide(), square)) {
@@ -369,7 +366,7 @@ public class PawnWall {
 
     // we make a board full of white pawns to mark all blocked squares
     StaticPosition calculateBlockedSquares = StaticPosition.EMPTY_POSITION;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (staticPosition.isOwnPawn(square, side)) {
         // we ignore pawn with empty squares ahead, but such pawns must be checked prior calling to have a pawn
         // ahead
@@ -529,7 +526,7 @@ public class PawnWall {
 
   private static boolean calculateHasOneOrMultipleBishopForSpecifiedColor(Side side, StaticPosition staticPosition,
       SquareType squareType) {
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
           && boardSquare.getSquareType() == squareType) {
@@ -541,7 +538,7 @@ public class PawnWall {
 
   private static boolean calculateHasOnlyPawnsForSpecifiedColor(Side side, StaticPosition staticPosition,
       SquareType squareType) {
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       if (staticPosition.isOwnPawn(boardSquare, side) && boardSquare.getSquareType() != squareType) {
         return false;
       }

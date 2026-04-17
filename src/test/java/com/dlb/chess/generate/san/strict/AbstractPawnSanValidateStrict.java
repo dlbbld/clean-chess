@@ -28,7 +28,7 @@ public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanV
     final Set<String> resultSet = new TreeSet<>();
 
     // one square advance (includes two square advance)
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       if (!Rank.calculateIsGroundRank(getSide(), toSquare.getRank())
           && !Rank.calculateIsPawnInititalRank(getSide(), toSquare.getRank())) {
         appendOnlyMove(resultSet, toSquare);
@@ -36,7 +36,7 @@ public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanV
     }
 
     // diagonal moves
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (!Rank.calculateIsGroundRank(getSide(), fromSquare.getRank())
           && !Rank.calculateIsPromotionRank(getSide(), fromSquare.getRank())) {
 

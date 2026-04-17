@@ -24,7 +24,7 @@ public class GenerateKingNonCastlingSanValidateStrict extends AbstractGenerateSa
 
     final Set<String> resultSet = new TreeSet<>();
 
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       appendOnlyMove(resultSet, toSquare);
     }
 
@@ -35,7 +35,7 @@ public class GenerateKingNonCastlingSanValidateStrict extends AbstractGenerateSa
   Set<String> calculateEnumConstantFormal() {
     final Set<String> resultSet = new TreeSet<>();
 
-    for (final Square toSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square toSquare : Square.REAL) {
       final Set<EmptyBoardMove> emptyBoardMoveSet = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMovesTo(KING,
           toSquare);
       for (final EmptyBoardMove move : emptyBoardMoveSet) {

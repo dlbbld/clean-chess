@@ -14,7 +14,7 @@ public abstract class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition) {
     final Piece piece = Piece.calculate(side, pieceType);
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (pieceOnSquare == piece) {
         return true;
@@ -26,7 +26,7 @@ public abstract class MaterialUtility implements EnumConstants {
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition,
       File file) {
     final Piece piece = Piece.calculate(side, pieceType);
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       if (boardSquare.getFile() != file) {
         continue;
       }
@@ -41,7 +41,7 @@ public abstract class MaterialUtility implements EnumConstants {
   public static boolean calculateHasPieceType(Side side, PieceType pieceType, StaticPosition staticPosition,
       Rank rank) {
     final Piece piece = Piece.calculate(side, pieceType);
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       if (boardSquare.getRank() != rank) {
         continue;
       }
@@ -120,7 +120,7 @@ public abstract class MaterialUtility implements EnumConstants {
 
   public static boolean calculateHasKingOnly(Side side, StaticPosition staticPosition) {
     var countKing = 0;
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (pieceOnSquare == Piece.NONE || pieceOnSquare.getSide() != side) {
         continue;
@@ -169,7 +169,7 @@ public abstract class MaterialUtility implements EnumConstants {
   public static int calculateNumberOfBishops(Side side, StaticPosition staticPosition, SquareType squareType) {
     final Piece bishop = Piece.calculate(side, PieceType.BISHOP);
     var total = 0;
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (pieceOnSquare == bishop && boardSquare.getSquareType() == squareType) {
         total++;
@@ -189,7 +189,7 @@ public abstract class MaterialUtility implements EnumConstants {
   public static int calculateNumberOfPieces(Side side, StaticPosition staticPosition, PieceType pieceType) {
     final Piece piece = Piece.calculate(side, pieceType);
     var total = 0;
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (pieceOnSquare == piece) {
         total++;
@@ -278,7 +278,7 @@ public abstract class MaterialUtility implements EnumConstants {
 
     var countKing = 0;
     var countAnotherPieces = 0;
-    for (final Square boardSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
       if (pieceOnSquare == Piece.NONE || pieceOnSquare.getSide() != side) {
         continue;

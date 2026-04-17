@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.List;
@@ -214,10 +213,6 @@ public class NonNullWrapperCommon {
     return map.keySet();
   }
 
-  public static <T> List<T> unmodifiableList(List<? extends T> list) {
-    return checkResult(Collections.unmodifiableList(list));
-  }
-
   public static <E extends Enum<E>> EnumSet<E> newEnumSet(Iterable<E> iterable, Class<E> elementType) {
     return checkResult(Sets.newEnumSet(iterable, elementType));
   }
@@ -257,9 +252,9 @@ public class NonNullWrapperCommon {
     return directoryPath.resolve(filePath);
   }
 
-  @SuppressWarnings("null")
-  public static <E> Set<E> setOf(E item) {
-    return Set.of(item);
+  @SuppressWarnings({ "null", "unchecked" })
+  public static <E> Set<E> setOf(E... items) {
+    return Set.of(items);
   }
 
 }

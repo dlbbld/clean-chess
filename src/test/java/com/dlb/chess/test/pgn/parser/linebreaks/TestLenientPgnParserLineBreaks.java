@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class TestLenientPgnParserLineBreaks {
 
@@ -72,8 +72,8 @@ public class TestLenientPgnParserLineBreaks {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFileActual = LenientPgnParser.parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH,
-        pgnFileName);
+    final PgnFile pgnFileActual = LenientPgnParser
+        .parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, pgnFileName);
 
     assertEquals(pgnFileExpected, pgnFileActual);
   }

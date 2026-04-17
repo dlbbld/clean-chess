@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParser {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
@@ -18,7 +18,8 @@ class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParse
   @Test
   void testWhite() {
 
-    final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "98_white_start_original.pgn");
+    final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+        "98_white_start_original.pgn");
 
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_white_start.pgn");
@@ -42,7 +43,8 @@ class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParse
   @Test
   void testBlack() {
 
-    final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_black_start_original.pgn");
+    final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+        "99_black_start_original.pgn");
 
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "05_black_start.pgn");

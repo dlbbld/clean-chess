@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.enums.ResultTagValue;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
 class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
@@ -23,7 +23,8 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
 
     final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
-    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_result_tag_only.pgn");
+    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+        "01_result_tag_only.pgn");
 
     assertTrue(TagUtility.hasResult(expected.tagList()));
     assertEquals(ResultTagValue.ONGOING.getValue(), TagUtility.readResult(expected.tagList()));
@@ -49,7 +50,8 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
 
     final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
-    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "03_too_much_space_in_tag.pgn");
+    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+        "03_too_much_space_in_tag.pgn");
 
     assertEquals(actual, expected);
   }
@@ -61,11 +63,13 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
     final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "04_setup_tag_zero_remove.pgn");
+      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "04_setup_tag_zero_remove.pgn");
       assertEquals(actual, expected);
     }
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "05_setup_tag_one_remove.pgn");
+      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "05_setup_tag_one_remove.pgn");
       assertEquals(actual, expected);
     }
   }

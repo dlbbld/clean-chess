@@ -29,10 +29,7 @@ class PawnForwardPromotionLegalMoves extends PawnLegalMoves {
     for (final Square toSquare : pawnPotentialToSquareSet) {
       if (Rank.calculateIsPromotionRank(havingMove, toSquare.getRank())) {
         // one move for each possible promotion square and promotion piece
-        for (final PromotionPieceType promotionPieceType : PromotionPieceType.values()) {
-          if (promotionPieceType == PromotionPieceType.NONE) {
-            continue;
-          }
+        for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
           final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare, toSquare,
               promotionPieceType);
           if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {

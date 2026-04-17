@@ -1,0 +1,44 @@
+package com.dlb.chess.test.san.format.oracle;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+
+import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
+
+class TestSanValidateFormatSuccessOracle {
+
+  /**
+   * For every entry in the static SAN map, asserts that {@link SanValidateFormat#validateFormat} returns the identical
+   * {@link SanParse} that the map pre-computed.
+   *
+   * <p>
+   * This uses the static map as an oracle: if the new parser produces a different result for any known-valid SAN string
+   * (wrong {@link com.dlb.chess.san.enums.SanType}, wrong from-square, wrong promotion piece, etc.) the test will catch
+   * it immediately without having to enumerate strings manually.
+   */
+  @SuppressWarnings("static-method")
+  @Test
+  void testSuccessOracle() {
+    final var tBuildStart = System.currentTimeMillis();
+    final Map<String, SanParse> map = SanValidateStaticallyFormat.getSanValidationMap();
+    final var tBuildEnd = System.currentTimeMillis();
+    System.out.println("Oracle size: " + map.size() + ", build time: " + (tBuildEnd - tBuildStart) + " ms");
+
+    final var tLoopStart = System.currentTimeMillis();
+    for (final Map.Entry<String, SanParse> entry : NonNullWrapperCommon.entrySet(map)) {
+      final String san = NonNullWrapperCommon.getKey(entry);
+      final SanParse expected = NonNullWrapperCommon.getValue(entry);
+      final SanParse actual = SanValidateFormat.validateFormat(san);
+      assertEquals(expected, actual, "validateFormat result differs from static map for SAN: \"" + san + "\"");
+    }
+    final var tLoopEnd = System.currentTimeMillis();
+    System.out.println("Loop time: " + (tLoopEnd - tLoopStart) + " ms");
+  }
+
+}

@@ -17,11 +17,11 @@ import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestInsufficientMaterial implements EnumConstants {
 
@@ -31,7 +31,7 @@ class TestInsufficientMaterial implements EnumConstants {
   @Test
   void testPgnFiles() throws Exception {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
-      if (PgnTestConstants.IS_RESTRICT_INSUFFICIENT_MATERIAL_TEST) {
+      if (RestrictTestConstants.IS_RESTRICT_PGN_INSUFFICIENT_MATERIAL_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_INSUFFICIENT_MATERIAL:
           case BASIC_CHECK_WHITE:

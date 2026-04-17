@@ -34,9 +34,9 @@ class TestFenInsufficientMaterial {
     var counter = 0;
 
     StaticPosition staticPositionWork = StaticPosition.EMPTY_POSITION;
-    for (final Square squareFirstKing : Square.BOARD_SQUARE_LIST) {
+    for (final Square squareFirstKing : Square.REAL) {
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing, Piece.WHITE_KING);
-      for (final Square squareSecondKing : Square.BOARD_SQUARE_LIST) {
+      for (final Square squareSecondKing : Square.REAL) {
         if (squareSecondKing == squareFirstKing) {
           continue;
         }
@@ -126,20 +126,20 @@ class TestFenInsufficientMaterial {
     var counter = 0;
 
     StaticPosition staticPositionWork = StaticPosition.EMPTY_POSITION;
-    for (final Square squareFirstKing : Square.BOARD_SQUARE_LIST) {
+    for (final Square squareFirstKing : Square.REAL) {
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing, Piece.WHITE_KING);
-      for (final Square squareFirstBishop : Square.BOARD_SQUARE_LIST) {
+      for (final Square squareFirstBishop : Square.REAL) {
         if (squareFirstBishop == squareFirstKing || squareFirstBishop.getSquareType() != squareType) {
           continue;
         }
         staticPositionWork = staticPositionWork.createChangedPosition(squareFirstBishop, Piece.WHITE_BISHOP);
-        for (final Square squareSecondKing : Square.BOARD_SQUARE_LIST) {
+        for (final Square squareSecondKing : Square.REAL) {
           if (squareSecondKing == squareFirstBishop || squareSecondKing == squareFirstKing) {
             continue;
           }
           staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing, Piece.BLACK_KING);
 
-          for (final Square squareSecondBishop : Square.BOARD_SQUARE_LIST) {
+          for (final Square squareSecondBishop : Square.REAL) {
             if (squareSecondBishop == squareFirstKing || squareSecondBishop == squareFirstBishop
                 || squareSecondBishop == squareSecondKing || squareSecondBishop.getSquareType() != squareType) {
               continue;
@@ -180,9 +180,9 @@ class TestFenInsufficientMaterial {
     var counter = 0;
 
     StaticPosition staticPositionWork = StaticPosition.EMPTY_POSITION;
-    for (final Square squareFirstKing : Square.BOARD_SQUARE_LIST) {
+    for (final Square squareFirstKing : Square.REAL) {
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing, Piece.WHITE_KING);
-      for (final Square squareKnight : Square.BOARD_SQUARE_LIST) {
+      for (final Square squareKnight : Square.REAL) {
         if (squareKnight == squareFirstKing) {
           continue;
         }
@@ -199,7 +199,7 @@ class TestFenInsufficientMaterial {
             throw new IllegalArgumentException();
         }
         staticPositionWork = staticPositionWork.createChangedPosition(squareKnight, piece);
-        for (final Square squareSecondKing : Square.BOARD_SQUARE_LIST) {
+        for (final Square squareSecondKing : Square.REAL) {
           if (squareSecondKing == squareKnight || squareSecondKing == squareFirstKing) {
             continue;
           }

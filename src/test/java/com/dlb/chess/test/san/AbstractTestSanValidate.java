@@ -11,16 +11,16 @@ import com.dlb.chess.san.validate.SanValidation;
 
 public abstract class AbstractTestSanValidate implements EnumConstants {
 
+  public static void checkExceptionMovingOntoItselfSquare(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_ONTO_ITSELF);
+  }
+
   public static void checkExceptionMovingOntoOwnPiece(String san, ApiBoard board) {
     checkException(san, board, SanValidationProblem.MOVING_ONTO_OWN_PIECE);
   }
 
   public static void checkExceptionCapturingOwnPiece(String san, ApiBoard board) {
     checkException(san, board, SanValidationProblem.CAPTURING_OWN_PIECE);
-  }
-
-  static void checkExceptionFormat(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.FORMAT);
   }
 
   public static void checkExceptionFormat(String san, SanValidationProblem problem, ApiBoard board) {

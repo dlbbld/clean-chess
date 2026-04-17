@@ -16,10 +16,8 @@ class TestBasicFile implements EnumConstants {
   @Test
   void testCount() throws Exception {
     var totalFiles = 0;
-    for (final File file : File.values()) {
-      if (file != File.NONE) {
-        totalFiles++;
-      }
+    for (@SuppressWarnings("unused") final File file : File.REAL) {
+      totalFiles++;
     }
     assertEquals(8, totalFiles);
   }

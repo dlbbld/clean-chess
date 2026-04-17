@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.FirstDuplicateTag;
 import com.dlb.chess.pgn.parser.model.Tag;

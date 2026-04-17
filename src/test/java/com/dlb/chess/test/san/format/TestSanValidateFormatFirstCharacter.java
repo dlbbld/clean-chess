@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 
 class TestSanValidateFormatFirstCharacter {
 
@@ -61,10 +61,10 @@ class TestSanValidateFormatFirstCharacter {
   @Test
   void testInvalidLowercasePieceLetters() {
     // lowercase piece letters are not valid starts — only uppercase R, N, B, Q, K
-    checkExceptionFormat("nf3");
-    checkExceptionFormat("qd1");
-    checkExceptionFormat("re1");
-    checkExceptionFormat("ke2");
+    checkException("nf3", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+    checkException("qd1", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+    checkException("re1", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+    checkException("ke2", SanValidationProblem.FORMAT_FIRST_CHARACTER);
   }
 
   @SuppressWarnings("static-method")
@@ -82,25 +82,16 @@ class TestSanValidateFormatFirstCharacter {
   void testInvalidOtherLetters() {
     // letters that are not file letters (a-h) or piece letters (R, N, B, Q, K)
     // these contain invalid SAN characters, caught by validateFormatBasic
-    checkExceptionFormat("ie4");
-    checkExceptionFormat("Pe4");
-    checkExceptionFormat("Ze4");
-  }
-
-  private static void checkExceptionFormat(String san) {
-    boolean isException;
-    try {
-      SanValidateFormat.validateFormat(san);
-      isException = false;
-    } catch (final SanValidationException e) {
-      isException = true;
-      System.out.println("SAN: " + san + " -> " + e.getMessage());
-      assertEquals(SanValidationProblem.FORMAT_INVALID_CHARACTER, e.getSanValidationProblem());
-    }
-    assertTrue(isException);
+    checkException("ie4", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+    checkException("Pe4", SanValidationProblem.FORMAT_FIRST_CHARACTER);
+    checkException("Ze4", SanValidationProblem.FORMAT_FIRST_CHARACTER);
   }
 
   private static void checkException(String san) {
+    checkException(san, SanValidationProblem.FORMAT_FIRST_CHARACTER);
+  }
+
+  private static void checkException(String san, SanValidationProblem expectedProblem) {
     boolean isException;
     try {
       SanValidateFormat.validateFormat(san);
@@ -108,7 +99,7 @@ class TestSanValidateFormatFirstCharacter {
     } catch (final SanValidationException e) {
       isException = true;
       System.out.println("SAN: " + san + " -> " + e.getMessage());
-      assertEquals(SanValidationProblem.FORMAT_FIRST_CHARACTER, e.getSanValidationProblem());
+      assertEquals(expectedProblem, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

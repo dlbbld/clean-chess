@@ -11,11 +11,11 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestPgnImportAgainstExport {
 
@@ -26,7 +26,7 @@ class TestPgnImportAgainstExport {
   void test() {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (PgnTestConstants.IS_RESTRICT_PGN_WRITER_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
+        if (RestrictTestConstants.IS_RESTRICT_PGN_WRITER_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
           continue;
         }
 
@@ -34,8 +34,8 @@ class TestPgnImportAgainstExport {
 
         logger.info(pgnFileName);
 
-        final PgnFile pgnFileFromFileSystem = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+        final PgnFile pgnFileFromFileSystem = PgnCacheForLenientPgnParserTestCases
+            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
 
         final List<String> export = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
         final PgnFile pgnFileFromReadingExport = LenientPgnParser.parse(export);

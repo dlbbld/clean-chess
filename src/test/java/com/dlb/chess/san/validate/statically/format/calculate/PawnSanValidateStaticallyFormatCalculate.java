@@ -3,7 +3,6 @@ package com.dlb.chess.san.validate.statically.format.calculate;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.model.SanParse;
@@ -24,16 +23,11 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
       }
     }
 
-    for (final File fromFile : File.values()) {
-      if (fromFile == File.NONE) {
-        continue;
-      }
-      for (final SanValidationFromTo model : calculateWithFile()) {
-        if (isPromotionRank(model)) {
-          populatePawnPromotionMap(sanValidateMap, model, true);
-        } else {
-          populatePawnNonPromotionMap(sanValidateMap, model, true);
-        }
+    for (final SanValidationFromTo model : calculateWithFile()) {
+      if (isPromotionRank(model)) {
+        populatePawnPromotionMap(sanValidateMap, model, true);
+      } else {
+        populatePawnNonPromotionMap(sanValidateMap, model, true);
       }
     }
 

@@ -16,10 +16,8 @@ class TestBasicRank implements EnumConstants {
   @Test
   void testCount() throws Exception {
     var totalRanks = 0;
-    for (final Rank rank : Rank.values()) {
-      if (rank != Rank.NONE) {
-        totalRanks++;
-      }
+    for (@SuppressWarnings("unused") final Rank rank : Rank.REAL) {
+      totalRanks++;
     }
     assertEquals(8, totalRanks);
   }

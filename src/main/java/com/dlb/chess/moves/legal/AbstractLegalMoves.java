@@ -59,7 +59,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
       CastlingRight castlingRight, final Square enPassantCaptureTargetSquare) {
 
     final Set<LegalMove> resultSet = new TreeSet<>();
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       if (staticPosition.isOwnPiece(fromSquare, havingMove)) {
         final Set<LegalMove> currentMovingPieceSet = calculateLegalMovesBottomUp(staticPosition,
             enPassantCaptureTargetSquare, castlingRight, havingMove, fromSquare);
@@ -84,7 +84,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
 
     for (final Square toSquare : toSquareSet) {
       final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare, toSquare);
-      final Piece pieceCaptured = staticPosition.isEmpty(toSquare) ? Piece.NONE : staticPosition.get(toSquare);
+      final var pieceCaptured = staticPosition.isEmpty(toSquare) ? Piece.NONE : staticPosition.get(toSquare);
 
       if (pieceCaptured != Piece.NONE && pieceCaptured.getPieceType() == PieceType.KING) {
         continue;
@@ -101,8 +101,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     final PseudoLegalReason pseudoLegalReason;
     if (!legalMoveSet.isEmpty() || pseudoLegalMoveSet.isEmpty()) {
       pseudoLegalReason = PseudoLegalReason.NONE;
-    } else if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition,
-        havingMove.getOppositeSide())) {
+    } else if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove.getOppositeSide())) {
       pseudoLegalReason = PseudoLegalReason.KING_LEFT_IN_CHECK;
     } else {
       pseudoLegalReason = PseudoLegalReason.KING_EXPOSED_TO_CHECK;

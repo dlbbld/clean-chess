@@ -19,7 +19,7 @@ class TestDiagonalUtility implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testDiagonalSetContent() {
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       assertEquals(calculateLeftToRightUpDiagonalUsingWhile(square),
           DiagonalLineUtility.calculateLeftToRightUpDiagonal(square));
       assertEquals(calculateLeftToRightDownDiagonalUsingWhile(square),

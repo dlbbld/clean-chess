@@ -31,8 +31,8 @@ class TestStrictPgnParserAgainstLenientPgnParser {
         // continue;
         // }
 
-        final PgnFile pgnFileStandard = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+        final PgnFile pgnFileStandard = PgnCacheForLenientPgnParserTestCases
+            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
 
         final PgnFile pgnFileStrict = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
             pgnFileName);

@@ -41,7 +41,7 @@ class TestSanValidateBlank {
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      assertEquals(SanValidationProblem.BLANK, e.getSanValidationProblem());
+      assertEquals(SanValidationProblem.FORMAT_BLANK, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

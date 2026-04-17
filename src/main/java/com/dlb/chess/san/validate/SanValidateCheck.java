@@ -60,7 +60,8 @@ public abstract class SanValidateCheck extends AbstractSan {
     }
   }
 
-  private static SanTerminalMarker calculateBoardSanTerminalMarker(ApiBoard board, MoveSpecification moveSpecification) {
+  private static SanTerminalMarker calculateBoardSanTerminalMarker(ApiBoard board,
+      MoveSpecification moveSpecification) {
     board.performMove(moveSpecification);
 
     SanTerminalMarker sanTerminalMarker;

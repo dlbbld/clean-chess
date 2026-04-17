@@ -7,6 +7,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -31,6 +32,19 @@ class TestUnwinnabilityQuickAgainstWinnability {
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
+        if (RestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST) {
+          switch (testCaseList.pgnTest()) {
+            case UNFAIR_LICHESS_EXAMPLES:
+            case UNFAIR_LICHESS_HELPMATE:
+            case UNFAIR_DEPTH_THREE:
+            case UNFAIR_NOT_QUICK:
+            case UNFAIR_AMBRONA:
+              break;
+            // $CASES-OMITTED$
+            default:
+              continue;
+          }
+        }
         if (!hasFound) {
           if (IS_START_FROM_PGN_FILE) {
             if (START_FROM_PGN_FILE_NAME.equals(testCase.pgnFileName())) {

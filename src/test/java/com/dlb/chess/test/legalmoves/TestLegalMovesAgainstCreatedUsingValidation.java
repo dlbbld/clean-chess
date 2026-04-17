@@ -27,11 +27,11 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.squares.to.potential.AbstractPotentialToSquares;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
@@ -44,7 +44,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     // the move generation from validation for testing is about ten times slower than the used on
     // so we only perform a spot checks on the PGN^s
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
-      if (PgnTestConstants.IS_RESTRICT_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST) {
+      if (RestrictTestConstants.IS_RESTRICT_PGN_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_CHECK_WHITE:
           case BASIC_CHECK_BLACK:
@@ -115,7 +115,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     // now we do something crazy:
     // we loop through all possible from/to square combinations and filter out the legal ones using the validation
     // this must match with the calculated legal moves - so both methods are hopefully correct (or both wrong..)
-    for (final Square fromSquare : Square.BOARD_SQUARE_LIST) {
+    for (final Square fromSquare : Square.REAL) {
       final Set<MoveSpecification> listForSquare = calculateMoveSpecificationsFromValidation(board, fromSquare);
       listForBoard.addAll(listForSquare);
     }
@@ -167,10 +167,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
         // that get's too much otherwise
         if (boardPiece.getPieceType() == PieceType.PAWN
             && Rank.calculateIsPromotionRank(havingMove, toSquare.getRank())) {
-          for (final PromotionPieceType promotionPieceType : PromotionPieceType.values()) {
-            if (promotionPieceType == PromotionPieceType.NONE) {
-              continue;
-            }
+          for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
             final MoveSpecification promotionMove = new MoveSpecification(havingMove, fromSquare, toSquare,
                 promotionPieceType);
             try {

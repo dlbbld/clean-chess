@@ -10,17 +10,14 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanType;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanConversionCheck;
 import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.validate.format.SanValidateFormat;
 
 /**
  * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original type-enumeration approach
@@ -30,8 +27,6 @@ import com.dlb.chess.san.validate.SanValidateFormat;
 public abstract class SanValidateFormatReference {
 
   public static SanParse validateFormat(String san) {
-    SanValidateFormat.validateFormatBasic(san);
-
     for (final SanType sanType : SanType.values()) {
       final SanConversionCheck sanSanConversion = parseForSanType(san, sanType);
       if (sanSanConversion.isMatch()) {
@@ -39,8 +34,7 @@ public abstract class SanValidateFormatReference {
       }
     }
 
-    throw new SanValidationException(SanValidationProblem.FORMAT,
-        Message.getString("validation.san.format.nonSpecific"));
+    throw new IllegalArgumentException("No SanType matches the SAN string: \"" + san + "\"");
   }
 
   private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {

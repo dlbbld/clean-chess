@@ -14,10 +14,8 @@ class TestBasicSquare implements EnumConstants {
   @Test
   void testCount() throws Exception {
     var totalSquares = 0;
-    for (final Square square : Square.values()) {
-      if (square != Square.NONE) {
-        totalSquares++;
-      }
+    for (@SuppressWarnings("unused") final Square square : Square.REAL) {
+      totalSquares++;
     }
     assertEquals(64, totalSquares);
   }
@@ -41,13 +39,11 @@ class TestBasicSquare implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testSquareType() throws Exception {
-    for (final Square square : Square.values()) {
-      if (square != Square.NONE) {
-        if ((square.getFile().getNumber() + square.getRank().getNumber()) % 2 == 0) {
-          assertEquals(SquareType.DARK_SQUARE, square.getSquareType());
-        } else {
-          assertEquals(SquareType.LIGHT_SQUARE, square.getSquareType());
-        }
+    for (final Square square : Square.REAL) {
+      if ((square.getFile().getNumber() + square.getRank().getNumber()) % 2 == 0) {
+        assertEquals(SquareType.DARK_SQUARE, square.getSquareType());
+      } else {
+        assertEquals(SquareType.LIGHT_SQUARE, square.getSquareType());
       }
     }
   }

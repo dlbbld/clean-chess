@@ -1,14 +1,11 @@
 package com.dlb.chess.test.san.format;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidateFormat;
+import com.dlb.chess.san.reference.SanValidateFormatBasic;
 
 class TestSanValidateFormatBasic {
 
@@ -77,26 +74,12 @@ class TestSanValidateFormatBasic {
   }
 
   private static void checkException(String san, String invalidChar) {
-    boolean isException;
-    try {
-      SanValidateFormat.validateFormatBasic(san);
-      isException = false;
-    } catch (final SanValidationException e) {
-      isException = true;
-      System.out.println("SAN: " + san + " -> " + e.getMessage() + " (invalid char: '" + invalidChar + "')");
-      assertEquals(SanValidationProblem.FORMAT_INVALID_CHARACTER, e.getSanValidationProblem());
-    }
-    assertTrue(isException);
+    System.out.println("SAN: " + san + " (invalid char: '" + invalidChar + "')");
+    assertFalse(SanValidateFormatBasic.isBasicFormatValid(san));
   }
 
   private static void checkValid(String san) {
-    var isException = false;
-    try {
-      SanValidateFormat.validateFormatBasic(san);
-    } catch (@SuppressWarnings("unused") final SanValidationException e) {
-      isException = true;
-    }
-    assertFalse(isException);
+    assertTrue(SanValidateFormatBasic.isBasicFormatValid(san));
   }
 
 }

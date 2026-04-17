@@ -15,7 +15,7 @@ import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnTestConstants;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
@@ -222,8 +222,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   }
 
   private static void checkNonLeadingCommentarySuccess(String pgnFileName, List<String> commentaryListExpected) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH,
-        pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases
+        .getPgn(PGN_TEST_NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH, pgnFileName);
 
     assertEquals("", pgnFile.leadingCommentary());
 
@@ -296,8 +296,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
   private static void checkMoveSuffixAnnotationSuccess(String pgnFileName,
       List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH,
-        pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases
+        .getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH, pgnFileName);
 
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
   }
@@ -321,7 +321,8 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   private static void checkCombinedSuccess(String pgnFileName, String leadingCommentaryExpected,
       List<String> sanListExpected, List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected,
       List<String> commentaryListExpected) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH, pgnFileName);
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
+        pgnFileName);
 
     assertEquals(leadingCommentaryExpected, pgnFile.leadingCommentary());
 

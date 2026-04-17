@@ -24,14 +24,14 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 
 class TestMobilitySolution implements EnumConstants {
 
-  private static final Set<Square> ALL_SQUARE_SET = new TreeSet<>(Square.BOARD_SQUARE_LIST);
+  private static final Set<Square> ALL_SQUARE_SET = new TreeSet<>(Square.REAL);
   private static final Set<Square> LIGHT_SQUARE_SET;
   private static final Set<Square> DARK_SQUARE_SET;
 
   static {
     LIGHT_SQUARE_SET = new TreeSet<>();
     DARK_SQUARE_SET = new TreeSet<>();
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       switch (square.getSquareType()) {
         case LIGHT_SQUARE -> LIGHT_SQUARE_SET.add(square);
         case DARK_SQUARE -> DARK_SQUARE_SET.add(square);
@@ -467,7 +467,7 @@ class TestMobilitySolution implements EnumConstants {
 
   private static void checkEmptySquares(StaticPosition staticPosition, MobilitySolution mobilitySolution) {
     final Set<Square> occupiedSquares = calculateOccupiedSquares(mobilitySolution);
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (!occupiedSquares.contains(square)) {
         assertTrue(staticPosition.isEmpty(square));
       }
@@ -476,7 +476,7 @@ class TestMobilitySolution implements EnumConstants {
 
   private static int calculateNumberOfPieces(StaticPosition staticPosition) {
     var counter = 0;
-    for (final Square square : Square.BOARD_SQUARE_LIST) {
+    for (final Square square : Square.REAL) {
       if (!staticPosition.isEmpty(square)) {
         counter++;
       }
