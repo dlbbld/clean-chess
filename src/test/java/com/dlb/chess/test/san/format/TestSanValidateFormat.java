@@ -28,27 +28,27 @@ class TestSanValidateFormat {
 
     // d3 — replace first char with valid non-file, second char with valid non-digit
     checkException("=3", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("dd", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
+    checkException("dd", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
 
     // dxe5 — invalid first, second, third, fourth chars
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("d=e5", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
-    checkException("dx15", SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_FILE);
-    checkException("dxeR", SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK);
+    checkException("d=e5", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
+    checkException("dx15", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE);
+    checkException("dxeR", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
 
     // d8=Q — invalid first, second (rank), structure, promotion piece
     checkException("18=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER);
-    checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_SYMBOL);
-    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
+    checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
+    checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_SYMBOL);
+    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // dxe8=Q — invalid chars replaced with valid SAN chars
     checkException("1xe8=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("d=e8=Q", SanValidationProblem.FORMAT_NON_SPECIFIC);
-    checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK);
+    checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
     checkException("dxeR=Q", SanValidationProblem.FORMAT_NON_SPECIFIC);
     checkException("dxe8xQ", SanValidationProblem.FORMAT_NON_SPECIFIC);
-    checkException("dxe8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
+    checkException("dxe8=K", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE);
 
     // Qe5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
@@ -294,8 +294,8 @@ class TestSanValidateFormat {
   @SuppressWarnings("static-method")
   @Test
   void testPromotionToKing() {
-    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
-    checkException("d1=K", SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE);
+    checkException("d8=K", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE);
+    checkException("d1=K", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE);
   }
 
   @SuppressWarnings("static-method")
@@ -379,7 +379,7 @@ class TestSanValidateFormat {
     }
     {
       final var san = "d7=Q";
-      checkException(san, SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION);
+      checkException(san, SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION);
     }
     // (1d) pawnCapturingPromotionMoves dxe8=Q
     {

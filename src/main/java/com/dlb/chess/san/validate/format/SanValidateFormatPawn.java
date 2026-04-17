@@ -24,8 +24,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
   static SanParse parsePawnMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     // too short
     if (core.length() == 1) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_GENERAL,
-          Message.getString("validation.san.format.pawn.length.general"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_NO_SECOND_CHARACTER,
+          Message.getString("validation.san.format.pawn.noSecondCharacter"));
     }
 
     final var secondChar = core.charAt(1);
@@ -37,8 +37,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
       return parsePawnCaptureMove(core, sanTerminalMarker);
     }
 
-    throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_SECOND_CHARACTER,
-        Message.getString("validation.san.format.pawn.secondCharacter", NonNullWrapperCommon.toString(secondChar)));
+    throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER, Message
+        .getString("validation.san.format.pawn.wrongSecondCharacter", NonNullWrapperCommon.toString(secondChar)));
   }
 
   private static SanParse parsePawnForwardMove(final String core, final SanTerminalMarker sanTerminalMarker) {
@@ -51,8 +51,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
       // too long
       if (length > 2) {
-        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_NON_PROMOTION,
-            Message.getString("validation.san.format.pawn.length.forward.nonPromotion"));
+        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_NON_PROMOTION,
+            Message.getString("validation.san.format.pawn.overlength.forward.nonPromotion"));
       }
 
       // valid
@@ -66,37 +66,38 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // no promotion symbol
     if (length == 2) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL,
-          Message.getString("validation.san.format.pawn.promotion.noPromotionSymbol"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL,
+          Message.getString("validation.san.format.pawn.forward.promotion.noPromotionSymbol"));
     }
 
     final var thirdChar = core.charAt(2);
 
     // wrong promotion symbol
     if (!isPromotionSymbol(thirdChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_SYMBOL,
-          Message.getString("validation.san.format.pawn.promotion.wrongPromotionSymbol"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_SYMBOL,
+          Message.getString("validation.san.format.pawn.forward.promotion.wrongPromotionSymbol",
+              NonNullWrapperCommon.toString(thirdChar)));
     }
 
     // no promotion piece
     if (length == 3) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_PIECE,
-          Message.getString("validation.san.format.pawn.promotion.noPromotionPiece"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_PIECE,
+          Message.getString("validation.san.format.pawn.forward.promotion.noPromotionPiece"));
     }
 
     final var fourthChar = core.charAt(3);
 
     // wrong promotion piece
     if (!NotationPromotionPiece.exists(fourthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE,
-          Message.getString("validation.san.format.pawn.promotion.wrongPromotionPiece",
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE,
+          Message.getString("validation.san.format.pawn.forward.promotion.wrongPromotionPiece",
               NonNullWrapperCommon.toString(fourthChar)));
     }
 
     // too long
     if (length > 4) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_FORWARD_PROMOTION,
-          Message.getString("validation.san.format.pawn.length.forward.promotion"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_FORWARD_PROMOTION,
+          Message.getString("validation.san.format.pawn.overlength.forward.promotion"));
     }
 
     // valid
@@ -112,30 +113,30 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // too short
     if (length == 2) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_GENERAL,
-          Message.getString("validation.san.format.pawn.length.capture.general"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NO_FILE,
+          Message.getString("validation.san.format.pawn.noCaptureToFile"));
     }
 
     final var thirdChar = core.charAt(2);
 
     // file check
     if (!SanValidateFormat.isFileLetter(thirdChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_FILE,
-          Message.getString("validation.san.format.pawn.captureToFile", NonNullWrapperCommon.toString(thirdChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE,
+          Message.getString("validation.san.format.pawn.wrongCaptureToFile", NonNullWrapperCommon.toString(thirdChar)));
     }
 
     // too short
     if (length == 3) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_GENERAL,
-          Message.getString("validation.san.format.pawn.length.capture.general"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_NO_RANK,
+          Message.getString("validation.san.format.pawn.noCaptureToRank"));
     }
 
     final var fourthChar = core.charAt(3);
 
     // rank check
     if (!SanValidateFormat.isRankDigit(fourthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_TO_RANK,
-          Message.getString("validation.san.format.pawn.captureToRank", NonNullWrapperCommon.toString(fourthChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK, Message
+          .getString("validation.san.format.pawn.wrongCaptureToRank", NonNullWrapperCommon.toString(fourthChar)));
     }
 
     if (!isAnyPromotionRank(fourthChar)) {
@@ -143,8 +144,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
       // too long
       if (length > 4) {
-        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_NON_PROMOTION,
-            Message.getString("validation.san.format.pawn.length.capture.nonPromotion"));
+        throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_CAPTURE_NON_PROMOTION,
+            Message.getString("validation.san.format.pawn.overlength.capture.nonPromotion"));
       }
 
       // valid
@@ -158,38 +159,38 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // no promotion symbol
     if (length == 4) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_SYMBOL,
-          Message.getString("validation.san.format.pawn.promotion.noPromotionSymbol"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL,
+          Message.getString("validation.san.format.pawn.capture.promotion.noPromotionSymbol"));
     }
 
     final var fifthChar = core.charAt(4);
 
     // wrong promotion symbol
     if (!isPromotionSymbol(fifthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_SYMBOL,
-          Message.getString("validation.san.format.pawn.promotion.wrongPromotionSymbol",
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_SYMBOL,
+          Message.getString("validation.san.format.pawn.capture.promotion.wrongPromotionSymbol",
               NonNullWrapperCommon.toString(fifthChar)));
     }
 
     // no promotion piece
     if (length == 5) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_NO_PROMOTION_PIECE,
-          Message.getString("validation.san.format.pawn.promotion.noPromotionPiece"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_PIECE,
+          Message.getString("validation.san.format.pawn.capture.promotion.noPromotionPiece"));
     }
 
     final var sixthChar = core.charAt(5);
 
     // wrong promotion piece
     if (!NotationPromotionPiece.exists(sixthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_PROMOTION_WRONG_PROMOTION_PIECE,
-          Message.getString("validation.san.format.pawn.promotion.wrongPromotionPiece",
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_PIECE,
+          Message.getString("validation.san.format.pawn.capture.promotion.wrongPromotionPiece",
               NonNullWrapperCommon.toString(sixthChar)));
     }
 
     // too long
     if (length > 6) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_LENGTH_CAPTURE_PROMOTION,
-          Message.getString("validation.san.format.pawn.length.capture.promotion"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_OVERLENGTH_CAPTURE_PROMOTION,
+          Message.getString("validation.san.format.pawn.overlength.capture.promotion"));
     }
 
     // valid
