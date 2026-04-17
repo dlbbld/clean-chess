@@ -72,8 +72,8 @@ public class TestLenientPgnParserLineBreaks {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFileActual = LenientPgnParser.parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH,
-        pgnFileName);
+    final PgnFile pgnFileActual = LenientPgnParser
+        .parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, pgnFileName);
 
     assertEquals(pgnFileExpected, pgnFileActual);
   }

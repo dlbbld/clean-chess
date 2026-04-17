@@ -34,7 +34,8 @@ class TestPgnExportIdempotency {
 
         logger.info(pgnFileName);
 
-        final PgnFile importedPgn = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+        final PgnFile importedPgn = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
+            pgnFileName);
 
         final List<String> exportedLines = PgnCreate.createPgnFileLines(importedPgn);
         final PgnFile exportedLinesImportedPgn = LenientPgnParser.parse(exportedLines);

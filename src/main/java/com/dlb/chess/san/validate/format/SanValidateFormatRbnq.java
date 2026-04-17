@@ -125,9 +125,8 @@ abstract class SanValidateFormatRbnq extends AbstractSan {
               Message.getString("validation.san.format.piece.middle3", NonNullWrapperCommon.toString(m0),
                   NonNullWrapperCommon.toString(m1), NonNullWrapperCommon.toString(m2)));
         }
-        yield new SanParse(pieceMoveSanType(piece, true, true, true),
-            new SanConversion(SanValidateFormat.parseFile(m0), SanValidateFormat.parseRank(m1), toSquare,
-                PromotionPieceType.NONE, sanTerminalMarker));
+        yield new SanParse(pieceMoveSanType(piece, true, true, true), new SanConversion(SanValidateFormat.parseFile(m0),
+            SanValidateFormat.parseRank(m1), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
       }
 
       default -> throw new ProgrammingMistakeException("Unreachable: mid is exactly 0-3 given the length check above");

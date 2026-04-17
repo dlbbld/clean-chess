@@ -216,8 +216,8 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   }
 
   protected static void generateScalaMoveList() {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PgnTest.BASIC_INSUFFICIENT_MATERIAL.getFolderPath(),
-        "insufficient_material_KBbBb_K.pgn");
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases
+        .getPgn(PgnTest.BASIC_INSUFFICIENT_MATERIAL.getFolderPath(), "insufficient_material_KBbBb_K.pgn");
 
     if (pgnFile.startFen() != FenConstants.FEN_INITIAL) {
       throw new ProgrammingMistakeException("Only test cases from initial FEN are supported");

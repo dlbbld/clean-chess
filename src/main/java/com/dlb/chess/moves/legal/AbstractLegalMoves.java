@@ -101,8 +101,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     final PseudoLegalReason pseudoLegalReason;
     if (!legalMoveSet.isEmpty() || pseudoLegalMoveSet.isEmpty()) {
       pseudoLegalReason = PseudoLegalReason.NONE;
-    } else if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition,
-        havingMove.getOppositeSide())) {
+    } else if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove.getOppositeSide())) {
       pseudoLegalReason = PseudoLegalReason.KING_LEFT_IN_CHECK;
     } else {
       pseudoLegalReason = PseudoLegalReason.KING_EXPOSED_TO_CHECK;

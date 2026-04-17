@@ -34,8 +34,8 @@ public abstract class LenientParseTagUtility extends AbstractParseTagUtility {
           hasFoundNonTagLine = true;
         }
       } else if (hasFoundNonTagLine) {
-        throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_REAPPEAR, SanValidationProblem.NONE,
-            "After the movetext started, tags can no longer appear.");
+        throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_REAPPEAR,
+            SanValidationProblem.NONE, "After the movetext started, tags can no longer appear.");
       }
     }
   }
@@ -52,7 +52,8 @@ public abstract class LenientParseTagUtility extends AbstractParseTagUtility {
     if (matcher.matches()) {
       return true;
     }
-    throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_FORMAT_INVALID, SanValidationProblem.NONE,
+    throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_FORMAT_INVALID,
+        SanValidationProblem.NONE,
         "A tag line with an invalid format was found. The expected format is exactly like: [White \"Alpha Zero\"]. The tag line is \""
             + tagLine + "\"");
   }
@@ -60,7 +61,8 @@ public abstract class LenientParseTagUtility extends AbstractParseTagUtility {
   private static void validateTagUniqueNames(List<Tag> tagList) throws LenientPgnParserValidationException {
     final FirstDuplicateTag check = calculateFirstDuplicateTag(tagList);
     if (check.hasDuplicateTag()) {
-      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE, SanValidationProblem.NONE,
+      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
+          SanValidationProblem.NONE,
           "The tag name must be unique. The tag name \"" + check.duplicateTagName() + "\" was used more than once.");
     }
   }

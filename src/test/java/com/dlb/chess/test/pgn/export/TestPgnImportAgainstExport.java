@@ -34,8 +34,8 @@ class TestPgnImportAgainstExport {
 
         logger.info(pgnFileName);
 
-        final PgnFile pgnFileFromFileSystem = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+        final PgnFile pgnFileFromFileSystem = PgnCacheForLenientPgnParserTestCases
+            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
 
         final List<String> export = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
         final PgnFile pgnFileFromReadingExport = LenientPgnParser.parse(export);

@@ -48,7 +48,8 @@ class TestBoardAgainstEachOther {
         final String pgnFileName = testCase.pgnFileName();
         logger.info(pgnFileName);
 
-        final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+        final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
+            pgnFileName);
 
         if (pgnFile.startFen() != FenConstants.FEN_INITIAL) {
           // API Carlos does not generate correct SAN when starting from position

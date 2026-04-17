@@ -68,7 +68,8 @@ class TestLenientPgnParserFromInitialPosition extends AbstractTestLenientPgnPars
     final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "11_result_incomplete_missing_tag.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "11_result_incomplete_missing_tag.pgn");
       assertEquals(expected, actual);
     }
     {
@@ -88,7 +89,8 @@ class TestLenientPgnParserFromInitialPosition extends AbstractTestLenientPgnPars
   @Test
   void testWhitespace() {
     final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
-    final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "14_movetext_whitespace.pgn");
+    final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+        "14_movetext_whitespace.pgn");
     assertEquals(expected, actual);
   }
 
@@ -98,27 +100,33 @@ class TestLenientPgnParserFromInitialPosition extends AbstractTestLenientPgnPars
     final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "15_movetext_no_move_numbers.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "15_movetext_no_move_numbers.pgn");
       assertEquals(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "16_movetext_wrong_move_numbers.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "16_movetext_wrong_move_numbers.pgn");
       assertEquals(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "17_movetext_wrong_move_numbers.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "17_movetext_wrong_move_numbers.pgn");
       assertEquals(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "18_movetext_wrong_move_numbers.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "18_movetext_wrong_move_numbers.pgn");
       assertEquals(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "19_movetext_wrong_move_numbers.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "19_movetext_wrong_move_numbers.pgn");
       assertEquals(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "20_movetext_wrong_move_numbers.pgn");
+      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+          "20_movetext_wrong_move_numbers.pgn");
       assertEquals(expected, actual);
     }
   }
