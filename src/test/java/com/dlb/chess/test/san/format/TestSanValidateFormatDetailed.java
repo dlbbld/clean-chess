@@ -151,32 +151,32 @@ class TestSanValidateFormatDetailed {
   @Test
   void testKingDestination() {
     // "K9e" — '9' is not a file letter, 'x', or valid rank digit (1-8)
-    checkException("K9e", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER);
+    checkException("K9e", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_FILE);
     // "KR5" — 'R' is not a file letter, 'x', or rank digit
-    checkException("KR5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER);
+    checkException("KR5", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_FILE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingSecondCharacter() {
     // "Kae5" — length 4 king, third char 'e' is not a rank digit
-    checkException("Kae5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK);
+    checkException("Kae5", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_RANK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingCaptureDestination() {
     // "Kx9e" — after 'x', '9' is not a file letter for the destination
-    checkException("Kx9e", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_FILE);
+    checkException("Kx9e", SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_WRONG_DESTINATION_FILE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingLength() {
     // "Ke" — too short, missing destination rank
-    checkException("Ke", SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_DESTINATION_RANK);
+    checkException("Ke", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_NO_DESTINATION_RANK);
     // "Kxe5a" — too long, valid Kxe5 with an extra char
-    checkException("Kxe5a", SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_CAPTURE);
+    checkException("Kxe5a", SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_OVERLENGTH);
   }
 
   // --- Piece format (R, N, B, Q) ---
@@ -185,35 +185,35 @@ class TestSanValidateFormatDetailed {
   @Test
   void testPieceDestination() {
     // "QeR" — Q + R = countRbnq > 1
-    checkException("QeR", SanValidationProblem.FORMAT_PIECE_DESTINATION);
+    checkException("QeR", SanValidationProblem.FORMAT_RNBQ_DESTINATION);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPieceLength() {
     // "Qe" — length 2, too short for a piece move
-    checkException("Qe", SanValidationProblem.FORMAT_PIECE_LENGTH);
+    checkException("Qe", SanValidationProblem.FORMAT_RNBQ_LENGTH);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPieceMiddle1() {
     // "Q=e5" — middle char '=' not a file/rank/x
-    checkException("Q=e5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
+    checkException("Q=e5", SanValidationProblem.FORMAT_RNBQ_MIDDLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPieceMiddle2() {
     // "Qabe5" — countFiles > 2 (a, b, e)
-    checkException("Qabe5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
+    checkException("Qabe5", SanValidationProblem.FORMAT_RNBQ_MIDDLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPieceMiddle3() {
     // "Qa3ae5" — countFiles > 2 (a, a, e)
-    checkException("Qa3ae5", SanValidationProblem.FORMAT_PIECE_MIDDLE);
+    checkException("Qa3ae5", SanValidationProblem.FORMAT_RNBQ_MIDDLE);
   }
 
   // --- Castling format ---

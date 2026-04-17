@@ -44,92 +44,91 @@ import com.dlb.chess.san.model.SanParse;
  */
 abstract class SanValidateFormatRbnq extends AbstractSan {
 
+  /**
+   * Parses a non-king piece move SAN sequentially, left to right. The SAN shape is
+   * {@code [piece][fromFile?][fromRank?][x?][toFile][toRank]}: a piece letter at position 0, followed by an optional
+   * disambiguation (file, rank, or both), an optional capture symbol, and always a two-character destination square at
+   * the end.
+   *
+   * <p>
+   * Middle-section components are matched greedily in grammar order (file before rank before {@code x}), bounded by the
+   * position where the destination must begin. If the greedy pass doesn't consume the middle completely, the first
+   * unconsumed character violates the grammar and an error is reported there.
+   */
   static SanParse parseRbnqMove(final String core, final SanTerminalMarker sanTerminalMarker) {
-    // Valid core lengths: piece(1) + middle(0–3) + destination(2) = 3 to 6
-    if (core.length() < 3 || core.length() > 6) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_LENGTH,
-          Message.getString("validation.san.format.piece.length"));
+    final var length = core.length();
+
+    // Length: piece(1) + middle(0–3) + destination(2) = 3 to 6
+    if (length < 3 || length > 6) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_LENGTH,
+          Message.getString("validation.san.format.rnbq.length"));
     }
 
-    // The destination square is always the last two characters
-    final var toFileChar = core.charAt(core.length() - 2);
-    final var toRankChar = core.charAt(core.length() - 1);
+    final var piece = parsePieceLetter(core.charAt(0));
+    final var destStart = length - 2;
+    var pos = 1;
+
+    // Greedy-match optional [fromFile]?[fromRank]?[x]?. The pos < destStart guard ensures we never consume into the
+    // destination square's two reserved positions.
+    var fromFile = File.NONE;
+    if (pos < destStart && SanValidateFormat.isFileLetter(core.charAt(pos))) {
+      fromFile = SanValidateFormat.parseFile(core.charAt(pos));
+      pos++;
+    }
+
+    var fromRank = Rank.NONE;
+    if (pos < destStart && SanValidateFormat.isRankDigit(core.charAt(pos))) {
+      fromRank = SanValidateFormat.parseRank(core.charAt(pos));
+      pos++;
+    }
+
+    var isCapture = false;
+    if (pos < destStart && core.charAt(pos) == 'x') {
+      isCapture = true;
+      pos++;
+    }
+
+    // After greedy consumption, pos must be at destStart. If not, the remaining middle characters don't form a valid
+    // disambiguation — report using the existing width-specific middle messages.
+    if (pos != destStart) {
+      throw buildMiddleException(core, pos, destStart);
+    }
+
+    // Destination square (always the last two characters)
+    final var toFileChar = core.charAt(destStart);
+    final var toRankChar = core.charAt(destStart + 1);
     if (!SanValidateFormat.isFileLetter(toFileChar) || !SanValidateFormat.isRankDigit(toRankChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_DESTINATION,
-          Message.getString("validation.san.format.piece.destination"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_DESTINATION,
+          Message.getString("validation.san.format.rnbq.destination"));
     }
     final var toSquare = Square.calculate(SanValidateFormat.parseFile(toFileChar),
         SanValidateFormat.parseRank(toRankChar));
-    final var piece = parsePieceLetter(core.charAt(0));
-    final var mid = core.length() - 3; // middle length: 0, 1, 2, or 3
 
-    return switch (mid) {
+    final var hasFromFile = fromFile != File.NONE;
+    final var hasFromRank = fromRank != Rank.NONE;
 
-      case 0 ->
-          // "Qe5" – no disambiguation, no capture
-          new SanParse(pieceMoveSanType(piece, false, false, false),
-              new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanType(piece, hasFromFile, hasFromRank, isCapture),
+        new SanConversion(fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+  }
 
-      case 1 -> {
-        final var m = core.charAt(1);
-        if (m == 'x') {
-          // "Qxe5" – no disambiguation, capture
-          yield new SanParse(pieceMoveSanType(piece, false, false, true),
-              new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
-        }
-        if (SanValidateFormat.isFileLetter(m)) {
-          // "Qae5" – file disambiguation, no capture
-          yield new SanParse(pieceMoveSanType(piece, true, false, false), new SanConversion(
-              SanValidateFormat.parseFile(m), Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
-        }
-        if (SanValidateFormat.isRankDigit(m)) {
-          // "Q2e5" – rank disambiguation, no capture
-          yield new SanParse(pieceMoveSanType(piece, false, true, false), new SanConversion(File.NONE,
-              SanValidateFormat.parseRank(m), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
-        }
-        throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
-            Message.getString("validation.san.format.piece.middle", NonNullWrapperCommon.toString(m)));
-      }
-
-      case 2 -> {
-        final var m0 = core.charAt(1);
-        final var m1 = core.charAt(2);
-        if (SanValidateFormat.isFileLetter(m0) && m1 == 'x') {
-          // "Qaxe5" – file disambiguation, capture
-          yield new SanParse(pieceMoveSanType(piece, true, false, true), new SanConversion(
-              SanValidateFormat.parseFile(m0), Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
-        }
-        if (SanValidateFormat.isRankDigit(m0) && m1 == 'x') {
-          // "Q2xe5" – rank disambiguation, capture
-          yield new SanParse(pieceMoveSanType(piece, false, true, true), new SanConversion(File.NONE,
-              SanValidateFormat.parseRank(m0), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
-        }
-        if (SanValidateFormat.isFileLetter(m0) && SanValidateFormat.isRankDigit(m1)) {
-          // "Qc3e5" – square disambiguation (file + rank), no capture
-          yield new SanParse(pieceMoveSanType(piece, true, true, false),
-              new SanConversion(SanValidateFormat.parseFile(m0), SanValidateFormat.parseRank(m1), toSquare,
-                  PromotionPieceType.NONE, sanTerminalMarker));
-        }
-        throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
-            Message.getString("validation.san.format.piece.middle2", NonNullWrapperCommon.toString(m0),
-                NonNullWrapperCommon.toString(m1)));
-      }
-
-      case 3 -> {
-        // "Qc3xe5" – square disambiguation (file + rank), capture
-        final var m0 = core.charAt(1);
-        final var m1 = core.charAt(2);
-        final var m2 = core.charAt(3);
-        if (!SanValidateFormat.isFileLetter(m0) || !SanValidateFormat.isRankDigit(m1) || m2 != 'x') {
-          throw new SanValidationException(SanValidationProblem.FORMAT_PIECE_MIDDLE,
-              Message.getString("validation.san.format.piece.middle3", NonNullWrapperCommon.toString(m0),
-                  NonNullWrapperCommon.toString(m1), NonNullWrapperCommon.toString(m2)));
-        }
-        yield new SanParse(pieceMoveSanType(piece, true, true, true), new SanConversion(SanValidateFormat.parseFile(m0),
-            SanValidateFormat.parseRank(m1), toSquare, PromotionPieceType.NONE, sanTerminalMarker));
-      }
-
-      default -> throw new ProgrammingMistakeException("Unreachable: mid is exactly 0-3 given the length check above");
+  /**
+   * Builds a {@link FORMAT_PIECE_MIDDLE} exception describing the unconsumed middle characters. Picks the
+   * width-specific message key ({@code middle}, {@code middle2}, {@code middle3}) based on how many characters remain.
+   */
+  private static SanValidationException buildMiddleException(final String core, final int pos, final int destStart) {
+    final var remainingLength = destStart - pos;
+    return switch (remainingLength) {
+      case 1 -> new SanValidationException(SanValidationProblem.FORMAT_RNBQ_MIDDLE,
+          Message.getString("validation.san.format.rnbq.middle", NonNullWrapperCommon.toString(core.charAt(pos))));
+      case 2 -> new SanValidationException(SanValidationProblem.FORMAT_RNBQ_MIDDLE,
+          Message.getString("validation.san.format.rnbq.middle2", NonNullWrapperCommon.toString(core.charAt(pos)),
+              NonNullWrapperCommon.toString(core.charAt(pos + 1))));
+      case 3 -> new SanValidationException(SanValidationProblem.FORMAT_RNBQ_MIDDLE,
+          Message.getString("validation.san.format.rnbq.middle3", NonNullWrapperCommon.toString(core.charAt(pos)),
+              NonNullWrapperCommon.toString(core.charAt(pos + 1)),
+              NonNullWrapperCommon.toString(core.charAt(pos + 2))));
+      default -> throw new ProgrammingMistakeException(
+          "Unreachable: remainingLength is in [1, 3] given the length check at entry");
     };
   }
 

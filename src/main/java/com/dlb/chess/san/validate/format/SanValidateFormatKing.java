@@ -35,29 +35,27 @@ abstract class SanValidateFormatKing extends AbstractSan {
   static SanParse parseKingMove(final String core, final SanTerminalMarker sanTerminalMarker) {
     // core[0] == 'K' ensured by the dispatcher in SanValidateFormat
 
-    // Second character
+    // Capture path is determined by the second char being 'x'. Anything else (or absence) is treated as a
+    // (malformed) non-capturing move, reported symmetrically with the capture-path destination-file codes.
+    if (core.length() >= 2 && core.charAt(1) == 'x') {
+      return parseKingCaptureMove(core, sanTerminalMarker);
+    }
+
+    // Non-capturing path: second char is the destination file letter.
     if (core.length() == 1) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_SECOND_CHARACTER,
-          Message.getString("validation.san.format.king.nonCastling.noSecondCharacter"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_NO_DESTINATION_FILE,
+          Message.getString("validation.san.format.king.nonCastling.nonCapture.noDestinationFile"));
     }
 
     final var secondChar = core.charAt(1);
 
-    // Kx... = capture move
-    if (secondChar == 'x') {
-      return parseKingCaptureMove(core, sanTerminalMarker);
-    }
-
-    // Anything other than a file letter at position 1 is invalid. Rank digits (e.g. "K2f3") and other characters
-    // all fall into the same generic "wrong second character" bucket; detecting rank-disambiguation specifically
-    // adds no user value beyond what this message already says.
     if (!SanValidateFormat.isFileLetter(secondChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER, Message
-          .getString("validation.san.format.king.nonCastling.wrongSecondCharacter",
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_FILE,
+          Message.getString("validation.san.format.king.nonCastling.nonCapture.wrongDestinationFile",
               NonNullWrapperCommon.toString(secondChar)));
     }
 
-    // K[file]... — non-capturing path (destination file, or more after that)
+    // K[file]... — non-capturing path continues with the destination rank
     return parseKingNonCaptureMove(core, sanTerminalMarker);
   }
 
@@ -66,8 +64,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
     final var secondChar = core.charAt(1);
 
     if (core.length() == 2) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_DESTINATION_RANK,
-          Message.getString("validation.san.format.king.nonCastling.noDestinationRank"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.king.nonCastling.nonCapture.noDestinationRank"));
     }
 
     final var thirdChar = core.charAt(2);
@@ -76,8 +74,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
     // "wrong destination rank" bucket; detecting file-disambiguation specifically adds no user value beyond what
     // this message already says.
     if (!SanValidateFormat.isRankDigit(thirdChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK,
-          Message.getString("validation.san.format.king.nonCastling.wrongDestinationRank",
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.king.nonCastling.nonCapture.wrongDestinationRank",
               NonNullWrapperCommon.toString(thirdChar)));
     }
 
@@ -91,8 +89,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
 
     // Length > 3 after valid K[file][rank] — overlength. Square-disambiguation attempts like "Ka2b3" also land here;
     // the generic overlength message is sufficient since the user can see the move already has 4+ chars.
-    throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_NON_CAPTURE,
-        Message.getString("validation.san.format.king.nonCastling.overlengthNonCapture"));
+    throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH,
+        Message.getString("validation.san.format.king.nonCastling.nonCapture.overlength"));
   }
 
   private static SanParse parseKingCaptureMove(final String core, final SanTerminalMarker sanTerminalMarker) {
@@ -100,29 +98,29 @@ abstract class SanValidateFormatKing extends AbstractSan {
 
     // Third character (destination file)
     if (core.length() == 2) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_CAPTURE_FILE,
-          Message.getString("validation.san.format.king.nonCastling.noCaptureFile"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_NO_DESTINATION_FILE,
+          Message.getString("validation.san.format.king.nonCastling.capture.noDestinationFile"));
     }
 
     final var thirdChar = core.charAt(2);
 
     if (!SanValidateFormat.isFileLetter(thirdChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_FILE,
-          Message.getString("validation.san.format.king.nonCastling.wrongCaptureFile",
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_WRONG_DESTINATION_FILE,
+          Message.getString("validation.san.format.king.nonCastling.capture.wrongDestinationFile",
               NonNullWrapperCommon.toString(thirdChar)));
     }
 
     // Fourth character (destination rank)
     if (core.length() == 3) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_CAPTURE_RANK,
-          Message.getString("validation.san.format.king.nonCastling.noCaptureRank"));
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.king.nonCastling.capture.noDestinationRank"));
     }
 
     final var fourthChar = core.charAt(3);
 
     if (!SanValidateFormat.isRankDigit(fourthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_RANK,
-          Message.getString("validation.san.format.king.nonCastling.wrongCaptureRank",
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.king.nonCastling.capture.wrongDestinationRank",
               NonNullWrapperCommon.toString(fourthChar)));
     }
 
@@ -135,8 +133,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
     }
 
     // Length > 4 after valid Kx[file][rank] — always overlength
-    throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_CAPTURE,
-        Message.getString("validation.san.format.king.nonCastling.overlengthCapture"));
+    throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_OVERLENGTH,
+        Message.getString("validation.san.format.king.nonCastling.capture.overlength"));
   }
 
 }
