@@ -68,7 +68,7 @@ class TestSanValidatePawnPromotion {
   void testWhiteCapturingMissingPromotionPiece() {
     // white pawn on d7, black rook on e8 — dxe8 without =Q
     final ApiBoard board = new Board("4rk2/3P4/8/8/8/8/8/4K3 w - - 0 100");
-    checkException("dxe8", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
+    checkException("dxe8", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
   }
 
   @SuppressWarnings("static-method")
@@ -133,7 +133,7 @@ class TestSanValidatePawnPromotion {
   void testBlackCapturingMissingPromotionPiece() {
     // black pawn on d2, white rook on e1 — dxe1 without =Q
     final ApiBoard board = new Board("4k3/8/8/8/8/8/3p4/4RK2 b - - 0 100");
-    checkException("dxe1", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
+    checkException("dxe1", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
   }
 
   @SuppressWarnings("static-method")

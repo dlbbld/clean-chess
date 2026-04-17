@@ -18,118 +18,353 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 
 /**
- * Parses a non-king piece move SAN (core starts with R, N, B, or Q).
+ * Parses a non-king piece move SAN (core starts with R, N, B, or Q) sequentially, character by character.
  *
  * <p>
- * Structure: {@code [piece][middle][toFile][toRank]}, where the destination square is always the last two characters
- * and {@code middle} is a 0–3 character sequence encoding optional from-square disambiguation and an optional capture
- * symbol 'x'.
- *
- * <p>
- * Recognised middle patterns by length:
+ * Recognised forms:
  *
  * <pre>
- *   0: ""              no disambiguation, no capture           e.g. Qe5
- *   1: x               no disambiguation, capture              e.g. Qxe5
- *      [file]          file disambiguation,  no capture        e.g. Qae5
- *      [rank]          rank disambiguation,  no capture        e.g. Q2e5
- *   2: [file]x         file disambiguation,  capture           e.g. Qaxe5
- *      [rank]x         rank disambiguation,  capture           e.g. Q2xe5
- *      [file][rank]    square disambiguation, no capture       e.g. Qc3e5
- *   3: [file][rank]x   square disambiguation, capture          e.g. Qc3xe5
+ *   Length 3:  R[toFile][toRank]                   — no disambiguation, no capture  e.g. Ra1
+ *   Length 4:  R[fromFile][toFile][toRank]         — file disambiguation           e.g. Rba1
+ *              R[fromRank][toFile][toRank]         — rank disambiguation           e.g. R2a1
+ *              Rx[toFile][toRank]                  — capture, no disambiguation    e.g. Rxa1
+ *   Length 5:  R[fromFile][fromRank][toFile][toRank] — square disambiguation       e.g. Rb2a1
+ *              R[fromFile]x[toFile][toRank]        — file disambiguation + capture e.g. Rbxa1
+ *              R[fromRank]x[toFile][toRank]        — rank disambiguation + capture e.g. R2xa1
+ *   Length 6:  R[fromFile][fromRank]x[toFile][toRank] — square + capture           e.g. Rb2xa1
  * </pre>
  *
  * <p>
- * All four piece types (Q, R, N, B) accept every combination above.
+ * The parser does a character-by-character walk and branches at each point where the grammar is ambiguous. It never
+ * commits to a disambiguation form until the next character makes the branch unambiguous, or until the SAN ends and
+ * the shorter valid form is complete. Each failure is reported with the most specific
+ * {@link SanValidationProblem} describing which character is missing or wrong.
  */
 abstract class SanValidateFormatRbnq extends AbstractSan {
 
-  /**
-   * Parses a non-king piece move SAN sequentially, left to right. The SAN shape is
-   * {@code [piece][fromFile?][fromRank?][x?][toFile][toRank]}: a piece letter at position 0, followed by an optional
-   * disambiguation (file, rank, or both), an optional capture symbol, and always a two-character destination square at
-   * the end.
-   *
-   * <p>
-   * Middle-section components are matched greedily in grammar order (file before rank before {@code x}), bounded by the
-   * position where the destination must begin. If the greedy pass doesn't consume the middle completely, the first
-   * unconsumed character violates the grammar and an error is reported there.
-   */
   static SanParse parseRbnqMove(final String core, final SanTerminalMarker sanTerminalMarker) {
-    final var length = core.length();
-
-    // Length: piece(1) + middle(0–3) + destination(2) = 3 to 6
-    if (length < 3 || length > 6) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_LENGTH,
-          Message.getString("validation.san.format.rnbq.length"));
-    }
-
+    // core[0] is the piece letter, already validated to be R/N/B/Q by the dispatcher in SanValidateFormat.
     final var piece = parsePieceLetter(core.charAt(0));
-    final var destStart = length - 2;
-    var pos = 1;
 
-    // Greedy-match optional [fromFile]?[fromRank]?[x]?. The pos < destStart guard ensures we never consume into the
-    // destination square's two reserved positions.
-    var fromFile = File.NONE;
-    if (pos < destStart && SanValidateFormat.isFileLetter(core.charAt(pos))) {
-      fromFile = SanValidateFormat.parseFile(core.charAt(pos));
-      pos++;
+    // pos 1: second character — file letter, rank digit, or the capture symbol 'x'
+    if (core.length() == 1) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NO_SECOND_CHARACTER,
+          Message.getString("validation.san.format.rnbq.noSecondCharacter"));
+    }
+    final var c1 = core.charAt(1);
+
+    if (c1 == 'x') {
+      return parseCaptureNoDisambig(core, sanTerminalMarker, piece);
+    }
+    if (SanValidateFormat.isRankDigit(c1)) {
+      return parseRankBranch(core, sanTerminalMarker, piece, SanValidateFormat.parseRank(c1));
+    }
+    if (SanValidateFormat.isFileLetter(c1)) {
+      return parseFileBranch(core, sanTerminalMarker, piece, SanValidateFormat.parseFile(c1));
+    }
+    throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_WRONG_SECOND_CHARACTER,
+        Message.getString("validation.san.format.rnbq.wrongSecondCharacter", NonNullWrapperCommon.toString(c1)));
+  }
+
+  // ---------------------------------------------------------------------------
+  // Rx[toFile][toRank] — capture, no disambiguation
+  // ---------------------------------------------------------------------------
+
+  private static SanParse parseCaptureNoDisambig(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece) {
+    // pos 2: destination file
+    if (core.length() == 2) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_NO_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.noDestinationFile"));
+    }
+    final var c2 = core.charAt(2);
+    if (!SanValidateFormat.isFileLetter(c2)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.wrongDestinationFile",
+              NonNullWrapperCommon.toString(c2)));
     }
 
-    var fromRank = Rank.NONE;
-    if (pos < destStart && SanValidateFormat.isRankDigit(core.charAt(pos))) {
-      fromRank = SanValidateFormat.parseRank(core.charAt(pos));
-      pos++;
+    // pos 3: destination rank
+    if (core.length() == 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.noDestinationRank"));
+    }
+    final var c3 = core.charAt(3);
+    if (!SanValidateFormat.isRankDigit(c3)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c3)));
     }
 
-    var isCapture = false;
-    if (pos < destStart && core.charAt(pos) == 'x') {
-      isCapture = true;
-      pos++;
+    // Length 4 is the exact valid form; anything longer is overlength.
+    if (core.length() > 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.capture.overlength"));
     }
 
-    // After greedy consumption, pos must be at destStart. If not, the remaining middle characters don't form a valid
-    // disambiguation — report using the existing width-specific middle messages.
-    if (pos != destStart) {
-      throw buildMiddleException(core, pos, destStart);
+    final var toSquare = Square.calculate(SanValidateFormat.parseFile(c2), SanValidateFormat.parseRank(c3));
+    return new SanParse(pieceMoveSanType(piece, false, false, true),
+        new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+  }
+
+  // ---------------------------------------------------------------------------
+  // R[rank]... — rank branch (at pos 2 we need 'x' for capture or a file letter for non-capture)
+  // ---------------------------------------------------------------------------
+
+  private static SanParse parseRankBranch(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final Rank fromRank) {
+    if (core.length() == 2) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_RANK_NO_THIRD_CHARACTER,
+          Message.getString("validation.san.format.rnbq.rank.noThirdCharacter"));
+    }
+    final var c2 = core.charAt(2);
+
+    if (c2 == 'x') {
+      return parseCaptureRank(core, sanTerminalMarker, piece, fromRank);
+    }
+    if (SanValidateFormat.isFileLetter(c2)) {
+      return parseNonCaptureRank(core, sanTerminalMarker, piece, fromRank, SanValidateFormat.parseFile(c2));
+    }
+    throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_RANK_WRONG_THIRD_CHARACTER,
+        Message.getString("validation.san.format.rnbq.rank.wrongThirdCharacter", NonNullWrapperCommon.toString(c2)));
+  }
+
+  // R[rank][toFile][toRank] — non-capture rank disambiguation (e.g. R2a1)
+  private static SanParse parseNonCaptureRank(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final Rank fromRank, final File toFile) {
+    // pos 3: destination rank
+    if (core.length() == 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_RANK_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.nonCapture.rank.noDestinationRank"));
+    }
+    final var c3 = core.charAt(3);
+    if (!SanValidateFormat.isRankDigit(c3)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_RANK_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.nonCapture.rank.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c3)));
     }
 
-    // Destination square (always the last two characters)
-    final var toFileChar = core.charAt(destStart);
-    final var toRankChar = core.charAt(destStart + 1);
-    if (!SanValidateFormat.isFileLetter(toFileChar) || !SanValidateFormat.isRankDigit(toRankChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_DESTINATION,
-          Message.getString("validation.san.format.rnbq.destination"));
+    if (core.length() > 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_RANK_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.nonCapture.rank.overlength"));
     }
-    final var toSquare = Square.calculate(SanValidateFormat.parseFile(toFileChar),
-        SanValidateFormat.parseRank(toRankChar));
 
-    final var hasFromFile = fromFile != File.NONE;
-    final var hasFromRank = fromRank != Rank.NONE;
+    final var toSquare = Square.calculate(toFile, SanValidateFormat.parseRank(c3));
+    return new SanParse(pieceMoveSanType(piece, false, true, false),
+        new SanConversion(File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+  }
 
-    return new SanParse(pieceMoveSanType(piece, hasFromFile, hasFromRank, isCapture),
+  // R[rank]x[toFile][toRank] — capture rank disambiguation (e.g. R2xa1)
+  private static SanParse parseCaptureRank(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final Rank fromRank) {
+    // pos 3: destination file
+    if (core.length() == 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_NO_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.rank.noDestinationFile"));
+    }
+    final var c3 = core.charAt(3);
+    if (!SanValidateFormat.isFileLetter(c3)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_WRONG_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.rank.wrongDestinationFile",
+              NonNullWrapperCommon.toString(c3)));
+    }
+
+    // pos 4: destination rank
+    if (core.length() == 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.rank.noDestinationRank"));
+    }
+    final var c4 = core.charAt(4);
+    if (!SanValidateFormat.isRankDigit(c4)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.rank.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c4)));
+    }
+
+    if (core.length() > 5) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.capture.rank.overlength"));
+    }
+
+    final var toSquare = Square.calculate(SanValidateFormat.parseFile(c3), SanValidateFormat.parseRank(c4));
+    return new SanParse(pieceMoveSanType(piece, false, true, true),
+        new SanConversion(File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+  }
+
+  // ---------------------------------------------------------------------------
+  // R[file]... — file branch (3-way ambiguity at pos 2: rank=toRank, file=fromFile, x=capture)
+  // ---------------------------------------------------------------------------
+
+  private static SanParse parseFileBranch(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final File firstFile) {
+    if (core.length() == 2) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_FILE_NO_THIRD_CHARACTER,
+          Message.getString("validation.san.format.rnbq.file.noThirdCharacter"));
+    }
+    final var c2 = core.charAt(2);
+
+    if (c2 == 'x') {
+      return parseCaptureFile(core, sanTerminalMarker, piece, firstFile);
+    }
+    if (SanValidateFormat.isFileLetter(c2)) {
+      return parseNonCaptureFile(core, sanTerminalMarker, piece, firstFile, SanValidateFormat.parseFile(c2));
+    }
+    if (SanValidateFormat.isRankDigit(c2)) {
+      return parseFileRankBranch(core, sanTerminalMarker, piece, firstFile, SanValidateFormat.parseRank(c2));
+    }
+    throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_FILE_WRONG_THIRD_CHARACTER,
+        Message.getString("validation.san.format.rnbq.file.wrongThirdCharacter", NonNullWrapperCommon.toString(c2)));
+  }
+
+  // R[fromFile][toFile][toRank] — non-capture file disambiguation (e.g. Rba1)
+  private static SanParse parseNonCaptureFile(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final File fromFile, final File toFile) {
+    // pos 3: destination rank
+    if (core.length() == 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_FILE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.nonCapture.file.noDestinationRank"));
+    }
+    final var c3 = core.charAt(3);
+    if (!SanValidateFormat.isRankDigit(c3)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_FILE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.nonCapture.file.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c3)));
+    }
+
+    if (core.length() > 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_FILE_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.nonCapture.file.overlength"));
+    }
+
+    final var toSquare = Square.calculate(toFile, SanValidateFormat.parseRank(c3));
+    return new SanParse(pieceMoveSanType(piece, true, false, false),
+        new SanConversion(fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+  }
+
+  // R[fromFile]x[toFile][toRank] — capture file disambiguation (e.g. Rbxa1)
+  private static SanParse parseCaptureFile(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final File fromFile) {
+    // pos 3: destination file
+    if (core.length() == 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_NO_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.file.noDestinationFile"));
+    }
+    final var c3 = core.charAt(3);
+    if (!SanValidateFormat.isFileLetter(c3)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_WRONG_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.file.wrongDestinationFile",
+              NonNullWrapperCommon.toString(c3)));
+    }
+
+    // pos 4: destination rank
+    if (core.length() == 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.file.noDestinationRank"));
+    }
+    final var c4 = core.charAt(4);
+    if (!SanValidateFormat.isRankDigit(c4)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.file.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c4)));
+    }
+
+    if (core.length() > 5) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.capture.file.overlength"));
+    }
+
+    final var toSquare = Square.calculate(SanValidateFormat.parseFile(c3), SanValidateFormat.parseRank(c4));
+    return new SanParse(pieceMoveSanType(piece, true, false, true),
+        new SanConversion(fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+  }
+
+  // ---------------------------------------------------------------------------
+  // R[file][rank]... — ambiguous between plain destination (Ra1) and source-square prefix (Rb2a1 / Rb2xa1)
+  // ---------------------------------------------------------------------------
+
+  private static SanParse parseFileRankBranch(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final File firstFile, final Rank firstRank) {
+    // Length 3: interpret as plain destination Ra1 — firstFile/firstRank are the destination square.
+    if (core.length() == 3) {
+      final var toSquare = Square.calculate(firstFile, firstRank);
+      return new SanParse(pieceMoveSanType(piece, false, false, false),
+          new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    }
+
+    // Length > 3: commit to source-square interpretation — firstFile/firstRank become the source square,
+    // and pos 3 must be either the destination file (non-capture) or 'x' (capture).
+    final var c3 = core.charAt(3);
+
+    if (c3 == 'x') {
+      return parseCaptureSquare(core, sanTerminalMarker, piece, firstFile, firstRank);
+    }
+    if (SanValidateFormat.isFileLetter(c3)) {
+      return parseNonCaptureSquare(core, sanTerminalMarker, piece, firstFile, firstRank, SanValidateFormat.parseFile(c3));
+    }
+    throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_SQUARE_WRONG_THIRD_CHARACTER,
+        Message.getString("validation.san.format.rnbq.square.wrongThirdCharacter", NonNullWrapperCommon.toString(c3)));
+  }
+
+  // R[fromFile][fromRank][toFile][toRank] — non-capture square disambiguation (e.g. Rb2a1)
+  private static SanParse parseNonCaptureSquare(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final File fromFile, final Rank fromRank, final File toFile) {
+    // pos 4: destination rank
+    if (core.length() == 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_SQUARE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.nonCapture.square.noDestinationRank"));
+    }
+    final var c4 = core.charAt(4);
+    if (!SanValidateFormat.isRankDigit(c4)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_SQUARE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.nonCapture.square.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c4)));
+    }
+
+    if (core.length() > 5) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_SQUARE_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.nonCapture.square.overlength"));
+    }
+
+    final var toSquare = Square.calculate(toFile, SanValidateFormat.parseRank(c4));
+    return new SanParse(pieceMoveSanType(piece, true, true, false),
         new SanConversion(fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
-  /**
-   * Builds a {@link FORMAT_PIECE_MIDDLE} exception describing the unconsumed middle characters. Picks the
-   * width-specific message key ({@code middle}, {@code middle2}, {@code middle3}) based on how many characters remain.
-   */
-  private static SanValidationException buildMiddleException(final String core, final int pos, final int destStart) {
-    final var remainingLength = destStart - pos;
-    return switch (remainingLength) {
-      case 1 -> new SanValidationException(SanValidationProblem.FORMAT_RNBQ_MIDDLE,
-          Message.getString("validation.san.format.rnbq.middle", NonNullWrapperCommon.toString(core.charAt(pos))));
-      case 2 -> new SanValidationException(SanValidationProblem.FORMAT_RNBQ_MIDDLE,
-          Message.getString("validation.san.format.rnbq.middle2", NonNullWrapperCommon.toString(core.charAt(pos)),
-              NonNullWrapperCommon.toString(core.charAt(pos + 1))));
-      case 3 -> new SanValidationException(SanValidationProblem.FORMAT_RNBQ_MIDDLE,
-          Message.getString("validation.san.format.rnbq.middle3", NonNullWrapperCommon.toString(core.charAt(pos)),
-              NonNullWrapperCommon.toString(core.charAt(pos + 1)),
-              NonNullWrapperCommon.toString(core.charAt(pos + 2))));
-      default -> throw new ProgrammingMistakeException(
-          "Unreachable: remainingLength is in [1, 3] given the length check at entry");
-    };
+  // R[fromFile][fromRank]x[toFile][toRank] — capture square disambiguation (e.g. Rb2xa1)
+  private static SanParse parseCaptureSquare(final String core, final SanTerminalMarker sanTerminalMarker,
+      final PieceType piece, final File fromFile, final Rank fromRank) {
+    // pos 4: destination file
+    if (core.length() == 4) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_NO_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.square.noDestinationFile"));
+    }
+    final var c4 = core.charAt(4);
+    if (!SanValidateFormat.isFileLetter(c4)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_WRONG_DESTINATION_FILE,
+          Message.getString("validation.san.format.rnbq.capture.square.wrongDestinationFile",
+              NonNullWrapperCommon.toString(c4)));
+    }
+
+    // pos 5: destination rank
+    if (core.length() == 5) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.square.noDestinationRank"));
+    }
+    final var c5 = core.charAt(5);
+    if (!SanValidateFormat.isRankDigit(c5)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.rnbq.capture.square.wrongDestinationRank",
+              NonNullWrapperCommon.toString(c5)));
+    }
+
+    if (core.length() > 6) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_OVERLENGTH,
+          Message.getString("validation.san.format.rnbq.capture.square.overlength"));
+    }
+
+    final var toSquare = Square.calculate(SanValidateFormat.parseFile(c4), SanValidateFormat.parseRank(c5));
+    return new SanParse(pieceMoveSanType(piece, true, true, true),
+        new SanConversion(fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   private static PieceType parsePieceLetter(final char c) {

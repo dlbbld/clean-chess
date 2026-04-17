@@ -29,14 +29,14 @@ class TestSanValidatePawnExists {
       checkException("c7", board);
       checkException("c8", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
 
-      checkException("fxg1", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
+      checkException("fxg1", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
       checkException("fxg2", board, SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_RANK);
       checkException("fxg3", board);
       checkException("fxg4", board);
       checkException("fxg5", board);
       checkException("fxg6", board);
       checkException("fxg7", board);
-      checkException("fxg8", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
+      checkException("fxg8", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
     }
 
   }
@@ -57,14 +57,14 @@ class TestSanValidatePawnExists {
       checkException("h2", board);
       checkException("h1", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
 
-      checkException("bxa8", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
+      checkException("bxa8", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
       checkException("bxa7", board, SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_RANK);
       checkException("bxa6", board);
       checkException("bxa5", board);
       checkException("bxa4", board);
       checkException("bxa3", board);
       checkException("bxa2", board);
-      checkException("bxa1", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
+      checkException("bxa1", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
 
     }
 

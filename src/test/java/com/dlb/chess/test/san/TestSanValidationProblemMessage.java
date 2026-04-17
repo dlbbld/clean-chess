@@ -172,42 +172,170 @@ class TestSanValidationProblemMessage {
   @Test
   void testFormatRbnq() {
 
-    // Cases listed in the order the sequential parser checks them:
-    //   1) length  →  FORMAT_PIECE_LENGTH
-    //   2) middle  →  FORMAT_PIECE_MIDDLE (width 1, 2, or 3 remaining chars)
-    //   3) destination  →  FORMAT_PIECE_DESTINATION
+    // Cases listed in sequential parse order. The parser branches at each ambiguity point and commits to a
+    // disambiguation only when the next character disambiguates (or when the SAN ends and the shorter valid form
+    // is complete).
 
-    // length — underlength (< 3)
-    checkException("Q", SanValidationProblem.FORMAT_RNBQ_LENGTH,
-        "A piece move must have 3 to 6 characters (excluding check/checkmate symbol).");
+    // --- pos 1: second character ---
 
-    checkException("Qe", SanValidationProblem.FORMAT_RNBQ_LENGTH,
-        "A piece move must have 3 to 6 characters (excluding check/checkmate symbol).");
+    checkException("Q", SanValidationProblem.FORMAT_RNBQ_NO_SECOND_CHARACTER,
+        "For a piece move (R, N, B, Q), the piece letter must be followed by a file letter (a-h),"
+            + " a rank digit (1-8), or the capture symbol (x).");
 
-    // length — overlength (> 6)
-    checkException("Qa2xe5y", SanValidationProblem.FORMAT_RNBQ_LENGTH,
-        "A piece move must have 3 to 6 characters (excluding check/checkmate symbol).");
+    checkException("Q=", SanValidationProblem.FORMAT_RNBQ_WRONG_SECOND_CHARACTER,
+        "For a piece move (R, N, B, Q), the second character must be a file letter (a-h),"
+            + " a rank digit (1-8), or the capture symbol (x), but is '='.");
 
-    // middle — 1 unconsumed char before destination (e.g. "Q=e5": '=' at pos 1, destStart 2)
-    checkException("Q=e5", SanValidationProblem.FORMAT_RNBQ_MIDDLE,
-        "After the piece letter, the next character must be a file letter (a-h), a rank digit (1-8),"
-            + " or the capture symbol (x), but is '='.");
+    // --- Rx... — capture, no disambiguation ---
 
-    // middle — 2 unconsumed chars before destination (e.g. "Q==e5": '==' at pos 1, destStart 3)
-    checkException("Q==e5", SanValidationProblem.FORMAT_RNBQ_MIDDLE,
-        "The disambiguation characters '==' are not valid. Expected: [file]x, [rank]x, or [file][rank].");
+    checkException("Qx", SanValidationProblem.FORMAT_RNBQ_CAPTURE_NO_DESTINATION_FILE,
+        "For a piece move with no disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but was not provided.");
 
-    // middle — 3 unconsumed chars before destination (e.g. "Q===e5": '===' at pos 1, destStart 4)
-    checkException("Q===e5", SanValidationProblem.FORMAT_RNBQ_MIDDLE,
-        "The disambiguation characters '===' are not valid. Expected: [file][rank]x, for example Qc3xe5.");
+    checkException("Qx=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_FILE,
+        "For a piece move with no disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but is '='.");
 
-    // destination — wrong destination file (e.g. "QK5": 'K' is not a file letter)
-    checkException("QK5", SanValidationProblem.FORMAT_RNBQ_DESTINATION,
-        "A piece move must end with a destination square (file letter + rank digit), for example Qe5.");
+    checkException("Qxe", SanValidationProblem.FORMAT_RNBQ_CAPTURE_NO_DESTINATION_RANK,
+        "For a piece move with no disambiguation and capturing, after the destination file a rank digit (1-8)"
+            + " is expected for the destination rank, but was not provided.");
 
-    // destination — wrong destination rank (e.g. "Qe=": '=' is not a rank digit)
-    checkException("Qe=", SanValidationProblem.FORMAT_RNBQ_DESTINATION,
-        "A piece move must end with a destination square (file letter + rank digit), for example Qe5.");
+    checkException("Qxe=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_RANK,
+        "For a piece move with no disambiguation and capturing, after the destination file a rank digit (1-8)"
+            + " is expected for the destination rank, but is '='.");
+
+    checkException("Qxe5y", SanValidationProblem.FORMAT_RNBQ_CAPTURE_OVERLENGTH,
+        "A piece move with no disambiguation and capturing must have exactly 4 characters"
+            + " (excluding check/checkmate symbol).");
+
+    // --- R[rank]... — rank branch (pos 2 expects 'x' or file letter) ---
+
+    checkException("Q2", SanValidationProblem.FORMAT_RNBQ_RANK_NO_THIRD_CHARACTER,
+        "After the source-rank digit, a file letter (destination file for a non-capturing move)"
+            + " or the capture symbol (x) is expected, but was not provided.");
+
+    checkException("Q2=", SanValidationProblem.FORMAT_RNBQ_RANK_WRONG_THIRD_CHARACTER,
+        "After the source-rank digit, a file letter (destination file for a non-capturing move)"
+            + " or the capture symbol (x) is expected, but is '='.");
+
+    // R[rank][toFile][toRank] — non-capture rank disambiguation
+    checkException("Q2a", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_RANK_NO_DESTINATION_RANK,
+        "For a piece move with rank disambiguation and non-capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but was not provided.");
+
+    checkException("Q2a=", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_RANK_WRONG_DESTINATION_RANK,
+        "For a piece move with rank disambiguation and non-capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but is '='.");
+
+    checkException("Q2a1y", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_RANK_OVERLENGTH,
+        "A piece move with rank disambiguation and non-capturing must have exactly 4 characters"
+            + " (excluding check/checkmate symbol).");
+
+    // R[rank]x[toFile][toRank] — capture rank disambiguation
+    checkException("Q2x", SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_NO_DESTINATION_FILE,
+        "For a piece move with rank disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but was not provided.");
+
+    checkException("Q2x=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_WRONG_DESTINATION_FILE,
+        "For a piece move with rank disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but is '='.");
+
+    checkException("Q2xa", SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_NO_DESTINATION_RANK,
+        "For a piece move with rank disambiguation and capturing, after the destination file a rank digit (1-8)"
+            + " is expected for the destination rank, but was not provided.");
+
+    checkException("Q2xa=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_WRONG_DESTINATION_RANK,
+        "For a piece move with rank disambiguation and capturing, after the destination file a rank digit (1-8)"
+            + " is expected for the destination rank, but is '='.");
+
+    checkException("Q2xa1y", SanValidationProblem.FORMAT_RNBQ_CAPTURE_RANK_OVERLENGTH,
+        "A piece move with rank disambiguation and capturing must have exactly 5 characters"
+            + " (excluding check/checkmate symbol).");
+
+    // --- R[file]... — file branch (3-way ambiguity at pos 2) ---
+
+    checkException("Qa", SanValidationProblem.FORMAT_RNBQ_FILE_NO_THIRD_CHARACTER,
+        "After the file letter, a rank digit (destination rank), another file letter (destination file when"
+            + " a source file is being specified), or the capture symbol (x) is expected, but was not provided.");
+
+    checkException("Qa=", SanValidationProblem.FORMAT_RNBQ_FILE_WRONG_THIRD_CHARACTER,
+        "After the file letter, a rank digit (destination rank), another file letter (destination file when"
+            + " a source file is being specified), or the capture symbol (x) is expected, but is '='.");
+
+    // R[fromFile][toFile][toRank] — non-capture file disambiguation
+    checkException("Qab", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_FILE_NO_DESTINATION_RANK,
+        "For a piece move with file disambiguation and non-capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but was not provided.");
+
+    checkException("Qab=", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_FILE_WRONG_DESTINATION_RANK,
+        "For a piece move with file disambiguation and non-capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but is '='.");
+
+    checkException("Qab1y", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_FILE_OVERLENGTH,
+        "A piece move with file disambiguation and non-capturing must have exactly 4 characters"
+            + " (excluding check/checkmate symbol).");
+
+    // R[fromFile]x[toFile][toRank] — capture file disambiguation
+    checkException("Qax", SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_NO_DESTINATION_FILE,
+        "For a piece move with file disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but was not provided.");
+
+    checkException("Qax=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_WRONG_DESTINATION_FILE,
+        "For a piece move with file disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but is '='.");
+
+    checkException("Qaxb", SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_NO_DESTINATION_RANK,
+        "For a piece move with file disambiguation and capturing, after the destination file a rank digit (1-8)"
+            + " is expected for the destination rank, but was not provided.");
+
+    checkException("Qaxb=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_WRONG_DESTINATION_RANK,
+        "For a piece move with file disambiguation and capturing, after the destination file a rank digit (1-8)"
+            + " is expected for the destination rank, but is '='.");
+
+    checkException("Qaxb1y", SanValidationProblem.FORMAT_RNBQ_CAPTURE_FILE_OVERLENGTH,
+        "A piece move with file disambiguation and capturing must have exactly 5 characters"
+            + " (excluding check/checkmate symbol).");
+
+    // --- R[file][rank]... — ambiguous: Ra1 (length 3, valid) or source-square prefix (length > 3) ---
+
+    // When a fourth char is present we commit to source-square. It must be 'x' (capture) or a file letter.
+    checkException("Qa1=", SanValidationProblem.FORMAT_RNBQ_SQUARE_WRONG_THIRD_CHARACTER,
+        "After the source square, a file letter (destination file) or the capture symbol (x) is expected,"
+            + " but is '='.");
+
+    // R[fromFile][fromRank][toFile][toRank] — non-capture square disambiguation
+    checkException("Qa1b", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_SQUARE_NO_DESTINATION_RANK,
+        "For a piece move with square disambiguation and non-capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but was not provided.");
+
+    checkException("Qa1b=", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_SQUARE_WRONG_DESTINATION_RANK,
+        "For a piece move with square disambiguation and non-capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but is '='.");
+
+    checkException("Qa1b2y", SanValidationProblem.FORMAT_RNBQ_NON_CAPTURE_SQUARE_OVERLENGTH,
+        "A piece move with square disambiguation and non-capturing must have exactly 5 characters"
+            + " (excluding check/checkmate symbol).");
+
+    // R[fromFile][fromRank]x[toFile][toRank] — capture square disambiguation
+    checkException("Qa1x", SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_NO_DESTINATION_FILE,
+        "For a piece move with square disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but was not provided.");
+
+    checkException("Qa1x=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_WRONG_DESTINATION_FILE,
+        "For a piece move with square disambiguation and capturing, after the capture symbol a file letter (a-h)"
+            + " is expected for the destination file, but is '='.");
+
+    checkException("Qa1xb", SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_NO_DESTINATION_RANK,
+        "For a piece move with square disambiguation and capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but was not provided.");
+
+    checkException("Qa1xb=", SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_WRONG_DESTINATION_RANK,
+        "For a piece move with square disambiguation and capturing, after the destination file a rank digit"
+            + " (1-8) is expected for the destination rank, but is '='.");
+
+    checkException("Qa1xb2y", SanValidationProblem.FORMAT_RNBQ_CAPTURE_SQUARE_OVERLENGTH,
+        "A piece move with square disambiguation and capturing must have exactly 6 characters"
+            + " (excluding check/checkmate symbol).");
 
   }
 
