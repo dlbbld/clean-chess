@@ -231,25 +231,25 @@ class TestSanValidateFormat {
     // Ke5
     checkException("+e5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("KK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("KeR", SanValidationProblem.FORMAT_KING_DESTINATION);
+    checkException("KeR", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK);
 
     // Kxe5
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("K=e5", SanValidationProblem.FORMAT_KING_SECOND_CHARACTER);
+    checkException("K=e5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER);
     checkException("KxK5", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("KxeR", SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION);
+    checkException("KxeR", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_RANK);
 
     // O-O
     checkException("+-O", SanValidationProblem.FORMAT_FIRST_CHARACTER);
-    checkException("O=O", SanValidationProblem.FORMAT_CASTLING);
-    checkException("O-x", SanValidationProblem.FORMAT_CASTLING);
+    checkException("O=O", SanValidationProblem.FORMAT_KING_CASTLING);
+    checkException("O-x", SanValidationProblem.FORMAT_KING_CASTLING);
 
     // O-O-O
     checkException("+-O-O", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("O=O-O", SanValidationProblem.FORMAT_PIECE_DESTINATION);
-    checkException("O-x-O", SanValidationProblem.FORMAT_CASTLING);
-    checkException("O-O=O", SanValidationProblem.FORMAT_CASTLING);
-    checkException("O-O-x", SanValidationProblem.FORMAT_CASTLING);
+    checkException("O-x-O", SanValidationProblem.FORMAT_KING_CASTLING);
+    checkException("O-O=O", SanValidationProblem.FORMAT_KING_CASTLING);
+    checkException("O-O-x", SanValidationProblem.FORMAT_KING_CASTLING);
 
   }
 

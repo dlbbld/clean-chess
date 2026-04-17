@@ -89,8 +89,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     if (CastlingConstants.SAN_CASTLING_KING_SIDE.equals(core)) {
       return new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE, sanConversion);
     }
-    throw new SanValidationException(SanValidationProblem.FORMAT_CASTLING,
-        Message.getString("validation.san.format.castling"));
+    throw new SanValidationException(SanValidationProblem.FORMAT_KING_CASTLING,
+        Message.getString("validation.san.format.king.castling"));
   }
 
   // --- Shared character-class and parsing helpers (package-private) ---

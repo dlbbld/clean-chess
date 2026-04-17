@@ -25,126 +25,118 @@ import com.dlb.chess.san.model.SanParse;
  *   length 3: K[file][rank]   non-castling, non-capturing   e.g. Ke5
  *   length 4: Kx[file][rank]  non-castling, capturing       e.g. Kxe5
  * </pre>
+ *
+ * <p>
+ * Parses the SAN character-by-character (sequential), analogous to {@link SanValidateFormatPawn}. Each failure is
+ * reported with the most specific {@link SanValidationProblem} describing which character is missing or wrong.
  */
-// TODO align with piece parsing -> sequential
 abstract class SanValidateFormatKing extends AbstractSan {
 
   static SanParse parseKingMove(final String core, final SanTerminalMarker sanTerminalMarker) {
-    return switch (core.length()) {
+    // core[0] == 'K' ensured by the dispatcher in SanValidateFormat
 
-      case 3 -> {
-        // K[toFile][toRank] – non-capturing e.g. "Ke5"
-        final var toFileChar = core.charAt(1);
-        final var toRankChar = core.charAt(2);
-        if (!SanValidateFormat.isFileLetter(toFileChar) || !SanValidateFormat.isRankDigit(toRankChar)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_DESTINATION,
-              Message.getString("validation.san.format.king.destination"));
-        }
-        yield new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE,
-            new SanConversion(File.NONE, Rank.NONE,
-                Square.calculate(SanValidateFormat.parseFile(toFileChar), SanValidateFormat.parseRank(toRankChar)),
-                PromotionPieceType.NONE, sanTerminalMarker));
-      }
+    // Second character
+    if (core.length() == 1) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_SECOND_CHARACTER,
+          Message.getString("validation.san.format.king.nonCastling.noSecondCharacter"));
+    }
 
-      case 4 -> {
-        // Kx[toFile][toRank] – capturing e.g. "Kxe5"
-        // But first check for disambiguation patterns (never valid for king)
-        final var secondChar4 = core.charAt(1);
-        final var thirdChar4 = core.charAt(2);
-        final var fourthChar4 = core.charAt(3);
-        // K[file][toFile][toRank] — file disambiguation
-        if (SanValidateFormat.isFileLetter(secondChar4) && SanValidateFormat.isFileLetter(thirdChar4)
-            && SanValidateFormat.isRankDigit(fourthChar4)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_FILE_SPECIFIED,
-              Message.getString("validation.san.format.king.fileSpecified"));
-        }
-        // K[rank][toFile][toRank] — rank disambiguation
-        if (SanValidateFormat.isRankDigit(secondChar4) && SanValidateFormat.isFileLetter(thirdChar4)
-            && SanValidateFormat.isRankDigit(fourthChar4)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_RANK_SPECIFIED,
-              Message.getString("validation.san.format.king.rankSpecified"));
-        }
-        if (secondChar4 != 'x') {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SECOND_CHARACTER, Message
-              .getString("validation.san.format.king.secondCharacter", NonNullWrapperCommon.toString(secondChar4)));
-        }
-        if (!SanValidateFormat.isFileLetter(thirdChar4) || !SanValidateFormat.isRankDigit(fourthChar4)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION,
-              Message.getString("validation.san.format.king.captureDestination"));
-        }
-        yield new SanParse(SanType.KING_NON_CASTLING_CAPTURING_MOVE,
-            new SanConversion(File.NONE, Rank.NONE,
-                Square.calculate(SanValidateFormat.parseFile(thirdChar4), SanValidateFormat.parseRank(fourthChar4)),
-                PromotionPieceType.NONE, sanTerminalMarker));
-      }
+    final var secondChar = core.charAt(1);
 
-      case 5 -> {
-        // K[file]x[toFile][toRank] or K[rank]x[toFile][toRank] or K[file][rank][toFile][toRank]
-        final var secondChar5 = core.charAt(1);
-        final var thirdChar5 = core.charAt(2);
-        final var fourthChar5 = core.charAt(3);
-        final var fifthChar5 = core.charAt(4);
-        // K[file]x[toFile][toRank] — file disambiguation + capture
-        if (SanValidateFormat.isFileLetter(secondChar5) && thirdChar5 == 'x'
-            && SanValidateFormat.isFileLetter(fourthChar5) && SanValidateFormat.isRankDigit(fifthChar5)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_FILE_SPECIFIED,
-              Message.getString("validation.san.format.king.fileSpecified"));
-        }
-        // K[rank]x[toFile][toRank] — rank disambiguation + capture
-        if (SanValidateFormat.isRankDigit(secondChar5) && thirdChar5 == 'x'
-            && SanValidateFormat.isFileLetter(fourthChar5) && SanValidateFormat.isRankDigit(fifthChar5)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_RANK_SPECIFIED,
-              Message.getString("validation.san.format.king.rankSpecified"));
-        }
-        // K[file][rank][toFile][toRank] — square disambiguation
-        if (SanValidateFormat.isFileLetter(secondChar5) && SanValidateFormat.isRankDigit(thirdChar5)
-            && SanValidateFormat.isFileLetter(fourthChar5) && SanValidateFormat.isRankDigit(fifthChar5)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED,
-              Message.getString("validation.san.format.king.squareSpecified"));
-        }
-        throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
-            Message.getString("validation.san.format.king.length"));
-      }
+    // Kx... = capture move
+    if (secondChar == 'x') {
+      return parseKingCaptureMove(core, sanTerminalMarker);
+    }
 
-      case 6 -> {
-        // K[file]x[toFile][toRank] or K[rank]x[toFile][toRank] or K[file][rank][toFile][toRank]
-        // or K[file][rank]x[toFile][toRank] (square disambiguation + capture)
-        final var c1 = core.charAt(1);
-        final var c2 = core.charAt(2);
-        final var c3 = core.charAt(3);
-        final var c4 = core.charAt(4);
-        final var c5 = core.charAt(5);
-        // Kfxa1 — file disambiguation + capture
-        if (SanValidateFormat.isFileLetter(c1) && c2 == 'x' && SanValidateFormat.isFileLetter(c3)
-            && SanValidateFormat.isRankDigit(c4)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_FILE_SPECIFIED,
-              Message.getString("validation.san.format.king.fileSpecified"));
-        }
-        // K2xf3 — rank disambiguation + capture
-        if (SanValidateFormat.isRankDigit(c1) && c2 == 'x' && SanValidateFormat.isFileLetter(c3)
-            && SanValidateFormat.isRankDigit(c4)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_RANK_SPECIFIED,
-              Message.getString("validation.san.format.king.rankSpecified"));
-        }
-        // Ka2b3 — square disambiguation, non-capturing
-        if (SanValidateFormat.isFileLetter(c1) && SanValidateFormat.isRankDigit(c2)
-            && SanValidateFormat.isFileLetter(c3) && SanValidateFormat.isRankDigit(c4)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED,
-              Message.getString("validation.san.format.king.squareSpecified"));
-        }
-        // Ka2xb3 — square disambiguation + capture
-        if (SanValidateFormat.isFileLetter(c1) && SanValidateFormat.isRankDigit(c2) && c3 == 'x'
-            && SanValidateFormat.isFileLetter(c4) && SanValidateFormat.isRankDigit(c5)) {
-          throw new SanValidationException(SanValidationProblem.FORMAT_KING_SQUARE_SPECIFIED,
-              Message.getString("validation.san.format.king.squareSpecified"));
-        }
-        throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
-            Message.getString("validation.san.format.king.length"));
-      }
+    // Anything other than a file letter at position 1 is invalid. Rank digits (e.g. "K2f3") and other characters
+    // all fall into the same generic "wrong second character" bucket; detecting rank-disambiguation specifically
+    // adds no user value beyond what this message already says.
+    if (!SanValidateFormat.isFileLetter(secondChar)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER, Message
+          .getString("validation.san.format.king.nonCastling.wrongSecondCharacter",
+              NonNullWrapperCommon.toString(secondChar)));
+    }
 
-      default -> throw new SanValidationException(SanValidationProblem.FORMAT_KING_LENGTH,
-          Message.getString("validation.san.format.king.length"));
-    };
+    // K[file]... — non-capturing path (destination file, or more after that)
+    return parseKingNonCaptureMove(core, sanTerminalMarker);
+  }
+
+  private static SanParse parseKingNonCaptureMove(final String core, final SanTerminalMarker sanTerminalMarker) {
+    // core[0]='K', core[1]=file letter. Expect rank digit next.
+    final var secondChar = core.charAt(1);
+
+    if (core.length() == 2) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_DESTINATION_RANK,
+          Message.getString("validation.san.format.king.nonCastling.noDestinationRank"));
+    }
+
+    final var thirdChar = core.charAt(2);
+
+    // Third char must be a rank digit. Anything else (another file letter, 'x', etc.) falls into the same generic
+    // "wrong destination rank" bucket; detecting file-disambiguation specifically adds no user value beyond what
+    // this message already says.
+    if (!SanValidateFormat.isRankDigit(thirdChar)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK,
+          Message.getString("validation.san.format.king.nonCastling.wrongDestinationRank",
+              NonNullWrapperCommon.toString(thirdChar)));
+    }
+
+    // K[file][rank] — valid destination, length 3 expected
+    if (core.length() == 3) {
+      return new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE,
+          new SanConversion(File.NONE, Rank.NONE,
+              Square.calculate(SanValidateFormat.parseFile(secondChar), SanValidateFormat.parseRank(thirdChar)),
+              PromotionPieceType.NONE, sanTerminalMarker));
+    }
+
+    // Length > 3 after valid K[file][rank] — overlength. Square-disambiguation attempts like "Ka2b3" also land here;
+    // the generic overlength message is sufficient since the user can see the move already has 4+ chars.
+    throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_NON_CAPTURE,
+        Message.getString("validation.san.format.king.nonCastling.overlengthNonCapture"));
+  }
+
+  private static SanParse parseKingCaptureMove(final String core, final SanTerminalMarker sanTerminalMarker) {
+    // core[0]='K', core[1]='x'. Expect [file][rank] next.
+
+    // Third character (destination file)
+    if (core.length() == 2) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_CAPTURE_FILE,
+          Message.getString("validation.san.format.king.nonCastling.noCaptureFile"));
+    }
+
+    final var thirdChar = core.charAt(2);
+
+    if (!SanValidateFormat.isFileLetter(thirdChar)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_FILE,
+          Message.getString("validation.san.format.king.nonCastling.wrongCaptureFile",
+              NonNullWrapperCommon.toString(thirdChar)));
+    }
+
+    // Fourth character (destination rank)
+    if (core.length() == 3) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_CAPTURE_RANK,
+          Message.getString("validation.san.format.king.nonCastling.noCaptureRank"));
+    }
+
+    final var fourthChar = core.charAt(3);
+
+    if (!SanValidateFormat.isRankDigit(fourthChar)) {
+      throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_RANK,
+          Message.getString("validation.san.format.king.nonCastling.wrongCaptureRank",
+              NonNullWrapperCommon.toString(fourthChar)));
+    }
+
+    // Valid Kx[file][rank] — length 4 expected
+    if (core.length() == 4) {
+      return new SanParse(SanType.KING_NON_CASTLING_CAPTURING_MOVE,
+          new SanConversion(File.NONE, Rank.NONE,
+              Square.calculate(SanValidateFormat.parseFile(thirdChar), SanValidateFormat.parseRank(fourthChar)),
+              PromotionPieceType.NONE, sanTerminalMarker));
+    }
+
+    // Length > 4 after valid Kx[file][rank] — always overlength
+    throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_CAPTURE,
+        Message.getString("validation.san.format.king.nonCastling.overlengthCapture"));
   }
 
 }

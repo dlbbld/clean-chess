@@ -37,11 +37,17 @@ class TestSanValidationProblemMessage {
 
   @SuppressWarnings("static-method")
   @Test
-  void testFormat() {
+  void testFormatGeneral() {
     checkException("", SanValidationProblem.FORMAT_BLANK, "The value cannot be blank.");
 
     checkException("Z", SanValidationProblem.FORMAT_FIRST_CHARACTER,
-        "A SAN move must start with a file letter (a-h), a piece letter (R, N, B, Q, K), or O for castling, but starts with 'Z'.");
+        "A SAN move must start with a file letter (a-h), a piece letter (R, N, B, Q, K), or O for castling (letter O not digit 0), but starts with 'Z'.");
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testFormatPawn() {
 
     // pawn
     checkException("a", SanValidationProblem.FORMAT_PAWN_NO_SECOND_CHARACTER,
@@ -102,6 +108,63 @@ class TestSanValidationProblemMessage {
 
     checkException("axb8=Qx", SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_OVERLENGTH,
         "A promoting pawn capturing move must have exactly 6 characters (excluding check/checkmate symbol).");
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testFormatKing() {
+
+    // king
+    // king castling
+    checkException("O-", SanValidationProblem.FORMAT_KING_CASTLING,
+        "When the value starts with 'O', it must be either castling king-side (O-O) or castling queen-side (O-O-O).");
+
+    // king non castling
+    checkException("K", SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_SECOND_CHARACTER,
+        "For a king non-castling move, the king letter must be followed by a file letter (a-h) for a non-capturing move or by the capture symbol (x) for a capturing move.");
+
+    checkException("K=", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER,
+        "For a king non-castling move, the second character must be a file letter (a-h) or the capture symbol (x), but is '='.");
+
+    // rank-disambiguation attempts like "K2e5" collapse into WRONG_SECOND_CHARACTER
+    checkException("K2e5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER,
+        "For a king non-castling move, the second character must be a file letter (a-h) or the capture symbol (x), but is '2'.");
+
+    // king non castling non capture
+    checkException("Ke", SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_DESTINATION_RANK,
+        "For a king non-castling non-capturing move, after the destination file a rank digit (1-8) is expected for the destination rank, but was not provided.");
+
+    checkException("KeR", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK,
+        "For a king non-castling non-capturing move, after the destination file a rank digit (1-8) is expected for the destination rank, but is 'R'.");
+
+    // file-disambiguation attempts like "Kae5" collapse into WRONG_DESTINATION_RANK (third char 'e' is a file, not a
+    // rank)
+    checkException("Kae5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK,
+        "For a king non-castling non-capturing move, after the destination file a rank digit (1-8) is expected for the destination rank, but is 'e'.");
+
+    checkException("Ke5R", SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_NON_CAPTURE,
+        "A king non-castling non-capturing move must have exactly 3 characters (excluding check/checkmate symbol).");
+
+    // square-disambiguation attempts like "Ka2b3" collapse into OVERLENGTH_NON_CAPTURE
+    checkException("Ka2b3", SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_NON_CAPTURE,
+        "A king non-castling non-capturing move must have exactly 3 characters (excluding check/checkmate symbol).");
+
+    // king non castling capture
+    checkException("Kx", SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_CAPTURE_FILE,
+        "For a king non-castling capturing move, after the capture symbol a file letter (a-h) is expected for the destination file, but was not provided.");
+
+    checkException("KxR", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_FILE,
+        "For a king non-castling capturing move, after the capture symbol a file letter (a-h) is expected for the destination file, but is 'R'.");
+
+    checkException("Kxe", SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_CAPTURE_RANK,
+        "For a king non-castling capturing move, after the destination file a rank digit (1-8) is expected for the destination rank, but was not provided.");
+
+    checkException("KxeR", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_RANK,
+        "For a king non-castling capturing move, after the destination file a rank digit (1-8) is expected for the destination rank, but is 'R'.");
+
+    checkException("Kxe5a", SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_CAPTURE,
+        "A king non-castling capturing move must have exactly 4 characters (excluding check/checkmate symbol).");
 
   }
 

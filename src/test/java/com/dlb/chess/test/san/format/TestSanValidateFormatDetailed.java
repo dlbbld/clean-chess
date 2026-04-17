@@ -150,33 +150,33 @@ class TestSanValidateFormatDetailed {
   @SuppressWarnings("static-method")
   @Test
   void testKingDestination() {
-    // "K9e" — '9' is not a valid SAN character
-    checkException("K9e", SanValidationProblem.FORMAT_KING_DESTINATION);
-    // "KR5" — 'R' is not a file letter
-    checkException("KR5", SanValidationProblem.FORMAT_KING_DESTINATION);
+    // "K9e" — '9' is not a file letter, 'x', or valid rank digit (1-8)
+    checkException("K9e", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER);
+    // "KR5" — 'R' is not a file letter, 'x', or rank digit
+    checkException("KR5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_SECOND_CHARACTER);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingSecondCharacter() {
-    // "Kae5" — length 4 king, looks like file disambiguation which is never valid for king
-    checkException("Kae5", SanValidationProblem.FORMAT_KING_FILE_SPECIFIED);
+    // "Kae5" — length 4 king, third char 'e' is not a rank digit
+    checkException("Kae5", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_DESTINATION_RANK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingCaptureDestination() {
-    // "Kx9e" — '9' is not a valid SAN character
-    checkException("Kx9e", SanValidationProblem.FORMAT_KING_CAPTURE_DESTINATION);
+    // "Kx9e" — after 'x', '9' is not a file letter for the destination
+    checkException("Kx9e", SanValidationProblem.FORMAT_KING_NON_CASTLING_WRONG_CAPTURE_FILE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingLength() {
-    // "Ke" — too short
-    checkException("Ke", SanValidationProblem.FORMAT_KING_LENGTH);
-    // "Kxe5a" — too long
-    checkException("Kxe5a", SanValidationProblem.FORMAT_KING_LENGTH);
+    // "Ke" — too short, missing destination rank
+    checkException("Ke", SanValidationProblem.FORMAT_KING_NON_CASTLING_NO_DESTINATION_RANK);
+    // "Kxe5a" — too long, valid Kxe5 with an extra char
+    checkException("Kxe5a", SanValidationProblem.FORMAT_KING_NON_CASTLING_OVERLENGTH_CAPTURE);
   }
 
   // --- Piece format (R, N, B, Q) ---
@@ -226,11 +226,11 @@ class TestSanValidateFormatDetailed {
     checkValid("O-O-O");
 
     // invalid: "O-O-" — starts with O but is neither O-O nor O-O-O
-    checkException("O-O-", SanValidationProblem.FORMAT_CASTLING);
+    checkException("O-O-", SanValidationProblem.FORMAT_KING_CASTLING);
     // "O-" — too short
-    checkException("O-", SanValidationProblem.FORMAT_CASTLING);
+    checkException("O-", SanValidationProblem.FORMAT_KING_CASTLING);
     // "O" — just O
-    checkException("O", SanValidationProblem.FORMAT_CASTLING);
+    checkException("O", SanValidationProblem.FORMAT_KING_CASTLING);
   }
 
   // --- Helpers ---
