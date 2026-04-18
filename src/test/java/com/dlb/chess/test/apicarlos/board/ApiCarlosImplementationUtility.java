@@ -61,7 +61,7 @@ public abstract class ApiCarlosImplementationUtility {
   private static boolean calculateIsPawn(com.github.bhlangonijr.chesslib.Piece piece) {
     return switch (piece) {
       case WHITE_PAWN, BLACK_PAWN -> true;
-      case BLACK_BISHOP, BLACK_KING, BLACK_KNIGHT, BLACK_QUEEN, BLACK_ROOK, WHITE_BISHOP, WHITE_KING, WHITE_KNIGHT, WHITE_QUEEN, WHITE_ROOK -> false;
+      case WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING -> false;
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
