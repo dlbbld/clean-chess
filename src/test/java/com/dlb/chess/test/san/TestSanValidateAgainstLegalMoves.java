@@ -362,7 +362,7 @@ class TestSanValidateAgainstLegalMoves {
     checkException(board, "R8a5", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
 
     // knight
-    checkException(board, "N8c5", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK);
+    checkException(board, "N8c5", SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK);
 
     // bishop
     checkException(board, "B8d5", SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
@@ -600,7 +600,7 @@ class TestSanValidateAgainstLegalMoves {
     // white
     // rook no square specification allowed
     // knight
-    checkException(board, "Nb1c4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_NOT_ONTO_ITSELF);
+    checkException(board, "Nb1c4", SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE);
 
     // bishop
     checkException(board, "Bc1a3", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);
@@ -612,7 +612,7 @@ class TestSanValidateAgainstLegalMoves {
     board.performMoves("e4");
     // rook no square specification allowed
     // knight
-    checkException(board, "Ng8d4", SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_NOT_ONTO_ITSELF);
+    checkException(board, "Ng8d4", SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE);
 
     // bishop
     checkException(board, "Bf8h6", SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE);

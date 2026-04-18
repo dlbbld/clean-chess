@@ -10,7 +10,6 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.movement.SanValidateMovement;
 
@@ -18,16 +17,10 @@ public class SanValidation extends AbstractSan {
 
   public static MoveSpecification validateSan(String san, ApiBoard board) throws SanValidationException {
     final var sanParse = SanValidateFormat.validateFormat(san);
-    return validateAgainstPosition(board, sanParse);
-  }
-
-  private static MoveSpecification validateAgainstPosition(ApiBoard board, SanParse sanParse)
-      throws SanValidationException {
-
-    final Side havingMove = board.getHavingMove();
 
     SanValidateNonMovement.validateNonMovement(sanParse);
 
+    final Side havingMove = board.getHavingMove();
     SanValidateMovement.validateMovement(sanParse, havingMove);
 
     final var sanType = sanParse.sanType();

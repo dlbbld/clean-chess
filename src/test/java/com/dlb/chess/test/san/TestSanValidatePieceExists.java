@@ -52,7 +52,7 @@ class TestSanValidatePieceExists {
   }
 
   private static void checkExceptionNeither(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.PIECE_NEITHER_NO_PIECE_EXISTS);
+    checkException(san, board, SanValidationProblem.EXISTS_RNBQ_NEITHER);
   }
 
   @SuppressWarnings("static-method")
@@ -95,7 +95,7 @@ class TestSanValidatePieceExists {
   }
 
   private static void checkExceptionFile(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.PIECE_FILE_NO_PIECE_EXISTS);
+    checkException(san, board, SanValidationProblem.EXISTS_RNBQ_FILE);
   }
 
   @SuppressWarnings("static-method")
@@ -138,7 +138,7 @@ class TestSanValidatePieceExists {
   }
 
   private static void checkExceptionRank(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.PIECE_RANK_NO_PIECE_EXISTS);
+    checkException(san, board, SanValidationProblem.EXISTS_RNBQ_RANK);
   }
 
   @SuppressWarnings("static-method")
@@ -171,7 +171,7 @@ class TestSanValidatePieceExists {
   }
 
   private static void checkExceptionSquare(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.PIECE_SQUARE_NO_PIECE_EXISTS);
+    checkException(san, board, SanValidationProblem.EXISTS_RNBQ_SQUARE);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem svp) {

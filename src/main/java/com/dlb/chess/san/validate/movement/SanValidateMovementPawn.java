@@ -54,7 +54,7 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
-      throw new SanValidationException(SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_RANK,
+      throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK,
           Message.getString(messageKey, havingMove.getName()));
     }
   }
@@ -66,7 +66,7 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
         && File.calculateRightFile(havingMove, fromFile) == toFile;
 
     if (!isAdjacentLeft && !isAdjacentRight) {
-      throw new SanValidationException(SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_FILE,
+      throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_FILE,
           Message.getString("validation.san.movement.pawn.capturingFileNotAdjacent"));
     }
   }

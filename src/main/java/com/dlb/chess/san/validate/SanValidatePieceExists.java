@@ -30,8 +30,8 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         // for non-capturing pawn moves, the pawn must be on the to-square's file
         final File pawnFile = sanConversion.toSquare().getFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
-          throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
-              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetterString()));
+          throw new SanValidationException(SanValidationProblem.EXISTS_PAWN,
+              Message.getString("validation.san.exists.pawn", havingMove.getName(), pawnFile.getLetterString()));
         }
         break;
       }
@@ -40,35 +40,34 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         // for capturing pawn moves, the SAN specifies the from-file explicitly
         final File pawnFile = sanConversion.fromFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
-          throw new SanValidationException(SanValidationProblem.PAWN_NO_PIECE_EXISTS,
-              Message.getString("validation.san.pawn.noPieceExists", havingMove.getName(), pawnFile.getLetterString()));
+          throw new SanValidationException(SanValidationProblem.EXISTS_PAWN,
+              Message.getString("validation.san.exists.pawn", havingMove.getName(), pawnFile.getLetterString()));
         }
         break;
       }
       case PIECE_CAPTURING_NEITHER:
       case PIECE_NON_CAPTURING_NEITHER:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
-          throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NO_PIECE_EXISTS,
-              Message.getString("validation.san.notPawn.specification.none.otherThanKing.noPieceExists",
-                  havingMove.getName(), movingPieceType.getName()));
+          throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_NEITHER,
+              Message.getString("validation.san.exists.rnbq.neither", havingMove.getName(), movingPieceType.getName()));
         }
         break;
       case PIECE_CAPTURING_FILE:
       case PIECE_NON_CAPTURING_FILE:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromFile())) {
-          throw new SanValidationException(SanValidationProblem.PIECE_FILE_NO_PIECE_EXISTS,
-              Message.getString("validation.san.notPawn.specification.file.noPieceExists", havingMove.getName(),
-                  movingPieceType.getName(), sanConversion.fromFile().getLetterString()));
+          throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_FILE,
+              Message.getString("validation.san.exists.rnbq.file", havingMove.getName(), movingPieceType.getName(),
+                  sanConversion.fromFile().getLetterString()));
         }
         break;
       case PIECE_CAPTURING_RANK:
       case PIECE_NON_CAPTURING_RANK:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromRank())) {
-          throw new SanValidationException(SanValidationProblem.PIECE_RANK_NO_PIECE_EXISTS,
-              Message.getString("validation.san.notPawn.specification.rank.noPieceExists", havingMove.getName(),
-                  movingPieceType.getName(), NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
+          throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_RANK,
+              Message.getString("validation.san.exists.rnbq.rank", havingMove.getName(), movingPieceType.getName(),
+                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
         }
         break;
       case PIECE_CAPTURING_SQUARE:
@@ -77,9 +76,9 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         final Piece pieceOnFromSquare = staticPosition.get(fromSquare);
         if (pieceOnFromSquare == Piece.NONE || pieceOnFromSquare.getSide() != havingMove
             || pieceOnFromSquare.getPieceType() != movingPieceType) {
-          throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NO_PIECE_EXISTS,
-              Message.getString("validation.san.notPawn.specification.square.noPieceExists", havingMove.getName(),
-                  movingPieceType.getName(), fromSquare.getName()));
+          throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_SQUARE,
+              Message.getString("validation.san.exists.rnbq.square", havingMove.getName(), movingPieceType.getName(),
+                  fromSquare.getName()));
         }
         break;
       default:

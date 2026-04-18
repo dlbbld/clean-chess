@@ -347,6 +347,45 @@ class TestSanValidationProblemMessage {
 
   }
 
+  @SuppressWarnings("static-method")
+  @Test
+  void testMovementPawn() {
+    checkException("d2", new Board(), SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK,
+        "A white pawn can never move to rank 2 or 1 as pawns cannot move backwards.");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testMovementRnbq() {
+    checkException("Baa1", SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
+        "A bishop can never move from file a to square a1. A bishop can only move diagonally.");
+
+    checkException("N2a2", SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
+        "A knight can never move from rank 2 to square a2. A knight can only move in an L-shape.");
+
+    checkException("Qa1c2", SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
+        "A queen can never move from square a1 to square c2. A queen can only move orthogonally or diagonally.");
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testExistsPawn() {
+    final Board board = new Board();
+    board.performMoves("a4", "h6", "a5", "h5", "a6", "h4", "axb7", "h3");
+    checkException("a4", board, SanValidationProblem.EXISTS_PAWN, "There is no white pawn on file a.");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testExistsRnbq() {
+    final Board board = new Board();
+    board.performMoves("b3", "g6", "g3", "Bg7", "Na3", "Bxa1", "Nb1", "b6", "Na3", "Bb7", "Nb1", "Bxh1");
+    checkException("Ra2", board, SanValidationProblem.EXISTS_RNBQ_NEITHER, "There is no white rook on the board.");
+    checkException("Nac3", SanValidationProblem.EXISTS_RNBQ_FILE, "There is no white knight on file a.");
+    checkException("Bh5xf7+", SanValidationProblem.EXISTS_RNBQ_SQUARE, "There is no white bishop on square h5.");
+  }
+
   /** Checks a SAN against the initial position. */
   private static void checkException(String san, SanValidationProblem expectedProblem, String expectedMessage) {
     checkException(san, new Board(), expectedProblem, expectedMessage);

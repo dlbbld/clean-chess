@@ -38,7 +38,7 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingOneSquareWhiteNoPawn() {
     // e3 — no white pawn on e-file (pawn existence fails first)
     final ApiBoard board = new Board(FEN_BASE);
-    checkException("e3", board, SanValidationProblem.PAWN_NO_PIECE_EXISTS);
+    checkException("e3", board, SanValidationProblem.EXISTS_PAWN);
   }
 
   @SuppressWarnings("static-method")
@@ -164,7 +164,7 @@ class TestSanValidatePawnFromSquare {
   void testCapturingWhiteNoPawn() {
     // cxd5 — no white pawn on c-file
     final ApiBoard board = new Board("4k3/8/8/3p4/3P4/8/8/4K3 w - - 0 100");
-    checkException("cxd5", board, SanValidationProblem.PAWN_NO_PIECE_EXISTS);
+    checkException("cxd5", board, SanValidationProblem.EXISTS_PAWN);
   }
 
   @SuppressWarnings("static-method")

@@ -85,7 +85,7 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       default -> throw new IllegalArgumentException();
     };
 
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE,
+    throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
         Message.getString(messageKey, fromFile.getLetterString(), toSquare.getName()));
   }
 
@@ -112,7 +112,7 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       default -> throw new IllegalArgumentException();
     };
 
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK,
+    throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
         Message.getString(messageKey, NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
 
   }
@@ -132,13 +132,13 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.square.notOntoItself.knight";
-      case BISHOP -> "validation.san.movement.square.notOntoItself.bishop";
-      case ROOK -> "validation.san.movement.square.notOntoItself.rook";
-      case QUEEN -> "validation.san.movement.square.notOntoItself.queen";
+      case KNIGHT -> "validation.san.movement.square.knight";
+      case BISHOP -> "validation.san.movement.square.bishop";
+      case ROOK -> "validation.san.movement.square.rook";
+      case QUEEN -> "validation.san.movement.square.queen";
       default -> throw new IllegalArgumentException();
     };
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_NOT_ONTO_ITSELF,
+    throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
         Message.getString(messageKey, fromSquare.getName(), toSquare.getName()));
 
   }
