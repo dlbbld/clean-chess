@@ -19,10 +19,12 @@ public abstract class SanValidateMovement extends AbstractSan implements EnumCon
       return;
     }
 
-    if (sanType.getMovingPieceType() != PieceType.KING) {
-      SanValidateMovementRnbq.validateRnbqMovement(sanParse);
+    if (sanType.getMovingPieceType() == PieceType.KING) {
+      SanValidateMovementKing.validateKingMovement(sanParse);
+      return;
     }
 
+    SanValidateMovementRnbq.validateRnbqMovement(sanParse);
   }
 
 }
