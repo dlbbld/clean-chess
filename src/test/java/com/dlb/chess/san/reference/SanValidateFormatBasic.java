@@ -26,7 +26,7 @@ public abstract class SanValidateFormatBasic {
     var equalsIndex = -1;
     var countCheckOrCheckmate = 0;
     var countK = 0;
-    var countRbnq = 0;
+    var countRnbq = 0;
     var countDigits = 0;
     var countFiles = 0;
     for (var i = 0; i < san.length(); i++) {
@@ -38,7 +38,7 @@ public abstract class SanValidateFormatBasic {
         }
         case '+', '#' -> countCheckOrCheckmate++;
         case 'K' -> countK++;
-        case 'R', 'N', 'B', 'Q' -> countRbnq++;
+        case 'R', 'N', 'B', 'Q' -> countRnbq++;
         case '1', '2', '3', '4', '5', '6', '7', '8' -> countDigits++;
         case 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' -> countFiles++;
         case 'O', '-' -> {
@@ -49,7 +49,7 @@ public abstract class SanValidateFormatBasic {
         }
       }
     }
-    if (countX > 1 || countEquals > 1 || countCheckOrCheckmate > 1 || countK > 1 || countRbnq > 1 || countDigits > 2
+    if (countX > 1 || countEquals > 1 || countCheckOrCheckmate > 1 || countK > 1 || countRnbq > 1 || countDigits > 2
         || countFiles > 2) {
       return false;
     }

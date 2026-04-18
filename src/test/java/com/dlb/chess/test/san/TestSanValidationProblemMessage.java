@@ -170,7 +170,7 @@ class TestSanValidationProblemMessage {
 
   @SuppressWarnings("static-method")
   @Test
-  void testFormatRbnq() {
+  void testFormatRnbq() {
 
     // Cases listed in sequential parse order. The parser branches at each ambiguity point and commits to a
     // disambiguation only when the next character disambiguates (or when the SAN ends and the shorter valid form

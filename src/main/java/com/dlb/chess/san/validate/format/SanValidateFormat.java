@@ -23,7 +23,7 @@ import com.dlb.chess.san.model.SanParse;
  *   O            → {@link #parseCastling}
  *   a–h          → {@link SanValidateFormatPawn#parsePawnMove}
  *   K            → {@link SanValidateFormatKing#parseKingMove}
- *   R, N, B, Q   → {@link SanValidateFormatRbnq#parseRbnqMove}
+ *   R, N, B, Q   → {@link SanValidateFormatRnbq#parseRnbqMove}
  * </pre>
  */
 public abstract class SanValidateFormat extends AbstractSan {
@@ -59,8 +59,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     if (first == 'K') {
       return SanValidateFormatKing.parseKingMove(core, sanTerminalMarker);
     }
-    if (isPieceLetterRbnq(first)) {
-      return SanValidateFormatRbnq.parseRbnqMove(core, sanTerminalMarker);
+    if (isPieceLetterRnbq(first)) {
+      return SanValidateFormatRnbq.parseRnbqMove(core, sanTerminalMarker);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
         Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
@@ -103,7 +103,7 @@ public abstract class SanValidateFormat extends AbstractSan {
     return c >= '1' && c <= '8';
   }
 
-  private static boolean isPieceLetterRbnq(final char c) {
+  private static boolean isPieceLetterRnbq(final char c) {
     return c == 'R' || c == 'N' || c == 'B' || c == 'Q';
   }
 
