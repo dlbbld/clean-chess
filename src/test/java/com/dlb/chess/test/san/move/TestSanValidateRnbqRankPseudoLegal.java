@@ -11,7 +11,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
 
-class TestSanValidatePieceRankPseudoLegal {
+class TestSanValidateRnbqRankPseudoLegal {
 
   // --- Not reachable, single piece on rank ---
 
@@ -20,7 +20,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testWhiteNotReachableSingle() {
     // Single white rook on a1, blocked by own pawn on a2. R1a4 not reachable.
     final ApiBoard board = new Board("k7/8/8/8/8/8/P7/R3K3 w - - 0 1");
-    checkException("R1a4", board, SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE);
+    checkException("R1a4", board, SanValidationProblem.RNBQ_RANK_NOT_REACHABLE_SINGLE);
   }
 
   @SuppressWarnings("static-method")
@@ -28,7 +28,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testBlackNotReachableSingle() {
     // Single black rook on a8, blocked by own pawn on a7. R8a5 not reachable.
     final ApiBoard board = new Board("r3k3/p7/8/8/8/8/8/4K3 b - - 0 1");
-    checkException("R8a5", board, SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE);
+    checkException("R8a5", board, SanValidationProblem.RNBQ_RANK_NOT_REACHABLE_SINGLE);
   }
 
   // --- Not reachable, multiple pieces on rank ---
@@ -38,7 +38,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testWhiteNotReachableMultiple() {
     // Two white rooks on a1 and h1, both blocked by own pawns. R1a4 not reachable.
     final ApiBoard board = new Board("k7/8/8/8/8/8/P6P/R3K2R w - - 0 1");
-    checkException("R1a4", board, SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
+    checkException("R1a4", board, SanValidationProblem.RNBQ_RANK_NOT_REACHABLE_MULTIPLE);
   }
 
   @SuppressWarnings("static-method")
@@ -46,7 +46,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testBlackNotReachableMultiple() {
     // Two black rooks on a8 and h8, both blocked by own pawns. R8a5 not reachable.
     final ApiBoard board = new Board("r3k2r/p6p/8/8/8/8/8/4K3 b - - 0 1");
-    checkException("R8a5", board, SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE);
+    checkException("R8a5", board, SanValidationProblem.RNBQ_RANK_NOT_REACHABLE_MULTIPLE);
   }
 
   // --- King in check, single pseudo-legal move on rank ---
@@ -56,7 +56,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testWhiteKingInCheckSingle() {
     // White bishop on e4 pinned along e-file (king e1, rook e8). B4d5 would expose king.
     final ApiBoard board = new Board("4r2k/8/8/8/4B3/8/8/4K3 w - - 0 1");
-    checkException("B4d5", board, SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_SINGLE);
+    checkException("B4d5", board, SanValidationProblem.RNBQ_RANK_KING_EXPOSED_TO_CHECK_SINGLE);
   }
 
   @SuppressWarnings("static-method")
@@ -64,7 +64,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testBlackKingInCheckSingle() {
     // Black bishop on e5 pinned along e-file (king e8, rook e1). B5d4 would expose king.
     final ApiBoard board = new Board("4k3/8/8/4b3/8/8/8/4R2K b - - 0 1");
-    checkException("B5d4", board, SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_SINGLE);
+    checkException("B5d4", board, SanValidationProblem.RNBQ_RANK_KING_EXPOSED_TO_CHECK_SINGLE);
   }
 
   // --- King in check, multiple pseudo-legal moves on rank ---
@@ -76,7 +76,7 @@ class TestSanValidatePieceRankPseudoLegal {
     // b4 pinned along c3-b4-a5 (bishop a5), d4 pinned along c3-d4-e5 (bishop e5).
     // Both can reach c5 but each would expose king.
     final ApiBoard board = new Board("k7/8/8/b3b3/1B1B4/2K5/8/8 w - - 0 1");
-    checkException("B4c5", board, SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_MULTIPLE);
+    checkException("B4c5", board, SanValidationProblem.RNBQ_RANK_KING_EXPOSED_TO_CHECK_MULTIPLE);
   }
 
   @SuppressWarnings("static-method")
@@ -86,7 +86,7 @@ class TestSanValidatePieceRankPseudoLegal {
     // b5 pinned along c6-b5-a4 (bishop a4), d5 pinned along c6-d5-e4 (bishop e4).
     // Both can reach c4 but each would expose king.
     final ApiBoard board = new Board("8/8/2k5/1b1b4/B3B3/8/8/K7 b - - 0 1");
-    checkException("B5c4", board, SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_MULTIPLE);
+    checkException("B5c4", board, SanValidationProblem.RNBQ_RANK_KING_EXPOSED_TO_CHECK_MULTIPLE);
   }
 
   // --- King left in check ---
@@ -96,7 +96,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testWhiteKingLeftInCheckSingle() {
     // White king e1 in check from black rook e8. White bishop on c4 can reach B4d5 but doesn't resolve check.
     final ApiBoard board = new Board("4r2k/8/8/8/2B5/8/8/4K3 w - - 0 1");
-    checkException("B4d5", board, SanValidationProblem.PIECE_RANK_KING_LEFT_IN_CHECK_SINGLE);
+    checkException("B4d5", board, SanValidationProblem.RNBQ_RANK_KING_LEFT_IN_CHECK_SINGLE);
   }
 
   @SuppressWarnings("static-method")
@@ -104,7 +104,7 @@ class TestSanValidatePieceRankPseudoLegal {
   void testBlackKingLeftInCheckSingle() {
     // Black king e8 in check from white rook e1. Black bishop on c5 can reach B5d4 but doesn't resolve check.
     final ApiBoard board = new Board("4k3/8/8/2b5/8/8/8/4R2K b - - 0 1");
-    checkException("B5d4", board, SanValidationProblem.PIECE_RANK_KING_LEFT_IN_CHECK_SINGLE);
+    checkException("B5d4", board, SanValidationProblem.RNBQ_RANK_KING_LEFT_IN_CHECK_SINGLE);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem expectedProblem) {

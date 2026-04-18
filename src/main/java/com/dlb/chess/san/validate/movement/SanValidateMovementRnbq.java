@@ -38,20 +38,20 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       case PAWN_NON_CAPTURING_NON_PROMOTION:
       case PAWN_NON_CAPTURING_PROMOTION:
         return;
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_NEITHER:
+      case RNBQ_NON_CAPTURING_NEITHER:
+      case RNBQ_CAPTURING_NEITHER:
         // with source file and rank not restricted, all pieces can move to any square
         return;
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_CAPTURING_FILE:
+      case RNBQ_NON_CAPTURING_FILE:
+      case RNBQ_CAPTURING_FILE:
         validateRnbqMovement(pieceType, sanConversion.fromFile(), toSquare);
         break;
-      case PIECE_NON_CAPTURING_RANK:
-      case PIECE_CAPTURING_RANK:
+      case RNBQ_NON_CAPTURING_RANK:
+      case RNBQ_CAPTURING_RANK:
         validateRnbqMovement(pieceType, sanConversion.fromRank(), toSquare);
         break;
-      case PIECE_NON_CAPTURING_SQUARE:
-      case PIECE_CAPTURING_SQUARE: {
+      case RNBQ_NON_CAPTURING_SQUARE:
+      case RNBQ_CAPTURING_SQUARE: {
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
         validateRnbqMovement(pieceType, fromSquare, toSquare);
       }

@@ -32,14 +32,14 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
         validatePawnCapturingDiagonal(havingMove, sanConversion.fromFile(), sanConversion.toSquare().getFile());
         break;
       }
-      case PIECE_CAPTURING_NEITHER:
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_FILE:
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_CAPTURING_RANK:
-      case PIECE_NON_CAPTURING_RANK:
-      case PIECE_CAPTURING_SQUARE:
-      case PIECE_NON_CAPTURING_SQUARE:
+      case RNBQ_CAPTURING_NEITHER:
+      case RNBQ_NON_CAPTURING_NEITHER:
+      case RNBQ_CAPTURING_FILE:
+      case RNBQ_NON_CAPTURING_FILE:
+      case RNBQ_CAPTURING_RANK:
+      case RNBQ_NON_CAPTURING_RANK:
+      case RNBQ_CAPTURING_SQUARE:
+      case RNBQ_NON_CAPTURING_SQUARE:
       default:
         throw new IllegalArgumentException();
     }

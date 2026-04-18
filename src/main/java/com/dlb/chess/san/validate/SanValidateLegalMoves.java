@@ -100,20 +100,20 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
         return new MoveSpecification(havingMove, fromSquare, toSquare, sanConversion.promotionPieceType());
       }
-      case PIECE_CAPTURING_SQUARE: {
+      case RNBQ_CAPTURING_SQUARE: {
         // san is enough to determine from square
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
         return new MoveSpecification(havingMove, fromSquare, toSquare);
       }
       case KING_NON_CASTLING_CAPTURING:
       case KING_NON_CASTLING_NON_CAPTURING:
-      case PIECE_CAPTURING_FILE:
-      case PIECE_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_RANK:
-      case PIECE_NON_CAPTURING_SQUARE:
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_NON_CAPTURING_RANK: {
+      case RNBQ_CAPTURING_FILE:
+      case RNBQ_CAPTURING_NEITHER:
+      case RNBQ_CAPTURING_RANK:
+      case RNBQ_NON_CAPTURING_SQUARE:
+      case RNBQ_NON_CAPTURING_FILE:
+      case RNBQ_NON_CAPTURING_NEITHER:
+      case RNBQ_NON_CAPTURING_RANK: {
         // legal move is required to determine from square
         final Square fromSquare = legalMoveOnlyCandidate.fromSquare();
         return new MoveSpecification(havingMove, fromSquare, toSquare);
@@ -204,28 +204,59 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     switch (sanFormat) {
       case KING_CASTLING_QUEEN_SIDE, KING_CASTLING_KING_SIDE -> throw new ProgrammingMistakeException(
           "Invalid program flow, the castling must be handled at this point");
-      case KING_NON_CASTLING_NON_CAPTURING, KING_NON_CASTLING_CAPTURING -> validateAgainstLegalMovesForKing(
-          legalMovesCandidates, toSquare);
+      case KING_NON_CASTLING_NON_CAPTURING, KING_NON_CASTLING_CAPTURING -> validateAgainstLegalMovesForKingNonCastling(
+          staticPosition, havingMove, legalMovesCandidates, toSquare);
       case PAWN_NON_CAPTURING_NON_PROMOTION, PAWN_CAPTURING_NON_PROMOTION, PAWN_NON_CAPTURING_PROMOTION, PAWN_CAPTURING_PROMOTION -> validateAgainstLegalMovesForPawn(
           staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat, sanConversion, toSquare,
           board.getEnPassantCaptureTargetSquare());
-      case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER -> validateAgainstLegalMovesForPieceNeither(
+      case RNBQ_NON_CAPTURING_NEITHER, RNBQ_CAPTURING_NEITHER -> validateAgainstLegalMovesForPieceNeither(
           staticPosition, havingMove, legalMovesCandidates, pieceType, toSquare);
-      case PIECE_NON_CAPTURING_FILE, PIECE_CAPTURING_FILE -> validateAgainstLegalMovesForPieceFile(staticPosition,
+      case RNBQ_NON_CAPTURING_FILE, RNBQ_CAPTURING_FILE -> validateAgainstLegalMovesForPieceFile(staticPosition,
           havingMove, legalMovesCandidates, pieceType, sanFormat, sanConversion, toSquare);
-      case PIECE_NON_CAPTURING_RANK, PIECE_CAPTURING_RANK -> validateAgainstLegalMovesForPieceRank(staticPosition,
+      case RNBQ_NON_CAPTURING_RANK, RNBQ_CAPTURING_RANK -> validateAgainstLegalMovesForPieceRank(staticPosition,
           havingMove, legalMovesCandidates, pieceType, sanFormat, sanConversion, toSquare);
-      case PIECE_NON_CAPTURING_SQUARE, PIECE_CAPTURING_SQUARE -> validateAgainstLegalMovesForPieceSquare(staticPosition,
+      case RNBQ_NON_CAPTURING_SQUARE, RNBQ_CAPTURING_SQUARE -> validateAgainstLegalMovesForPieceSquare(staticPosition,
           havingMove, legalMovesCandidates, pieceType, sanFormat, sanConversion, toSquare);
       default -> throw new IllegalArgumentException();
     }
   }
 
-  private static void validateAgainstLegalMovesForKing(Set<LegalMove> legalMovesCandidates, Square toSquare) {
-    if (legalMovesCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.KING_NON_CASTLING_NO_LEGAL_MOVE,
-          Message.getString("validation.san.notPawn.specification.none.king.noLegalMove", toSquare.getName()));
+  private static void validateAgainstLegalMovesForKingNonCastling(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, Square toSquare) {
+    if (!legalMovesCandidates.isEmpty()) {
+      return;
     }
+    final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForKingNonCastling(staticPosition, havingMove,
+        toSquare);
+    if (pseudoLegalMoves.isEmpty()) {
+      throw new SanValidationException(SanValidationProblem.KING_NON_CASTLING_NOT_REACHABLE,
+          Message.getString("validation.san.king.nonCastling.notReachable", toSquare.getName()));
+    }
+    final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
+    if (reason == PseudoLegalReason.KING_LEFT_IN_CHECK) {
+      throw new SanValidationException(SanValidationProblem.KING_NON_CASTLING_KING_LEFT_IN_CHECK,
+          Message.getString("validation.san.king.nonCastling.kingLeftInCheck", toSquare.getName()));
+    }
+    throw new SanValidationException(SanValidationProblem.KING_NON_CASTLING_KING_EXPOSED_TO_CHECK,
+        Message.getString("validation.san.king.nonCastling.kingExposedToCheck", toSquare.getName()));
+  }
+
+  private static Set<PseudoLegalMove> calculatePseudoLegalMovesForKingNonCastling(StaticPosition staticPosition,
+      Side havingMove, Square toSquare) {
+    final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
+    for (final Square fromSquare : Square.REAL) {
+      if (!staticPosition.isOwnPiece(fromSquare, havingMove, KING)) {
+        continue;
+      }
+      final Set<Square> potentialToSquares = AbstractPotentialToSquares.calculatePotentialToSquare(staticPosition,
+          Square.NONE, havingMove, fromSquare);
+      if (potentialToSquares.contains(toSquare)) {
+        final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
+            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+        allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
+      }
+    }
+    return allPseudoLegal;
   }
 
   private static void validateAgainstLegalMovesForPawn(StaticPosition staticPosition, Side havingMove,
@@ -285,11 +316,11 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
 
       if (pseudoLegalMoves.isEmpty()) {
         if (countPiecesOfType(staticPosition, havingMove, pieceType) == 1) {
-          throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_SINGLE,
+          throw new SanValidationException(SanValidationProblem.RNBQ_NEITHER_NOT_REACHABLE_SINGLE,
               Message.getString("validation.san.notPawn.specification.none.notReachable.single", pieceType.getName(),
                   toSquare.getName()));
         }
-        throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_NOT_REACHABLE_MULTIPLE,
+        throw new SanValidationException(SanValidationProblem.RNBQ_NEITHER_NOT_REACHABLE_MULTIPLE,
             Message.getString("validation.san.notPawn.specification.none.notReachable.multiple", pieceType.getName(),
                 toSquare.getName()));
       }
@@ -298,21 +329,21 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (pseudoLegalMoves.size() == 1) {
         final Square fromSquare = SetUtility.getOnly(pseudoLegalMoves).moveSpecification().fromSquare();
         final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-            ? SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_SINGLE
-            : SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_SINGLE;
+            ? SanValidationProblem.RNBQ_NEITHER_KING_LEFT_IN_CHECK_SINGLE
+            : SanValidationProblem.RNBQ_NEITHER_KING_EXPOSED_TO_CHECK_SINGLE;
         throw new SanValidationException(problem,
             Message.getString("validation.san.notPawn.specification.none." + msgKey + ".single", pieceType.getName(),
                 fromSquare.getName(), toSquare.getName()));
       }
       final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-          ? SanValidationProblem.PIECE_NEITHER_KING_LEFT_IN_CHECK_MULTIPLE
-          : SanValidationProblem.PIECE_NEITHER_KING_EXPOSED_TO_CHECK_MULTIPLE;
+          ? SanValidationProblem.RNBQ_NEITHER_KING_LEFT_IN_CHECK_MULTIPLE
+          : SanValidationProblem.RNBQ_NEITHER_KING_EXPOSED_TO_CHECK_MULTIPLE;
       throw new SanValidationException(problem,
           Message.getString("validation.san.notPawn.specification.none." + msgKey + ".multiple", pieceType.getName(),
               toSquare.getName()));
     }
     if (legalMovesCandidates.size() > 1) {
-      throw new SanValidationException(SanValidationProblem.PIECE_NEITHER_MULTIPLE_LEGAL_MOVES, Message.getString(
+      throw new SanValidationException(SanValidationProblem.RNBQ_NEITHER_MULTIPLE_LEGAL_MOVES, Message.getString(
           "validation.san.notPawn.specification.none.moreThanOneLegalMove", pieceType.getName(), toSquare.getName()));
     }
   }
@@ -470,11 +501,11 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     if (movementCandidates.isEmpty()) {
       if (countPiecesOfTypeOnFile(staticPosition, havingMove, pieceType, fromFile) == 1) {
         final Square pieceSquare = SetUtility.getOnly(pieceCandidates);
-        throw new SanValidationException(SanValidationProblem.PIECE_FILE_NOT_REACHABLE_SINGLE,
+        throw new SanValidationException(SanValidationProblem.RNBQ_FILE_NOT_REACHABLE_SINGLE,
             Message.getString("validation.san.notPawn.specification.file.notReachable.single", pieceType.getName(),
                 pieceSquare.getName(), toSquare.getName()));
       }
-      throw new SanValidationException(SanValidationProblem.PIECE_FILE_NOT_REACHABLE_MULTIPLE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_FILE_NOT_REACHABLE_MULTIPLE,
           Message.getString("validation.san.notPawn.specification.file.notReachable.multiple", pieceType.getName(),
               fromFile.getLetterString(), toSquare.getName()));
     }
@@ -488,22 +519,22 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (pseudoLegalMoves.size() == 1) {
         final Square pieceSquare = SetUtility.getOnly(pseudoLegalMoves).moveSpecification().fromSquare();
         final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-            ? SanValidationProblem.PIECE_FILE_KING_LEFT_IN_CHECK_SINGLE
-            : SanValidationProblem.PIECE_FILE_KING_EXPOSED_TO_CHECK_SINGLE;
+            ? SanValidationProblem.RNBQ_FILE_KING_LEFT_IN_CHECK_SINGLE
+            : SanValidationProblem.RNBQ_FILE_KING_EXPOSED_TO_CHECK_SINGLE;
         throw new SanValidationException(problem,
             Message.getString("validation.san.notPawn.specification.file." + msgKey + ".single", pieceType.getName(),
                 pieceSquare.getName(), toSquare.getName()));
       }
       final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-          ? SanValidationProblem.PIECE_FILE_KING_LEFT_IN_CHECK_MULTIPLE
-          : SanValidationProblem.PIECE_FILE_KING_EXPOSED_TO_CHECK_MULTIPLE;
+          ? SanValidationProblem.RNBQ_FILE_KING_LEFT_IN_CHECK_MULTIPLE
+          : SanValidationProblem.RNBQ_FILE_KING_EXPOSED_TO_CHECK_MULTIPLE;
       throw new SanValidationException(problem,
           Message.getString("validation.san.notPawn.specification.file." + msgKey + ".multiple", pieceType.getName(),
               fromFile.getLetterString(), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
-      throw new SanValidationException(SanValidationProblem.PIECE_FILE_ONLY_ONE_LEGAL_MOVE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_FILE_ONLY_ONE_LEGAL_MOVE,
           Message.getString("validation.san.overspecification.file"));
     }
 
@@ -511,18 +542,18 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (numberOfLegalMovesFromSameFile < 2) {
         throw new ProgrammingMistakeException("A programming assumption about the rank turned out to be wrong");
       }
-      throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
+      throw new SanValidationException(SanValidationProblem.RNBQ_FILE_MUST_USE_RANK,
           Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
               sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameFile >= 2) {
       if (pieceType == ROOK) {
-        throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK,
+        throw new SanValidationException(SanValidationProblem.RNBQ_FILE_MUST_USE_RANK,
             Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
                 sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
-      throw new SanValidationException(SanValidationProblem.PIECE_FILE_MUST_USE_RANK_OR_SQUARE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_FILE_MUST_USE_RANK_OR_SQUARE,
           Message.getString("validation.san.notDetermined.byFile", pieceType.getName(),
               sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
@@ -539,11 +570,11 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     if (movementCandidates.isEmpty()) {
       if (countPiecesOfTypeOnRank(staticPosition, havingMove, pieceType, fromRank) == 1) {
         final Square pieceSquare = SetUtility.getOnly(pieceCandidates);
-        throw new SanValidationException(SanValidationProblem.PIECE_RANK_NOT_REACHABLE_SINGLE,
+        throw new SanValidationException(SanValidationProblem.RNBQ_RANK_NOT_REACHABLE_SINGLE,
             Message.getString("validation.san.notPawn.specification.rank.notReachable.single", pieceType.getName(),
                 pieceSquare.getName(), toSquare.getName()));
       }
-      throw new SanValidationException(SanValidationProblem.PIECE_RANK_NOT_REACHABLE_MULTIPLE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_RANK_NOT_REACHABLE_MULTIPLE,
           Message.getString("validation.san.notPawn.specification.rank.notReachable.multiple", pieceType.getName(),
               NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
     }
@@ -557,22 +588,22 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (pseudoLegalMoves.size() == 1) {
         final Square pieceSquare = SetUtility.getOnly(pseudoLegalMoves).moveSpecification().fromSquare();
         final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-            ? SanValidationProblem.PIECE_RANK_KING_LEFT_IN_CHECK_SINGLE
-            : SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_SINGLE;
+            ? SanValidationProblem.RNBQ_RANK_KING_LEFT_IN_CHECK_SINGLE
+            : SanValidationProblem.RNBQ_RANK_KING_EXPOSED_TO_CHECK_SINGLE;
         throw new SanValidationException(problem,
             Message.getString("validation.san.notPawn.specification.rank." + msgKey + ".single", pieceType.getName(),
                 pieceSquare.getName(), toSquare.getName()));
       }
       final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-          ? SanValidationProblem.PIECE_RANK_KING_LEFT_IN_CHECK_MULTIPLE
-          : SanValidationProblem.PIECE_RANK_KING_EXPOSED_TO_CHECK_MULTIPLE;
+          ? SanValidationProblem.RNBQ_RANK_KING_LEFT_IN_CHECK_MULTIPLE
+          : SanValidationProblem.RNBQ_RANK_KING_EXPOSED_TO_CHECK_MULTIPLE;
       throw new SanValidationException(problem,
           Message.getString("validation.san.notPawn.specification.rank." + msgKey + ".multiple", pieceType.getName(),
               NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
-      throw new SanValidationException(SanValidationProblem.PIECE_RANK_ONLY_ONE_LEGAL_MOVE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_RANK_ONLY_ONE_LEGAL_MOVE,
           Message.getString("validation.san.overspecification.rank"));
     }
 
@@ -580,18 +611,18 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       if (numberOfLegalMovesFromSameRank < 2) {
         throw new ProgrammingMistakeException("A programming assumption about the file turned out to be wrong");
       }
-      throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_RANK_MUST_USE_FILE,
           Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
               NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameRank >= 2) {
       if (pieceType == ROOK) {
-        throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
+        throw new SanValidationException(SanValidationProblem.RNBQ_RANK_MUST_USE_FILE,
             Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
                 sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
-      throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE_OR_SQUARE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_RANK_MUST_USE_FILE_OR_SQUARE,
           Message.getString("validation.san.notDetermined.byRank", pieceType.getName(),
               NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
     }
@@ -605,7 +636,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         legalMovesCandidates);
 
     if (numberOfLegalMovesFromSameFile == 1) {
-      throw new SanValidationException(SanValidationProblem.PIECE_RANK_MUST_USE_FILE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_RANK_MUST_USE_FILE,
           Message.getString("validation.san.rankInsteadOfFileUsed"));
     }
   }
@@ -619,7 +650,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     final Set<Square> movementCandidates = filterCandidateSquaresForPotentialMove(staticPosition, havingMove, toSquare,
         pieceCandidates);
     if (movementCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_NOT_REACHABLE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_SQUARE_NOT_REACHABLE,
           Message.getString("validation.san.notPawn.specification.square.notReachable", pieceType.getName(),
               fromSquare.getName(), toSquare.getName()));
     }
@@ -627,15 +658,15 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
       final var msgKey = reason == PseudoLegalReason.KING_LEFT_IN_CHECK ? "kingLeftInCheck" : "kingExposedToCheck";
       final var problem = reason == PseudoLegalReason.KING_LEFT_IN_CHECK
-          ? SanValidationProblem.PIECE_SQUARE_KING_LEFT_IN_CHECK
-          : SanValidationProblem.PIECE_SQUARE_KING_EXPOSED_TO_CHECK;
+          ? SanValidationProblem.RNBQ_SQUARE_KING_LEFT_IN_CHECK
+          : SanValidationProblem.RNBQ_SQUARE_KING_EXPOSED_TO_CHECK;
       throw new SanValidationException(problem,
           Message.getString("validation.san.notPawn.specification.square." + msgKey, pieceType.getName(),
               fromSquare.getName(), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
-      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_ONLY_ONE_LEGAL_MOVE,
+      throw new SanValidationException(SanValidationProblem.RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE,
           Message.getString("validation.san.overspecification.square.square"));
     }
 
@@ -646,12 +677,12 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         legalMovesCandidates);
 
     if (numberOfLegalMovesFromFile == 2 && numberOfLegalMovesFromOtherFiles == 0) {
-      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_FILE_NOT_NECESSARY,
+      throw new SanValidationException(SanValidationProblem.RNBQ_SQUARE_FILE_NOT_NECESSARY,
           Message.getString("validation.san.overspecification.square.file"));
     }
 
     if (numberOfLegalMovesFromFile == 1 && numberOfLegalMovesFromOtherFiles >= 1) {
-      throw new SanValidationException(SanValidationProblem.PIECE_SQUARE_RANK_NOT_NECESSARY,
+      throw new SanValidationException(SanValidationProblem.RNBQ_SQUARE_RANK_NOT_NECESSARY,
           Message.getString("validation.san.overspecification.square.rank"));
     }
   }
@@ -664,24 +695,24 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         continue;
       }
       switch (sanFormat) {
-        case PIECE_NON_CAPTURING_NEITHER:
-        case PIECE_CAPTURING_NEITHER:
+        case RNBQ_NON_CAPTURING_NEITHER:
+        case RNBQ_CAPTURING_NEITHER:
           result.add(square);
           break;
-        case PIECE_NON_CAPTURING_FILE:
-        case PIECE_CAPTURING_FILE:
+        case RNBQ_NON_CAPTURING_FILE:
+        case RNBQ_CAPTURING_FILE:
           if (square.getFile() == sanConversion.fromFile()) {
             result.add(square);
           }
           break;
-        case PIECE_NON_CAPTURING_RANK:
-        case PIECE_CAPTURING_RANK:
+        case RNBQ_NON_CAPTURING_RANK:
+        case RNBQ_CAPTURING_RANK:
           if (square.getRank() == sanConversion.fromRank()) {
             result.add(square);
           }
           break;
-        case PIECE_NON_CAPTURING_SQUARE:
-        case PIECE_CAPTURING_SQUARE:
+        case RNBQ_NON_CAPTURING_SQUARE:
+        case RNBQ_CAPTURING_SQUARE:
           if (square == calculateFromSquare(sanConversion)) {
             result.add(square);
           }
@@ -753,25 +784,25 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           // no from restriction
           legalMovesForFrom.add(moveCandidate);
           break;
-        case PIECE_NON_CAPTURING_NEITHER:
-        case PIECE_CAPTURING_NEITHER:
+        case RNBQ_NON_CAPTURING_NEITHER:
+        case RNBQ_CAPTURING_NEITHER:
           // no from restriction
           legalMovesForFrom.add(moveCandidate);
           break;
-        case PIECE_NON_CAPTURING_FILE:
-        case PIECE_CAPTURING_FILE:
+        case RNBQ_NON_CAPTURING_FILE:
+        case RNBQ_CAPTURING_FILE:
           if (isFromFileMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
           break;
-        case PIECE_NON_CAPTURING_RANK:
-        case PIECE_CAPTURING_RANK:
+        case RNBQ_NON_CAPTURING_RANK:
+        case RNBQ_CAPTURING_RANK:
           if (isFromRankMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
           break;
-        case PIECE_NON_CAPTURING_SQUARE:
-        case PIECE_CAPTURING_SQUARE:
+        case RNBQ_NON_CAPTURING_SQUARE:
+        case RNBQ_CAPTURING_SQUARE:
           if (isFromFileMatch && isFromRankMatch) {
             legalMovesForFrom.add(moveCandidate);
           }
@@ -794,14 +825,14 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         case KING_NON_CASTLING_NON_CAPTURING:
         case PAWN_CAPTURING_NON_PROMOTION:
         case PAWN_NON_CAPTURING_NON_PROMOTION:
-        case PIECE_CAPTURING_SQUARE:
-        case PIECE_CAPTURING_FILE:
-        case PIECE_CAPTURING_NEITHER:
-        case PIECE_CAPTURING_RANK:
-        case PIECE_NON_CAPTURING_SQUARE:
-        case PIECE_NON_CAPTURING_FILE:
-        case PIECE_NON_CAPTURING_NEITHER:
-        case PIECE_NON_CAPTURING_RANK:
+        case RNBQ_CAPTURING_SQUARE:
+        case RNBQ_CAPTURING_FILE:
+        case RNBQ_CAPTURING_NEITHER:
+        case RNBQ_CAPTURING_RANK:
+        case RNBQ_NON_CAPTURING_SQUARE:
+        case RNBQ_NON_CAPTURING_FILE:
+        case RNBQ_NON_CAPTURING_NEITHER:
+        case RNBQ_NON_CAPTURING_RANK:
           legalMovesForPromotion.add(moveCandidate);
           break;
         case PAWN_CAPTURING_PROMOTION:
@@ -836,14 +867,14 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         case KING_NON_CASTLING_NON_CAPTURING:
         case PAWN_CAPTURING_NON_PROMOTION:
         case PAWN_NON_CAPTURING_NON_PROMOTION:
-        case PIECE_CAPTURING_SQUARE:
-        case PIECE_CAPTURING_FILE:
-        case PIECE_CAPTURING_NEITHER:
-        case PIECE_CAPTURING_RANK:
-        case PIECE_NON_CAPTURING_SQUARE:
-        case PIECE_NON_CAPTURING_FILE:
-        case PIECE_NON_CAPTURING_NEITHER:
-        case PIECE_NON_CAPTURING_RANK:
+        case RNBQ_CAPTURING_SQUARE:
+        case RNBQ_CAPTURING_FILE:
+        case RNBQ_CAPTURING_NEITHER:
+        case RNBQ_CAPTURING_RANK:
+        case RNBQ_NON_CAPTURING_SQUARE:
+        case RNBQ_NON_CAPTURING_FILE:
+        case RNBQ_NON_CAPTURING_NEITHER:
+        case RNBQ_NON_CAPTURING_RANK:
         case PAWN_CAPTURING_PROMOTION:
         case PAWN_NON_CAPTURING_PROMOTION:
           legalMovesForCastling.add(moveCandidate);

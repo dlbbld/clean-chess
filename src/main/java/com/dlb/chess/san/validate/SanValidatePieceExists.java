@@ -45,15 +45,15 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         }
         break;
       }
-      case PIECE_CAPTURING_NEITHER:
-      case PIECE_NON_CAPTURING_NEITHER:
+      case RNBQ_CAPTURING_NEITHER:
+      case RNBQ_NON_CAPTURING_NEITHER:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_NEITHER,
               Message.getString("validation.san.exists.rnbq.neither", havingMove.getName(), movingPieceType.getName()));
         }
         break;
-      case PIECE_CAPTURING_FILE:
-      case PIECE_NON_CAPTURING_FILE:
+      case RNBQ_CAPTURING_FILE:
+      case RNBQ_NON_CAPTURING_FILE:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromFile())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_FILE,
@@ -61,8 +61,8 @@ public abstract class SanValidatePieceExists extends AbstractSan {
                   sanConversion.fromFile().getLetterString()));
         }
         break;
-      case PIECE_CAPTURING_RANK:
-      case PIECE_NON_CAPTURING_RANK:
+      case RNBQ_CAPTURING_RANK:
+      case RNBQ_NON_CAPTURING_RANK:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromRank())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_RANK,
@@ -70,8 +70,8 @@ public abstract class SanValidatePieceExists extends AbstractSan {
                   NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
         }
         break;
-      case PIECE_CAPTURING_SQUARE:
-      case PIECE_NON_CAPTURING_SQUARE:
+      case RNBQ_CAPTURING_SQUARE:
+      case RNBQ_NON_CAPTURING_SQUARE:
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), sanConversion.fromRank());
         final Piece pieceOnFromSquare = staticPosition.get(fromSquare);
         if (pieceOnFromSquare == Piece.NONE || pieceOnFromSquare.getSide() != havingMove

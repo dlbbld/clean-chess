@@ -23,21 +23,21 @@ public class SanFormatPropertiesMap {
     // dxe8=Q
     MAP.put(SanFormat.PAWN_CAPTURING_PROMOTION, new SanFormatProperties(6, -1, 0, -1, 1, 2, 3, 4, 5, true));
     // Qe5
-    MAP.put(SanFormat.PIECE_NON_CAPTURING_NEITHER, new SanFormatProperties(3, 0, -1, -1, -1, 1, 2, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_NON_CAPTURING_NEITHER, new SanFormatProperties(3, 0, -1, -1, -1, 1, 2, -1, -1, false));
     // Qae5
-    MAP.put(SanFormat.PIECE_NON_CAPTURING_FILE, new SanFormatProperties(4, 0, 1, -1, -1, 2, 3, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_NON_CAPTURING_FILE, new SanFormatProperties(4, 0, 1, -1, -1, 2, 3, -1, -1, false));
     // Q2e5
-    MAP.put(SanFormat.PIECE_NON_CAPTURING_RANK, new SanFormatProperties(4, 0, -1, 1, -1, 2, 3, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_NON_CAPTURING_RANK, new SanFormatProperties(4, 0, -1, 1, -1, 2, 3, -1, -1, false));
     // Qc3e5
-    MAP.put(SanFormat.PIECE_NON_CAPTURING_SQUARE, new SanFormatProperties(5, 0, 1, 2, -1, 3, 4, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_NON_CAPTURING_SQUARE, new SanFormatProperties(5, 0, 1, 2, -1, 3, 4, -1, -1, false));
     // Qxe5
-    MAP.put(SanFormat.PIECE_CAPTURING_NEITHER, new SanFormatProperties(4, 0, -1, -1, 1, 2, 3, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_CAPTURING_NEITHER, new SanFormatProperties(4, 0, -1, -1, 1, 2, 3, -1, -1, false));
     // Qaxe5
-    MAP.put(SanFormat.PIECE_CAPTURING_FILE, new SanFormatProperties(5, 0, 1, -1, 2, 3, 4, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_CAPTURING_FILE, new SanFormatProperties(5, 0, 1, -1, 2, 3, 4, -1, -1, false));
     // Q2xe5
-    MAP.put(SanFormat.PIECE_CAPTURING_RANK, new SanFormatProperties(5, 0, -1, 1, 2, 3, 4, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_CAPTURING_RANK, new SanFormatProperties(5, 0, -1, 1, 2, 3, 4, -1, -1, false));
     // Qc3xe5
-    MAP.put(SanFormat.PIECE_CAPTURING_SQUARE, new SanFormatProperties(6, 0, 1, 2, 3, 4, 5, -1, -1, false));
+    MAP.put(SanFormat.RNBQ_CAPTURING_SQUARE, new SanFormatProperties(6, 0, 1, 2, 3, 4, 5, -1, -1, false));
     // Ke5
     MAP.put(SanFormat.KING_NON_CASTLING_NON_CAPTURING, new SanFormatProperties(3, 0, -1, -1, -1, 1, 2, -1, -1, false));
     // Kxe5

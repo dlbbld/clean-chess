@@ -14,8 +14,8 @@ public abstract class SanValidateNonMovement extends AbstractSan {
   public static void validateNonMovement(SanParse sanParse) {
     final SanFormat sanFormat = sanParse.sanType().getSanFormat();
     switch (sanFormat) {
-      case PIECE_NON_CAPTURING_SQUARE:
-      case PIECE_CAPTURING_SQUARE: {
+      case RNBQ_NON_CAPTURING_SQUARE:
+      case RNBQ_CAPTURING_SQUARE: {
         final SanConversion sanConversion = sanParse.sanConversion();
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
         final Square toSquare = sanConversion.toSquare();
