@@ -343,7 +343,7 @@ class TestSanValidationProblemMessage {
   @Test
   void testNonMovementRnbq() {
     checkException("Rd4d4", SanValidationProblem.NON_MOVEMENT_RNBQ_SOURCE_SQUARE_EQUALS_DESTINATION_SQUARE,
-        "For a valid movement, the source square cannot be the same as the destination square.");
+        "For a movement to be valid, the source square cannot be the same as the destination square.");
 
   }
 
@@ -352,6 +352,10 @@ class TestSanValidationProblemMessage {
   void testMovementPawn() {
     checkException("d2", new Board(), SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK,
         "A white pawn can never move to rank 2 or 1 as pawns cannot move backwards.");
+
+    checkException("fxh4", new Board(), SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_FILE,
+        "A pawn can never capture on a non-adjacent file, only on adjacent files.");
+
   }
 
   @SuppressWarnings("static-method")
@@ -383,6 +387,7 @@ class TestSanValidationProblemMessage {
     board.performMoves("b3", "g6", "g3", "Bg7", "Na3", "Bxa1", "Nb1", "b6", "Na3", "Bb7", "Nb1", "Bxh1");
     checkException("Ra2", board, SanValidationProblem.EXISTS_RNBQ_NEITHER, "There is no white rook on the board.");
     checkException("Nac3", SanValidationProblem.EXISTS_RNBQ_FILE, "There is no white knight on file a.");
+    checkException("Q3d4", SanValidationProblem.EXISTS_RNBQ_RANK, "There is no white queen on rank 3.");
     checkException("Bh5xf7+", SanValidationProblem.EXISTS_RNBQ_SQUARE, "There is no white bishop on square h5.");
   }
 
