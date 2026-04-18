@@ -138,7 +138,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      assertEquals(SanValidationProblem.NON_CAPTURING_MOVING_ONTO_OPPONENT_PIECE, e.getSanValidationProblem());
+      assertEquals(SanValidationProblem.CAPTURE_SYMBOL_MISSING, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

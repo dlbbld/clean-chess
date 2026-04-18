@@ -32,21 +32,27 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
       // own piece on destination
       if (pieceOnToSquare.getSide() == havingMove) {
         if (sanType.isCapture()) {
-          throw new SanValidationException(SanValidationProblem.CAPTURING_OWN_PIECE,
-              Message.getString("validation.san.allExceptCastling.capturingOwnPiece", toSquare.getName()));
+          throw new SanValidationException(SanValidationProblem.DESTINATION_OWN_PIECE_CAPTURING,
+              Message.getString("validation.san.destination.ownPiece.capturing", toSquare.getName()));
         }
-        throw new SanValidationException(SanValidationProblem.MOVING_ONTO_OWN_PIECE,
-            Message.getString("validation.san.allExceptCastling.movingOntoOwnPiece", toSquare.getName()));
+        throw new SanValidationException(SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING,
+            Message.getString("validation.san.destination.ownPiece.nonCapturing", toSquare.getName()));
       }
 
       // opponent piece on destination
-      if (sanType.isCapture() && pieceOnToSquare.getPieceType() == KING) {
-        throw new SanValidationException(SanValidationProblem.CAPTURING_OPPONENT_KING,
-            Message.getString("validation.san.allExceptCastling.capturingOpponentKing", toSquare.getName()));
+      if (!sanType.isCapture() && pieceOnToSquare.getPieceType() == KING) {
+        throw new SanValidationException(SanValidationProblem.DESTINATION_OPPONENT_KING_NON_CAPTURING,
+            Message.getString("validation.san.destination.opponentKing.nonCapturing", toSquare.getName()));
       }
+      // opponent piece on destination
+      if (sanType.isCapture() && pieceOnToSquare.getPieceType() == KING) {
+        throw new SanValidationException(SanValidationProblem.DESTINATION_OPPONENT_KING_CAPTURING,
+            Message.getString("validation.san.destination.opponentKing.capturing", toSquare.getName()));
+      }
+
       if (!sanType.isCapture()) {
-        throw new SanValidationException(SanValidationProblem.NON_CAPTURING_MOVING_ONTO_OPPONENT_PIECE,
-            Message.getString("validation.san.allExceptCastling.noCaptureIsCapture", toSquare.getName()));
+        throw new SanValidationException(SanValidationProblem.CAPTURE_SYMBOL_MISSING,
+            Message.getString("validation.san.captureSymbol.missing", toSquare.getName()));
       }
       return;
     }
@@ -56,8 +62,8 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
       if (calculateIsEnPassantCapture(board, havingMove, sanType, sanConversion, toSquare)) {
         return;
       }
-      throw new SanValidationException(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE,
-          Message.getString("validation.san.allExceptCastling.captureIsNoCapture", toSquare.getName()));
+      throw new SanValidationException(SanValidationProblem.CAPTURE_SYMBOL_WRONG,
+          Message.getString("validation.san.captureSymbol.wrong", toSquare.getName()));
     }
   }
 

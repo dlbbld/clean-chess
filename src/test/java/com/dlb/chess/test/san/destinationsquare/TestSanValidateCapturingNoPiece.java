@@ -87,7 +87,7 @@ class TestSanValidateCapturingNoPiece {
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      assertEquals(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE, e.getSanValidationProblem());
+      assertEquals(SanValidationProblem.CAPTURE_SYMBOL_WRONG, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

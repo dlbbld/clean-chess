@@ -391,6 +391,43 @@ class TestSanValidationProblemMessage {
     checkException("Bh5xf7+", SanValidationProblem.EXISTS_RNBQ_SQUARE, "There is no white bishop on square h5.");
   }
 
+  @SuppressWarnings("static-method")
+  @Test
+  void testDestinationOwnPiece() {
+    checkException("Na1", SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING,
+        "The move to square a1 is not possible because it is occupied by an own piece.");
+
+    checkException("Nxa1", SanValidationProblem.DESTINATION_OWN_PIECE_CAPTURING,
+        "Capturing on square a1 is not possible because it is occupied by an own piece.");
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testDestinationKing() {
+    checkException("Re8", SanValidationProblem.DESTINATION_OPPONENT_KING_NON_CAPTURING,
+        "The move to square e8 is not possible because it is occupied by the opponent king.");
+
+    checkException("Rxe8", SanValidationProblem.DESTINATION_OPPONENT_KING_CAPTURING,
+        "The opponent king can never be captured.");
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testCaptureSymbol() {
+
+    final Board board = new Board();
+    board.performMoves("Nc3", "e6", "Nb5", "e5");
+
+    checkException("Na7", board, SanValidationProblem.CAPTURE_SYMBOL_MISSING,
+        "The move captures an opponent piece on square a7 but has not capture symbol.");
+
+    checkException("Nxc3", SanValidationProblem.CAPTURE_SYMBOL_WRONG,
+        "The move is designated as a capture by the capture symbol, but the destination square c3 is empty.");
+
+  }
+
   /** Checks a SAN against the initial position. */
   private static void checkException(String san, SanValidationProblem expectedProblem, String expectedMessage) {
     checkException(san, new Board(), expectedProblem, expectedMessage);

@@ -66,11 +66,11 @@ class TestSanValidatePawnForwardMoves {
   }
 
   private static void checkExceptionOpponent(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.NON_CAPTURING_MOVING_ONTO_OPPONENT_PIECE);
+    checkException(san, board, SanValidationProblem.CAPTURE_SYMBOL_MISSING);
   }
 
   private static void checkExceptionOwn(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.MOVING_ONTO_OWN_PIECE);
+    checkException(san, board, SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem svp) {
