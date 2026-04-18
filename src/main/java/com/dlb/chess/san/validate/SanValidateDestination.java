@@ -51,8 +51,8 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
       }
 
       if (!sanType.isCapture()) {
-        throw new SanValidationException(SanValidationProblem.CAPTURE_SYMBOL_MISSING,
-            Message.getString("validation.san.captureSymbol.missing", toSquare.getName()));
+        throw new SanValidationException(SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
+            Message.getString("validation.san.destination.notEmpty.noCaptureSymbol", toSquare.getName()));
       }
       return;
     }
@@ -62,8 +62,12 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
       if (calculateIsEnPassantCapture(board, havingMove, sanType, sanConversion, toSquare)) {
         return;
       }
-      throw new SanValidationException(SanValidationProblem.CAPTURE_SYMBOL_WRONG,
-          Message.getString("validation.san.captureSymbol.wrong", toSquare.getName()));
+      if (sanType.getMovingPieceType() == PAWN) {
+        throw new SanValidationException(SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_PAWN,
+            Message.getString("validation.san.destination.empty.captureSymbol.pawn", toSquare.getName()));
+      }
+      throw new SanValidationException(SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK,
+          Message.getString("validation.san.destination.empty.captureSymbol.rnbqk", toSquare.getName()));
     }
   }
 

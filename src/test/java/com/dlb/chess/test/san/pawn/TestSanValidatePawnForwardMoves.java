@@ -66,7 +66,7 @@ class TestSanValidatePawnForwardMoves {
   }
 
   private static void checkExceptionOpponent(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.CAPTURE_SYMBOL_MISSING);
+    checkException(san, board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL);
   }
 
   private static void checkExceptionOwn(String san, ApiBoard board) {

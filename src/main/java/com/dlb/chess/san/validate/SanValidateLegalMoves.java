@@ -206,10 +206,9 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           "Invalid program flow, the castling must be handled at this point");
       case KING_NON_CASTLING_NON_CAPTURING, KING_NON_CASTLING_CAPTURING -> validateAgainstLegalMovesForKing(
           legalMovesCandidates, toSquare);
-      case PAWN_NON_CAPTURING_NON_PROMOTION, PAWN_CAPTURING_NON_PROMOTION -> validateAgainstLegalMovesForPawnNonPromotion(
-          legalMovesCandidates, pieceType, toSquare);
-      case PAWN_NON_CAPTURING_PROMOTION, PAWN_CAPTURING_PROMOTION -> validateAgainstLegalMovesForPawnPromotion(
-          legalMovesCandidates, pieceType, toSquare);
+      case PAWN_NON_CAPTURING_NON_PROMOTION, PAWN_CAPTURING_NON_PROMOTION, PAWN_NON_CAPTURING_PROMOTION, PAWN_CAPTURING_PROMOTION -> validateAgainstLegalMovesForPawn(
+          staticPosition, havingMove, legalMovesCandidates, pieceType, sanFormat, sanConversion, toSquare,
+          board.getEnPassantCaptureTargetSquare());
       case PIECE_NON_CAPTURING_NEITHER, PIECE_CAPTURING_NEITHER -> validateAgainstLegalMovesForPieceNeither(
           staticPosition, havingMove, legalMovesCandidates, pieceType, toSquare);
       case PIECE_NON_CAPTURING_FILE, PIECE_CAPTURING_FILE -> validateAgainstLegalMovesForPieceFile(staticPosition,
@@ -229,20 +228,53 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     }
   }
 
-  private static void validateAgainstLegalMovesForPawnNonPromotion(Set<LegalMove> legalMovesCandidates,
-      PieceType pieceType, Square toSquare) {
-    if (legalMovesCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE,
-          Message.getString("validation.san.pawn.noLegalMove", pieceType.getName(), toSquare.getName()));
+  private static void validateAgainstLegalMovesForPawn(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      Square toSquare, Square enPassantCaptureTargetSquare) {
+    if (!legalMovesCandidates.isEmpty()) {
+      return;
     }
+    final boolean isCapturing = sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION
+        || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION;
+    final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForPawn(staticPosition, havingMove,
+        isCapturing, sanConversion, toSquare, enPassantCaptureTargetSquare);
+    if (pseudoLegalMoves.isEmpty()) {
+      if (isCapturing) {
+        throw new SanValidationException(SanValidationProblem.PAWN_NOT_REACHABLE_CAPTURING,
+            Message.getString("validation.san.pawn.notReachable.capturing", pieceType.getName(), toSquare.getName()));
+      }
+      throw new SanValidationException(SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING,
+          Message.getString("validation.san.pawn.notReachable.nonCapturing", pieceType.getName(), toSquare.getName()));
+    }
+    final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
+    if (reason == PseudoLegalReason.KING_LEFT_IN_CHECK) {
+      throw new SanValidationException(SanValidationProblem.PAWN_KING_LEFT_IN_CHECK,
+          Message.getString("validation.san.pawn.kingLeftInCheck", pieceType.getName(), toSquare.getName()));
+    }
+    throw new SanValidationException(SanValidationProblem.PAWN_KING_EXPOSED_TO_CHECK,
+        Message.getString("validation.san.pawn.kingExposedToCheck", pieceType.getName(), toSquare.getName()));
   }
 
-  private static void validateAgainstLegalMovesForPawnPromotion(Set<LegalMove> legalMovesCandidates,
-      PieceType pieceType, Square toSquare) {
-    if (legalMovesCandidates.isEmpty()) {
-      throw new SanValidationException(SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE,
-          Message.getString("validation.san.pawn.noLegalMove", pieceType.getName(), toSquare.getName()));
+  private static Set<PseudoLegalMove> calculatePseudoLegalMovesForPawn(StaticPosition staticPosition, Side havingMove,
+      boolean isCapturing, SanConversion sanConversion, Square toSquare, Square enPassantCaptureTargetSquare) {
+    final File filterFromFile = isCapturing ? sanConversion.fromFile() : toSquare.getFile();
+    final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
+    for (final Square fromSquare : Square.REAL) {
+      if (fromSquare.getFile() != filterFromFile) {
+        continue;
+      }
+      if (!staticPosition.isOwnPiece(fromSquare, havingMove, PAWN)) {
+        continue;
+      }
+      final Set<Square> potentialToSquares = AbstractPotentialToSquares.calculatePotentialToSquare(staticPosition,
+          enPassantCaptureTargetSquare, havingMove, fromSquare);
+      if (potentialToSquares.contains(toSquare)) {
+        final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
+            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+        allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
+      }
     }
+    return allPseudoLegal;
   }
 
   private static void validateAgainstLegalMovesForPieceNeither(StaticPosition staticPosition, Side havingMove,

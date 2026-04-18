@@ -33,8 +33,8 @@ class TestSanValidateAgainstLegalMoves {
   void testPawnNonPromotion() {
     final ApiBoard board = new Board("8/8/8/2Rpk3/2R5/4K3/8/8 b - - 0 100");
 
-    checkException(board, "d4", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
-    checkException(board, "dxc4", SanValidationProblem.PAWN_NON_PROMOTION_NO_LEGAL_MOVE);
+    checkException(board, "d4", SanValidationProblem.PAWN_KING_EXPOSED_TO_CHECK);
+    checkException(board, "dxc4", SanValidationProblem.PAWN_KING_EXPOSED_TO_CHECK);
 
   }
 
@@ -44,11 +44,11 @@ class TestSanValidateAgainstLegalMoves {
     // black
     {
       final ApiBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
-      checkException(board, "f1=N+", SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE);
+      checkException(board, "f1=N+", SanValidationProblem.PAWN_KING_EXPOSED_TO_CHECK);
     }
     {
       final ApiBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
-      checkException(board, "fxg1=Q+", SanValidationProblem.PAWN_PROMOTION_NO_LEGAL_MOVE);
+      checkException(board, "fxg1=Q+", SanValidationProblem.PAWN_KING_EXPOSED_TO_CHECK);
     }
 
   }

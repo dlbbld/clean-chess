@@ -420,11 +420,14 @@ class TestSanValidationProblemMessage {
     final Board board = new Board();
     board.performMoves("Nc3", "e6", "Nb5", "e5");
 
-    checkException("Na7", board, SanValidationProblem.CAPTURE_SYMBOL_MISSING,
+    checkException("Na7", board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
         "The move captures an opponent piece on square a7 but has not capture symbol.");
 
-    checkException("Nxc3", SanValidationProblem.CAPTURE_SYMBOL_WRONG,
+    checkException("Nxc3", SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK,
         "The move is designated as a capture by the capture symbol, but the destination square c3 is empty.");
+
+    checkException("dxe3", SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_PAWN,
+        "The pawn diagonal capture is only possible if there is an opponent piece on the destination square, but the destination square e3 is empty.");
 
   }
 
