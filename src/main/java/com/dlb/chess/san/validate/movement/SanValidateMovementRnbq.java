@@ -131,11 +131,6 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       }
     }
 
-    if (fromSquare == toSquare) {
-      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_ONTO_ITSELF, Message
-          .getString("validation.san.movement.square.ontoItself.general", fromSquare.getName(), toSquare.getName()));
-    }
-
     final var messageKey = switch (movingPieceType) {
       case KNIGHT -> "validation.san.movement.square.notOntoItself.knight";
       case BISHOP -> "validation.san.movement.square.notOntoItself.bishop";

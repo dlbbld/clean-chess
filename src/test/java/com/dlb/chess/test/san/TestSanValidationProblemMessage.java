@@ -339,6 +339,14 @@ class TestSanValidationProblemMessage {
 
   }
 
+  @SuppressWarnings("static-method")
+  @Test
+  void testNonMovementRnbq() {
+    checkException("Rd4d4", SanValidationProblem.NON_MOVEMENT_RNBQ_SOURCE_SQUARE_EQUALS_DESTINATION_SQUARE,
+        "For a valid movement, the source square cannot be the same as the destination square.");
+
+  }
+
   /** Checks a SAN against the initial position. */
   private static void checkException(String san, SanValidationProblem expectedProblem, String expectedMessage) {
     checkException(san, new Board(), expectedProblem, expectedMessage);

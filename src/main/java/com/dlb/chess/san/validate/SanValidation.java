@@ -26,6 +26,8 @@ public class SanValidation extends AbstractSan {
 
     final Side havingMove = board.getHavingMove();
 
+    SanValidateNonMovement.validateNonMovement(sanParse);
+
     SanValidateMovement.validateMovement(sanParse, havingMove);
 
     final var sanType = sanParse.sanType();
