@@ -17,23 +17,23 @@ public abstract class EnumConversionUtility implements EnumConstants {
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Side havingMove, PieceType pieceType) {
     return switch (havingMove) {
       case BLACK -> switch (pieceType) {
-        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
-        case KING -> com.github.bhlangonijr.chesslib.Piece.BLACK_KING;
-        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
-        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-        case PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
-        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
         case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
+        case KING -> com.github.bhlangonijr.chesslib.Piece.BLACK_KING;
+        case PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
         default -> throw new IllegalArgumentException();
       };
       case WHITE -> switch (pieceType) {
-        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
-        case KING -> com.github.bhlangonijr.chesslib.Piece.WHITE_KING;
-        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
-        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-        case PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
-        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
         case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
+        case KING -> com.github.bhlangonijr.chesslib.Piece.WHITE_KING;
+        case PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
         default -> throw new IllegalArgumentException();
       };
       case NONE -> throw new IllegalArgumentException();
@@ -45,19 +45,19 @@ public abstract class EnumConversionUtility implements EnumConstants {
       PromotionPieceType promotionPieceType) {
     return switch (havingMove) {
       case BLACK -> switch (promotionPieceType) {
-        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
-        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
-        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
         case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
         default -> throw new IllegalArgumentException();
       };
       case WHITE -> switch (promotionPieceType) {
-        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
-        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
-        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
-        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
         case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
+        case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
+        case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
+        case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
+        case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
         default -> throw new IllegalArgumentException();
       };
       case NONE -> throw new IllegalArgumentException();

@@ -26,18 +26,18 @@ public abstract class AbstractThreatenSquares extends AbstractToSquares {
       if (staticPosition.isOwnPiece(fromSquare, havingMove)) {
         final Piece piece = staticPosition.get(fromSquare);
         switch (piece.getPieceType()) {
-          case BISHOP -> squareSet
-              .addAll(BishopThreatenSquares.calculateBishopThreatenSquares(staticPosition, fromSquare, havingMove));
-          case KING -> squareSet.addAll(KingNonCastlingThreatenSquares
-              .calculateKingNonCastlingThreatenSquares(staticPosition, fromSquare, havingMove));
-          case KNIGHT -> squareSet
-              .addAll(KnightThreatenSquares.calculateKnightThreatenSquares(staticPosition, fromSquare, havingMove));
-          case PAWN -> squareSet
-              .addAll(PawnThreatenSquares.calculatePawnThreatenSquares(staticPosition, fromSquare, havingMove));
-          case QUEEN -> squareSet
-              .addAll(QueenThreatenSquares.calculateQueenThreatenSquares(staticPosition, fromSquare, havingMove));
           case ROOK -> squareSet
               .addAll(RookThreatenSquares.calculateRookThreatenSquares(staticPosition, fromSquare, havingMove));
+          case KNIGHT -> squareSet
+              .addAll(KnightThreatenSquares.calculateKnightThreatenSquares(staticPosition, fromSquare, havingMove));
+          case BISHOP -> squareSet
+              .addAll(BishopThreatenSquares.calculateBishopThreatenSquares(staticPosition, fromSquare, havingMove));
+          case QUEEN -> squareSet
+              .addAll(QueenThreatenSquares.calculateQueenThreatenSquares(staticPosition, fromSquare, havingMove));
+          case KING -> squareSet.addAll(KingNonCastlingThreatenSquares
+              .calculateKingNonCastlingThreatenSquares(staticPosition, fromSquare, havingMove));
+          case PAWN -> squareSet
+              .addAll(PawnThreatenSquares.calculatePawnThreatenSquares(staticPosition, fromSquare, havingMove));
           case NONE -> throw new IllegalArgumentException();
           default -> throw new IllegalArgumentException();
         }

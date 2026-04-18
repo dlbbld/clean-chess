@@ -307,10 +307,10 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   private static String calculateScalaMovePromotionPiece(MoveSpecification moveSpecification) {
     if (PromotionUtility.calculateIsPromotion(moveSpecification)) {
       return switch (moveSpecification.promotionPieceType()) {
-        case BISHOP -> "Option(Bishop)";
-        case KNIGHT -> "Option(Knight)";
-        case QUEEN -> "Option(Queen)";
         case ROOK -> "Option(Rook)";
+        case KNIGHT -> "Option(Knight)";
+        case BISHOP -> "Option(Bishop)";
+        case QUEEN -> "Option(Queen)";
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };

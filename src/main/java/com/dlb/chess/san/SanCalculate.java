@@ -48,19 +48,17 @@ public class SanCalculate implements EnumConstants {
 
     if (!isCapture) {
       switch (movingPieceType) {
-        case BISHOP:
+        case ROOK:
           if (fromRank == Rank.NONE) {
             if (fromFile == File.NONE) {
-              return SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
+              return SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
             }
-            return SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
+            return SanType.ROOK_NON_CAPTURING_FILE_MOVE;
           }
           if (fromFile == File.NONE) {
-            return SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
+            return SanType.ROOK_NON_CAPTURING_RANK_MOVE;
           }
-          return SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
-        case KING:
-          return SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE;
+          return SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
         case KNIGHT:
           if (fromRank == Rank.NONE) {
             if (fromFile == File.NONE) {
@@ -72,11 +70,17 @@ public class SanCalculate implements EnumConstants {
             return SanType.KNIGHT_NON_CAPTURING_RANK_MOVE;
           }
           return SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE;
-        case PAWN:
-          if (promotionPieceType == PromotionPieceType.NONE) {
-            return SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
+        case BISHOP:
+          if (fromRank == Rank.NONE) {
+            if (fromFile == File.NONE) {
+              return SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
+            }
+            return SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
           }
-          return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
+          if (fromFile == File.NONE) {
+            return SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
+          }
+          return SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
         case QUEEN:
           if (fromRank == Rank.NONE) {
             if (fromFile == File.NONE) {
@@ -89,65 +93,21 @@ public class SanCalculate implements EnumConstants {
             return SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
           }
           return SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
-        case ROOK:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.ROOK_NON_CAPTURING_FILE_MOVE;
+        case KING:
+          return SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE;
+        case PAWN:
+          if (promotionPieceType == PromotionPieceType.NONE) {
+            return SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
           }
-          if (fromFile == File.NONE) {
-            return SanType.ROOK_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
-        default:
+          return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
         case NONE:
+        default:
           throw new IllegalArgumentException();
       }
     }
 
     // now capture
     switch (movingPieceType) {
-      case BISHOP:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.BISHOP_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.BISHOP_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.BISHOP_CAPTURING_RANK_MOVE;
-        }
-        return SanType.BISHOP_CAPTURING_SQUARE_MOVE;
-      case KING:
-        return SanType.KING_NON_CASTLING_CAPTURING_MOVE;
-      case KNIGHT:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.KNIGHT_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.KNIGHT_CAPTURING_RANK_MOVE;
-        }
-        return SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
-      case PAWN:
-        if (promotionPieceType == PromotionPieceType.NONE) {
-          return SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
-        }
-        return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
-      case QUEEN:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.QUEEN_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.QUEEN_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.QUEEN_CAPTURING_RANK_MOVE;
-        }
-        return SanType.QUEEN_CAPTURING_SQUARE_MOVE;
       case ROOK:
         if (fromRank == Rank.NONE) {
           if (fromFile == File.NONE) {
@@ -159,8 +119,48 @@ public class SanCalculate implements EnumConstants {
           return SanType.ROOK_CAPTURING_RANK_MOVE;
         }
         return SanType.ROOK_CAPTURING_SQUARE_MOVE;
-      default:
+      case KNIGHT:
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
+          }
+          return SanType.KNIGHT_CAPTURING_FILE_MOVE;
+        }
+        if (fromFile == File.NONE) {
+          return SanType.KNIGHT_CAPTURING_RANK_MOVE;
+        }
+        return SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
+      case BISHOP:
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.BISHOP_CAPTURING_NEITHER_MOVE;
+          }
+          return SanType.BISHOP_CAPTURING_FILE_MOVE;
+        }
+        if (fromFile == File.NONE) {
+          return SanType.BISHOP_CAPTURING_RANK_MOVE;
+        }
+        return SanType.BISHOP_CAPTURING_SQUARE_MOVE;
+      case QUEEN:
+        if (fromRank == Rank.NONE) {
+          if (fromFile == File.NONE) {
+            return SanType.QUEEN_CAPTURING_NEITHER_MOVE;
+          }
+          return SanType.QUEEN_CAPTURING_FILE_MOVE;
+        }
+        if (fromFile == File.NONE) {
+          return SanType.QUEEN_CAPTURING_RANK_MOVE;
+        }
+        return SanType.QUEEN_CAPTURING_SQUARE_MOVE;
+      case KING:
+        return SanType.KING_NON_CASTLING_CAPTURING_MOVE;
+      case PAWN:
+        if (promotionPieceType == PromotionPieceType.NONE) {
+          return SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
+        }
+        return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       case NONE:
+      default:
         throw new IllegalArgumentException();
     }
   }

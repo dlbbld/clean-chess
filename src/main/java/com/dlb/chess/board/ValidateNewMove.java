@@ -319,11 +319,11 @@ public class ValidateNewMove implements EnumConstants {
     final var toSquareSet = switch (movingPiece.getPieceType()) {
       case ROOK -> RookPotentialToSquares.calculateRookPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
+      case KNIGHT -> new TreeSet<>();
       case BISHOP -> BishopPotentialToSquares.calculateBishopPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
       case QUEEN -> QueenPotentialToSquares.calculateQueenPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
-      case KNIGHT -> new TreeSet<>();
       case KING, PAWN, NONE -> throw new IllegalArgumentException();
     };
     switch (movingPiece.getPieceType()) {

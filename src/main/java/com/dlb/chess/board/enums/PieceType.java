@@ -41,21 +41,21 @@ public enum PieceType {
   public static Piece calculate(Side havingMove, PieceType pieceType) {
     return switch (havingMove) {
       case BLACK -> switch (pieceType) {
-        case BISHOP -> Piece.BLACK_BISHOP;
-        case KING -> Piece.BLACK_KING;
-        case KNIGHT -> Piece.BLACK_KNIGHT;
-        case QUEEN -> Piece.BLACK_QUEEN;
         case ROOK -> Piece.BLACK_ROOK;
+        case KNIGHT -> Piece.BLACK_KNIGHT;
+        case BISHOP -> Piece.BLACK_BISHOP;
+        case QUEEN -> Piece.BLACK_QUEEN;
+        case KING -> Piece.BLACK_KING;
         case PAWN -> Piece.BLACK_PAWN;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
       case WHITE -> switch (pieceType) {
-        case BISHOP -> Piece.WHITE_BISHOP;
-        case KING -> Piece.WHITE_KING;
-        case KNIGHT -> Piece.WHITE_KNIGHT;
-        case QUEEN -> Piece.WHITE_QUEEN;
         case ROOK -> Piece.WHITE_ROOK;
+        case KNIGHT -> Piece.WHITE_KNIGHT;
+        case BISHOP -> Piece.WHITE_BISHOP;
+        case QUEEN -> Piece.WHITE_QUEEN;
+        case KING -> Piece.WHITE_KING;
         case PAWN -> Piece.WHITE_PAWN;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();

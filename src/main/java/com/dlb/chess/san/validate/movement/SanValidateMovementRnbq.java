@@ -78,9 +78,9 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     final var messageKey = switch (movingPieceType) {
+      case ROOK -> "validation.san.movement.file.rook";
       case KNIGHT -> "validation.san.movement.file.knight";
       case BISHOP -> "validation.san.movement.file.bishop";
-      case ROOK -> "validation.san.movement.file.rook";
       case QUEEN -> "validation.san.movement.file.queen";
       default -> throw new IllegalArgumentException();
     };
@@ -105,9 +105,9 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     final var messageKey = switch (movingPieceType) {
+      case ROOK -> "validation.san.movement.rank.rook";
       case KNIGHT -> "validation.san.movement.rank.knight";
       case BISHOP -> "validation.san.movement.rank.bishop";
-      case ROOK -> "validation.san.movement.rank.rook";
       case QUEEN -> "validation.san.movement.rank.queen";
       default -> throw new IllegalArgumentException();
     };
@@ -132,9 +132,9 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     final var messageKey = switch (movingPieceType) {
+      case ROOK -> "validation.san.movement.square.rook";
       case KNIGHT -> "validation.san.movement.square.knight";
       case BISHOP -> "validation.san.movement.square.bishop";
-      case ROOK -> "validation.san.movement.square.rook";
       case QUEEN -> "validation.san.movement.square.queen";
       default -> throw new IllegalArgumentException();
     };

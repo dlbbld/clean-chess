@@ -357,11 +357,11 @@ class TestMobilitySolution implements EnumConstants {
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
       final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
       switch (piecePlacement.pieceType()) {
-        case PAWN:
         case ROOK:
         case KNIGHT:
         case BISHOP:
         case QUEEN:
+        case PAWN:
           assertEquals(1, squaresWithValueOne.size());
           final Square onlyToSquare = NonNullWrapperCommon.getFirst(new ArrayList<>(squaresWithValueOne));
           assertEquals(piecePlacement.squareOriginal(), onlyToSquare);
@@ -428,8 +428,8 @@ class TestMobilitySolution implements EnumConstants {
         case ROOK:
         case KNIGHT:
         case QUEEN:
-        case PAWN:
         case KING:
+        case PAWN:
           assertEquals(ALL_SQUARE_SET, squaresWithValueOne);
           break;
         case BISHOP:

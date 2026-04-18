@@ -101,27 +101,6 @@ public class MoveToSan extends AbstractSan {
     final StringBuilder buildSan = new StringBuilder();
 
     switch (movingPiece.getPieceType()) {
-      case KING:
-        buildSan.append(pieceLetter);
-        if (isCapture) {
-          buildSan.append(SanSymbol.CAPTURE.getSymbol());
-        }
-        buildSan.append(toSquareName);
-        break;
-      case PAWN:
-        if (!PromotionUtility.calculateIsPromotion(moveSpecification)) {
-          if (isCapture) {
-            buildSan.append(fromFileLetter).append(SanSymbol.CAPTURE.getSymbol());
-          }
-          buildSan.append(toSquareName);
-        } else {
-          final var promotionPieceLetter = moveSpecification.promotionPieceType().getPieceType().getLetter();
-          if (isCapture) {
-            buildSan.append(fromFileLetter).append(SanSymbol.CAPTURE.getSymbol());
-          }
-          buildSan.append(toSquareName).append(SanSymbol.PROMOTION.getSymbol()).append(promotionPieceLetter);
-        }
-        break;
       case ROOK:
       case KNIGHT:
       case BISHOP:
@@ -156,6 +135,27 @@ public class MoveToSan extends AbstractSan {
         }
 
         buildSan.append(toSquareName);
+        break;
+      case KING:
+        buildSan.append(pieceLetter);
+        if (isCapture) {
+          buildSan.append(SanSymbol.CAPTURE.getSymbol());
+        }
+        buildSan.append(toSquareName);
+        break;
+      case PAWN:
+        if (!PromotionUtility.calculateIsPromotion(moveSpecification)) {
+          if (isCapture) {
+            buildSan.append(fromFileLetter).append(SanSymbol.CAPTURE.getSymbol());
+          }
+          buildSan.append(toSquareName);
+        } else {
+          final var promotionPieceLetter = moveSpecification.promotionPieceType().getPieceType().getLetter();
+          if (isCapture) {
+            buildSan.append(fromFileLetter).append(SanSymbol.CAPTURE.getSymbol());
+          }
+          buildSan.append(toSquareName).append(SanSymbol.PROMOTION.getSymbol()).append(promotionPieceLetter);
+        }
         break;
       case NONE:
       default:

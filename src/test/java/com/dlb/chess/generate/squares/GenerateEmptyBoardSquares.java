@@ -139,6 +139,13 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     final List<List<Square>> result = new ArrayList<>();
 
     switch (pieceType) {
+      case ROOK -> {
+        final OrthogonalRange rookRange = calculateRookSquares(fromSquare);
+        result.add(rookRange.squareListNorth());
+        result.add(rookRange.squareListEast());
+        result.add(rookRange.squareListSouth());
+        result.add(rookRange.squareListWest());
+      }
       case BISHOP -> {
         final DiagonalRange bishopRange = calculateBishopSquares(fromSquare);
         result.add(bishopRange.squareListNorthEast());
@@ -156,13 +163,6 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
         result.add(queenRange.squareListSouthEast());
         result.add(queenRange.squareListSouthWest());
         result.add(queenRange.squareListNorthWest());
-      }
-      case ROOK -> {
-        final OrthogonalRange rookRange = calculateRookSquares(fromSquare);
-        result.add(rookRange.squareListNorth());
-        result.add(rookRange.squareListEast());
-        result.add(rookRange.squareListSouth());
-        result.add(rookRange.squareListWest());
       }
       case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
@@ -182,9 +182,9 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     variableNamesBoth.addAll(variableNamesDiagonal);
 
     return switch (pieceType) {
+      case ROOK -> variableNamesOrthogonal;
       case BISHOP -> variableNamesDiagonal;
       case QUEEN -> variableNamesBoth;
-      case ROOK -> variableNamesOrthogonal;
       case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

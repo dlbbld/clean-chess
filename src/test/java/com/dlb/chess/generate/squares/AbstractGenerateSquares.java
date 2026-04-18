@@ -144,9 +144,9 @@ public abstract class AbstractGenerateSquares implements EnumConstants {
   private static Set<Square> calculateSquareSet(Side side, Square fromSquare, PieceType pieceType,
       GeneratePawnMoveType pawnMoveType) {
     switch (pieceType) {
+      case ROOK:
       case BISHOP:
       case QUEEN:
-      case ROOK:
         throw new IllegalArgumentException();
       case KNIGHT:
         return GenerateEmptyBoardSquares.calculateKnightSquares(fromSquare);

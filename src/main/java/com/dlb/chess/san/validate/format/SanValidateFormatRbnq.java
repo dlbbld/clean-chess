@@ -384,73 +384,73 @@ abstract class SanValidateFormatRbnq extends AbstractSan {
       final boolean isCapture) {
     if (!hasFromFile && !hasFromRank && !isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
         case ROOK -> SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
         case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE;
         case BISHOP -> SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
+        case QUEEN -> SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     if (hasFromFile && !hasFromRank && !isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_FILE_MOVE;
         case ROOK -> SanType.ROOK_NON_CAPTURING_FILE_MOVE;
         case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_FILE_MOVE;
         case BISHOP -> SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
+        case QUEEN -> SanType.QUEEN_NON_CAPTURING_FILE_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     if (!hasFromFile && hasFromRank && !isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
         case ROOK -> SanType.ROOK_NON_CAPTURING_RANK_MOVE;
         case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_RANK_MOVE;
         case BISHOP -> SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
+        case QUEEN -> SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     if (hasFromFile && hasFromRank && !isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
         case ROOK -> SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
         case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE;
         case BISHOP -> SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
+        case QUEEN -> SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     if (!hasFromFile && !hasFromRank && isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_CAPTURING_NEITHER_MOVE;
         case ROOK -> SanType.ROOK_CAPTURING_NEITHER_MOVE;
         case KNIGHT -> SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
         case BISHOP -> SanType.BISHOP_CAPTURING_NEITHER_MOVE;
+        case QUEEN -> SanType.QUEEN_CAPTURING_NEITHER_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     if (hasFromFile && !hasFromRank && isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_CAPTURING_FILE_MOVE;
         case ROOK -> SanType.ROOK_CAPTURING_FILE_MOVE;
         case KNIGHT -> SanType.KNIGHT_CAPTURING_FILE_MOVE;
         case BISHOP -> SanType.BISHOP_CAPTURING_FILE_MOVE;
+        case QUEEN -> SanType.QUEEN_CAPTURING_FILE_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     if (!hasFromFile && hasFromRank && isCapture) {
       return switch (piece) {
-        case QUEEN -> SanType.QUEEN_CAPTURING_RANK_MOVE;
         case ROOK -> SanType.ROOK_CAPTURING_RANK_MOVE;
         case KNIGHT -> SanType.KNIGHT_CAPTURING_RANK_MOVE;
         case BISHOP -> SanType.BISHOP_CAPTURING_RANK_MOVE;
+        case QUEEN -> SanType.QUEEN_CAPTURING_RANK_MOVE;
         default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
       };
     }
     // hasFromFile && hasFromRank && isCapture
     return switch (piece) {
-      case QUEEN -> SanType.QUEEN_CAPTURING_SQUARE_MOVE;
       case ROOK -> SanType.ROOK_CAPTURING_SQUARE_MOVE;
       case KNIGHT -> SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
       case BISHOP -> SanType.BISHOP_CAPTURING_SQUARE_MOVE;
+      case QUEEN -> SanType.QUEEN_CAPTURING_SQUARE_MOVE;
       default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
     };
   }
