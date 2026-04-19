@@ -12,7 +12,7 @@ import com.dlb.chess.san.model.SanParse;
 public abstract class SanValidateNonMovement extends AbstractSan {
 
   public static void validateNonMovement(SanParse sanParse) {
-    final SanFormat sanFormat = sanParse.sanType().getSanFormat();
+    final SanFormat sanFormat = sanParse.sanFormat();
     switch (sanFormat) {
       case RNBQ_NON_CAPTURING_SQUARE:
       case RNBQ_CAPTURING_SQUARE: {

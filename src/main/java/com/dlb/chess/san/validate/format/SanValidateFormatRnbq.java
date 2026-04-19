@@ -7,12 +7,11 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationMovingPiece;
-import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
+import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -103,8 +102,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(SanValidateFormat.parseFile(c2), SanValidateFormat.parseRank(c3));
-    return new SanParse(pieceMoveSanType(piece, false, false, true),
-        new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(false, false, true),
+        new SanConversion(piece, File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   // ---------------------------------------------------------------------------
@@ -150,8 +149,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(toFile, SanValidateFormat.parseRank(c3));
-    return new SanParse(pieceMoveSanType(piece, false, true, false),
-        new SanConversion(File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(false, true, false),
+        new SanConversion(piece, File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   // R[rank]x[toFile][toRank] — capture rank disambiguation (e.g. R2xa1)
@@ -187,8 +186,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(SanValidateFormat.parseFile(c3), SanValidateFormat.parseRank(c4));
-    return new SanParse(pieceMoveSanType(piece, false, true, true),
-        new SanConversion(File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(false, true, true),
+        new SanConversion(piece, File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   // ---------------------------------------------------------------------------
@@ -237,8 +236,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(toFile, SanValidateFormat.parseRank(c3));
-    return new SanParse(pieceMoveSanType(piece, true, false, false),
-        new SanConversion(fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(true, false, false),
+        new SanConversion(piece, fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   // R[fromFile]x[toFile][toRank] — capture file disambiguation (e.g. Rbxa1)
@@ -274,8 +273,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(SanValidateFormat.parseFile(c3), SanValidateFormat.parseRank(c4));
-    return new SanParse(pieceMoveSanType(piece, true, false, true),
-        new SanConversion(fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(true, false, true),
+        new SanConversion(piece, fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   // ---------------------------------------------------------------------------
@@ -287,8 +286,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     // Length 3: interpret as plain destination Ra1 — firstFile/firstRank are the destination square.
     if (core.length() == 3) {
       final var toSquare = Square.calculate(firstFile, firstRank);
-      return new SanParse(pieceMoveSanType(piece, false, false, false),
-          new SanConversion(File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+      return new SanParse(pieceMoveSanFormat(false, false, false),
+          new SanConversion(piece, File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
     }
 
     // Length > 3: commit to source-square interpretation — firstFile/firstRank become the source square,
@@ -326,8 +325,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(toFile, SanValidateFormat.parseRank(c4));
-    return new SanParse(pieceMoveSanType(piece, true, true, false),
-        new SanConversion(fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(true, true, false),
+        new SanConversion(piece, fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   // R[fromFile][fromRank]x[toFile][toRank] — capture square disambiguation (e.g. Rb2xa1)
@@ -363,8 +362,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
 
     final var toSquare = Square.calculate(SanValidateFormat.parseFile(c4), SanValidateFormat.parseRank(c5));
-    return new SanParse(pieceMoveSanType(piece, true, true, true),
-        new SanConversion(fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
+    return new SanParse(pieceMoveSanFormat(true, true, true),
+        new SanConversion(piece, fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
   private static PieceType parsePieceLetter(final char c) {
@@ -372,87 +371,35 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
   }
 
   /**
-   * Resolves the {@link SanType} for a non-king piece move given the piece type and three boolean flags describing the
-   * move's structure.
-   *
-   * <p>
-   * Every non-king piece (Q, R, N, B) supports all eight disambiguation/capture combinations, so this method covers 4 ×
-   * 8 = 32 distinct values. The conditions are mutually exclusive and exhaustive; the final block handles
-   * {@code hasFromFile && hasFromRank && isCapture}.
+   * Resolves the {@link SanFormat} for a non-king piece move given three boolean flags describing the move's structure.
+   * The piece identity (R/N/B/Q) does not influence the format because all four share the same SAN grammar; it is
+   * carried separately on {@link SanConversion#movingPieceType()}.
    */
-  private static SanType pieceMoveSanType(final PieceType piece, final boolean hasFromFile, final boolean hasFromRank,
+  private static SanFormat pieceMoveSanFormat(final boolean hasFromFile, final boolean hasFromRank,
       final boolean isCapture) {
     if (!hasFromFile && !hasFromRank && !isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
-        case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE;
-        case BISHOP -> SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_NON_CAPTURING_NEITHER;
     }
     if (hasFromFile && !hasFromRank && !isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_NON_CAPTURING_FILE_MOVE;
-        case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_FILE_MOVE;
-        case BISHOP -> SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_FILE_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_NON_CAPTURING_FILE;
     }
     if (!hasFromFile && hasFromRank && !isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_NON_CAPTURING_RANK_MOVE;
-        case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_RANK_MOVE;
-        case BISHOP -> SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_NON_CAPTURING_RANK;
     }
     if (hasFromFile && hasFromRank && !isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
-        case KNIGHT -> SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE;
-        case BISHOP -> SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
-        case QUEEN -> SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_NON_CAPTURING_SQUARE;
     }
     if (!hasFromFile && !hasFromRank && isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_CAPTURING_NEITHER_MOVE;
-        case KNIGHT -> SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
-        case BISHOP -> SanType.BISHOP_CAPTURING_NEITHER_MOVE;
-        case QUEEN -> SanType.QUEEN_CAPTURING_NEITHER_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_CAPTURING_NEITHER;
     }
     if (hasFromFile && !hasFromRank && isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_CAPTURING_FILE_MOVE;
-        case KNIGHT -> SanType.KNIGHT_CAPTURING_FILE_MOVE;
-        case BISHOP -> SanType.BISHOP_CAPTURING_FILE_MOVE;
-        case QUEEN -> SanType.QUEEN_CAPTURING_FILE_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_CAPTURING_FILE;
     }
     if (!hasFromFile && hasFromRank && isCapture) {
-      return switch (piece) {
-        case ROOK -> SanType.ROOK_CAPTURING_RANK_MOVE;
-        case KNIGHT -> SanType.KNIGHT_CAPTURING_RANK_MOVE;
-        case BISHOP -> SanType.BISHOP_CAPTURING_RANK_MOVE;
-        case QUEEN -> SanType.QUEEN_CAPTURING_RANK_MOVE;
-        default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-      };
+      return SanFormat.RNBQ_CAPTURING_RANK;
     }
     // hasFromFile && hasFromRank && isCapture
-    return switch (piece) {
-      case ROOK -> SanType.ROOK_CAPTURING_SQUARE_MOVE;
-      case KNIGHT -> SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
-      case BISHOP -> SanType.BISHOP_CAPTURING_SQUARE_MOVE;
-      case QUEEN -> SanType.QUEEN_CAPTURING_SQUARE_MOVE;
-      default -> throw new ProgrammingMistakeException("Unexpected piece type: " + piece);
-    };
+    return SanFormat.RNBQ_CAPTURING_SQUARE;
   }
 
 }

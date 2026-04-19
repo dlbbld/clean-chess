@@ -23,18 +23,17 @@ public class SanValidation extends AbstractSan {
     final Side havingMove = board.getHavingMove();
     SanValidateMovement.validateMovement(sanParse, havingMove);
 
-    final var sanType = sanParse.sanType();
+    final var sanFormat = sanParse.sanFormat();
     final var sanConversion = sanParse.sanConversion();
-    final SanFormat sanFormat = sanType.getSanFormat();
 
-    SanValidatePieceExists.validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(),
+    SanValidatePieceExists.validatePieceExists(havingMove, sanFormat, sanConversion, sanConversion.movingPieceType(),
         board.getStaticPosition());
 
-    SanValidateDestination.validateDestinationSquareSemantics(board, havingMove, sanType, sanConversion);
+    SanValidateDestination.validateDestinationSquareSemantics(board, havingMove, sanFormat, sanConversion);
 
     final Set<LegalMove> legalMovesCandidates = SanValidateLegalMoves.calculateLegalMovesCandidates(board, havingMove,
         sanParse);
-    SanValidateLegalMoves.validateAgainstLegalMoves(board, havingMove, legalMovesCandidates, sanType, sanConversion);
+    SanValidateLegalMoves.validateAgainstLegalMoves(board, havingMove, legalMovesCandidates, sanFormat, sanConversion);
 
     final LegalMove legalMoveOnlyCandidate = SanValidateLegalMoves.calculateOnlyPossibleLegalMove(sanFormat,
         sanConversion, legalMovesCandidates);

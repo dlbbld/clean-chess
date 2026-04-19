@@ -12,15 +12,15 @@ import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.SanType;
+import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
 public abstract class SanValidateDestination extends AbstractSan implements EnumConstants {
 
-  public static void validateDestinationSquareSemantics(ApiBoard board, Side havingMove, SanType sanType,
+  public static void validateDestinationSquareSemantics(ApiBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion) {
-    if (SanType.calculateIsKingCastlingMove(sanType)) {
+    if (sanFormat.isKingCastlingMove()) {
       return;
     }
 
@@ -31,7 +31,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     if (pieceOnToSquare != Piece.NONE) {
       // own piece on destination
       if (pieceOnToSquare.getSide() == havingMove) {
-        if (sanType.isCapture()) {
+        if (sanFormat.isCapture()) {
           throw new SanValidationException(SanValidationProblem.DESTINATION_OWN_PIECE_CAPTURING,
               Message.getString("validation.san.destination.ownPiece.capturing", toSquare.getName()));
         }
@@ -40,17 +40,17 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
       }
 
       // opponent piece on destination
-      if (!sanType.isCapture() && pieceOnToSquare.getPieceType() == KING) {
+      if (!sanFormat.isCapture() && pieceOnToSquare.getPieceType() == KING) {
         throw new SanValidationException(SanValidationProblem.DESTINATION_OPPONENT_KING_NON_CAPTURING,
             Message.getString("validation.san.destination.opponentKing.nonCapturing", toSquare.getName()));
       }
       // opponent piece on destination
-      if (sanType.isCapture() && pieceOnToSquare.getPieceType() == KING) {
+      if (sanFormat.isCapture() && pieceOnToSquare.getPieceType() == KING) {
         throw new SanValidationException(SanValidationProblem.DESTINATION_OPPONENT_KING_CAPTURING,
             Message.getString("validation.san.destination.opponentKing.capturing", toSquare.getName()));
       }
 
-      if (!sanType.isCapture()) {
+      if (!sanFormat.isCapture()) {
         throw new SanValidationException(SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
             Message.getString("validation.san.destination.notEmpty.noCaptureSymbol", toSquare.getName()));
       }
@@ -58,11 +58,11 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     }
 
     // empty destination
-    if (sanType.isCapture()) {
-      if (calculateIsEnPassantCapture(board, havingMove, sanType, sanConversion, toSquare)) {
+    if (sanFormat.isCapture()) {
+      if (calculateIsEnPassantCapture(board, havingMove, sanFormat, sanConversion, toSquare)) {
         return;
       }
-      if (sanType.getMovingPieceType() == PAWN) {
+      if (sanConversion.movingPieceType() == PAWN) {
         throw new SanValidationException(SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_PAWN,
             Message.getString("validation.san.destination.empty.captureSymbol.pawn", toSquare.getName()));
       }
@@ -71,9 +71,9 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     }
   }
 
-  private static boolean calculateIsEnPassantCapture(ApiBoard board, Side havingMove, SanType sanType,
+  private static boolean calculateIsEnPassantCapture(ApiBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion, Square toSquare) {
-    if (sanType != SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) {
+    if (sanFormat != SanFormat.PAWN_CAPTURING_NON_PROMOTION) {
       return false;
     }
     final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());

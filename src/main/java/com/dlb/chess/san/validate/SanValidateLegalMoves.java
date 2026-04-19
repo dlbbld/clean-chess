@@ -32,7 +32,6 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -125,25 +124,26 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   }
 
   public static Set<LegalMove> calculateLegalMovesCandidates(ApiBoard board, Side havingMove, SanParse sanParse) {
-    final var sanType = sanParse.sanType();
+    final var sanFormat = sanParse.sanFormat();
+    final var sanConversion = sanParse.sanConversion();
 
     // for castling we need to filter the castling moves
-    if (SanType.calculateIsKingCastlingMove(sanType)) {
+    if (sanFormat.isKingCastlingMove()) {
       return filterCastlingMove(board.getLegalMoveSet());
     }
 
-    final PieceType pieceType = sanType.getMovingPieceType();
+    final PieceType pieceType = sanConversion.movingPieceType();
     final Piece piece = PieceType.calculate(havingMove, pieceType);
 
     final Set<LegalMove> legalMoveSetForMovingPiece = MoveToSan.calculateLegalMoveSetForMovingPiece(piece,
         board.getLegalMoveSet());
     // for non castling moves we need to filter by the to square (which is always set for non castling)
-    final Square toSquare = sanParse.sanConversion().toSquare();
+    final Square toSquare = sanConversion.toSquare();
     final Set<LegalMove> legalMovesCandidates = filterLegalMovesCandidates(legalMoveSetForMovingPiece, toSquare);
 
     // for pawn moves we must filter additionally by the from file!!
-    if (sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE) {
-      return calculateLegalMovesCandidates(legalMovesCandidates, sanParse.sanConversion().fromFile());
+    if (sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION) {
+      return calculateLegalMovesCandidates(legalMovesCandidates, sanConversion.fromFile());
     }
     return legalMovesCandidates;
   }
@@ -177,13 +177,12 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   }
 
   public static void validateAgainstLegalMoves(ApiBoard board, Side havingMove, Set<LegalMove> legalMovesCandidates,
-      SanType sanType, SanConversion sanConversion) {
+      SanFormat sanFormat, SanConversion sanConversion) {
 
     final StaticPosition staticPosition = board.getStaticPosition();
 
     // we need an early return for castling first so for the remaining cases we can
     // calculate the to square
-    final SanFormat sanFormat = sanType.getSanFormat();
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       if (!isContained(legalMovesCandidates, havingMove, sanFormat)) {
         throwCastlingException(board, havingMove, "Queen-side", CastlingMove.QUEEN_SIDE);
@@ -199,7 +198,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
 
     // only in non castling case we can calculate the to square!
     final Square toSquare = sanConversion.toSquare();
-    final PieceType pieceType = sanType.getMovingPieceType();
+    final PieceType pieceType = sanConversion.movingPieceType();
 
     switch (sanFormat) {
       case KING_CASTLING_QUEEN_SIDE, KING_CASTLING_KING_SIDE -> throw new ProgrammingMistakeException(

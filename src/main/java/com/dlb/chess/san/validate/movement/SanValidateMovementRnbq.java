@@ -12,7 +12,6 @@ import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -21,13 +20,12 @@ import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 public abstract class SanValidateMovementRnbq extends AbstractSan implements EnumConstants {
 
   public static void validateRnbqMovement(SanParse sanParse) {
-    final SanType sanType = sanParse.sanType();
     final SanConversion sanConversion = sanParse.sanConversion();
 
-    final PieceType pieceType = sanType.getMovingPieceType();
+    final PieceType pieceType = sanConversion.movingPieceType();
     final Square toSquare = sanConversion.toSquare();
 
-    switch (sanType.getSanFormat()) {
+    switch (sanParse.sanFormat()) {
       case KING_NON_CASTLING_CAPTURING:
       case KING_NON_CASTLING_NON_CAPTURING:
       case KING_CASTLING_QUEEN_SIDE:
