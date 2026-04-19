@@ -324,7 +324,7 @@ public class ValidateNewMove implements EnumConstants {
           havingMove);
       case QUEEN -> QueenPotentialToSquares.calculateQueenPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
-      case KING, PAWN, NONE -> throw new IllegalArgumentException();
+      case PAWN, KING, NONE -> throw new IllegalArgumentException();
     };
     switch (movingPiece.getPieceType()) {
       case ROOK:
@@ -339,8 +339,8 @@ public class ValidateNewMove implements EnumConstants {
         break;
       case KNIGHT:
         break;
-      case KING:
       case PAWN:
+      case KING:
       case NONE:
       default:
         throw new IllegalArgumentException();

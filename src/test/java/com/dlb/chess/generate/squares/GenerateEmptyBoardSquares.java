@@ -164,7 +164,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
         result.add(queenRange.squareListSouthWest());
         result.add(queenRange.squareListNorthWest());
       }
-      case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
+      case PAWN, KNIGHT, KING, NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     }
     return result;
@@ -185,7 +185,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
       case ROOK -> variableNamesOrthogonal;
       case BISHOP -> variableNamesDiagonal;
       case QUEEN -> variableNamesBoth;
-      case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
+      case PAWN, KNIGHT, KING, NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
   }

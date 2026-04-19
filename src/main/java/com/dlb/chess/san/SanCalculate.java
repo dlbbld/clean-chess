@@ -48,6 +48,11 @@ public class SanCalculate implements EnumConstants {
 
     if (!isCapture) {
       switch (movingPieceType) {
+        case PAWN:
+          if (promotionPieceType == PromotionPieceType.NONE) {
+            return SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
+          }
+          return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
         case ROOK:
           if (fromRank == Rank.NONE) {
             if (fromFile == File.NONE) {
@@ -95,11 +100,6 @@ public class SanCalculate implements EnumConstants {
           return SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
         case KING:
           return SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE;
-        case PAWN:
-          if (promotionPieceType == PromotionPieceType.NONE) {
-            return SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
-          }
-          return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
         case NONE:
         default:
           throw new IllegalArgumentException();
@@ -108,6 +108,11 @@ public class SanCalculate implements EnumConstants {
 
     // now capture
     switch (movingPieceType) {
+      case PAWN:
+        if (promotionPieceType == PromotionPieceType.NONE) {
+          return SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
+        }
+        return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       case ROOK:
         if (fromRank == Rank.NONE) {
           if (fromFile == File.NONE) {
@@ -154,11 +159,6 @@ public class SanCalculate implements EnumConstants {
         return SanType.QUEEN_CAPTURING_SQUARE_MOVE;
       case KING:
         return SanType.KING_NON_CASTLING_CAPTURING_MOVE;
-      case PAWN:
-        if (promotionPieceType == PromotionPieceType.NONE) {
-          return SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
-        }
-        return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
       case NONE:
       default:
         throw new IllegalArgumentException();

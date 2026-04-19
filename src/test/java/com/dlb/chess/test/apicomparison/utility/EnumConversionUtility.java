@@ -17,22 +17,22 @@ public abstract class EnumConversionUtility implements EnumConstants {
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Side havingMove, PieceType pieceType) {
     return switch (havingMove) {
       case BLACK -> switch (pieceType) {
+        case PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
         case ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
         case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
         case BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
         case QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
         case KING -> com.github.bhlangonijr.chesslib.Piece.BLACK_KING;
-        case PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
         case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
         default -> throw new IllegalArgumentException();
       };
       case WHITE -> switch (pieceType) {
+        case PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
         case ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
         case KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
         case BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
         case QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
         case KING -> com.github.bhlangonijr.chesslib.Piece.WHITE_KING;
-        case PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
         case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
         default -> throw new IllegalArgumentException();
       };
@@ -67,18 +67,18 @@ public abstract class EnumConversionUtility implements EnumConstants {
 
   public static com.github.bhlangonijr.chesslib.Piece convertToPiece(Piece piece) {
     return switch (piece) {
+      case WHITE_PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
       case WHITE_ROOK -> com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK;
       case WHITE_KNIGHT -> com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT;
       case WHITE_BISHOP -> com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP;
       case WHITE_QUEEN -> com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN;
       case WHITE_KING -> com.github.bhlangonijr.chesslib.Piece.WHITE_KING;
-      case WHITE_PAWN -> com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN;
+      case BLACK_PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
       case BLACK_ROOK -> com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK;
       case BLACK_KNIGHT -> com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT;
       case BLACK_BISHOP -> com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP;
       case BLACK_QUEEN -> com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN;
       case BLACK_KING -> com.github.bhlangonijr.chesslib.Piece.BLACK_KING;
-      case BLACK_PAWN -> com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
       case NONE -> com.github.bhlangonijr.chesslib.Piece.NONE;
       default -> throw new IllegalArgumentException();
     };
@@ -86,18 +86,18 @@ public abstract class EnumConversionUtility implements EnumConstants {
 
   public static Piece convertToMyPiece(com.github.bhlangonijr.chesslib.Piece piece) {
     return switch (piece) {
+      case WHITE_PAWN -> WHITE_PAWN;
       case WHITE_ROOK -> WHITE_ROOK;
       case WHITE_KNIGHT -> WHITE_KNIGHT;
       case WHITE_BISHOP -> WHITE_BISHOP;
       case WHITE_QUEEN -> WHITE_QUEEN;
       case WHITE_KING -> WHITE_KING;
-      case WHITE_PAWN -> WHITE_PAWN;
+      case BLACK_PAWN -> BLACK_PAWN;
       case BLACK_ROOK -> BLACK_ROOK;
       case BLACK_KNIGHT -> BLACK_KNIGHT;
       case BLACK_BISHOP -> BLACK_BISHOP;
       case BLACK_QUEEN -> BLACK_QUEEN;
       case BLACK_KING -> BLACK_KING;
-      case BLACK_PAWN -> BLACK_PAWN;
       case NONE -> Piece.NONE;
       default -> throw new IllegalArgumentException();
     };
@@ -105,18 +105,18 @@ public abstract class EnumConversionUtility implements EnumConstants {
 
   public static PieceType convertToMyPieceType(com.github.bhlangonijr.chesslib.Piece piece) {
     return switch (piece) {
+      case WHITE_PAWN -> PAWN;
       case WHITE_ROOK -> ROOK;
       case WHITE_KNIGHT -> KNIGHT;
       case WHITE_BISHOP -> BISHOP;
       case WHITE_QUEEN -> QUEEN;
       case WHITE_KING -> KING;
-      case WHITE_PAWN -> PAWN;
+      case BLACK_PAWN -> PAWN;
       case BLACK_ROOK -> ROOK;
       case BLACK_KNIGHT -> KNIGHT;
       case BLACK_BISHOP -> BISHOP;
       case BLACK_QUEEN -> QUEEN;
       case BLACK_KING -> KING;
-      case BLACK_PAWN -> PAWN;
       case NONE -> PieceType.NONE;
       default -> throw new IllegalArgumentException();
     };
@@ -214,18 +214,18 @@ public abstract class EnumConversionUtility implements EnumConstants {
 
   public static Piece convertPiece(com.github.bhlangonijr.chesslib.Piece piece) {
     return switch (piece) {
+      case WHITE_PAWN -> WHITE_PAWN;
       case WHITE_ROOK -> WHITE_ROOK;
       case WHITE_KNIGHT -> WHITE_KNIGHT;
       case WHITE_BISHOP -> WHITE_BISHOP;
       case WHITE_QUEEN -> WHITE_QUEEN;
       case WHITE_KING -> WHITE_KING;
-      case WHITE_PAWN -> WHITE_PAWN;
+      case BLACK_PAWN -> BLACK_PAWN;
       case BLACK_ROOK -> BLACK_ROOK;
       case BLACK_KNIGHT -> BLACK_KNIGHT;
       case BLACK_BISHOP -> BLACK_BISHOP;
       case BLACK_QUEEN -> BLACK_QUEEN;
       case BLACK_KING -> BLACK_KING;
-      case BLACK_PAWN -> BLACK_PAWN;
       case NONE -> Piece.NONE;
       default -> throw new IllegalArgumentException();
     };

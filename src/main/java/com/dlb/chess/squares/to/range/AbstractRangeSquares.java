@@ -82,7 +82,7 @@ public abstract class AbstractRangeSquares extends AbstractToSquares {
           isAllowOwnPiece);
       case QUEEN -> QueenRangeSquares.calculateQueenRangeSquares(staticPosition, fromSquare, havingMove,
           isAllowOwnPiece);
-      case KNIGHT, KING, PAWN, NONE -> throw new IllegalArgumentException();
+      case PAWN, KNIGHT, KING, NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
 

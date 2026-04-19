@@ -33,6 +33,18 @@ public class MoveToLan extends AbstractSan {
     final String toSquareName = moveSpecification.toSquare().getName();
     final var isCapture = lastMove.pieceCaptured() != Piece.NONE;
     switch (movingPiece.getPieceType()) {
+      case PAWN:
+        buildSan.append(fromSquareName);
+        if (isCapture) {
+          buildSan.append(SanSymbol.CAPTURE.getSymbol());
+        }
+        buildSan.append(toSquareName);
+        if (PromotionUtility.calculateIsPromotion(moveSpecification)) {
+          final var promotionPieceLetter = moveSpecification.promotionPieceType().getPieceType().getLetter();
+          buildSan.append(SanSymbol.PROMOTION.getSymbol());
+          buildSan.append(promotionPieceLetter);
+        }
+        break;
       case ROOK:
       case KNIGHT:
       case BISHOP:
@@ -45,18 +57,6 @@ public class MoveToLan extends AbstractSan {
           buildSan.append(SanSymbol.CAPTURE.getSymbol());
         }
         buildSan.append(toSquareName);
-        break;
-      case PAWN:
-        buildSan.append(fromSquareName);
-        if (isCapture) {
-          buildSan.append(SanSymbol.CAPTURE.getSymbol());
-        }
-        buildSan.append(toSquareName);
-        if (PromotionUtility.calculateIsPromotion(moveSpecification)) {
-          final var promotionPieceLetter = moveSpecification.promotionPieceType().getPieceType().getLetter();
-          buildSan.append(SanSymbol.PROMOTION.getSymbol());
-          buildSan.append(promotionPieceLetter);
-        }
         break;
       case NONE:
       default:

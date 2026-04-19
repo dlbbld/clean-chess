@@ -5,23 +5,23 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableList;
 
 public enum Piece {
+  WHITE_PAWN('P', PieceType.PAWN, Side.WHITE),
   WHITE_ROOK('R', PieceType.ROOK, Side.WHITE),
   WHITE_KNIGHT('N', PieceType.KNIGHT, Side.WHITE),
   WHITE_BISHOP('B', PieceType.BISHOP, Side.WHITE),
   WHITE_QUEEN('Q', PieceType.QUEEN, Side.WHITE),
   WHITE_KING('K', PieceType.KING, Side.WHITE),
-  WHITE_PAWN('P', PieceType.PAWN, Side.WHITE),
+  BLACK_PAWN('p', PieceType.PAWN, Side.BLACK),
   BLACK_ROOK('r', PieceType.ROOK, Side.BLACK),
   BLACK_KNIGHT('n', PieceType.KNIGHT, Side.BLACK),
   BLACK_BISHOP('b', PieceType.BISHOP, Side.BLACK),
   BLACK_QUEEN('q', PieceType.QUEEN, Side.BLACK),
   BLACK_KING('k', PieceType.KING, Side.BLACK),
-  BLACK_PAWN('p', PieceType.PAWN, Side.BLACK),
   NONE('\0', PieceType.NONE, Side.NONE);
 
   @SuppressWarnings("null")
-  public static final ImmutableList<Piece> REAL = ImmutableList.of(WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN,
-      WHITE_KING, WHITE_PAWN, BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING, BLACK_PAWN);
+  public static final ImmutableList<Piece> REAL = ImmutableList.of(WHITE_PAWN, WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP,
+      WHITE_QUEEN, WHITE_KING, BLACK_PAWN, BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING);
 
   private final char letter;
   private final PieceType pieceType;
@@ -126,12 +126,12 @@ public enum Piece {
 
   public static Piece calculate(Side side, PieceType pieceType) {
     return switch (pieceType) {
+      case PAWN -> calculatePawnPiece(side);
       case ROOK -> calculateRookPiece(side);
       case KNIGHT -> calculateKnightPiece(side);
       case BISHOP -> calculateBishopPiece(side);
       case QUEEN -> calculateQueenPiece(side);
       case KING -> calculateKingPiece(side);
-      case PAWN -> calculatePawnPiece(side);
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

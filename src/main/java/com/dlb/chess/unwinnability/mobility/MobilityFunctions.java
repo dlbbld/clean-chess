@@ -17,12 +17,6 @@ public class MobilityFunctions implements EnumConstants {
 
   public static Set<Square> predecessorsCapture(PiecePlacement piecePlacement, Square square) {
     switch (piecePlacement.pieceType()) {
-      case ROOK:
-      case KNIGHT:
-      case BISHOP:
-      case QUEEN:
-      case KING:
-        return MobilityFunctions.predecessors(piecePlacement, square);
       case PAWN:
         final Set<Square> result = new TreeSet<>();
         if (Square.calculateHasBehindLeftDiagonalSquare(piecePlacement.side(), square)) {
@@ -32,6 +26,12 @@ public class MobilityFunctions implements EnumConstants {
           result.add(Square.calculateBehindRightDiagonalSquare(piecePlacement.side(), square));
         }
         return result;
+      case ROOK:
+      case KNIGHT:
+      case BISHOP:
+      case QUEEN:
+      case KING:
+        return MobilityFunctions.predecessors(piecePlacement, square);
       case NONE:
       default:
         throw new IllegalArgumentException();
@@ -40,13 +40,13 @@ public class MobilityFunctions implements EnumConstants {
 
   static Set<Square> promotion(PiecePlacement piecePlacement) {
     return switch (piecePlacement.pieceType()) {
-      case ROOK, KNIGHT, BISHOP, QUEEN, KING -> new TreeSet<>();
       case PAWN -> switch (piecePlacement.side()) {
         case WHITE -> new TreeSet<>(Arrays.asList(A8, B8, C8, D8, E8, F8, G8, H8));
         case BLACK -> new TreeSet<>(Arrays.asList(A1, B1, C1, D1, E1, F1, G1, H1));
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
+      case ROOK, KNIGHT, BISHOP, QUEEN, KING -> new TreeSet<>();
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
@@ -54,11 +54,11 @@ public class MobilityFunctions implements EnumConstants {
 
   static Set<Square> predecessors(PiecePlacement piecePlacement, Square square) {
     return switch (piecePlacement.pieceType()) {
+      case PAWN -> calculateBehindSquare(piecePlacement.side(), square);
       case ROOK -> KingDistanceOneFunctions.calculateOrthogonalSquares(square);
       case KNIGHT -> KnightEmptyBoardSquares.getKnightSquares(square);
       case BISHOP -> KingDistanceOneFunctions.calculateDiagonalSquares(square);
       case QUEEN, KING -> KingNonCastlingEmptyBoardSquares.getKingSquares(square);
-      case PAWN -> calculateBehindSquare(piecePlacement.side(), square);
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
