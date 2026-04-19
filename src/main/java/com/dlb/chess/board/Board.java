@@ -346,7 +346,7 @@ public class Board extends AbstractBoard {
         .get(dynamicPositionList, dynamicPositionList.size() - 2).staticPosition();
 
     List<UpdateSquare> updateSquareList;
-    if (EnPassantCaptureUtility.calculateIsEnPassantCapture(staticPositionBeforeLastMove,
+    if (EnPassantCaptureUtility.calculateIsPotentialEnPassantCapture(staticPositionBeforeLastMove,
         moveToUndo.moveSpecification())) {
       updateSquareList = EnPassantCaptureUtility.performEnPassantCaptureUndoMovements(moveToUndo);
     } else if (CastlingUtility.calculateIsCastlingMove(moveToUndo.moveSpecification())) {

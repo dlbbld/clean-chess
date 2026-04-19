@@ -630,7 +630,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
   }
 
   private static boolean calculateIsEnPassantCaptureLastMove(ApiBoard board) {
-    return EnPassantCaptureUtility.calculateIsEnPassantCapture(board.getStaticPositionBeforeLastMove(),
+    return EnPassantCaptureUtility.calculateIsPotentialEnPassantCapture(board.getStaticPositionBeforeLastMove(),
         board.getLastMove().moveSpecification());
   }
 }

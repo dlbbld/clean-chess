@@ -252,7 +252,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     }
   }
 
-  public static boolean calculateIsEnPassantCapture(StaticPosition staticPositionBeforeMove, MoveSpecification move) {
+  public static boolean calculateIsPotentialEnPassantCapture(StaticPosition staticPositionBeforeMove, MoveSpecification move) {
     if (CastlingUtility.calculateIsCastlingMove(move)) {
       return false;
     }
