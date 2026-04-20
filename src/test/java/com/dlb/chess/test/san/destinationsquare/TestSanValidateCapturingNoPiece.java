@@ -85,8 +85,7 @@ class TestSanValidateCapturingNoPiece {
   }
 
   private static void checkExceptionRnbqk(String san, ApiBoard board) {
-    checkException(san, board,
-        SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_EMPTY_BUT_CAPTURE_SYMBOL_PROVIDED);
+    checkException(san, board, SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem expected) {

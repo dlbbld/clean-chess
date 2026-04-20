@@ -54,7 +54,7 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingOneSquareWhiteNoPawnOnFromSquare() {
     // d6 with white pawn on d4 — no pawn on d5
     final ApiBoard board = new Board(FEN_ADVANCED);
-    checkException("d6", board, SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING);
+    checkException("d6", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
   }
 
   @SuppressWarnings("static-method")
@@ -70,7 +70,7 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingOneSquareBlackNoPawnOnFromSquare() {
     // f3 with black pawn on f5 — no pawn on f4
     final ApiBoard board = new Board("4k3/8/8/5p2/3P4/8/8/4K3 b - - 0 100");
-    checkException("f3", board, SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING);
+    checkException("f3", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
   }
 
   // --- Non-capturing: two-square advance ---
@@ -88,7 +88,7 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingTwoSquareWhiteBlocked() {
     // d4 with white pawn on d2 but d3 blocked by black pawn — no valid from-square
     final ApiBoard board = new Board(FEN_BLOCKED);
-    checkException("d4", board, SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING);
+    checkException("d4", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
   }
 
   @SuppressWarnings("static-method")
@@ -106,7 +106,7 @@ class TestSanValidatePawnFromSquare {
       board.performMove("f5");
       board.performMove("d5");
       board.performMove("f4");
-      checkException("d4", board, SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING);
+      checkException("d4", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
     }
   }
 
@@ -123,7 +123,7 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingTwoSquareBlackBlocked() {
     // f5 with black pawn on f7 but f6 blocked
     final ApiBoard board = new Board("4k3/5p2/5P2/8/8/8/8/4K3 b - - 0 100");
-    checkException("f5", board, SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING);
+    checkException("f5", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
   }
 
   @SuppressWarnings("static-method")
@@ -144,7 +144,7 @@ class TestSanValidatePawnFromSquare {
       board.performMove("d5");
       board.performMove("f4");
       board.performMove("d6");
-      checkException("f5", board, SanValidationProblem.PAWN_NOT_REACHABLE_NON_CAPTURING);
+      checkException("f5", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
     }
 
   }
@@ -172,7 +172,7 @@ class TestSanValidatePawnFromSquare {
   void testCapturingWhiteNoPawnOnFromSquare() {
     // dxe6 with white pawn on d4 — needs pawn on d5, but d5 is empty
     final ApiBoard board = new Board("4k3/8/4p3/8/3P4/8/8/4K3 w - - 0 100");
-    checkException("dxe6", board, SanValidationProblem.PAWN_NOT_REACHABLE_CAPTURING);
+    checkException("dxe6", board, SanValidationProblem.NOT_REACHABLE_PAWN_CAPTURING);
   }
 
   @SuppressWarnings("static-method")
@@ -188,7 +188,7 @@ class TestSanValidatePawnFromSquare {
   void testCapturingBlackNoPawnOnFromSquare() {
     // fxe3 with black pawn on f5 — needs pawn on f4, but f4 is empty
     final ApiBoard board = new Board("4k3/8/8/5p2/8/4P3/8/4K3 b - - 0 100");
-    checkException("fxe3", board, SanValidationProblem.PAWN_NOT_REACHABLE_CAPTURING);
+    checkException("fxe3", board, SanValidationProblem.NOT_REACHABLE_PAWN_CAPTURING);
   }
 
   private static void checkValid(String san, ApiBoard board) {

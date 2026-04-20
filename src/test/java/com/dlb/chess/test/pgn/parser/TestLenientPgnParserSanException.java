@@ -18,10 +18,10 @@ class TestLenientPgnParserSanException extends AbstractTestLenientPgnParserExcep
   @Test
   void testException() {
     checkException("01_initial_position.pgn", SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_NON_CAPTURING);
-    checkException("02_initial_position.pgn", SanValidationProblem.RNBQ_NEITHER_NOT_REACHABLE_MULTIPLE);
+    checkException("02_initial_position.pgn", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE);
 
-    checkException("03_custom_position_white_start.pgn", SanValidationProblem.RNBQ_NEITHER_NOT_REACHABLE_MULTIPLE);
-    checkException("04_custom_position_black_start.pgn", SanValidationProblem.RNBQ_NEITHER_NOT_REACHABLE_SINGLE);
+    checkException("03_custom_position_white_start.pgn", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE);
+    checkException("04_custom_position_black_start.pgn", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_SINGLE);
 
   }
 

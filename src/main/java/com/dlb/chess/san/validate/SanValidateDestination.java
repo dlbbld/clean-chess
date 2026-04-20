@@ -109,11 +109,8 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
 
       // opponent non-king on destination
       if (!isCapture) {
-        throw new SanValidationException(
-            SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_NOT_EMPTY_CAPTURES_PRNBQ_BUT_NOT_CAPTURE_SYMBOL_PROVIDED,
-            Message.getString(
-                "validation.san.destination.rnbqk.captureSymbol.squareNotEmptyCapturesPrnbqButNotCaptureSymbolProvided",
-                toSquare.getName()));
+        throw new SanValidationException(SanValidationProblem.DESTINATION_RNBQK_OPPONENT_NON_KING_NO_CAPTURE_SYMBOL,
+            Message.getString("validation.san.destination.rnbqk.opponentNonKingNoCaptureSymbol", toSquare.getName()));
       }
       // capturing onto opponent non-king: valid, fall through
       return;
@@ -121,10 +118,8 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
 
     // empty destination
     if (isCapture) {
-      throw new SanValidationException(
-          SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_EMPTY_BUT_CAPTURE_SYMBOL_PROVIDED,
-          Message.getString("validation.san.destination.rnbqk.captureSymbol.squareEmptyButCaptureSymbolProvided",
-              toSquare.getName()));
+      throw new SanValidationException(SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL,
+          Message.getString("validation.san.destination.rnbqk.emptyCaptureSymbol", toSquare.getName()));
     }
     // non-capturing move to empty destination: valid, fall through
   }

@@ -20,7 +20,7 @@ class TestSanValidateKingLegal {
   void testWhiteNotReachable() {
     // White king e1 trying to move three squares away to e4.
     final ApiBoard board = new Board("7k/8/8/8/8/8/8/4K3 w - - 0 1");
-    checkException("Ke4", board, SanValidationProblem.KING_NON_CASTLING_NOT_REACHABLE);
+    checkException("Ke4", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
   @SuppressWarnings("static-method")
@@ -28,7 +28,7 @@ class TestSanValidateKingLegal {
   void testBlackNotReachable() {
     // Black king e8 trying to move three squares away to e5.
     final ApiBoard board = new Board("4k3/8/8/8/8/8/8/7K b - - 0 1");
-    checkException("Ke5", board, SanValidationProblem.KING_NON_CASTLING_NOT_REACHABLE);
+    checkException("Ke5", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
   // --- Not reachable, capturing ---
@@ -38,7 +38,7 @@ class TestSanValidateKingLegal {
   void testWhiteCaptureNotReachable() {
     // White king e1 trying to capture a black knight three squares away on e4.
     final ApiBoard board = new Board("7k/8/8/8/4n3/8/8/4K3 w - - 0 1");
-    checkException("Kxe4", board, SanValidationProblem.KING_NON_CASTLING_NOT_REACHABLE);
+    checkException("Kxe4", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
   @SuppressWarnings("static-method")
@@ -46,7 +46,7 @@ class TestSanValidateKingLegal {
   void testBlackCaptureNotReachable() {
     // Black king e8 trying to capture a white knight three squares away on e5.
     final ApiBoard board = new Board("4k3/8/8/4N3/8/8/8/7K b - - 0 1");
-    checkException("Kxe5", board, SanValidationProblem.KING_NON_CASTLING_NOT_REACHABLE);
+    checkException("Kxe5", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem expectedProblem) {

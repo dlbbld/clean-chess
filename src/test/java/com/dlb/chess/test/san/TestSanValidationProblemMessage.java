@@ -470,11 +470,11 @@ class TestSanValidationProblemMessage {
       board.performMoves("Nc3", "e6", "Nb5", "e5");
 
       checkException("Na7", board,
-          SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_NOT_EMPTY_CAPTURES_PRNBQ_BUT_NOT_CAPTURE_SYMBOL_PROVIDED,
+          SanValidationProblem.DESTINATION_RNBQK_OPPONENT_NON_KING_NO_CAPTURE_SYMBOL,
           "The move captures an opponent piece on square a7 but has not capture symbol.");
     }
 
-    checkException("Nxc3", SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_EMPTY_BUT_CAPTURE_SYMBOL_PROVIDED,
+    checkException("Nxc3", SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL,
         "The move is designated as a capture by the capture symbol, but the destination square c3 is empty.");
   }
 
