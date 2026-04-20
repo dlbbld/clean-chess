@@ -350,10 +350,10 @@ class TestSanValidationProblemMessage {
   @SuppressWarnings("static-method")
   @Test
   void testMovementPawn() {
-    checkException("d2", new Board(), SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK,
+    checkException("d2", new Board(), SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS,
         "A white pawn can never move to rank 2 or 1 as pawns cannot move backwards.");
 
-    checkException("fxh4", new Board(), SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_FILE,
+    checkException("fxh4", new Board(), SanValidationProblem.MOVEMENT_PAWN_CAPTURE_NON_ADJACENT_FILE,
         "A pawn can never capture on a non-adjacent file, only on adjacent files.");
 
   }
@@ -417,18 +417,28 @@ class TestSanValidationProblemMessage {
   @Test
   void testCaptureSymbol() {
 
-    final Board board = new Board();
-    board.performMoves("Nc3", "e6", "Nb5", "e5");
+    {
+      final Board board = new Board();
+      board.performMoves("Nc3", "e6", "Nb5", "e5");
 
-    checkException("Na7", board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
-        "The move captures an opponent piece on square a7 but has not capture symbol.");
+      checkException("Na7", board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
+          "The move captures an opponent piece on square a7 but has not capture symbol.");
+    }
 
     checkException("Nxc3", SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK,
         "The move is designated as a capture by the capture symbol, but the destination square c3 is empty.");
 
-    checkException("dxe3", SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_PAWN,
-        "The pawn diagonal capture is only possible if there is an opponent piece on the destination square, but the destination square e3 is empty.");
+    checkException("dxe3", SanValidationProblem.MOVEMENT_PAWN_DIAGONAL_REQUIRES_OPPONENT_PIECE,
+        "A pawn diagonal capture requires an opponent piece on the destination square (or a valid en passant capture target); the destination square e3 is empty and no en passant capture applies.");
 
+    {
+      final Board board = new Board();
+      board.performMoves("d4", "d5");
+
+      checkException("d5", board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
+          "The move captures an opponent piece on square d5 but has not capture symbol.");
+
+    }
   }
 
   /** Checks a SAN against the initial position. */

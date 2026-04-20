@@ -21,7 +21,7 @@ class TestSanValidatePawnExists {
       final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
 
       checkException("c1", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
-      checkException("c2", board, SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK);
+      checkException("c2", board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
       checkException("c3", board);
       checkException("c4", board);
       checkException("c5", board);
@@ -30,7 +30,7 @@ class TestSanValidatePawnExists {
       checkException("c8", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
 
       checkException("fxg1", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
-      checkException("fxg2", board, SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK);
+      checkException("fxg2", board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
       checkException("fxg3", board);
       checkException("fxg4", board);
       checkException("fxg5", board);
@@ -49,7 +49,7 @@ class TestSanValidatePawnExists {
       final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
 
       checkException("h8", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
-      checkException("h7", board, SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK);
+      checkException("h7", board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
       checkException("h6", board);
       checkException("h5", board);
       checkException("h4", board);
@@ -58,7 +58,7 @@ class TestSanValidatePawnExists {
       checkException("h1", board, SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_NO_PROMOTION_SYMBOL);
 
       checkException("bxa8", board, SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_NO_PROMOTION_SYMBOL);
-      checkException("bxa7", board, SanValidationProblem.MOVEMENT_PAWN_NON_REACHABLE_RANK);
+      checkException("bxa7", board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
       checkException("bxa6", board);
       checkException("bxa5", board);
       checkException("bxa4", board);

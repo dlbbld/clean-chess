@@ -63,8 +63,8 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
         return;
       }
       if (sanConversion.movingPieceType() == PAWN) {
-        throw new SanValidationException(SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_PAWN,
-            Message.getString("validation.san.destination.empty.captureSymbol.pawn", toSquare.getName()));
+        throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_DIAGONAL_REQUIRES_OPPONENT_PIECE,
+            Message.getString("validation.san.movement.pawn.diagonalRequiresOpponentPiece", toSquare.getName()));
       }
       throw new SanValidationException(SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK,
           Message.getString("validation.san.destination.empty.captureSymbol.rnbqk", toSquare.getName()));
