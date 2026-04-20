@@ -8,8 +8,6 @@ public enum SanValidationProblem {
   FORMAT_FIRST_CHARACTER,
 
   // pawn
-  // TODO it is still conceptually wrong to warn for white that d1 is missing promotion information, instead of saying
-  // invalid rank
   FORMAT_PAWN_NO_SECOND_CHARACTER,
   FORMAT_PAWN_WRONG_SECOND_CHARACTER,
 
