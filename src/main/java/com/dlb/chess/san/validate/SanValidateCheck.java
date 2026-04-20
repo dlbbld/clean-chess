@@ -2,6 +2,7 @@ package com.dlb.chess.san.validate;
 
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanValidationProblem;
@@ -19,24 +20,24 @@ public abstract class SanValidateCheck extends AbstractSan {
           case CHECKMATE:
             return;
           case CHECK:
-            throw new SanValidationException(SanValidationProblem.CHECKMATE_BUT_CHECK_ONLY,
-                "It's check only but checkmate is specified");
+            throw new SanValidationException(SanValidationProblem.CHECKMATE_SYMBOL_BUT_CHECK_ONLY,
+                Message.getString("validation.san.checkmateSymbolButCheckOnly"));
           case NONE:
-            throw new SanValidationException(SanValidationProblem.CHECKMATE_BUT_NONE,
-                "It's not checkmate but checkmate is specified");
+            throw new SanValidationException(SanValidationProblem.CHECKMATE_SYMBOL_BUT_NO_CHECK,
+                Message.getString("validation.san.checkmateSymbolButNoCheck"));
           default:
             throw new IllegalArgumentException();
         }
       case CHECK:
         switch (boardSanTerminalMarker) {
           case CHECKMATE:
-            throw new SanValidationException(SanValidationProblem.CHECK_BUT_CHECKMATE,
-                "It's checkmate but check is specified");
+            throw new SanValidationException(SanValidationProblem.CHECK_SYMBOL_BUT_CHECKMATE,
+                Message.getString("validation.san.checkSymbolButCheckmate"));
           case CHECK:
             break;
           case NONE:
-            throw new SanValidationException(SanValidationProblem.CHECK_BUT_NONE,
-                "It's not check but check is specified");
+            throw new SanValidationException(SanValidationProblem.CHECK_SYMBOL_BUT_NO_CHECK,
+                Message.getString("validation.san.checkSymbolButNoCheck"));
           default:
             throw new IllegalArgumentException();
         }
@@ -44,11 +45,11 @@ public abstract class SanValidateCheck extends AbstractSan {
       case NONE:
         switch (boardSanTerminalMarker) {
           case CHECKMATE:
-            throw new SanValidationException(SanValidationProblem.NONE_BUT_CHECKMATE,
-                "It's checkmate but that is not specified");
+            throw new SanValidationException(SanValidationProblem.NO_SYMBOL_BUT_CHECKMATE,
+                Message.getString("validation.san.noSymbolButCheckmate"));
           case CHECK:
-            throw new SanValidationException(SanValidationProblem.NONE_BUT_CHECK,
-                "It's check but that is not specified");
+            throw new SanValidationException(SanValidationProblem.NO_SYMBOL_BUT_CHECK,
+                Message.getString("validation.san.noSymbolButCheck"));
           case NONE:
             break;
           default:

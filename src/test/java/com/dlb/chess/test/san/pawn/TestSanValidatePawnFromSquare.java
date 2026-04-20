@@ -98,7 +98,7 @@ class TestSanValidatePawnFromSquare {
       final ApiBoard board = new Board(FEN_BASE);
       board.performMove("d4");
       board.performMove("f5");
-      checkException("d4", board, SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING);
+      checkException("d4", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE);
     }
     {
       final ApiBoard board = new Board(FEN_BASE);
@@ -134,7 +134,7 @@ class TestSanValidatePawnFromSquare {
       board.performMove("d4");
       board.performMove("f5");
       board.performMove("d5");
-      checkException("f5", board, SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING);
+      checkException("f5", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE);
     }
 
     {

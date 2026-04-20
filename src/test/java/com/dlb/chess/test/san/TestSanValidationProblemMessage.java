@@ -393,22 +393,70 @@ class TestSanValidationProblemMessage {
 
   @SuppressWarnings("static-method")
   @Test
-  void testDestinationOwnPiece() {
-    checkException("Na1", SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING,
+  void testDestinationPawn() {
+    // DESTINATION_PAWN_FORWARD_OWN_PIECE: after Nf3 Nf6, white's f-pawn tries to advance to f3 blocked by own knight
+    {
+      final Board board = new Board();
+      board.performMoves("Nf3", "Nf6");
+      checkException("f3", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE,
+          "The pawn cannot move forward to square f3 because it is occupied by an own piece.");
+    }
+
+    // DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_KING: white pawn e4, black king e5, white tries e5
+    {
+      final ApiBoard board = new Board("8/8/8/4k3/4P3/8/8/K7 w - - 0 1");
+      checkException("e5", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_KING,
+          "The pawn cannot move forward to square e5 because it is occupied by the opponent king (the king cannot be captured, and pawns cannot capture by moving forward).");
+    }
+
+    // DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_NOT_KING: after d4 d5, white's d-pawn tries d5 blocked by black pawn
+    {
+      final Board board = new Board();
+      board.performMoves("d4", "d5");
+      checkException("d5", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_NOT_KING,
+          "The pawn cannot move forward to square d5 because it is occupied by an opponent piece; pawns cannot capture by moving forward.");
+    }
+
+    // DESTINATION_PAWN_CAPTURE_OWN_PIECE: after Nc3 a6, white's b-pawn tries bxc3 onto own knight
+    {
+      final Board board = new Board();
+      board.performMoves("Nc3", "a6");
+      checkException("bxc3", board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_OWN_PIECE,
+          "The pawn cannot capture on square c3 because it is occupied by an own piece.");
+    }
+
+    // DESTINATION_PAWN_CAPTURE_KING: legal position — white pawn e2 doesn't threaten d5; SAN "exd5" would target
+    // d5 where the black king sits. Movement layer passes (file change adjacent, rank progression OK), exists check
+    // passes (pawn on e-file), destination check fires because d5 has opponent king.
+    {
+      final ApiBoard board = new Board("7K/8/8/3k4/8/8/4P3/8 w - - 0 1");
+      checkException("exd5", board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_KING,
+          "The pawn cannot capture the opponent king on d5; the king cannot be captured.");
+    }
+
+    // DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT: from initial position, dxe3 with e3 empty and no EP target
+    checkException("dxe3", SanValidationProblem.DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT,
+        "A pawn diagonal capture requires an opponent piece on the destination square (or a valid en passant capture target); the destination square e3 is empty and no en passant capture applies.");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testDestinationRnbqkOwnPiece() {
+    checkException("Na1", SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_NON_CAPTURING,
         "The move to square a1 is not possible because it is occupied by an own piece.");
 
-    checkException("Nxa1", SanValidationProblem.DESTINATION_OWN_PIECE_CAPTURING,
+    checkException("Nxa1", SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_CAPTURING,
         "Capturing on square a1 is not possible because it is occupied by an own piece.");
 
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void testDestinationKing() {
-    checkException("Re8", SanValidationProblem.DESTINATION_OPPONENT_KING_NON_CAPTURING,
+  void testDestinationRnbqkKing() {
+    checkException("Re8", SanValidationProblem.DESTINATION_RNBQK_OPPONENT_KING_NON_CAPTURING,
         "The move to square e8 is not possible because it is occupied by the opponent king.");
 
-    checkException("Rxe8", SanValidationProblem.DESTINATION_OPPONENT_KING_CAPTURING,
+    checkException("Rxe8", SanValidationProblem.DESTINATION_RNBQK_OPPONENT_KING_CAPTURING,
         "The opponent king can never be captured.");
 
   }
@@ -421,24 +469,13 @@ class TestSanValidationProblemMessage {
       final Board board = new Board();
       board.performMoves("Nc3", "e6", "Nb5", "e5");
 
-      checkException("Na7", board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
+      checkException("Na7", board,
+          SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_NOT_EMPTY_CAPTURES_PRNBQ_BUT_NOT_CAPTURE_SYMBOL_PROVIDED,
           "The move captures an opponent piece on square a7 but has not capture symbol.");
     }
 
-    checkException("Nxc3", SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK,
+    checkException("Nxc3", SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_EMPTY_BUT_CAPTURE_SYMBOL_PROVIDED,
         "The move is designated as a capture by the capture symbol, but the destination square c3 is empty.");
-
-    checkException("dxe3", SanValidationProblem.MOVEMENT_PAWN_DIAGONAL_REQUIRES_OPPONENT_PIECE,
-        "A pawn diagonal capture requires an opponent piece on the destination square (or a valid en passant capture target); the destination square e3 is empty and no en passant capture applies.");
-
-    {
-      final Board board = new Board();
-      board.performMoves("d4", "d5");
-
-      checkException("d5", board, SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
-          "The move captures an opponent piece on square d5 but has not capture symbol.");
-
-    }
   }
 
   /** Checks a SAN against the initial position. */

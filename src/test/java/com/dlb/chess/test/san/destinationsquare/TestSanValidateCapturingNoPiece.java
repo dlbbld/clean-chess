@@ -81,11 +81,12 @@ class TestSanValidateCapturingNoPiece {
   }
 
   private static void checkExceptionPawn(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.MOVEMENT_PAWN_DIAGONAL_REQUIRES_OPPONENT_PIECE);
+    checkException(san, board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT);
   }
 
   private static void checkExceptionRnbqk(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK);
+    checkException(san, board,
+        SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_EMPTY_BUT_CAPTURE_SYMBOL_PROVIDED);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem expected) {

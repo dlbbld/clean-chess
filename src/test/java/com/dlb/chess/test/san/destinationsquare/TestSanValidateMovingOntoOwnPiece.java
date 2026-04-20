@@ -13,10 +13,10 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
   void testUnderstanding() {
     final ApiBoard board = new Board("8/3k4/3r4/R7/4K3/8/8/R7 b - - 0 1");
 
-    checkExceptionMovingOntoOwnPiece("Rd6", board);
+    checkExceptionRnbqkMovingOntoOwnPiece("Rd6", board);
     board.performMoves("Rc6");
     // rook
-    checkExceptionMovingOntoOwnPiece("Ra1", board);
+    checkExceptionRnbqkMovingOntoOwnPiece("Ra1", board);
   }
 
   @SuppressWarnings("static-method")
@@ -26,25 +26,25 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
     final ApiBoard board = new Board();
 
     // rook
-    checkExceptionCapturingOwnPiece("Rxa2", board);
+    checkExceptionRnbqkCapturingOwnPiece("Rxa2", board);
 
     // knight
-    checkExceptionCapturingOwnPiece("Nxd2", board);
+    checkExceptionRnbqkCapturingOwnPiece("Nxd2", board);
 
     // bishop
-    checkExceptionCapturingOwnPiece("Bxa2", board);
+    checkExceptionRnbqkCapturingOwnPiece("Bxa2", board);
 
     // queen
-    checkExceptionCapturingOwnPiece("Qxd2", board);
+    checkExceptionRnbqkCapturingOwnPiece("Qxd2", board);
 
     // king
-    checkExceptionCapturingOwnPiece("Kxf1", board);
+    checkExceptionRnbqkCapturingOwnPiece("Kxf1", board);
 
     board.performMoves("Nc3");
     board.performMoves("a6");
 
     // pawn
-    checkExceptionCapturingOwnPiece("bxc3", board);
+    checkExceptionPawnCaptureOwnPiece("bxc3", board);
   }
 
   @SuppressWarnings("static-method")
@@ -55,24 +55,24 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
     board.performMoves("e4");
 
     // rook
-    checkExceptionCapturingOwnPiece("Rxa7", board);
+    checkExceptionRnbqkCapturingOwnPiece("Rxa7", board);
 
     // knight
-    checkExceptionCapturingOwnPiece("Nxd7", board);
+    checkExceptionRnbqkCapturingOwnPiece("Nxd7", board);
 
     // bishop
-    checkExceptionCapturingOwnPiece("Bxa7", board);
+    checkExceptionRnbqkCapturingOwnPiece("Bxa7", board);
 
     // queen
-    checkExceptionCapturingOwnPiece("Qxd7", board);
+    checkExceptionRnbqkCapturingOwnPiece("Qxd7", board);
 
     // king
-    checkExceptionCapturingOwnPiece("Kxf7", board);
+    checkExceptionRnbqkCapturingOwnPiece("Kxf7", board);
 
     board.performMoves("Nc6");
     board.performMoves("d4");
 
     // pawn
-    checkExceptionCapturingOwnPiece("bxc6", board);
+    checkExceptionPawnCaptureOwnPiece("bxc6", board);
   }
 }

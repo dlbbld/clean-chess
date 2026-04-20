@@ -15,12 +15,20 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
     checkException(san, board, SanValidationProblem.NON_MOVEMENT_RNBQ_SOURCE_SQUARE_EQUALS_DESTINATION_SQUARE);
   }
 
-  public static void checkExceptionMovingOntoOwnPiece(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING);
+  public static void checkExceptionRnbqkMovingOntoOwnPiece(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_NON_CAPTURING);
   }
 
-  public static void checkExceptionCapturingOwnPiece(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.DESTINATION_OWN_PIECE_CAPTURING);
+  public static void checkExceptionRnbqkCapturingOwnPiece(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_CAPTURING);
+  }
+
+  public static void checkExceptionPawnForwardOwnPiece(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE);
+  }
+
+  public static void checkExceptionPawnCaptureOwnPiece(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_OWN_PIECE);
   }
 
   public static void checkExceptionFormat(String san, SanValidationProblem problem, ApiBoard board) {

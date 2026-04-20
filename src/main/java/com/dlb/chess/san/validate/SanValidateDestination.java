@@ -2,6 +2,7 @@ package com.dlb.chess.san.validate;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -27,48 +28,105 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     final Square toSquare = sanConversion.toSquare();
     final StaticPosition staticPosition = board.getStaticPosition();
     final Piece pieceOnToSquare = staticPosition.get(toSquare);
+    final PieceType movingPieceType = sanConversion.movingPieceType();
+
+    if (movingPieceType == PAWN) {
+      validatePawnDestination(board, havingMove, sanFormat, sanConversion, toSquare, pieceOnToSquare);
+    } else {
+      validateRnbqkDestination(havingMove, sanFormat, toSquare, pieceOnToSquare);
+    }
+  }
+
+  private static void validatePawnDestination(ApiBoard board, Side havingMove, SanFormat sanFormat,
+      SanConversion sanConversion, Square toSquare, Piece pieceOnToSquare) {
+    final boolean isCapture = sanFormat.isCapture();
 
     if (pieceOnToSquare != Piece.NONE) {
       // own piece on destination
       if (pieceOnToSquare.getSide() == havingMove) {
-        if (sanFormat.isCapture()) {
-          throw new SanValidationException(SanValidationProblem.DESTINATION_OWN_PIECE_CAPTURING,
-              Message.getString("validation.san.destination.ownPiece.capturing", toSquare.getName()));
+        if (isCapture) {
+          throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_CAPTURE_OWN_PIECE,
+              Message.getString("validation.san.destination.pawn.capture.ownPiece", toSquare.getName()));
         }
-        throw new SanValidationException(SanValidationProblem.DESTINATION_OWN_PIECE_NON_CAPTURING,
-            Message.getString("validation.san.destination.ownPiece.nonCapturing", toSquare.getName()));
+        throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE,
+            Message.getString("validation.san.destination.pawn.forward.ownPiece", toSquare.getName()));
       }
 
       // opponent piece on destination
-      if (!sanFormat.isCapture() && pieceOnToSquare.getPieceType() == KING) {
-        throw new SanValidationException(SanValidationProblem.DESTINATION_OPPONENT_KING_NON_CAPTURING,
-            Message.getString("validation.san.destination.opponentKing.nonCapturing", toSquare.getName()));
-      }
-      // opponent piece on destination
-      if (sanFormat.isCapture() && pieceOnToSquare.getPieceType() == KING) {
-        throw new SanValidationException(SanValidationProblem.DESTINATION_OPPONENT_KING_CAPTURING,
-            Message.getString("validation.san.destination.opponentKing.capturing", toSquare.getName()));
+      if (pieceOnToSquare.getPieceType() == KING) {
+        if (isCapture) {
+          throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_CAPTURE_KING,
+              Message.getString("validation.san.destination.pawn.capture.king", toSquare.getName()));
+        }
+        throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_KING,
+            Message.getString("validation.san.destination.pawn.forward.opponentPiece.king", toSquare.getName()));
       }
 
-      if (!sanFormat.isCapture()) {
-        throw new SanValidationException(SanValidationProblem.DESTINATION_NOT_EMPTY_NO_CAPTURE_SYMBOL,
-            Message.getString("validation.san.destination.notEmpty.noCaptureSymbol", toSquare.getName()));
+      // opponent non-king on destination
+      if (!isCapture) {
+        throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_NOT_KING,
+            Message.getString("validation.san.destination.pawn.forward.opponentPiece.notKing", toSquare.getName()));
       }
+      // capturing onto opponent non-king: valid, fall through
       return;
     }
 
     // empty destination
-    if (sanFormat.isCapture()) {
+    if (isCapture) {
       if (calculateIsEnPassantCapture(board, havingMove, sanFormat, sanConversion, toSquare)) {
         return;
       }
-      if (sanConversion.movingPieceType() == PAWN) {
-        throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_DIAGONAL_REQUIRES_OPPONENT_PIECE,
-            Message.getString("validation.san.movement.pawn.diagonalRequiresOpponentPiece", toSquare.getName()));
-      }
-      throw new SanValidationException(SanValidationProblem.DESTINATION_EMPTY_CAPTURE_SYMBOL_RNBQK,
-          Message.getString("validation.san.destination.empty.captureSymbol.rnbqk", toSquare.getName()));
+      throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT,
+          Message.getString("validation.san.destination.pawn.capture.emptyNotEnPassant", toSquare.getName()));
     }
+    // non-capturing pawn move to empty destination: valid, fall through
+  }
+
+  private static void validateRnbqkDestination(Side havingMove, SanFormat sanFormat, Square toSquare,
+      Piece pieceOnToSquare) {
+    final boolean isCapture = sanFormat.isCapture();
+
+    if (pieceOnToSquare != Piece.NONE) {
+      // own piece on destination
+      if (pieceOnToSquare.getSide() == havingMove) {
+        if (isCapture) {
+          throw new SanValidationException(SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_CAPTURING,
+              Message.getString("validation.san.destination.rnbqk.ownPiece.capturing", toSquare.getName()));
+        }
+        throw new SanValidationException(SanValidationProblem.DESTINATION_RNBQK_OWN_PIECE_NON_CAPTURING,
+            Message.getString("validation.san.destination.rnbqk.ownPiece.nonCapturing", toSquare.getName()));
+      }
+
+      // opponent piece on destination
+      if (pieceOnToSquare.getPieceType() == KING) {
+        if (isCapture) {
+          throw new SanValidationException(SanValidationProblem.DESTINATION_RNBQK_OPPONENT_KING_CAPTURING,
+              Message.getString("validation.san.destination.rnbqk.opponentKing.capturing", toSquare.getName()));
+        }
+        throw new SanValidationException(SanValidationProblem.DESTINATION_RNBQK_OPPONENT_KING_NON_CAPTURING,
+            Message.getString("validation.san.destination.rnbqk.opponentKing.nonCapturing", toSquare.getName()));
+      }
+
+      // opponent non-king on destination
+      if (!isCapture) {
+        throw new SanValidationException(
+            SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_NOT_EMPTY_CAPTURES_PRNBQ_BUT_NOT_CAPTURE_SYMBOL_PROVIDED,
+            Message.getString(
+                "validation.san.destination.rnbqk.captureSymbol.squareNotEmptyCapturesPrnbqButNotCaptureSymbolProvided",
+                toSquare.getName()));
+      }
+      // capturing onto opponent non-king: valid, fall through
+      return;
+    }
+
+    // empty destination
+    if (isCapture) {
+      throw new SanValidationException(
+          SanValidationProblem.DESTINATION_RNBQK_CAPTURE_SYMBOL_SQUARE_EMPTY_BUT_CAPTURE_SYMBOL_PROVIDED,
+          Message.getString("validation.san.destination.rnbqk.captureSymbol.squareEmptyButCaptureSymbolProvided",
+              toSquare.getName()));
+    }
+    // non-capturing move to empty destination: valid, fall through
   }
 
   private static boolean calculateIsEnPassantCapture(ApiBoard board, Side havingMove, SanFormat sanFormat,
