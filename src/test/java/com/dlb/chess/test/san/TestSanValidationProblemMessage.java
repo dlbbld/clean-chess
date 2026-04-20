@@ -3,6 +3,10 @@ package com.dlb.chess.test.san;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.EnumSet;
+import java.util.Set;
+
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -27,6 +31,55 @@ import com.dlb.chess.san.validate.SanValidation;
  * no test case.
  */
 class TestSanValidationProblemMessage {
+
+  private static final Set<SanValidationProblem> CHECKED_PROBLEMS = EnumSet.noneOf(SanValidationProblem.class);
+  private static final Set<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = EnumSet.of(
+      SanValidationProblem.KING_CASTLING_NOT_POSSIBLE,
+      SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING,
+      SanValidationProblem.NOT_REACHABLE_PAWN_CAPTURING,
+      SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_SINGLE,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_FILE_SINGLE,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_FILE_MULTIPLE,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_RANK_SINGLE,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_RANK_MULTIPLE,
+      SanValidationProblem.NOT_REACHABLE_RNBQ_SQUARE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_PAWN,
+      SanValidationProblem.KING_LEFT_IN_CHECK_KING_NON_CASTLING,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_NEITHER_SINGLE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_NEITHER_MULTIPLE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_FILE_SINGLE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_FILE_MULTIPLE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_RANK_SINGLE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_RANK_MULTIPLE,
+      SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_SQUARE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_PAWN,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_KING_NON_CASTLING,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_NEITHER_SINGLE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_NEITHER_MULTIPLE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_FILE_SINGLE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_FILE_MULTIPLE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_RANK_SINGLE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_RANK_MULTIPLE,
+      SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_SQUARE,
+      SanValidationProblem.OVERSPECIFIED_RNBQ_FILE_ONLY_ONE_LEGAL_MOVE,
+      SanValidationProblem.OVERSPECIFIED_RNBQ_RANK_ONLY_ONE_LEGAL_MOVE,
+      SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE,
+      SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_FILE_NOT_NECESSARY,
+      SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_RANK_NOT_NECESSARY,
+      SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_MULTIPLE_LEGAL_MOVES,
+      SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK,
+      SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE,
+      SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE,
+      SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE,
+      SanValidationProblem.CHECKMATE_SYMBOL_BUT_CHECK_ONLY,
+      SanValidationProblem.CHECKMATE_SYMBOL_BUT_NO_CHECK,
+      SanValidationProblem.CHECK_SYMBOL_BUT_CHECKMATE,
+      SanValidationProblem.CHECK_SYMBOL_BUT_NO_CHECK,
+      SanValidationProblem.NO_SYMBOL_BUT_CHECKMATE,
+      SanValidationProblem.NO_SYMBOL_BUT_CHECK);
+  private static final Set<SanValidationProblem> EXPECTED_PROBLEMS = createExpectedProblems();
 
   /**
    * When {@code true}, each test asserts the exact full exception message (useful while messages.properties is being
@@ -493,11 +546,25 @@ class TestSanValidationProblemMessage {
     } catch (final SanValidationException e) {
       isException = true;
       assertEquals(expectedProblem, e.getSanValidationProblem());
+      CHECKED_PROBLEMS.add(expectedProblem);
       if (IS_CHECK_MESSAGE) {
         assertEquals(expectedMessage, e.getMessage());
       }
     }
     assertTrue(isException);
+  }
+
+  @AfterAll
+  static void testCoverage() {
+    assertEquals(EXPECTED_PROBLEMS, CHECKED_PROBLEMS);
+  }
+
+  private static Set<SanValidationProblem> createExpectedProblems() {
+    final Set<SanValidationProblem> expectedProblems = EnumSet.allOf(SanValidationProblem.class);
+    expectedProblems.remove(SanValidationProblem.UNKNOWN_ERROR);
+    expectedProblems.remove(SanValidationProblem.NONE);
+    expectedProblems.removeAll(TEMPORARILY_UNCHECKED_PROBLEMS);
+    return expectedProblems;
   }
 
 }
