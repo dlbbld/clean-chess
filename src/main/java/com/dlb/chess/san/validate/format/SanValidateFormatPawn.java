@@ -1,6 +1,7 @@
 package com.dlb.chess.san.validate.format;
 
 import com.dlb.chess.board.enums.File;
+import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
@@ -9,8 +10,8 @@ import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
+import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -56,8 +57,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
       }
 
       // valid
-      return new SanParse(SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE,
-          new SanConversion(File.NONE, Rank.NONE,
+      return new SanParse(SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION,
+          new SanConversion(PieceType.PAWN, File.NONE, Rank.NONE,
               Square.calculate(SanValidateFormat.parseFile(firstChar), SanValidateFormat.parseRank(secondChar)),
               PromotionPieceType.NONE, sanTerminalMarker));
     }
@@ -101,8 +102,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     }
 
     // valid
-    return new SanParse(SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE,
-        new SanConversion(File.NONE, Rank.NONE,
+    return new SanParse(SanFormat.PAWN_NON_CAPTURING_PROMOTION,
+        new SanConversion(PieceType.PAWN, File.NONE, Rank.NONE,
             Square.calculate(SanValidateFormat.parseFile(firstChar), SanValidateFormat.parseRank(secondChar)),
             NotationPromotionPiece.calculate(fourthChar).getPromotionPieceType(), sanTerminalMarker));
   }
@@ -149,8 +150,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
       }
 
       // valid
-      return new SanParse(SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE,
-          new SanConversion(SanValidateFormat.parseFile(firstChar), Rank.NONE,
+      return new SanParse(SanFormat.PAWN_CAPTURING_NON_PROMOTION,
+          new SanConversion(PieceType.PAWN, SanValidateFormat.parseFile(firstChar), Rank.NONE,
               Square.calculate(SanValidateFormat.parseFile(thirdChar), SanValidateFormat.parseRank(fourthChar)),
               PromotionPieceType.NONE, sanTerminalMarker));
     }
@@ -194,8 +195,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     }
 
     // valid
-    return new SanParse(SanType.PAWN_CAPTURING_PROMOTION_MOVE,
-        new SanConversion(SanValidateFormat.parseFile(firstChar), Rank.NONE,
+    return new SanParse(SanFormat.PAWN_CAPTURING_PROMOTION,
+        new SanConversion(PieceType.PAWN, SanValidateFormat.parseFile(firstChar), Rank.NONE,
             Square.calculate(SanValidateFormat.parseFile(thirdChar), SanValidateFormat.parseRank(fourthChar)),
             NotationPromotionPiece.calculate(sixthChar).getPromotionPieceType(), sanTerminalMarker));
   }

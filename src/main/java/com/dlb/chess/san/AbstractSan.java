@@ -3,7 +3,6 @@ package com.dlb.chess.san;
 import java.util.Set;
 import java.util.TreeSet;
 
-import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
@@ -11,7 +10,6 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 
 public abstract class AbstractSan {
 
@@ -20,15 +18,6 @@ public abstract class AbstractSan {
       return Square.NONE;
     }
     return Square.calculate(sanConversion.fromFile(), sanConversion.fromRank());
-  }
-
-  public static CastlingMove calculateCastlingMove(SanType sanType) {
-    return switch (sanType) {
-      case BISHOP_CAPTURING_SQUARE_MOVE, BISHOP_CAPTURING_FILE_MOVE, BISHOP_CAPTURING_NEITHER_MOVE, BISHOP_CAPTURING_RANK_MOVE, BISHOP_NON_CAPTURING_SQUARE_MOVE, BISHOP_NON_CAPTURING_FILE_MOVE, BISHOP_NON_CAPTURING_NEITHER_MOVE, BISHOP_NON_CAPTURING_RANK_MOVE, KING_NON_CASTLING_CAPTURING_MOVE, KING_NON_CASTLING_NON_CAPTURING_MOVE, KNIGHT_CAPTURING_SQUARE_MOVE, KNIGHT_CAPTURING_FILE_MOVE, KNIGHT_CAPTURING_NEITHER_MOVE, KNIGHT_CAPTURING_RANK_MOVE, KNIGHT_NON_CAPTURING_SQUARE_MOVE, KNIGHT_NON_CAPTURING_FILE_MOVE, KNIGHT_NON_CAPTURING_NEITHER_MOVE, KNIGHT_NON_CAPTURING_RANK_MOVE, PAWN_CAPTURING_NON_PROMOTION_MOVE, PAWN_CAPTURING_PROMOTION_MOVE, PAWN_NON_CAPTURING_NON_PROMOTION_MOVE, PAWN_NON_CAPTURING_PROMOTION_MOVE, QUEEN_CAPTURING_SQUARE_MOVE, QUEEN_CAPTURING_FILE_MOVE, QUEEN_CAPTURING_NEITHER_MOVE, QUEEN_CAPTURING_RANK_MOVE, QUEEN_NON_CAPTURING_SQUARE_MOVE, QUEEN_NON_CAPTURING_FILE_MOVE, QUEEN_NON_CAPTURING_NEITHER_MOVE, QUEEN_NON_CAPTURING_RANK_MOVE, ROOK_CAPTURING_FILE_MOVE, ROOK_CAPTURING_NEITHER_MOVE, ROOK_CAPTURING_RANK_MOVE, ROOK_CAPTURING_SQUARE_MOVE, ROOK_NON_CAPTURING_FILE_MOVE, ROOK_NON_CAPTURING_NEITHER_MOVE, ROOK_NON_CAPTURING_RANK_MOVE, ROOK_NON_CAPTURING_SQUARE_MOVE -> CastlingMove.NONE;
-      case KING_CASTLING_KING_SIDE_MOVE -> CastlingMove.KING_SIDE;
-      case KING_CASTLING_QUEEN_SIDE_MOVE -> CastlingMove.QUEEN_SIDE;
-      default -> throw new IllegalArgumentException();
-    };
   }
 
   public static Set<LegalMove> filterLegalMovesCandidates(Set<LegalMove> legalMoveSet, Square toSquare) {

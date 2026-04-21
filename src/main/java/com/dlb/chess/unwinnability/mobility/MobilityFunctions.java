@@ -26,11 +26,11 @@ public class MobilityFunctions implements EnumConstants {
           result.add(Square.calculateBehindRightDiagonalSquare(piecePlacement.side(), square));
         }
         return result;
+      case ROOK:
       case KNIGHT:
       case BISHOP:
-      case ROOK:
-      case KING:
       case QUEEN:
+      case KING:
         return MobilityFunctions.predecessors(piecePlacement, square);
       case NONE:
       default:
@@ -46,7 +46,7 @@ public class MobilityFunctions implements EnumConstants {
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
-      case KNIGHT, BISHOP, ROOK, KING, QUEEN -> new TreeSet<>();
+      case ROOK, KNIGHT, BISHOP, QUEEN, KING -> new TreeSet<>();
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
@@ -55,10 +55,10 @@ public class MobilityFunctions implements EnumConstants {
   static Set<Square> predecessors(PiecePlacement piecePlacement, Square square) {
     return switch (piecePlacement.pieceType()) {
       case PAWN -> calculateBehindSquare(piecePlacement.side(), square);
+      case ROOK -> KingDistanceOneFunctions.calculateOrthogonalSquares(square);
       case KNIGHT -> KnightEmptyBoardSquares.getKnightSquares(square);
       case BISHOP -> KingDistanceOneFunctions.calculateDiagonalSquares(square);
-      case ROOK -> KingDistanceOneFunctions.calculateOrthogonalSquares(square);
-      case KING, QUEEN -> KingNonCastlingEmptyBoardSquares.getKingSquares(square);
+      case QUEEN, KING -> KingNonCastlingEmptyBoardSquares.getKingSquares(square);
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

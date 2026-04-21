@@ -4,13 +4,13 @@ import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.internationalization.Message;
 
 public enum PieceType {
+  PAWN('P', 1, Message.getString("pieceType.pawn.name")),
   ROOK('R', 5, Message.getString("pieceType.rook.name")),
   KNIGHT('N', 3, Message.getString("pieceType.knight.name")),
   BISHOP('B', 3, Message.getString("pieceType.bishop.name")),
   QUEEN('Q', 9, Message.getString("pieceType.queen.name")),
   // value is only used for move ordering for unwinnability
   KING('K', 0, Message.getString("pieceType.king.name")),
-  PAWN('P', 1, Message.getString("pieceType.pawn.name")),
   NONE('\0', -1, "");
 
   private final char letter;
@@ -41,22 +41,22 @@ public enum PieceType {
   public static Piece calculate(Side havingMove, PieceType pieceType) {
     return switch (havingMove) {
       case BLACK -> switch (pieceType) {
-        case BISHOP -> Piece.BLACK_BISHOP;
-        case KING -> Piece.BLACK_KING;
-        case KNIGHT -> Piece.BLACK_KNIGHT;
-        case QUEEN -> Piece.BLACK_QUEEN;
-        case ROOK -> Piece.BLACK_ROOK;
         case PAWN -> Piece.BLACK_PAWN;
+        case ROOK -> Piece.BLACK_ROOK;
+        case KNIGHT -> Piece.BLACK_KNIGHT;
+        case BISHOP -> Piece.BLACK_BISHOP;
+        case QUEEN -> Piece.BLACK_QUEEN;
+        case KING -> Piece.BLACK_KING;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
       case WHITE -> switch (pieceType) {
-        case BISHOP -> Piece.WHITE_BISHOP;
-        case KING -> Piece.WHITE_KING;
-        case KNIGHT -> Piece.WHITE_KNIGHT;
-        case QUEEN -> Piece.WHITE_QUEEN;
-        case ROOK -> Piece.WHITE_ROOK;
         case PAWN -> Piece.WHITE_PAWN;
+        case ROOK -> Piece.WHITE_ROOK;
+        case KNIGHT -> Piece.WHITE_KNIGHT;
+        case BISHOP -> Piece.WHITE_BISHOP;
+        case QUEEN -> Piece.WHITE_QUEEN;
+        case KING -> Piece.WHITE_KING;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };

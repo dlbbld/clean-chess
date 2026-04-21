@@ -257,4 +257,9 @@ public class NonNullWrapperCommon {
     return Set.of(items);
   }
 
+  @SuppressWarnings({ "null", "unchecked" })
+  public static <E> List<E> listOf(E... items) {
+    return List.of(items);
+  }
+
 }

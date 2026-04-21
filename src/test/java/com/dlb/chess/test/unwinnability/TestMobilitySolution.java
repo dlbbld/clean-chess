@@ -357,15 +357,21 @@ class TestMobilitySolution implements EnumConstants {
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
       final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
       switch (piecePlacement.pieceType()) {
-        case PAWN:
-        case ROOK:
-        case KNIGHT:
-        case BISHOP:
-        case QUEEN:
+        case PAWN: {
           assertEquals(1, squaresWithValueOne.size());
           final Square onlyToSquare = NonNullWrapperCommon.getFirst(new ArrayList<>(squaresWithValueOne));
           assertEquals(piecePlacement.squareOriginal(), onlyToSquare);
           break;
+        }
+        case ROOK:
+        case KNIGHT:
+        case BISHOP:
+        case QUEEN: {
+          assertEquals(1, squaresWithValueOne.size());
+          final Square onlyToSquare = NonNullWrapperCommon.getFirst(new ArrayList<>(squaresWithValueOne));
+          assertEquals(piecePlacement.squareOriginal(), onlyToSquare);
+          break;
+        }
         case KING:
           switch (piecePlacement.side()) {
             case WHITE -> assertEquals(new TreeSet<>(whiteKingToSquareList), squaresWithValueOne);
@@ -425,11 +431,11 @@ class TestMobilitySolution implements EnumConstants {
       final Set<Square> squaresWithValueOne = mobilitySolution.calculateSquaresWithValueOne(piecePlacement);
 
       switch (piecePlacement.pieceType()) {
+        case PAWN:
+          assertEquals(ALL_SQUARE_SET, squaresWithValueOne);
+          break;
         case ROOK:
         case KNIGHT:
-        case QUEEN:
-        case PAWN:
-        case KING:
           assertEquals(ALL_SQUARE_SET, squaresWithValueOne);
           break;
         case BISHOP:
@@ -439,6 +445,10 @@ class TestMobilitySolution implements EnumConstants {
             case NONE -> throw new IllegalArgumentException();
             default -> throw new IllegalArgumentException();
           }
+          break;
+        case QUEEN:
+        case KING:
+          assertEquals(ALL_SQUARE_SET, squaresWithValueOne);
           break;
         case NONE:
         default:

@@ -61,7 +61,7 @@ public abstract class ApiCarlosImplementationUtility {
   private static boolean calculateIsPawn(com.github.bhlangonijr.chesslib.Piece piece) {
     return switch (piece) {
       case WHITE_PAWN, BLACK_PAWN -> true;
-      case BLACK_BISHOP, BLACK_KING, BLACK_KNIGHT, BLACK_QUEEN, BLACK_ROOK, WHITE_BISHOP, WHITE_KING, WHITE_KNIGHT, WHITE_QUEEN, WHITE_ROOK -> false;
+      case WHITE_ROOK, WHITE_KNIGHT, WHITE_BISHOP, WHITE_QUEEN, WHITE_KING, BLACK_ROOK, BLACK_KNIGHT, BLACK_BISHOP, BLACK_QUEEN, BLACK_KING -> false;
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
@@ -160,22 +160,22 @@ public abstract class ApiCarlosImplementationUtility {
       Board board) {
     return switch (side) {
       case BLACK -> switch (pieceType) {
-        case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP) != 0L;
-        case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KING) != 0L;
-        case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT) != 0L;
         case PAWN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN) != 0L;
-        case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN) != 0L;
         case ROOK -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_ROOK) != 0L;
+        case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KNIGHT) != 0L;
+        case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_BISHOP) != 0L;
+        case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_QUEEN) != 0L;
+        case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.BLACK_KING) != 0L;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
       case WHITE -> switch (pieceType) {
-        case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP) != 0L;
-        case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KING) != 0L;
-        case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT) != 0L;
         case PAWN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN) != 0L;
-        case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN) != 0L;
         case ROOK -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_ROOK) != 0L;
+        case KNIGHT -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KNIGHT) != 0L;
+        case BISHOP -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_BISHOP) != 0L;
+        case QUEEN -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_QUEEN) != 0L;
+        case KING -> board.getBitboard(com.github.bhlangonijr.chesslib.Piece.WHITE_KING) != 0L;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };

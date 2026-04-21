@@ -16,6 +16,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
+import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.fen.model.Fen;
@@ -114,13 +115,13 @@ public abstract class CastlingUtility implements EnumConstants {
         oppositeSide);
 
     if (threatenedSquares.contains(calculateKingOriginalSquare(havingMove))) {
-      return MoveCheck.CASTLING_PRIORITY_4_KING_IN_CHECK;
+      return MoveCheck.KING_CASTLING_TEMPORARY_KING_IN_CHECK;
     }
     if (threatenedSquares.contains(calculateQueenSideKingTravelOverSquare(havingMove))) {
-      return MoveCheck.CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK;
+      return MoveCheck.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK;
     }
     if (threatenedSquares.contains(calculateQueenSideKingDestinationSquare(havingMove))) {
-      return MoveCheck.CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK;
+      return MoveCheck.KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK;
     }
     return MoveCheck.SUCCESS;
   }
@@ -132,13 +133,13 @@ public abstract class CastlingUtility implements EnumConstants {
         oppositeSide);
 
     if (threatenedSquares.contains(calculateKingOriginalSquare(havingMove))) {
-      return MoveCheck.CASTLING_PRIORITY_4_KING_IN_CHECK;
+      return MoveCheck.KING_CASTLING_TEMPORARY_KING_IN_CHECK;
     }
     if (threatenedSquares.contains(calculateKingSideKingTravelOverSquare(havingMove))) {
-      return MoveCheck.CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK;
+      return MoveCheck.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK;
     }
     if (threatenedSquares.contains(calculateKingSideKingDestinationSquare(havingMove))) {
-      return MoveCheck.CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK;
+      return MoveCheck.KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK;
     }
     return MoveCheck.SUCCESS;
   }
@@ -558,21 +559,22 @@ public abstract class CastlingUtility implements EnumConstants {
   public static MoveCheck calculateQueenSideCastlingCheck(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight) {
 
-    final var isOriginalPosition = calculateQueenSideCastlingIsOriginalPosition(staticPosition, havingMove);
-    if (!isOriginalPosition) {
-      return MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE;
-    }
-
     final var hasLostCastlingRight = castlingRight != CastlingRight.KING_AND_QUEEN_SIDE
         && castlingRight != CastlingRight.QUEEN_SIDE;
     if (hasLostCastlingRight) {
-      return MoveCheck.CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE;
+      return MoveCheck.KING_CASTLING_FINAL_NO_RIGHT;
+    }
+
+    final var isOriginalPosition = calculateQueenSideCastlingIsOriginalPosition(staticPosition, havingMove);
+    if (!isOriginalPosition) {
+      throw new ProgrammingMistakeException(
+          "Castling right held but king or rook not on required square (inconsistent board state).");
     }
 
     final var isEmptySquaresBetweenRookAndKing = calculateQueenSideCastlingIsEmptySquaresBetweenRookAndKing(
         staticPosition, havingMove);
     if (!isEmptySquaresBetweenRookAndKing) {
-      return MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY;
+      return MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY;
     }
 
     return calculateQueenSideCheckCondition(staticPosition, havingMove);
@@ -581,21 +583,22 @@ public abstract class CastlingUtility implements EnumConstants {
   public static MoveCheck calculateKingSideCastlingCheck(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight) {
 
-    final var isOriginalPosition = calculateKingSideCastlingIsOriginalPosition(staticPosition, havingMove);
-    if (!isOriginalPosition) {
-      return MoveCheck.CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE;
-    }
-
     final var hasLostCastlingRight = castlingRight != CastlingRight.KING_AND_QUEEN_SIDE
         && castlingRight != CastlingRight.KING_SIDE;
     if (hasLostCastlingRight) {
-      return MoveCheck.CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE;
+      return MoveCheck.KING_CASTLING_FINAL_NO_RIGHT;
+    }
+
+    final var isOriginalPosition = calculateKingSideCastlingIsOriginalPosition(staticPosition, havingMove);
+    if (!isOriginalPosition) {
+      throw new ProgrammingMistakeException(
+          "Castling right held but king or rook not on required square (inconsistent board state).");
     }
 
     final var isEmptySquaresBetweenRookAndKing = CastlingUtility
         .calculateKingSideCastlingIsEmptySquaresBetweenRookAndKing(staticPosition, havingMove);
     if (!isEmptySquaresBetweenRookAndKing) {
-      return MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY;
+      return MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY;
     }
 
     return calculateKingSideCheckCondition(staticPosition, havingMove);

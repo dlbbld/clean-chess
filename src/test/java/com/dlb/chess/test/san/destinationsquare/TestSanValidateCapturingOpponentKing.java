@@ -66,7 +66,7 @@ class TestSanValidateCapturingOpponentKing {
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      assertEquals(SanValidationProblem.CAPTURING_OPPONENT_KING, e.getSanValidationProblem());
+      assertEquals(SanValidationProblem.DESTINATION_RNBQK_OPPONENT_KING_CAPTURING, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

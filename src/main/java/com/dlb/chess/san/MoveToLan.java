@@ -45,11 +45,11 @@ public class MoveToLan extends AbstractSan {
           buildSan.append(promotionPieceLetter);
         }
         break;
-      case KING:
       case ROOK:
       case KNIGHT:
       case BISHOP:
       case QUEEN:
+      case KING:
         final var pieceLetter = String.valueOf(movingPiece.getPieceType().getLetter());
         buildSan.append(pieceLetter);
         buildSan.append(fromSquareName);

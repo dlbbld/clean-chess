@@ -201,7 +201,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
   }
 
   public static Square calculateEnPassantCaptureTargetSquare(LegalMove legalMove) {
-    if (calculateIsPawnTwoSquareAdvanceMove(legalMove.movingPiece(), legalMove.moveSpecification())) {
+    if (legalMove.enPassantRole().createsEnPassantTarget()) {
       return calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(legalMove.moveSpecification());
     }
     return Square.NONE;
@@ -252,7 +252,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     }
   }
 
-  public static boolean calculateIsEnPassantCapture(StaticPosition staticPositionBeforeMove, MoveSpecification move) {
+  public static boolean calculateIsPotentialEnPassantCapture(StaticPosition staticPositionBeforeMove, MoveSpecification move) {
     if (CastlingUtility.calculateIsCastlingMove(move)) {
       return false;
     }

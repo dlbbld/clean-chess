@@ -4,7 +4,10 @@ clean-chess
 clean-chess is a java chess library with the main feature of implementing the 
 [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess).
 
-clean-chess is not a chess engine, it does not calculate moves for a given position.
+It's not a chess engine - it does not calculate best moves for a given position.
+
+It's also not built for performance, if you need fast move generation, use for example Stockfish. 
+It is built for correctness and comprehension, for example it will produce meaningfull messages for SAN or PGN validation.
 
 # Building/Installing
 ## From source

@@ -7,9 +7,9 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
+import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 
 public class SanCalculate implements EnumConstants {
 
@@ -43,126 +43,31 @@ public class SanCalculate implements EnumConstants {
     return NonNullWrapperCommon.toString(san);
   }
 
-  public static SanType calculateSanType(boolean isCapture, File fromFile, Rank fromRank, PieceType movingPieceType,
+  public static SanFormat calculateSanFormat(boolean isCapture, File fromFile, Rank fromRank, PieceType movingPieceType,
       PromotionPieceType promotionPieceType) {
 
-    if (!isCapture) {
-      switch (movingPieceType) {
-        case BISHOP:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.BISHOP_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.BISHOP_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.BISHOP_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.BISHOP_NON_CAPTURING_SQUARE_MOVE;
-        case KING:
-          return SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE;
-        case KNIGHT:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.KNIGHT_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.KNIGHT_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.KNIGHT_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.KNIGHT_NON_CAPTURING_SQUARE_MOVE;
-        case PAWN:
-          if (promotionPieceType == PromotionPieceType.NONE) {
-            return SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE;
-          }
-          return SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE;
-        case QUEEN:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.QUEEN_NON_CAPTURING_NEITHER_MOVE;
-            }
-
-            return SanType.QUEEN_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.QUEEN_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.QUEEN_NON_CAPTURING_SQUARE_MOVE;
-        case ROOK:
-          if (fromRank == Rank.NONE) {
-            if (fromFile == File.NONE) {
-              return SanType.ROOK_NON_CAPTURING_NEITHER_MOVE;
-            }
-            return SanType.ROOK_NON_CAPTURING_FILE_MOVE;
-          }
-          if (fromFile == File.NONE) {
-            return SanType.ROOK_NON_CAPTURING_RANK_MOVE;
-          }
-          return SanType.ROOK_NON_CAPTURING_SQUARE_MOVE;
-        default:
-        case NONE:
-          throw new IllegalArgumentException();
+    if (movingPieceType == PAWN) {
+      if (promotionPieceType == PromotionPieceType.NONE) {
+        return isCapture ? SanFormat.PAWN_CAPTURING_NON_PROMOTION : SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION;
       }
+      return isCapture ? SanFormat.PAWN_CAPTURING_PROMOTION : SanFormat.PAWN_NON_CAPTURING_PROMOTION;
     }
 
-    // now capture
-    switch (movingPieceType) {
-      case BISHOP:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.BISHOP_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.BISHOP_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.BISHOP_CAPTURING_RANK_MOVE;
-        }
-        return SanType.BISHOP_CAPTURING_SQUARE_MOVE;
-      case KING:
-        return SanType.KING_NON_CASTLING_CAPTURING_MOVE;
-      case KNIGHT:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.KNIGHT_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.KNIGHT_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.KNIGHT_CAPTURING_RANK_MOVE;
-        }
-        return SanType.KNIGHT_CAPTURING_SQUARE_MOVE;
-      case PAWN:
-        if (promotionPieceType == PromotionPieceType.NONE) {
-          return SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE;
-        }
-        return SanType.PAWN_CAPTURING_PROMOTION_MOVE;
-      case QUEEN:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.QUEEN_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.QUEEN_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.QUEEN_CAPTURING_RANK_MOVE;
-        }
-        return SanType.QUEEN_CAPTURING_SQUARE_MOVE;
-      case ROOK:
-        if (fromRank == Rank.NONE) {
-          if (fromFile == File.NONE) {
-            return SanType.ROOK_CAPTURING_NEITHER_MOVE;
-          }
-          return SanType.ROOK_CAPTURING_FILE_MOVE;
-        }
-        if (fromFile == File.NONE) {
-          return SanType.ROOK_CAPTURING_RANK_MOVE;
-        }
-        return SanType.ROOK_CAPTURING_SQUARE_MOVE;
-      default:
-      case NONE:
-        throw new IllegalArgumentException();
+    if (movingPieceType == KING) {
+      return isCapture ? SanFormat.KING_NON_CASTLING_CAPTURING : SanFormat.KING_NON_CASTLING_NON_CAPTURING;
     }
+
+    // RNBQ
+    if (fromRank == Rank.NONE) {
+      if (fromFile == File.NONE) {
+        return isCapture ? SanFormat.RNBQ_CAPTURING_NEITHER : SanFormat.RNBQ_NON_CAPTURING_NEITHER;
+      }
+      return isCapture ? SanFormat.RNBQ_CAPTURING_FILE : SanFormat.RNBQ_NON_CAPTURING_FILE;
+    }
+    if (fromFile == File.NONE) {
+      return isCapture ? SanFormat.RNBQ_CAPTURING_RANK : SanFormat.RNBQ_NON_CAPTURING_RANK;
+    }
+    return isCapture ? SanFormat.RNBQ_CAPTURING_SQUARE : SanFormat.RNBQ_NON_CAPTURING_SQUARE;
   }
 
 }

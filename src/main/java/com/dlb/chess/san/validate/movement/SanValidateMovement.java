@@ -10,19 +10,20 @@ import com.dlb.chess.san.model.SanParse;
 public abstract class SanValidateMovement extends AbstractSan implements EnumConstants {
 
   public static void validateMovement(SanParse sanParse, Side havingMove) {
-    final var sanType = sanParse.sanType();
     final var sanConversion = sanParse.sanConversion();
-    final SanFormat sanFormat = sanType.getSanFormat();
+    final SanFormat sanFormat = sanParse.sanFormat();
 
-    if (sanType.getMovingPieceType() == PieceType.PAWN) {
+    if (sanConversion.movingPieceType() == PieceType.PAWN) {
       SanValidateMovementPawn.validatePawnMovement(havingMove, sanFormat, sanConversion);
       return;
     }
 
-    if (sanType.getMovingPieceType() != PieceType.KING) {
-      SanValidateMovementRnbq.validateRnbqMovement(sanParse);
+    if (sanConversion.movingPieceType() == PieceType.KING) {
+      SanValidateMovementKing.validateKingMovement(sanParse);
+      return;
     }
 
+    SanValidateMovementRnbq.validateRnbqMovement(sanParse);
   }
 
 }

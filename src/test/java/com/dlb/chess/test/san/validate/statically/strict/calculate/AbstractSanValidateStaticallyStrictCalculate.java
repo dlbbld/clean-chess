@@ -95,10 +95,10 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
 
     final String san = SanCalculate.calculateSan(fromFile, fromRank, toSquare, promotionPieceType, isCapture,
         sanTerminalMarker, movingPieceType);
-    final var sanType = SanCalculate.calculateSanType(isCapture, fromFile, fromRank, movingPieceType,
+    final var sanFormat = SanCalculate.calculateSanFormat(isCapture, fromFile, fromRank, movingPieceType,
         promotionPieceType);
-    final SanParse sanParse = new SanParse(sanType,
-        new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker));
+    final SanParse sanParse = new SanParse(sanFormat,
+        new SanConversion(movingPieceType, fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker));
     sanValidateMap.put(san, sanParse);
   }
 

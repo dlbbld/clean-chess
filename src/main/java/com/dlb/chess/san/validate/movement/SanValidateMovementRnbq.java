@@ -12,7 +12,6 @@ import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -21,13 +20,12 @@ import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 public abstract class SanValidateMovementRnbq extends AbstractSan implements EnumConstants {
 
   public static void validateRnbqMovement(SanParse sanParse) {
-    final SanType sanType = sanParse.sanType();
     final SanConversion sanConversion = sanParse.sanConversion();
 
-    final PieceType pieceType = sanType.getMovingPieceType();
+    final PieceType pieceType = sanConversion.movingPieceType();
     final Square toSquare = sanConversion.toSquare();
 
-    switch (sanType.getSanFormat()) {
+    switch (sanParse.sanFormat()) {
       case KING_NON_CASTLING_CAPTURING:
       case KING_NON_CASTLING_NON_CAPTURING:
       case KING_CASTLING_QUEEN_SIDE:
@@ -38,20 +36,20 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       case PAWN_NON_CAPTURING_NON_PROMOTION:
       case PAWN_NON_CAPTURING_PROMOTION:
         return;
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_NEITHER:
+      case RNBQ_NON_CAPTURING_NEITHER:
+      case RNBQ_CAPTURING_NEITHER:
         // with source file and rank not restricted, all pieces can move to any square
         return;
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_CAPTURING_FILE:
+      case RNBQ_NON_CAPTURING_FILE:
+      case RNBQ_CAPTURING_FILE:
         validateRnbqMovement(pieceType, sanConversion.fromFile(), toSquare);
         break;
-      case PIECE_NON_CAPTURING_RANK:
-      case PIECE_CAPTURING_RANK:
+      case RNBQ_NON_CAPTURING_RANK:
+      case RNBQ_CAPTURING_RANK:
         validateRnbqMovement(pieceType, sanConversion.fromRank(), toSquare);
         break;
-      case PIECE_NON_CAPTURING_SQUARE:
-      case PIECE_CAPTURING_SQUARE: {
+      case RNBQ_NON_CAPTURING_SQUARE:
+      case RNBQ_CAPTURING_SQUARE: {
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
         validateRnbqMovement(pieceType, fromSquare, toSquare);
       }
@@ -77,16 +75,17 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       }
     }
 
-    final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.file.knight";
-      case BISHOP -> "validation.san.movement.file.bishop";
-      case ROOK -> "validation.san.movement.file.rook";
-      case QUEEN -> "validation.san.movement.file.queen";
+    switch (movingPieceType) {
+      case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
+          Message.getString("validation.san.movement.rnbq.from.file.rook", fromFile.getLetterString(), toSquare.getName()));
+      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
+          Message.getString("validation.san.movement.rnbq.from.file.knight", fromFile.getLetterString(), toSquare.getName()));
+      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
+          Message.getString("validation.san.movement.rnbq.from.file.bishop", fromFile.getLetterString(), toSquare.getName()));
+      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
+          Message.getString("validation.san.movement.rnbq.from.file.queen", fromFile.getLetterString(), toSquare.getName()));
       default -> throw new IllegalArgumentException();
-    };
-
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_FILE,
-        Message.getString(messageKey, fromFile.getLetterString(), toSquare.getName()));
+    }
   }
 
   private static void validateRnbqMovement(PieceType movingPieceType, Rank fromRank, Square toSquare) {
@@ -104,17 +103,18 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       }
     }
 
-    final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.rank.knight";
-      case BISHOP -> "validation.san.movement.rank.bishop";
-      case ROOK -> "validation.san.movement.rank.rook";
-      case QUEEN -> "validation.san.movement.rank.queen";
+    final var rankText = NonNullWrapperCommon.valueOf(fromRank.getNumber());
+    switch (movingPieceType) {
+      case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
+          Message.getString("validation.san.movement.rnbq.from.rank.rook", rankText, toSquare.getName()));
+      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
+          Message.getString("validation.san.movement.rnbq.from.rank.knight", rankText, toSquare.getName()));
+      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
+          Message.getString("validation.san.movement.rnbq.from.rank.bishop", rankText, toSquare.getName()));
+      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
+          Message.getString("validation.san.movement.rnbq.from.rank.queen", rankText, toSquare.getName()));
       default -> throw new IllegalArgumentException();
-    };
-
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_RANK,
-        Message.getString(messageKey, NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
-
+    }
   }
 
   private static void validateRnbqMovement(PieceType movingPieceType, Square fromSquare, Square toSquare) {
@@ -131,21 +131,17 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
       }
     }
 
-    if (fromSquare == toSquare) {
-      throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_ONTO_ITSELF, Message
-          .getString("validation.san.movement.square.ontoItself.general", fromSquare.getName(), toSquare.getName()));
-    }
-
-    final var messageKey = switch (movingPieceType) {
-      case KNIGHT -> "validation.san.movement.square.notOntoItself.knight";
-      case BISHOP -> "validation.san.movement.square.notOntoItself.bishop";
-      case ROOK -> "validation.san.movement.square.notOntoItself.rook";
-      case QUEEN -> "validation.san.movement.square.notOntoItself.queen";
+    switch (movingPieceType) {
+      case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
+          Message.getString("validation.san.movement.rnbq.from.square.rook", fromSquare.getName(), toSquare.getName()));
+      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
+          Message.getString("validation.san.movement.rnbq.from.square.knight", fromSquare.getName(), toSquare.getName()));
+      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
+          Message.getString("validation.san.movement.rnbq.from.square.bishop", fromSquare.getName(), toSquare.getName()));
+      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
+          Message.getString("validation.san.movement.rnbq.from.square.queen", fromSquare.getName(), toSquare.getName()));
       default -> throw new IllegalArgumentException();
-    };
-    throw new SanValidationException(SanValidationProblem.INVALID_MOVEMENT_NON_PAWN_FROM_SQUARE_NOT_ONTO_ITSELF,
-        Message.getString(messageKey, fromSquare.getName(), toSquare.getName()));
-
+    }
   }
 
 }

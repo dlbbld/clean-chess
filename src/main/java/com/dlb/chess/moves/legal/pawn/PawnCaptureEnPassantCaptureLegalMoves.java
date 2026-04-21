@@ -10,6 +10,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
@@ -43,7 +44,8 @@ class PawnCaptureEnPassantCaptureLegalMoves extends PawnLegalMoves {
           .calculateSquareOfCapturedPawnForEnPassantCapture(moveSpecification);
       final Piece pieceCaptured = staticPosition.get(squareOfCapturedPawnForEnPassantCapture);
 
-      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured,
+          EnPassantRole.EN_PASSANT_CAPTURE);
       legalMoveSet.add(legalMove);
     }
 

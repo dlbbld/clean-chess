@@ -48,7 +48,7 @@ class TestSanValidatePawnDestinationRank {
   }
 
   private static void checkException(String san, ApiBoard board) {
-    checkException(san, board, SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_RANK);
+    checkException(san, board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
   }
 
   private static void checkException(String san, ApiBoard board, SanValidationProblem svp) {

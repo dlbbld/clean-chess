@@ -4,11 +4,15 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 
-public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured)
-    implements Comparable<LegalMove>, EnumConstants {
+public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured,
+    EnPassantRole enPassantRole) implements Comparable<LegalMove>, EnumConstants {
 
   public LegalMove(MoveSpecification moveSpecification) {
-    this(moveSpecification, Piece.NONE, Piece.NONE);
+    this(moveSpecification, Piece.NONE, Piece.NONE, EnPassantRole.NONE);
+  }
+
+  public LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured) {
+    this(moveSpecification, movingPiece, pieceCaptured, EnPassantRole.NONE);
   }
 
   @Override

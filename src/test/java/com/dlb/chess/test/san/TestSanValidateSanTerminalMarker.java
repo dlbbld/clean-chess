@@ -17,16 +17,16 @@ class TestSanValidateSanTerminalMarker {
   void testWhite() {
     final ApiBoard board = new Board();
 
-    checkException("e4#", SanValidationProblem.CHECKMATE_BUT_NONE, board);
-    checkException("e4+", SanValidationProblem.CHECK_BUT_NONE, board);
+    checkException("e4#", SanValidationProblem.CHECKMATE_SYMBOL_BUT_NO_CHECK, board);
+    checkException("e4+", SanValidationProblem.CHECK_SYMBOL_BUT_NO_CHECK, board);
 
     board.performMoves("e4", "e5", "Bc4", "Bc5");
-    checkException("Bxf7#", SanValidationProblem.CHECKMATE_BUT_CHECK_ONLY, board);
-    checkException("Bxf7", SanValidationProblem.NONE_BUT_CHECK, board);
+    checkException("Bxf7#", SanValidationProblem.CHECKMATE_SYMBOL_BUT_CHECK_ONLY, board);
+    checkException("Bxf7", SanValidationProblem.NO_SYMBOL_BUT_CHECK, board);
 
     board.performMoves("a3", "Nc6", "Qf3", "d6");
-    checkException("Qxf7+", SanValidationProblem.CHECK_BUT_CHECKMATE, board);
-    checkException("Qxf7", SanValidationProblem.NONE_BUT_CHECKMATE, board);
+    checkException("Qxf7+", SanValidationProblem.CHECK_SYMBOL_BUT_CHECKMATE, board);
+    checkException("Qxf7", SanValidationProblem.NO_SYMBOL_BUT_CHECKMATE, board);
   }
 
   @SuppressWarnings("static-method")
@@ -36,16 +36,16 @@ class TestSanValidateSanTerminalMarker {
 
     board.performMove("e4");
 
-    checkException("e5#", SanValidationProblem.CHECKMATE_BUT_NONE, board);
-    checkException("e5+", SanValidationProblem.CHECK_BUT_NONE, board);
+    checkException("e5#", SanValidationProblem.CHECKMATE_SYMBOL_BUT_NO_CHECK, board);
+    checkException("e5+", SanValidationProblem.CHECK_SYMBOL_BUT_NO_CHECK, board);
 
     board.performMoves("e5", "Bc4", "Bc5", "Nc3");
-    checkException("Bxf2#", SanValidationProblem.CHECKMATE_BUT_CHECK_ONLY, board);
-    checkException("Bxf2", SanValidationProblem.NONE_BUT_CHECK, board);
+    checkException("Bxf2#", SanValidationProblem.CHECKMATE_SYMBOL_BUT_CHECK_ONLY, board);
+    checkException("Bxf2", SanValidationProblem.NO_SYMBOL_BUT_CHECK, board);
 
     board.performMoves("Qf6", "d3");
-    checkException("Qxf2+", SanValidationProblem.CHECK_BUT_CHECKMATE, board);
-    checkException("Qxf2", SanValidationProblem.NONE_BUT_CHECKMATE, board);
+    checkException("Qxf2+", SanValidationProblem.CHECK_SYMBOL_BUT_CHECKMATE, board);
+    checkException("Qxf2", SanValidationProblem.NO_SYMBOL_BUT_CHECKMATE, board);
   }
 
   private static void checkException(String san, SanValidationProblem problem, ApiBoard board) {

@@ -32,14 +32,14 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
         validatePawnCapturingDiagonal(havingMove, sanConversion.fromFile(), sanConversion.toSquare().getFile());
         break;
       }
-      case PIECE_CAPTURING_NEITHER:
-      case PIECE_NON_CAPTURING_NEITHER:
-      case PIECE_CAPTURING_FILE:
-      case PIECE_NON_CAPTURING_FILE:
-      case PIECE_CAPTURING_RANK:
-      case PIECE_NON_CAPTURING_RANK:
-      case PIECE_CAPTURING_SQUARE:
-      case PIECE_NON_CAPTURING_SQUARE:
+      case RNBQ_CAPTURING_NEITHER:
+      case RNBQ_NON_CAPTURING_NEITHER:
+      case RNBQ_CAPTURING_FILE:
+      case RNBQ_NON_CAPTURING_FILE:
+      case RNBQ_CAPTURING_RANK:
+      case RNBQ_NON_CAPTURING_RANK:
+      case RNBQ_CAPTURING_SQUARE:
+      case RNBQ_NON_CAPTURING_SQUARE:
       default:
         throw new IllegalArgumentException();
     }
@@ -48,14 +48,16 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
   private static void validatePawnDestinationRank(Side havingMove, Rank destinationRank) {
     final var isInvalid = !Rank.calculateIsValidRank(havingMove, destinationRank);
     if (isInvalid) {
-      final var messageKey = switch (havingMove) {
-        case WHITE -> "validation.san.movement.pawn.destinationRankWhite";
-        case BLACK -> "validation.san.movement.pawn.destinationRankBlack";
+      switch (havingMove) {
+        case WHITE ->
+            throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS, Message
+                .getString("validation.san.movement.pawn.forward.backwards.white", havingMove.getName()));
+        case BLACK ->
+            throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS, Message
+                .getString("validation.san.movement.pawn.forward.backwards.black", havingMove.getName()));
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
-      };
-      throw new SanValidationException(SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_RANK,
-          Message.getString(messageKey, havingMove.getName()));
+      }
     }
   }
 
@@ -66,8 +68,8 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
         && File.calculateRightFile(havingMove, fromFile) == toFile;
 
     if (!isAdjacentLeft && !isAdjacentRight) {
-      throw new SanValidationException(SanValidationProblem.PAWN_MOVEMENT_NON_REACHABLE_FILE,
-          Message.getString("validation.san.movement.pawn.capturingFileNotAdjacent"));
+      throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_CAPTURE_NON_ADJACENT_FILE,
+          Message.getString("validation.san.movement.pawn.capture.nonAdjacentFile"));
     }
   }
 

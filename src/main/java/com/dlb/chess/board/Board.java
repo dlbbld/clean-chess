@@ -35,6 +35,7 @@ import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
+import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.legal.AbstractLegalMoves;
 import com.dlb.chess.moves.utility.CastlingUtility;
@@ -298,7 +299,7 @@ public class Board extends AbstractBoard {
       final Square squareOfCapturedPawnForEnPassantCapture = EnPassantCaptureUtility
           .calculateSquareOfCapturedPawnForEnPassantCapture(moveSpecification);
       final Piece pieceCaptured = staticPosition.get(squareOfCapturedPawnForEnPassantCapture);
-      return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, EnPassantRole.EN_PASSANT_CAPTURE);
     }
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       return new LegalMove(moveSpecification);
@@ -308,7 +309,10 @@ public class Board extends AbstractBoard {
       return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
     }
     final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-    return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+    final EnPassantRole enPassantRole = EnPassantCaptureUtility
+        .calculateIsPawnTwoSquareAdvanceMove(movingPiece, moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE
+            : EnPassantRole.NONE;
+    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
   }
 
   public static StaticPosition createPositionAfterMove(StaticPosition staticPosition,
@@ -346,8 +350,7 @@ public class Board extends AbstractBoard {
         .get(dynamicPositionList, dynamicPositionList.size() - 2).staticPosition();
 
     List<UpdateSquare> updateSquareList;
-    if (EnPassantCaptureUtility.calculateIsEnPassantCapture(staticPositionBeforeLastMove,
-        moveToUndo.moveSpecification())) {
+    if (moveToUndo.enPassantRole().isEnPassantCapture()) {
       updateSquareList = EnPassantCaptureUtility.performEnPassantCaptureUndoMovements(moveToUndo);
     } else if (CastlingUtility.calculateIsCastlingMove(moveToUndo.moveSpecification())) {
       updateSquareList = CastlingUtility.performCastlingUndoMovements(moveToUndo);

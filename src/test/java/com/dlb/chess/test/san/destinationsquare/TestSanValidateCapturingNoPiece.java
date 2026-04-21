@@ -20,29 +20,29 @@ class TestSanValidateCapturingNoPiece {
     final ApiBoard board = new Board();
 
     // pawn
-    checkException("axb3", board);
+    checkExceptionPawn("axb3", board);
 
     // rook
     board.performMoves("a3");
     board.performMoves("a6");
 
     // knight
-    checkException("Nxc3", board);
+    checkExceptionRnbqk("Nxc3", board);
 
     // bishop
     board.performMoves("b3");
     board.performMoves("b6");
-    checkException("Bxb2", board);
+    checkExceptionRnbqk("Bxb2", board);
 
     // queen
     board.performMoves("Bb2");
     board.performMoves("Bb7");
-    checkException("Qxc1", board);
+    checkExceptionRnbqk("Qxc1", board);
 
     // king
     board.performMoves("Qc1");
     board.performMoves("Qc8");
-    checkException("Kxd1", board);
+    checkExceptionRnbqk("Kxd1", board);
   }
 
   @SuppressWarnings("static-method")
@@ -53,41 +53,49 @@ class TestSanValidateCapturingNoPiece {
 
     // pawn
     board.performMoves("a3");
-    checkException("axb6", board);
+    checkExceptionPawn("axb6", board);
 
     // rook
 
     board.performMoves("a6");
     board.performMoves("a4");
-    checkException("Rxa7", board);
+    checkExceptionRnbqk("Rxa7", board);
 
     // knight
-    checkException("Nxc6", board);
+    checkExceptionRnbqk("Nxc6", board);
 
     // bishop
     board.performMoves("b6");
     board.performMoves("b3");
-    checkException("Bxb7", board);
+    checkExceptionRnbqk("Bxb7", board);
 
     // queen
     board.performMoves("Bb7");
     board.performMoves("Bb2");
-    checkException("Qxc8", board);
+    checkExceptionRnbqk("Qxc8", board);
 
     // king
     board.performMoves("Qc8");
     board.performMoves("Qc1");
-    checkException("Kxd8", board);
+    checkExceptionRnbqk("Kxd8", board);
   }
 
-  private static void checkException(String san, ApiBoard board) {
+  private static void checkExceptionPawn(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT);
+  }
+
+  private static void checkExceptionRnbqk(String san, ApiBoard board) {
+    checkException(san, board, SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL);
+  }
+
+  private static void checkException(String san, ApiBoard board, SanValidationProblem expected) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;
-      assertEquals(SanValidationProblem.CAPTURING_MOVING_ONTO_NO_PIECE, e.getSanValidationProblem());
+      assertEquals(expected, e.getSanValidationProblem());
     }
     assertTrue(isException);
   }

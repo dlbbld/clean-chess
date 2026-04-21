@@ -8,9 +8,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.movement.SanValidateMovement;
 
@@ -18,28 +16,23 @@ public class SanValidation extends AbstractSan {
 
   public static MoveSpecification validateSan(String san, ApiBoard board) throws SanValidationException {
     final var sanParse = SanValidateFormat.validateFormat(san);
-    return validateAgainstPosition(board, sanParse);
-  }
 
-  private static MoveSpecification validateAgainstPosition(ApiBoard board, SanParse sanParse)
-      throws SanValidationException {
+    SanValidateNonMovement.validateNonMovement(sanParse);
 
     final Side havingMove = board.getHavingMove();
-
     SanValidateMovement.validateMovement(sanParse, havingMove);
 
-    final var sanType = sanParse.sanType();
+    final var sanFormat = sanParse.sanFormat();
     final var sanConversion = sanParse.sanConversion();
-    final SanFormat sanFormat = sanType.getSanFormat();
 
-    SanValidatePieceExists.validatePieceExists(havingMove, sanFormat, sanConversion, sanType.getMovingPieceType(),
+    SanValidatePieceExists.validatePieceExists(havingMove, sanFormat, sanConversion, sanConversion.movingPieceType(),
         board.getStaticPosition());
 
-    SanValidateDestination.validateDestinationSquareSemantics(board, havingMove, sanType, sanConversion);
+    SanValidateDestination.validateDestinationSquareSemantics(board, havingMove, sanFormat, sanConversion);
 
     final Set<LegalMove> legalMovesCandidates = SanValidateLegalMoves.calculateLegalMovesCandidates(board, havingMove,
         sanParse);
-    SanValidateLegalMoves.validateAgainstLegalMoves(board, havingMove, legalMovesCandidates, sanType, sanConversion);
+    SanValidateLegalMoves.validateAgainstLegalMoves(board, havingMove, legalMovesCandidates, sanFormat, sanConversion);
 
     final LegalMove legalMoveOnlyCandidate = SanValidateLegalMoves.calculateOnlyPossibleLegalMove(sanFormat,
         sanConversion, legalMovesCandidates);

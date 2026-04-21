@@ -590,6 +590,6 @@ public class ApiCarlosBoard extends AbstractBoard {
 
   @Override
   public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingMove) {
-    return CastlingRightLoss.NOT_IMPLEMENTED;
+    throw new UnsupportedOperationException("Castling right loss tracking is not supported in Carlos's API");
   }
 }

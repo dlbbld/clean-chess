@@ -17,8 +17,8 @@ import com.dlb.chess.common.exceptions.TestSetupException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -143,12 +143,18 @@ public abstract class AbstractTestBasic implements EnumConstants {
     final var moveSpecification = new MoveSpecification(side, fromSquare, toSquare);
     final Piece movingPiece = Piece.calculatePawnPiece(side);
     final Piece capturedPiece = Piece.calculatePawnPiece(side.getOppositeSide());
-    final LegalMove expected = new LegalMove(moveSpecification, movingPiece, capturedPiece);
+    final var expected = new LegalMove(moveSpecification, movingPiece, capturedPiece, EnPassantRole.EN_PASSANT_CAPTURE);
 
     assertEquals(expected, lastMoveEnPassantCapture);
   }
 
   static void checkMovingPiece(Side side, Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
+
+    checkMovingPiece(side, fromSquare, toSquare, movingPiece, board, EnPassantRole.NONE);
+  }
+
+  static void checkMovingPiece(Side side, Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board,
+      EnPassantRole enPassantRole) {
 
     assertFalse(board.isCapture());
     assertFalse(board.isCheck());
@@ -156,7 +162,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertFalse(board.isStalemate());
 
     final var moveSpecification = new MoveSpecification(side, fromSquare, toSquare);
-    final LegalMove expected = new LegalMove(moveSpecification, movingPiece, Piece.NONE);
+    final LegalMove expected = new LegalMove(moveSpecification, movingPiece, Piece.NONE, enPassantRole);
     assertEquals(expected, board.getLastMove());
 
   }
@@ -204,8 +210,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
   }
 
   private static boolean calculateIsEnPassantCaptureLastMove(ApiBoard board) {
-    return EnPassantCaptureUtility.calculateIsEnPassantCapture(board.getStaticPositionBeforeLastMove(),
-        board.getLastMove().moveSpecification());
+    return board.getLastMove().enPassantRole().isEnPassantCapture();
   }
 
 }

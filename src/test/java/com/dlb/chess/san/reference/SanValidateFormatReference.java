@@ -14,32 +14,30 @@ import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.model.SanConversionCheck;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
 
 /**
  * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original type-enumeration approach
- * (iterating over all {@link SanType} values) as an oracle against which the direct-parse implementation can be
+ * (iterating over all {@link SanFormat} values) as an oracle against which the direct-parse implementation can be
  * verified in tests.
  */
 public abstract class SanValidateFormatReference {
 
   public static SanParse validateFormat(String san) {
-    for (final SanType sanType : SanType.values()) {
-      final SanConversionCheck sanSanConversion = parseForSanType(san, sanType);
+    for (final SanFormat sanFormat : SanFormat.values()) {
+      final SanConversionCheck sanSanConversion = parseForSanFormat(san, sanFormat);
       if (sanSanConversion.isMatch()) {
-        return new SanParse(sanType, sanSanConversion.sanConversion());
+        return new SanParse(sanFormat, sanSanConversion.sanConversion());
       }
     }
 
-    throw new IllegalArgumentException("No SanType matches the SAN string: \"" + san + "\"");
+    throw new IllegalArgumentException("No SanFormat matches the SAN string: \"" + san + "\"");
   }
 
-  private static SanConversionCheck parseForSanType(final String san, final SanType sanType) {
+  private static SanConversionCheck parseForSanFormat(final String san, final SanFormat sanFormat) {
 
-    final SanFormat sanFormat = sanType.getSanFormat();
     final SanFormatProperties properties = NonNullWrapperCommon.get(SanFormatPropertiesMap.MAP, sanFormat);
 
     // length
@@ -58,8 +56,8 @@ public abstract class SanValidateFormatReference {
       if (!san.startsWith(CastlingConstants.SAN_CASTLING_QUEEN_SIDE)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
-      final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-          sanTerminalMarker);
+      final var sanConversion = new SanConversion(PieceType.NONE, File.NONE, Rank.NONE, Square.NONE,
+          PromotionPieceType.NONE, sanTerminalMarker);
       return new SanConversionCheck(true, sanConversion);
     }
     if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
@@ -67,22 +65,26 @@ public abstract class SanValidateFormatReference {
       if (!san.startsWith(CastlingConstants.SAN_CASTLING_KING_SIDE)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
-      final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-          sanTerminalMarker);
+      final var sanConversion = new SanConversion(PieceType.NONE, File.NONE, Rank.NONE, Square.NONE,
+          PromotionPieceType.NONE, sanTerminalMarker);
       return new SanConversionCheck(true, sanConversion);
     }
 
-    // movingPieceTypeIndex
+    // movingPieceType: for pawn it is fixed; for RNBQ/king it comes from the first character.
+    final PieceType movingPieceType;
     final var movingPieceTypeIndex = properties.movingPieceTypeIndex();
-    if (!properties.isPawn()) {
+    if (properties.isPawn()) {
+      movingPieceType = PieceType.PAWN;
+    } else {
       final var checkMovingPieceTypeLetter = san.charAt(movingPieceTypeIndex);
       if (!NotationMovingPiece.exists(checkMovingPieceTypeLetter)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
       final PieceType pieceType = NotationMovingPiece.calculate(checkMovingPieceTypeLetter).getPieceType();
-      if (pieceType != sanType.getMovingPieceType()) {
+      if (!isPieceTypeForSanFormat(pieceType, sanFormat)) {
         return SanConversionCheck.IS_NO_MATCH;
       }
+      movingPieceType = pieceType;
     }
 
     // fromFileIndex
@@ -147,11 +149,11 @@ public abstract class SanValidateFormatReference {
     }
 
     // pawn promotion rank enforcement
-    if ((sanType == SanType.PAWN_NON_CAPTURING_NON_PROMOTION_MOVE
-        || sanType == SanType.PAWN_CAPTURING_NON_PROMOTION_MOVE) && Rank.calculateIsAnyPromotionRank(toRank)) {
+    if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION
+        || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION) && Rank.calculateIsAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
-    if ((sanType == SanType.PAWN_NON_CAPTURING_PROMOTION_MOVE || sanType == SanType.PAWN_CAPTURING_PROMOTION_MOVE)
+    if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION)
         && !Rank.calculateIsAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
@@ -187,8 +189,26 @@ public abstract class SanValidateFormatReference {
       throw new ProgrammingMistakeException(
           "Incorrect file/rank calculation - either file and rank are both set for non-castling moves or both not set for castling moves");
     }
-    final var sanConversion = new SanConversion(fromFile, fromRank, toSquare, promotionPieceType, sanTerminalMarker);
+    final var sanConversion = new SanConversion(movingPieceType, fromFile, fromRank, toSquare, promotionPieceType,
+        sanTerminalMarker);
     return new SanConversionCheck(true, sanConversion);
+  }
+
+  /**
+   * Whether the given piece type can produce the given non-pawn, non-castling SAN format.
+   * <ul>
+   *   <li>King formats accept only KING.</li>
+   *   <li>RNBQ formats accept ROOK, KNIGHT, BISHOP, QUEEN.</li>
+   * </ul>
+   */
+  private static boolean isPieceTypeForSanFormat(PieceType pieceType, SanFormat sanFormat) {
+    return switch (sanFormat) {
+      case KING_NON_CASTLING_NON_CAPTURING, KING_NON_CASTLING_CAPTURING -> pieceType == PieceType.KING;
+      case RNBQ_NON_CAPTURING_NEITHER, RNBQ_NON_CAPTURING_FILE, RNBQ_NON_CAPTURING_RANK, RNBQ_NON_CAPTURING_SQUARE,
+          RNBQ_CAPTURING_NEITHER, RNBQ_CAPTURING_FILE, RNBQ_CAPTURING_RANK, RNBQ_CAPTURING_SQUARE -> pieceType == PieceType.ROOK
+              || pieceType == PieceType.KNIGHT || pieceType == PieceType.BISHOP || pieceType == PieceType.QUEEN;
+      default -> false;
+    };
   }
 
   private static boolean calculateIsAllowedLastChar(String san) {

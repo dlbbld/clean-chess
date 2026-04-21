@@ -1,6 +1,7 @@
 package com.dlb.chess.san.validate.format;
 
 import com.dlb.chess.board.enums.File;
+import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
@@ -9,8 +10,8 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
+import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -23,7 +24,7 @@ import com.dlb.chess.san.model.SanParse;
  *   O            → {@link #parseCastling}
  *   a–h          → {@link SanValidateFormatPawn#parsePawnMove}
  *   K            → {@link SanValidateFormatKing#parseKingMove}
- *   R, N, B, Q   → {@link SanValidateFormatRbnq#parseRbnqMove}
+ *   R, N, B, Q   → {@link SanValidateFormatRnbq#parseRnbqMove}
  * </pre>
  */
 public abstract class SanValidateFormat extends AbstractSan {
@@ -59,8 +60,8 @@ public abstract class SanValidateFormat extends AbstractSan {
     if (first == 'K') {
       return SanValidateFormatKing.parseKingMove(core, sanTerminalMarker);
     }
-    if (isPieceLetterRbnq(first)) {
-      return SanValidateFormatRbnq.parseRbnqMove(core, sanTerminalMarker);
+    if (isPieceLetterRnbq(first)) {
+      return SanValidateFormatRnbq.parseRnbqMove(core, sanTerminalMarker);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
         Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
@@ -81,13 +82,13 @@ public abstract class SanValidateFormat extends AbstractSan {
    * check/checkmate symbol has already been stripped into {@code sanTerminalMarker}.
    */
   private static SanParse parseCastling(final String core, final SanTerminalMarker sanTerminalMarker) {
-    final var sanConversion = new SanConversion(File.NONE, Rank.NONE, Square.NONE, PromotionPieceType.NONE,
-        sanTerminalMarker);
+    final var sanConversion = new SanConversion(PieceType.NONE, File.NONE, Rank.NONE, Square.NONE,
+        PromotionPieceType.NONE, sanTerminalMarker);
     if (CastlingConstants.SAN_CASTLING_QUEEN_SIDE.equals(core)) {
-      return new SanParse(SanType.KING_CASTLING_QUEEN_SIDE_MOVE, sanConversion);
+      return new SanParse(SanFormat.KING_CASTLING_QUEEN_SIDE, sanConversion);
     }
     if (CastlingConstants.SAN_CASTLING_KING_SIDE.equals(core)) {
-      return new SanParse(SanType.KING_CASTLING_KING_SIDE_MOVE, sanConversion);
+      return new SanParse(SanFormat.KING_CASTLING_KING_SIDE, sanConversion);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_KING_CASTLING,
         Message.getString("validation.san.format.king.castling"));
@@ -103,7 +104,7 @@ public abstract class SanValidateFormat extends AbstractSan {
     return c >= '1' && c <= '8';
   }
 
-  private static boolean isPieceLetterRbnq(final char c) {
+  private static boolean isPieceLetterRnbq(final char c) {
     return c == 'R' || c == 'N' || c == 'B' || c == 'Q';
   }
 

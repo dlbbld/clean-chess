@@ -1,6 +1,7 @@
 package com.dlb.chess.san.validate.format;
 
 import com.dlb.chess.board.enums.File;
+import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
@@ -8,8 +9,8 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
+import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanType;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
@@ -81,8 +82,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
 
     // K[file][rank] — valid destination, length 3 expected
     if (core.length() == 3) {
-      return new SanParse(SanType.KING_NON_CASTLING_NON_CAPTURING_MOVE,
-          new SanConversion(File.NONE, Rank.NONE,
+      return new SanParse(SanFormat.KING_NON_CASTLING_NON_CAPTURING,
+          new SanConversion(PieceType.KING, File.NONE, Rank.NONE,
               Square.calculate(SanValidateFormat.parseFile(secondChar), SanValidateFormat.parseRank(thirdChar)),
               PromotionPieceType.NONE, sanTerminalMarker));
     }
@@ -126,8 +127,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
 
     // Valid Kx[file][rank] — length 4 expected
     if (core.length() == 4) {
-      return new SanParse(SanType.KING_NON_CASTLING_CAPTURING_MOVE,
-          new SanConversion(File.NONE, Rank.NONE,
+      return new SanParse(SanFormat.KING_NON_CASTLING_CAPTURING,
+          new SanConversion(PieceType.KING, File.NONE, Rank.NONE,
               Square.calculate(SanValidateFormat.parseFile(thirdChar), SanValidateFormat.parseRank(fourthChar)),
               PromotionPieceType.NONE, sanTerminalMarker));
     }

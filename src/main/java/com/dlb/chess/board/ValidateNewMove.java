@@ -97,22 +97,20 @@ public class ValidateNewMove implements EnumConstants {
       case NONE -> throw new IllegalArgumentException();
     };
     switch (castlingCheck) {
-      case CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE:
-        throw new InvalidMoveException("the king or rook have left their initial position", castlingCheck);
-      case CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY:
-        throw new InvalidMoveException("not all squares between the rook and the king are empty", castlingCheck);
-      case CASTLING_PRIORITY_4_KING_IN_CHECK:
-        throw new InvalidMoveException("castling is not possible because the king is in check", castlingCheck);
-      case CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK:
-        throw new InvalidMoveException("the king would travel over a field that is in check", castlingCheck);
-      case CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK:
-        throw new InvalidMoveException("the king would end in check", castlingCheck);
-      case CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE:
+      case KING_CASTLING_FINAL_NO_RIGHT:
         final CastlingRight castlingRight = board.getCastlingRight(havingMove);
         if (castlingRight == CastlingRight.NONE) {
           throw new InvalidMoveException("there are no castling rights anymore on both sides", castlingCheck);
         }
         throw new InvalidMoveException("there is no castling right anymore on this side", castlingCheck);
+      case KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY:
+        throw new InvalidMoveException("not all squares between the rook and the king are empty", castlingCheck);
+      case KING_CASTLING_TEMPORARY_KING_IN_CHECK:
+        throw new InvalidMoveException("castling is not possible because the king is in check", castlingCheck);
+      case KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
+        throw new InvalidMoveException("the king would travel over a field that is in check", castlingCheck);
+      case KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK:
+        throw new InvalidMoveException("the king would end in check", castlingCheck);
       case SUCCESS:
         // valid castling
         break;
@@ -319,12 +317,12 @@ public class ValidateNewMove implements EnumConstants {
     final var toSquareSet = switch (movingPiece.getPieceType()) {
       case ROOK -> RookPotentialToSquares.calculateRookPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
+      case KNIGHT -> new TreeSet<>();
       case BISHOP -> BishopPotentialToSquares.calculateBishopPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
       case QUEEN -> QueenPotentialToSquares.calculateQueenPotentialToSquares(board.getStaticPosition(), fromSquare,
           havingMove);
-      case KNIGHT -> new TreeSet<>();
-      case KING, PAWN, NONE -> throw new IllegalArgumentException();
+      case PAWN, KING, NONE -> throw new IllegalArgumentException();
     };
     switch (movingPiece.getPieceType()) {
       case ROOK:
@@ -339,8 +337,8 @@ public class ValidateNewMove implements EnumConstants {
         break;
       case KNIGHT:
         break;
-      case KING:
       case PAWN:
+      case KING:
       case NONE:
       default:
         throw new IllegalArgumentException();
