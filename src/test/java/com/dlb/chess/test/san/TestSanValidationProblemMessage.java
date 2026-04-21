@@ -797,17 +797,18 @@ class TestSanValidationProblemMessage {
     // both can reach d3; Rd3 (no disambiguation) is ambiguous.
     {
       final ApiBoard board = new Board("7k/8/8/8/8/R3R3/8/6K1 w - - 0 1");
-      checkException("Rd3", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_MULTIPLE_LEGAL_MOVES,
-          "There is more than one rook which can move to square d3. TODO provide options.");
+      checkException("Rd3", board,
+          SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED,
+          "There is more than one rook which can move to square d3. Please further specify the piece to be moved by file or rank.");
     }
 
     // INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK: two rooks on the a-file (a7, a2), both
     // can reach a5; Raa5 (file disambig) is ambiguous — rank or square must be used.
     {
       final ApiBoard board = new Board("7k/R7/8/8/8/8/R7/6K1 w - - 0 1");
-      checkException("Raa5", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK,
+      checkException("Raa5", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED,
           "There are multiple rook on the specified file a which can move to square a5."
-              + " Please specify the piece by rank or square.");
+              + " To move a piece from that file, please specify the rank instead.");
     }
 
     // INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE: non-rook (queen) variant — two
@@ -815,7 +816,8 @@ class TestSanValidationProblemMessage {
     // reaches b4; Qbb4 is ambiguous (and this non-rook branch fires).
     {
       final ApiBoard board = new Board("k7/8/8/1Q6/2Q5/8/1Q6/K7 w - - 0 1");
-      checkException("Qbb4", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE,
+      checkException("Qbb4", board,
+          SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED,
           "There are multiple queen on the specified file b which can move to square b4."
               + " Please specify the piece by rank or square.");
     }
@@ -824,9 +826,9 @@ class TestSanValidationProblemMessage {
     // reach d3; R3d3 (rank disambig) is ambiguous — file or square must be used.
     {
       final ApiBoard board = new Board("7k/8/8/8/8/R3R3/8/6K1 w - - 0 1");
-      checkException("R3d3", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE,
+      checkException("R3d3", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED,
           "There are multiple rook on the specified rank 3 which can move to square d3."
-              + " Please specify the piece by file or square.");
+              + " To move a piece from that rank, please specify the file instead.");
     }
 
     // INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE: non-rook (queen) variant — two
@@ -834,9 +836,21 @@ class TestSanValidationProblemMessage {
     // reaches d4; Q4d4 is ambiguous (non-rook branch).
     {
       final ApiBoard board = new Board("8/3Q4/7k/8/1Q4Q1/8/8/K7 w - - 0 1");
-      checkException("Q4d4", board, SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE,
+      checkException("Q4d4", board,
+          SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED,
           "There are multiple queen on the specified rank 4 which can move to square d4."
               + " Please specify the piece by file or square.");
+    }
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testNonStandardSpecified() {
+
+    {
+      final ApiBoard board = new Board("1k6/8/8/R7/8/7r/2R5/3K4 w - - 0 1");
+      checkException("R5c5", board, SanValidationProblem.NON_STANDARD_SPECIFIED_RNBQ_RANK_INSTEAD_OF_FILE,
+          "The specified rank determines the piece but because the file also determines the piece, by the SAN specification, the file must be used to specify the move.");
     }
   }
 

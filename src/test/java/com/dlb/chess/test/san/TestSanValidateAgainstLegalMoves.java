@@ -143,12 +143,12 @@ class TestSanValidateAgainstLegalMoves {
           "Rhc6", "Rd5", "Rc4");
       // two white rooks
 
-      checkException(board, "Rdd4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Rdd4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("R5d4");
       // two black rooks
 
-      checkException(board, "Rcc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Rcc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("R4c5");
 
@@ -156,13 +156,13 @@ class TestSanValidateAgainstLegalMoves {
           "Na8", "Nf5", "N8c7");
       // two white knights
 
-      checkException(board, "Nfd4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Nfd4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("N5d4");
       // two black knights
       board.performMoves("Na8", "Nf5");
 
-      checkException(board, "Nac7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Nac7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("N8c7");
 
@@ -170,12 +170,12 @@ class TestSanValidateAgainstLegalMoves {
           "Ne3", "a1=B", "Bf5", "Bxb2", "Bg4", "Bf6");
       // two white bishops
 
-      checkException(board, "Bgh3", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Bgh3", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("B4h3");
       // two black bishops
 
-      checkException(board, "Bfg7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Bfg7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("B6g7");
 
@@ -183,13 +183,13 @@ class TestSanValidateAgainstLegalMoves {
           "Rb1", "cxb1=Q", "Qd3", "Qb6");
       // two white queens
 
-      checkException(board, "Qdc2", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Qdc2", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("Q3c2");
       // two black queens
       board.performMoves("Ne6", "Qd3");
 
-      checkException(board, "Qbc7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Qbc7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("Q6c7");
     }
@@ -205,12 +205,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // three white rooks
 
-      checkException(board, "Rdd2", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Rdd2", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("R1d2");
       // three black rooks
 
-      checkException(board, "Rcc7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK);
+      checkException(board, "Rcc7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED);
 
       board.performMove("R8c7");
     }
@@ -228,12 +228,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // three white knights
 
-      checkException(board, "Nce4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Nce4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("N3e4");
       // three black knights
 
-      checkException(board, "Nfd5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Nfd5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("N6d5");
     }
@@ -247,12 +247,12 @@ class TestSanValidateAgainstLegalMoves {
           "N2e4", "Ne5", "Nd6", "Ned3", "Nc8", "Nf2", "Nb6", "Nh1", "Qc8", "Ng3", "Qb8");
       // four white knights
 
-      checkException(board, "Nce4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Nce4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Nc3e4");
       // four black knights
 
-      checkException(board, "Nbd5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Nbd5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Nb6d5");
     }
@@ -266,13 +266,13 @@ class TestSanValidateAgainstLegalMoves {
           "Be4", "Bdc4", "Bf5", "Bxa2", "Bef3", "Qe8");
       // three white bishops
 
-      checkException(board, "Bfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Bfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Bf5g4");
       board.performMoves("Kd8", "Kd1"); // unpin black bishop
       // three black bishops
 
-      checkException(board, "Bac4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Bac4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Ba6c4");
 
@@ -281,12 +281,12 @@ class TestSanValidateAgainstLegalMoves {
           "Ke1", "Bde4");
       // four white bishops
 
-      checkException(board, "Bfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Bfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Bf3g4");
       // four black bishops
 
-      checkException(board, "Bed5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Bed5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Be4d5");
     }
@@ -299,12 +299,12 @@ class TestSanValidateAgainstLegalMoves {
           "Q3b4", "Qdf6", "Q7b6", "Q6f5");
       // three white queens
 
-      checkException(board, "Qbc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Qbc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Qb6c5");
       // three black queens
 
-      checkException(board, "Qfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Qfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Qf5g4");
 
@@ -312,24 +312,24 @@ class TestSanValidateAgainstLegalMoves {
           "a8=Q", "Qgf5", "Qad5", "Qhh5", "Qdd4", "Qgh3");
       // four white queens
 
-      checkException(board, "Qbc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Qbc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Qb4c5");
       // four black queens
 
-      checkException(board, "Qfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Qfg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Qf3g4");
 
       board.performMoves("Qcb4", "Qgf3", "d3", "Be7", "Kc2", "Bf8", "Kb2", "Be7", "Ka1", "Qxe2", "Qa7", "Kf8");
       // four white queens
 
-      checkException(board, "Qdc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Qdc5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Qd4c5");
       // four black queens
 
-      checkException(board, "Qhg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE);
+      checkException(board, "Qhg4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED);
 
       board.performMove("Qh5g4");
     }
@@ -419,24 +419,24 @@ class TestSanValidateAgainstLegalMoves {
           "Rg6");
       // two white rooks
 
-      checkException(board, "R4b4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "R4b4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Rdb4");
       // two black rooks
 
-      checkException(board, "R5g5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "R5g5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Rdg5");
 
       board.performMoves("Nf3", "Nf6", "Nc3", "Nc6", "Nd4", "Nd5");
       // two white knights
 
-      checkException(board, "N3b5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "N3b5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Ncb5");
       // two black knights
 
-      checkException(board, "N5xb4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "N5xb4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Ndxb4");
 
@@ -445,12 +445,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // two white bishops
 
-      checkException(board, "B6f4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "B6f4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Bhf4");
       // two black bishops
 
-      checkException(board, "B4e5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "B4e5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Bde5");
 
@@ -459,12 +459,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // two white queens
 
-      checkException(board, "Q6c6", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "Q6c6", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Qac6");
       // two black queens
 
-      checkException(board, "Q4xf4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE);
+      checkException(board, "Q4xf4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED);
 
       board.performMove("Qdxf4");
 
@@ -482,12 +482,12 @@ class TestSanValidateAgainstLegalMoves {
 
       // three white knights
 
-      checkException(board, "N5e4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "N5e4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Nc5e4");
       // three black knights
 
-      checkException(board, "N4d5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "N4d5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Nf4d5");
     }
@@ -501,12 +501,12 @@ class TestSanValidateAgainstLegalMoves {
           "N2e4", "Ne5", "Nd6", "Ned3", "Nc8", "Nf2", "Nb6", "Nh1", "Qc8", "Ng3", "Qb8");
       // four white knights
 
-      checkException(board, "N3e4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "N3e4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Nc3e4");
       // four black knights
 
-      checkException(board, "N6d5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "N6d5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Nb6d5");
     }
@@ -520,13 +520,13 @@ class TestSanValidateAgainstLegalMoves {
           "Be4", "Bdc4", "Bf5", "Bxa2", "Bef3", "Qe8");
       // three white bishops
 
-      checkException(board, "B5g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "B5g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Bf5g4");
       board.performMoves("Kd8", "Kd1"); // unpin black bishop
       // three black bishops
 
-      checkException(board, "B6c4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "B6c4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Ba6c4");
 
@@ -535,12 +535,12 @@ class TestSanValidateAgainstLegalMoves {
           "Ke1", "Bde4");
       // four white bishops
 
-      checkException(board, "B3g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "B3g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Bf3g4");
       // four black bishops
 
-      checkException(board, "B4d5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "B4d5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Be4d5");
     }
@@ -553,12 +553,12 @@ class TestSanValidateAgainstLegalMoves {
           "Q3b4", "Qdf6", "Q7b6", "Q6f5");
       // three white queens
 
-      checkException(board, "Q6c5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "Q6c5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Qb6c5");
       // three black queens
 
-      checkException(board, "Q5g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "Q5g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Qf5g4");
 
@@ -566,24 +566,24 @@ class TestSanValidateAgainstLegalMoves {
           "a8=Q", "Qgf5", "Qad5", "Qhh5", "Qdd4", "Qgh3");
       // four white queens
 
-      checkException(board, "Q4c5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "Q4c5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Qb4c5");
       // four black queens
 
-      checkException(board, "Q3g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "Q3g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Qf3g4");
 
       board.performMoves("Qcb4", "Qgf3", "d3", "Be7", "Kc2", "Bf8", "Kb2", "Be7", "Ka1", "Qxe2", "Qa7", "Kf8");
       // four white queens
 
-      checkException(board, "Q4c5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "Q4c5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Qd4c5");
       // four black queens
 
-      checkException(board, "Q5g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
+      checkException(board, "Q5g4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED);
 
       board.performMove("Qh5g4");
     }
