@@ -73,7 +73,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
 
     // empty destination
     if (isCapture) {
-      if (calculateIsEnPassantCapture(board, havingMove, sanFormat, sanConversion, toSquare)) {
+      if (calculateIsPotentialEnPassantCapture(board, havingMove, sanFormat, sanConversion, toSquare)) {
         return;
       }
       throw new SanValidationException(SanValidationProblem.DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT,
@@ -124,7 +124,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     // non-capturing move to empty destination: valid, fall through
   }
 
-  private static boolean calculateIsEnPassantCapture(ApiBoard board, Side havingMove, SanFormat sanFormat,
+  private static boolean calculateIsPotentialEnPassantCapture(ApiBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion, Square toSquare) {
     if (sanFormat != SanFormat.PAWN_CAPTURING_NON_PROMOTION) {
       return false;

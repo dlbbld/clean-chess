@@ -201,7 +201,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
   }
 
   public static Square calculateEnPassantCaptureTargetSquare(LegalMove legalMove) {
-    if (calculateIsPawnTwoSquareAdvanceMove(legalMove.movingPiece(), legalMove.moveSpecification())) {
+    if (legalMove.enPassantRole().createsEnPassantTarget()) {
       return calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(legalMove.moveSpecification());
     }
     return Square.NONE;

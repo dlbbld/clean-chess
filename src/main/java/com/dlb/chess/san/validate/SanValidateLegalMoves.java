@@ -391,7 +391,8 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         throw new ProgrammingMistakeException("Unexpected castling check result: " + moveCheck);
     }
 
-    throw new SanValidationException(CastlingMoveCheckMapper.map(moveCheck), message, moveCheck, castlingRightLoss);
+    throw new SanValidationException(CastlingMoveCheckMapper.map(moveCheck, castlingRightLoss), message, moveCheck,
+        castlingRightLoss);
   }
 
   private static PseudoLegalReason calculatePseudoLegalReason(StaticPosition staticPosition, Side havingMove) {

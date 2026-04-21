@@ -492,11 +492,45 @@ class TestSanValidationProblemMessage {
   @Test
   void testKingCastling() {
 
-    // KING_CASTLING_FINAL_NO_RIGHT: king and rooks on required squares but FEN says no castling rights
-    // (UNKNOWN_FEN_IMPORT provenance).
+    // KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED: white king moved to e2 and back; O-O fails.
+    {
+      final Board board = new Board();
+      board.performMoves("e4", "e5", "Ke2", "d6", "Ke1", "d5");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED,
+          "King-side castling is not possible anymore because the king has moved.");
+    }
+
+    // KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED: white king-side rook moved to h3 and back; O-O fails.
+    {
+      final Board board = new Board();
+      board.performMoves("h4", "e5", "Rh3", "d6", "Rh1", "d5");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED,
+          "King-side castling is not possible anymore because the king-side rook has moved.");
+    }
+
+    // KING_CASTLING_FINAL_NO_RIGHT_ROOK_CAPTURED: black bishop on b7 captures white's h1 rook via
+    // Bxg2-Bxh1. White then attempts O-O — king-side rook has been captured.
+    {
+      final Board board = new Board();
+      board.performMoves("a3", "b6", "a4", "Bb7", "a5", "Bxg2", "a6", "Bxh1");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_CAPTURED,
+          "King-side castling is not possible anymore because the king-side rook has been captured.");
+    }
+
+    // KING_CASTLING_FINAL_NO_RIGHT_CASTLED: white castles king-side; after black's reply, white
+    // tries O-O-O — all castling rights are lost via having already castled.
+    {
+      final Board board = new Board();
+      board.performMoves("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6");
+      checkException("O-O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_CASTLED,
+          "Queen-side castling is not possible anymore because the king has already castled.");
+    }
+
+    // KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT: FEN says no rights at all; provenance
+    // unknown because it was lost before the position was imported.
     {
       final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1");
-      checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT,
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT,
           "King-side castling is not possible anymore, the reason is unknown for at game import the castling right was already lost.");
     }
 

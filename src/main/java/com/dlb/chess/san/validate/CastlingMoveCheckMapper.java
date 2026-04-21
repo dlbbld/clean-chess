@@ -1,27 +1,35 @@
 package com.dlb.chess.san.validate;
 
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
 /**
- * Maps the castling-refusal values of {@link MoveCheck} to their counterparts in
- * {@link SanValidationProblem}.
+ * Maps the castling-refusal values of {@link MoveCheck} + {@link CastlingRightLoss} to their
+ * counterparts in {@link SanValidationProblem}.
  *
  * <p>
- * The two enums deliberately carry overlapping concepts in the castling subset: {@code MoveCheck}
- * is the internal pipeline result type, {@code SanValidationProblem} is the external error code
- * surfaced via {@code SanValidationException}. They live in separate layers and are renamed
- * independently; this class is the compile-time-enforced bridge between them. The exhaustive
- * switch (no {@code default:}) guarantees that any new castling value added to {@code MoveCheck}
- * without a corresponding entry here causes a compile error.
+ * The two input enums form orthogonal dimensions of the castling-failure space:
+ * <ul>
+ * <li>{@code MoveCheck} = which chess-rule check failed (5 values for castling);</li>
+ * <li>{@code CastlingRightLoss} = why the castling right was lost (6 values + {@code NOT_LOST}).
+ * </li>
+ * </ul>
+ * {@code SanValidationProblem} flattens these dimensions into a single user-facing enum: the
+ * FINAL_NO_RIGHT case is expanded across the 6 provenance values, while the 4 TEMPORARY cases stay
+ * flat (they have no provenance sub-dimension). Consumers switching on {@code SanValidationProblem}
+ * get the whole story without drilling into side-fields.
+ *
+ * <p>
+ * Both inner switches are exhaustive (no {@code default:}) so any new value added to
+ * {@code MoveCheck} or {@code CastlingRightLoss} causes a compile error here.
  */
 public abstract class CastlingMoveCheckMapper {
 
-  public static SanValidationProblem map(MoveCheck castlingMoveCheck) {
+  public static SanValidationProblem map(MoveCheck castlingMoveCheck, CastlingRightLoss castlingRightLoss) {
     return switch (castlingMoveCheck) {
-      case KING_CASTLING_FINAL_NO_RIGHT ->
-          SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT;
+      case KING_CASTLING_FINAL_NO_RIGHT -> mapRightLoss(castlingRightLoss);
       case KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY ->
           SanValidationProblem.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY;
       case KING_CASTLING_TEMPORARY_KING_IN_CHECK ->
@@ -47,6 +55,18 @@ public abstract class CastlingMoveCheckMapper {
           KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES, KING_MOVES_INTO_CHECK ->
           throw new ProgrammingMistakeException(
               "MoveCheck value is not a castling-refusal reason: " + castlingMoveCheck);
+    };
+  }
+
+  private static SanValidationProblem mapRightLoss(CastlingRightLoss castlingRightLoss) {
+    return switch (castlingRightLoss) {
+      case KING_MOVED -> SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED;
+      case ROOK_MOVED -> SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED;
+      case ROOK_CAPTURED -> SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_CAPTURED;
+      case CASTLED -> SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_CASTLED;
+      case UNKNOWN_FEN_IMPORT -> SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT;
+      case NOT_LOST -> throw new ProgrammingMistakeException(
+          "NOT_LOST is not a valid provenance for a KING_CASTLING_FINAL_NO_RIGHT failure");
     };
   }
 

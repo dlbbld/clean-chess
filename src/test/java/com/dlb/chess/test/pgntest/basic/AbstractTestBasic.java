@@ -18,7 +18,6 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -204,8 +203,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
   }
 
   private static boolean calculateIsEnPassantCaptureLastMove(ApiBoard board) {
-    return EnPassantCaptureUtility.calculateIsPotentialEnPassantCapture(board.getStaticPositionBeforeLastMove(),
-        board.getLastMove().moveSpecification());
+    return board.getLastMove().enPassantRole().isEnPassantCapture();
   }
 
 }

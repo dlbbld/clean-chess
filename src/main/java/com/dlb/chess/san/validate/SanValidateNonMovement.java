@@ -22,7 +22,7 @@ public abstract class SanValidateNonMovement extends AbstractSan {
         if (fromSquare == toSquare) {
           throw new SanValidationException(
               SanValidationProblem.NON_MOVEMENT_RNBQ_SOURCE_SQUARE_EQUALS_DESTINATION_SQUARE,
-              Message.getString("validation.san.nonMovement.rnbq", fromSquare.getName(), toSquare.getName()));
+              Message.getString("validation.san.nonMovement.rnbq.sourceSquareEqualsDestinationSquare", fromSquare.getName(), toSquare.getName()));
         }
         break;
       }

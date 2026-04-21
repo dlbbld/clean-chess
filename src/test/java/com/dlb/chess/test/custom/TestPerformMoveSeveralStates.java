@@ -15,7 +15,6 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 
 class TestPerformMoveSeveralStates implements EnumConstants {
@@ -630,7 +629,6 @@ class TestPerformMoveSeveralStates implements EnumConstants {
   }
 
   private static boolean calculateIsEnPassantCaptureLastMove(ApiBoard board) {
-    return EnPassantCaptureUtility.calculateIsPotentialEnPassantCapture(board.getStaticPositionBeforeLastMove(),
-        board.getLastMove().moveSpecification());
+    return board.getLastMove().enPassantRole().isEnPassantCapture();
   }
 }
