@@ -290,7 +290,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     final var filterFromFile = isCapturing ? sanConversion.fromFile() : toSquare.getFile();
     final Set<PseudoLegalMove> allPseudoLegal = new TreeSet<>();
     for (final Square fromSquare : Square.REAL) {
-      if ((fromSquare.getFile() != filterFromFile) || !staticPosition.isOwnPiece(fromSquare, havingMove, PAWN)) {
+      if (fromSquare.getFile() != filterFromFile || !staticPosition.isOwnPiece(fromSquare, havingMove, PAWN)) {
         continue;
       }
       final Set<Square> potentialToSquares = AbstractPotentialToSquares.calculatePotentialToSquare(staticPosition,
@@ -362,15 +362,13 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         final var rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
         message = switch (castlingRightLoss) {
           case KING_MOVED -> Message.getString("validation.san.kingCastling.finalNoRight.kingMoved", sideLabel);
-          case ROOK_MOVED ->
-              Message.getString("validation.san.kingCastling.finalNoRight.rookMoved", sideLabel, rookLabel);
-          case ROOK_CAPTURED ->
-              Message.getString("validation.san.kingCastling.finalNoRight.rookCaptured", sideLabel, rookLabel);
+          case ROOK_MOVED -> Message.getString("validation.san.kingCastling.finalNoRight.rookMoved", sideLabel,
+              rookLabel);
+          case ROOK_CAPTURED -> Message.getString("validation.san.kingCastling.finalNoRight.rookCaptured", sideLabel,
+              rookLabel);
           case CASTLED -> Message.getString("validation.san.kingCastling.finalNoRight.castled", sideLabel);
-          case UNKNOWN_FEN_IMPORT ->
-              Message.getString("validation.san.kingCastling.finalNoRight.unknownFenImport", sideLabel);
-          case NOT_IMPLEMENTED ->
-              Message.getString("validation.san.kingCastling.finalNoRight.notImplemented", sideLabel);
+          case UNKNOWN_FEN_IMPORT -> Message.getString("validation.san.kingCastling.finalNoRight.unknownFenImport",
+              sideLabel);
           default -> throw new IllegalArgumentException();
         };
         break;
@@ -557,8 +555,8 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       }
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.file.eitherRankOrSquareRequired", pieceType.getName(),
-              sanConversion.fromFile().getLetterString(), toSquare.getName()));
+          Message.getString("validation.san.insufficientlySpecified.rnbq.file.eitherRankOrSquareRequired",
+              pieceType.getName(), sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
   }
 
@@ -630,8 +628,9 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       }
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.eitherFileOrSquareRequired", pieceType.getName(),
-              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.eitherFileOrSquareRequired",
+              pieceType.getName(), NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()),
+              toSquare.getName()));
     }
 
     final File onlyPossibleFromFile = calculateOnlyPossibleFile(legalMovesCandidates, sanConversion);

@@ -6,6 +6,5 @@ public enum CastlingRightLoss {
   ROOK_MOVED,
   ROOK_CAPTURED,
   CASTLED,
-  UNKNOWN_FEN_IMPORT,
-  NOT_IMPLEMENTED;
+  UNKNOWN_FEN_IMPORT;
 }

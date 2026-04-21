@@ -144,9 +144,6 @@ public enum SanValidationProblem {
   DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL,
   DESTINATION_RNBQK_OPPONENT_NON_KING_NO_CAPTURE_SYMBOL,
 
-  // king castling — one constant per chess-rule refusal reason; order mirrors
-  // MoveCheck.CASTLING_PRIORITY_2..6 (locked by test).
-  // FINAL = right lost permanently. TEMPORARY = board state blocks now but may clear later.
   KING_CASTLING_FINAL_NO_RIGHT,
   KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY,
   KING_CASTLING_TEMPORARY_KING_IN_CHECK,
