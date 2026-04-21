@@ -11,10 +11,12 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
+import com.google.common.collect.ImmutableSet;
 
 /**
  * Per-entry coverage for {@link SanValidationProblem}. For each enum constant that can be triggered from a SAN input,
@@ -33,42 +35,10 @@ import com.dlb.chess.san.validate.SanValidation;
  */
 class TestSanValidationProblemMessage {
 
-  private static final Set<SanValidationProblem> CHECKED_PROBLEMS = EnumSet.noneOf(SanValidationProblem.class);
-  private static final Set<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = new TreeSet<>(
-      EnumSet.of(SanValidationProblem.KING_CASTLING_NOT_POSSIBLE));
-  // EnumSet.of();
-  // SanValidationProblem.KING_CASTLING_NOT_POSSIBLE, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING,
-  // SanValidationProblem.NOT_REACHABLE_PAWN_CAPTURING, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING,
-  // SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_SINGLE, SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE,
-  // SanValidationProblem.NOT_REACHABLE_RNBQ_FILE_SINGLE, SanValidationProblem.NOT_REACHABLE_RNBQ_FILE_MULTIPLE,
-  // SanValidationProblem.NOT_REACHABLE_RNBQ_RANK_SINGLE, SanValidationProblem.NOT_REACHABLE_RNBQ_RANK_MULTIPLE,
-  // SanValidationProblem.NOT_REACHABLE_RNBQ_SQUARE, SanValidationProblem.KING_LEFT_IN_CHECK_PAWN,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_KING_NON_CASTLING,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_NEITHER_SINGLE,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_NEITHER_MULTIPLE,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_FILE_SINGLE,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_FILE_MULTIPLE,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_RANK_SINGLE,
-  // SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_RANK_MULTIPLE, SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_SQUARE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_PAWN, SanValidationProblem.KING_EXPOSED_TO_CHECK_KING_NON_CASTLING,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_NEITHER_SINGLE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_NEITHER_MULTIPLE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_FILE_SINGLE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_FILE_MULTIPLE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_RANK_SINGLE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_RANK_MULTIPLE,
-  // SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_SQUARE,
-  // SanValidationProblem.OVERSPECIFIED_RNBQ_FILE_ONLY_ONE_LEGAL_MOVE,
-  // SanValidationProblem.OVERSPECIFIED_RNBQ_RANK_ONLY_ONE_LEGAL_MOVE,
-  // SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE,
-  // SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_FILE_NOT_NECESSARY,
-  // SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_RANK_NOT_NECESSARY,
-  // SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_MULTIPLE_LEGAL_MOVES,
-  // SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK,
-  // SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_MUST_USE_RANK_OR_SQUARE,
-  // SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE,
-  // SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_MUST_USE_FILE_OR_SQUARE);
-  private static final Set<SanValidationProblem> EXPECTED_PROBLEMS = createExpectedProblems();
+  private static final Set<SanValidationProblem> checkedProblems = new TreeSet<>();
+  private static final ImmutableSet<SanValidationProblem> FIXED_UNCHECKED_ENTRIES = NonNullWrapperCommon
+      .copyOfSet(NonNullWrapperCommon.setOf(SanValidationProblem.UNKNOWN_ERROR, SanValidationProblem.NONE));
+  private static final ImmutableSet<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = ImmutableSet.of();
 
   /**
    * When {@code true}, each test asserts the exact full exception message (useful while messages.properties is being
@@ -521,6 +491,16 @@ class TestSanValidationProblemMessage {
 
   @SuppressWarnings("static-method")
   @Test
+  void testKingCastling() {
+
+    // NOT_REACHABLE_PAWN_NON_CAPTURING: from initial, e5 is out of reach for the e2 pawn
+    // (which can only advance to e3 or e4).
+    checkException("O-O", SanValidationProblem.KING_CASTLING_NOT_POSSIBLE,
+        "King-side castling is not possible because the squares between the king and the rook are not empty.");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testNotReachable() {
 
     // NOT_REACHABLE_PAWN_NON_CAPTURING: from initial, e5 is out of reach for the e2 pawn
@@ -915,7 +895,7 @@ class TestSanValidationProblemMessage {
     } catch (final SanValidationException e) {
       isException = true;
       assertEquals(expectedProblem, e.getSanValidationProblem());
-      CHECKED_PROBLEMS.add(expectedProblem);
+      checkedProblems.add(expectedProblem);
       if (IS_CHECK_MESSAGE) {
         assertEquals(expectedMessage, e.getMessage());
       }
@@ -925,19 +905,13 @@ class TestSanValidationProblemMessage {
 
   @AfterAll
   static void testCoverage() {
-    final Set<SanValidationProblem> missingProblems = EnumSet.copyOf(EXPECTED_PROBLEMS);
-    missingProblems.removeAll(CHECKED_PROBLEMS);
+    final Set<SanValidationProblem> missingProblems = EnumSet.allOf(SanValidationProblem.class);
+    missingProblems.removeAll(FIXED_UNCHECKED_ENTRIES);
+    missingProblems.removeAll(TEMPORARILY_UNCHECKED_PROBLEMS);
+    missingProblems.removeAll(checkedProblems);
     final var missingProblemsMessage = missingProblems.stream().map(problem -> problem.name() + " is missing")
         .reduce((left, right) -> left + System.lineSeparator() + right).orElse("");
-    // assertTrue(missingProblems.isEmpty(), missingProblemsMessage);
-  }
-
-  private static Set<SanValidationProblem> createExpectedProblems() {
-    final Set<SanValidationProblem> expectedProblems = EnumSet.allOf(SanValidationProblem.class);
-    expectedProblems.remove(SanValidationProblem.UNKNOWN_ERROR);
-    expectedProblems.remove(SanValidationProblem.NONE);
-    // expectedProblems.removeAll(TEMPORARILY_UNCHECKED_PROBLEMS);
-    return expectedProblems;
+    assertTrue(missingProblems.isEmpty(), missingProblemsMessage);
   }
 
 }

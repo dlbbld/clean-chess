@@ -342,7 +342,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     if (legalMovesCandidates.size() > 1) {
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.neither.multipleLegalMoves",
+          Message.getString("validation.san.insufficientlySpecified.rnbq.neither.eitherFileOrRankOrSquareRequired",
               pieceType.getName(), toSquare.getName()));
     }
   }
@@ -545,19 +545,19 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         throw new ProgrammingMistakeException("A programming assumption about the rank turned out to be wrong");
       }
       throw new SanValidationException(SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.file.mustUseRank", pieceType.getName(),
+          Message.getString("validation.san.insufficientlySpecified.rnbq.file.rankRequired", pieceType.getName(),
               sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameFile >= 2) {
       if (pieceType == ROOK) {
         throw new SanValidationException(SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_RANK_REQUIRED,
-            Message.getString("validation.san.insufficientlySpecified.rnbq.file.mustUseRank", pieceType.getName(),
+            Message.getString("validation.san.insufficientlySpecified.rnbq.file.rankRequired", pieceType.getName(),
                 sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_FILE_EITHER_RANK_OR_SQUARE_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.file.mustUseRankOrSquare", pieceType.getName(),
+          Message.getString("validation.san.insufficientlySpecified.rnbq.file.eitherRankOrSquareRequired", pieceType.getName(),
               sanConversion.fromFile().getLetterString(), toSquare.getName()));
     }
   }
@@ -618,19 +618,19 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         throw new ProgrammingMistakeException("A programming assumption about the file turned out to be wrong");
       }
       throw new SanValidationException(SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.mustUseFile", pieceType.getName(),
+          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.fileRequired", pieceType.getName(),
               NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameRank >= 2) {
       if (pieceType == ROOK) {
         throw new SanValidationException(SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED,
-            Message.getString("validation.san.insufficientlySpecified.rnbq.rank.mustUseFile", pieceType.getName(),
+            Message.getString("validation.san.insufficientlySpecified.rnbq.rank.fileRequired", pieceType.getName(),
                 sanConversion.fromFile().getLetterString(), toSquare.getName()));
       }
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.mustUseFileOrSquare", pieceType.getName(),
+          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.eitherFileOrSquareRequired", pieceType.getName(),
               NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
     }
 
@@ -644,7 +644,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
 
     if (numberOfLegalMovesFromSameFile == 1) {
       throw new SanValidationException(SanValidationProblem.NON_STANDARD_SPECIFIED_RNBQ_RANK_INSTEAD_OF_FILE,
-          Message.getString("validation.san.insufficientlySpecified.rnbq.rank.mustUseFile.rankInsteadOfFile"));
+          Message.getString("validation.san.nonStandardSpecified.rnbq.rank.rankInsteadOfFile"));
     }
   }
 
