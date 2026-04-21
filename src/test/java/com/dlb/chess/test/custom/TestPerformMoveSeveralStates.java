@@ -41,9 +41,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
       assertEquals(0, board.getHalfMoveClock());
 
@@ -84,9 +84,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveBlack = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -124,9 +124,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
       board.performMove(halfMoveWhite);
@@ -164,9 +164,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveBlack = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -204,9 +204,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
       board.performMove(halfMoveWhite);
@@ -244,9 +244,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveBlack = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -284,9 +284,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
       board.performMove(halfMoveWhite);
@@ -324,9 +324,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveBlack = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -364,9 +364,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
       board.performMove(halfMoveWhite);
@@ -404,9 +404,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveBlack = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -444,9 +444,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
       board.performMove(halfMoveWhite);
@@ -486,7 +486,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       assertEquals(MoveCheck.SUCCESS, CastlingUtility.calculateQueenSideCastlingCheck(board.getStaticPosition(),
           havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -524,9 +524,9 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
       board.performMove(halfMoveWhite);
@@ -566,7 +566,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       assertEquals(MoveCheck.SUCCESS, CastlingUtility.calculateQueenSideCastlingCheck(board.getStaticPosition(),
           havingMove, board.getCastlingRightBlack()));
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
       board.performMove(halfMoveBlack);
@@ -604,7 +604,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
 
       final MoveSpecification halfMoveWhite = new MoveSpecification(havingMove, fromSquare, toSquare);
 
-      assertEquals(MoveCheck.CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY, CastlingUtility
+      assertEquals(MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
       assertEquals(MoveCheck.SUCCESS, CastlingUtility.calculateKingSideCastlingCheck(board.getStaticPosition(),
           havingMove, board.getCastlingRightWhite()));

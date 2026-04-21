@@ -358,33 +358,34 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     final String message;
 
     switch (moveCheck) {
-      case CASTLING_PRIORITY_1_KING_OR_ROOK_NOT_ON_REQUIRED_SQUARE:
-        message = Message.getString("validation.san.castling.kingOrRookNotOnRequiredSquare", sideLabel);
-        break;
-      case CASTLING_PRIORITY_2_NO_CASTLING_RIGHT_ON_THIS_SIDE: {
+      case KING_CASTLING_FINAL_NO_RIGHT: {
         final var rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
         message = switch (castlingRightLoss) {
-          case KING_MOVED -> Message.getString("validation.san.castling.noRight.kingMoved", sideLabel);
-          case ROOK_MOVED -> Message.getString("validation.san.castling.noRight.rookMoved", sideLabel, rookLabel);
-          case ROOK_CAPTURED -> Message.getString("validation.san.castling.noRight.rookCaptured", sideLabel, rookLabel);
-          case CASTLED -> Message.getString("validation.san.castling.noRight.castled", sideLabel);
-          case UNKNOWN_FEN_IMPORT -> Message.getString("validation.san.castling.noRight.unknownFenImport", sideLabel);
-          case NOT_IMPLEMENTED -> Message.getString("validation.san.castling.noRight.notImplemented", sideLabel);
+          case KING_MOVED -> Message.getString("validation.san.kingCastling.finalNoRight.kingMoved", sideLabel);
+          case ROOK_MOVED ->
+              Message.getString("validation.san.kingCastling.finalNoRight.rookMoved", sideLabel, rookLabel);
+          case ROOK_CAPTURED ->
+              Message.getString("validation.san.kingCastling.finalNoRight.rookCaptured", sideLabel, rookLabel);
+          case CASTLED -> Message.getString("validation.san.kingCastling.finalNoRight.castled", sideLabel);
+          case UNKNOWN_FEN_IMPORT ->
+              Message.getString("validation.san.kingCastling.finalNoRight.unknownFenImport", sideLabel);
+          case NOT_IMPLEMENTED ->
+              Message.getString("validation.san.kingCastling.finalNoRight.notImplemented", sideLabel);
           default -> throw new IllegalArgumentException();
         };
         break;
       }
-      case CASTLING_PRIORITY_3_SQUARES_BETWEEN_KING_AND_ROOK_NOT_EMPTY:
-        message = Message.getString("validation.san.castling.squaresNotEmpty", sideLabel);
+      case KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY:
+        message = Message.getString("validation.san.kingCastling.temporary.squaresNotEmpty", sideLabel);
         break;
-      case CASTLING_PRIORITY_4_KING_IN_CHECK:
-        message = Message.getString("validation.san.castling.kingInCheck", sideLabel);
+      case KING_CASTLING_TEMPORARY_KING_IN_CHECK:
+        message = Message.getString("validation.san.kingCastling.temporary.kingInCheck", sideLabel);
         break;
-      case CASTLING_PRIORITY_5_KING_WOULD_TRAVEL_THROUGH_CHECK:
-        message = Message.getString("validation.san.castling.kingWouldTravelThroughCheck", sideLabel);
+      case KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
+        message = Message.getString("validation.san.kingCastling.temporary.kingTravelsThroughCheck", sideLabel);
         break;
-      case CASTLING_PRIORITY_6_KING_WOULD_END_IN_CHECK:
-        message = Message.getString("validation.san.castling.kingWouldEndInCheck", sideLabel);
+      case KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK:
+        message = Message.getString("validation.san.kingCastling.temporary.kingEndsInCheck", sideLabel);
         break;
       case SUCCESS:
         throw new ProgrammingMistakeException("Castling check returned SUCCESS but move is not in legal moves");
@@ -392,8 +393,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         throw new ProgrammingMistakeException("Unexpected castling check result: " + moveCheck);
     }
 
-    throw new SanValidationException(SanValidationProblem.KING_CASTLING_NOT_POSSIBLE, message, moveCheck,
-        castlingRightLoss);
+    throw new SanValidationException(CastlingMoveCheckMapper.map(moveCheck), message, moveCheck, castlingRightLoss);
   }
 
   private static PseudoLegalReason calculatePseudoLegalReason(StaticPosition staticPosition, Side havingMove) {

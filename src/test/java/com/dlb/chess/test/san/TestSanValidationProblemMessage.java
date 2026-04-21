@@ -16,7 +16,6 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Per-entry coverage for {@link SanValidationProblem}. For each enum constant that can be triggered from a SAN input,
@@ -36,9 +35,9 @@ import com.google.common.collect.ImmutableSet;
 class TestSanValidationProblemMessage {
 
   private static final Set<SanValidationProblem> checkedProblems = new TreeSet<>();
-  private static final ImmutableSet<SanValidationProblem> FIXED_UNCHECKED_ENTRIES = NonNullWrapperCommon
-      .copyOfSet(NonNullWrapperCommon.setOf(SanValidationProblem.UNKNOWN_ERROR, SanValidationProblem.NONE));
-  private static final ImmutableSet<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = ImmutableSet.of();
+  private static final Set<SanValidationProblem> FIXED_UNCHECKED_ENTRIES = NonNullWrapperCommon
+      .setOf(SanValidationProblem.UNKNOWN_ERROR, SanValidationProblem.NONE);
+  private static final Set<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = NonNullWrapperCommon.setOf();
 
   /**
    * When {@code true}, each test asserts the exact full exception message (useful while messages.properties is being
@@ -493,10 +492,42 @@ class TestSanValidationProblemMessage {
   @Test
   void testKingCastling() {
 
-    // NOT_REACHABLE_PAWN_NON_CAPTURING: from initial, e5 is out of reach for the e2 pawn
-    // (which can only advance to e3 or e4).
-    checkException("O-O", SanValidationProblem.KING_CASTLING_NOT_POSSIBLE,
+    // KING_CASTLING_FINAL_NO_RIGHT: king and rooks on required squares but FEN says no castling rights
+    // (UNKNOWN_FEN_IMPORT provenance).
+    {
+      final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT,
+          "King-side castling is not possible anymore, the reason is unknown for at game import the castling right was already lost.");
+    }
+
+    // KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY: from the initial position, Nf1/Ng1 still block kingside
+    // castling.
+    checkException("O-O", SanValidationProblem.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY,
         "King-side castling is not possible because the squares between the king and the rook are not empty.");
+
+    // KING_CASTLING_TEMPORARY_KING_IN_CHECK: black queen on e5 attacks white king on e1 along the open
+    // e-file; O-O while in check.
+    {
+      final ApiBoard board = new Board("r3k2r/pppp1ppp/8/4q3/8/8/PPPP1PPP/R3K2R w KQkq - 0 1");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_TEMPORARY_KING_IN_CHECK,
+          "King-side castling is not possible because the king is in check.");
+    }
+
+    // KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK: Nf6-on-e6 attacks f1; king passes through f1.
+    {
+      final ApiBoard board = new Board("rnbqk2r/ppppppbp/4Nnp1/8/8/8/PPPPPPPP/R1BQKBNR b KQkq - 0 25");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
+          "King-side castling is not possible because the king would travel through check.");
+    }
+
+    // KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK: after castling king-side, king on g1 is attacked by the
+    // black bishop on c5 through an open a7-g1 diagonal.
+    {
+      final ApiBoard board = new Board("rnbqk1nr/pppp1ppp/4p3/2b5/2B1P3/5P1N/PPPP2PP/RNBQK2R w KQkq - 0 25");
+      checkException("O-O", board, SanValidationProblem.KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK,
+          "King-side castling is not possible because the king would end in check.");
+    }
+
   }
 
   @SuppressWarnings("static-method")
