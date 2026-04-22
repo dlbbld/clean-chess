@@ -31,7 +31,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         final File pawnFile = sanConversion.toSquare().getFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_PAWN,
-              Message.getString("validation.san.exists.pawn", havingMove.getName(), pawnFile.getLetterString()));
+              Message.getString("validation.san.exists.pawn", pawnFile.getLetterString()));
         }
         break;
       }
@@ -41,7 +41,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         final File pawnFile = sanConversion.fromFile();
         if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_PAWN,
-              Message.getString("validation.san.exists.pawn", havingMove.getName(), pawnFile.getLetterString()));
+              Message.getString("validation.san.exists.pawn", pawnFile.getLetterString()));
         }
         break;
       }
@@ -49,7 +49,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
       case RNBQ_NON_CAPTURING_NEITHER:
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_NEITHER,
-              Message.getString("validation.san.exists.rnbq.neither", havingMove.getName(), movingPieceType.getName()));
+              Message.getString("validation.san.exists.rnbq.neither", movingPieceType.getName()));
         }
         break;
       case RNBQ_CAPTURING_FILE:
@@ -57,7 +57,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromFile())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_FILE,
-              Message.getString("validation.san.exists.rnbq.file", havingMove.getName(), movingPieceType.getName(),
+              Message.getString("validation.san.exists.rnbq.file", movingPieceType.getName(),
                   sanConversion.fromFile().getLetterString()));
         }
         break;
@@ -66,7 +66,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromRank())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_RANK,
-              Message.getString("validation.san.exists.rnbq.rank", havingMove.getName(), movingPieceType.getName(),
+              Message.getString("validation.san.exists.rnbq.rank", movingPieceType.getName(),
                   NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
         }
         break;
@@ -77,7 +77,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         if (pieceOnFromSquare == Piece.NONE || pieceOnFromSquare.getSide() != havingMove
             || pieceOnFromSquare.getPieceType() != movingPieceType) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_SQUARE,
-              Message.getString("validation.san.exists.rnbq.square", havingMove.getName(), movingPieceType.getName(),
+              Message.getString("validation.san.exists.rnbq.square", movingPieceType.getName(),
                   fromSquare.getName()));
         }
         break;
