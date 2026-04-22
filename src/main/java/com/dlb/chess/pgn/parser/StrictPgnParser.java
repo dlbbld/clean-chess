@@ -1,8 +1,5 @@
 package com.dlb.chess.pgn.parser;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,8 +38,9 @@ import com.dlb.chess.utility.TagUtility;
  * Strict PGN parser. Consumes a PGN source as a single forward-only token stream, performing validation and semantic
  * construction in one pass — no intermediate whole-file representations, no multiple passes over the input.
  *
- * <p>The parser produces a {@link PgnFile} record with tags sorted canonically, the start FEN derived from tag data,
- * the leading commentary if present, and the full half-move list. Structural violations surface as
+ * <p>
+ * The parser produces a {@link PgnFile} record with tags sorted canonically, the start FEN derived from tag data, the
+ * leading commentary if present, and the full half-move list. Structural violations surface as
  * {@link StrictPgnParserValidationException} with a fine-grained {@link StrictPgnParserValidationProblem} category.
  */
 public final class StrictPgnParser {
@@ -70,14 +68,7 @@ public final class StrictPgnParser {
   public static PgnFile parse(Path pgnFilePath) {
     // Read raw bytes so that file-structure invariants (trailing newline, blank-line layout) see the actual source
     // rather than a normalized line-by-line reconstruction.
-    final String source;
-    try {
-      source = Files.readString(pgnFilePath, StandardCharsets.UTF_8);
-    } catch (final IOException e) {
-      throw new com.dlb.chess.common.exceptions.FileSystemAccessException(
-          "Reading file \"" + pgnFilePath + "\" failed.", e);
-    }
-    return parseText(source);
+    return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
@@ -105,6 +96,21 @@ public final class StrictPgnParser {
     return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
   }
 
+  public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
+    try {
+      parse(pgnFilePath);
+      return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
+    } catch (final StrictPgnParserValidationException e) {
+      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
+          message);
+    } catch (final RuntimeException e) {
+      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
+          SanValidationProblem.UNKNOWN_ERROR, message);
+    }
+  }
+
   /**
    * Validates a PGN source and returns a structured result rather than throwing. Intended for callers that want to
    * inspect the problem category programmatically instead of catching exceptions.
@@ -115,25 +121,10 @@ public final class StrictPgnParser {
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
     } catch (final StrictPgnParserValidationException e) {
       @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(),
-          e.getSanValidationProblem(), message);
+      return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
+          message);
     } catch (final RuntimeException e) {
-      final String message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
-      return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.UNKNOWN_ERROR, message);
-    }
-  }
-
-  public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
-    try {
-      parse(pgnFilePath);
-      return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
-    } catch (final StrictPgnParserValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(),
-          e.getSanValidationProblem(), message);
-    } catch (final RuntimeException e) {
-      final String message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.UNKNOWN_ERROR, message);
     }
@@ -154,7 +145,7 @@ public final class StrictPgnParser {
 
     final ResultTagValue resultTagValue = validateResultTagValue(tagList);
     final SetUpTagValue setUpTagValue = validateTagSetUpValue(tagList);
-    final boolean isStartFromPosition = setUpTagValue == SetUpTagValue.START_FROM_SETUP_POSITION;
+    final var isStartFromPosition = setUpTagValue == SetUpTagValue.START_FROM_SETUP_POSITION;
     final Fen startFen = calculateStartFen(tagList, isStartFromPosition);
 
     final MovetextOutcome movetext = parseMovetext(startFen, resultTagValue);
@@ -254,16 +245,16 @@ public final class StrictPgnParser {
     return new Tag(tagName, valueToken.text());
   }
 
-  private void validateTagNameFirstCharacter(String name) {
+  private static void validateTagNameFirstCharacter(String name) {
     if (name.isEmpty() || !isAsciiLetterOrDigit(name.charAt(0))) {
       throw tagFormatError(StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER,
           "The first character in the tag name must be one of A-Z, a-z or 0-9.");
     }
   }
 
-  private void validateTagNameCharacters(String name) {
-    for (int i = 0; i < name.length(); i++) {
-      final char c = name.charAt(i);
+  private static void validateTagNameCharacters(String name) {
+    for (var i = 0; i < name.length(); i++) {
+      final var c = name.charAt(i);
       if (!isAsciiLetterOrDigit(c) && c != '_' && c != '+' && c != '#' && c != '=' && c != ':' && c != '-') {
         throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
             "The tag name contains an invalid character \"" + c + "\".");
@@ -271,7 +262,7 @@ public final class StrictPgnParser {
     }
   }
 
-  private void validateTagNameLength(String name) {
+  private static void validateTagNameLength(String name) {
     if (name.length() > MAX_TAG_NAME_LENGTH) {
       throw tagFormatError(StrictPgnParserValidationProblem.TAG_NAME_EXCEEDS_MAXIMUM_LENGTH,
           "With " + name.length() + " characters, the tag name exceeds the allowed maximum length of "
@@ -280,12 +271,12 @@ public final class StrictPgnParser {
   }
 
   private static void validateUniqueTagNames(List<Tag> tagList) {
-    for (int i = 0; i < tagList.size(); i++) {
-      for (int j = i + 1; j < tagList.size(); j++) {
-        if (tagList.get(i).name().equals(tagList.get(j).name())) {
+    for (var i = 0; i < tagList.size(); i++) {
+      for (var j = i + 1; j < tagList.size(); j++) {
+        if (NonNullWrapperCommon.get(tagList, i).name().equals(NonNullWrapperCommon.get(tagList, j).name())) {
           throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
-              SanValidationProblem.NONE,
-              "The tag name must be unique. The tag name \"" + tagList.get(i).name() + "\" was used more than once.");
+              SanValidationProblem.NONE, "The tag name must be unique. The tag name \""
+                  + NonNullWrapperCommon.get(tagList, i).name() + "\" was used more than once.");
         }
       }
     }
@@ -334,7 +325,7 @@ public final class StrictPgnParser {
   }
 
   private static void validateTagFenValue(List<Tag> tagList, SetUpTagValue setUpTagValue) {
-    final boolean hasFen = TagUtility.hasFen(tagList);
+    final var hasFen = TagUtility.hasFen(tagList);
     switch (setUpTagValue) {
       case NONE, START_FROM_INITIAL_POSITION -> {
         if (hasFen) {
@@ -373,7 +364,7 @@ public final class StrictPgnParser {
 
   private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
     // Leading commentary (optional).
-    String leadingCommentary = "";
+    var leadingCommentary = "";
     final PgnTokenType firstType = tokenizer.peek().type();
     if (firstType == PgnTokenType.BRACE_COMMENT || firstType == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
       leadingCommentary = readCommentOrThrow();
@@ -382,8 +373,8 @@ public final class StrictPgnParser {
 
     final List<PgnHalfMove> halfMoves = new ArrayList<>();
     Side havingMove = startFen.havingMove();
-    int fullMoveNumber = startFen.fullMoveNumber();
-    boolean isFirstMove = true;
+    var fullMoveNumber = startFen.fullMoveNumber();
+    var isFirstMove = true;
 
     // Zero-move game: the movetext body is just <space><terminator>, with no move numbers or SANs at all. The
     // leading single space is the same one a half-move would emit after itself, only no half-move preceded it.
@@ -426,7 +417,7 @@ public final class StrictPgnParser {
       expectInterTokenSeparatorOrMissingTermination(resultTagValue);
 
       // Optional brace commentary attached to this half-move.
-      String commentary = "";
+      var commentary = "";
       final PgnTokenType maybeComment = tokenizer.peek().type();
       if (maybeComment == PgnTokenType.BRACE_COMMENT || maybeComment == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
         commentary = readCommentOrThrow();
@@ -454,11 +445,7 @@ public final class StrictPgnParser {
 
   private void expectSpaceAfterComment() {
     final PgnToken token = tokenizer.peek();
-    if (token.type() == PgnTokenType.NEWLINE) {
-      tokenizer.next();
-      return;
-    }
-    if (token.type() == PgnTokenType.SPACES && token.text().length() == 1) {
+    if (token.type() == PgnTokenType.NEWLINE || token.type() == PgnTokenType.SPACES && token.text().length() == 1) {
       tokenizer.next();
       return;
     }
@@ -468,12 +455,8 @@ public final class StrictPgnParser {
 
   private void expectInterTokenSeparatorOrMissingTermination(ResultTagValue resultTagValue) {
     final PgnToken peek = tokenizer.peek();
-    if (peek.type() == PgnTokenType.NEWLINE && tokenizer.peekNext().type() == PgnTokenType.NEWLINE) {
-      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
-          "The file must end with the result provided in the result tag. The provided result is \""
-              + resultTagValue.getValue() + "\".");
-    }
-    if (peek.type() == PgnTokenType.EOF) {
+    if (peek.type() == PgnTokenType.NEWLINE && tokenizer.peekNext().type() == PgnTokenType.NEWLINE
+        || peek.type() == PgnTokenType.EOF) {
       throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
           "The file must end with the result provided in the result tag. The provided result is \""
               + resultTagValue.getValue() + "\".");
@@ -506,7 +489,7 @@ public final class StrictPgnParser {
     validateSanCharacters(san);
     validateSanLength(san);
 
-    MoveSuffixAnnotation suffix = MoveSuffixAnnotation.NONE;
+    var suffix = MoveSuffixAnnotation.NONE;
     if (tokenizer.peek().type() == PgnTokenType.MOVE_SUFFIX_ANNOTATION) {
       final PgnToken suffixToken = tokenizer.next();
       if (!MoveSuffixAnnotation.exists(suffixToken.text())) {
@@ -553,9 +536,9 @@ public final class StrictPgnParser {
     tokenizer.next();
   }
 
-  private void validateSanCharacters(String san) {
-    for (int i = 0; i < san.length(); i++) {
-      final char c = san.charAt(i);
+  private static void validateSanCharacters(String san) {
+    for (var i = 0; i < san.length(); i++) {
+      final var c = san.charAt(i);
       if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
           && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.enums.SanSymbol.exists(c)) {
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
@@ -564,14 +547,14 @@ public final class StrictPgnParser {
     }
   }
 
-  private void validateSanLength(String san) {
+  private static void validateSanLength(String san) {
     if (san.length() < SAN_MIN_LENGTH || san.length() > SAN_MAX_LENGTH) {
       throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID,
           "The movetext contains the SAN '" + san + "' with an invalid SAN length.");
     }
   }
 
-  private void validateTermination(PgnToken terminator, ResultTagValue resultTagValue) {
+  private static void validateTermination(PgnToken terminator, ResultTagValue resultTagValue) {
     if (!terminator.text().equals(resultTagValue.getValue())) {
       throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
           "The file must end with the result provided in the result tag. The provided result is \""
@@ -587,14 +570,14 @@ public final class StrictPgnParser {
     final Board board = new Board(startFen);
     for (final PgnHalfMove halfMove : halfMoveList) {
       final Side side = board.getHavingMove();
-      final int fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
+      final var fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
       try {
         board.performMove(halfMove.san());
       } catch (final SanValidationException e) {
         final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
             halfMove.san());
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
-        final String message = "The validation for " + moveNumberAndSan + " failed. Reason: "
+        final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
         throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
             message);
@@ -603,7 +586,7 @@ public final class StrictPgnParser {
   }
 
   private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
-    final String startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
+    final var startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
     return FenParserAdvanced.parseFenAdvanced(startFenStr);
   }
 
@@ -633,6 +616,6 @@ public final class StrictPgnParser {
   }
 
   private static boolean isAsciiLetterOrDigit(char c) {
-    return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+    return c >= '0' && c <= '9' || c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z';
   }
 }

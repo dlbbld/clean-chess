@@ -7,28 +7,40 @@ package com.dlb.chess.pgn.parser.sequential;
  */
 public enum PgnTokenType {
 
-  /** The {@code [} character introducing a tag pair on its own line. */
+  /**
+   * The {@code [} character introducing a tag pair on its own line.
+   */
   TAG_BRACKET_OPEN,
 
-  /** The {@code ]} character terminating a tag pair. */
+  /**
+   * The {@code ]} character terminating a tag pair.
+   */
   TAG_BRACKET_CLOSE,
 
   /** Tag value — the unescaped content between the quotes, without the surrounding quotes. */
   TAG_VALUE_STRING,
 
-  /** Tag value that started with {@code "} but was not terminated before end-of-line or end-of-input. */
+  /**
+   * Tag value that started with {@code "} but was not terminated before end-of-line or end-of-input.
+   */
   TAG_VALUE_STRING_UNTERMINATED,
 
   /** Run of space and tab characters inside a line. */
   SPACES,
 
-  /** Single {@code \n} or {@code \r\n} line terminator. */
+  /**
+   * Single {@code \n} or {@code \r\n} line terminator.
+   */
   NEWLINE,
 
-  /** Move number indicator for the side to move, e.g. {@code 1.} or {@code 12.}. */
+  /**
+   * Move number indicator for the side to move, e.g. {@code 1.} or {@code 12.}.
+   */
   MOVE_NUMBER_WHITE,
 
-  /** Move number indicator for the continuation of black's move, e.g. {@code 1...} or {@code 12...}. */
+  /**
+   * Move number indicator for the continuation of black's move, e.g. {@code 1...} or {@code 12...}.
+   */
   MOVE_NUMBER_BLACK,
 
   /**
@@ -37,10 +49,14 @@ public enum PgnTokenType {
    */
   SYMBOL,
 
-  /** Move suffix annotation — {@code !}, {@code !!}, {@code ?}, {@code ??}, {@code !?}, {@code ?!}. */
+  /**
+   * Move suffix annotation — {@code !}, {@code !!}, {@code ?}, {@code ??}, {@code !?}, {@code ?!}.
+   */
   MOVE_SUFFIX_ANNOTATION,
 
-  /** Brace-delimited commentary {@code {...}}. The token text is the commentary content without the braces. */
+  /**
+   * Brace-delimited commentary {@code {...}}. The token text is the commentary content without the braces.
+   */
   BRACE_COMMENT,
 
   /**
@@ -50,7 +66,9 @@ public enum PgnTokenType {
    */
   BRACE_COMMENT_UNCLOSED,
 
-  /** Game termination marker — {@code 1-0}, {@code 0-1}, {@code 1/2-1/2}, {@code *}. */
+  /**
+   * Game termination marker — {@code 1-0}, {@code 0-1}, {@code 1/2-1/2}, {@code *}.
+   */
   TERMINATION_MARKER,
 
   /** End of the character source. */

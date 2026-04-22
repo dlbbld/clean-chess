@@ -15,11 +15,34 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public abstract class FileUtility {
+
+  /**
+   * Reads the entire contents of a file as a single UTF-8 string, preserving line terminators exactly as they
+   * appear on disk. Complements {@link #readFileLines(Path)} — use this when the parser needs to see the raw source
+   * (for example to detect a missing trailing newline).
+   */
+  public static String readFileAsString(Path filePath) {
+    final var file = filePath.toFile();
+    if (!file.exists()) {
+      throw new FileSystemAccessException("File \"" + filePath + "\" was not found.");
+    }
+    if (!file.isFile()) {
+      throw new FileSystemAccessException("\"" + filePath + "\" is not a file.");
+    }
+    try {
+      @SuppressWarnings("null") @NonNull final String content = Files.readString(filePath, StandardCharsets.UTF_8);
+      return content;
+    } catch (final IOException ioe) {
+      throw new FileSystemAccessException("Reading file \"" + filePath + "\" failed.", ioe);
+    }
+  }
 
   /**
    * Reading a file linewise, without including linebreaks or adding spaces after a line break.

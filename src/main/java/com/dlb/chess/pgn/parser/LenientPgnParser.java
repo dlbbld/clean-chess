@@ -1,19 +1,16 @@
 package com.dlb.chess.pgn.parser;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
@@ -44,8 +41,9 @@ import com.dlb.chess.utility.TagUtility;
  * optional, space before a move suffix annotation or a check/mate glyph is tolerated, and missing seven-tag-roster
  * entries are patched in with placeholders rather than rejected.
  *
- * <p>Independent validation pipeline — does not share logic with {@link StrictPgnParser}. Tokenizer primitives are
- * shared via the {@code sequential} sub-package.
+ * <p>
+ * Independent validation pipeline — does not share logic with {@link StrictPgnParser}. Tokenizer primitives are shared
+ * via the {@code sequential} sub-package.
  */
 public final class LenientPgnParser {
 
@@ -69,13 +67,7 @@ public final class LenientPgnParser {
   }
 
   public static PgnFile parse(Path pgnFilePath) {
-    final String source;
-    try {
-      source = Files.readString(pgnFilePath, StandardCharsets.UTF_8);
-    } catch (final IOException e) {
-      throw new FileSystemAccessException("Reading file \"" + pgnFilePath + "\" failed.", e);
-    }
-    return parseText(source);
+    return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
@@ -103,6 +95,22 @@ public final class LenientPgnParser {
     return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
   }
 
+  public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
+    try {
+      parse(pgnFilePath);
+      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE,
+          "OK");
+    } catch (final LenientPgnParserValidationException e) {
+      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
+          message);
+    } catch (final RuntimeException e) {
+      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
+          SanValidationProblem.NONE, message);
+    }
+  }
+
   /**
    * Validates a PGN source and returns a structured result rather than throwing. Intended for callers that want to
    * inspect the problem category programmatically instead of catching exceptions.
@@ -114,26 +122,10 @@ public final class LenientPgnParser {
           "OK");
     } catch (final LenientPgnParserValidationException e) {
       @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(),
-          e.getSanValidationProblem(), message);
+      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
+          message);
     } catch (final RuntimeException e) {
-      final String message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
-      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, message);
-    }
-  }
-
-  public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
-    try {
-      parse(pgnFilePath);
-      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE,
-          "OK");
-    } catch (final LenientPgnParserValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(),
-          e.getSanValidationProblem(), message);
-    } catch (final RuntimeException e) {
-      final String message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, message);
     }
@@ -164,11 +156,9 @@ public final class LenientPgnParser {
     // file to detect this up front; here we catch it by inspecting whatever is left after the termination marker.
     skipInsignificantWhitespace();
     final PgnToken trailingPeek = tokenizer.peek();
-    if (trailingPeek.type() == PgnTokenType.TAG_BRACKET_OPEN
-        || currentLineContainsTagBracket(trailingPeek.line())) {
-      if (trailingPeek.type() != PgnTokenType.EOF) {
-        throw tagReappearError();
-      }
+    if ((trailingPeek.type() == PgnTokenType.TAG_BRACKET_OPEN || currentLineContainsTagBracket(trailingPeek.line()))
+        && trailingPeek.type() != PgnTokenType.EOF) {
+      throw tagReappearError();
     }
 
     final ResultTagValue resultTagValue = reconcileResult(tagList, movetext.terminationResult());
@@ -178,7 +168,7 @@ public final class LenientPgnParser {
     // Lenient policy — derive setup-from-position strictly from the presence of the FEN tag. A SetUp tag with
     // value "1" but no FEN is logically inconsistent; the existing lenient pipeline resolves that by ignoring
     // the stale SetUp and starting from the initial position, then the fix-up below removes the stale tag.
-    final boolean isStartFromPosition = TagUtility.hasFen(tagList);
+    final var isStartFromPosition = TagUtility.hasFen(tagList);
     fixTagListForSetUpIfRequired(tagList, isStartFromPosition);
 
     final Fen startFen = calculateStartFen(tagList, isStartFromPosition);
@@ -221,10 +211,10 @@ public final class LenientPgnParser {
    * Mirrors the existing lenient parser's {@code isConsideredTagLine} check at the sequential layer.
    */
   private boolean currentLineContainsTagBracket(int lineNumber) {
-    int index = 0;
-    int currentLine = 1;
+    var index = 0;
+    var currentLine = 1;
     while (currentLine < lineNumber && index < source.length()) {
-      final char c = source.charAt(index);
+      final var c = source.charAt(index);
       if (c == '\r') {
         currentLine++;
         if (index + 1 < source.length() && source.charAt(index + 1) == '\n') {
@@ -236,7 +226,7 @@ public final class LenientPgnParser {
       index++;
     }
     while (index < source.length()) {
-      final char c = source.charAt(index);
+      final var c = source.charAt(index);
       if (c == '\n' || c == '\r') {
         break;
       }
@@ -251,8 +241,7 @@ public final class LenientPgnParser {
   private Tag parseTag() {
     final PgnToken open = tokenizer.next();
     if (open.type() != PgnTokenType.TAG_BRACKET_OPEN) {
-      throw tagFormatError(
-          "Tag opening bracket [ expected but found \"" + open.text() + "\".");
+      throw tagFormatError("Tag opening bracket [ expected but found \"" + open.text() + "\".");
     }
     skipInlineWhitespace();
 
@@ -281,8 +270,8 @@ public final class LenientPgnParser {
     if (name.isEmpty()) {
       throw tagFormatError("Tag name must not be empty.");
     }
-    for (int i = 0; i < name.length(); i++) {
-      final char c = name.charAt(i);
+    for (var i = 0; i < name.length(); i++) {
+      final var c = name.charAt(i);
       if (!isAsciiLetterOrDigit(c) && c != '_' && c != '+' && c != '#' && c != '=' && c != ':' && c != '-') {
         throw tagFormatError("The tag name contains an invalid character \"" + c + "\".");
       }
@@ -290,12 +279,12 @@ public final class LenientPgnParser {
   }
 
   private static void validateUniqueTagNames(List<Tag> tagList) {
-    for (int i = 0; i < tagList.size(); i++) {
-      for (int j = i + 1; j < tagList.size(); j++) {
-        if (tagList.get(i).name().equals(tagList.get(j).name())) {
+    for (var i = 0; i < tagList.size(); i++) {
+      for (var j = i + 1; j < tagList.size(); j++) {
+        if (NonNullWrapperCommon.get(tagList, i).name().equals(NonNullWrapperCommon.get(tagList, j).name())) {
           throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
-              SanValidationProblem.NONE,
-              "The tag name must be unique. The tag name \"" + tagList.get(i).name() + "\" was used more than once.");
+              SanValidationProblem.NONE, "The tag name must be unique. The tag name \""
+                  + NonNullWrapperCommon.get(tagList, i).name() + "\" was used more than once.");
         }
       }
     }
@@ -338,13 +327,13 @@ public final class LenientPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   private record MovetextOutcome(List<PgnHalfMove> halfMoveList, String leadingCommentary,
-      ResultTagValue terminationResult) {
+      @Nullable ResultTagValue terminationResult) {
   }
 
   private MovetextOutcome parseMovetext() {
-    String leadingCommentary = "";
+    var leadingCommentary = "";
     final List<PgnHalfMove> halfMoves = new ArrayList<>();
-    ResultTagValue terminationResult = null;
+    @Nullable ResultTagValue terminationResult = null;
 
     skipInsignificantWhitespace();
     if (isCommentToken(tokenizer.peek().type())) {
@@ -377,10 +366,9 @@ public final class LenientPgnParser {
           // Stray comment with no preceding half-move — append to the leading commentary so nothing is lost.
           leadingCommentary = leadingCommentary.isEmpty() ? commentary : leadingCommentary + " " + commentary;
         } else {
-          final int last = halfMoves.size() - 1;
-          final PgnHalfMove previous = halfMoves.get(last);
-          final String combined = previous.commentary().isEmpty() ? commentary
-              : previous.commentary() + " " + commentary;
+          final var last = halfMoves.size() - 1;
+          final PgnHalfMove previous = NonNullWrapperCommon.get(halfMoves, last);
+          final var combined = previous.commentary().isEmpty() ? commentary : previous.commentary() + " " + commentary;
           halfMoves.set(last, new PgnHalfMove(previous.san(), previous.moveSuffixAnnotation(), combined));
         }
         continue;
@@ -392,8 +380,8 @@ public final class LenientPgnParser {
         }
         final PgnToken suffixToken = tokenizer.next();
         final MoveSuffixAnnotation suffix = parseMoveSuffix(suffixToken.text());
-        final int last = halfMoves.size() - 1;
-        final PgnHalfMove previous = halfMoves.get(last);
+        final var last = halfMoves.size() - 1;
+        final PgnHalfMove previous = NonNullWrapperCommon.get(halfMoves, last);
         halfMoves.set(last, new PgnHalfMove(previous.san(), suffix, previous.commentary()));
         continue;
       }
@@ -402,8 +390,9 @@ public final class LenientPgnParser {
         continue;
       }
       // Anything else at movetext position is an unexpected format.
-      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
-          SanValidationProblem.NONE, "Unexpected token \"" + peek.text() + "\" at line " + peek.line() + ".");
+      throw new LenientPgnParserValidationException(
+          LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION, SanValidationProblem.NONE,
+          "Unexpected token \"" + peek.text() + "\" at line " + peek.line() + ".");
     }
 
     return new MovetextOutcome(halfMoves, leadingCommentary, terminationResult);
@@ -426,7 +415,7 @@ public final class LenientPgnParser {
     validateSanCharacters(san);
     validateSanLength(san);
 
-    MoveSuffixAnnotation suffix = MoveSuffixAnnotation.NONE;
+    var suffix = MoveSuffixAnnotation.NONE;
     // Allow whitespace between SAN and suffix annotation (`e4 !!`).
     skipInlineWhitespace();
     if (tokenizer.peek().type() == PgnTokenType.MOVE_SUFFIX_ANNOTATION) {
@@ -459,8 +448,8 @@ public final class LenientPgnParser {
   }
 
   private static void validateSanCharacters(String san) {
-    for (int i = 0; i < san.length(); i++) {
-      final char c = san.charAt(i);
+    for (var i = 0; i < san.length(); i++) {
+      final var c = san.charAt(i);
       if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
           && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.enums.SanSymbol.exists(c)) {
         throw new LenientPgnParserValidationException(
@@ -482,7 +471,7 @@ public final class LenientPgnParser {
   // Tag fix-ups
   // -------------------------------------------------------------------------------------------------
 
-  private static ResultTagValue reconcileResult(List<Tag> tagList, ResultTagValue terminationResult) {
+  private static ResultTagValue reconcileResult(List<Tag> tagList, @Nullable ResultTagValue terminationResult) {
     if (TagUtility.hasResult(tagList)) {
       final ResultTagValue fromTag = ResultTagValue.calculate(TagUtility.readResult(tagList));
       if (terminationResult != null && terminationResult != fromTag) {
@@ -526,19 +515,22 @@ public final class LenientPgnParser {
   // Whitespace skipping helpers
   // -------------------------------------------------------------------------------------------------
 
-  /** Consumes any run of {@link PgnTokenType#SPACES} and {@link PgnTokenType#NEWLINE} tokens at the current position. */
+  /**
+   * Consumes any run of {@link PgnTokenType#SPACES} and {@link PgnTokenType#NEWLINE} tokens at the current position.
+   */
   private void skipInsignificantWhitespace() {
     while (true) {
       final PgnTokenType type = tokenizer.peek().type();
-      if (type == PgnTokenType.SPACES || type == PgnTokenType.NEWLINE) {
-        tokenizer.next();
-      } else {
+      if (type != PgnTokenType.SPACES && type != PgnTokenType.NEWLINE) {
         break;
       }
+      tokenizer.next();
     }
   }
 
-  /** Consumes only {@link PgnTokenType#SPACES} at the current position. Used inside a single logical line. */
+  /**
+   * Consumes only {@link PgnTokenType#SPACES} at the current position. Used inside a single logical line.
+   */
   private void skipInlineWhitespace() {
     while (tokenizer.peek().type() == PgnTokenType.SPACES) {
       tokenizer.next();
@@ -553,14 +545,14 @@ public final class LenientPgnParser {
     final Board board = new Board(startFen);
     for (final PgnHalfMove halfMove : halfMoveList) {
       final Side side = board.getHavingMove();
-      final int fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
+      final var fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
       try {
         board.performMove(halfMove.san());
       } catch (final SanValidationException e) {
         final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
             halfMove.san());
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
-        final String message = "The validation for " + moveNumberAndSan + " failed. Reason: "
+        final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
         throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.SAN,
             e.getSanValidationProblem(), message);
@@ -569,7 +561,7 @@ public final class LenientPgnParser {
   }
 
   private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
-    final String startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
+    final var startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
     return FenParserAdvanced.parseFenAdvanced(startFenStr);
   }
 
@@ -599,6 +591,6 @@ public final class LenientPgnParser {
   }
 
   private static boolean isAsciiLetterOrDigit(char c) {
-    return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+    return c >= '0' && c <= '9' || c >= 'A' && c <= 'Z' || c >= 'a' && c <= 'z';
   }
 }

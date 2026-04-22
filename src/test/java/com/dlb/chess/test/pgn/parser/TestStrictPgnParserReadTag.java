@@ -25,6 +25,7 @@ class TestStrictPgnParserReadTag {
     }
     return sanList;
   }
+
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
       .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "tag");
 
