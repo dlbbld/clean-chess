@@ -1,0 +1,577 @@
+package com.dlb.chess.pgn.parser.sequential;
+
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.eclipse.jdt.annotation.NonNull;
+
+import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.enums.MoveSuffixAnnotation;
+import com.dlb.chess.fen.FenParserAdvanced;
+import com.dlb.chess.fen.constants.FenConstants;
+import com.dlb.chess.fen.model.Fen;
+import com.dlb.chess.model.PgnHalfMove;
+import com.dlb.chess.pgn.parser.enums.ResultTagValue;
+import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
+import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.parser.model.Tag;
+import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.utility.TagUtility;
+
+/**
+ * Sequential strict PGN parser. Consumes a PGN source as a single forward-only token stream, performing validation
+ * and semantic construction in one pass — no intermediate whole-file representations, no multiple passes over the
+ * input.
+ *
+ * <p>This is an independent pipeline from the existing {@code StrictPgnParser}; it shares no validation logic with
+ * the lenient parser. The final {@link PgnFile} output is designed to match byte-for-byte what the existing strict
+ * parser produces for the same input, so it is a drop-in replacement once validation coverage is complete.
+ *
+ * <p>First cut: covers the happy path (well-formed strict PGN) and maps the most common structural violations to
+ * their existing {@link StrictPgnParserValidationProblem} categories. Finer-grained error discrimination is added as
+ * specific exception tests come online.
+ */
+public final class SequentialStrictPgnParser {
+
+  private static final int MAX_TAG_NAME_LENGTH = 255;
+  private static final int SAN_MIN_LENGTH = 2;
+  private static final int SAN_MAX_LENGTH = 7;
+
+  private final String source;
+  private final PgnTokenizer tokenizer;
+
+  private SequentialStrictPgnParser(String source) {
+    this.source = source;
+    this.tokenizer = new PgnTokenizer(new PgnCharStream(source));
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Public entry points
+  // -------------------------------------------------------------------------------------------------
+
+  public static PgnFile parseText(String pgn) {
+    return new SequentialStrictPgnParser(pgn).parseInternal();
+  }
+
+  public static PgnFile parse(Path pgnFilePath) {
+    // Read raw bytes so that file-structure invariants (trailing newline, blank-line layout) see the actual source
+    // rather than a normalized line-by-line reconstruction.
+    final String source;
+    try {
+      source = Files.readString(pgnFilePath, StandardCharsets.UTF_8);
+    } catch (final IOException e) {
+      throw new com.dlb.chess.common.exceptions.FileSystemAccessException(
+          "Reading file \"" + pgnFilePath + "\" failed.", e);
+    }
+    return parseText(source);
+  }
+
+  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
+    return parse(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+  }
+
+  public static PgnFile parse(String pgnFilePath) {
+    return parse(NonNullWrapperCommon.get(pgnFilePath));
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Top-level parsing
+  // -------------------------------------------------------------------------------------------------
+
+  private PgnFile parseInternal() {
+    // Whole-file structural checks up front — these correspond to the existing parser's line-counting validations
+    // and keep the token-driven parse below focused on content.
+    StrictFileStructurePreScan.validate(source);
+
+    final List<Tag> tagList = parseTagSection();
+    validateUniqueTagNames(tagList);
+    validateSevenTagRoster(tagList);
+
+    final ResultTagValue resultTagValue = validateResultTagValue(tagList);
+    final SetUpTagValue setUpTagValue = validateTagSetUpValue(tagList);
+    final boolean isStartFromPosition = setUpTagValue == SetUpTagValue.START_FROM_SETUP_POSITION;
+    final Fen startFen = calculateStartFen(tagList, isStartFromPosition);
+
+    final MovetextOutcome movetext = parseMovetext(startFen, resultTagValue);
+
+    validateBoardPerLastMove(startFen, movetext.halfMoveList());
+
+    removeFenIfInitial(tagList, startFen);
+    Collections.sort(tagList);
+
+    return new PgnFile(tagList, startFen, movetext.leadingCommentary(), movetext.halfMoveList());
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Tag section
+  // -------------------------------------------------------------------------------------------------
+
+  private List<Tag> parseTagSection() {
+    final List<Tag> tags = new ArrayList<>();
+    while (true) {
+      final PgnToken peek = tokenizer.peek();
+      if (peek.type() == PgnTokenType.NEWLINE) {
+        tokenizer.next(); // the separator blank line
+        return tags;
+      }
+      if (peek.type() == PgnTokenType.EOF) {
+        // Should be unreachable given the structural pre-scan, but guard anyway.
+        throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID, "Unexpected end of input in tags.");
+      }
+      tags.add(parseTag());
+      // After the closing ] the tag line must end. Any further content on the same line is reported as a
+      // right-bracket error because semantically the tag didn't end cleanly at the bracket.
+      final PgnToken eol = tokenizer.next();
+      if (eol.type() != PgnTokenType.NEWLINE) {
+        throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET,
+            "The tag line must end right after the closing right square bracket ].");
+      }
+    }
+  }
+
+  private Tag parseTag() {
+    final PgnToken open = tokenizer.next();
+    if (open.type() != PgnTokenType.TAG_BRACKET_OPEN) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET,
+          "The tag line must start with the left square bracket [.");
+    }
+
+    final PgnToken afterOpen = tokenizer.peek();
+    if (afterOpen.type() == PgnTokenType.SPACES) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_LEFT_SQUARE_BRACKET_FOLLOWED_BY_SPACE,
+          "The left square bracket [ must be followed by the tag name, but a space was found.");
+    }
+
+    if (afterOpen.type() != PgnTokenType.SYMBOL) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER,
+          "The first character in the tag name must be one of A-Z, a-z or 0-9.");
+    }
+    final PgnToken nameToken = tokenizer.next();
+    final String tagName = nameToken.text();
+    validateTagNameFirstCharacter(tagName);
+    validateTagNameCharacters(tagName);
+    validateTagNameLength(tagName);
+
+    // The existing strict parser's regex-based validator classifies "no space between tag name and value" as a
+    // generic TAG_FORMAT_INVALID rather than a distinct missing-space error. We match that here.
+    final PgnToken afterName = tokenizer.peek();
+    if (afterName.type() != PgnTokenType.SPACES || afterName.text().length() != 1) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
+          "A single space is required between the tag name and the tag value.");
+    }
+    tokenizer.next();
+
+    final PgnToken valueToken = tokenizer.next();
+    if (valueToken.type() == PgnTokenType.TAG_VALUE_STRING_UNTERMINATED) {
+      // Split on whether the tag line still ends with ]. The captured content of an unterminated string stops at
+      // the next newline or EOF, so its trailing character (if any) is whatever came right before that boundary —
+      // including a stray ] if the source had one on that line. The existing regex-based validator uses the same
+      // heuristic: line endsWith("]") maps to TAG_FORMAT_INVALID, otherwise NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET.
+      final String content = valueToken.text();
+      if (!content.isEmpty() && content.charAt(content.length() - 1) == ']') {
+        throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
+            "The tag value starts with a double quote but is not properly terminated.");
+      }
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET,
+          "The tag line must end with the right square bracket ].");
+    }
+    if (valueToken.type() != PgnTokenType.TAG_VALUE_STRING) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
+          "The tag value must be enclosed in double quotes.");
+    }
+
+    final PgnToken close = tokenizer.next();
+    if (close.type() != PgnTokenType.TAG_BRACKET_CLOSE) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET,
+          "The tag line must end with the right square bracket ].");
+    }
+
+    return new Tag(tagName, valueToken.text());
+  }
+
+  private void validateTagNameFirstCharacter(String name) {
+    if (name.isEmpty() || !isAsciiLetterOrDigit(name.charAt(0))) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_NAME_FIRST_CHARACTER,
+          "The first character in the tag name must be one of A-Z, a-z or 0-9.");
+    }
+  }
+
+  private void validateTagNameCharacters(String name) {
+    for (int i = 0; i < name.length(); i++) {
+      final char c = name.charAt(i);
+      if (!isAsciiLetterOrDigit(c) && c != '_' && c != '+' && c != '#' && c != '=' && c != ':' && c != '-') {
+        throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
+            "The tag name contains an invalid character \"" + c + "\".");
+      }
+    }
+  }
+
+  private void validateTagNameLength(String name) {
+    if (name.length() > MAX_TAG_NAME_LENGTH) {
+      throw tagFormatError(StrictPgnParserValidationProblem.TAG_NAME_EXCEEDS_MAXIMUM_LENGTH,
+          "With " + name.length() + " characters, the tag name exceeds the allowed maximum length of "
+              + MAX_TAG_NAME_LENGTH + " characters per the PGN specification.");
+    }
+  }
+
+  private static void validateUniqueTagNames(List<Tag> tagList) {
+    for (int i = 0; i < tagList.size(); i++) {
+      for (int j = i + 1; j < tagList.size(); j++) {
+        if (tagList.get(i).name().equals(tagList.get(j).name())) {
+          throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
+              SanValidationProblem.NONE,
+              "The tag name must be unique. The tag name \"" + tagList.get(i).name() + "\" was used more than once.");
+        }
+      }
+    }
+  }
+
+  private static void validateSevenTagRoster(List<Tag> tagList) {
+    for (final StandardTag expected : TagUtility.SEVEN_TAG_ROSTER_TAG_LIST) {
+      if (!TagUtility.existsTag(tagList, expected)) {
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_NOT_ALL_REQUIRED_TAGS_SET,
+            SanValidationProblem.NONE,
+            "Not all tags from the seven tag roster (" + TagUtility.calculateSevenTagRosterDescription()
+                + ") are set. The first not found tag is \"" + expected.getName() + "\".");
+      }
+    }
+  }
+
+  private static ResultTagValue validateResultTagValue(List<Tag> tagList) {
+    if (!TagUtility.hasResult(tagList)) {
+      throw new ProgrammingMistakeException(
+          "At this point the result tag must be present — seven-tag roster was validated.");
+    }
+    final String value = TagUtility.readResult(tagList);
+    if (!ResultTagValue.exists(value)) {
+      throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_RESULT_VALUE_INVALID,
+          SanValidationProblem.NONE, "The " + StandardTag.RESULT.getName() + " tag value must exactly match one \""
+              + ResultTagValue.calculateList() + "\".");
+    }
+    return ResultTagValue.calculate(value);
+  }
+
+  private static SetUpTagValue validateTagSetUpValue(List<Tag> tagList) {
+    final SetUpTagValue setUpTagValue;
+    if (!TagUtility.hasSetUp(tagList)) {
+      setUpTagValue = SetUpTagValue.NONE;
+    } else {
+      final String setUpStr = TagUtility.readSetUp(tagList);
+      if (!SetUpTagValue.exists(setUpStr)) {
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_SET_UP_VALUE_INVALID,
+            SanValidationProblem.NONE, "The " + StandardTag.SET_UP.getName() + " tag value must exactly match one \""
+                + SetUpTagValue.calculateList() + "\".");
+      }
+      setUpTagValue = SetUpTagValue.calculate(setUpStr);
+    }
+    validateTagFenValue(tagList, setUpTagValue);
+    return setUpTagValue;
+  }
+
+  private static void validateTagFenValue(List<Tag> tagList, SetUpTagValue setUpTagValue) {
+    final boolean hasFen = TagUtility.hasFen(tagList);
+    switch (setUpTagValue) {
+      case NONE, START_FROM_INITIAL_POSITION -> {
+        if (hasFen) {
+          throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_FEN_NOT_REQUIRED_BUT_SET,
+              SanValidationProblem.NONE, "The FEN can only be set when " + StandardTag.FEN.getName() + " is set to "
+                  + SetUpTagValue.START_FROM_SETUP_POSITION.getValue());
+        }
+      }
+      case START_FROM_SETUP_POSITION -> {
+        if (!hasFen) {
+          throw new StrictPgnParserValidationException(
+              StrictPgnParserValidationProblem.TAG_SET_UP_REQUIRES_FEN_TAG_BUT_MISSING, SanValidationProblem.NONE,
+              "If the " + StandardTag.SET_UP.getName() + " is set to " + SetUpTagValue.START_FROM_SETUP_POSITION
+                  + ", the " + StandardTag.FEN.getName() + " tag must be set.");
+        }
+        final String fen = TagUtility.readFen(tagList);
+        try {
+          FenParserAdvanced.parseFenAdvanced(fen);
+        } catch (final com.dlb.chess.common.exceptions.FenAdvancedValidationException e) {
+          throw new StrictPgnParserValidationException(
+              StrictPgnParserValidationProblem.TAG_SET_UP_REQUIRES_FEN_TAG_BUT_FEN_INVALID, SanValidationProblem.NONE,
+              "The required FEN tag was provided but is invalid. The error message when parsing was \"" + e.getMessage()
+                  + "\".");
+        }
+      }
+      default -> throw new IllegalArgumentException();
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Movetext section
+  // -------------------------------------------------------------------------------------------------
+
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, String leadingCommentary) {
+  }
+
+  private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
+    // Leading commentary (optional).
+    String leadingCommentary = "";
+    final PgnTokenType firstType = tokenizer.peek().type();
+    if (firstType == PgnTokenType.BRACE_COMMENT || firstType == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
+      leadingCommentary = readCommentOrThrow();
+      expectSpaceAfterComment();
+    }
+
+    final List<PgnHalfMove> halfMoves = new ArrayList<>();
+    Side havingMove = startFen.havingMove();
+    int fullMoveNumber = startFen.fullMoveNumber();
+    boolean isFirstMove = true;
+
+    while (true) {
+      // Termination marker ends the movetext — checked first so the loop terminates before we try to read
+      // non-existent move-number / half-move tokens.
+      if (tokenizer.peek().type() == PgnTokenType.TERMINATION_MARKER) {
+        final PgnToken terminator = tokenizer.next();
+        validateTermination(terminator, resultTagValue);
+        return new MovetextOutcome(halfMoves, leadingCommentary);
+      }
+
+      // Catch illegal move-number-before-black-non-initial here, before expectMoveNumber is skipped.
+      if (!isFirstMove && havingMove == Side.BLACK) {
+        final PgnTokenType t = tokenizer.peek().type();
+        if (t == PgnTokenType.MOVE_NUMBER_WHITE || t == PgnTokenType.MOVE_NUMBER_BLACK) {
+          throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
+              "Move number specified for Black non initial move.");
+        }
+      }
+
+      if (isFirstMove || havingMove == Side.WHITE) {
+        expectMoveNumber(fullMoveNumber, havingMove, isFirstMove);
+        expectInterTokenSpace(StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT,
+            "A move number must be followed by a single space.");
+      }
+
+      final SanAndSuffix sanAndSuffix = parseSanAndSuffix();
+
+      // Consume the single separator before next content. If we're at the trailing blank line instead, the file
+      // has no termination marker — report that specifically rather than as a generic structural error.
+      expectInterTokenSeparatorOrMissingTermination(resultTagValue);
+
+      // Optional brace commentary attached to this half-move.
+      String commentary = "";
+      final PgnTokenType maybeComment = tokenizer.peek().type();
+      if (maybeComment == PgnTokenType.BRACE_COMMENT || maybeComment == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
+        commentary = readCommentOrThrow();
+        expectSpaceAfterComment();
+      }
+
+      halfMoves.add(new PgnHalfMove(sanAndSuffix.san(), sanAndSuffix.suffix(), commentary));
+
+      isFirstMove = false;
+      if (havingMove == Side.BLACK) {
+        fullMoveNumber++;
+      }
+      havingMove = havingMove.getOppositeSide();
+    }
+  }
+
+  private String readCommentOrThrow() {
+    final PgnToken token = tokenizer.next();
+    if (token.type() == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
+          "Found commentary start brace without commentary end brace");
+    }
+    return token.text();
+  }
+
+  private void expectSpaceAfterComment() {
+    final PgnToken token = tokenizer.peek();
+    if (token.type() == PgnTokenType.NEWLINE) {
+      tokenizer.next();
+      return;
+    }
+    if (token.type() == PgnTokenType.SPACES && token.text().length() == 1) {
+      tokenizer.next();
+      return;
+    }
+    throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE,
+        "The movetext doesnt continue with a space after a comment");
+  }
+
+  private void expectInterTokenSeparatorOrMissingTermination(ResultTagValue resultTagValue) {
+    final PgnToken peek = tokenizer.peek();
+    if (peek.type() == PgnTokenType.NEWLINE && tokenizer.peekNext().type() == PgnTokenType.NEWLINE) {
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
+          "The file must end with the result provided in the result tag. The provided result is \""
+              + resultTagValue.getValue() + "\".");
+    }
+    if (peek.type() == PgnTokenType.EOF) {
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
+          "The file must end with the result provided in the result tag. The provided result is \""
+              + resultTagValue.getValue() + "\".");
+    }
+    expectInterTokenSpace(StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT,
+        "A half-move must be followed by a single space before the next token.");
+  }
+
+  private void expectInterTokenSpace(StrictPgnParserValidationProblem problem, String message) {
+    final PgnToken token = tokenizer.next();
+    if (token.type() == PgnTokenType.NEWLINE) {
+      return;
+    }
+    if (token.type() != PgnTokenType.SPACES || token.text().length() != 1) {
+      throw movetextError(problem, message);
+    }
+  }
+
+  private record SanAndSuffix(String san, MoveSuffixAnnotation suffix) {
+  }
+
+  private SanAndSuffix parseSanAndSuffix() {
+    final PgnToken token = tokenizer.peek();
+    if (token.type() != PgnTokenType.SYMBOL) {
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY,
+          "The movetext is invalid because a SAN possibly annotated was expected but no SAN was found.");
+    }
+    final PgnToken sanToken = tokenizer.next();
+    final String san = sanToken.text();
+    validateSanCharacters(san);
+    validateSanLength(san);
+
+    MoveSuffixAnnotation suffix = MoveSuffixAnnotation.NONE;
+    if (tokenizer.peek().type() == PgnTokenType.MOVE_SUFFIX_ANNOTATION) {
+      final PgnToken suffixToken = tokenizer.next();
+      if (!MoveSuffixAnnotation.exists(suffixToken.text())) {
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID,
+            "An invalid move annotation suffix of \"" + suffixToken.text() + "\" was found. Valid values are \""
+                + MoveSuffixAnnotation.calculateValueList() + "\".");
+      }
+      suffix = MoveSuffixAnnotation.calculate(suffixToken.text());
+    }
+    return new SanAndSuffix(san, suffix);
+  }
+
+  private void expectMoveNumber(int expectedNumber, Side havingMove, boolean isFirstMove) {
+    final PgnToken token = tokenizer.peek();
+    final String expected = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(expectedNumber, havingMove);
+
+    if (havingMove == Side.BLACK) {
+      if (!isFirstMove) {
+        // Move number before a non-initial black move is forbidden. We only reach here if a move number was
+        // emitted when we expected a SAN — signalled by peek type.
+        if (token.type() == PgnTokenType.MOVE_NUMBER_BLACK || token.type() == PgnTokenType.MOVE_NUMBER_WHITE) {
+          throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
+              "Move number specified for Black non initial move.");
+        }
+        return;
+      }
+      if (token.type() != PgnTokenType.MOVE_NUMBER_BLACK || !token.text().equals(expected)) {
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_BLACK_MOVE,
+            "The move text does not begin indicating a Black move \"" + expected + "\" as expected.");
+      }
+      tokenizer.next();
+      return;
+    }
+
+    // White move number expected.
+    if (token.type() != PgnTokenType.MOVE_NUMBER_WHITE || !token.text().equals(expected)) {
+      if (isFirstMove) {
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE,
+            "The move text does not begin indicating a White move \"" + expected + "\" as expected.");
+      }
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED,
+          "The movetext numbering does not continue with \"" + expected + "\" as expected.");
+    }
+    tokenizer.next();
+  }
+
+  private void validateSanCharacters(String san) {
+    for (int i = 0; i < san.length(); i++) {
+      final char c = san.charAt(i);
+      if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
+          && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.enums.SanSymbol.exists(c)) {
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
+            "The movetext is invalid because a SAN contains an invalid character of \"" + c + "\".");
+      }
+    }
+  }
+
+  private void validateSanLength(String san) {
+    if (san.length() < SAN_MIN_LENGTH || san.length() > SAN_MAX_LENGTH) {
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_LENGTH_INVALID,
+          "The movetext contains the SAN '" + san + "' with an invalid SAN length.");
+    }
+  }
+
+  private void validateTermination(PgnToken terminator, ResultTagValue resultTagValue) {
+    if (!terminator.text().equals(resultTagValue.getValue())) {
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_TERMINATION_INVALID,
+          "The file must end with the result provided in the result tag. The provided result is \""
+              + resultTagValue.getValue() + "\".");
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Board replay & post-processing
+  // -------------------------------------------------------------------------------------------------
+
+  private static void validateBoardPerLastMove(Fen startFen, List<PgnHalfMove> halfMoveList) {
+    final Board board = new Board(startFen);
+    for (final PgnHalfMove halfMove : halfMoveList) {
+      final Side side = board.getHavingMove();
+      final int fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
+      try {
+        board.performMove(halfMove.san());
+      } catch (final SanValidationException e) {
+        final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
+            halfMove.san());
+        @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
+        final String message = "The validation for " + moveNumberAndSan + " failed. Reason: "
+            + messageSanValidationFailure;
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
+            message);
+      }
+    }
+  }
+
+  private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
+    final String startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
+    return FenParserAdvanced.parseFenAdvanced(startFenStr);
+  }
+
+  private static void removeFenIfInitial(List<Tag> tagList, Fen startFen) {
+    if (startFen.equals(FenConstants.FEN_INITIAL)) {
+      if (TagUtility.hasFen(tagList)) {
+        TagUtility.removeFenTag(tagList);
+      }
+      if (TagUtility.hasSetUp(tagList)) {
+        TagUtility.removeSetUpTag(tagList);
+      }
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Exception builders
+  // -------------------------------------------------------------------------------------------------
+
+  private static StrictPgnParserValidationException tagFormatError(StrictPgnParserValidationProblem problem,
+      String message) {
+    return new StrictPgnParserValidationException(problem, SanValidationProblem.NONE, message);
+  }
+
+  private static StrictPgnParserValidationException movetextError(StrictPgnParserValidationProblem problem,
+      String message) {
+    return new StrictPgnParserValidationException(problem, SanValidationProblem.NONE, message);
+  }
+
+  private static boolean isAsciiLetterOrDigit(char c) {
+    return (c >= '0' && c <= '9') || (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z');
+  }
+}
