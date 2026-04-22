@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.movetext.model;
+package com.dlb.chess.test.pgn;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.sequential;
+package com.dlb.chess.pgn.parser;
 
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;

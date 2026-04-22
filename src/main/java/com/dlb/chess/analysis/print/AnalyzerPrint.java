@@ -28,10 +28,7 @@ public class AnalyzerPrint {
   private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;
 
   protected static void printAnalysis(String pgn) {
-
-    final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(pgn, "\\n"));
-
-    final PgnFile pgnFile = LenientPgnParser.parse(lines);
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
 
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     printAnalysis(board);
