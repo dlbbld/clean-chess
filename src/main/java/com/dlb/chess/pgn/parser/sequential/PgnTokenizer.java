@@ -89,6 +89,10 @@ public final class PgnTokenizer {
         return readTagValueString(line, column);
       case '{':
         return readBraceComment(line, column);
+      case '}':
+        // Stray closing brace outside of any open commentary — always an error; the parser surfaces it.
+        stream.read();
+        return new PgnToken(PgnTokenType.BRACE_STRAY_CLOSE, "}", line, column);
       case '!':
       case '?':
         return readMoveSuffixAnnotation(line, column);
@@ -155,21 +159,23 @@ public final class PgnTokenizer {
   private PgnToken readBraceComment(int line, int column) {
     stream.read(); // opening brace
     final StringBuilder text = new StringBuilder();
-    var closed = false;
     while (true) {
       final var c = stream.peek();
       if (c == CHAR_EOF) {
-        break;
+        // EOF before matching } — unclosed commentary.
+        return new PgnToken(PgnTokenType.BRACE_COMMENT_UNCLOSED, NonNullWrapperCommon.toString(text), line, column);
+      }
+      if (c == '{') {
+        // A second { before the first } — commentary cannot nest. Leave the inner { unconsumed; the parser throws
+        // on the nested-token, so what follows in the stream does not matter for correctness.
+        return new PgnToken(PgnTokenType.BRACE_COMMENT_NESTED, NonNullWrapperCommon.toString(text), line, column);
       }
       if (c == '}') {
         stream.read();
-        closed = true;
-        break;
+        return new PgnToken(PgnTokenType.BRACE_COMMENT, NonNullWrapperCommon.toString(text), line, column);
       }
       text.append((char) stream.read());
     }
-    return new PgnToken(closed ? PgnTokenType.BRACE_COMMENT : PgnTokenType.BRACE_COMMENT_UNCLOSED,
-        NonNullWrapperCommon.toString(text), line, column);
   }
 
   private PgnToken readMoveSuffixAnnotation(int line, int column) {

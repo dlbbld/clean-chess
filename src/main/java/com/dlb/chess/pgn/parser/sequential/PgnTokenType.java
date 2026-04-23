@@ -67,6 +67,20 @@ public enum PgnTokenType {
   BRACE_COMMENT_UNCLOSED,
 
   /**
+   * A brace commentary that contained another {@code {} before its closing {@code }}. Commentary cannot nest: this
+   * is always an error. The token text holds the content scanned up to (but not including) the inner {@code {}, and
+   * the inner {@code {} is left for subsequent tokenization so error reporting can carry its exact position if
+   * desired.
+   */
+  BRACE_COMMENT_NESTED,
+
+  /**
+   * A closing brace {@code }} encountered outside any open commentary. Always an error — commentary must be opened
+   * before it can be closed.
+   */
+  BRACE_STRAY_CLOSE,
+
+  /**
    * Game termination marker — {@code 1-0}, {@code 0-1}, {@code 1/2-1/2}, {@code *}.
    */
   TERMINATION_MARKER,

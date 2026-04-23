@@ -67,12 +67,16 @@ class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserExce
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkException("25_2_invalid_commentary.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+    // 25_3 contains "{{" (two opening braces back-to-back). Previously surfaced as the generic unclosed-commentary
+    // error; now distinguished as the more specific nested-commentary error via the tokenizer's BRACE_COMMENT_NESTED.
     checkException("25_3_invalid_commentary.pgn",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
     checkException("25_4_invalid_commentary.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
+    // 25_5 contains "{wrong count}}" — a closed commentary followed by a stray close brace. Previously surfaced as
+    // "no space after comment"; now distinguished as the more specific stray-close-brace error.
     checkException("25_5_invalid_commentary.pgn",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
 
     checkException("26_1_move_number_for_non_initial_black_move.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE);

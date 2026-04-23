@@ -365,9 +365,8 @@ public final class StrictPgnParser {
   private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
     // Leading commentary (optional).
     var leadingCommentary = "";
-    final PgnTokenType firstType = tokenizer.peek().type();
-    if (firstType == PgnTokenType.BRACE_COMMENT || firstType == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
-      leadingCommentary = readCommentOrThrow();
+    if (isBraceToken(tokenizer.peek().type())) {
+      leadingCommentary = consumeCommentaryOrThrow();
       expectSpaceAfterComment();
     }
 
@@ -418,9 +417,8 @@ public final class StrictPgnParser {
 
       // Optional brace commentary attached to this half-move.
       var commentary = "";
-      final PgnTokenType maybeComment = tokenizer.peek().type();
-      if (maybeComment == PgnTokenType.BRACE_COMMENT || maybeComment == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
-        commentary = readCommentOrThrow();
+      if (isBraceToken(tokenizer.peek().type())) {
+        commentary = consumeCommentaryOrThrow();
         expectSpaceAfterComment();
       }
 
@@ -434,13 +432,34 @@ public final class StrictPgnParser {
     }
   }
 
-  private String readCommentOrThrow() {
+  /**
+   * Consumes a brace-related token at a position where commentary is allowed (leading or trailing slot). Returns the
+   * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. Throws the corresponding validation error
+   * for each ill-formed brace variant — unclosed, nested, or stray closing brace.
+   */
+  private String consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
-    if (token.type() == PgnTokenType.BRACE_COMMENT_UNCLOSED) {
-      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
-          "Found commentary start brace without commentary end brace");
+    switch (token.type()) {
+      case BRACE_COMMENT:
+        return token.text();
+      case BRACE_COMMENT_UNCLOSED:
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
+            "A commentary opened with { was not closed with } before end of input.");
+      case BRACE_COMMENT_NESTED:
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
+            "A commentary cannot contain another opening brace {.");
+      case BRACE_STRAY_CLOSE:
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
+            "A closing brace } was found with no matching opening brace.");
+      default:
+        throw new ProgrammingMistakeException(
+            "consumeCommentaryOrThrow called for non-brace token: " + token.type());
     }
-    return token.text();
+  }
+
+  private static boolean isBraceToken(PgnTokenType type) {
+    return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED
+        || type == PgnTokenType.BRACE_COMMENT_NESTED || type == PgnTokenType.BRACE_STRAY_CLOSE;
   }
 
   private void expectSpaceAfterComment() {
@@ -449,8 +468,32 @@ public final class StrictPgnParser {
       tokenizer.next();
       return;
     }
+    // A broken brace directly after the just-consumed commentary reports the brace-specific error, not the generic
+    // missing-space error — it is more informative to say "stray closing brace" than "no space here".
+    throwIfBrokenBrace(token);
     throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE,
         "The movetext doesnt continue with a space after a comment");
+  }
+
+  /**
+   * If the given token is a malformed brace variant, throws the matching category-specific error (R1/R2/R3). Returns
+   * normally for any other token. Used at positions where a broken brace should surface with its precise category
+   * rather than be subsumed by a more generic structural error.
+   */
+  private static void throwIfBrokenBrace(PgnToken token) {
+    switch (token.type()) {
+      case BRACE_COMMENT_UNCLOSED:
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
+            "A commentary opened with { was not closed with } before end of input.");
+      case BRACE_COMMENT_NESTED:
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
+            "A commentary cannot contain another opening brace {.");
+      case BRACE_STRAY_CLOSE:
+        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
+            "A closing brace } was found with no matching opening brace.");
+      default:
+        // Not a broken brace — caller handles.
+    }
   }
 
   private void expectInterTokenSeparatorOrMissingTermination(ResultTagValue resultTagValue) {
@@ -480,6 +523,12 @@ public final class StrictPgnParser {
 
   private SanAndSuffix parseSanAndSuffix() {
     final PgnToken token = tokenizer.peek();
+    if (isBraceToken(token.type())) {
+      // Prefer the specific broken-brace error when applicable; otherwise fall through to the positional R4.
+      throwIfBrokenBrace(token);
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_ALLOWED_IN_SAN,
+          "A commentary brace cannot occur where a SAN half-move is expected.");
+    }
     if (token.type() != PgnTokenType.SYMBOL) {
       throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_EMPTY,
           "The movetext is invalid because a SAN possibly annotated was expected but no SAN was found.");

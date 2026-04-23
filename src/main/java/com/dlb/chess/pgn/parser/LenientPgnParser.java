@@ -336,8 +336,10 @@ public final class LenientPgnParser {
     @Nullable ResultTagValue terminationResult = null;
 
     skipInsignificantWhitespace();
-    if (isCommentToken(tokenizer.peek().type())) {
-      leadingCommentary = readCommentText();
+    // Leading-commentary slot: exactly one commentary allowed before the first move. Additional braces before any
+    // half-move fall through to the main loop and are reported as R4 (brace at SAN-expected position).
+    if (isBraceToken(tokenizer.peek().type())) {
+      leadingCommentary = consumeCommentaryOrThrow();
     }
 
     while (true) {
@@ -360,18 +362,12 @@ public final class LenientPgnParser {
         tokenizer.next();
         continue;
       }
-      if (isCommentToken(type)) {
-        final String commentary = readCommentText();
-        if (halfMoves.isEmpty()) {
-          // Stray comment with no preceding half-move — append to the leading commentary so nothing is lost.
-          leadingCommentary = leadingCommentary.isEmpty() ? commentary : leadingCommentary + " " + commentary;
-        } else {
-          final var last = halfMoves.size() - 1;
-          final PgnHalfMove previous = NonNullWrapperCommon.get(halfMoves, last);
-          final var combined = previous.commentary().isEmpty() ? commentary : previous.commentary() + " " + commentary;
-          halfMoves.set(last, new PgnHalfMove(previous.san(), previous.moveSuffixAnnotation(), combined));
-        }
-        continue;
+      if (isBraceToken(type)) {
+        // Broken brace variants surface with their specific category (R1/R2/R3). A well-formed brace at this
+        // position is R4 — SAN-expected slot, commentary not allowed there.
+        throwIfBrokenBrace(peek);
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_ALLOWED_IN_SAN,
+            "A commentary brace cannot occur where a SAN half-move is expected.");
       }
       if (type == PgnTokenType.MOVE_SUFFIX_ANNOTATION) {
         if (halfMoves.isEmpty()) {
@@ -386,7 +382,17 @@ public final class LenientPgnParser {
         continue;
       }
       if (type == PgnTokenType.SYMBOL) {
-        halfMoves.add(parseHalfMoveLenient());
+        final PgnHalfMove halfMove = parseHalfMoveLenient();
+        halfMoves.add(halfMove);
+        // Trailing-commentary slot: exactly one commentary directly after this half-move. A second brace here falls
+        // through to the next loop iteration and fires R4 at the loop-top guard above.
+        skipInsignificantWhitespace();
+        if (isBraceToken(tokenizer.peek().type())) {
+          final var commentary = consumeCommentaryOrThrow();
+          final var last = halfMoves.size() - 1;
+          final PgnHalfMove previous = NonNullWrapperCommon.get(halfMoves, last);
+          halfMoves.set(last, new PgnHalfMove(previous.san(), previous.moveSuffixAnnotation(), commentary));
+        }
         continue;
       }
       // Anything else at movetext position is an unexpected format.
@@ -429,14 +435,61 @@ public final class LenientPgnParser {
     return "+".equals(text) || "#".equals(text);
   }
 
-  private String readCommentText() {
+  /**
+   * Consumes a brace-related token at a position where commentary is allowed (leading or trailing slot). Returns the
+   * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. For every ill-formed brace variant —
+   * unclosed, nested, or stray closing brace — throws the corresponding validation error. Lenient here behaves the
+   * same as strict: continuing past malformed commentary yields unreliable downstream results.
+   */
+  private String consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
-    // In lenient mode an unclosed brace still yields the captured text; we do not reject the file over it.
-    return token.text();
+    switch (token.type()) {
+      case BRACE_COMMENT:
+        return token.text();
+      case BRACE_COMMENT_UNCLOSED:
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
+            "A commentary opened with { was not closed with } before end of input.");
+      case BRACE_COMMENT_NESTED:
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
+            "A commentary cannot contain another opening brace {.");
+      case BRACE_STRAY_CLOSE:
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
+            "A closing brace } was found with no matching opening brace.");
+      default:
+        throw new com.dlb.chess.common.exceptions.ProgrammingMistakeException(
+            "consumeCommentaryOrThrow called for non-brace token: " + token.type());
+    }
   }
 
-  private static boolean isCommentToken(PgnTokenType type) {
-    return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED;
+  private static boolean isBraceToken(PgnTokenType type) {
+    return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED
+        || type == PgnTokenType.BRACE_COMMENT_NESTED || type == PgnTokenType.BRACE_STRAY_CLOSE;
+  }
+
+  /**
+   * If the given token is a malformed brace variant, throws the matching category-specific error (R1/R2/R3). Returns
+   * normally for any other token. Used at positions where a broken brace should surface with its precise category
+   * rather than be subsumed by a more generic positional error.
+   */
+  private static void throwIfBrokenBrace(PgnToken token) {
+    switch (token.type()) {
+      case BRACE_COMMENT_UNCLOSED:
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
+            "A commentary opened with { was not closed with } before end of input.");
+      case BRACE_COMMENT_NESTED:
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
+            "A commentary cannot contain another opening brace {.");
+      case BRACE_STRAY_CLOSE:
+        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
+            "A closing brace } was found with no matching opening brace.");
+      default:
+        // Not a broken brace — caller handles.
+    }
+  }
+
+  private static LenientPgnParserValidationException movetextError(LenientPgnParserValidationProblem problem,
+      String message) {
+    return new LenientPgnParserValidationException(problem, SanValidationProblem.NONE, message);
   }
 
   private static MoveSuffixAnnotation parseMoveSuffix(String text) {
