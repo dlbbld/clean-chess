@@ -149,6 +149,7 @@ public final class StrictPgnParser {
     final Fen startFen = calculateStartFen(tagList, isStartFromPosition);
 
     final MovetextOutcome movetext = parseMovetext(startFen, resultTagValue);
+    expectOnlyTrailingWhitespaceUntilEof();
 
     validateBoardPerLastMove(startFen, movetext.halfMoveList());
 
@@ -473,6 +474,28 @@ public final class StrictPgnParser {
     throwIfBrokenBrace(token);
     throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE,
         "The movetext doesnt continue with a space after a comment");
+  }
+
+  /**
+   * After {@link #parseMovetext(Fen, ResultTagValue)} has consumed the termination marker, the remaining tokens must
+   * be nothing but whitespace/newlines leading up to EOF. Any other content — a stray commentary, a reappearing
+   * tag-bracket, random symbols — is rejected. Broken brace variants surface with their specific lexical category
+   * (R1/R2/R3); everything else maps to {@link StrictPgnParserValidationProblem#MOVETEXT_CONTENT_AFTER_TERMINATION}.
+   */
+  private void expectOnlyTrailingWhitespaceUntilEof() {
+    while (true) {
+      final PgnToken token = tokenizer.peek();
+      if (token.type() == PgnTokenType.EOF) {
+        return;
+      }
+      if (token.type() == PgnTokenType.NEWLINE || token.type() == PgnTokenType.SPACES) {
+        tokenizer.next();
+        continue;
+      }
+      throwIfBrokenBrace(token);
+      throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION,
+          "Unexpected content after the game termination marker: \"" + token.text() + "\".");
+    }
   }
 
   /**

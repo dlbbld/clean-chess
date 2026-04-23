@@ -152,14 +152,9 @@ public final class LenientPgnParser {
     skipInsignificantWhitespace();
     final MovetextOutcome movetext = parseMovetext();
 
-    // After a valid movetext, no further tag-like content may appear. The existing lenient parser walks the whole
-    // file to detect this up front; here we catch it by inspecting whatever is left after the termination marker.
-    skipInsignificantWhitespace();
-    final PgnToken trailingPeek = tokenizer.peek();
-    if ((trailingPeek.type() == PgnTokenType.TAG_BRACKET_OPEN || currentLineContainsTagBracket(trailingPeek.line()))
-        && trailingPeek.type() != PgnTokenType.EOF) {
-      throw tagReappearError();
-    }
+    // After the movetext, only whitespace may appear before end of input. Anything else is rejected so inputs like
+    // "1. e4 e5 * {after result}" or "1. e4 e5 * }" cannot slip through silently.
+    expectOnlyTrailingContentUntilEof();
 
     final ResultTagValue resultTagValue = reconcileResult(tagList, movetext.terminationResult());
     fixTagListForResultIfRequired(tagList, resultTagValue);
@@ -464,6 +459,31 @@ public final class LenientPgnParser {
   private static boolean isBraceToken(PgnTokenType type) {
     return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED
         || type == PgnTokenType.BRACE_COMMENT_NESTED || type == PgnTokenType.BRACE_STRAY_CLOSE;
+  }
+
+  /**
+   * After {@link #parseMovetext()} has consumed the termination marker (or bailed at EOF with none), the remaining
+   * tokens must be whitespace/newlines only until EOF. Tag-like content triggers {@code TAG_REAPPEAR}; broken braces
+   * surface with their specific lexical category (R1/R2/R3); anything else — including a well-formed brace — is
+   * rejected with {@link LenientPgnParserValidationProblem#MOVETEXT_CONTENT_AFTER_TERMINATION}.
+   */
+  private void expectOnlyTrailingContentUntilEof() {
+    while (true) {
+      final PgnToken token = tokenizer.peek();
+      if (token.type() == PgnTokenType.EOF) {
+        return;
+      }
+      if (token.type() == PgnTokenType.SPACES || token.type() == PgnTokenType.NEWLINE) {
+        tokenizer.next();
+        continue;
+      }
+      if (token.type() == PgnTokenType.TAG_BRACKET_OPEN || currentLineContainsTagBracket(token.line())) {
+        throw tagReappearError();
+      }
+      throwIfBrokenBrace(token);
+      throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION,
+          "Unexpected content after the game termination marker: \"" + token.text() + "\".");
+    }
   }
 
   /**

@@ -203,6 +203,38 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
+  // Post-termination content — same rule as strict
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void postTermination_wellFormedBraceIsRejected() {
+    expectError(header("*") + "1. e4 e5 * {after result}\n\n",
+        LenientPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void postTermination_strayCloseUsesSpecificCategory() {
+    expectError(header("*") + "1. e4 e5 * }\n\n",
+        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void postTermination_unclosedBraceUsesSpecificCategory() {
+    expectError(header("*") + "1. e4 e5 * {no closing\n\n",
+        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void postTermination_randomSymbolIsRejected() {
+    expectError(header("*") + "1. e4 e5 * garbage\n\n",
+        LenientPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
+  }
+
+  // -------------------------------------------------------------------------------------------------
   // Helpers
   // -------------------------------------------------------------------------------------------------
 

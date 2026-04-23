@@ -179,11 +179,17 @@ public final class PgnTokenizer {
   }
 
   private PgnToken readMoveSuffixAnnotation(int line, int column) {
+    // Consume every consecutive ! / ? character as a single suffix token. Over-long runs like `!!!` or `!?!` become
+    // one token so the parser can surface them with MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID rather than being split
+    // and misdiagnosed as a spacing error.
     final StringBuilder text = new StringBuilder();
-    text.append((char) stream.read());
-    final var next = stream.peek();
-    if (next == '!' || next == '?') {
-      text.append((char) stream.read());
+    while (true) {
+      final var c = stream.peek();
+      if (c == '!' || c == '?') {
+        text.append((char) stream.read());
+      } else {
+        break;
+      }
     }
     return new PgnToken(PgnTokenType.MOVE_SUFFIX_ANNOTATION, NonNullWrapperCommon.toString(text), line, column);
   }
