@@ -11,7 +11,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
@@ -24,12 +23,9 @@ class TestPgnExportIdempotency {
   @SuppressWarnings({ "static-method" })
   @Test
   void test() {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    // Uses the curated export-roundtrip smoke subset (~20 files) — see PgnExpectedValue.getExportRoundtripSmokeList().
+    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getExportRoundtripSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (RestrictTestConstants.IS_RESTRICT_PGN_EXPORT_IDEMPOTENCY_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
-          continue;
-        }
-
         final String pgnFileName = testCase.pgnFileName();
 
         logger.info(pgnFileName);

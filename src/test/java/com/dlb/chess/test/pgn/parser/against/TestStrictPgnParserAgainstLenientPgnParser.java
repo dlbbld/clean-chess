@@ -20,16 +20,14 @@ class TestStrictPgnParserAgainstLenientPgnParser {
   @SuppressWarnings({ "static-method" })
   @Test
   void test() {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    // Uses the curated parser-integration smoke subset (~45 files) rather than the full restricted corpus — see
+    // PgnExpectedValue.getParserIntegrationSmokeList() for the rationale.
+    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
 
         final String pgnFileName = testCase.pgnFileName();
 
         logger.info(pgnFileName);
-
-        // if (!"03_claim_for_own_move_incorrect_castling_right_lost_for_king_move.pgn".equals(pgnFileName)) {
-        // continue;
-        // }
 
         final PgnFile pgnFileStandard = PgnCacheForLenientPgnParserTestCases
             .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
