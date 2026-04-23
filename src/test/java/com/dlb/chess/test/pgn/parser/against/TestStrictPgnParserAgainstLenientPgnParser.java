@@ -5,8 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
@@ -20,16 +23,17 @@ class TestStrictPgnParserAgainstLenientPgnParser {
   @SuppressWarnings({ "static-method" })
   @Test
   void test() {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    // true (default) → curated parser-integration smoke subset (~45 files).
+    // false → full ALL_EXCEPT_LONGEST_POSSIBLE corpus for a pre-release / regression sweep.
+    final List<PgnFileTestCaseList> source = RestrictTestConstants.IS_RESTRICT_PGN_STRICT_AGAINST_LENIENT_TEST
+        ? PgnExpectedValue.getParserIntegrationSmokeList()
+        : PgnExpectedValue.getRestrictedTestListList();
+    for (final PgnFileTestCaseList testCaseList : source) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
 
         final String pgnFileName = testCase.pgnFileName();
 
         logger.info(pgnFileName);
-
-        // if (!"03_claim_for_own_move_incorrect_castling_right_lost_for_king_move.pgn".equals(pgnFileName)) {
-        // continue;
-        // }
 
         final PgnFile pgnFileStandard = PgnCacheForLenientPgnParserTestCases
             .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);

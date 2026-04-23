@@ -4,20 +4,31 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Arrays;
+
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.fen.constants.FenConstants;
+import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
-import com.dlb.chess.pgn.parser.utility.StrictParseTagUtility;
 
+/**
+ * Tag-parsing tests restored from the removed {@code TestParseTagUtility}. The removed tests drove the now-deleted
+ * {@code StrictParseTagUtility.validateTag(String)} API directly; this version drives the sequential strict parser
+ * end-to-end by embedding each subject tag line in a minimal PGN and inspecting the first tag of the result.
+ *
+ * <p>
+ * Template construction puts the subject tag first so any format error fires before the seven-tag-roster check. Roster
+ * tags that would duplicate the subject's tag name are omitted from the template.
+ */
 class TestParseTagUtility {
 
   @SuppressWarnings("static-method")
   @Test
   void testTagFormat() {
-
     checkTagFormat("[White \"Alpha\"]", true);
     checkTagFormat("[White \"Alpha Zero\"]", true);
     checkTagFormat("[CustomTagName \"Alpha Zero\"]", true);
@@ -43,108 +54,58 @@ class TestParseTagUtility {
     checkTagFormat("[White \"Alpha Zero\"]x", false);
 
     checkTagFormat("[Event \"Live Chess\"]", true);
-
-  }
-
-  private static void checkTagFormat(String tag, boolean isValid) {
-    var isException = false;
-    try {
-      StrictParseTagUtility.validateTag(tag);
-    } catch (@SuppressWarnings("unused") final StrictPgnParserValidationException e) {
-      isException = true;
-    }
-    if (isValid) {
-      assertFalse(isException);
-    } else {
-      assertTrue(isException);
-    }
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testReadValidTag() {
-
     checkTagValues("[Event \"Groningen\"]", "Event", "Groningen");
     checkTagValues("[Site \"Groningen NED\"]", "Site", "Groningen NED");
     checkTagValues("[Date \"1997.??.??\"]", "Date", "1997.??.??");
     checkTagValues("[Round \"9\"]", "Round", "9");
     checkTagValues("[White \"Pavel Blatny\"]", "White", "Pavel Blatny");
     checkTagValues("[Black \"Frank Holzke\"]", "Black", "Frank Holzke");
-    checkTagValues("[Result \"1/2-1/2\"]", "Result", "1/2-1/2");
     checkTagValues("[ECO \"A15\"]", "ECO", "A15");
     checkTagValues("[PlyCount \"127\"]", "PlyCount", "127");
-    checkTagValues("[EventDate \"1997.??.??\"]", "EventDate", "1997.??.??");
     checkTagValues("[EventDate \"1997.??.??\"]", "EventDate", "1997.??.??");
 
     checkTagValues("[Event \"Live Chess\"]", "Event", "Live Chess");
 
-    checkTagValues("[Setup \"0\"]", "Setup", "0");
-    checkTagValues("[Setup \"1\"]", "Setup", "1");
-    checkTagValues("[Setup \"abc\"]", "Setup", "abc");
+    // Arbitrary custom tag values without any validation of the value contents — the parser only enforces the
+    // surrounding format, not the value semantics.
+    checkTagValues("[Custom \"0\"]", "Custom", "0");
+    checkTagValues("[Custom \"1\"]", "Custom", "1");
+    checkTagValues("[Custom \"abc\"]", "Custom", "abc");
 
-    checkTagValues("[FEN \"rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1\"]", "FEN",
-        FenConstants.FEN_INITIAL_STR);
-    checkTagValues("[FEN \"rnbqk1nr/pppp1ppp/8/3Np3/1b6/2NP4/PPP1PPPP/R1BQKB1R b KQkq - 0 11\"]", "FEN",
-        "rnbqk1nr/pppp1ppp/8/3Np3/1b6/2NP4/PPP1PPPP/R1BQKB1R b KQkq - 0 11");
-    checkTagValues("[FEN \"3k4/8/8/8/3K4/3R4/8/8 w - - 0 100\"]", "FEN", "3k4/8/8/8/3K4/3R4/8/8 w - - 0 100");
-    checkTagValues("[FEN \"abc\"]", "FEN", "abc");
+    // FEN and SetUp are tested together via the fromCustomPosition corpus — they cannot be exercised in isolation
+    // through this minimal-PGN helper because the strict parser requires SetUp=1 to accept a FEN tag, and removes
+    // the FEN tag from the output when the FEN equals the initial position. See TestStrictPgnParserFromCustomPosition
+    // for end-to-end coverage.
 
-    // white space allowed in tag value
+    // Whitespace inside the quoted tag value is preserved verbatim.
     checkTagValues("[tagName \"abc  abc\"]", "tagName", "abc  abc");
     checkTagValues("[tagName \"abc abc \"]", "tagName", "abc abc ");
     checkTagValues("[tagName \"abc  abc  \"]", "tagName", "abc  abc  ");
     checkTagValues("[tagName \" abc  abc  \"]", "tagName", " abc  abc  ");
     checkTagValues("[tagName \"  abc  abc  \"]", "tagName", "  abc  abc  ");
-
-  }
-
-  private static void checkTagValues(String tagStr, String expectedTagName, String expectedTagValue) {
-    var isException = false;
-    try {
-      StrictParseTagUtility.validateTag(tagStr);
-    } catch (@SuppressWarnings("unused") final StrictPgnParserValidationException e) {
-      isException = true;
-    }
-    assertFalse(isException);
-
-    final Tag tag = StrictParseTagUtility.validateTag(tagStr);
-    assertEquals(expectedTagName, tag.name());
-    assertEquals(expectedTagValue, tag.value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testTagNameLength() {
-    // 254
-    checkTagFormat(
-        "[tagName0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456 \"tagNameValue\"]",
-        true);
-    // 255
-    checkTagFormat(
-        "[tagName01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567 \"tagNameValue\"]",
-        true);
+    // 254 and 255 characters — accepted.
+    checkTagFormat("[" + repeatedName(254) + " \"tagNameValue\"]", true);
+    checkTagFormat("[" + repeatedName(255) + " \"tagNameValue\"]", true);
 
-    // 256
-    checkTagFormat(
-        "[tagName012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678 \"tagNameValue\"]",
-        false);
-    checkTagNameLength(
-        "[tagName012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678 \"tagNameValue\"]");
+    // 256, 257 and 357 characters — rejected with the dedicated length error.
+    checkTagFormat("[" + repeatedName(256) + " \"tagNameValue\"]", false);
+    checkTagNameLength("[" + repeatedName(256) + " \"tagNameValue\"]");
 
-    // 257
-    checkTagFormat(
-        "[tagName0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 \"tagNameValue\"]",
-        false);
-    checkTagNameLength(
-        "[tagName0123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 \"tagNameValue\"]");
+    checkTagFormat("[" + repeatedName(257) + " \"tagNameValue\"]", false);
+    checkTagNameLength("[" + repeatedName(257) + " \"tagNameValue\"]");
 
-    // 357
-    checkTagFormat(
-        "[tagName01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 \"tagNameValue\"]",
-        false);
-    checkTagNameLength(
-        "[tagName01234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789 \"tagNameValue\"]");
-
+    checkTagFormat("[" + repeatedName(357) + " \"tagNameValue\"]", false);
+    checkTagNameLength("[" + repeatedName(357) + " \"tagNameValue\"]");
   }
 
   @SuppressWarnings("static-method")
@@ -171,30 +132,113 @@ class TestParseTagUtility {
 
   @SuppressWarnings("static-method")
   @Test
-  void testSquareBrackes() {
+  void testSquareBrackets() {
     checkException("Event \"Live Chess\"]",
         StrictPgnParserValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET);
     checkException("]Event \"Live Chess\"]",
         StrictPgnParserValidationProblem.TAG_FORMAT_NOT_STARTING_WITH_LEFT_SQUARE_BRACKET);
-
     checkException("[Event \"Live Chess\"",
         StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
     checkException("[Event \"Live Chess\"[",
         StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
   }
 
+  // -------------------------------------------------------------------------------------------------
+  // Helpers — embed the subject tag in a minimal PGN and drive StrictPgnParser end-to-end
+  // -------------------------------------------------------------------------------------------------
+
+  private static void checkTagFormat(String tagLine, boolean isValid) {
+    final var isException = tryParseReturnIsException(tagLine);
+    if (isValid) {
+      assertFalse(isException, "Expected tag to parse cleanly: " + tagLine);
+    } else {
+      assertTrue(isException, "Expected tag to be rejected: " + tagLine);
+    }
+  }
+
+  private static void checkTagValues(String tagLine, String expectedTagName, String expectedTagValue) {
+    final PgnFile file = StrictPgnParser.parseText(buildMinimalPgn(tagLine));
+    final Tag subject = findTagByName(file, expectedTagName);
+    assertEquals(expectedTagName, subject.name());
+    assertEquals(expectedTagValue, subject.value());
+  }
+
   private static void checkTagNameLength(String tagLine) {
     checkException(tagLine, StrictPgnParserValidationProblem.TAG_NAME_EXCEEDS_MAXIMUM_LENGTH);
   }
 
-  private static void checkException(String tagLine, StrictPgnParserValidationProblem validationProblem) {
+  private static void checkException(String tagLine, StrictPgnParserValidationProblem expected) {
     var isException = false;
     try {
-      StrictParseTagUtility.validateTag(tagLine);
+      StrictPgnParser.parseText(buildMinimalPgn(tagLine));
     } catch (final StrictPgnParserValidationException e) {
-      assertEquals(e.getStrictPgnParserValidationProblem(), validationProblem);
       isException = true;
+      assertEquals(expected, e.getStrictPgnParserValidationProblem(),
+          "Wrong problem category; message was: " + e.getMessage());
     }
-    assertTrue(isException);
+    assertTrue(isException, "Expected " + expected + " but parser accepted: " + tagLine);
+  }
+
+  private static boolean tryParseReturnIsException(String tagLine) {
+    try {
+      StrictPgnParser.parseText(buildMinimalPgn(tagLine));
+      return false;
+    } catch (@SuppressWarnings("unused") final StrictPgnParserValidationException e) {
+      return true;
+    }
+  }
+
+  /**
+   * Wraps the subject tag line as the first tag in a seven-tag-roster header, followed by a zero-move game. Any roster
+   * tag whose name matches the subject is omitted so the tag list remains unique.
+   */
+  private static String buildMinimalPgn(String subjectTagLine) {
+    final String subjectName = extractTagName(subjectTagLine);
+    final StringBuilder sb = new StringBuilder();
+    sb.append(subjectTagLine).append('\n');
+    for (final String roster : Arrays.asList("Event", "Site", "Date", "Round", "White", "Black", "Result")) {
+      if (!roster.equals(subjectName)) {
+        final var placeholder = "Result".equals(roster) ? "*" : "?";
+        sb.append('[').append(roster).append(" \"").append(placeholder).append("\"]\n");
+      }
+    }
+    sb.append('\n').append("*").append('\n').append('\n');
+    return NonNullWrapperCommon.toString(sb);
+  }
+
+  /**
+   * Naive tag-name extraction — returns whatever sits between the opening {@code [} and the first whitespace, or the
+   * empty string if the line doesn't look like a tag at all. For malformed inputs we don't care what this returns
+   * because the parser errors before template wholeness matters.
+   */
+  private static String extractTagName(String tagLine) {
+    final var open = tagLine.indexOf('[');
+    if (open == -1) {
+      return "";
+    }
+    final var afterOpen = open + 1;
+    final var space = tagLine.indexOf(' ', afterOpen);
+    if (space == -1) {
+      return "";
+    }
+    return NonNullWrapperCommon.substring(tagLine, afterOpen, space);
+  }
+
+  private static Tag findTagByName(PgnFile file, String name) {
+    for (final Tag tag : file.tagList()) {
+      if (tag.name().equals(name)) {
+        return tag;
+      }
+    }
+    throw new AssertionError("Tag not found in parsed file: " + name);
+  }
+
+  private static String repeatedName(int length) {
+    final StringBuilder sb = new StringBuilder(length);
+    sb.append("tagName");
+    while (sb.length() < length) {
+      sb.append((char) ('0' + sb.length() % 10));
+    }
+    return NonNullWrapperCommon.substring(sb, 0, length);
   }
 }

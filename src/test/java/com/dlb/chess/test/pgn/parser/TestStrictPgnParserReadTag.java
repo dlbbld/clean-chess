@@ -10,13 +10,22 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.fen.constants.FenConstants;
+import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.common.utility.AbstractTestMovetextUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.utility.TagUtility;
 
-class TestStrictPgnParserReadTag extends AbstractTestMovetextUtility {
+class TestStrictPgnParserReadTag {
+
+  private static List<String> calculateSanList(List<PgnHalfMove> halfMoveList) {
+    final List<String> sanList = new ArrayList<>();
+    for (final PgnHalfMove halfMove : halfMoveList) {
+      sanList.add(halfMove.san());
+    }
+    return sanList;
+  }
+
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
       .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "tag");
 

@@ -209,6 +209,112 @@ public class PgnExpectedValue {
     return restricedTestCaseListList;
   }
 
+  // -------------------------------------------------------------------------------------------------
+  // Smoke subsets for broad integration tests
+  //
+  // The strict-vs-lenient parser comparison and the export/import roundtrip tests are sweeps over the PGN corpus.
+  // Using every basic fixture (~591 files across 23 buckets) for these is an order of magnitude more work than
+  // needed for their purpose — detailed feature coverage already exists in the dedicated parser, SAN, and basic
+  // tests. These two curated lists keep broad diversity (piece movement, capture, en passant, promotion, castling,
+  // check, checkmate, stalemate, custom starting positions) without iterating hundreds of near-identical variants.
+  //
+  // The lists are built at class-load time; any missing file fails fast during init with a clear message, so a
+  // future rename of a referenced fixture surfaces immediately rather than during a long test run.
+  // -------------------------------------------------------------------------------------------------
+
+  private static final List<PgnFileTestCaseList> parserIntegrationSmokeList = buildParserIntegrationSmokeList();
+  private static final List<PgnFileTestCaseList> exportRoundtripSmokeList = buildExportRoundtripSmokeList();
+
+  /**
+   * Smoke subset used by {@code TestStrictPgnParserAgainstLenientPgnParser} — broad enough to exercise every major
+   * parser code path (piece movement, capture, en passant, promotion, castling with check/checkmate, checkmate by
+   * various pieces, stalemate, custom starting position via FEN, repetition-sensitive en passant setup). About 45 files
+   * in total rather than ~591.
+   */
+  public static List<PgnFileTestCaseList> getParserIntegrationSmokeList() {
+    return parserIntegrationSmokeList;
+  }
+
+  /**
+   * Smoke subset used by {@code TestPgnExportIdempotency} and {@code TestPgnImportAgainstExport} — tighter than the
+   * parser smoke set because export tests only vary over structural shape, not chess-rule details. About 20 files
+   * covering ordinary SAN movement, promotion, castling, en passant, and custom starting position.
+   */
+  public static List<PgnFileTestCaseList> getExportRoundtripSmokeList() {
+    return exportRoundtripSmokeList;
+  }
+
+  private static List<PgnFileTestCaseList> buildParserIntegrationSmokeList() {
+    final List<PgnFileTestCaseList> result = new ArrayList<>();
+    // Small buckets — keep whole.
+    result.add(getTestList(PgnTest.BASIC_MOVING_PIECE_WHITE));
+    result.add(getTestList(PgnTest.BASIC_PROMOTION_PIECE_WHITE));
+    result.add(getTestList(PgnTest.BASIC_STALEMATE));
+    result.add(getTestList(PgnTest.BASIC_THREEFOLD_INITIAL_EP));
+    // Curated samples from larger buckets.
+    result.add(
+        filterBucket(PgnTest.BASIC_CAPTURE_WHITE, "01_white_capture_rook_rook.pgn", "06_white_capture_knight_rook.pgn",
+            "11_white_capture_bishop_rook.pgn", "16_white_capture_queen_rook.pgn", "21_white_capture_king_rook.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE, "01_white_en_passant_capture_right_a6.pgn",
+        "07_white_en_passant_capture_right_g6.pgn", "08_white_en_passant_capture_left_b6.pgn",
+        "14_white_en_passant_capture_left_h6.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_CASTLING_SPECIAL_WHITE, "01_white_castling_special_kingside_check.pgn",
+        "02_white_castling_special_kingside_checkmate.pgn", "06_white_castling_special_queenside_check.pgn",
+        "07_white_castling_special_queenside_checkmate.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_CHECKMATE_WHITE, "01_white_checkmate_rook_direct_adjacent.pgn",
+        "04_white_checkmate_knight_direct.pgn", "07_white_checkmate_bishop_direct_adjacent.pgn",
+        "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn", "14_white_checkmate_king_discover_orthogonal.pgn"));
+    // One black-side fixture to exercise side-to-move plumbing end-to-end.
+    result.add(filterBucket(PgnTest.BASIC_CHECKMATE_BLACK, "01_black_checkmate_rook_direct_adjacent.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
+        "from_fen_no_move_half_move_clock_099_black_to_move.pgn",
+        "from_fen_capture_first_move_half_move_clock_150_white_to_move.pgn",
+        "from_fen_capture_second_move_half_move_clock_150_black_to_move.pgn"));
+    return result;
+  }
+
+  private static List<PgnFileTestCaseList> buildExportRoundtripSmokeList() {
+    final List<PgnFileTestCaseList> result = new ArrayList<>();
+    // Whole small buckets covering the main SAN shapes.
+    result.add(getTestList(PgnTest.BASIC_MOVING_PIECE_WHITE));
+    result.add(getTestList(PgnTest.BASIC_PROMOTION_PIECE_WHITE));
+    // Two-file samples of the structurally interesting cases.
+    result.add(filterBucket(PgnTest.BASIC_CASTLING_SPECIAL_WHITE, "01_white_castling_special_kingside_check.pgn",
+        "06_white_castling_special_queenside_check.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE, "01_white_en_passant_capture_right_a6.pgn",
+        "08_white_en_passant_capture_left_b6.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
+        "from_fen_capture_first_move_half_move_clock_150_white_to_move.pgn"));
+    return result;
+  }
+
+  /**
+   * Builds a {@link PgnFileTestCaseList} for the given bucket containing only the entries whose file name is in
+   * {@code wantedFileNames}. Fails fast with a precise message if any requested file is missing from the bucket —
+   * catches fixture renames the first time the class is loaded rather than mid test-run.
+   */
+  private static PgnFileTestCaseList filterBucket(PgnTest pgnTest, String... wantedFileNames) {
+    final Set<String> wanted = new TreeSet<>();
+    for (var i = 0; i < wantedFileNames.length; i++) {
+      wanted.add(NonNullWrapperCommon.get(wantedFileNames, i));
+    }
+    final List<PgnFileTestCase> filtered = new ArrayList<>();
+    final Set<String> found = new TreeSet<>();
+    for (final PgnFileTestCase tc : getTestList(pgnTest).list()) {
+      if (wanted.contains(tc.pgnFileName())) {
+        filtered.add(tc);
+        found.add(tc.pgnFileName());
+      }
+    }
+    if (found.size() != wanted.size()) {
+      final Set<String> missing = new TreeSet<>(wanted);
+      missing.removeAll(found);
+      throw new ProgrammingMistakeException(
+          "Curated smoke-subset file(s) missing from bucket " + pgnTest + ": " + missing);
+    }
+    return new PgnFileTestCaseList(pgnTest, filtered);
+  }
+
   // We want to have unique file names for the test cases. For the convenience
   // that o can run a test case for testing by
   // only specifying it's name.

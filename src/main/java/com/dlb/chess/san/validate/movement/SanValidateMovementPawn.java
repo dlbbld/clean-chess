@@ -48,16 +48,8 @@ public abstract class SanValidateMovementPawn extends AbstractSan implements Enu
   private static void validatePawnDestinationRank(Side havingMove, Rank destinationRank) {
     final var isInvalid = !Rank.calculateIsValidRank(havingMove, destinationRank);
     if (isInvalid) {
-      switch (havingMove) {
-        case WHITE ->
-            throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS, Message
-                .getString("validation.san.movement.pawn.forward.backwards.white", havingMove.getName()));
-        case BLACK ->
-            throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS, Message
-                .getString("validation.san.movement.pawn.forward.backwards.black", havingMove.getName()));
-        case NONE -> throw new IllegalArgumentException();
-        default -> throw new IllegalArgumentException();
-      }
+      throw new SanValidationException(SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS,
+          Message.getString("validation.san.movement.pawn.forward.backwards"));
     }
   }
 

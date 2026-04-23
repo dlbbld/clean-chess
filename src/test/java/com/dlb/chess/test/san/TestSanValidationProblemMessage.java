@@ -362,7 +362,7 @@ class TestSanValidationProblemMessage {
   @Test
   void testMovementPawn() {
     checkException("d2", new Board(), SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS,
-        "A white pawn can never move to rank 2 or 1 as pawns cannot move backwards.");
+        "A pawn cannot move backwards.");
 
     checkException("fxh4", new Board(), SanValidationProblem.MOVEMENT_PAWN_CAPTURE_NON_ADJACENT_FILE,
         "A pawn can never capture on a non-adjacent file, only on adjacent files.");
@@ -388,7 +388,7 @@ class TestSanValidationProblemMessage {
   void testExistsPawn() {
     final Board board = new Board();
     board.performMoves("a4", "h6", "a5", "h5", "a6", "h4", "axb7", "h3");
-    checkException("a4", board, SanValidationProblem.EXISTS_PAWN, "There is no white pawn on file a.");
+    checkException("a4", board, SanValidationProblem.EXISTS_PAWN, "There is no pawn on file a.");
   }
 
   @SuppressWarnings("static-method")
@@ -396,10 +396,10 @@ class TestSanValidationProblemMessage {
   void testExistsRnbq() {
     final Board board = new Board();
     board.performMoves("b3", "g6", "g3", "Bg7", "Na3", "Bxa1", "Nb1", "b6", "Na3", "Bb7", "Nb1", "Bxh1");
-    checkException("Ra2", board, SanValidationProblem.EXISTS_RNBQ_NEITHER, "There is no white rook on the board.");
-    checkException("Nac3", SanValidationProblem.EXISTS_RNBQ_FILE, "There is no white knight on file a.");
-    checkException("Q3d4", SanValidationProblem.EXISTS_RNBQ_RANK, "There is no white queen on rank 3.");
-    checkException("Bh5xf7+", SanValidationProblem.EXISTS_RNBQ_SQUARE, "There is no white bishop on square h5.");
+    checkException("Ra2", board, SanValidationProblem.EXISTS_RNBQ_NEITHER, "There is no rook on the board.");
+    checkException("Nac3", SanValidationProblem.EXISTS_RNBQ_FILE, "There is no knight on file a.");
+    checkException("Q3d4", SanValidationProblem.EXISTS_RNBQ_RANK, "There is no queen on rank 3.");
+    checkException("Bh5xf7+", SanValidationProblem.EXISTS_RNBQ_SQUARE, "There is no bishop on square h5.");
   }
 
   @SuppressWarnings("static-method")

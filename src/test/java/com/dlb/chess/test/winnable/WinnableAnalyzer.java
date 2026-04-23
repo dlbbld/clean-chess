@@ -19,10 +19,10 @@ public class WinnableAnalyzer {
   private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableAnalyzer.class);
 
   // TODO test cases
-  // ae_10.pgn
+  // unfair_ambrona_10.pgn
   // we return unwinnable but is winnable. that is a bug.
 
-  // a2l4gphm.pgn
+  // unfair_lichess_examples_a2l4gphm.pgn
   // we return unknown but we could see that is is unwinnable. here there is a possible improvement.
   // we have a problem with an enemy pawn on the same square type as our bishop
 

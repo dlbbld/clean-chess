@@ -309,9 +309,8 @@ public class Board extends AbstractBoard {
       return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
     }
     final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-    final EnPassantRole enPassantRole = EnPassantCaptureUtility
-        .calculateIsPawnTwoSquareAdvanceMove(movingPiece, moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE
-            : EnPassantRole.NONE;
+    final var enPassantRole = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece,
+        moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE : EnPassantRole.NONE;
     return new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
   }
 
@@ -342,8 +341,6 @@ public class Board extends AbstractBoard {
     // only to test our methods correctness we perform an undo and check against the previous position
     // the below has no other purpose and could be removed
     final LegalMove moveToUndo = getLastMove();
-    final StaticPosition staticPositionBeforeLastMove = NonNullWrapperCommon
-        .get(dynamicPositionList, this.dynamicPositionList.size() - 2).staticPosition();
 
     final StaticPosition staticPositionToUndo = NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
     final StaticPosition staticPositionUndoExpected = NonNullWrapperCommon

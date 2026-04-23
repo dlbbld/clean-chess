@@ -6,9 +6,11 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.pgn.parser.AbstractPgnParser;
+import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.custom.AbstractTestFenParser;
@@ -52,7 +54,11 @@ class TestFenParserAll extends AbstractTestFenParser {
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final List<MoveSpecification> moveList = AbstractPgnParser.calculateMoveSpecificationList(pgnFile);
+    final ApiBoard board = new Board(pgnFile.startFen());
+    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+      board.performMove(halfMove.san());
+    }
+    final List<MoveSpecification> moveList = board.getPerformedMoveSpecificationList();
     checkGames(pgnFile.startFen().fen(), moveList, false);
   }
 
