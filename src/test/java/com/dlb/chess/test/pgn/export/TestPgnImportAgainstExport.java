@@ -11,6 +11,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
@@ -23,8 +24,12 @@ class TestPgnImportAgainstExport {
   @SuppressWarnings({ "static-method" })
   @Test
   void test() {
-    // Uses the curated export-roundtrip smoke subset (~20 files) — see PgnExpectedValue.getExportRoundtripSmokeList().
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getExportRoundtripSmokeList()) {
+    // true (default) → curated export-roundtrip smoke subset (~20 files).
+    // false → full ALL_EXCEPT_LONGEST_POSSIBLE corpus for a pre-release / regression sweep.
+    final List<PgnFileTestCaseList> source = RestrictTestConstants.IS_RESTRICT_PGN_WRITER_TEST
+        ? PgnExpectedValue.getExportRoundtripSmokeList()
+        : PgnExpectedValue.getRestrictedTestListList();
+    for (final PgnFileTestCaseList testCaseList : source) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();
 

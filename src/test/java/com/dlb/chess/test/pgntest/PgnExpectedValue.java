@@ -228,8 +228,8 @@ public class PgnExpectedValue {
   /**
    * Smoke subset used by {@code TestStrictPgnParserAgainstLenientPgnParser} — broad enough to exercise every major
    * parser code path (piece movement, capture, en passant, promotion, castling with check/checkmate, checkmate by
-   * various pieces, stalemate, custom starting position via FEN, repetition-sensitive en passant setup). About 45
-   * files in total rather than ~591.
+   * various pieces, stalemate, custom starting position via FEN, repetition-sensitive en passant setup). About 45 files
+   * in total rather than ~591.
    */
   public static List<PgnFileTestCaseList> getParserIntegrationSmokeList() {
     return parserIntegrationSmokeList;
@@ -252,33 +252,21 @@ public class PgnExpectedValue {
     result.add(getTestList(PgnTest.BASIC_STALEMATE));
     result.add(getTestList(PgnTest.BASIC_THREEFOLD_INITIAL_EP));
     // Curated samples from larger buckets.
-    result.add(filterBucket(PgnTest.BASIC_CAPTURE_WHITE,
-        "01_white_capture_rook_rook.pgn",
-        "06_white_capture_knight_rook.pgn",
-        "11_white_capture_bishop_rook.pgn",
-        "16_white_capture_queen_rook.pgn",
-        "21_white_capture_king_rook.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE,
-        "01_white_en_passant_capture_right_a6.pgn",
-        "07_white_en_passant_capture_right_g6.pgn",
-        "08_white_en_passant_capture_left_b6.pgn",
+    result.add(
+        filterBucket(PgnTest.BASIC_CAPTURE_WHITE, "01_white_capture_rook_rook.pgn", "06_white_capture_knight_rook.pgn",
+            "11_white_capture_bishop_rook.pgn", "16_white_capture_queen_rook.pgn", "21_white_capture_king_rook.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE, "01_white_en_passant_capture_right_a6.pgn",
+        "07_white_en_passant_capture_right_g6.pgn", "08_white_en_passant_capture_left_b6.pgn",
         "14_white_en_passant_capture_left_h6.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_CASTLING_SPECIAL_WHITE,
-        "01_white_castling_special_kingside_check.pgn",
-        "02_white_castling_special_kingside_checkmate.pgn",
-        "06_white_castling_special_queenside_check.pgn",
+    result.add(filterBucket(PgnTest.BASIC_CASTLING_SPECIAL_WHITE, "01_white_castling_special_kingside_check.pgn",
+        "02_white_castling_special_kingside_checkmate.pgn", "06_white_castling_special_queenside_check.pgn",
         "07_white_castling_special_queenside_checkmate.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_CHECKMATE_WHITE,
-        "01_white_checkmate_rook_direct_adjacent.pgn",
-        "04_white_checkmate_knight_direct.pgn",
-        "07_white_checkmate_bishop_direct_adjacent.pgn",
-        "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn",
-        "14_white_checkmate_king_discover_orthogonal.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_CHECKMATE_WHITE, "01_white_checkmate_rook_direct_adjacent.pgn",
+        "04_white_checkmate_knight_direct.pgn", "07_white_checkmate_bishop_direct_adjacent.pgn",
+        "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn", "14_white_checkmate_king_discover_orthogonal.pgn"));
     // One black-side fixture to exercise side-to-move plumbing end-to-end.
-    result.add(filterBucket(PgnTest.BASIC_CHECKMATE_BLACK,
-        "01_black_checkmate_rook_direct_adjacent.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_FROM_FEN,
-        "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
+    result.add(filterBucket(PgnTest.BASIC_CHECKMATE_BLACK, "01_black_checkmate_rook_direct_adjacent.pgn"));
+    result.add(filterBucket(PgnTest.BASIC_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
         "from_fen_no_move_half_move_clock_099_black_to_move.pgn",
         "from_fen_capture_first_move_half_move_clock_150_white_to_move.pgn",
         "from_fen_capture_second_move_half_move_clock_150_black_to_move.pgn"));
@@ -291,14 +279,11 @@ public class PgnExpectedValue {
     result.add(getTestList(PgnTest.BASIC_MOVING_PIECE_WHITE));
     result.add(getTestList(PgnTest.BASIC_PROMOTION_PIECE_WHITE));
     // Two-file samples of the structurally interesting cases.
-    result.add(filterBucket(PgnTest.BASIC_CASTLING_SPECIAL_WHITE,
-        "01_white_castling_special_kingside_check.pgn",
+    result.add(filterBucket(PgnTest.BASIC_CASTLING_SPECIAL_WHITE, "01_white_castling_special_kingside_check.pgn",
         "06_white_castling_special_queenside_check.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE,
-        "01_white_en_passant_capture_right_a6.pgn",
+    result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE, "01_white_en_passant_capture_right_a6.pgn",
         "08_white_en_passant_capture_left_b6.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_FROM_FEN,
-        "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
+    result.add(filterBucket(PgnTest.BASIC_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
         "from_fen_capture_first_move_half_move_clock_150_white_to_move.pgn"));
     return result;
   }
@@ -310,8 +295,8 @@ public class PgnExpectedValue {
    */
   private static PgnFileTestCaseList filterBucket(PgnTest pgnTest, String... wantedFileNames) {
     final Set<String> wanted = new TreeSet<>();
-    for (final String name : wantedFileNames) {
-      wanted.add(name);
+    for (var i = 0; i < wantedFileNames.length; i++) {
+      wanted.add(NonNullWrapperCommon.get(wantedFileNames, i));
     }
     final List<PgnFileTestCase> filtered = new ArrayList<>();
     final Set<String> found = new TreeSet<>();
