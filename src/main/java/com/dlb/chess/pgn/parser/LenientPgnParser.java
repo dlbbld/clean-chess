@@ -377,6 +377,12 @@ public final class LenientPgnParser {
         continue;
       }
       if (type == PgnTokenType.SYMBOL) {
+        // Lenient tolerance for spaced move-number indicators like `1 . e4` and `1 ... e5`. The old pipeline
+        // normalized these by stripping " ." / " ..." before parsing; in the sequential tokenizer the digits and
+        // dots arrive as separate SYMBOL tokens, so we reassemble the intent here and skip the pseudo-move-number.
+        if (consumedSpacedMoveNumber(peek)) {
+          continue;
+        }
         final PgnHalfMove halfMove = parseHalfMoveLenient();
         halfMoves.add(halfMove);
         // Trailing-commentary slot: exactly one commentary directly after this half-move. A second brace here falls
@@ -397,6 +403,69 @@ public final class LenientPgnParser {
     }
 
     return new MovetextOutcome(halfMoves, leadingCommentary, terminationResult);
+  }
+
+  /**
+   * Detects and consumes a spaced move-number indicator of the form {@code N . } or {@code N ... } where the digits
+   * and dots arrive as separate {@link PgnTokenType#SYMBOL} tokens because whitespace split them. Returns true when
+   * such a pattern was matched and consumed; returns false without consuming anything otherwise.
+   *
+   * <p>A {@code peek} of digits-only followed immediately by a dots-only symbol also counts (covers the contiguous
+   * {@code N..} or {@code N.e4} edge case where the tokenizer already produced separate digit and dot tokens).
+   */
+  private boolean consumedSpacedMoveNumber(PgnToken digitsPeek) {
+    if (!isPurelyDigits(digitsPeek.text())) {
+      return false;
+    }
+    // Pattern 1 — digits + SPACES + dots-only symbol. The 2-slot peek can see the SPACES; we must commit to
+    // consuming the digits to look past the SPACES for the dots symbol. That commitment is safe: a lone digits
+    // symbol is not a valid SAN, so if no dots follow we throw the equivalent length error below.
+    final PgnTokenType next = tokenizer.peekNext().type();
+    if (next == PgnTokenType.SPACES) {
+      tokenizer.next(); // digits
+      skipInlineWhitespace();
+      final PgnToken afterSpace = tokenizer.peek();
+      if (afterSpace.type() == PgnTokenType.SYMBOL && isAllDots(afterSpace.text())) {
+        tokenizer.next();
+        return true;
+      }
+      throw movetextError(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
+          "The movetext contains the SAN '" + digitsPeek.text() + "' with an invalid SAN length.");
+    }
+    // Pattern 2 — digits immediately followed by a dots-only SYMBOL (no separating SPACES). Rare in practice
+    // because the tokenizer normally folds adjacent digits and dots into a MOVE_NUMBER_* token, but covered here
+    // for robustness.
+    if (next == PgnTokenType.SYMBOL && isAllDots(tokenizer.peekNext().text())) {
+      tokenizer.next(); // digits
+      tokenizer.next(); // dots
+      return true;
+    }
+    return false;
+  }
+
+  private static boolean isPurelyDigits(String text) {
+    if (text.isEmpty()) {
+      return false;
+    }
+    for (var i = 0; i < text.length(); i++) {
+      final char c = text.charAt(i);
+      if (c < '0' || c > '9') {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private static boolean isAllDots(String text) {
+    if (text.isEmpty()) {
+      return false;
+    }
+    for (var i = 0; i < text.length(); i++) {
+      if (text.charAt(i) != '.') {
+        return false;
+      }
+    }
+    return true;
   }
 
   private PgnHalfMove parseHalfMoveLenient() {

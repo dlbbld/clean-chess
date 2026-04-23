@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -19,9 +18,8 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
  * Restored non-commentary portion of the original {@code TestMoveTextUtilityUsingPgn}. Commentary-specific tests
- * (leading-commentary success/exception, non-leading-commentary success/exception, combined commentary success) are
- * now covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not
- * restored here.
+ * (leading-commentary success/exception, non-leading-commentary success/exception, combined commentary success) are now
+ * covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored here.
  */
 class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
@@ -45,8 +43,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     // tokenizer splits them cleanly (SUFFIX `!` + SYMBOL `x`), so the diagnosis surfaces as an unexpected-format
     // violation rather than a suffix-value violation. Both are correct detections; the category differs from the
     // previous parser pipeline.
-    checkMoveSuffixAnnotationException("02_example.pgn",
-        StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT);
+    checkMoveSuffixAnnotationException("02_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT);
     // 03: `Qxf7#!?!` — trailing `!?!` lex as one suffix token; "!?!" fails validation.
     checkMoveSuffixAnnotationException("03_example.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
@@ -70,10 +67,10 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @SuppressWarnings("static-method")
   @Test
   void testMoveSuffixAnnotationSuccess() {
-    checkMoveSuffixAnnotationSuccess("01_example.pgn",
-        Arrays.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE));
-    checkMoveSuffixAnnotationSuccess("02_example.pgn",
-        Arrays.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.GOOD_MOVE));
+    checkMoveSuffixAnnotationSuccess("01_example.pgn", NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER,
+        MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE));
+    checkMoveSuffixAnnotationSuccess("02_example.pgn", NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER,
+        MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.GOOD_MOVE));
   }
 
   private static void checkMoveSuffixAnnotationSuccess(String pgnFileName,
@@ -119,12 +116,14 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
     // These fixtures exercise the full combination of leading commentary, trailing commentary, move-suffix
     // annotations, and SAN. Commentary correctness in isolation is covered by TestCommentaryStrict; here we assert
     // that all features parse together without loss of any component.
-    checkCombinedSuccess("01_example.pgn", "leading commentary", Arrays.asList("e4", "d5", "d4"),
-        Arrays.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE),
-        Arrays.asList("commentWhite1", "commentBlack", "commentWhite2"));
-    checkCombinedSuccess("02_example.pgn", "leading commentary", Arrays.asList("d5", "a3", "Qd6"),
-        Arrays.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE),
-        Arrays.asList("commentBlack1", "commentWhite", "commentBlack2"));
+    checkCombinedSuccess("01_example.pgn", "leading commentary", NonNullWrapperCommon.asList("e4", "d5", "d4"),
+        NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
+            MoveSuffixAnnotation.BRILLIANT_MOVE),
+        NonNullWrapperCommon.asList("commentWhite1", "commentBlack", "commentWhite2"));
+    checkCombinedSuccess("02_example.pgn", "leading commentary", NonNullWrapperCommon.asList("d5", "a3", "Qd6"),
+        NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
+            MoveSuffixAnnotation.BRILLIANT_MOVE),
+        NonNullWrapperCommon.asList("commentBlack1", "commentWhite", "commentBlack2"));
   }
 
   private static void checkCombinedSuccess(String pgnFileName, String leadingCommentaryExpected,

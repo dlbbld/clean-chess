@@ -68,6 +68,10 @@ public class NonNullWrapperCommon {
     return checkResult(string.substring(beginIndex, endIndex));
   }
 
+  public static String substring(StringBuilder stringBuffer, int beginIndex, int endIndex) {
+    return checkResult(stringBuffer.substring(beginIndex, endIndex));
+  }
+
   public static String replace(String string, String oldString, String newString) {
     return checkResult(string.replace(oldString, newString));
   }

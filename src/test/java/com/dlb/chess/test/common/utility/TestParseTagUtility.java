@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
@@ -19,8 +20,9 @@ import com.dlb.chess.pgn.parser.model.Tag;
  * {@code StrictParseTagUtility.validateTag(String)} API directly; this version drives the sequential strict parser
  * end-to-end by embedding each subject tag line in a minimal PGN and inspecting the first tag of the result.
  *
- * <p>Template construction puts the subject tag first so any format error fires before the seven-tag-roster check.
- * Roster tags that would duplicate the subject's tag name are omitted from the template.
+ * <p>
+ * Template construction puts the subject tag first so any format error fires before the seven-tag-roster check. Roster
+ * tags that would duplicate the subject's tag name are omitted from the template.
  */
 class TestParseTagUtility {
 
@@ -146,7 +148,7 @@ class TestParseTagUtility {
   // -------------------------------------------------------------------------------------------------
 
   private static void checkTagFormat(String tagLine, boolean isValid) {
-    final boolean isException = tryParseReturnIsException(tagLine);
+    final var isException = tryParseReturnIsException(tagLine);
     if (isValid) {
       assertFalse(isException, "Expected tag to parse cleanly: " + tagLine);
     } else {
@@ -187,8 +189,8 @@ class TestParseTagUtility {
   }
 
   /**
-   * Wraps the subject tag line as the first tag in a seven-tag-roster header, followed by a zero-move game. Any
-   * roster tag whose name matches the subject is omitted so the tag list remains unique.
+   * Wraps the subject tag line as the first tag in a seven-tag-roster header, followed by a zero-move game. Any roster
+   * tag whose name matches the subject is omitted so the tag list remains unique.
    */
   private static String buildMinimalPgn(String subjectTagLine) {
     final String subjectName = extractTagName(subjectTagLine);
@@ -196,12 +198,12 @@ class TestParseTagUtility {
     sb.append(subjectTagLine).append('\n');
     for (final String roster : Arrays.asList("Event", "Site", "Date", "Round", "White", "Black", "Result")) {
       if (!roster.equals(subjectName)) {
-        final String placeholder = "Result".equals(roster) ? "*" : "?";
+        final var placeholder = "Result".equals(roster) ? "*" : "?";
         sb.append('[').append(roster).append(" \"").append(placeholder).append("\"]\n");
       }
     }
     sb.append('\n').append("*").append('\n').append('\n');
-    return sb.toString();
+    return NonNullWrapperCommon.toString(sb);
   }
 
   /**
@@ -210,16 +212,16 @@ class TestParseTagUtility {
    * because the parser errors before template wholeness matters.
    */
   private static String extractTagName(String tagLine) {
-    final int open = tagLine.indexOf('[');
+    final var open = tagLine.indexOf('[');
     if (open == -1) {
       return "";
     }
-    final int afterOpen = open + 1;
-    final int space = tagLine.indexOf(' ', afterOpen);
+    final var afterOpen = open + 1;
+    final var space = tagLine.indexOf(' ', afterOpen);
     if (space == -1) {
       return "";
     }
-    return tagLine.substring(afterOpen, space);
+    return NonNullWrapperCommon.substring(tagLine, afterOpen, space);
   }
 
   private static Tag findTagByName(PgnFile file, String name) {
@@ -237,6 +239,6 @@ class TestParseTagUtility {
     while (sb.length() < length) {
       sb.append((char) ('0' + sb.length() % 10));
     }
-    return sb.substring(0, length);
+    return NonNullWrapperCommon.substring(sb, 0, length);
   }
 }

@@ -67,10 +67,9 @@ public enum PgnTokenType {
   BRACE_COMMENT_UNCLOSED,
 
   /**
-   * A brace commentary that contained another {@code {} before its closing {@code }}. Commentary cannot nest: this
-   * is always an error. The token text holds the content scanned up to (but not including) the inner {@code {}, and
-   * the inner {@code {} is left for subsequent tokenization so error reporting can carry its exact position if
-   * desired.
+   * A brace commentary that contained another "{" before its closing "}". Commentary cannot nest: this is always an
+   * error. The token text holds the content scanned up to (but not including) the inner "{", and the inner "{" is left
+   * for subsequent tokenization so error reporting can carry its exact position if desired.
    */
   BRACE_COMMENT_NESTED,
 
