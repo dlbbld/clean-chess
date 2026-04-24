@@ -92,47 +92,28 @@ public class ValidateNewMove implements EnumConstants {
       case NONE -> throw new IllegalArgumentException();
     };
     switch (castlingCheck) {
-      case KING_CASTLING_FINAL_NO_RIGHT:
+      case FINAL_NO_RIGHT:
         final CastlingRight castlingRight = board.getCastlingRight(havingMove);
         if (castlingRight == CastlingRight.NONE) {
-          throw new InvalidMoveException("there are no castling rights anymore on both sides", castlingCheck);
+          throw new InvalidMoveException("there are no castling rights anymore on both sides",
+              castlingCheck.toMoveCheck());
         }
-        throw new InvalidMoveException("there is no castling right anymore on this side", castlingCheck);
-      case KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY:
-        throw new InvalidMoveException("not all squares between the rook and the king are empty", castlingCheck);
-      case KING_CASTLING_TEMPORARY_KING_IN_CHECK:
-        throw new InvalidMoveException("castling is not possible because the king is in check", castlingCheck);
-      case KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
-        throw new InvalidMoveException("the king would travel over a field that is in check", castlingCheck);
-      case KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK:
-        throw new InvalidMoveException("the king would end in check", castlingCheck);
+        throw new InvalidMoveException("there is no castling right anymore on this side",
+            castlingCheck.toMoveCheck());
+      case TEMPORARY_SQUARES_NOT_EMPTY:
+        throw new InvalidMoveException("not all squares between the rook and the king are empty",
+            castlingCheck.toMoveCheck());
+      case TEMPORARY_KING_IN_CHECK:
+        throw new InvalidMoveException("castling is not possible because the king is in check",
+            castlingCheck.toMoveCheck());
+      case TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
+        throw new InvalidMoveException("the king would travel over a field that is in check",
+            castlingCheck.toMoveCheck());
+      case TEMPORARY_KING_ENDS_IN_CHECK:
+        throw new InvalidMoveException("the king would end in check", castlingCheck.toMoveCheck());
       case SUCCESS:
         // valid castling
         break;
-      case ALL_BUT_KING_KING_EXPOSED_TO_CHECK:
-      case ALL_BUT_KING_KING_LEFT_IN_CHECK:
-      case LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES:
-      case ALL_MOVEMENT_NOT_POSSIBLE:
-      case ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE:
-      case BASIC_MOVING_PIECE_NONE:
-      case BASIC_MOVING_PIECE_OPPONENT:
-      case BASIC_NON_PAWN_PROMOTION_PIECE_SET:
-      case KING_CAPTURES_GUARDED_PIECE:
-      case KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES:
-      case KING_MOVES_INTO_CHECK:
-      case KING_MOVES_NEXT_TO_OPPONENT_KING:
-      case PAWN_DIAGONAL_OWN_PIECE:
-      case PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE:
-      case PAWN_EN_PASSANT_CAPTURE_WRONG_RANK:
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE:
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE:
-      case PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY:
-      case PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY:
-      case PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY:
-      case PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE:
-      case PAWN_PROMOTION_MOVE_NO_PROMOTION_PIECE:
-      case KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES:
-        // per precondition should not happen
       default:
         throw new IllegalArgumentException();
     }

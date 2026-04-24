@@ -7,7 +7,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.CastlingConstants;
-import com.dlb.chess.enums.MoveCheck;
+import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
@@ -20,23 +20,23 @@ public class KingCastlingLegalMoves extends KingLegalMoves {
     switch (havingMove) {
       case BLACK:
         if (CastlingUtility.calculateQueenSideCastlingCheck(staticPosition, havingMove,
-            castlingRight) == MoveCheck.SUCCESS) {
+            castlingRight) == CastlingCheck.SUCCESS) {
           legalMoveSet.add(CastlingConstants.BLACK_QUEEN_SIDE_CASTLING_MOVE);
         }
 
         if (CastlingUtility.calculateKingSideCastlingCheck(staticPosition, havingMove,
-            castlingRight) == MoveCheck.SUCCESS) {
+            castlingRight) == CastlingCheck.SUCCESS) {
           legalMoveSet.add(CastlingConstants.BLACK_KING_SIDE_CASTLING_MOVE);
         }
         break;
       case WHITE:
         if (CastlingUtility.calculateQueenSideCastlingCheck(staticPosition, havingMove,
-            castlingRight) == MoveCheck.SUCCESS) {
+            castlingRight) == CastlingCheck.SUCCESS) {
           legalMoveSet.add(CastlingConstants.WHITE_QUEEN_SIDE_CASTLING_MOVE);
         }
 
         if (CastlingUtility.calculateKingSideCastlingCheck(staticPosition, havingMove,
-            castlingRight) == MoveCheck.SUCCESS) {
+            castlingRight) == CastlingCheck.SUCCESS) {
           legalMoveSet.add(CastlingConstants.WHITE_KING_SIDE_CASTLING_MOVE);
         }
         break;

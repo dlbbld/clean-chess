@@ -9,34 +9,28 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.enums.MoveCheck;
+import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.validate.CastlingMoveCheckMapper;
+import com.dlb.chess.san.validate.CastlingCheckMapper;
 
 /**
- * Lock-down tests for the bridge between {@link MoveCheck} + {@link CastlingRightLoss} (internal pipeline vocabulary)
+ * Lock-down tests for the bridge between {@link CastlingCheck} + {@link CastlingRightLoss} (internal pipeline vocabulary)
  * and {@link SanValidationProblem} (external error-code vocabulary) in the castling subset.
  *
  * <p>
  * The input enums form two orthogonal dimensions; {@code SanValidationProblem} flattens them: the FINAL_NO_RIGHT case
- * expands across the 6 provenance values of {@code CastlingRightLoss} (all except {@code NOT_LOST}), while the 4
- * TEMPORARY cases stay flat. Total castling constants in {@code SanValidationProblem} = 4 + 6 = 10.
+ * expands across the 5 provenance values of {@code CastlingRightLoss} (all except {@code NOT_LOST}), while the 3
+ * TEMPORARY cases stay flat. Total castling constants in {@code SanValidationProblem} = 3 TEMPORARY + 5 FINAL = 8.
  *
  * <p>
- * These tests make the invariants machine-checkable so drift is caught at build time:
- * <ul>
- * <li>{@link MoveCheck}'s castling values appear in priority order.</li>
- * <li>{@link SanValidationProblem}'s KING_CASTLING_* values appear in the same order (FINAL before TEMPORARY).</li>
- * <li>The mapper is exhaustive for every castling {@code MoveCheck} and every provenance except {@code NOT_LOST}.</li>
- * <li>The parity relation holds: |KING_CASTLING_*| = (|castling MoveCheck| − 1) + (|CastlingRightLoss| − 1).</li>
- * </ul>
+ * These tests make the invariants machine-checkable so drift is caught at build time.
  */
-class TestCastlingMoveCheckMapper {
+class TestCastlingCheckMapper {
 
-  private static final List<MoveCheck> EXPECTED_CASTLING_MOVE_CHECKS = NonNullWrapperCommon.listOf(
-      MoveCheck.KING_CASTLING_FINAL_NO_RIGHT, MoveCheck.KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY,
-      MoveCheck.KING_CASTLING_TEMPORARY_KING_IN_CHECK, MoveCheck.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
-      MoveCheck.KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK);
+  private static final List<CastlingCheck> EXPECTED_CASTLING_CHECKS = NonNullWrapperCommon.listOf(
+      CastlingCheck.FINAL_NO_RIGHT, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
+      CastlingCheck.TEMPORARY_KING_IN_CHECK, CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
+      CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK);
 
   private static final List<SanValidationProblem> EXPECTED_KING_CASTLING_PROBLEMS = NonNullWrapperCommon.listOf(
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED,
@@ -66,13 +60,13 @@ class TestCastlingMoveCheckMapper {
   @SuppressWarnings("static-method")
   @Test
   void testMapperIsExhaustiveForTemporary() {
-    // For the 4 TEMPORARY MoveCheck values, the provenance is irrelevant; any value works.
-    for (final MoveCheck moveCheck : EXPECTED_CASTLING_MOVE_CHECKS) {
-      if (moveCheck == MoveCheck.KING_CASTLING_FINAL_NO_RIGHT) {
+    // For the TEMPORARY CastlingCheck values, the provenance is irrelevant; any value works.
+    for (final CastlingCheck castlingCheck : EXPECTED_CASTLING_CHECKS) {
+      if (castlingCheck == CastlingCheck.FINAL_NO_RIGHT) {
         continue;
       }
-      final SanValidationProblem mapped = CastlingMoveCheckMapper.map(moveCheck, CastlingRightLoss.NOT_LOST);
-      assertNotNull(mapped, "mapper returned null for " + moveCheck);
+      final SanValidationProblem mapped = CastlingCheckMapper.map(castlingCheck, CastlingRightLoss.NOT_LOST);
+      assertNotNull(mapped, "mapper returned null for " + castlingCheck);
     }
   }
 
@@ -80,7 +74,7 @@ class TestCastlingMoveCheckMapper {
   @Test
   void testMapperIsExhaustiveForFinalNoRight() {
     for (final CastlingRightLoss loss : EXPECTED_FINAL_NO_RIGHT_PROVENANCES) {
-      final SanValidationProblem mapped = CastlingMoveCheckMapper.map(MoveCheck.KING_CASTLING_FINAL_NO_RIGHT, loss);
+      final SanValidationProblem mapped = CastlingCheckMapper.map(CastlingCheck.FINAL_NO_RIGHT, loss);
       assertNotNull(mapped, "mapper returned null for FINAL_NO_RIGHT + " + loss);
     }
   }
@@ -88,10 +82,9 @@ class TestCastlingMoveCheckMapper {
   @SuppressWarnings("static-method")
   @Test
   void testParityCount() {
-    final var expectedProblemCount = EXPECTED_CASTLING_MOVE_CHECKS.size() - 1
-        + EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size();
+    final var expectedProblemCount = EXPECTED_CASTLING_CHECKS.size() - 1 + EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size();
     assertEquals(expectedProblemCount, EXPECTED_KING_CASTLING_PROBLEMS.size(),
-        "|KING_CASTLING_*| must equal (|castling MoveCheck| - 1) + |FINAL_NO_RIGHT provenances|");
+        "|KING_CASTLING_*| must equal (|CastlingCheck refusal| - 1) + |FINAL_NO_RIGHT provenances|");
   }
 
   @SuppressWarnings("static-method")
@@ -99,7 +92,7 @@ class TestCastlingMoveCheckMapper {
   void testFinalNoRightMappingMatchesProvenanceOrder() {
     for (var i = 0; i < EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size(); i++) {
       assertEquals(NonNullWrapperCommon.get(EXPECTED_FINAL_NO_RIGHT_PROBLEMS, i),
-          CastlingMoveCheckMapper.map(MoveCheck.KING_CASTLING_FINAL_NO_RIGHT,
+          CastlingCheckMapper.map(CastlingCheck.FINAL_NO_RIGHT,
               NonNullWrapperCommon.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i)),
           "FINAL_NO_RIGHT mapping mismatch for provenance "
               + NonNullWrapperCommon.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i));
@@ -109,12 +102,12 @@ class TestCastlingMoveCheckMapper {
   @SuppressWarnings("static-method")
   @Test
   void testTemporaryMappingMatchesExpectedOrder() {
-    // The 4 TEMPORARY entries in EXPECTED_KING_CASTLING_PROBLEMS start at index 6 (after the 6 FINAL entries).
+    // The TEMPORARY entries in EXPECTED_KING_CASTLING_PROBLEMS start after the 5 FINAL entries.
     final var temporaryStartIndex = EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size();
-    final var temporaryMoveChecks = EXPECTED_CASTLING_MOVE_CHECKS.subList(1, EXPECTED_CASTLING_MOVE_CHECKS.size());
-    for (var i = 0; i < temporaryMoveChecks.size(); i++) {
+    final var temporaryCastlingChecks = EXPECTED_CASTLING_CHECKS.subList(1, EXPECTED_CASTLING_CHECKS.size());
+    for (var i = 0; i < temporaryCastlingChecks.size(); i++) {
       assertEquals(NonNullWrapperCommon.get(EXPECTED_KING_CASTLING_PROBLEMS, temporaryStartIndex + i),
-          CastlingMoveCheckMapper.map(NonNullWrapperCommon.get(temporaryMoveChecks, i), CastlingRightLoss.NOT_LOST),
+          CastlingCheckMapper.map(NonNullWrapperCommon.get(temporaryCastlingChecks, i), CastlingRightLoss.NOT_LOST),
           "TEMPORARY mapping mismatch at position " + i);
     }
   }

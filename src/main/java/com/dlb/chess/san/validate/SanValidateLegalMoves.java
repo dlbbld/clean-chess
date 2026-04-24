@@ -21,6 +21,8 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.enums.CastlingCheck;
+import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
@@ -350,15 +352,15 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   private static void throwCastlingException(ApiBoard board, Side havingMove, String sideLabel,
       CastlingMove castlingMove) {
     final CastlingRight castlingRight = board.getCastlingRight(havingMove);
-    final var moveCheck = castlingMove == CastlingMove.QUEEN_SIDE
+    final var castlingCheck = castlingMove == CastlingMove.QUEEN_SIDE
         ? CastlingUtility.calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove, castlingRight)
         : CastlingUtility.calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, castlingRight);
 
     final var castlingRightLoss = board.getCastlingRightLoss(havingMove, castlingMove);
     final String message;
 
-    switch (moveCheck) {
-      case KING_CASTLING_FINAL_NO_RIGHT: {
+    switch (castlingCheck) {
+      case FINAL_NO_RIGHT: {
         final var rookLabel = castlingMove == CastlingMove.QUEEN_SIDE ? "queen-side" : "king-side";
         message = switch (castlingRightLoss) {
           case KING_MOVED -> Message.getString("validation.san.kingCastling.finalNoRight.kingMoved", sideLabel);
@@ -373,26 +375,26 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
         };
         break;
       }
-      case KING_CASTLING_TEMPORARY_SQUARES_NOT_EMPTY:
+      case TEMPORARY_SQUARES_NOT_EMPTY:
         message = Message.getString("validation.san.kingCastling.temporary.squaresNotEmpty", sideLabel);
         break;
-      case KING_CASTLING_TEMPORARY_KING_IN_CHECK:
+      case TEMPORARY_KING_IN_CHECK:
         message = Message.getString("validation.san.kingCastling.temporary.kingInCheck", sideLabel);
         break;
-      case KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
+      case TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
         message = Message.getString("validation.san.kingCastling.temporary.kingTravelsThroughCheck", sideLabel);
         break;
-      case KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK:
+      case TEMPORARY_KING_ENDS_IN_CHECK:
         message = Message.getString("validation.san.kingCastling.temporary.kingEndsInCheck", sideLabel);
         break;
       case SUCCESS:
         throw new ProgrammingMistakeException("Castling check returned SUCCESS but move is not in legal moves");
       default:
-        throw new ProgrammingMistakeException("Unexpected castling check result: " + moveCheck);
+        throw new ProgrammingMistakeException("Unexpected castling check result: " + castlingCheck);
     }
 
-    throw new SanValidationException(CastlingMoveCheckMapper.map(moveCheck, castlingRightLoss), message, moveCheck,
-        castlingRightLoss);
+    throw new SanValidationException(CastlingCheckMapper.map(castlingCheck, castlingRightLoss), message,
+        castlingCheck.toMoveCheck(), castlingRightLoss);
   }
 
   private static PseudoLegalReason calculatePseudoLegalReason(StaticPosition staticPosition, Side havingMove) {
