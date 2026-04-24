@@ -128,7 +128,8 @@ public class ValidateNewMove implements EnumConstants {
     }
 
     if (movingPiece.getSide() != havingMove) {
-      throw new InvalidMoveException("the moving piece is not an own piece", MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
+      throw new InvalidMoveException("the moving piece is not an own piece",
+          MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
     }
 
   }
@@ -284,7 +285,8 @@ public class ValidateNewMove implements EnumConstants {
     }
 
     if (capturedPiece != Piece.NONE && capturedPiece.getSide() == havingMove) {
-      throw new InvalidMoveException("you cannot capture an own piece", MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+      throw new InvalidMoveException("you cannot capture an own piece",
+          MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
     }
 
     final var toSquareSet = switch (movingPiece.getPieceType()) {
@@ -367,11 +369,11 @@ public class ValidateNewMove implements EnumConstants {
         final Piece king = Piece.calculateKingPiece(havingMove);
         if (calculateHasKingMove(board.getLegalMoveSet(), king)) {
           throw new InvalidMoveException(
-              "it leaves the king in check. The king can only be moved to a nonthreatened square. Because there are no such squares, another piece must be moved instead.",
+              "it leaves the king in check. The king can only be moved to an empty nonthreatened square.",
               MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
         }
         throw new InvalidMoveException(
-            "it leaves the king in check. . The king can only be moved to a nonthreatened square. Because there are no such squares, another piece must be moved instead.",
+            "it leaves the king in check. Because the king has no legal moves another piece must be moved.",
             MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
       }
       throw new InvalidMoveException("it exposes the king to check", MoveCheck.KING_MOVES_INTO_CHECK);
