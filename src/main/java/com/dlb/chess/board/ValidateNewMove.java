@@ -124,11 +124,11 @@ public class ValidateNewMove implements EnumConstants {
     final Piece movingPiece = board.getStaticPosition().get(fromSquare);
 
     if (movingPiece == Piece.NONE) {
-      throw new InvalidMoveException("the from square is empty", MoveCheck.BASIC_MOVING_PIECE_NONE);
+      throw new InvalidMoveException("the from square is empty", MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
     }
 
     if (movingPiece.getSide() != havingMove) {
-      throw new InvalidMoveException("the moving piece is not an own piece", MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+      throw new InvalidMoveException("the moving piece is not an own piece", MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
     }
 
   }

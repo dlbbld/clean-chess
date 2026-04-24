@@ -16,22 +16,22 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     final ApiBoard board = new Board();
     MoveSpecification move = new MoveSpecification(E3, E4);
 
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
 
     move = new MoveSpecification(A3, H6);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
 
     move = new MoveSpecification(D4, D8);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
 
     move = new MoveSpecification(E7, E6);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(D8, D6);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(E8, E7);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(B2, B3);
     board.performMove(move);
@@ -842,22 +842,22 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove("e4");
 
     MoveSpecification move = new MoveSpecification(E6, E5);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
 
     move = new MoveSpecification(A6, H3);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
 
     move = new MoveSpecification(D4, D1);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_NONE);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
 
     move = new MoveSpecification(D2, D3);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(D1, D3);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(E1, E2);
-    check(board, move, MoveCheck.BASIC_MOVING_PIECE_OPPONENT);
+    check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(B7, B6);
     board.performMove(move);
