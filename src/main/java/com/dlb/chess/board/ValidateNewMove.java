@@ -14,7 +14,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -42,11 +42,7 @@ public class ValidateNewMove implements EnumConstants {
       validatePawnPromotionPieceConsistency(board, moveSpecification);
     }
 
-    if (movingPiece.getPieceType() == KING) {
-      validateKingSafety(board, moveSpecification);
-    } else {
-      validateKingLeftInCheckOrExposedToCheckNonKingMove(board, moveSpecification);
-    }
+    validateKingSafety(board, moveSpecification);
 
     return MoveCheck.SUCCESS;
   }
@@ -181,44 +177,22 @@ public class ValidateNewMove implements EnumConstants {
 
   private static void validateKingSafety(ApiBoard board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
-    final Side havingMove = board.getHavingMove();
-    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(board.getStaticPosition(), havingMove,
-        moveSpecification)) {
-      if (StaticPositionUtility.calculateIsCheck(board.getStaticPosition(), havingMove)) {
-        final Piece king = Piece.calculateKingPiece(havingMove);
-        if (calculateHasKingMove(board.getLegalMoveSet(), king)) {
-          throw new InvalidMoveException("it leaves the king in check.",
-              MoveCheck.KING_KING_LEFT_IN_CHECK_LEGAL_MOVES);
-        }
-        throw new InvalidMoveException("it leaves the king in check.",
-            MoveCheck.KING_KING_LEFT_IN_CHECK_NO_LEGAL_MOVES);
-      }
-      throw new InvalidMoveException("it exposes the king to check", MoveCheck.KING_KING_EXPOSED_TO_CHECK);
+    final KingSafetyCheck kingSafetyCheck = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(),
+        board.getHavingMove(), board.getLegalMoveSet(), moveSpecification);
+    if (kingSafetyCheck == KingSafetyCheck.SUCCESS) {
+      return;
     }
+    throw new InvalidMoveException(kingSafetyMessage(kingSafetyCheck), kingSafetyCheck.toMoveCheck());
   }
 
-  private static boolean calculateHasKingMove(Set<LegalMove> legalMoves, Piece king) {
-    for (final LegalMove legalMove : legalMoves) {
-      if (legalMove.movingPiece() == king) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static void validateKingLeftInCheckOrExposedToCheckNonKingMove(ApiBoard board,
-      MoveSpecification moveSpecification) throws InvalidMoveException {
-    final Side havingMove = board.getHavingMove();
-
-    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(board.getStaticPosition(), havingMove,
-        moveSpecification)) {
-      if (StaticPositionUtility.calculateIsCheck(board.getStaticPosition(), havingMove)) {
-        throw new InvalidMoveException("it would leave the own king in check",
-            MoveCheck.ALL_BUT_KING_KING_LEFT_IN_CHECK);
-      }
-      throw new InvalidMoveException("it would expose the own king to check",
-          MoveCheck.ALL_BUT_KING_KING_EXPOSED_TO_CHECK);
-    }
+  private static String kingSafetyMessage(KingSafetyCheck check) {
+    return switch (check) {
+      case NON_KING_LEFT_IN_CHECK -> "it would leave the own king in check";
+      case NON_KING_EXPOSED_TO_CHECK -> "it would expose the own king to check";
+      case KING_EXPOSED_TO_CHECK -> "it exposes the king to check";
+      case KING_LEFT_IN_CHECK_LEGAL_MOVES, KING_LEFT_IN_CHECK_NO_LEGAL_MOVES -> "it leaves the king in check.";
+      case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS has no message");
+    };
   }
 
   public static Set<MoveSpecification> calculateMoveSpecifications(Set<LegalMove> legalMoveSet) {

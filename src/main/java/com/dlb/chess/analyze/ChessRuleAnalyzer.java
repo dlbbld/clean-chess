@@ -12,8 +12,10 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.model.EmptyBoardMove;
+import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
@@ -57,6 +59,40 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
       case ROOK, KNIGHT, BISHOP, QUEEN -> analyzeStandardPiece(staticPosition, havingMove, moveSpecification);
       case NONE -> throw new ProgrammingMistakeException("None piece type is not movable");
     };
+  }
+
+  public static KingSafetyCheck analyzeKingSafety(StaticPosition staticPosition, Side havingMove,
+      Set<LegalMove> legalMoveSet, MoveSpecification moveSpecification) {
+    if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
+      throw new ProgrammingMistakeException("Castling king-safety is handled by CastlingCheck");
+    }
+    final Piece movingPiece = staticPosition.get(moveSpecification.fromSquare());
+    if (movingPiece == Piece.NONE || movingPiece.getSide() != havingMove) {
+      throw new ProgrammingMistakeException("From-square does not hold an own piece");
+    }
+    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+      return KingSafetyCheck.SUCCESS;
+    }
+    final boolean wasInCheck = StaticPositionUtility.calculateIsCheck(staticPosition, havingMove);
+    final boolean isKingMove = movingPiece.getPieceType() == KING;
+    if (!isKingMove) {
+      return wasInCheck ? KingSafetyCheck.NON_KING_LEFT_IN_CHECK : KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
+    }
+    if (!wasInCheck) {
+      return KingSafetyCheck.KING_EXPOSED_TO_CHECK;
+    }
+    final Piece king = Piece.calculateKingPiece(havingMove);
+    return calculateHasKingMove(legalMoveSet, king) ? KingSafetyCheck.KING_LEFT_IN_CHECK_LEGAL_MOVES
+        : KingSafetyCheck.KING_LEFT_IN_CHECK_NO_LEGAL_MOVES;
+  }
+
+  private static boolean calculateHasKingMove(Set<LegalMove> legalMoves, Piece king) {
+    for (final LegalMove legalMove : legalMoves) {
+      if (legalMove.movingPiece() == king) {
+        return true;
+      }
+    }
+    return false;
   }
 
   private static MovementCheck analyzePawn(StaticPosition staticPosition, Side havingMove,
