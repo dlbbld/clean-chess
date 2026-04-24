@@ -145,7 +145,7 @@ public class ValidateNewMove implements EnumConstants {
     final var isDiagonalMove = PawnDiagonalMoveUtility.calculateIsPawnDiagonalMove(havingMove, fromSquare, toSquare);
 
     if (!isForwardMove && !isDiagonalMove) {
-      throw new InvalidMoveException("pawns cannot move in this way", MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+      throw new InvalidMoveException("pawns cannot move in this way", MoveCheck.MOVEMENT_NOT_POSSIBLE);
     }
 
     if (isForwardMove) {
@@ -184,17 +184,17 @@ public class ValidateNewMove implements EnumConstants {
       if (!toSquareIsEmpty) {
         throw new InvalidMoveException(
             "when moving two squares both the passing and destination square must be empty, but both squares are occcupied",
-            MoveCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
+            MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
       }
       throw new InvalidMoveException(
           "when moving two squares both the passing and destination square must be empty, but the passing square is occcupied",
-          MoveCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
+          MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
     }
 
     if (!toSquareIsEmpty) {
       throw new InvalidMoveException(
           "when moving two squares both the passing and destination square must be empty, but the destination square is occcupied",
-          MoveCheck.PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
+          MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
     }
   }
 
@@ -208,11 +208,11 @@ public class ValidateNewMove implements EnumConstants {
       if (pieceOnToSquare.getSide() == board.getHavingMove()) {
         throw new InvalidMoveException(
             "when moving a pawn one square forwards, the destination square must be empty, but the destination square is occupied by an own piece",
-            MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+            MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
       }
       throw new InvalidMoveException(
           "when moving a pawn one square forwards, the destination square must be empty, but the destination square is occupied by an opponent pieces",
-          MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+          MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
     }
   }
 
@@ -226,7 +226,7 @@ public class ValidateNewMove implements EnumConstants {
       validatePawnEnPassantCapture(board, moveSpecification);
     } else if (capturedPiece.getSide() == havingMove) {
       throw new InvalidMoveException("the pawn you cannot diagonally capture an own piece",
-          MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+          MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
     } else if (capturedPiece.getSide() != havingMove.getOppositeSide()) {
       // we are fine, opponent piece was captured
       throw new ProgrammingMistakeException();
@@ -244,7 +244,7 @@ public class ValidateNewMove implements EnumConstants {
     if (!isEnPassantCaptureRank) {
       throw new InvalidMoveException(
           "the pawn cannot move diagonally to an empty field, except when en passant capture is possible, which is not the case",
-          MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+          MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
     }
 
     final Square boardEnPassantCaptureTargetSquare = board.getEnPassantCaptureTargetSquare();
@@ -256,7 +256,7 @@ public class ValidateNewMove implements EnumConstants {
       throw new InvalidMoveException(
           "the en passant capture requires that the pawn move " + sanTwoSquareAdvance
               + " was immediately played before, which is not the case",
-          MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+          MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
     }
 
   }
@@ -280,11 +280,11 @@ public class ValidateNewMove implements EnumConstants {
 
     if (!calculateIsEmptyBoardMove(toSquare, emptyBoardMoves)) {
       throw new InvalidMoveException("the " + movingPiece.getPieceType().getName() + " cannot move in this way",
-          MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+          MoveCheck.MOVEMENT_NOT_POSSIBLE);
     }
 
     if (capturedPiece != Piece.NONE && capturedPiece.getSide() == havingMove) {
-      throw new InvalidMoveException("you cannot capture an own piece", MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+      throw new InvalidMoveException("you cannot capture an own piece", MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
     }
 
     final var toSquareSet = switch (movingPiece.getPieceType()) {
@@ -304,7 +304,7 @@ public class ValidateNewMove implements EnumConstants {
         if (!toSquareSet.contains(toSquare)) {
           throw new InvalidMoveException(
               "the " + movingPiece.getPieceType().getName() + " cannot jump over other pieces",
-              MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+              MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
 
         }
         break;
@@ -339,12 +339,12 @@ public class ValidateNewMove implements EnumConstants {
 
     if (!calculateIsEmptyBoardMove(toSquare, emptyBoardMoves)) {
       throw new InvalidMoveException("the " + movingPiece.getPieceType().getName() + " cannot move in this way",
-          MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+          MoveCheck.MOVEMENT_NOT_POSSIBLE);
     }
 
     if (pieceOnToSquare != Piece.NONE && pieceOnToSquare.getSide() == havingMove) {
       throw new InvalidMoveException("you cannot capture an an own piece",
-          MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+          MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
     }
 
     if (calculateIsMoveNextToOpponentKing(board, moveSpecification)) {

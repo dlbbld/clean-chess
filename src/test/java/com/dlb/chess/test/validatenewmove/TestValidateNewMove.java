@@ -41,23 +41,23 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // rook movement
     move = new MoveSpecification(A1, B2);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // rook movement
     move = new MoveSpecification(H1, G3);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // rook movement
     move = new MoveSpecification(A1, B8);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // knight movement
     move = new MoveSpecification(B1, B4);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // knight movement
     move = new MoveSpecification(B1, B2);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(C2, C4);
     board.performMove(move);
@@ -67,7 +67,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // knight movement
     move = new MoveSpecification(B1, C2);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(B1, C3);
     board.performMove(move);
@@ -77,27 +77,27 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // bishop movement
     move = new MoveSpecification(C1, C2);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // bishop movement
     move = new MoveSpecification(F1, C3);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // bishop movement
     move = new MoveSpecification(C1, C8);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // queen movement
     move = new MoveSpecification(D1, B2);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // queen movement
     move = new MoveSpecification(D1, H3);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // queen movement
     move = new MoveSpecification(D1, C8);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(E2, E4);
     board.performMove(move);
@@ -107,27 +107,27 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // king movement
     move = new MoveSpecification(E1, E3);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // king movement
     move = new MoveSpecification(E1, F3);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // king movement
     move = new MoveSpecification(E1, A8);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A2, A5);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A2, B4);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A2, A8);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A2, A3, PromotionPieceType.QUEEN);
@@ -135,7 +135,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // pawn movement
     move = new MoveSpecification(A2, A8, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
   }
 
@@ -148,14 +148,14 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // rook
     MoveSpecification move = new MoveSpecification(A1, A2);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(A1, B1);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // knight
     move = new MoveSpecification(B1, D2);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(A2, A3);
     board.performMove(move);
@@ -164,11 +164,11 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B1, A3);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // bishop
     move = new MoveSpecification(C1, B2);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(D2, D4);
     board.performMove(move);
@@ -183,25 +183,25 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(C1, D2);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // queen
     move = new MoveSpecification(D2, C1);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // queen tries to capture the own king
     move = new MoveSpecification(D2, E1);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(D2, C2);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // king
     move = new MoveSpecification(E1, D2);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(E1, F1);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
   }
 
@@ -231,7 +231,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A4, A5);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(D4, E5);
     board.performMove(move);
@@ -246,7 +246,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E4, E5);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(H2, H4);
     board.performMove(move);
@@ -255,7 +255,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(H4, H5);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(A5, A6);
     board.performMove(move);
@@ -270,7 +270,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A5, A6);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(F2, F3);
     board.performMove(move);
@@ -279,7 +279,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F3, E4);
-    check(board, move, MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
 
     move = new MoveSpecification(C2, C3);
     board.performMove(move);
@@ -294,19 +294,19 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B4, A5);
-    check(board, move, MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
 
     move = new MoveSpecification(B4, C5);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(E4, F5);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(F3, G4);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(H4, G5);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(F3, F4);
     board.performMove(move);
@@ -321,7 +321,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F5, E6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(D2, H6);
     board.performMove(move);
@@ -348,19 +348,19 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F5, E6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(H5, G6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(A5, B6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(E5, F6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(F5, G6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     // pawn moves
     board = new Board();
@@ -378,7 +378,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E5, D6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(H2, H4);
     board.performMove(move);
@@ -399,7 +399,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(H5, G6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(A2, A4);
     board.performMove(move);
@@ -414,7 +414,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A5, B6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(D1, E1);
     board.performMove(move);
@@ -429,7 +429,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E5, F6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     // pawn moves
     board = new Board();
@@ -447,7 +447,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B5, C6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(B5, A6);
     board.performMove(move);
@@ -474,7 +474,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(H5, G6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
   }
 
@@ -492,7 +492,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(C2, C4);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(E2, E4);
     board.performMove(move);
@@ -513,7 +513,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(C2, C4);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(A4, C3);
     board.performMove(move);
@@ -522,7 +522,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(C2, C4);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
   }
 
   @Test
@@ -867,23 +867,23 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // rook movement
     move = new MoveSpecification(A8, B7);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // rook movement
     move = new MoveSpecification(H8, G6);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // rook movement
     move = new MoveSpecification(A8, B1);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // knight movement
     move = new MoveSpecification(B8, B5);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // knight movement
     move = new MoveSpecification(B8, B7);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(C7, C5);
     board.performMove(move);
@@ -893,7 +893,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // knight movement
     move = new MoveSpecification(B8, C7);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(B8, C6);
     board.performMove(move);
@@ -903,27 +903,27 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // bishop movement
     move = new MoveSpecification(C8, C7);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // bishop movement
     move = new MoveSpecification(F8, C6);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // bishop movement
     move = new MoveSpecification(C8, C1);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // queen movement
     move = new MoveSpecification(D8, B7);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // queen movement
     move = new MoveSpecification(D8, H6);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // queen movement
     move = new MoveSpecification(D8, C1);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(E7, E5);
     board.performMove(move);
@@ -933,27 +933,27 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // king movement
     move = new MoveSpecification(E8, E6);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // king movement
     move = new MoveSpecification(E8, F6);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // king movement
     move = new MoveSpecification(E8, A1);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A7, A4);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A7, B5);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A7, A1);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     // pawn movement
     move = new MoveSpecification(A7, A6, PromotionPieceType.QUEEN);
@@ -961,7 +961,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // pawn movement
     move = new MoveSpecification(A7, A1, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.ALL_MOVEMENT_NOT_POSSIBLE);
+    check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
   }
 
@@ -975,14 +975,14 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // rook
     MoveSpecification move = new MoveSpecification(A8, A7);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(A8, B8);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // knight
     move = new MoveSpecification(B8, D7);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(A7, A6);
     board.performMove(move);
@@ -991,11 +991,11 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B8, A6);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // bishop
     move = new MoveSpecification(C8, B7);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(D7, D5);
     board.performMove(move);
@@ -1010,25 +1010,25 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(C8, D7);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // queen
     move = new MoveSpecification(D7, C8);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // queen tries to capture the own king
     move = new MoveSpecification(D7, E8);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(D7, C7);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     // king
     move = new MoveSpecification(E8, D7);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(E8, F8);
-    check(board, move, MoveCheck.ALL_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
   }
 
@@ -1061,7 +1061,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A5, A4);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(G8, H6);
     board.performMove(move);
@@ -1070,7 +1070,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(H7, H6);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     board = new Board();
 
@@ -1084,7 +1084,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A5, A4);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(A8, A6);
     board.performMove(move);
@@ -1099,7 +1099,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(G7, G6);
-    check(board, move, MoveCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     board = new Board();
 
@@ -1113,7 +1113,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B7, C6);
-    check(board, move, MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
 
     move = new MoveSpecification(E7, E5);
     board.performMove(move);
@@ -1140,7 +1140,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F7, G6);
-    check(board, move, MoveCheck.PAWN_DIAGONAL_OWN_PIECE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
 
     board = new Board();
 
@@ -1148,10 +1148,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(G7, F6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(G7, H6);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(F7, F5);
     board.performMove(move);
@@ -1160,7 +1160,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F5, E4);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(B7, B6);
     board.performMove(move);
@@ -1169,10 +1169,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B6, C5);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(B6, A5);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_WRONG_RANK);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     board = new Board();
 
@@ -1192,10 +1192,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(B4, A3);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(B4, C3);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(C8, B7);
     board.performMove(move);
@@ -1216,7 +1216,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(H4, G3);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(F7, F5);
     board.performMove(move);
@@ -1237,7 +1237,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F4, G3);
-    check(board, move, MoveCheck.PAWN_EN_PASSANT_CAPTURE_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
   }
 
@@ -1257,7 +1257,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(C7, C5);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(C6, B8);
     board.performMove(move);
@@ -1278,7 +1278,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A7, A5);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(G8, F6);
     board.performMove(move);
@@ -1293,7 +1293,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(H7, H5);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(H5, F6);
     board.performMove(move);
@@ -1308,7 +1308,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(F7, F5);
-    check(board, move, MoveCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
+    check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
 
   }
 
@@ -1518,19 +1518,19 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     {
       final var fen = "r2qk2r/1bppbppp/p1n2n2/1p2p2P/4P2R/2N2N2/PPPP1PP1/R1BQKB2 w Qkq - 3 8";
       final MoveSpecification move = new MoveSpecification(H4, A4);
-      check(fen, move, MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+      check(fen, move, MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
     }
     // bishop
     {
       final var fen = "r1bqkb1r/p1pp1ppp/2n2n2/1p2p3/4P3/2N2N1P/PPPP1PP1/R1BQKB1R w KQkq - 0 5";
       final MoveSpecification move = new MoveSpecification(F1, A6);
-      check(fen, move, MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+      check(fen, move, MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
     }
     // queen
     {
       final var fen = "r2q1rk1/1bppbppp/p1n2n2/1p2p2P/4P2R/P1N2N2/1PPP1PP1/R1BQKB2 w Q - 1 9";
       final MoveSpecification move = new MoveSpecification(D1, G4);
-      check(fen, move, MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+      check(fen, move, MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
     }
 
     // black
@@ -1538,19 +1538,19 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     {
       final var fen = "r1b1kbn1/ppp1ppp1/2n4r/q6p/3P4/2N2N1P/PPPB1PP1/R2QKB1R b KQq - 4 7";
       final MoveSpecification move = new MoveSpecification(H6, B6);
-      check(fen, move, MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+      check(fen, move, MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
     }
     // bishop
     {
       final var fen = "r1b1kb2/ppp1ppp1/2nr1n2/q6p/3P2PP/2N2N2/PPPB1P2/R2QKB1R b KQq - 0 9";
       final MoveSpecification move = new MoveSpecification(C8, H3);
-      check(fen, move, MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+      check(fen, move, MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
     }
     // queen
     {
       final var fen = "r3kb2/pppbppp1/2nr1n2/q6p/3P2PP/2N2N2/PPPB1P2/1R1QKB1R b Kq - 2 10";
       final MoveSpecification move = new MoveSpecification(A5, A1);
-      check(fen, move, MoveCheck.LONG_RANGE_PIECES_CANNOT_JUMP_OVER_PIECES);
+      check(fen, move, MoveCheck.MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE);
     }
   }
 
