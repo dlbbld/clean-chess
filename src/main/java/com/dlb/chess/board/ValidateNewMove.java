@@ -162,12 +162,12 @@ public class ValidateNewMove implements EnumConstants {
     if (Rank.calculateIsPromotionRank(havingMove, moveSpecification.toSquare().getRank())) {
       if (moveSpecification.promotionPieceType() == PromotionPieceType.NONE) {
         throw new InvalidMoveException("this is a pawn promotion move but the promotion piece was not specified",
-            MoveCheck.PAWN_PROMOTION_MOVE_NO_PROMOTION_PIECE);
+            MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
       }
 
     } else if (moveSpecification.promotionPieceType() != PromotionPieceType.NONE) {
       throw new InvalidMoveException("this is not a pawn promotion move but the promotion piece was specified",
-          MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+          MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
     }
   }
 
@@ -266,7 +266,7 @@ public class ValidateNewMove implements EnumConstants {
     if (moveSpecification.promotionPieceType() != PromotionPieceType.NONE) {
       throw new InvalidMoveException("the promotion piece type which was set as "
           + moveSpecification.promotionPieceType() + " can only be specified for pawn promotion moves",
-          MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+          MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
     }
 
     final Side havingMove = board.getHavingMove();
@@ -324,7 +324,7 @@ public class ValidateNewMove implements EnumConstants {
       throw new InvalidMoveException(
           "The move is not valid because the promotion piece type which was set as "
               + moveSpecification.promotionPieceType() + " can only be specified for pawn promotion moves",
-          MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+          MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
     }
 
     final Side havingMove = board.getHavingMove();

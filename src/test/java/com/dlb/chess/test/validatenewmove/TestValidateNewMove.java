@@ -131,7 +131,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // pawn movement
     move = new MoveSpecification(A2, A3, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     // pawn movement
     move = new MoveSpecification(A2, A8, PromotionPieceType.QUEEN);
@@ -717,36 +717,36 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // rook
     move = new MoveSpecification(A1, A2, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // knight
     move = new MoveSpecification(B1, C3, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // bishop light square
     move = new MoveSpecification(F1, C4, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // bishop dark square
     move = new MoveSpecification(C1, F4, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // queen
     move = new MoveSpecification(D1, D2, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // king
     move = new MoveSpecification(E1, E2, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // pawn move - promotion piece checks with promotion by capture
     board = new Board();
 
     move = new MoveSpecification(E2, E3, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E2, E4, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E2, E4);
     board.performMove(move);
@@ -755,7 +755,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E4, D5, PromotionPieceType.KNIGHT);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E4, D5);
     board.performMove(move);
@@ -765,7 +765,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // en passant capture
     move = new MoveSpecification(D5, C6, PromotionPieceType.BISHOP);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D5, C6);
     board.performMove(move);
@@ -781,7 +781,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // promotion with capture
     move = new MoveSpecification(B7, A8);
-    check(board, move, MoveCheck.PAWN_PROMOTION_MOVE_NO_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
 
     move = new MoveSpecification(B7, A8, PromotionPieceType.ROOK);
     board.performMove(move);
@@ -790,10 +790,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board = new Board();
 
     move = new MoveSpecification(D2, D3, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D2, D4, PromotionPieceType.ROOK);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D2, D4);
     board.performMove(move);
@@ -802,7 +802,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(D4, E5, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D4, E5);
     board.performMove(move);
@@ -811,7 +811,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E5, F6, PromotionPieceType.ROOK);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E5, F6);
     board.performMove(move);
@@ -827,7 +827,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // promotion without capture
     move = new MoveSpecification(G7, G8);
-    check(board, move, MoveCheck.PAWN_PROMOTION_MOVE_NO_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
 
     move = new MoveSpecification(G7, G8, PromotionPieceType.QUEEN);
     board.performMove(move);
@@ -957,7 +957,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // pawn movement
     move = new MoveSpecification(A7, A6, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     // pawn movement
     move = new MoveSpecification(A7, A1, PromotionPieceType.QUEEN);
@@ -1399,27 +1399,27 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
 
     // rook
     move = new MoveSpecification(A8, A7, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // knight
     move = new MoveSpecification(B8, C6, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // bishop light square
     move = new MoveSpecification(F8, C5, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // bishop dark square
     move = new MoveSpecification(C8, F5, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // queen
     move = new MoveSpecification(D8, D7, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // king
     move = new MoveSpecification(E8, E7, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.BASIC_NON_PAWN_PROMOTION_PIECE_SET);
+    check(board, move, MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
 
     // pawn move - promotion piece checks with promotion by capture
     board = new Board();
@@ -1428,10 +1428,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E7, E6, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E7, E5, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E7, E5);
     board.performMove(move);
@@ -1440,7 +1440,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(E5, D4, PromotionPieceType.KNIGHT);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     // en passant capture
     board = new Board();
@@ -1461,7 +1461,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(D4, E3, PromotionPieceType.BISHOP);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     // promotion with capture
     board = new Board();
@@ -1494,7 +1494,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(A2, B1);
-    check(board, move, MoveCheck.PAWN_PROMOTION_MOVE_NO_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
 
     // pawn move - promotion piece checks with promotion without capture
     board = new Board();
@@ -1503,10 +1503,10 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     board.performMove(move);
 
     move = new MoveSpecification(D7, D6, PromotionPieceType.QUEEN);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D7, D5, PromotionPieceType.ROOK);
-    check(board, move, MoveCheck.PAWN_NON_PROMOTION_MOVE_PROMOTION_PIECE);
+    check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
   }
 
