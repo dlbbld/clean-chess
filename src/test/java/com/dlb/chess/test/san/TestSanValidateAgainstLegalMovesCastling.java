@@ -158,7 +158,7 @@ class TestSanValidateAgainstLegalMovesCastling {
     } catch (final SanValidationException e) {
       isException = true;
       assertEquals(CastlingCheckMapper.map(expectedCastlingCheck, expectedLoss), e.getSanValidationProblem());
-      assertEquals(expectedCastlingCheck.toMoveCheck(), e.getMoveCheck());
+      assertEquals(expectedCastlingCheck.toMoveCheck(expectedLoss), e.getMoveCheck());
       assertEquals(expectedLoss, e.getCastlingRightLoss());
     }
     assertTrue(isException);

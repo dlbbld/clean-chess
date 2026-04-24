@@ -109,7 +109,7 @@ class TestSanValidateCastling {
       throw new AssertionError("Expected SanValidationException");
     } catch (final SanValidationException e) {
       assertEquals(CastlingCheckMapper.map(expectedCastlingCheck, expectedLoss), e.getSanValidationProblem());
-      assertEquals(expectedCastlingCheck.toMoveCheck(), e.getMoveCheck());
+      assertEquals(expectedCastlingCheck.toMoveCheck(expectedLoss), e.getMoveCheck());
       assertEquals(expectedLoss, e.getCastlingRightLoss());
     }
   }

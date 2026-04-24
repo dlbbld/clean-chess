@@ -21,26 +21,26 @@ class TestValidateNewMoveCastling extends AbstractTestValidateNewMove {
     {
       final var fen = "rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w Qkq - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.KING_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
     // king-side - lost both
     {
       final var fen = "rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w kq - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.KING_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
 
     // queen-side - lost queen-side
     {
       final var fen = "rnb1kbnr/pp2pppp/2pq4/3p4/2P5/2NP4/PPQBPPPP/R3KBNR w Kkq - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.QUEEN_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
     // queen-side - lost both
     {
       final var fen = "rnb1kbnr/pp2pppp/2pq4/3p4/2P5/2NP4/PPQBPPPP/R3KBNR w kq - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.QUEEN_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
 
     // black
@@ -48,26 +48,26 @@ class TestValidateNewMoveCastling extends AbstractTestValidateNewMove {
     {
       final var fen = "rnbqk2r/pppp1ppp/4pn2/2b5/8/1PN5/PBPPPPPP/R2QKBNR b KQq - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.KING_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
     // king-side - lost both
     {
       final var fen = "rnbqk2r/pppp1ppp/4pn2/2b5/8/1PN5/PBPPPPPP/R2QKBNR b KQ - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.KING_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
 
     // queen-side - lost queen-side
     {
       final var fen = "r3k2r/pbqpppbp/n1p2np1/1p6/3PP3/2N2N1P/PPPBBPP1/R2Q1RK1 b k - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.QUEEN_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
     // queen-side - lost both
     {
       final var fen = "r3k2r/pbqpppbp/n1p2np1/1p6/3PP3/2N2N1P/PPPBBPP1/R2Q1RK1 b - - 0 25";
       final MoveSpecification move = new MoveSpecification(CastlingMove.QUEEN_SIDE);
-      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT);
+      check(fen, move, MoveCheck.KING_CASTLING_FINAL_NO_RIGHT_UNKNOWN_FEN_IMPORT);
     }
   }
 

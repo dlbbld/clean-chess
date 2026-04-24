@@ -392,7 +392,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     }
 
     throw new SanValidationException(CastlingCheckMapper.map(castlingCheck, castlingRightLoss), message,
-        castlingCheck.toMoveCheck(), castlingRightLoss);
+        castlingCheck.toMoveCheck(castlingRightLoss), castlingRightLoss);
   }
 
   private static PseudoLegalReason calculatePseudoLegalReason(StaticPosition staticPosition, Side havingMove) {

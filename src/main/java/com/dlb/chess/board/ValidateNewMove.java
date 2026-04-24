@@ -4,7 +4,9 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
+import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
+import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
@@ -14,6 +16,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.enums.MovementCheck;
@@ -56,32 +59,37 @@ public class ValidateNewMove implements EnumConstants {
 
     final Side havingMove = board.getHavingMove();
 
-    final var castlingCheck = switch (moveSpecification.castlingMove()) {
+    final CastlingMove castlingMove = moveSpecification.castlingMove();
+    final var castlingCheck = switch (castlingMove) {
       case KING_SIDE -> CastlingUtility.calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove,
           board.getCastlingRight(havingMove));
       case QUEEN_SIDE -> CastlingUtility.calculateQueenSideCastlingCheck(board.getStaticPosition(), havingMove,
           board.getCastlingRight(havingMove));
       case NONE -> throw new IllegalArgumentException();
     };
+    final CastlingRightLoss castlingRightLoss = castlingCheck == CastlingCheck.FINAL_NO_RIGHT
+        ? board.getCastlingRightLoss(havingMove, castlingMove)
+        : CastlingRightLoss.NOT_LOST;
     switch (castlingCheck) {
       case FINAL_NO_RIGHT:
         final CastlingRight castlingRight = board.getCastlingRight(havingMove);
         if (castlingRight == CastlingRight.NONE) {
           throw new InvalidMoveException("there are no castling rights anymore on both sides",
-              castlingCheck.toMoveCheck());
+              castlingCheck.toMoveCheck(castlingRightLoss));
         }
-        throw new InvalidMoveException("there is no castling right anymore on this side", castlingCheck.toMoveCheck());
+        throw new InvalidMoveException("there is no castling right anymore on this side",
+            castlingCheck.toMoveCheck(castlingRightLoss));
       case TEMPORARY_SQUARES_NOT_EMPTY:
         throw new InvalidMoveException("not all squares between the rook and the king are empty",
-            castlingCheck.toMoveCheck());
+            castlingCheck.toMoveCheck(castlingRightLoss));
       case TEMPORARY_KING_IN_CHECK:
         throw new InvalidMoveException("castling is not possible because the king is in check",
-            castlingCheck.toMoveCheck());
+            castlingCheck.toMoveCheck(castlingRightLoss));
       case TEMPORARY_KING_TRAVELS_THROUGH_CHECK:
         throw new InvalidMoveException("the king would travel over a field that is in check",
-            castlingCheck.toMoveCheck());
+            castlingCheck.toMoveCheck(castlingRightLoss));
       case TEMPORARY_KING_ENDS_IN_CHECK:
-        throw new InvalidMoveException("the king would end in check", castlingCheck.toMoveCheck());
+        throw new InvalidMoveException("the king would end in check", castlingCheck.toMoveCheck(castlingRightLoss));
       case SUCCESS:
         // valid castling
         break;
