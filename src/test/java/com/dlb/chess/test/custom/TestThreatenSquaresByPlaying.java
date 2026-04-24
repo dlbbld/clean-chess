@@ -77,7 +77,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     // now we look on rooks initially on A1 and H8 after each move from white and
     // black
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, A2, A4);
+      final MoveSpecification move = new MoveSpecification(A2, A4);
       board.performMove(move);
     }
 
@@ -95,7 +95,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H7, H5);
+      final MoveSpecification move = new MoveSpecification(H7, H5);
       board.performMove(move);
     }
 
@@ -113,7 +113,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, A1, A3);
+      final MoveSpecification move = new MoveSpecification(A1, A3);
       board.performMove(move);
     }
 
@@ -131,7 +131,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H5, H4);
+      final MoveSpecification move = new MoveSpecification(H5, H4);
       board.performMove(move);
     }
 
@@ -149,7 +149,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, A3, D3);
+      final MoveSpecification move = new MoveSpecification(A3, D3);
       board.performMove(move);
     }
 
@@ -168,7 +168,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H8, H5);
+      final MoveSpecification move = new MoveSpecification(H8, H5);
       board.performMove(move);
     }
 
@@ -187,7 +187,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, D3, D5);
+      final MoveSpecification move = new MoveSpecification(D3, D5);
       board.performMove(move);
     }
 
@@ -206,7 +206,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H5, E5);
+      final MoveSpecification move = new MoveSpecification(H5, E5);
       board.performMove(move);
     }
 
@@ -224,7 +224,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, E3);
+      final MoveSpecification move = new MoveSpecification(E2, E3);
       board.performMove(move);
     }
 
@@ -242,7 +242,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, B8, C6);
+      final MoveSpecification move = new MoveSpecification(B8, C6);
       board.performMove(move);
     }
 
@@ -260,7 +260,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, D1, H5);
+      final MoveSpecification move = new MoveSpecification(D1, H5);
       board.performMove(move);
     }
 
@@ -278,7 +278,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, C6, D4);
+      final MoveSpecification move = new MoveSpecification(C6, D4);
       board.performMove(move);
     }
 
@@ -296,7 +296,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, F1, B5);
+      final MoveSpecification move = new MoveSpecification(F1, B5);
       board.performMove(move);
     }
 
@@ -314,7 +314,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, D4, F5);
+      final MoveSpecification move = new MoveSpecification(D4, F5);
       board.performMove(move);
     }
 
@@ -333,7 +333,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // waiting move
-      final MoveSpecification move = new MoveSpecification(WHITE, B1, C3);
+      final MoveSpecification move = new MoveSpecification(B1, C3);
       board.performMove(move);
     }
 
@@ -352,7 +352,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black checks
-      final MoveSpecification move = new MoveSpecification(BLACK, E5, E3);
+      final MoveSpecification move = new MoveSpecification(E5, E3);
       board.performMove(move);
     }
 
@@ -371,7 +371,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white blocks check with knight
-      final MoveSpecification move = new MoveSpecification(WHITE, G1, E2);
+      final MoveSpecification move = new MoveSpecification(G1, E2);
       board.performMove(move);
     }
 
@@ -427,7 +427,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     // now we look on knights initially on B1 and F8 after each move from white and
     // black
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, B1, C3);
+      final MoveSpecification move = new MoveSpecification(B1, C3);
       board.performMove(move);
     }
 
@@ -445,7 +445,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, G8, H6);
+      final MoveSpecification move = new MoveSpecification(G8, H6);
       board.performMove(move);
     }
 
@@ -463,7 +463,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, C3, D5);
+      final MoveSpecification move = new MoveSpecification(C3, D5);
       board.performMove(move);
     }
 
@@ -481,7 +481,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H6, G4);
+      final MoveSpecification move = new MoveSpecification(H6, G4);
       board.performMove(move);
     }
 
@@ -499,7 +499,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, C2, C3);
+      final MoveSpecification move = new MoveSpecification(C2, C3);
       board.performMove(move);
     }
 
@@ -517,7 +517,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H7, H6);
+      final MoveSpecification move = new MoveSpecification(H7, H6);
       board.performMove(move);
     }
 
@@ -535,7 +535,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, H2, H4);
+      final MoveSpecification move = new MoveSpecification(H2, H4);
       board.performMove(move);
     }
 
@@ -553,7 +553,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, E7, E6);
+      final MoveSpecification move = new MoveSpecification(E7, E6);
       board.performMove(move);
     }
 
@@ -571,7 +571,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, H1, H2);
+      final MoveSpecification move = new MoveSpecification(H1, H2);
       board.performMove(move);
     }
 
@@ -589,7 +589,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, D8, E7);
+      final MoveSpecification move = new MoveSpecification(D8, E7);
       board.performMove(move);
     }
 
@@ -608,7 +608,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white checks
-      final MoveSpecification move = new MoveSpecification(WHITE, D5, F6);
+      final MoveSpecification move = new MoveSpecification(D5, F6);
       board.performMove(move);
     }
 
@@ -627,7 +627,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black moves out of check
-      final MoveSpecification move = new MoveSpecification(BLACK, E8, D8);
+      final MoveSpecification move = new MoveSpecification(E8, D8);
       board.performMove(move);
     }
 
@@ -645,7 +645,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, E4);
+      final MoveSpecification move = new MoveSpecification(E2, E4);
       board.performMove(move);
     }
 
@@ -663,7 +663,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, E7, D6);
+      final MoveSpecification move = new MoveSpecification(E7, D6);
       board.performMove(move);
     }
 
@@ -681,7 +681,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, F1, A6);
+      final MoveSpecification move = new MoveSpecification(F1, A6);
       board.performMove(move);
     }
 
@@ -699,7 +699,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, D6, E5);
+      final MoveSpecification move = new MoveSpecification(D6, E5);
       board.performMove(move);
     }
 
@@ -717,7 +717,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, E1, F1);
+      final MoveSpecification move = new MoveSpecification(E1, F1);
       board.performMove(move);
     }
 
@@ -736,7 +736,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black checks
-      final MoveSpecification move = new MoveSpecification(BLACK, G4, H2);
+      final MoveSpecification move = new MoveSpecification(G4, H2);
       board.performMove(move);
     }
 
@@ -755,7 +755,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white moves out of check
-      final MoveSpecification move = new MoveSpecification(WHITE, F1, E2);
+      final MoveSpecification move = new MoveSpecification(F1, E2);
       board.performMove(move);
     }
 
@@ -825,7 +825,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     // now we are making moves
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, B2, B3);
+      final MoveSpecification move = new MoveSpecification(B2, B3);
       board.performMove(move);
     }
 
@@ -843,7 +843,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, E7, E6);
+      final MoveSpecification move = new MoveSpecification(E7, E6);
       board.performMove(move);
     }
 
@@ -861,7 +861,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, C1, B2);
+      final MoveSpecification move = new MoveSpecification(C1, B2);
       board.performMove(move);
     }
 
@@ -879,7 +879,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, F8, C5);
+      final MoveSpecification move = new MoveSpecification(F8, C5);
       board.performMove(move);
     }
 
@@ -897,7 +897,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, B2, D4);
+      final MoveSpecification move = new MoveSpecification(B2, D4);
       board.performMove(move);
     }
 
@@ -915,7 +915,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, G7, G6);
+      final MoveSpecification move = new MoveSpecification(G7, G6);
       board.performMove(move);
     }
 
@@ -934,7 +934,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // capture the rook with white's bishop so black bishop can later check
-      final MoveSpecification move = new MoveSpecification(WHITE, D4, H8);
+      final MoveSpecification move = new MoveSpecification(D4, H8);
       board.performMove(move);
     }
 
@@ -953,7 +953,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black retreats bishop as waiting move so can free a square for white king
-      final MoveSpecification move = new MoveSpecification(BLACK, C5, B6);
+      final MoveSpecification move = new MoveSpecification(C5, B6);
       board.performMove(move);
     }
 
@@ -973,7 +973,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     // now we look at whites other bishop (the white light square bishop) so we can
     {
       // white prepares development of light square bishop so can check later
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, E4);
+      final MoveSpecification move = new MoveSpecification(E2, E4);
       board.performMove(move);
     }
 
@@ -993,7 +993,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     {
       // we need another waiting move for black for prepare square so white king can
       // move out of check, we give retreat square
-      final MoveSpecification move = new MoveSpecification(BLACK, A7, A6);
+      final MoveSpecification move = new MoveSpecification(A7, A6);
       board.performMove(move);
     }
 
@@ -1012,7 +1012,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // free the square for white king
-      final MoveSpecification move = new MoveSpecification(WHITE, D1, C1);
+      final MoveSpecification move = new MoveSpecification(D1, C1);
       board.performMove(move);
     }
 
@@ -1031,7 +1031,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black checks
-      final MoveSpecification move = new MoveSpecification(BLACK, B6, F2);
+      final MoveSpecification move = new MoveSpecification(B6, F2);
       board.performMove(move);
     }
 
@@ -1050,7 +1050,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white moves out of check
-      final MoveSpecification move = new MoveSpecification(WHITE, E1, D1);
+      final MoveSpecification move = new MoveSpecification(E1, D1);
       board.performMove(move);
     }
     {
@@ -1068,7 +1068,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black takes the knight
-      final MoveSpecification move = new MoveSpecification(BLACK, F2, G1);
+      final MoveSpecification move = new MoveSpecification(F2, G1);
       board.performMove(move);
     }
     {
@@ -1086,7 +1086,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white takes out the bishop for later check
-      final MoveSpecification move = new MoveSpecification(WHITE, F1, C4);
+      final MoveSpecification move = new MoveSpecification(F1, C4);
       board.performMove(move);
     }
     {
@@ -1104,7 +1104,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black moves pawn so white bishop can check
-      final MoveSpecification move = new MoveSpecification(BLACK, E6, E5);
+      final MoveSpecification move = new MoveSpecification(E6, E5);
       board.performMove(move);
     }
     {
@@ -1122,7 +1122,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white checks
-      final MoveSpecification move = new MoveSpecification(WHITE, C4, F7);
+      final MoveSpecification move = new MoveSpecification(C4, F7);
       board.performMove(move);
     }
     {
@@ -1140,7 +1140,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black moves out of check
-      final MoveSpecification move = new MoveSpecification(BLACK, E8, F8);
+      final MoveSpecification move = new MoveSpecification(E8, F8);
       board.performMove(move);
     }
     {
@@ -1195,7 +1195,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     // now we are making moves
     {
       // e4
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, E4);
+      final MoveSpecification move = new MoveSpecification(E2, E4);
       board.performMove(move);
     }
     {
@@ -1213,7 +1213,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // d5
-      final MoveSpecification move = new MoveSpecification(BLACK, D7, D5);
+      final MoveSpecification move = new MoveSpecification(D7, D5);
       board.performMove(move);
     }
     {
@@ -1231,7 +1231,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white queen enters the game
-      final MoveSpecification move = new MoveSpecification(WHITE, D1, H5);
+      final MoveSpecification move = new MoveSpecification(D1, H5);
       board.performMove(move);
     }
     {
@@ -1250,7 +1250,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // take away one square from white queen by black piece
-      final MoveSpecification move = new MoveSpecification(BLACK, G8, H6);
+      final MoveSpecification move = new MoveSpecification(G8, H6);
       board.performMove(move);
     }
     {
@@ -1269,7 +1269,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // take away one more square from white queen by white piece
-      final MoveSpecification move = new MoveSpecification(WHITE, G1, H3);
+      final MoveSpecification move = new MoveSpecification(G1, H3);
       board.performMove(move);
     }
     {
@@ -1288,7 +1288,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // a black dummy move, not changing anything
-      final MoveSpecification move = new MoveSpecification(BLACK, H8, G8);
+      final MoveSpecification move = new MoveSpecification(H8, G8);
       board.performMove(move);
     }
     {
@@ -1307,7 +1307,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white queen goes for d5
-      final MoveSpecification move = new MoveSpecification(WHITE, H5, D5);
+      final MoveSpecification move = new MoveSpecification(H5, D5);
       board.performMove(move);
     }
     {
@@ -1326,7 +1326,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black queen comes out
-      final MoveSpecification move = new MoveSpecification(BLACK, D8, D6);
+      final MoveSpecification move = new MoveSpecification(D8, D6);
       board.performMove(move);
     }
     {
@@ -1346,7 +1346,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white checks
-      final MoveSpecification move = new MoveSpecification(WHITE, D5, F7);
+      final MoveSpecification move = new MoveSpecification(D5, F7);
       board.performMove(move);
     }
     {
@@ -1366,7 +1366,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black moves out of check
-      final MoveSpecification move = new MoveSpecification(BLACK, E8, D8);
+      final MoveSpecification move = new MoveSpecification(E8, D8);
       board.performMove(move);
     }
     {
@@ -1386,7 +1386,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white moves out bishop to later take away a few squares from black queen
-      final MoveSpecification move = new MoveSpecification(WHITE, F1, B5);
+      final MoveSpecification move = new MoveSpecification(F1, B5);
       board.performMove(move);
     }
     {
@@ -1406,7 +1406,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black makes a dummy move
-      final MoveSpecification move = new MoveSpecification(BLACK, G8, H8);
+      final MoveSpecification move = new MoveSpecification(G8, H8);
       board.performMove(move);
     }
     {
@@ -1426,7 +1426,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white takes away two squares from black queen
-      final MoveSpecification move = new MoveSpecification(WHITE, B5, C6);
+      final MoveSpecification move = new MoveSpecification(B5, C6);
       board.performMove(move);
     }
     {
@@ -1446,7 +1446,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black checks
-      final MoveSpecification move = new MoveSpecification(BLACK, D6, D2);
+      final MoveSpecification move = new MoveSpecification(D6, D2);
       board.performMove(move);
     }
     {
@@ -1466,7 +1466,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white moves out of check
-      final MoveSpecification move = new MoveSpecification(WHITE, E1, F1);
+      final MoveSpecification move = new MoveSpecification(E1, F1);
       board.performMove(move);
     }
     {
@@ -1486,7 +1486,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // let black move queen one more time
-      final MoveSpecification move = new MoveSpecification(BLACK, D2, C2);
+      final MoveSpecification move = new MoveSpecification(D2, C2);
       board.performMove(move);
     }
     {
@@ -1506,7 +1506,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // let white move queen one more time
-      final MoveSpecification move = new MoveSpecification(WHITE, F7, G7);
+      final MoveSpecification move = new MoveSpecification(F7, G7);
       board.performMove(move);
     }
     {
@@ -1563,7 +1563,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     // now we are making moves
     {
       // e4
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, E4);
+      final MoveSpecification move = new MoveSpecification(E2, E4);
       board.performMove(move);
     }
     {
@@ -1581,7 +1581,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // d5
-      final MoveSpecification move = new MoveSpecification(BLACK, D7, D5);
+      final MoveSpecification move = new MoveSpecification(D7, D5);
       board.performMove(move);
     }
     {
@@ -1599,7 +1599,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white king walks to e2
-      final MoveSpecification move = new MoveSpecification(WHITE, E1, E2);
+      final MoveSpecification move = new MoveSpecification(E1, E2);
       board.performMove(move);
     }
     {
@@ -1617,7 +1617,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black king walks to d7
-      final MoveSpecification move = new MoveSpecification(BLACK, E8, D7);
+      final MoveSpecification move = new MoveSpecification(E8, D7);
       board.performMove(move);
     }
     {
@@ -1635,7 +1635,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white king walks to e3
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, E3);
+      final MoveSpecification move = new MoveSpecification(E2, E3);
       board.performMove(move);
     }
     {
@@ -1654,7 +1654,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black king walks to d6
-      final MoveSpecification move = new MoveSpecification(BLACK, D7, D6);
+      final MoveSpecification move = new MoveSpecification(D7, D6);
       board.performMove(move);
     }
     {
@@ -1672,7 +1672,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white king walks to f4
-      final MoveSpecification move = new MoveSpecification(WHITE, E3, F4);
+      final MoveSpecification move = new MoveSpecification(E3, F4);
       board.performMove(move);
     }
     {
@@ -1690,7 +1690,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black moves a pawn next to king
-      final MoveSpecification move = new MoveSpecification(BLACK, C7, C6);
+      final MoveSpecification move = new MoveSpecification(C7, C6);
       board.performMove(move);
     }
     {
@@ -1708,7 +1708,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white moves a pawn next to king
-      final MoveSpecification move = new MoveSpecification(WHITE, G2, G4);
+      final MoveSpecification move = new MoveSpecification(G2, G4);
       board.performMove(move);
     }
     {
@@ -1728,7 +1728,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
       // black captures g4 pawn with bishop, white king can now capture g4, so has one
       // more square
       // available
-      final MoveSpecification move = new MoveSpecification(BLACK, C8, G4);
+      final MoveSpecification move = new MoveSpecification(C8, G4);
       board.performMove(move);
     }
     {
@@ -1748,7 +1748,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
       // white captures d5 pawn with pawn, black king can now capture d5, so has one
       // more square
       // available, white king has also one more square available e4
-      final MoveSpecification move = new MoveSpecification(WHITE, E4, D5);
+      final MoveSpecification move = new MoveSpecification(E4, D5);
       board.performMove(move);
     }
     {
@@ -1766,7 +1766,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black checks white king with pawn
-      final MoveSpecification move = new MoveSpecification(BLACK, E7, E5);
+      final MoveSpecification move = new MoveSpecification(E7, E5);
       board.performMove(move);
     }
     {
@@ -1784,7 +1784,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white moves king away
-      final MoveSpecification move = new MoveSpecification(WHITE, F4, E4);
+      final MoveSpecification move = new MoveSpecification(F4, E4);
       board.performMove(move);
     }
     {
@@ -1802,7 +1802,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black brings knight out
-      final MoveSpecification move = new MoveSpecification(BLACK, G8, F6);
+      final MoveSpecification move = new MoveSpecification(G8, F6);
       board.performMove(move);
     }
     {
@@ -1820,53 +1820,53 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     // begin intermediary moves
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, E4, D3);
+      final MoveSpecification move = new MoveSpecification(E4, D3);
       board.performMove(move);
     }
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, F6, E8);
-      board.performMove(move);
-    }
-
-    {
-      final MoveSpecification move = new MoveSpecification(WHITE, D3, E4);
-      board.performMove(move);
-    }
-    {
-      final MoveSpecification move = new MoveSpecification(BLACK, A7, A6);
+      final MoveSpecification move = new MoveSpecification(F6, E8);
       board.performMove(move);
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, D1, E2);
+      final MoveSpecification move = new MoveSpecification(D3, E4);
       board.performMove(move);
     }
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, G4, H3);
-      board.performMove(move);
-    }
-
-    {
-      final MoveSpecification move = new MoveSpecification(WHITE, E2, H5);
-      board.performMove(move);
-    }
-    {
-      final MoveSpecification move = new MoveSpecification(BLACK, H3, G4);
+      final MoveSpecification move = new MoveSpecification(A7, A6);
       board.performMove(move);
     }
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, H5, H4);
+      final MoveSpecification move = new MoveSpecification(D1, E2);
       board.performMove(move);
     }
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, H8, G8);
+      final MoveSpecification move = new MoveSpecification(G4, H3);
+      board.performMove(move);
+    }
+
+    {
+      final MoveSpecification move = new MoveSpecification(E2, H5);
+      board.performMove(move);
+    }
+    {
+      final MoveSpecification move = new MoveSpecification(H3, G4);
+      board.performMove(move);
+    }
+
+    {
+      final MoveSpecification move = new MoveSpecification(H5, H4);
+      board.performMove(move);
+    }
+    {
+      final MoveSpecification move = new MoveSpecification(H8, G8);
       board.performMove(move);
     }
     // end intermediary moves
 
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, H4, H5);
+      final MoveSpecification move = new MoveSpecification(H4, H5);
       board.performMove(move);
     }
     {
@@ -1884,7 +1884,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black checks king again
-      final MoveSpecification move = new MoveSpecification(BLACK, G4, F3);
+      final MoveSpecification move = new MoveSpecification(G4, F3);
       board.performMove(move);
     }
     {
@@ -1902,7 +1902,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white king captures the checking piece
-      final MoveSpecification move = new MoveSpecification(WHITE, E4, F3);
+      final MoveSpecification move = new MoveSpecification(E4, F3);
       board.performMove(move);
     }
     {
@@ -1920,11 +1920,11 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     // begin intermediary moves
     {
-      final MoveSpecification move = new MoveSpecification(BLACK, E8, F6);
+      final MoveSpecification move = new MoveSpecification(E8, F6);
       board.performMove(move);
     }
     {
-      final MoveSpecification move = new MoveSpecification(WHITE, A2, A3);
+      final MoveSpecification move = new MoveSpecification(A2, A3);
       board.performMove(move);
     }
 
@@ -1932,7 +1932,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black knight captures in the middle
-      final MoveSpecification move = new MoveSpecification(BLACK, F6, D5);
+      final MoveSpecification move = new MoveSpecification(F6, D5);
       board.performMove(move);
     }
     {
@@ -1950,7 +1950,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white queen captures e5 and checks
-      final MoveSpecification move = new MoveSpecification(WHITE, H5, E5);
+      final MoveSpecification move = new MoveSpecification(H5, E5);
       board.performMove(move);
     }
     {
@@ -1968,7 +1968,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black king captures white queen
-      final MoveSpecification move = new MoveSpecification(BLACK, D6, E5);
+      final MoveSpecification move = new MoveSpecification(D6, E5);
       board.performMove(move);
     }
     {
@@ -2023,7 +2023,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     // now we are making moves
     {
       // c4
-      final MoveSpecification move = new MoveSpecification(WHITE, C2, C4);
+      final MoveSpecification move = new MoveSpecification(C2, C4);
       board.performMove(move);
     }
     {
@@ -2041,7 +2041,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // f5
-      final MoveSpecification move = new MoveSpecification(BLACK, F7, F5);
+      final MoveSpecification move = new MoveSpecification(F7, F5);
       board.performMove(move);
     }
     {
@@ -2059,7 +2059,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // giving black pawn a white pawn to feed
-      final MoveSpecification move = new MoveSpecification(WHITE, G2, G4);
+      final MoveSpecification move = new MoveSpecification(G2, G4);
       board.performMove(move);
     }
     {
@@ -2077,7 +2077,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // giving white pawn a black pawn to feed
-      final MoveSpecification move = new MoveSpecification(BLACK, D7, D5);
+      final MoveSpecification move = new MoveSpecification(D7, D5);
       board.performMove(move);
     }
     {
@@ -2097,7 +2097,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
       // moving a-pawn ahead for later en passant capture action - but en passant not
       // supported in potential to level
       // now looking at the a-pawn
-      final MoveSpecification move = new MoveSpecification(WHITE, A2, A4);
+      final MoveSpecification move = new MoveSpecification(A2, A4);
       board.performMove(move);
     }
     {
@@ -2115,7 +2115,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black captures the offered pawn
-      final MoveSpecification move = new MoveSpecification(BLACK, F5, G4);
+      final MoveSpecification move = new MoveSpecification(F5, G4);
       board.performMove(move);
     }
     {
@@ -2134,7 +2134,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     {
       // white offers the en passant capture - but en passant not supported in potential to
       // level
-      final MoveSpecification move = new MoveSpecification(WHITE, H2, H4);
+      final MoveSpecification move = new MoveSpecification(H2, H4);
       board.performMove(move);
     }
     {
@@ -2152,7 +2152,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black captures en passant
-      final MoveSpecification move = new MoveSpecification(BLACK, G4, H3);
+      final MoveSpecification move = new MoveSpecification(G4, H3);
       board.performMove(move);
     }
     {
@@ -2170,7 +2170,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white further a-pawn advance
-      final MoveSpecification move = new MoveSpecification(WHITE, A4, A5);
+      final MoveSpecification move = new MoveSpecification(A4, A5);
       board.performMove(move);
     }
     {
@@ -2188,7 +2188,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black allows en passant capture - but en passant not supported in potential to level
-      final MoveSpecification move = new MoveSpecification(BLACK, B7, B5);
+      final MoveSpecification move = new MoveSpecification(B7, B5);
       board.performMove(move);
     }
     {
@@ -2206,7 +2206,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white captures en passant
-      final MoveSpecification move = new MoveSpecification(WHITE, A5, B6);
+      final MoveSpecification move = new MoveSpecification(A5, B6);
       board.performMove(move);
     }
     {
@@ -2224,7 +2224,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black pushes h-pawn
-      final MoveSpecification move = new MoveSpecification(BLACK, H3, H2);
+      final MoveSpecification move = new MoveSpecification(H3, H2);
       board.performMove(move);
     }
     {
@@ -2242,7 +2242,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white captures zig-zag for promotion - zig
-      final MoveSpecification move = new MoveSpecification(WHITE, B6, A7);
+      final MoveSpecification move = new MoveSpecification(B6, A7);
       board.performMove(move);
     }
     {
@@ -2260,7 +2260,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black promotes to queen by capturing
-      final MoveSpecification move = new MoveSpecification(BLACK, H2, G1, PromotionPieceType.QUEEN);
+      final MoveSpecification move = new MoveSpecification(H2, G1, PromotionPieceType.QUEEN);
       board.performMove(move);
     }
     {
@@ -2279,7 +2279,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white promotes to queen by capturing - zag
-      final MoveSpecification move = new MoveSpecification(WHITE, A7, B8, PromotionPieceType.QUEEN);
+      final MoveSpecification move = new MoveSpecification(A7, B8, PromotionPieceType.QUEEN);
       board.performMove(move);
     }
     {
@@ -2298,7 +2298,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black prepares offering rook for capturing by pawn
-      final MoveSpecification move = new MoveSpecification(BLACK, A8, A5);
+      final MoveSpecification move = new MoveSpecification(A8, A5);
       board.performMove(move);
     }
     {
@@ -2318,7 +2318,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     {
       // white does the same with the knight
       // we start focusing the capturing pawns now
-      final MoveSpecification move = new MoveSpecification(WHITE, B1, C3);
+      final MoveSpecification move = new MoveSpecification(B1, C3);
       board.performMove(move);
     }
     {
@@ -2336,7 +2336,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black offers the rook
-      final MoveSpecification move = new MoveSpecification(BLACK, A5, B5);
+      final MoveSpecification move = new MoveSpecification(A5, B5);
       board.performMove(move);
     }
     {
@@ -2354,7 +2354,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // the pawn takes it
-      final MoveSpecification move = new MoveSpecification(WHITE, C4, B5);
+      final MoveSpecification move = new MoveSpecification(C4, B5);
       board.performMove(move);
     }
     {
@@ -2372,7 +2372,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black attacks the pawn with a pawn
-      final MoveSpecification move = new MoveSpecification(BLACK, C7, C6);
+      final MoveSpecification move = new MoveSpecification(C7, C6);
       board.performMove(move);
     }
     {
@@ -2390,7 +2390,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white offers the knight to a pawn
-      final MoveSpecification move = new MoveSpecification(WHITE, C3, E4);
+      final MoveSpecification move = new MoveSpecification(C3, E4);
       board.performMove(move);
     }
     {
@@ -2408,7 +2408,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black captures the knight
-      final MoveSpecification move = new MoveSpecification(BLACK, D5, E4);
+      final MoveSpecification move = new MoveSpecification(D5, E4);
       board.performMove(move);
     }
     {
@@ -2426,7 +2426,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white offers en passant
-      final MoveSpecification move = new MoveSpecification(WHITE, D2, D4);
+      final MoveSpecification move = new MoveSpecification(D2, D4);
       board.performMove(move);
     }
     {
@@ -2444,7 +2444,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black ignores en passant
-      final MoveSpecification move = new MoveSpecification(BLACK, E8, D7);
+      final MoveSpecification move = new MoveSpecification(E8, D7);
       board.performMove(move);
     }
     {
@@ -2463,7 +2463,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     {
       // white starts to ignore en passant
       // we look at whites f-pawn now
-      final MoveSpecification move = new MoveSpecification(WHITE, F2, F4);
+      final MoveSpecification move = new MoveSpecification(F2, F4);
       board.performMove(move);
     }
     {
@@ -2482,7 +2482,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     {
       // black ignores en passant capture possibility - but en passant not supported
       // in potential to level
-      final MoveSpecification move = new MoveSpecification(BLACK, E7, E5);
+      final MoveSpecification move = new MoveSpecification(E7, E5);
       board.performMove(move);
     }
     {
@@ -2500,7 +2500,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // white f-pawn goes ahead
-      final MoveSpecification move = new MoveSpecification(WHITE, F4, F5);
+      final MoveSpecification move = new MoveSpecification(F4, F5);
       board.performMove(move);
     }
     {
@@ -2518,7 +2518,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
 
     {
       // black offers en passant capture - but en passant not supported in potential to level
-      final MoveSpecification move = new MoveSpecification(BLACK, G7, G5);
+      final MoveSpecification move = new MoveSpecification(G7, G5);
       board.performMove(move);
     }
     {
@@ -2537,7 +2537,7 @@ class TestThreatenSquaresByPlaying implements EnumConstants {
     {
       // white ignores en passant capture - but en passant not supported in potential to
       // level
-      final MoveSpecification move = new MoveSpecification(WHITE, B2, B3);
+      final MoveSpecification move = new MoveSpecification(B2, B3);
       board.performMove(move);
     }
     {

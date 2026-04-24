@@ -43,11 +43,6 @@ public class ValidateNewMove implements EnumConstants {
       movingPiece = board.getStaticPosition().get(fromSquare);
     }
 
-    if (havingMove != moveSpecification.havingMove()) {
-      throw new InvalidMoveException(moveSpecification.havingMove() + " is not having the move",
-          MoveCheck.BASIC_NOT_HAVING_MOVE);
-    }
-
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       validateCastling(board, moveSpecification);
       return MoveCheck.SUCCESS;
@@ -122,7 +117,6 @@ public class ValidateNewMove implements EnumConstants {
       case BASIC_MOVING_PIECE_NONE:
       case BASIC_MOVING_PIECE_OPPONENT:
       case BASIC_NON_PAWN_PROMOTION_PIECE_SET:
-      case BASIC_NOT_HAVING_MOVE:
       case KING_CAPTURES_GUARDED_PIECE:
       case KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES:
       case KING_MOVES_INTO_CHECK:
@@ -388,9 +382,10 @@ public class ValidateNewMove implements EnumConstants {
           MoveCheck.KING_CAPTURES_GUARDED_PIECE);
     }
 
-    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(board.getStaticPosition(), moveSpecification)) {
+    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(board.getStaticPosition(), havingMove,
+        moveSpecification)) {
       if (StaticPositionUtility.calculateIsCheck(board.getStaticPosition(), havingMove)) {
-        final Piece king = Piece.calculateKingPiece(moveSpecification.havingMove());
+        final Piece king = Piece.calculateKingPiece(havingMove);
         if (calculateHasKingMove(board.getLegalMoveSet(), king)) {
           throw new InvalidMoveException(
               "it leaves the king in check. The king can only be moved to a nonthreatened square. Because there are no such squares, another piece must be moved instead.",
@@ -417,7 +412,8 @@ public class ValidateNewMove implements EnumConstants {
       MoveSpecification moveSpecification) throws InvalidMoveException {
     final Side havingMove = board.getHavingMove();
 
-    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(board.getStaticPosition(), moveSpecification)) {
+    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(board.getStaticPosition(), havingMove,
+        moveSpecification)) {
       if (StaticPositionUtility.calculateIsCheck(board.getStaticPosition(), havingMove)) {
         throw new InvalidMoveException("it would leave the own king in check",
             MoveCheck.ALL_BUT_KING_KING_LEFT_IN_CHECK);
@@ -428,7 +424,7 @@ public class ValidateNewMove implements EnumConstants {
   }
 
   private static boolean calculateIsMoveNextToOpponentKing(ApiBoard board, MoveSpecification moveSpecification) {
-    final Side havingMove = moveSpecification.havingMove();
+    final Side havingMove = board.getHavingMove();
     final Square opponentKingSquare = StaticPositionUtility.calculateKingSquare(board.getStaticPosition(),
         havingMove.getOppositeSide());
     final Set<Square> opponentKingThreatingSquareSet = KingNonCastlingEmptyBoardSquares

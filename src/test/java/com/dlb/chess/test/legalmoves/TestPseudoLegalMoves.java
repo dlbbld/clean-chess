@@ -105,7 +105,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
-    assertEquals(new MoveSpecification(WHITE, E2, D3), move.moveSpecification());
+    assertEquals(new MoveSpecification(E2, D3), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
@@ -123,7 +123,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
-    assertEquals(new MoveSpecification(WHITE, A1, B2), move.moveSpecification());
+    assertEquals(new MoveSpecification(A1, B2), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
@@ -204,7 +204,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
-    assertEquals(new MoveSpecification(BLACK, E7, D6), move.moveSpecification());
+    assertEquals(new MoveSpecification(E7, D6), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 
@@ -222,7 +222,7 @@ class TestPseudoLegalMoves implements EnumConstants {
     assertTrue(calc.legalMoveSet().isEmpty());
     assertEquals(1, calc.pseudoLegalMoveSet().size());
     final PseudoLegalMove move = SetUtility.getOnly(calc.pseudoLegalMoveSet());
-    assertEquals(new MoveSpecification(BLACK, A8, B7), move.moveSpecification());
+    assertEquals(new MoveSpecification(A8, B7), move.moveSpecification());
     assertEquals(PseudoLegalReason.KING_EXPOSED_TO_CHECK, calc.pseudoLegalReason());
   }
 

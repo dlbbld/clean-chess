@@ -2,48 +2,41 @@ package com.dlb.chess.common.model;
 
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PromotionPieceType;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
-// Specification: side must be white or black, for the non-castling non-promotion move the from and to square must be
-// different board squares, for the non-castling promotion move the from and to square must be different board squares
-// and the promotion piece type not the none piece type, for the castling move the castling move must be king-side or
-// queen-side.
-public record MoveSpecification(Side havingMove, Square fromSquare, Square toSquare, CastlingMove castlingMove,
+// Specification: for the non-castling non-promotion move the from and to square must be different board squares, for
+// the non-castling promotion move the from and to square must be different board squares and the promotion piece type
+// not the none piece type, for the castling move the castling move must be king-side or queen-side. The side to move
+// is determined by the board state, not by this specification.
+public record MoveSpecification(Square fromSquare, Square toSquare, CastlingMove castlingMove,
     PromotionPieceType promotionPieceType) implements Comparable<MoveSpecification> {
 
-  public MoveSpecification(Side havingMove, Square fromSquare, Square toSquare) {
-    this(havingMove, fromSquare, toSquare, CastlingMove.NONE, PromotionPieceType.NONE);
+  public MoveSpecification(Square fromSquare, Square toSquare) {
+    this(fromSquare, toSquare, CastlingMove.NONE, PromotionPieceType.NONE);
 
-    validate(havingMove, fromSquare, toSquare);
+    validate(fromSquare, toSquare);
   }
 
-  public MoveSpecification(Side havingMove, Square fromSquare, Square toSquare, PromotionPieceType promotionPieceType) {
-    this(havingMove, fromSquare, toSquare, CastlingMove.NONE, promotionPieceType);
+  public MoveSpecification(Square fromSquare, Square toSquare, PromotionPieceType promotionPieceType) {
+    this(fromSquare, toSquare, CastlingMove.NONE, promotionPieceType);
 
-    validate(havingMove, fromSquare, toSquare);
+    validate(fromSquare, toSquare);
 
     if (promotionPieceType == PromotionPieceType.NONE) {
       throw new IllegalArgumentException("The promotion piece type cannot be the none piece type");
     }
   }
 
-  public MoveSpecification(Side havingMove, CastlingMove castlingMove) {
-    this(havingMove, Square.NONE, Square.NONE, castlingMove, PromotionPieceType.NONE);
+  public MoveSpecification(CastlingMove castlingMove) {
+    this(Square.NONE, Square.NONE, castlingMove, PromotionPieceType.NONE);
 
-    if (havingMove == Side.NONE) {
-      throw new IllegalArgumentException("The side to move cannot be the none side");
-    }
     if (castlingMove == CastlingMove.NONE) {
       throw new IllegalArgumentException("The castling move cannot be the none castling move");
     }
   }
 
-  private static void validate(Side havingMove, Square fromSquare, Square toSquare) {
-    if (havingMove == Side.NONE) {
-      throw new IllegalArgumentException("The side to move cannot be the none side");
-    }
+  private static void validate(Square fromSquare, Square toSquare) {
     if (fromSquare == Square.NONE) {
       throw new IllegalArgumentException("The from square cannot be the none square");
     }
@@ -59,10 +52,6 @@ public record MoveSpecification(Side havingMove, Square fromSquare, Square toSqu
   public int compareTo(MoveSpecification move) {
     if (this.equals(move)) {
       return 0;
-    }
-
-    if (this.havingMove() != move.havingMove()) {
-      return this.havingMove().compareTo(move.havingMove());
     }
 
     if (this.fromSquare() != move.fromSquare()) {

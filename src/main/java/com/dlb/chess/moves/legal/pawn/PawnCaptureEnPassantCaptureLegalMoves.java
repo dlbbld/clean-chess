@@ -36,12 +36,11 @@ class PawnCaptureEnPassantCaptureLegalMoves extends PawnLegalMoves {
     // the pawn on the from square can potentially capture en passant
     final Set<LegalMove> legalMoveSet = new TreeSet<>();
 
-    final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare,
-        enPassantCaptureTargetSquare);
-    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {
+    final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, enPassantCaptureTargetSquare);
+    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
 
       final Square squareOfCapturedPawnForEnPassantCapture = EnPassantCaptureUtility
-          .calculateSquareOfCapturedPawnForEnPassantCapture(moveSpecification);
+          .calculateSquareOfCapturedPawnForEnPassantCapture(havingMove, moveSpecification);
       final Piece pieceCaptured = staticPosition.get(squareOfCapturedPawnForEnPassantCapture);
 
       final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured,

@@ -66,7 +66,7 @@ dependencies {
   board.performMove("e4"); // specifying the SAN
   board.performMoves("e5", "Bc4"); // specifying multiple SAN's
 
-  final var newMove = new MoveSpecification(Side.BLACK, Square.F8, Square.C5);
+  final var newMove = new MoveSpecification(Square.F8, Square.C5);
   board.performMove(newMove); // move specification without SAN
 
   board.unperformMove(); // undoes last move

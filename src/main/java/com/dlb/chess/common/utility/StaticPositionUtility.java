@@ -79,12 +79,11 @@ public abstract class StaticPositionUtility implements EnumConstants {
     return NonNullWrapperCommon.toString(piecePlacement);
   }
 
-  public static boolean calculateIsEvaluateAttackingKing(StaticPosition staticPosition,
+  public static boolean calculateIsEvaluateAttackingKing(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
-    final StaticPosition staticPositionEvaluateAfterMove = Board.createPositionAfterMove(staticPosition,
+    final StaticPosition staticPositionEvaluateAfterMove = Board.createPositionAfterMove(staticPosition, havingMove,
         moveSpecification);
-    return calculateIsEvaluateAttackingKing(staticPositionEvaluateAfterMove,
-        moveSpecification.havingMove().getOppositeSide());
+    return calculateIsEvaluateAttackingKing(staticPositionEvaluateAfterMove, havingMove.getOppositeSide());
   }
 
   public static boolean calculateIsEvaluateAttackingKing(StaticPosition staticPositionEvaluateAfterMove,

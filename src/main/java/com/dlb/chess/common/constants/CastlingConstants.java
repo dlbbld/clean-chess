@@ -1,6 +1,7 @@
 package com.dlb.chess.common.constants;
 
 import com.dlb.chess.board.enums.CastlingMove;
+import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
@@ -15,14 +16,14 @@ public abstract class CastlingConstants implements EnumConstants {
       + SanSymbol.CASTLING_O.getSymbol();
 
   public static final LegalMove WHITE_KING_SIDE_CASTLING_MOVE = new LegalMove(
-      new MoveSpecification(WHITE, CastlingMove.KING_SIDE));
+      new MoveSpecification(CastlingMove.KING_SIDE), WHITE_KING, Piece.NONE);
   public static final LegalMove WHITE_QUEEN_SIDE_CASTLING_MOVE = new LegalMove(
-      new MoveSpecification(WHITE, CastlingMove.QUEEN_SIDE));
+      new MoveSpecification(CastlingMove.QUEEN_SIDE), WHITE_KING, Piece.NONE);
 
   public static final LegalMove BLACK_KING_SIDE_CASTLING_MOVE = new LegalMove(
-      new MoveSpecification(BLACK, CastlingMove.KING_SIDE));
+      new MoveSpecification(CastlingMove.KING_SIDE), BLACK_KING, Piece.NONE);
   public static final LegalMove BLACK_QUEEN_SIDE_CASTLING_MOVE = new LegalMove(
-      new MoveSpecification(BLACK, CastlingMove.QUEEN_SIDE));
+      new MoveSpecification(CastlingMove.QUEEN_SIDE), BLACK_KING, Piece.NONE);
 
   // constants for white
   public static final Square WHITE_KING_FROM = E1;

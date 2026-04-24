@@ -43,10 +43,10 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
 
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
-      return new MoveSpecification(havingMove, CastlingMove.QUEEN_SIDE);
+      return new MoveSpecification(CastlingMove.QUEEN_SIDE);
     }
     if (sanFormat == SanFormat.KING_CASTLING_KING_SIDE) {
-      return new MoveSpecification(havingMove, CastlingMove.KING_SIDE);
+      return new MoveSpecification(CastlingMove.KING_SIDE);
     }
 
     final Square toSquare = sanConversion.toSquare();
@@ -62,7 +62,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           final File fromFile = toSquare.getFile(); // moving straight forward
           final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
           final Square fromSquare = Square.calculate(fromFile, fromRank);
-          return new MoveSpecification(havingMove, fromSquare, toSquare);
+          return new MoveSpecification(fromSquare, toSquare);
         }
         // we calculate this with san information and knowing it's a legal move (so e4
         // is e2-e4 xor e3-e4)
@@ -72,37 +72,37 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
           final File fromFile = toSquare.getFile(); // moving straight forward
           final Rank fromRank = Rank.calculatePawnInitialRank(havingMove);
           final Square fromSquare = Square.calculate(fromFile, fromRank);
-          return new MoveSpecification(havingMove, fromSquare, toSquare);
+          return new MoveSpecification(fromSquare, toSquare);
         }
 
         // one square advance
         final var fromSquare = potentialJumpOverSquare;
-        return new MoveSpecification(havingMove, fromSquare, toSquare);
+        return new MoveSpecification(fromSquare, toSquare);
       }
       case PAWN_CAPTURING_NON_PROMOTION: {
         // from file is in the san and from rank is the rank before to rank
 
         final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
-        return new MoveSpecification(havingMove, fromSquare, toSquare);
+        return new MoveSpecification(fromSquare, toSquare);
       }
       case PAWN_NON_CAPTURING_PROMOTION: {
         // from file equals to file and from rank is the rank before to rank
         final File fromFile = toSquare.getFile(); // moving straight forward
         final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
         final Square fromSquare = Square.calculate(fromFile, fromRank);
-        return new MoveSpecification(havingMove, fromSquare, toSquare, sanConversion.promotionPieceType());
+        return new MoveSpecification(fromSquare, toSquare, sanConversion.promotionPieceType());
       }
       case PAWN_CAPTURING_PROMOTION: {
         // from file is in the san and from rank is the rank before to rank
         final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
         final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
-        return new MoveSpecification(havingMove, fromSquare, toSquare, sanConversion.promotionPieceType());
+        return new MoveSpecification(fromSquare, toSquare, sanConversion.promotionPieceType());
       }
       case RNBQ_CAPTURING_SQUARE: {
         // san is enough to determine from square
         final Square fromSquare = AbstractSan.calculateFromSquare(sanConversion);
-        return new MoveSpecification(havingMove, fromSquare, toSquare);
+        return new MoveSpecification(fromSquare, toSquare);
       }
       case KING_NON_CASTLING_CAPTURING:
       case KING_NON_CASTLING_NON_CAPTURING:
@@ -115,7 +115,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       case RNBQ_NON_CAPTURING_RANK: {
         // legal move is required to determine from square
         final Square fromSquare = legalMoveOnlyCandidate.fromSquare();
-        return new MoveSpecification(havingMove, fromSquare, toSquare);
+        return new MoveSpecification(fromSquare, toSquare);
       }
       default:
         throw new IllegalArgumentException();

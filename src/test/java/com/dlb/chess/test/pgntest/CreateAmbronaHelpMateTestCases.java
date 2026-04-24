@@ -135,7 +135,8 @@ public class CreateAmbronaHelpMateTestCases {
   private static void printMovesAsUci(String game, Analysis analysis) {
     final StringBuilder uciMoveList = new StringBuilder();
     for (final HalfMove halfMove : analysis.halfMoveList()) {
-      final String uci = UciMoveUtility.convertMoveSpecificationToUci(halfMove.moveSpecification()).text();
+      final String uci = UciMoveUtility.convertMoveSpecificationToUci(halfMove.havingMove(), halfMove.moveSpecification())
+          .text();
       uciMoveList.append(uci);
       uciMoveList.append(" ");
     }

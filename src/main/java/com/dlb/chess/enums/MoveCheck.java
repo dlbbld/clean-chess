@@ -2,7 +2,6 @@ package com.dlb.chess.enums;
 
 public enum MoveCheck {
   SUCCESS,
-  BASIC_NOT_HAVING_MOVE,
   BASIC_MOVING_PIECE_NONE,
   BASIC_MOVING_PIECE_OPPONENT,
   BASIC_NON_PAWN_PROMOTION_PIECE_SET,

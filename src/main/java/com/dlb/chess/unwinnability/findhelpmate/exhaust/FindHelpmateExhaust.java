@@ -178,7 +178,8 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       }
 
       if (IS_DEBUG) {
-        final String uciMoveStr = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()).text();
+        final String uciMoveStr = UciMoveUtility
+            .convertMoveSpecificationToUci(legalMove.havingMove(), legalMove.moveSpecification()).text();
         final var out = uciMoveStr + " " + newDepth;
         System.out.println(out);
         evalCounter++;
@@ -297,7 +298,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
   private static List<UciMove> convertLegalMoveList(List<LegalMove> moveProgressList) {
     final List<UciMove> result = new ArrayList<>();
     for (final LegalMove legalMove : moveProgressList) {
-      result.add(UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification()));
+      result.add(UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(), legalMove.moveSpecification()));
     }
     return result;
   }

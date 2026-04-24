@@ -169,9 +169,9 @@ public abstract class CastlingUtility implements EnumConstants {
     return staticPosition.get(square) == Piece.NONE;
   }
 
-  public static List<UpdateSquare> performCastlingMovements(MoveSpecification moveSpecification) {
-    final List<UpdateSquare> result = new ArrayList<>(performKingMovement(moveSpecification));
-    result.addAll(performRookMovement(moveSpecification));
+  public static List<UpdateSquare> performCastlingMovements(Side havingMove, MoveSpecification moveSpecification) {
+    final List<UpdateSquare> result = new ArrayList<>(performKingMovement(havingMove, moveSpecification));
+    result.addAll(performRookMovement(havingMove, moveSpecification));
     return result;
   }
 
@@ -181,12 +181,12 @@ public abstract class CastlingUtility implements EnumConstants {
     return result;
   }
 
-  private static List<UpdateSquare> performKingMovement(MoveSpecification moveSpecification) {
+  private static List<UpdateSquare> performKingMovement(Side havingMove, MoveSpecification moveSpecification) {
     final List<UpdateSquare> result = new ArrayList<>();
     switch (moveSpecification.castlingMove()) {
       case KING_SIDE:
 
-        switch (moveSpecification.havingMove()) {
+        switch (havingMove) {
           case BLACK -> {
             // king move
             result.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM));
@@ -203,7 +203,7 @@ public abstract class CastlingUtility implements EnumConstants {
         break;
       case QUEEN_SIDE:
 
-        switch (moveSpecification.havingMove()) {
+        switch (havingMove) {
           case BLACK -> {
             // king move
             result.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM));
@@ -225,12 +225,12 @@ public abstract class CastlingUtility implements EnumConstants {
     return result;
   }
 
-  private static List<UpdateSquare> performRookMovement(MoveSpecification moveSpecification) {
+  private static List<UpdateSquare> performRookMovement(Side havingMove, MoveSpecification moveSpecification) {
     final List<UpdateSquare> result = new ArrayList<>();
     switch (moveSpecification.castlingMove()) {
       case KING_SIDE:
 
-        switch (moveSpecification.havingMove()) {
+        switch (havingMove) {
           case BLACK -> {
             // rook move
             result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM));
@@ -247,7 +247,7 @@ public abstract class CastlingUtility implements EnumConstants {
         break;
       case QUEEN_SIDE:
 
-        switch (moveSpecification.havingMove()) {
+        switch (havingMove) {
           case BLACK -> {
             // rook move
             result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM));
@@ -276,7 +276,7 @@ public abstract class CastlingUtility implements EnumConstants {
     final MoveSpecification moveSpecification = legalMove.moveSpecification();
     switch (moveSpecification.castlingMove()) {
       case KING_SIDE:
-        switch (moveSpecification.havingMove()) {
+        switch (legalMove.havingMove()) {
           case BLACK -> {
             // undo king move
             result.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM, BLACK_KING));
@@ -292,7 +292,7 @@ public abstract class CastlingUtility implements EnumConstants {
         }
         break;
       case QUEEN_SIDE:
-        switch (moveSpecification.havingMove()) {
+        switch (legalMove.havingMove()) {
           case BLACK -> {
             // king move
             result.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM, BLACK_KING));
@@ -322,7 +322,7 @@ public abstract class CastlingUtility implements EnumConstants {
     final MoveSpecification moveSpecification = legalMove.moveSpecification();
     switch (moveSpecification.castlingMove()) {
       case KING_SIDE:
-        switch (moveSpecification.havingMove()) {
+        switch (legalMove.havingMove()) {
           case BLACK -> {
             // undo rook move
             result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM, BLACK_ROOK));
@@ -338,7 +338,7 @@ public abstract class CastlingUtility implements EnumConstants {
         }
         break;
       case QUEEN_SIDE:
-        switch (moveSpecification.havingMove()) {
+        switch (legalMove.havingMove()) {
           case BLACK -> {
             // rook move
             result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM, BLACK_ROOK));
@@ -386,7 +386,7 @@ public abstract class CastlingUtility implements EnumConstants {
   public static CastlingRightBoth calculateCastlingRightBoth(CastlingRight lastCastlingRightWhite,
       CastlingRight lastCastlingRightBlack, LegalMove legalMove) {
 
-    final Side havingMoveBefore = legalMove.moveSpecification().havingMove();
+    final Side havingMoveBefore = legalMove.havingMove();
     final Side havingMove = havingMoveBefore.getOppositeSide();
 
     final CastlingRight oldCastlingRightHavingMoveBefore = CastlingUtility.getCastlingRight(lastCastlingRightWhite,
@@ -476,7 +476,7 @@ public abstract class CastlingUtility implements EnumConstants {
     if (previousLoss != CastlingRightLoss.NOT_LOST) {
       return previousLoss;
     }
-    final Side havingMoveBefore = legalMove.moveSpecification().havingMove();
+    final Side havingMoveBefore = legalMove.havingMove();
     if (calculateIsCastlingMove(legalMove.moveSpecification()) && havingMoveBefore == side) {
       return CastlingRightLoss.CASTLED;
     }
@@ -503,7 +503,7 @@ public abstract class CastlingUtility implements EnumConstants {
     if (legalMove.movingPiece().getPieceType() != ROOK) {
       return false;
     }
-    final var rookOriginalSquare = switch (legalMove.moveSpecification().havingMove()) {
+    final var rookOriginalSquare = switch (legalMove.havingMove()) {
       case BLACK -> CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM;
       case WHITE -> CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM;
       case NONE -> throw new IllegalArgumentException();
@@ -515,7 +515,7 @@ public abstract class CastlingUtility implements EnumConstants {
     if (legalMove.movingPiece().getPieceType() != ROOK) {
       return false;
     }
-    final var rookOriginalSquare = switch (legalMove.moveSpecification().havingMove()) {
+    final var rookOriginalSquare = switch (legalMove.havingMove()) {
       case BLACK -> CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM;
       case WHITE -> CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_FROM;
       case NONE -> throw new IllegalArgumentException();
@@ -525,7 +525,7 @@ public abstract class CastlingUtility implements EnumConstants {
 
   private static boolean calculateHasCapturedOpponentRookQueenSide(LegalMove legalMove) {
     if (legalMove.pieceCaptured() != Piece.NONE && legalMove.pieceCaptured().getPieceType() == ROOK) {
-      final var rookOpponentOriginalSquare = switch (legalMove.moveSpecification().havingMove()) {
+      final var rookOpponentOriginalSquare = switch (legalMove.havingMove()) {
         case BLACK -> CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM;
         case WHITE -> CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM;
         case NONE -> throw new IllegalArgumentException();
@@ -537,7 +537,7 @@ public abstract class CastlingUtility implements EnumConstants {
 
   private static boolean calculateHasCapturedOpponentRookKingSide(LegalMove legalMove) {
     if (legalMove.pieceCaptured() != Piece.NONE && legalMove.pieceCaptured().getPieceType() == ROOK) {
-      final var rookOpponentOriginalSquare = switch (legalMove.moveSpecification().havingMove()) {
+      final var rookOpponentOriginalSquare = switch (legalMove.havingMove()) {
         case BLACK -> CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_FROM;
         case WHITE -> CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM;
         case NONE -> throw new IllegalArgumentException();
@@ -626,18 +626,18 @@ public abstract class CastlingUtility implements EnumConstants {
     return staticPosition.get(rookOriginalSquare) == rookPiece;
   }
 
-  public static Square calculateKingCastlingFrom(MoveSpecification moveSpecification) {
+  public static Square calculateKingCastlingFrom(Side havingMove, MoveSpecification moveSpecification) {
     if (!calculateIsCastlingMove(moveSpecification)) {
       throw new IllegalArgumentException();
     }
     return switch (moveSpecification.castlingMove()) {
-      case KING_SIDE -> switch (moveSpecification.havingMove()) {
+      case KING_SIDE -> switch (havingMove) {
         case BLACK -> CastlingConstants.BLACK_KING_FROM;
         case WHITE -> CastlingConstants.WHITE_KING_FROM;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
-      case QUEEN_SIDE -> switch (moveSpecification.havingMove()) {
+      case QUEEN_SIDE -> switch (havingMove) {
         case BLACK -> CastlingConstants.BLACK_KING_FROM;
         case WHITE -> CastlingConstants.WHITE_KING_FROM;
         case NONE -> throw new IllegalArgumentException();
@@ -648,18 +648,18 @@ public abstract class CastlingUtility implements EnumConstants {
     };
   }
 
-  public static Square calculateKingCastlingTo(MoveSpecification moveSpecification) {
+  public static Square calculateKingCastlingTo(Side havingMove, MoveSpecification moveSpecification) {
     if (!calculateIsCastlingMove(moveSpecification)) {
       throw new IllegalArgumentException();
     }
     return switch (moveSpecification.castlingMove()) {
-      case KING_SIDE -> switch (moveSpecification.havingMove()) {
+      case KING_SIDE -> switch (havingMove) {
         case BLACK -> CastlingConstants.BLACK_KING_KING_SIDE_CASTLING_TO;
         case WHITE -> CastlingConstants.WHITE_KING_KING_SIDE_CASTLING_TO;
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
-      case QUEEN_SIDE -> switch (moveSpecification.havingMove()) {
+      case QUEEN_SIDE -> switch (havingMove) {
         case BLACK -> CastlingConstants.BLACK_KING_QUEEN_SIDE_CASTLING_TO;
         case WHITE -> CastlingConstants.WHITE_KING_QUEEN_SIDE_CASTLING_TO;
         case NONE -> throw new IllegalArgumentException();

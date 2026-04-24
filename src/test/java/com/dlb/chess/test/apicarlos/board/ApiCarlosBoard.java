@@ -66,7 +66,8 @@ public class ApiCarlosBoard extends AbstractBoard {
 
   @Override
   public boolean performMove(MoveSpecification moveSpecification) {
-    final var result = board.doMove(MoveConversionUtility.convertMoveSpecification(moveSpecification));
+    final Side havingMove = getHavingMove();
+    final var result = board.doMove(MoveConversionUtility.convertMoveSpecification(havingMove, moveSpecification));
     populateMoveHistory(moveSpecification);
     return result;
   }
@@ -467,16 +468,11 @@ public class ApiCarlosBoard extends AbstractBoard {
     for (final MoveBackup moveBackup : moveBackupList) {
       final Move move = NonNullWrapperApiCarlos.getMove(moveBackup);
       final MoveSpecification moveSpecification = convertMove(board, move);
-      LegalMove legalMove;
-      if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-        legalMove = new LegalMove(moveSpecification);
-      } else {
-        final Piece movingPiece = EnumConversionUtility
-            .convertPiece(NonNullWrapperApiCarlos.getMovingPiece(moveBackup));
-        final Piece pieceCaptured = EnumConversionUtility
-            .convertPiece(NonNullWrapperApiCarlos.getCapturedPiece(moveBackup));
-        legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
-      }
+      final Piece movingPiece = EnumConversionUtility
+          .convertPiece(NonNullWrapperApiCarlos.getMovingPiece(moveBackup));
+      final Piece pieceCaptured = EnumConversionUtility
+          .convertPiece(NonNullWrapperApiCarlos.getCapturedPiece(moveBackup));
+      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
       result.add(legalMove);
     }
     return result;
@@ -493,9 +489,6 @@ public class ApiCarlosBoard extends AbstractBoard {
   }
 
   private static LegalMove calculateLegalMove(MoveSpecification moveSpecification, MoveBackup moveBackup) {
-    if (moveBackup.isCastleMove()) {
-      return new LegalMove(moveSpecification);
-    }
     final Piece movingPiece = EnumConversionUtility
         .convertToMyPiece(NonNullWrapperApiCarlos.getMovingPiece(moveBackup));
     final Piece pieceCaptured = EnumConversionUtility

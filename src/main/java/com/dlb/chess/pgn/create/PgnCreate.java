@@ -92,8 +92,7 @@ public class PgnCreate {
 
     for (final HalfMove boardHalfMove : boardHalfMoveList) {
       PgnHalfMove halfMove;
-      if (boardHalfMove.moveSpecification().havingMove() != Side.WHITE
-          && boardHalfMove.moveSpecification().havingMove() != Side.BLACK) {
+      if (boardHalfMove.havingMove() != Side.WHITE && boardHalfMove.havingMove() != Side.BLACK) {
         throw new ProgrammingMistakeException("The program created an inconsistent alternating halfmove list");
       }
       halfMove = new PgnHalfMove(boardHalfMove.san(), MoveSuffixAnnotation.NONE, "");

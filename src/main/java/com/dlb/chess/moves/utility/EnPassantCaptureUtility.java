@@ -139,7 +139,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
   // we check if the moving piece is a pawn and the move itself
   public static boolean calculateIsPawnTwoSquareAdvanceMove(Piece movingPiece, MoveSpecification move) {
     if (movingPiece != Piece.NONE && movingPiece.getPieceType() == PAWN) {
-      return switch (move.havingMove()) {
+      return switch (movingPiece.getSide()) {
         case WHITE -> Square.WHITE_PAWN_TWO_SQUARE_ADVANCE.contains(calculateFromToList(move));
         case BLACK -> Square.BLACK_PAWN_TWO_SQUARE_ADVANCE.contains(calculateFromToList(move));
         case NONE -> throw new IllegalArgumentException();
@@ -202,13 +202,15 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
 
   public static Square calculateEnPassantCaptureTargetSquare(LegalMove legalMove) {
     if (legalMove.enPassantRole().createsEnPassantTarget()) {
-      return calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(legalMove.moveSpecification());
+      return calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(legalMove.havingMove(),
+          legalMove.moveSpecification());
     }
     return Square.NONE;
   }
 
-  public static Square calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(MoveSpecification move) {
-    switch (move.havingMove()) {
+  public static Square calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(Side havingMove,
+      MoveSpecification move) {
+    switch (havingMove) {
       case WHITE:
         if (!WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO.containsKey(move.toSquare())) {
           throw new IllegalArgumentException("The method only applies for en passant moves");
@@ -231,18 +233,15 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
       return false;
     }
     final Piece movingPiece = staticPosition.get(moveSpecification.fromSquare());
-    switch (moveSpecification.havingMove()) {
+    if (movingPiece == Piece.NONE || movingPiece.getPieceType() != PAWN) {
+      return false;
+    }
+    switch (movingPiece.getSide()) {
       case BLACK:
-        if (movingPiece != BLACK_PAWN) {
-          return false;
-        }
         // when the destination capture field is empty, this was an en passant capture
         return BLACK_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(moveSpecification))
             && staticPosition.get(moveSpecification.toSquare()) == Piece.NONE;
       case WHITE:
-        if (movingPiece != WHITE_PAWN) {
-          return false;
-        }
         // when the destination capture field is empty, this was an en passant capture
         return WHITE_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(moveSpecification))
             && staticPosition.get(moveSpecification.toSquare()) == Piece.NONE;
@@ -252,23 +251,21 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     }
   }
 
-  public static boolean calculateIsPotentialEnPassantCapture(StaticPosition staticPositionBeforeMove, MoveSpecification move) {
+  public static boolean calculateIsPotentialEnPassantCapture(StaticPosition staticPositionBeforeMove,
+      MoveSpecification move) {
     if (CastlingUtility.calculateIsCastlingMove(move)) {
       return false;
     }
     final Piece movingPiece = staticPositionBeforeMove.get(move.fromSquare());
-    switch (move.havingMove()) {
+    if (movingPiece == Piece.NONE || movingPiece.getPieceType() != PAWN) {
+      return false;
+    }
+    switch (movingPiece.getSide()) {
       case WHITE:
-        if (movingPiece != WHITE_PAWN) {
-          return false;
-        }
         // when the destination capture field is empty, this was an en passant capture
         return WHITE_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(move))
             && staticPositionBeforeMove.get(move.toSquare()) == Piece.NONE;
       case BLACK:
-        if (movingPiece != BLACK_PAWN) {
-          return false;
-        }
         // when the destination capture field is empty, this was an en passant capture
         return BLACK_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(move))
             && staticPositionBeforeMove.get(move.toSquare()) == Piece.NONE;
@@ -278,8 +275,8 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     }
   }
 
-  public static Square calculateSquareOfCapturedPawnForEnPassantCapture(MoveSpecification move) {
-    return calculateSquareOfCapturedPawnForEnPassantCapture(move.havingMove(), move.toSquare());
+  public static Square calculateSquareOfCapturedPawnForEnPassantCapture(Side havingMove, MoveSpecification move) {
+    return calculateSquareOfCapturedPawnForEnPassantCapture(havingMove, move.toSquare());
   }
 
   private static Square calculateSquareOfCapturedPawnForEnPassantCapture(Side havingMove, Square square) {
@@ -300,7 +297,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     }
   }
 
-  public static List<UpdateSquare> performEnPassantCaptureMovements(StaticPosition oldStaticPosition,
+  public static List<UpdateSquare> performEnPassantCaptureMovements(StaticPosition oldStaticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
     // arriving here, the move must have been identified as en passant capture
 
@@ -317,7 +314,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
 
     // remove captured pawn
     // move not yet done
-    final Square squareOfCapturedPawnForEnPassantCapture = calculateSquareOfCapturedPawnForEnPassantCapture(
+    final Square squareOfCapturedPawnForEnPassantCapture = calculateSquareOfCapturedPawnForEnPassantCapture(havingMove,
         moveSpecification);
     // remove the captured pawn
     result.add(new UpdateSquare(squareOfCapturedPawnForEnPassantCapture, Piece.NONE));
@@ -340,7 +337,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     // now we put back the pawn which was captured
     final Piece oppositePawnPiece = lastMove.pieceCaptured();
     final Square squareOfCapturedPawnForEnPassantCapture = calculateSquareOfCapturedPawnForEnPassantCapture(
-        lastMove.moveSpecification());
+        lastMove.havingMove(), lastMove.moveSpecification());
     result.add(new UpdateSquare(squareOfCapturedPawnForEnPassantCapture, oppositePawnPiece));
 
     return result;

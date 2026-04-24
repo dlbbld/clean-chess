@@ -96,8 +96,7 @@ public class Score {
       return false;
     }
 
-    return calculateIsAdvancedRank(legalMove.moveSpecification().havingMove(),
-        legalMove.moveSpecification().toSquare().getRank());
+    return calculateIsAdvancedRank(legalMove.havingMove(), legalMove.moveSpecification().toSquare().getRank());
   }
 
   private static boolean calculateIsPawnMove(LegalMove legalMove) {
