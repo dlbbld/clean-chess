@@ -32,7 +32,6 @@ public class ValidateNewMove implements EnumConstants {
 
   public static MoveCheck validateNewMove(ApiBoard board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
-    final Side havingMove = board.getHavingMove();
     final Square fromSquare = moveSpecification.fromSquare();
 
     final Piece movingPiece;
@@ -98,8 +97,7 @@ public class ValidateNewMove implements EnumConstants {
           throw new InvalidMoveException("there are no castling rights anymore on both sides",
               castlingCheck.toMoveCheck());
         }
-        throw new InvalidMoveException("there is no castling right anymore on this side",
-            castlingCheck.toMoveCheck());
+        throw new InvalidMoveException("there is no castling right anymore on this side", castlingCheck.toMoveCheck());
       case TEMPORARY_SQUARES_NOT_EMPTY:
         throw new InvalidMoveException("not all squares between the rook and the king are empty",
             castlingCheck.toMoveCheck());

@@ -14,7 +14,7 @@ public abstract class MoveConversionUtility {
 
   // the SAN is only set when the game is loaded from the PGN
   // this method is only for this case
-  public static MoveSpecification convertMove(com.github.bhlangonijr.chesslib.Side side, Move move, String san) {
+  public static MoveSpecification convertMove(Move move, String san) {
     switch (san) {
       case "O-O":
       case "O-O+":
@@ -27,12 +27,11 @@ public abstract class MoveConversionUtility {
       default:
         break;
     }
-    return convertNonCastlingMove(side, move);
+    return convertNonCastlingMove(move);
   }
 
   // when having created the board and the piece can be determined
-  public static MoveSpecification convertMove(com.github.bhlangonijr.chesslib.Side side, Move move,
-      com.github.bhlangonijr.chesslib.Piece movingPiece) {
+  public static MoveSpecification convertMove(Move move, com.github.bhlangonijr.chesslib.Piece movingPiece) {
     if (movingPiece == com.github.bhlangonijr.chesslib.Piece.WHITE_KING) {
       if (move.getFrom() == com.github.bhlangonijr.chesslib.Square.E1
           && move.getTo() == com.github.bhlangonijr.chesslib.Square.G1) {
@@ -53,10 +52,10 @@ public abstract class MoveConversionUtility {
         return new MoveSpecification(CastlingMove.QUEEN_SIDE);
       }
     }
-    return convertNonCastlingMove(side, move);
+    return convertNonCastlingMove(move);
   }
 
-  private static MoveSpecification convertNonCastlingMove(com.github.bhlangonijr.chesslib.Side side, Move move) {
+  private static MoveSpecification convertNonCastlingMove(Move move) {
     final com.github.bhlangonijr.chesslib.Square from = NonNullWrapperApiCarlos.getFrom(move);
     final com.github.bhlangonijr.chesslib.Square to = NonNullWrapperApiCarlos.getTo(move);
 
@@ -101,8 +100,8 @@ public abstract class MoveConversionUtility {
         .convertToSquare(moveSpecification.fromSquare());
     final com.github.bhlangonijr.chesslib.Square to = EnumConversionUtility
         .convertToSquare(moveSpecification.toSquare());
-    final com.github.bhlangonijr.chesslib.Piece promotion = EnumConversionUtility
-        .convertToPiece(havingMove, moveSpecification.promotionPieceType());
+    final com.github.bhlangonijr.chesslib.Piece promotion = EnumConversionUtility.convertToPiece(havingMove,
+        moveSpecification.promotionPieceType());
     return new Move(from, to, promotion);
   }
 }

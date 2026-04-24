@@ -21,8 +21,6 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
-import com.dlb.chess.enums.CastlingCheck;
-import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;

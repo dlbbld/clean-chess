@@ -28,6 +28,7 @@ class TestMoveSpecificationConstructorValidation {
     checkException(CastlingMove.NONE);
   }
 
+  @SuppressWarnings("unused")
   private static void checkException(Square fromSquare, Square toSquare) {
     boolean isException;
     try {
@@ -39,6 +40,7 @@ class TestMoveSpecificationConstructorValidation {
     assertTrue(isException);
   }
 
+  @SuppressWarnings("unused")
   private static void checkException(Square fromSquare, Square toSquare, PromotionPieceType promotionPieceType) {
     boolean isException;
     try {
@@ -50,6 +52,7 @@ class TestMoveSpecificationConstructorValidation {
     assertTrue(isException);
   }
 
+  @SuppressWarnings("unused")
   private static void checkException(CastlingMove castlingMove) {
     boolean isException;
     try {

@@ -85,8 +85,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertFalse(board.isStalemate());
   }
 
-  static void checkCapture(Side side, Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece,
-      ApiBoard board) {
+  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, ApiBoard board) {
     assertTrue(board.isCapture());
     assertFalse(board.isCheckmate());
     assertFalse(board.isStalemate());
@@ -96,7 +95,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkNonCaptureCheck(Side side, Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
+  static void checkNonCaptureCheck(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertFalse(board.isCheckmate());
@@ -107,8 +106,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkNonCaptureCheckmate(Side side, Square fromSquare, Square toSquare, Piece movingPiece,
-      ApiBoard board) {
+  static void checkNonCaptureCheckmate(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
@@ -148,12 +146,12 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, lastMoveEnPassantCapture);
   }
 
-  static void checkMovingPiece(Side side, Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
+  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
 
-    checkMovingPiece(side, fromSquare, toSquare, movingPiece, board, EnPassantRole.NONE);
+    checkMovingPiece(fromSquare, toSquare, movingPiece, board, EnPassantRole.NONE);
   }
 
-  static void checkMovingPiece(Side side, Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board,
+  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board,
       EnPassantRole enPassantRole) {
 
     assertFalse(board.isCapture());
