@@ -3,6 +3,7 @@ package com.dlb.chess.moves.legal;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
@@ -90,7 +91,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
         continue;
       }
 
-      if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+      if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
         final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
         legalMoveSet.add(legalMove);
       } else {

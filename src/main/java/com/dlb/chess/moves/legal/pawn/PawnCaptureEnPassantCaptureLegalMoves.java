@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
@@ -37,7 +37,7 @@ class PawnCaptureEnPassantCaptureLegalMoves extends PawnLegalMoves {
     final Set<LegalMove> legalMoveSet = new TreeSet<>();
 
     final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, enPassantCaptureTargetSquare);
-    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+    if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
 
       final Square squareOfCapturedPawnForEnPassantCapture = EnPassantCaptureUtility
           .calculateSquareOfCapturedPawnForEnPassantCapture(havingMove, moveSpecification);

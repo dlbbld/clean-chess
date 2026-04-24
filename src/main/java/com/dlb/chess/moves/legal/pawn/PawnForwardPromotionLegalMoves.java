@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
 
@@ -31,7 +31,7 @@ class PawnForwardPromotionLegalMoves extends PawnLegalMoves {
         // one move for each possible promotion square and promotion piece
         for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
           final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, toSquare, promotionPieceType);
-          if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+          if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
             final Piece pieceCaptured = staticPosition.get(toSquare);
             final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
             legalMoveSet.add(legalMove);

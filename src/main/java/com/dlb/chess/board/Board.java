@@ -28,6 +28,7 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.fen.FenBoard;
@@ -664,7 +665,7 @@ public class Board extends AbstractBoard {
       final Square squareRight = Square.calculateRightSquare(havingMove, squareBehind);
       if (staticPosition.isOwnPawn(squareRight, havingMove)) {
         final MoveSpecification moveSpecification = new MoveSpecification(squareRight, enPassantCaptureTargetSquare);
-        if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+        if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
           return true;
         }
       }
@@ -675,7 +676,7 @@ public class Board extends AbstractBoard {
       final Square squareLeft = Square.calculateLeftSquare(havingMove, squareBehind);
       if (staticPosition.isOwnPawn(squareLeft, havingMove)) {
         final MoveSpecification moveSpecification = new MoveSpecification(squareLeft, enPassantCaptureTargetSquare);
-        if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+        if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
           return true;
         }
       }

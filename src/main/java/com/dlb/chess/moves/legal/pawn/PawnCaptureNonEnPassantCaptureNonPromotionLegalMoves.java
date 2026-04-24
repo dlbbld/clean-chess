@@ -11,7 +11,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
 
@@ -28,7 +28,7 @@ class PawnCaptureNonEnPassantCaptureNonPromotionLegalMoves extends PawnLegalMove
       if (!Rank.calculateIsPromotionRank(havingMove, diagonalSquareTo.getRank())
           && staticPosition.isOpponentPiece(diagonalSquareTo, havingMove)) {
         final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, diagonalSquareTo);
-        if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+        if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
 
           final Piece pieceCaptured = staticPosition.get(diagonalSquareTo);
           if (pieceCaptured.getPieceType() != PieceType.KING) {

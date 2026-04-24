@@ -61,6 +61,17 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     };
   }
 
+  // Cheap variant: returns true iff the move leaves the own king safe. Use this when callers do
+  // not need the failure-reason classification (e.g. legal-vs-pseudo-legal split during legal-move
+  // enumeration).
+  public static boolean isMoveKingSafe(StaticPosition staticPosition, Side havingMove,
+      MoveSpecification moveSpecification) {
+    if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
+      throw new ProgrammingMistakeException("Castling king-safety is handled by CastlingCheck");
+    }
+    return !StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification);
+  }
+
   public static KingSafetyCheck analyzeKingSafety(StaticPosition staticPosition, Side havingMove,
       Set<LegalMove> legalMoveSet, MoveSpecification moveSpecification) {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {

@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
@@ -30,7 +30,7 @@ class PawnForwardNonPromotionLegalMoves extends PawnLegalMoves {
     for (final Square toSquare : pawnPotentialToSquareSet) {
       if (!Rank.calculateIsPromotionRank(havingMove, toSquare.getRank())) {
         final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, toSquare);
-        if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+        if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
           final Piece pieceCaptured = staticPosition.get(toSquare);
           final EnPassantRole enPassantRole = EnPassantCaptureUtility
               .calculateIsPawnTwoSquareAdvanceMove(movingPiece, moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE
