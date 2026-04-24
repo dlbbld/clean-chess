@@ -1630,31 +1630,31 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     {
       final var fen = "rnbqkbn1/ppppppp1/8/7p/4P3/r3K3/PPPPBPPP/RNBQ2NR w q - 6 5";
       final MoveSpecification move = new MoveSpecification(E3, F3);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // knight checking
     {
       final var fen = "r1bqkbnr/pppppppp/8/8/8/P2nPP2/1PPP2PP/RNBQKBNR w KQkq - 1 4";
       final MoveSpecification move = new MoveSpecification(E1, F2);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // bishop checking
     {
       final var fen = "r1bqk1nr/pppp1ppp/2n5/4p3/1b1P4/5P1N/PPP1P1PP/RNBQKB1R w KQkq - 1 4";
       final MoveSpecification move = new MoveSpecification(E1, D2);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // queen checking
     {
       final var fen = "rnb1kbnr/pppp1ppp/8/4p3/3P1P1q/2NQ4/PPP1P1PP/2BRKBNR w Kkq - 15 10";
       final MoveSpecification move = new MoveSpecification(E1, F2);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // pawn checking
     {
       final var fen = "rn1qkbnr/ppp1pppp/8/8/3pP1b1/4K2P/PPPP1PP1/RNBQ1BNR w kq - 0 5";
       final MoveSpecification move = new MoveSpecification(E3, F3);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
 
     // black
@@ -1662,31 +1662,31 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     {
       final var fen = "r1bq3r/pppp1ppp/2nk1n2/2b1p3/2B1P3/3R1N2/PPPP1PPP/RNBQ2K1 b - - 11 7";
       final MoveSpecification move = new MoveSpecification(D6, E6);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // knight checking
     {
       final var fen = "rnbq1bnr/ppppkppp/8/4pN2/8/8/PPPPPPPP/RNBQKB1R b KQ - 3 3";
       final MoveSpecification move = new MoveSpecification(E7, D6);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // bishop checking
     {
       final var fen = "rnbq2nr/ppppppkp/6pb/8/4P3/1P6/PBPP1PPP/RN1QKBNR b KQ - 6 5";
       final MoveSpecification move = new MoveSpecification(G7, F6);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // queen checking
     {
       final var fen = "rnbq1bnr/pppkpppp/3p4/8/6Q1/4P3/PPPP1PPP/RNB1KBNR b KQ - 3 3";
       final MoveSpecification move = new MoveSpecification(D7, E6);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
     // pawn checking
     {
       final var fen = "rnbq1bnr/ppppp1pp/5pk1/7P/8/4PQ2/PPPP1PP1/RNB1KBNR b KQ - 0 4";
       final MoveSpecification move = new MoveSpecification(G6, F5);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
     }
   }
 
@@ -1698,31 +1698,31 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     {
       final var fen = "rnbqkbn1/pp1ppp2/8/2p3pp/4P3/r3K3/PPPPBPPP/RNBQ2NR w q - 2 9";
       final MoveSpecification move = new MoveSpecification(E3, F3);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // knight checking
     {
       final var fen = "r1bqkbnr/pppppppp/8/8/8/P2n1PP1/1PPPP2P/RNBQKBNR w KQkq - 1 4";
       final MoveSpecification move = new MoveSpecification(E1, F2);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // bishop checking
     {
       final var fen = "rnbqk1nr/pppp1ppp/8/4p3/1b1P4/7N/PPP1PPPP/RNBQKB1R w KQkq - 2 3";
       final MoveSpecification move = new MoveSpecification(E1, D2);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // queen checking
     {
       final var fen = "rnb1kbnr/pppp1ppp/8/4p3/3P1P1q/2NQ4/PPPBP1PP/3RKBNR w Kkq - 9 7";
       final MoveSpecification move = new MoveSpecification(E1, F2);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // pawn checking
     {
       final var fen = "r3kbnr/p1pp3p/bpn1p3/6p1/4Pp2/4K1P1/PPPPBPqP/RNBQ2NR w kq - 0 12";
       final MoveSpecification move = new MoveSpecification(E3, D3);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
 
     // black
@@ -1730,31 +1730,31 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     {
       final var fen = "1nbq2nr/rpppbppp/pk6/3Q4/P6P/RR6/1PP1PPP1/1NB1KBN1 b - - 3 10";
       final MoveSpecification move = new MoveSpecification(B6, A5);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // knight checking
     {
       final var fen = "rnbqkbnr/1pppp1pp/p2N1p2/8/8/8/PPPPPPPP/R1BQKBNR b KQkq - 1 3";
       final MoveSpecification move = new MoveSpecification(E8, F7);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // bishop checking
     {
       final var fen = "rnbqkbnr/ppp1p1pp/3p1p2/5Q1B/8/4P3/PPPP1PPP/RNB1K1NR b KQ - 9 7";
       final MoveSpecification move = new MoveSpecification(E8, F7);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // queen checking
     {
       final var fen = "r1bqkbnr/ppppp1pp/5p2/4n2Q/8/4P3/PPPP1PPP/RNB1KBNR b KQkq - 5 4";
       final MoveSpecification move = new MoveSpecification(E8, F7);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
     // pawn checking
     {
       final var fen = "r1b2qnr/ppppppkp/Q6P/6p1/3b2n1/8/PPP1PPP1/RNB1KBNR b KQ - 0 12";
       final MoveSpecification move = new MoveSpecification(G7, G6);
-      check(fen, move, MoveCheck.KING_IN_CHECK_TO_EMPTY_ATTACKED_SQUARE_NO_LEGAL_MOVES);
+      check(fen, move, MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
     }
   }
 
