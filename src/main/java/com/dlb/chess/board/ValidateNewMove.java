@@ -374,7 +374,7 @@ public class ValidateNewMove implements EnumConstants {
         throw new InvalidMoveException("it leaves the king in check.",
             MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
       }
-      throw new InvalidMoveException("it exposes the king to check", MoveCheck.KING_MOVES_INTO_CHECK);
+      throw new InvalidMoveException("it exposes the king to check", MoveCheck.KING_NOT_IN_CHECK_TO_THREATENED_SQUARE);
     }
   }
 
