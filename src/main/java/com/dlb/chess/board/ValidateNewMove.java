@@ -369,12 +369,12 @@ public class ValidateNewMove implements EnumConstants {
         final Piece king = Piece.calculateKingPiece(havingMove);
         if (calculateHasKingMove(board.getLegalMoveSet(), king)) {
           throw new InvalidMoveException("it leaves the king in check.",
-              MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES);
+              MoveCheck.KING_KING_LEFT_IN_CHECK_LEGAL_MOVES);
         }
         throw new InvalidMoveException("it leaves the king in check.",
-            MoveCheck.KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES);
+            MoveCheck.KING_KING_LEFT_IN_CHECK_NO_LEGAL_MOVES);
       }
-      throw new InvalidMoveException("it exposes the king to check", MoveCheck.KING_NOT_IN_CHECK_TO_THREATENED_SQUARE);
+      throw new InvalidMoveException("it exposes the king to check", MoveCheck.KING_KING_EXPOSED_TO_CHECK);
     }
   }
 

@@ -32,10 +32,10 @@ public enum MoveCheck {
 
   KING_CAPTURES_GUARDED_PIECE,
   KING_MOVES_NEXT_TO_OPPONENT_KING,
-  KING_NOT_IN_CHECK_TO_THREATENED_SQUARE,
 
-  KING_IN_CHECK_TO_THREATENED_SQUARE_NO_LEGAL_MOVES,
-  KING_IN_CHECK_TO_THREATENED_SQUARE_LEGAL_MOVES,
+  KING_KING_EXPOSED_TO_CHECK,
+  KING_KING_LEFT_IN_CHECK_LEGAL_MOVES,
+  KING_KING_LEFT_IN_CHECK_NO_LEGAL_MOVES,
 
   // castling refusal reasons — FINAL means the castling right is lost permanently;
   // TEMPORARY means the board state blocks castling now but castling may become possible again.
