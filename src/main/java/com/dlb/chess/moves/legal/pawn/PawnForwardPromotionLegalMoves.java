@@ -3,6 +3,7 @@ package com.dlb.chess.moves.legal.pawn;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -10,7 +11,6 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
 
