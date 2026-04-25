@@ -646,14 +646,6 @@ class TestSanValidationProblemMessage {
           "No pawn can move to e3 because the own king would remain in check.");
     }
 
-    // KING_LEFT_IN_CHECK_KING_NON_CASTLING: white king d1 in check by rh1 along rank 1; moving to
-    // c1 stays on rank 1 and keeps the king in check.
-    {
-      final ApiBoard board = new Board("4k3/8/8/8/8/8/8/R2K3r w - - 0 1");
-      checkException("Kc1", board, SanValidationProblem.KING_LEFT_IN_CHECK_KING_NON_CASTLING,
-          "The king cannot move to c1 because the king would remain in check.");
-    }
-
     // KING_LEFT_IN_CHECK_RNBQ_NEITHER_SINGLE: single white rook (Rb2), king d1 in check by rh1;
     // Rb4 does not address the check.
     {
@@ -723,14 +715,6 @@ class TestSanValidationProblemMessage {
           "No pawn can move to d3 because it would expose the own king to check.");
     }
 
-    // KING_EXPOSED_TO_CHECK_KING_NON_CASTLING: king e1 not in check; moving to f2 walks onto the
-    // f-file attacked by rf8.
-    {
-      final ApiBoard board = new Board("5r2/8/8/k7/8/8/8/4K3 w - - 0 1");
-      checkException("Kf2", board, SanValidationProblem.KING_EXPOSED_TO_CHECK_KING_NON_CASTLING,
-          "The king cannot move to f2 because it would move into check.");
-    }
-
     // KING_EXPOSED_TO_CHECK_RNBQ_NEITHER_SINGLE: single rook (e4) pinned on the e-file by re7 to
     // white king e1; Ra4 leaves the e-file and exposes the king.
     {
@@ -785,6 +769,35 @@ class TestSanValidationProblemMessage {
       final ApiBoard board = new Board("4k3/4r3/8/8/4R3/8/8/4K3 w - - 0 1");
       checkException("Re4a4", board, SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_SQUARE,
           "The rook on e4 cannot move to a4 because it would expose the own king to check.");
+    }
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testKingOnlySafetyReasons() {
+
+    // KING_CAPTURES_GUARDED_PIECE: white king e1, black pawn d2 guarded by black bishop a5.
+    // Kxd2 captures a guarded piece.
+    {
+      final ApiBoard board = new Board("4k3/8/8/b7/8/8/3p4/4K3 w - - 0 1");
+      checkException("Kxd2", board, SanValidationProblem.KING_CAPTURES_GUARDED_PIECE,
+          "The king cannot capture the piece on d2 because it is guarded.");
+    }
+
+    // KING_MOVES_NEXT_TO_OPPONENT_KING: white king e1, black king e3. Ke2 lands adjacent to the
+    // black king.
+    {
+      final ApiBoard board = new Board("8/8/8/8/8/4k3/8/4K3 w - - 0 1");
+      checkException("Ke2", board, SanValidationProblem.KING_MOVES_NEXT_TO_OPPONENT_KING,
+          "The king cannot move to e2 because it would be next to the opponent king.");
+    }
+
+    // KING_MOVES_TO_ATTACKED_EMPTY_SQUARE: king e1 not in check; Kf2 walks onto the f-file
+    // attacked by rf8.
+    {
+      final ApiBoard board = new Board("5r2/8/8/k7/8/8/8/4K3 w - - 0 1");
+      checkException("Kf2", board, SanValidationProblem.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE,
+          "The king cannot move to f2 because the square is attacked.");
     }
   }
 

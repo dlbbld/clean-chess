@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
@@ -21,6 +22,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
@@ -231,13 +233,26 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
       throw new SanValidationException(SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING,
           Message.getString("validation.san.notReachable.king.nonCastling", toSquare.getName()));
     }
-    final var reason = calculatePseudoLegalReason(staticPosition, havingMove);
-    if (reason == PseudoLegalReason.KING_LEFT_IN_CHECK) {
-      throw new SanValidationException(SanValidationProblem.KING_LEFT_IN_CHECK_KING_NON_CASTLING,
-          Message.getString("validation.san.kingLeftInCheck.king.nonCastling", toSquare.getName()));
+    // Pseudo-legal but not legal: classify via the analyzer. For king moves the safety
+    // reasons (KING_CAPTURES_GUARDED_PIECE / KING_MOVES_NEXT_TO_OPPONENT_KING /
+    // KING_MOVES_TO_ATTACKED_EMPTY_SQUARE) live in MovementCheck rather than the LEFT/EXPOSED
+    // distinction used for non-king pieces.
+    final Square kingSquare = StaticPositionUtility.calculateKingSquare(staticPosition, havingMove);
+    final MovementCheck movementCheck = ChessRuleAnalyzer.analyzeMovement(staticPosition, havingMove, Square.NONE,
+        new MoveSpecification(kingSquare, toSquare));
+    switch (movementCheck) {
+      case KING_CAPTURES_GUARDED_PIECE -> throw new SanValidationException(
+          SanValidationProblem.KING_CAPTURES_GUARDED_PIECE,
+          Message.getString("validation.san.king.capturesGuardedPiece", toSquare.getName()));
+      case KING_MOVES_NEXT_TO_OPPONENT_KING -> throw new SanValidationException(
+          SanValidationProblem.KING_MOVES_NEXT_TO_OPPONENT_KING,
+          Message.getString("validation.san.king.movesNextToOpponentKing", toSquare.getName()));
+      case KING_MOVES_TO_ATTACKED_EMPTY_SQUARE -> throw new SanValidationException(
+          SanValidationProblem.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE,
+          Message.getString("validation.san.king.movesToAttackedEmptySquare", toSquare.getName()));
+      default -> throw new ProgrammingMistakeException(
+          "Unexpected MovementCheck for king non-castling pseudo-legal move: " + movementCheck);
     }
-    throw new SanValidationException(SanValidationProblem.KING_EXPOSED_TO_CHECK_KING_NON_CASTLING,
-        Message.getString("validation.san.kingExposedToCheck.king.nonCastling", toSquare.getName()));
   }
 
   private static Set<PseudoLegalMove> calculatePseudoLegalMovesForKingNonCastling(StaticPosition staticPosition,
