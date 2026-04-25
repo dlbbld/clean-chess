@@ -2,13 +2,20 @@ package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnFileTestCaseList;
 
 public abstract class AbstractPgnTest {
+
+  public static void testGame(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) throws Exception {
+    final var analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    testGame(testCase, analysis);
+  }
 
   public static boolean testGame(PgnFileTestCase testCase, Analysis analysis) throws Exception {
     testFen(testCase.fen(), analysis.fen());
