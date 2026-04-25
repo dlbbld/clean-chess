@@ -12,7 +12,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
 
@@ -24,8 +24,8 @@ public class Score {
     if (legalMove.pieceCaptured() != Piece.NONE) {
       return ScoreResult.REWARD;
     }
-    final Set<Square> squaresAttackedByNotHavingMove = AbstractThreatenSquares
-        .calculateThreatenedSquares(staticPosition, havingMove.getOppositeSide());
+    final Set<Square> squaresAttackedByNotHavingMove = AbstractAttackedSquares
+        .calculateAttackedSquares(staticPosition, havingMove.getOppositeSide());
 
     if (squaresAttackedByNotHavingMove.contains(legalMove.moveSpecification().toSquare())) {
       return ScoreResult.REWARD;

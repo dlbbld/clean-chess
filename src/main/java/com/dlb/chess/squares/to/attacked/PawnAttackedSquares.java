@@ -1,4 +1,4 @@
-package com.dlb.chess.squares.to.threaten;
+package com.dlb.chess.squares.to.attacked;
 
 import java.util.Set;
 
@@ -7,9 +7,9 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
 
-public class PawnThreatenSquares extends AbstractThreatenSquares {
+public class PawnAttackedSquares extends AbstractAttackedSquares {
 
-  public static Set<Square> calculatePawnThreatenSquares(StaticPosition staticPosition, Square fromSquare,
+  public static Set<Square> calculatePawnAttackedSquares(StaticPosition staticPosition, Square fromSquare,
       Side havingMove) {
 
     checkPiece(staticPosition, havingMove, fromSquare, PAWN);

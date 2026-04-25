@@ -179,7 +179,7 @@ public class ValidateNewMove implements EnumConstants {
           + " was immediately played before, which is not the case";
       case KING_CAPTURES_GUARDED_PIECE -> "the king cannot capture this piece because it is guarded by another piece";
       case KING_MOVES_NEXT_TO_OPPONENT_KING -> "the king can not be moved next to the opponent king";
-      case KING_MOVES_TO_THREATENED_EMPTY_SQUARE -> "the king cannot move to a square that is attacked";
+      case KING_MOVES_TO_ATTACKED_EMPTY_SQUARE -> "the king cannot move to a square that is attacked";
       case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS has no message");
     };
   }

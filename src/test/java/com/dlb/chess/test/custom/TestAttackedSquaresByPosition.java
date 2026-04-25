@@ -13,9 +13,9 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 
-class TestThreatenSquaresByPosition implements EnumConstants {
+class TestAttackedSquaresByPosition implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
@@ -56,7 +56,7 @@ class TestThreatenSquaresByPosition implements EnumConstants {
   private static void checkPosition(String fenStr, String... expectedSquareList) {
     final Fen fen = FenParserAdvanced.parseFenAdvanced(fenStr);
 
-    final Set<Square> actualSquareSet = AbstractThreatenSquares.calculateThreatenedSquares(fen.staticPosition(),
+    final Set<Square> actualSquareSet = AbstractAttackedSquares.calculateAttackedSquares(fen.staticPosition(),
         fen.havingMove());
 
     final Set<String> expected = new TreeSet<>();

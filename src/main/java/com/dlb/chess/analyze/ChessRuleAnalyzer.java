@@ -28,10 +28,9 @@ import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
  * Stateless chess-rules analysis shared by both validation pipelines (MoveSpecification and SAN).
  *
  * <p>
- * The Step A surface is just movement reasoning: piece geometry, path-clearing, occupancy, pawn-
- * specifics (forward one/two, diagonal, en passant) and king-specific non-safety rules (capturing
- * a guarded piece, moving next to the opponent king). Castling lives in {@link CastlingUtility};
- * king-safety after the move is a separate later layer.
+ * The Step A surface is just movement reasoning: piece geometry, path-clearing, occupancy, pawn- specifics (forward
+ * one/two, diagonal, en passant) and king-specific non-safety rules (capturing a guarded piece, moving next to the
+ * opponent king). Castling lives in {@link CastlingUtility}; king-safety after the move is a separate later layer.
  *
  * <p>
  * Preconditions for {@link #analyzeMovement}:
@@ -80,15 +79,12 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
       throw new ProgrammingMistakeException("From-square does not hold an own piece");
     }
     // King moves: their king-safety is fully covered by analyzeMovement (KING_CAPTURES_GUARDED_PIECE
-    // / KING_MOVES_TO_THREATENED_EMPTY_SQUARE). The was-in-check distinction has no analog for the
+    // / KING_MOVES_TO_ATTACKED_EMPTY_SQUARE). The was-in-check distinction has no analog for the
     // king itself, so this method only handles non-king moves.
-    if (movingPiece.getPieceType() == KING) {
+    if ((movingPiece.getPieceType() == KING) || !StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
       return KingSafetyCheck.SUCCESS;
     }
-    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
-      return KingSafetyCheck.SUCCESS;
-    }
-    final boolean wasInCheck = StaticPositionUtility.calculateIsCheck(staticPosition, havingMove);
+    final var wasInCheck = StaticPositionUtility.calculateIsCheck(staticPosition, havingMove);
     return wasInCheck ? KingSafetyCheck.NON_KING_LEFT_IN_CHECK : KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
   }
 
@@ -227,9 +223,9 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     if (calculateIsMoveNextToOpponentKing(staticPosition, havingMove, toSquare)) {
       return MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
     }
-    // Post-move attack detection (rather than pre-move threatenedSquares): when the king moves
+    // Post-move attack detection (rather than pre-move attackedSquares): when the king moves
     // along an opponent long-range piece's line, the king itself was the blocker; pre-move
-    // threatenedSquares would not include the destination, but the king IS attacked there after
+    // attackedSquares would not include the destination, but the king IS attacked there after
     // moving off its current square.
     if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
       return MovementCheck.SUCCESS;
@@ -238,16 +234,16 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
       return MovementCheck.KING_CAPTURES_GUARDED_PIECE;
     }
     // Empty destination, attacked after move — discriminated from KING_CAPTURES_GUARDED_PIECE.
-    return MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE;
+    return MovementCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE;
   }
 
   private static boolean calculateIsMoveNextToOpponentKing(StaticPosition staticPosition, Side havingMove,
       Square toSquare) {
     final Square opponentKingSquare = StaticPositionUtility.calculateKingSquare(staticPosition,
         havingMove.getOppositeSide());
-    final Set<Square> opponentKingThreatingSquareSet = KingNonCastlingEmptyBoardSquares
+    final Set<Square> opponentKingAttackedSquareSet = KingNonCastlingEmptyBoardSquares
         .getKingSquares(opponentKingSquare);
-    return opponentKingThreatingSquareSet.contains(toSquare);
+    return opponentKingAttackedSquareSet.contains(toSquare);
   }
 
   private static boolean calculateIsEmptyBoardMove(Square toSquare, Set<EmptyBoardMove> emptyBoardMoves) {

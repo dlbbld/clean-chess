@@ -17,10 +17,9 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MovementCheck;
 
 /**
- * Per-{@link MovementCheck}-value tests for {@link ChessRuleAnalyzer#analyzeMovement}.
- * Each enum value (including {@code SUCCESS}) has at least one test method exercising it. An
- * {@code @AfterAll} hook verifies the entire enum is covered — adding a new value without a test
- * fails the build.
+ * Per-{@link MovementCheck}-value tests for {@link ChessRuleAnalyzer#analyzeMovement}. Each enum value (including
+ * {@code SUCCESS}) has at least one test method exercising it. An {@code @AfterAll} hook verifies the entire enum is
+ * covered — adding a new value without a test fails the build.
  */
 class TestMovementCheck implements EnumConstants {
 
@@ -113,16 +112,14 @@ class TestMovementCheck implements EnumConstants {
   @Test
   void testPawnDiagonalOwnPiece() {
     // pawn diagonal to own piece
-    check("4k3/8/8/8/8/3N4/4P3/4K3 w - - 0 1", new MoveSpecification(E2, D3),
-        MovementCheck.PAWN_DIAGONAL_OWN_PIECE);
+    check("4k3/8/8/8/8/3N4/4P3/4K3 w - - 0 1", new MoveSpecification(E2, D3), MovementCheck.PAWN_DIAGONAL_OWN_PIECE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPawnEnPassantWrongRank() {
     // white pawn on e4 attempts diagonal to empty d5: rank 5 is not en passant rank for white
-    check("4k3/8/8/8/4P3/8/8/4K3 w - - 0 1", new MoveSpecification(E4, D5),
-        MovementCheck.PAWN_EN_PASSANT_WRONG_RANK);
+    check("4k3/8/8/8/4P3/8/8/4K3 w - - 0 1", new MoveSpecification(E4, D5), MovementCheck.PAWN_EN_PASSANT_WRONG_RANK);
   }
 
   @SuppressWarnings("static-method")
@@ -137,8 +134,7 @@ class TestMovementCheck implements EnumConstants {
   @Test
   void testKingCapturesGuardedPiece() {
     // king captures bishop on d2 but bishop is guarded by another bishop on a5
-    check("4k3/8/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2),
-        MovementCheck.KING_CAPTURES_GUARDED_PIECE);
+    check("4k3/8/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2), MovementCheck.KING_CAPTURES_GUARDED_PIECE);
   }
 
   @SuppressWarnings("static-method")
@@ -159,20 +155,20 @@ class TestMovementCheck implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingMovesToThreatenedEmptySquare() {
+  void testKingMovesToAttackedEmptySquare() {
     // king moves to f1, attacked by black rook on f8 — empty destination
     check("4kr2/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, F1),
-        MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE);
+        MovementCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingMovesToThreatenedEmptySquareDiscoveredCheck() {
+  void testKingMovesToAttackedEmptySquareDiscoveredCheck() {
     // discovered-check-on-self: king on g4 in check from rook on a4, attempts to step away on rank
-    // 4 to h4. Pre-move threatenedSquares does not include h4 (king blocks on rank 4); post-move
+    // 4 to h4. Pre-move attackedSquares does not include h4 (king blocks on rank 4); post-move
     // it is attacked.
     check("7k/8/8/8/r5K1/8/8/8 w - - 0 1", new MoveSpecification(G4, H4),
-        MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE);
+        MovementCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE);
   }
 
   @AfterAll

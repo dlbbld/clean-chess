@@ -92,7 +92,7 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
           MovementCheck.PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE;
       case KING_CAPTURES_GUARDED_PIECE -> MovementCheck.KING_CAPTURES_GUARDED_PIECE;
       case KING_MOVES_NEXT_TO_OPPONENT_KING -> MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
-      case KING_MOVES_TO_THREATENED_EMPTY_SQUARE -> MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE;
+      case KING_MOVES_TO_ATTACKED_EMPTY_SQUARE -> MovementCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE;
       default -> null;
     };
   }

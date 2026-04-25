@@ -436,7 +436,7 @@ class TestSanValidationProblemMessage {
           "The pawn cannot capture on square c3 because it is occupied by an own piece.");
     }
 
-    // DESTINATION_PAWN_CAPTURE_KING: legal position — white pawn e2 doesn't threaten d5; SAN "exd5" would target
+    // DESTINATION_PAWN_CAPTURE_KING: legal position — white pawn e2 doesn't attack d5; SAN "exd5" would target
     // d5 where the black king sits. Movement layer passes (file change adjacent, rank progression OK), exists check
     // passes (pawn on e-file), destination check fires because d5 has opponent king.
     {

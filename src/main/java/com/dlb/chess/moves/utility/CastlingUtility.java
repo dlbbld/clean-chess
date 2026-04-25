@@ -22,7 +22,7 @@ import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 
 public abstract class CastlingUtility implements EnumConstants {
@@ -111,16 +111,16 @@ public abstract class CastlingUtility implements EnumConstants {
   public static CastlingCheck calculateQueenSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
 
     final Side oppositeSide = havingMove.getOppositeSide();
-    final Set<Square> threatenedSquares = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,
+    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
         oppositeSide);
 
-    if (threatenedSquares.contains(calculateKingOriginalSquare(havingMove))) {
+    if (attackedSquares.contains(calculateKingOriginalSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_IN_CHECK;
     }
-    if (threatenedSquares.contains(calculateQueenSideKingTravelOverSquare(havingMove))) {
+    if (attackedSquares.contains(calculateQueenSideKingTravelOverSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK;
     }
-    if (threatenedSquares.contains(calculateQueenSideKingDestinationSquare(havingMove))) {
+    if (attackedSquares.contains(calculateQueenSideKingDestinationSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK;
     }
     return CastlingCheck.SUCCESS;
@@ -129,16 +129,16 @@ public abstract class CastlingUtility implements EnumConstants {
   public static CastlingCheck calculateKingSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
 
     final Side oppositeSide = havingMove.getOppositeSide();
-    final Set<Square> threatenedSquares = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,
+    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
         oppositeSide);
 
-    if (threatenedSquares.contains(calculateKingOriginalSquare(havingMove))) {
+    if (attackedSquares.contains(calculateKingOriginalSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_IN_CHECK;
     }
-    if (threatenedSquares.contains(calculateKingSideKingTravelOverSquare(havingMove))) {
+    if (attackedSquares.contains(calculateKingSideKingTravelOverSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK;
     }
-    if (threatenedSquares.contains(calculateKingSideKingDestinationSquare(havingMove))) {
+    if (attackedSquares.contains(calculateKingSideKingDestinationSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK;
     }
     return CastlingCheck.SUCCESS;

@@ -41,7 +41,7 @@ public enum MovementCheck {
 
   KING_CAPTURES_GUARDED_PIECE,
   KING_MOVES_NEXT_TO_OPPONENT_KING,
-  KING_MOVES_TO_THREATENED_EMPTY_SQUARE;
+  KING_MOVES_TO_ATTACKED_EMPTY_SQUARE;
 
   // Translator to the broader MoveCheck enum, used when a MovementCheck failure is surfaced
   // through InvalidMoveException for MoveCheck public-API stability.
@@ -66,7 +66,7 @@ public enum MovementCheck {
           MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE;
       case KING_CAPTURES_GUARDED_PIECE -> MoveCheck.KING_CAPTURES_GUARDED_PIECE;
       case KING_MOVES_NEXT_TO_OPPONENT_KING -> MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
-      case KING_MOVES_TO_THREATENED_EMPTY_SQUARE -> MoveCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE;
+      case KING_MOVES_TO_ATTACKED_EMPTY_SQUARE -> MoveCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE;
       case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS is not a movement-refusal reason");
     };
   }

@@ -9,15 +9,15 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 
 /**
- * Surface-level smoke tests for {@link com.dlb.chess.board.ValidateNewMove#validateNewMove}: one
- * representative scenario per public {@link MoveCheck} failure value, exercising the full pipeline
- * (Board → ValidateNewMove → InvalidMoveException → MoveCheck).
+ * Surface-level smoke tests for {@link com.dlb.chess.board.ValidateNewMove#validateNewMove}: one representative
+ * scenario per public {@link MoveCheck} failure value, exercising the full pipeline (Board → ValidateNewMove →
+ * InvalidMoveException → MoveCheck).
  *
  * <p>
- * Comprehensive scenario coverage lives in {@code TestChessRuleAnalyzerScenarios} (analyzer-level
- * tests). Per-enum-value exhaustiveness checks live in {@code TestMovementCheck} and
- * {@code TestKingSafetyCheck}. Tests here verify that the surface translation/wiring works for
- * every category, including the categories the analyzer does not handle (MOVE_SPEC_*, KING_CASTLING_*).
+ * Comprehensive scenario coverage lives in {@code TestChessRuleAnalyzerScenarios} (analyzer-level tests).
+ * Per-enum-value exhaustiveness checks live in {@code TestMovementCheck} and {@code TestKingSafetyCheck}. Tests here
+ * verify that the surface translation/wiring works for every category, including the categories the analyzer does not
+ * handle (MOVE_SPEC_*, KING_CASTLING_*).
  */
 class TestValidateNewMove extends AbstractTestValidateNewMove {
 
@@ -117,24 +117,22 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   @Test
   void testKingCapturesGuardedPiece() {
-    check("4k3/8/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2),
-        MoveCheck.KING_CAPTURES_GUARDED_PIECE);
+    check("4k3/8/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2), MoveCheck.KING_CAPTURES_GUARDED_PIECE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testKingMovesNextToOpponentKing() {
-    check("8/8/8/8/8/4k3/8/4K3 w - - 0 1", new MoveSpecification(E1, E2),
-        MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
+    check("8/8/8/8/8/4k3/8/4K3 w - - 0 1", new MoveSpecification(E1, E2), MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
   }
 
-  // --- KING_MOVES_TO_THREATENED_EMPTY_SQUARE (king-move to attacked empty destination) ---
+  // --- KING_MOVES_TO_ATTACKED_EMPTY_SQUARE (king-move to attacked empty destination) ---
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingMovesToThreatenedEmptySquare() {
+  void testKingMovesToAttackedEmptySquare() {
     check("4kr2/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, F1),
-        MoveCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE);
+        MoveCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE);
   }
 
   // --- ALL_BUT_KING_KING_* (non-king-move king-safety) ---
@@ -142,8 +140,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   @Test
   void testAllButKingKingLeftInCheck() {
-    check("4r2k/8/8/8/2N5/8/8/4K3 w - - 0 1", new MoveSpecification(C4, D6),
-        MoveCheck.ALL_BUT_KING_KING_LEFT_IN_CHECK);
+    check("4r2k/8/8/8/2N5/8/8/4K3 w - - 0 1", new MoveSpecification(C4, D6), MoveCheck.ALL_BUT_KING_KING_LEFT_IN_CHECK);
   }
 
   @SuppressWarnings("static-method")
@@ -179,8 +176,8 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   @Test
   void testKingCastlingTemporaryKingTravelsThroughCheck() {
-    check("rnb1kbnr/pppp2pp/5q2/8/2B5/7N/PPPP2PP/RNBQK2R w KQkq - 0 25",
-        new MoveSpecification(CastlingMove.KING_SIDE), MoveCheck.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK);
+    check("rnb1kbnr/pppp2pp/5q2/8/2B5/7N/PPPP2PP/RNBQK2R w KQkq - 0 25", new MoveSpecification(CastlingMove.KING_SIDE),
+        MoveCheck.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK);
   }
 
   @SuppressWarnings("static-method")

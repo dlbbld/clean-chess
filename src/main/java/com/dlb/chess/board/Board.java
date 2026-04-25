@@ -48,7 +48,7 @@ import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.validate.SanValidation;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 
 public class Board extends AbstractBoard {
 
@@ -95,14 +95,14 @@ public class Board extends AbstractBoard {
         initialCastlingRight, initialEnPassantCaptureTargetSquare);
     this.legalMoveListSet.add(legalMoveSet);
 
-    final Set<Square> threatenedSquareSet = AbstractThreatenSquares.calculateThreatenedSquares(initialStaticPosition,
+    final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(initialStaticPosition,
         initialHavingMove.getOppositeSide());
 
     final Square kingSquareHavingMove = StaticPositionUtility.calculateKingSquare(initialStaticPosition,
         initialHavingMove);
 
     this.isCheckList = new ArrayList<>();
-    final var isCheck = threatenedSquareSet.contains(kingSquareHavingMove);
+    final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
     this.isCheckmateList = new ArrayList<>();
@@ -221,12 +221,12 @@ public class Board extends AbstractBoard {
         afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
     this.legalMoveListSet.add(legalMovesAfterMove);
 
-    final Set<Square> threatenedSquareSet = AbstractThreatenSquares.calculateThreatenedSquares(afterStaticPosition,
+    final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(afterStaticPosition,
         afterHavingMove.getOppositeSide());
 
     final Square kingSquareHavingMove = StaticPositionUtility.calculateKingSquare(afterStaticPosition, afterHavingMove);
 
-    final var isCheck = threatenedSquareSet.contains(kingSquareHavingMove);
+    final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
     final var isCheckmate = isCheck && legalMovesAfterMove.isEmpty();

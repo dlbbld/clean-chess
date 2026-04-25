@@ -1,4 +1,4 @@
-package com.dlb.chess.squares.to.threaten;
+package com.dlb.chess.squares.to.attacked;
 
 import java.util.Set;
 
@@ -7,9 +7,9 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.squares.to.range.RookRangeSquares;
 
-public class RookThreatenSquares extends AbstractThreatenSquares {
+public class RookAttackedSquares extends AbstractAttackedSquares {
 
-  public static Set<Square> calculateRookThreatenSquares(StaticPosition staticPosition, Square fromSquare,
+  public static Set<Square> calculateRookAttackedSquares(StaticPosition staticPosition, Square fromSquare,
       Side havingMove) {
 
     checkPiece(staticPosition, havingMove, fromSquare, ROOK);
