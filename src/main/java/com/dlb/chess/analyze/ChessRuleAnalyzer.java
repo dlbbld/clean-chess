@@ -24,7 +24,6 @@ import com.dlb.chess.squares.emptyboard.KingNonCastlingEmptyBoardSquares;
 import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
 import com.dlb.chess.squares.to.potential.QueenPotentialToSquares;
 import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
 
 /**
  * Stateless chess-rules analysis shared by both validation pipelines (MoveSpecification and SAN).
@@ -228,7 +227,6 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
       MoveSpecification moveSpecification) {
     final Square fromSquare = moveSpecification.fromSquare();
     final Square toSquare = moveSpecification.toSquare();
-    final Side oppositeSide = havingMove.getOppositeSide();
     final Piece pieceOnToSquare = staticPosition.get(toSquare);
 
     final Set<EmptyBoardMove> emptyBoardMoves = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMoves(KING,
@@ -242,10 +240,12 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     if (calculateIsMoveNextToOpponentKing(staticPosition, havingMove, toSquare)) {
       return MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
     }
-    final Set<Square> threatenedSquares = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,
-        oppositeSide);
-    if (threatenedSquares.contains(toSquare) && pieceOnToSquare != Piece.NONE
-        && pieceOnToSquare.getSide() == oppositeSide) {
+    // Use post-move attack detection rather than pre-move threatenedSquares: when the king moves
+    // along an opponent long-range piece's line, the king itself was the blocker; pre-move
+    // threatenedSquares would not include the destination, but the king IS attacked there after
+    // moving off its current square.
+    if (pieceOnToSquare != Piece.NONE && pieceOnToSquare.getSide() == havingMove.getOppositeSide()
+        && StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
       return MovementCheck.KING_CAPTURES_GUARDED_PIECE;
     }
     return MovementCheck.SUCCESS;

@@ -1837,6 +1837,14 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
       final MoveSpecification move = new MoveSpecification(D2, C3);
       check(fen, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
     }
+
+    // knight failure
+    {
+      final var fen = "2k5/3r4/8/8/3K1N2/3n4/8/8 w - - 0 1";
+      final MoveSpecification move = new MoveSpecification(D4, D3);
+      check(fen, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
+    }
+
     // knight
     {
       final var fen = "rnb1kb2/p1qpppp1/8/7p/3P4/5Kn1/P3PPPP/RNBQ1BNR w q - 6 25";
