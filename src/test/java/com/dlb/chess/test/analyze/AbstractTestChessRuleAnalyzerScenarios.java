@@ -3,6 +3,8 @@ package com.dlb.chess.test.analyze;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
@@ -36,14 +38,14 @@ import com.dlb.chess.exceptions.InvalidMoveException;
 public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumConstants {
 
   static void check(ApiBoard board, MoveSpecification move, MoveCheck expectedMoveCheck) {
-    final MovementCheck expectedMc = toMovementCheck(expectedMoveCheck);
+    final @Nullable MovementCheck expectedMc = toMovementCheck(expectedMoveCheck);
     if (expectedMc != null) {
       final MovementCheck actual = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
           board.getEnPassantCaptureTargetSquare(), move);
       assertEquals(expectedMc, actual);
       return;
     }
-    final KingSafetyCheck expectedKs = toKingSafetyCheck(expectedMoveCheck);
+    final @Nullable KingSafetyCheck expectedKs = toKingSafetyCheck(expectedMoveCheck);
     if (expectedKs != null) {
       // king-safety presupposes movement passes
       final MovementCheck actualMc = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
@@ -69,7 +71,7 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
     check(new Board(fen), move, expectedMoveCheck);
   }
 
-  private static MovementCheck toMovementCheck(MoveCheck mc) {
+  private static @Nullable MovementCheck toMovementCheck(MoveCheck mc) {
     return switch (mc) {
       case MOVEMENT_NOT_POSSIBLE -> MovementCheck.NOT_POSSIBLE;
       case MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE -> MovementCheck.TO_SQUARE_OCCUPIED_BY_OWN_PIECE;
@@ -94,7 +96,7 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
     };
   }
 
-  private static KingSafetyCheck toKingSafetyCheck(MoveCheck mc) {
+  private static @Nullable KingSafetyCheck toKingSafetyCheck(MoveCheck mc) {
     return switch (mc) {
       case KING_KING_EXPOSED_TO_CHECK -> KingSafetyCheck.KING_EXPOSED_TO_CHECK;
       case KING_KING_LEFT_IN_CHECK_LEGAL_MOVES -> KingSafetyCheck.KING_LEFT_IN_CHECK_LEGAL_MOVES;

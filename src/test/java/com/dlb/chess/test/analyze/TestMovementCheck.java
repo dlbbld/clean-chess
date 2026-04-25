@@ -23,7 +23,7 @@ import com.dlb.chess.enums.MovementCheck;
  */
 class TestMovementCheck implements EnumConstants {
 
-  private static final Set<MovementCheck> COVERED = EnumSet.noneOf(MovementCheck.class);
+  @SuppressWarnings("null") private static final Set<MovementCheck> COVERED = EnumSet.noneOf(MovementCheck.class);
 
   private static MovementCheck analyze(ApiBoard board, MoveSpecification move) {
     final MovementCheck result = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
@@ -156,6 +156,7 @@ class TestMovementCheck implements EnumConstants {
         MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
   }
 
+  @SuppressWarnings("null")
   @AfterAll
   static void verifyExhaustive() {
     final Set<MovementCheck> missing = EnumSet.allOf(MovementCheck.class);
