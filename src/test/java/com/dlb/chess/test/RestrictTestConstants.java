@@ -33,4 +33,8 @@ public abstract class RestrictTestConstants {
   // Long running tests — excluded entirely via JUnit assumeFalse
   public static final boolean IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST = true;
 
+  // TestUnwinnabilityFull.testPgnFileExpected analyzes one heavy PGN (~10 seconds). Only useful
+  // when changes touch the unwinnability-full analyzer; flip to false locally to run.
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST = true;
+
 }
