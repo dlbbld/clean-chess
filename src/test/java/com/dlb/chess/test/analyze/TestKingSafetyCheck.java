@@ -28,7 +28,7 @@ class TestKingSafetyCheck implements EnumConstants {
 
   private static KingSafetyCheck analyze(ApiBoard board, MoveSpecification move) {
     final KingSafetyCheck result = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(), board.getHavingMove(),
-        board.getLegalMoveSet(), move);
+        move);
     COVERED.add(result);
     return result;
   }
@@ -60,32 +60,6 @@ class TestKingSafetyCheck implements EnumConstants {
     // pinned white knight on e2 between own king e1 and black rook e8; moving it exposes the king
     check("4r2k/8/8/8/8/8/4N3/4K3 w - - 0 1", new MoveSpecification(E2, C3),
         KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testKingExposedToCheck() {
-    // king not in check; moves to f1, attacked by black rook on f8
-    check("4kr2/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, F1),
-        KingSafetyCheck.KING_EXPOSED_TO_CHECK);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testKingLeftInCheckLegalMoves() {
-    // king on e1 in check from black rook on e8; king moves to e2 still on e-file → still in check;
-    // other king escape moves exist (d1, d2, f1, f2)
-    check("4r2k/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, E2),
-        KingSafetyCheck.KING_LEFT_IN_CHECK_LEGAL_MOVES);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testKingLeftInCheckNoLegalMoves() {
-    // white king a1 in check from black rook a8; black rook b8 covers b-file. Adjacent squares
-    // a2, b1, b2 are all attacked → no legal king escape
-    check("rr5k/8/8/8/8/8/8/K7 w - - 0 1", new MoveSpecification(A1, A2),
-        KingSafetyCheck.KING_LEFT_IN_CHECK_NO_LEGAL_MOVES);
   }
 
   @AfterAll

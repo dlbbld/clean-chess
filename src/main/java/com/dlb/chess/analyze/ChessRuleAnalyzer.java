@@ -15,7 +15,6 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
@@ -72,7 +71,7 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
   }
 
   public static KingSafetyCheck analyzeKingSafety(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMoveSet, MoveSpecification moveSpecification) {
+      MoveSpecification moveSpecification) {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       throw new ProgrammingMistakeException("Castling king-safety is handled by CastlingCheck");
     }
@@ -80,29 +79,17 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     if (movingPiece == Piece.NONE || movingPiece.getSide() != havingMove) {
       throw new ProgrammingMistakeException("From-square does not hold an own piece");
     }
+    // King moves: their king-safety is fully covered by analyzeMovement (KING_CAPTURES_GUARDED_PIECE
+    // / KING_MOVES_TO_THREATENED_EMPTY_SQUARE). The was-in-check distinction has no analog for the
+    // king itself, so this method only handles non-king moves.
+    if (movingPiece.getPieceType() == KING) {
+      return KingSafetyCheck.SUCCESS;
+    }
     if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
       return KingSafetyCheck.SUCCESS;
     }
     final boolean wasInCheck = StaticPositionUtility.calculateIsCheck(staticPosition, havingMove);
-    final boolean isKingMove = movingPiece.getPieceType() == KING;
-    if (!isKingMove) {
-      return wasInCheck ? KingSafetyCheck.NON_KING_LEFT_IN_CHECK : KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
-    }
-    if (!wasInCheck) {
-      return KingSafetyCheck.KING_EXPOSED_TO_CHECK;
-    }
-    final Piece king = Piece.calculateKingPiece(havingMove);
-    return calculateHasKingMove(legalMoveSet, king) ? KingSafetyCheck.KING_LEFT_IN_CHECK_LEGAL_MOVES
-        : KingSafetyCheck.KING_LEFT_IN_CHECK_NO_LEGAL_MOVES;
-  }
-
-  private static boolean calculateHasKingMove(Set<LegalMove> legalMoves, Piece king) {
-    for (final LegalMove legalMove : legalMoves) {
-      if (legalMove.movingPiece() == king) {
-        return true;
-      }
-    }
-    return false;
+    return wasInCheck ? KingSafetyCheck.NON_KING_LEFT_IN_CHECK : KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
   }
 
   private static MovementCheck analyzePawn(StaticPosition staticPosition, Side havingMove,
@@ -240,15 +227,18 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     if (calculateIsMoveNextToOpponentKing(staticPosition, havingMove, toSquare)) {
       return MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
     }
-    // Use post-move attack detection rather than pre-move threatenedSquares: when the king moves
+    // Post-move attack detection (rather than pre-move threatenedSquares): when the king moves
     // along an opponent long-range piece's line, the king itself was the blocker; pre-move
     // threatenedSquares would not include the destination, but the king IS attacked there after
     // moving off its current square.
-    if (pieceOnToSquare != Piece.NONE && pieceOnToSquare.getSide() == havingMove.getOppositeSide()
-        && StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+      return MovementCheck.SUCCESS;
+    }
+    if (pieceOnToSquare != Piece.NONE && pieceOnToSquare.getSide() == havingMove.getOppositeSide()) {
       return MovementCheck.KING_CAPTURES_GUARDED_PIECE;
     }
-    return MovementCheck.SUCCESS;
+    // Empty destination, attacked after move — discriminated from KING_CAPTURES_GUARDED_PIECE.
+    return MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE;
   }
 
   private static boolean calculateIsMoveNextToOpponentKing(StaticPosition staticPosition, Side havingMove,

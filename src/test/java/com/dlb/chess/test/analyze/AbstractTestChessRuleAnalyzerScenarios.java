@@ -52,7 +52,7 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
           board.getEnPassantCaptureTargetSquare(), move);
       assertEquals(MovementCheck.SUCCESS, actualMc, "movement should pass before king-safety check");
       final KingSafetyCheck actualKs = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(),
-          board.getHavingMove(), board.getLegalMoveSet(), move);
+          board.getHavingMove(), move);
       assertEquals(expectedKs, actualKs);
       return;
     }
@@ -92,15 +92,13 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
           MovementCheck.PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE;
       case KING_CAPTURES_GUARDED_PIECE -> MovementCheck.KING_CAPTURES_GUARDED_PIECE;
       case KING_MOVES_NEXT_TO_OPPONENT_KING -> MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
+      case KING_MOVES_TO_THREATENED_EMPTY_SQUARE -> MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE;
       default -> null;
     };
   }
 
   private static @Nullable KingSafetyCheck toKingSafetyCheck(MoveCheck mc) {
     return switch (mc) {
-      case KING_KING_EXPOSED_TO_CHECK -> KingSafetyCheck.KING_EXPOSED_TO_CHECK;
-      case KING_KING_LEFT_IN_CHECK_LEGAL_MOVES -> KingSafetyCheck.KING_LEFT_IN_CHECK_LEGAL_MOVES;
-      case KING_KING_LEFT_IN_CHECK_NO_LEGAL_MOVES -> KingSafetyCheck.KING_LEFT_IN_CHECK_NO_LEGAL_MOVES;
       case ALL_BUT_KING_KING_LEFT_IN_CHECK -> KingSafetyCheck.NON_KING_LEFT_IN_CHECK;
       case ALL_BUT_KING_KING_EXPOSED_TO_CHECK -> KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
       default -> null;

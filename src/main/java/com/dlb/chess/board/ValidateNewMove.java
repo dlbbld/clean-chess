@@ -179,6 +179,7 @@ public class ValidateNewMove implements EnumConstants {
           + " was immediately played before, which is not the case";
       case KING_CAPTURES_GUARDED_PIECE -> "the king cannot capture this piece because it is guarded by another piece";
       case KING_MOVES_NEXT_TO_OPPONENT_KING -> "the king can not be moved next to the opponent king";
+      case KING_MOVES_TO_THREATENED_EMPTY_SQUARE -> "the king cannot move to a square that is attacked";
       case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS has no message");
     };
   }
@@ -186,7 +187,7 @@ public class ValidateNewMove implements EnumConstants {
   private static void validateKingSafety(ApiBoard board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final KingSafetyCheck kingSafetyCheck = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(),
-        board.getHavingMove(), board.getLegalMoveSet(), moveSpecification);
+        board.getHavingMove(), moveSpecification);
     if (kingSafetyCheck == KingSafetyCheck.SUCCESS) {
       return;
     }
@@ -197,8 +198,6 @@ public class ValidateNewMove implements EnumConstants {
     return switch (check) {
       case NON_KING_LEFT_IN_CHECK -> "it would leave the own king in check";
       case NON_KING_EXPOSED_TO_CHECK -> "it would expose the own king to check";
-      case KING_EXPOSED_TO_CHECK -> "it exposes the king to check";
-      case KING_LEFT_IN_CHECK_LEGAL_MOVES, KING_LEFT_IN_CHECK_NO_LEGAL_MOVES -> "it leaves the king in check.";
       case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS has no message");
     };
   }

@@ -128,27 +128,13 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
         MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
   }
 
-  // --- KING_KING_* (king-move king-safety) ---
+  // --- KING_MOVES_TO_THREATENED_EMPTY_SQUARE (king-move to attacked empty destination) ---
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingKingExposedToCheck() {
+  void testKingMovesToThreatenedEmptySquare() {
     check("4kr2/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, F1),
-        MoveCheck.KING_KING_EXPOSED_TO_CHECK);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testKingKingLeftInCheckLegalMoves() {
-    check("4r2k/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, E2),
-        MoveCheck.KING_KING_LEFT_IN_CHECK_LEGAL_MOVES);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testKingKingLeftInCheckNoLegalMoves() {
-    check("rr5k/8/8/8/8/8/8/K7 w - - 0 1", new MoveSpecification(A1, A2),
-        MoveCheck.KING_KING_LEFT_IN_CHECK_NO_LEGAL_MOVES);
+        MoveCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE);
   }
 
   // --- ALL_BUT_KING_KING_* (non-king-move king-safety) ---

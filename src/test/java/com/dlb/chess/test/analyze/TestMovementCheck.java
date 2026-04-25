@@ -157,6 +157,24 @@ class TestMovementCheck implements EnumConstants {
         MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
   }
 
+  @SuppressWarnings("static-method")
+  @Test
+  void testKingMovesToThreatenedEmptySquare() {
+    // king moves to f1, attacked by black rook on f8 — empty destination
+    check("4kr2/8/8/8/8/8/8/4K3 w - - 0 1", new MoveSpecification(E1, F1),
+        MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testKingMovesToThreatenedEmptySquareDiscoveredCheck() {
+    // discovered-check-on-self: king on g4 in check from rook on a4, attempts to step away on rank
+    // 4 to h4. Pre-move threatenedSquares does not include h4 (king blocks on rank 4); post-move
+    // it is attacked.
+    check("7k/8/8/8/r5K1/8/8/8 w - - 0 1", new MoveSpecification(G4, H4),
+        MovementCheck.KING_MOVES_TO_THREATENED_EMPTY_SQUARE);
+  }
+
   @AfterAll
   static void verifyExhaustive() {
     final Set<MovementCheck> missing = EnumSet.allOf(MovementCheck.class);
