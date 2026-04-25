@@ -2,7 +2,6 @@ package com.dlb.chess.test.pgnall;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.YawnOutput;
@@ -21,10 +20,6 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    if (Analyzer.IS_CALCULATE_UNWINNABLE) {
-      testUnwinnableFull(analysis, testCase);
-      testUnwinnableQuick(analysis, testCase);
-    }
     return true;
   }
 
@@ -63,16 +58,6 @@ public abstract class AbstractPgnTest {
 
   private static void testInsufficientMaterial(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.insufficientMaterial(), analysis.insufficientMaterial());
-  }
-
-  private static void testUnwinnableFull(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableFullWhite(), analysis.unwinnableFullWhite());
-    assertEquals(testCase.unwinnableFullBlack(), analysis.unwinnableFullBlack());
-  }
-
-  private static void testUnwinnableQuick(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableQuickWhite(), analysis.unwinnableQuickWhite());
-    assertEquals(testCase.unwinnableQuickBlack(), analysis.unwinnableQuickBlack());
   }
 
 }

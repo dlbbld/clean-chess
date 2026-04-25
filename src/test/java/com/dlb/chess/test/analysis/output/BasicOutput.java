@@ -31,7 +31,6 @@ public class BasicOutput {
   private static final String ATTRIBUTE_MAX_YAWN_SEQUENCE = "Max yawn sequence";
   private static final String ATTRIBUTE_BOARD_RESULT_NAME = "Board result";
   private static final String ATTRIBUTE_INSUFFICIENT_MATERIAL = "Insufficient material";
-  private static final String ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE = "Unwinnable quick not having the move";
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
@@ -79,7 +78,6 @@ public class BasicOutput {
 
     if (IS_FULL) {
       output.add(calculateOutputLastPositionEvaluation(analysis));
-      output.add(calculateOutputWinnableNotHavingMove(analysis));
       output.add(calculateOutputInsufficientMaterial(analysis));
     }
 
@@ -96,10 +94,6 @@ public class BasicOutput {
 
   private static String calculateOutputInsufficientMaterial(Analysis analysis) {
     return calculateOutput(ATTRIBUTE_INSUFFICIENT_MATERIAL, analysis.insufficientMaterial().getDescription());
-  }
-
-  private static String calculateOutputWinnableNotHavingMove(Analysis analysis) {
-    return calculateOutput(ATTRIBUTE_UNWINNABLE_QUICK_NOT_HAVING_MOVE, analysis.unwinnableQuickBlack().getIdentifier());
   }
 
   private static String calculateOutputFirstCapture(Analysis analysis) {

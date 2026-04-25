@@ -18,16 +18,8 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.mobility.Mobility;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public class Analyzer extends AnalyzerPrint {
-
-  // we set to false for faster testing runs
-  public static final boolean IS_CALCULATE_UNWINNABLE = false;
 
   public static void printAnalysis(String pgn) {
     // delegated to package protected method for class organization
@@ -83,31 +75,6 @@ public class Analyzer extends AnalyzerPrint {
     final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
 
-    // for performance we calculate and reuse the mobility solution
-    final var mobilitySolution = Mobility.mobility(board);
-
-    final UnwinnableFull unwinnableFullWhite;
-    final UnwinnableFull unwinnableFullBlack;
-
-    final UnwinnableQuick unwinnableQuickWhite;
-    final UnwinnableQuick unwinnableQuickBlack;
-
-    if (IS_CALCULATE_UNWINNABLE) {
-      unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE, true, mobilitySolution)
-          .unwinnableFull();
-      unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK, true, mobilitySolution)
-          .unwinnableFull();
-
-      unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE, true, mobilitySolution);
-      unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK, true, mobilitySolution);
-    } else {
-      unwinnableFullWhite = UnwinnableFull.UNDETERMINED;
-      unwinnableFullBlack = UnwinnableFull.UNDETERMINED;
-
-      unwinnableQuickWhite = UnwinnableQuick.POSSIBLY_WINNABLE;
-      unwinnableQuickBlack = UnwinnableQuick.POSSIBLY_WINNABLE;
-    }
-
     final String fen = board.getFen();
 
     if (!invariant.equals(board.getFen())) {
@@ -118,8 +85,7 @@ public class Analyzer extends AnalyzerPrint {
         yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
         hasFiftyMoveRule, hasSeventyFiveMoveRule, isGameContinuedOverFivefoldRepetition,
         isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
-        insufficientMaterial, unwinnableFullWhite, unwinnableFullBlack, unwinnableQuickWhite, unwinnableQuickBlack, fen,
-        board);
+        insufficientMaterial, fen, board);
   }
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {
