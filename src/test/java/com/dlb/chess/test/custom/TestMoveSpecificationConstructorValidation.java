@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PromotionPieceType;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 
@@ -17,28 +16,23 @@ class TestMoveSpecificationConstructorValidation {
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    checkException(Side.NONE, Square.A1, Square.A2);
-    checkException(Side.WHITE, Square.NONE, Square.A2);
-    checkException(Side.WHITE, Square.A1, Square.NONE);
+    checkException(Square.NONE, Square.A2);
+    checkException(Square.A1, Square.NONE);
+    checkException(Square.A1, Square.A1);
 
-    checkException(Side.WHITE, Square.A1, Square.A1);
+    checkException(Square.NONE, Square.A2, PromotionPieceType.BISHOP);
+    checkException(Square.A1, Square.NONE, PromotionPieceType.BISHOP);
+    checkException(Square.A1, Square.A2, PromotionPieceType.NONE);
+    checkException(Square.A1, Square.A1, PromotionPieceType.BISHOP);
 
-    checkException(Side.NONE, Square.A1, Square.A2, PromotionPieceType.BISHOP);
-    checkException(Side.WHITE, Square.NONE, Square.A2, PromotionPieceType.BISHOP);
-    checkException(Side.WHITE, Square.A1, Square.NONE, PromotionPieceType.BISHOP);
-    checkException(Side.WHITE, Square.A1, Square.A2, PromotionPieceType.NONE);
-
-    checkException(Side.WHITE, Square.A1, Square.A1, PromotionPieceType.BISHOP);
-
-    checkException(Side.NONE, CastlingMove.KING_SIDE);
-    checkException(Side.WHITE, CastlingMove.NONE);
+    checkException(CastlingMove.NONE);
   }
 
   @SuppressWarnings("unused")
-  private static void checkException(Side havingMove, Square fromSquare, Square toSquare) {
+  private static void checkException(Square fromSquare, Square toSquare) {
     boolean isException;
     try {
-      new MoveSpecification(havingMove, fromSquare, toSquare);
+      new MoveSpecification(fromSquare, toSquare);
       isException = false;
     } catch (final IllegalArgumentException iae) {
       isException = true;
@@ -47,11 +41,10 @@ class TestMoveSpecificationConstructorValidation {
   }
 
   @SuppressWarnings("unused")
-  private static void checkException(Side havingMove, Square fromSquare, Square toSquare,
-      PromotionPieceType promotionPieceType) {
+  private static void checkException(Square fromSquare, Square toSquare, PromotionPieceType promotionPieceType) {
     boolean isException;
     try {
-      new MoveSpecification(havingMove, fromSquare, toSquare, promotionPieceType);
+      new MoveSpecification(fromSquare, toSquare, promotionPieceType);
       isException = false;
     } catch (final IllegalArgumentException iae) {
       isException = true;
@@ -60,10 +53,10 @@ class TestMoveSpecificationConstructorValidation {
   }
 
   @SuppressWarnings("unused")
-  private static void checkException(Side havingMove, CastlingMove castlingMove) {
+  private static void checkException(CastlingMove castlingMove) {
     boolean isException;
     try {
-      new MoveSpecification(havingMove, castlingMove);
+      new MoveSpecification(castlingMove);
       isException = false;
     } catch (final IllegalArgumentException iae) {
       isException = true;

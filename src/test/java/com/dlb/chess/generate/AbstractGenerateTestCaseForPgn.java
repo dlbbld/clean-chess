@@ -11,8 +11,6 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.test.analysis.output.RepetitionOutput;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
@@ -73,33 +71,6 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(", ");
 
     final var fen = analysis.fen();
-
-    // we use the quick for the full so it does not take too long
-    // we take into account of introducing some rare errors here
-    // they will be detected on periodic checks
-    final UnwinnableFull unwinnableFullResultWhite = analysis.unwinnableFullWhite();
-    result.append(UnwinnableFull.class.getSimpleName());
-    result.append(".");
-    result.append(unwinnableFullResultWhite.name());
-    result.append(", ");
-
-    final UnwinnableFull unwinnableFullResultBlack = analysis.unwinnableFullBlack();
-    result.append(UnwinnableFull.class.getSimpleName());
-    result.append(".");
-    result.append(unwinnableFullResultBlack.name());
-    result.append(", ");
-
-    final UnwinnableQuick unwinnableQuickResultWhite = analysis.unwinnableQuickWhite();
-    result.append(UnwinnableQuick.class.getSimpleName());
-    result.append(".");
-    result.append(unwinnableQuickResultWhite.name());
-    result.append(", ");
-
-    final UnwinnableQuick unwinnableQuickResultBlack = analysis.unwinnableQuickBlack();
-    result.append(UnwinnableQuick.class.getSimpleName());
-    result.append(".");
-    result.append(unwinnableQuickResultBlack.name());
-    result.append(", ");
 
     result.append("\"");
     result.append(fen);

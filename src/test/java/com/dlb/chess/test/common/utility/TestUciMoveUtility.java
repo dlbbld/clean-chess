@@ -12,6 +12,7 @@ import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
+import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.test.custom.model.UciMoveTest;
@@ -90,13 +91,15 @@ class TestUciMoveUtility {
 
     for (final UciMoveTest test : list) {
       board.performMove(test.san());
-      final MoveSpecification moveSpecification = board.getLastMove().moveSpecification();
+      final LegalMove lastMove = board.getLastMove();
+      final MoveSpecification moveSpecification = lastMove.moveSpecification();
 
-      final String actualUci = UciMoveUtility.convertMoveSpecificationToUci(moveSpecification).text();
+      final String actualUci = UciMoveUtility.convertMoveSpecificationToUci(lastMove.havingMove(), moveSpecification)
+          .text();
       assertEquals(test.uciMoveStr(), actualUci);
 
       final String actualUciForScala = GenerateScalaChessTestCases
-          .convertMoveSpecificationToUciForScala(moveSpecification);
+          .convertMoveSpecificationToUciForScala(lastMove.havingMove(), moveSpecification);
       if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
         // O-O or O-O-O as provided in the san is expected
         assertEquals(test.san(), actualUciForScala);

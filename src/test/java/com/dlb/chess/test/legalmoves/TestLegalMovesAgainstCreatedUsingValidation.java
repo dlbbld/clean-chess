@@ -103,7 +103,8 @@ class TestLegalMovesAgainstCreatedUsingValidation {
       Set<MoveSpecification> moveSpecificationsFromValidation) {
     final Set<LegalMove> result = new TreeSet<>();
     for (final MoveSpecification moveSpecification : moveSpecificationsFromValidation) {
-      final LegalMove legalMove = Board.calculateLegalMove(board.getStaticPosition(), moveSpecification);
+      final LegalMove legalMove = Board.calculateLegalMove(board.getStaticPosition(), board.getHavingMove(),
+          moveSpecification);
       result.add(legalMove);
     }
     return result;
@@ -136,14 +137,14 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     if (boardPiece.getSide() == havingMove) {
       // castling needs special treatment as always
       if (boardPiece.getPieceType() == PieceType.KING) {
-        final MoveSpecification castlingKingSide = new MoveSpecification(havingMove, CastlingMove.KING_SIDE);
+        final MoveSpecification castlingKingSide = new MoveSpecification(CastlingMove.KING_SIDE);
         try {
           ValidateNewMove.validateNewMove(board, castlingKingSide);
           listForSquare.add(castlingKingSide);
         } catch (@SuppressWarnings("unused") final InvalidMoveException e) {
           // not valid, so not adding
         }
-        final MoveSpecification castlingQueenSide = new MoveSpecification(havingMove, CastlingMove.QUEEN_SIDE);
+        final MoveSpecification castlingQueenSide = new MoveSpecification(CastlingMove.QUEEN_SIDE);
         try {
           ValidateNewMove.validateNewMove(board, castlingQueenSide);
           listForSquare.add(castlingQueenSide);
@@ -156,7 +157,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
       // we cannot use all board squares - that get's too slow
       // all PGN's expected outcomes are not through in 90 minutes
       for (final Square toSquare : potentialToSquareSet) {
-        final MoveSpecification move = new MoveSpecification(havingMove, fromSquare, toSquare);
+        final MoveSpecification move = new MoveSpecification(fromSquare, toSquare);
         try {
           ValidateNewMove.validateNewMove(board, move);
           listForSquare.add(move);
@@ -168,7 +169,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
         if (boardPiece.getPieceType() == PieceType.PAWN
             && Rank.calculateIsPromotionRank(havingMove, toSquare.getRank())) {
           for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
-            final MoveSpecification promotionMove = new MoveSpecification(havingMove, fromSquare, toSquare,
+            final MoveSpecification promotionMove = new MoveSpecification(fromSquare, toSquare,
                 promotionPieceType);
             try {
               ValidateNewMove.validateNewMove(board, promotionMove);

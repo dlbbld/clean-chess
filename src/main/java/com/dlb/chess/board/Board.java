@@ -28,6 +28,7 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.fen.FenBoard;
@@ -47,7 +48,7 @@ import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.validate.SanValidation;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 
 public class Board extends AbstractBoard {
 
@@ -94,14 +95,14 @@ public class Board extends AbstractBoard {
         initialCastlingRight, initialEnPassantCaptureTargetSquare);
     this.legalMoveListSet.add(legalMoveSet);
 
-    final Set<Square> threatenedSquareSet = AbstractThreatenSquares.calculateThreatenedSquares(initialStaticPosition,
+    final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(initialStaticPosition,
         initialHavingMove.getOppositeSide());
 
     final Square kingSquareHavingMove = StaticPositionUtility.calculateKingSquare(initialStaticPosition,
         initialHavingMove);
 
     this.isCheckList = new ArrayList<>();
-    final var isCheck = threatenedSquareSet.contains(kingSquareHavingMove);
+    final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
     this.isCheckmateList = new ArrayList<>();
@@ -186,12 +187,13 @@ public class Board extends AbstractBoard {
     final CastlingRight beforeCastlingRightBlack = NonNullWrapperCommon.getLast(dynamicPositionList)
         .castlingRightBlack();
 
-    final LegalMove moveToPerform = calculateLegalMove(this.getStaticPosition(), moveSpecification);
-    final MoveSpecification moveSpecificationForMoveToPerform = moveToPerform.moveSpecification();
+    final Side havingMove = this.getHavingMove();
+    final LegalMove moveToPerform = calculateLegalMove(this.getStaticPosition(), havingMove, moveSpecification);
 
     // values used in the following not to be get from board methods!!!
-    final StaticPosition afterStaticPosition = createPositionAfterMove(this.getStaticPosition(), moveSpecification);
-    final Side afterHavingMove = moveSpecificationForMoveToPerform.havingMove().getOppositeSide();
+    final StaticPosition afterStaticPosition = createPositionAfterMove(this.getStaticPosition(), havingMove,
+        moveSpecification);
+    final Side afterHavingMove = havingMove.getOppositeSide();
     final CastlingRightBoth afterCastlingRightBoth = CastlingUtility
         .calculateCastlingRightBoth(beforeCastlingRightWhite, beforeCastlingRightBlack, moveToPerform);
     final CastlingRight afterCastlingRightHavingMove = CastlingUtility.getCastlingRight(afterCastlingRightBoth,
@@ -219,12 +221,12 @@ public class Board extends AbstractBoard {
         afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
     this.legalMoveListSet.add(legalMovesAfterMove);
 
-    final Set<Square> threatenedSquareSet = AbstractThreatenSquares.calculateThreatenedSquares(afterStaticPosition,
+    final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(afterStaticPosition,
         afterHavingMove.getOppositeSide());
 
     final Square kingSquareHavingMove = StaticPositionUtility.calculateKingSquare(afterStaticPosition, afterHavingMove);
 
-    final var isCheck = threatenedSquareSet.contains(kingSquareHavingMove);
+    final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
     final var isCheckmate = isCheck && legalMovesAfterMove.isEmpty();
@@ -285,24 +287,21 @@ public class Board extends AbstractBoard {
 
   // Here we rely on that moveSpecification was validated as legal move. If this does not hold the below method will
   // just pass through this moves, there is no checking, so the error will be go through.
-  public static LegalMove calculateLegalMove(StaticPosition staticPosition, MoveSpecification moveSpecification) {
+  public static LegalMove calculateLegalMove(StaticPosition staticPosition, Side havingMove,
+      MoveSpecification moveSpecification) {
 
-    final Piece movingPiece;
-    if (moveSpecification.fromSquare() == Square.NONE) {
-      // castling
-      movingPiece = Piece.NONE;
-    } else {
-      movingPiece = staticPosition.get(moveSpecification.fromSquare());
+    if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
+      final Piece king = Piece.calculateKingPiece(havingMove);
+      return new LegalMove(moveSpecification, king, Piece.NONE);
     }
+
+    final Piece movingPiece = staticPosition.get(moveSpecification.fromSquare());
 
     if (EnPassantCaptureUtility.calculateIsEnPassantCaptureNewMove(staticPosition, moveSpecification)) {
       final Square squareOfCapturedPawnForEnPassantCapture = EnPassantCaptureUtility
-          .calculateSquareOfCapturedPawnForEnPassantCapture(moveSpecification);
+          .calculateSquareOfCapturedPawnForEnPassantCapture(havingMove, moveSpecification);
       final Piece pieceCaptured = staticPosition.get(squareOfCapturedPawnForEnPassantCapture);
       return new LegalMove(moveSpecification, movingPiece, pieceCaptured, EnPassantRole.EN_PASSANT_CAPTURE);
-    }
-    if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      return new LegalMove(moveSpecification);
     }
     if (PromotionUtility.calculateIsPromotionNewMove(moveSpecification)) {
       final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
@@ -314,25 +313,25 @@ public class Board extends AbstractBoard {
     return new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
   }
 
-  public static StaticPosition createPositionAfterMove(StaticPosition staticPosition,
+  public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
-    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, moveSpecification);
+    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove, moveSpecification);
     return staticPosition.createChangedPosition(updateSquareList);
 
   }
 
-  private static List<UpdateSquare> calculateUpdateSquareList(StaticPosition staticPosition,
+  private static List<UpdateSquare> calculateUpdateSquareList(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
     if (EnPassantCaptureUtility.calculateIsEnPassantCaptureNewMove(staticPosition, moveSpecification)) {
-      return EnPassantCaptureUtility.performEnPassantCaptureMovements(staticPosition, moveSpecification);
+      return EnPassantCaptureUtility.performEnPassantCaptureMovements(staticPosition, havingMove, moveSpecification);
     }
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      return CastlingUtility.performCastlingMovements(moveSpecification);
+      return CastlingUtility.performCastlingMovements(havingMove, moveSpecification);
     }
     if (PromotionUtility.calculateIsPromotionNewMove(moveSpecification)) {
-      return PromotionUtility.performPromotionMovements(moveSpecification);
+      return PromotionUtility.performPromotionMovements(havingMove, moveSpecification);
     }
     return StandardMoveUtility.performStandardMovements(staticPosition, moveSpecification);
   }
@@ -628,7 +627,7 @@ public class Board extends AbstractBoard {
       return initialFen.havingMove();
     }
     final LegalMove lastMove = getLastMove();
-    return lastMove.moveSpecification().havingMove().getOppositeSide();
+    return lastMove.havingMove().getOppositeSide();
   }
 
   @Override
@@ -665,9 +664,8 @@ public class Board extends AbstractBoard {
     if (Square.calculateHasRightSquare(havingMove, squareBehind)) {
       final Square squareRight = Square.calculateRightSquare(havingMove, squareBehind);
       if (staticPosition.isOwnPawn(squareRight, havingMove)) {
-        final MoveSpecification moveSpecification = new MoveSpecification(havingMove, squareRight,
-            enPassantCaptureTargetSquare);
-        if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {
+        final MoveSpecification moveSpecification = new MoveSpecification(squareRight, enPassantCaptureTargetSquare);
+        if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
           return true;
         }
       }
@@ -677,9 +675,8 @@ public class Board extends AbstractBoard {
     if (Square.calculateHasLeftSquare(havingMove, squareBehind)) {
       final Square squareLeft = Square.calculateLeftSquare(havingMove, squareBehind);
       if (staticPosition.isOwnPawn(squareLeft, havingMove)) {
-        final MoveSpecification moveSpecification = new MoveSpecification(havingMove, squareLeft,
-            enPassantCaptureTargetSquare);
-        if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {
+        final MoveSpecification moveSpecification = new MoveSpecification(squareLeft, enPassantCaptureTargetSquare);
+        if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
           return true;
         }
       }

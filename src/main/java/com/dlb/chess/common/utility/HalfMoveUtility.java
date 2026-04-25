@@ -75,8 +75,7 @@ public abstract class HalfMoveUtility {
   }
 
   private static String calculateMoveNumberAndSan(HalfMove halfMove, AddSpace addSpace) {
-    return calculateFullMoveNumberInitial(halfMove.fullMoveNumber(), halfMove.moveSpecification().havingMove(),
-        addSpace) + halfMove.san();
+    return calculateFullMoveNumberInitial(halfMove.fullMoveNumber(), halfMove.havingMove(), addSpace) + halfMove.san();
   }
 
   private static String calculateMoveNumberAndSan(int fullMoveNumber, Side havingMove, String san, AddSpace addSpace) {

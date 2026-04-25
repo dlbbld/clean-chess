@@ -11,20 +11,15 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.squares.to.threaten.AbstractThreatenSquares;
+import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 
 public abstract class StaticPositionUtility implements EnumConstants {
 
   public static boolean calculateIsCheck(StaticPosition staticPosition, Side havingMove) {
-    final Set<Square> threatenedSquares = AbstractThreatenSquares.calculateThreatenedSquares(staticPosition,
+    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
         havingMove.getOppositeSide());
-    return calculateIsKingAttacked(staticPosition, havingMove, threatenedSquares);
-  }
-
-  private static boolean calculateIsKingAttacked(StaticPosition staticPosition, Side havingMove,
-      Set<Square> threatenedSquares) {
     final Square kingSquareHavingMove = StaticPositionUtility.calculateKingSquare(staticPosition, havingMove);
-    return threatenedSquares.contains(kingSquareHavingMove);
+    return attackedSquares.contains(kingSquareHavingMove);
   }
 
   public static Square calculateKingSquare(StaticPosition staticPosition, Side side) {
@@ -79,20 +74,11 @@ public abstract class StaticPositionUtility implements EnumConstants {
     return NonNullWrapperCommon.toString(piecePlacement);
   }
 
-  public static boolean calculateIsEvaluateAttackingKing(StaticPosition staticPosition,
+  public static boolean calculateIsKingAttackedAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
-    final StaticPosition staticPositionEvaluateAfterMove = Board.createPositionAfterMove(staticPosition,
+    final StaticPosition staticPositionEvaluateAfterMove = Board.createPositionAfterMove(staticPosition, havingMove,
         moveSpecification);
-    return calculateIsEvaluateAttackingKing(staticPositionEvaluateAfterMove,
-        moveSpecification.havingMove().getOppositeSide());
+    return calculateIsCheck(staticPositionEvaluateAfterMove, havingMove);
   }
 
-  public static boolean calculateIsEvaluateAttackingKing(StaticPosition staticPositionEvaluateAfterMove,
-      Side havingMove) {
-    final Set<Square> threatenedSquares = AbstractThreatenSquares
-        .calculateThreatenedSquares(staticPositionEvaluateAfterMove, havingMove);
-    final Square kingSquareNotHavingMove = calculateKingSquare(staticPositionEvaluateAfterMove,
-        havingMove.getOppositeSide());
-    return threatenedSquares.contains(kingSquareNotHavingMove);
-  }
 }

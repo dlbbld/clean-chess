@@ -27,7 +27,6 @@ import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanSymbol;
@@ -66,7 +65,8 @@ public class ApiCarlosBoard extends AbstractBoard {
 
   @Override
   public boolean performMove(MoveSpecification moveSpecification) {
-    final var result = board.doMove(MoveConversionUtility.convertMoveSpecification(moveSpecification));
+    final Side havingMove = getHavingMove();
+    final var result = board.doMove(MoveConversionUtility.convertMoveSpecification(havingMove, moveSpecification));
     populateMoveHistory(moveSpecification);
     return result;
   }
@@ -95,7 +95,7 @@ public class ApiCarlosBoard extends AbstractBoard {
     } else {
       movingPiece = NonNullWrapperApiCarlos.getPiece(this.board, fromSquare);
     }
-    return MoveConversionUtility.convertMove(havingMove, move, movingPiece);
+    return MoveConversionUtility.convertMove(move, movingPiece);
   }
 
   private void populateMoveHistory(MoveSpecification moveSpecification) {
@@ -454,10 +454,9 @@ public class ApiCarlosBoard extends AbstractBoard {
   }
 
   private static MoveSpecification convertMove(Board board, Move move) {
-    final var havingMove = NonNullWrapperApiCarlos.getSideToMove(board);
     final com.github.bhlangonijr.chesslib.Square fromSquare = NonNullWrapperApiCarlos.getFrom(move);
     final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperApiCarlos.getPiece(board, fromSquare);
-    return MoveConversionUtility.convertMove(havingMove, move, movingPiece);
+    return MoveConversionUtility.convertMove(move, movingPiece);
   }
 
   private static Set<LegalMove> generateLegalMoveSet(Board board) {
@@ -467,16 +466,10 @@ public class ApiCarlosBoard extends AbstractBoard {
     for (final MoveBackup moveBackup : moveBackupList) {
       final Move move = NonNullWrapperApiCarlos.getMove(moveBackup);
       final MoveSpecification moveSpecification = convertMove(board, move);
-      LegalMove legalMove;
-      if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-        legalMove = new LegalMove(moveSpecification);
-      } else {
-        final Piece movingPiece = EnumConversionUtility
-            .convertPiece(NonNullWrapperApiCarlos.getMovingPiece(moveBackup));
-        final Piece pieceCaptured = EnumConversionUtility
-            .convertPiece(NonNullWrapperApiCarlos.getCapturedPiece(moveBackup));
-        legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
-      }
+      final Piece movingPiece = EnumConversionUtility.convertPiece(NonNullWrapperApiCarlos.getMovingPiece(moveBackup));
+      final Piece pieceCaptured = EnumConversionUtility
+          .convertPiece(NonNullWrapperApiCarlos.getCapturedPiece(moveBackup));
+      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
       result.add(legalMove);
     }
     return result;
@@ -493,9 +486,6 @@ public class ApiCarlosBoard extends AbstractBoard {
   }
 
   private static LegalMove calculateLegalMove(MoveSpecification moveSpecification, MoveBackup moveBackup) {
-    if (moveBackup.isCastleMove()) {
-      return new LegalMove(moveSpecification);
-    }
     final Piece movingPiece = EnumConversionUtility
         .convertToMyPiece(NonNullWrapperApiCarlos.getMovingPiece(moveBackup));
     final Piece pieceCaptured = EnumConversionUtility
@@ -513,11 +503,10 @@ public class ApiCarlosBoard extends AbstractBoard {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
     for (final MoveBackup moveBackup : NonNullWrapperApiCarlos.getBackup(this.board)) {
 
-      final com.github.bhlangonijr.chesslib.Side side = NonNullWrapperApiCarlos.getSideToMove(moveBackup);
       final Move move = NonNullWrapperApiCarlos.getMove(moveBackup);
       final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperApiCarlos.getMovingPiece(moveBackup);
 
-      moveSpecificationList.add(MoveConversionUtility.convertMove(side, move, movingPiece));
+      moveSpecificationList.add(MoveConversionUtility.convertMove(move, movingPiece));
     }
     return moveSpecificationList;
   }

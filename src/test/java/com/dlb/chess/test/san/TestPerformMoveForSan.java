@@ -78,26 +78,26 @@ class TestPerformMoveForSan implements EnumConstants {
     try {
       final ApiBoard board = new Board();
 
-      checkMoveSpecificationTest(board, "e4", new MoveSpecification(WHITE, E2, E4));
-      checkMoveSpecificationTest(board, "d5", new MoveSpecification(BLACK, D7, D5));
-      checkMoveSpecificationTest(board, "exd5", new MoveSpecification(WHITE, E4, D5));
-      checkMoveSpecificationTest(board, "e5", new MoveSpecification(BLACK, E7, E5));
-      checkMoveSpecificationTest(board, "dxe6", new MoveSpecification(WHITE, D5, E6));
-      checkMoveSpecificationTest(board, "h6", new MoveSpecification(BLACK, H7, H6));
-      checkMoveSpecificationTest(board, "exf7+", new MoveSpecification(WHITE, E6, F7));
-      checkMoveSpecificationTest(board, "Ke7", new MoveSpecification(BLACK, E8, E7));
-      checkMoveSpecificationTest(board, "fxg8=Q", new MoveSpecification(WHITE, F7, G8, PromotionPieceType.QUEEN));
-      checkMoveSpecificationTest(board, "h5", new MoveSpecification(BLACK, H6, H5));
-      checkMoveSpecificationTest(board, "Qxh8", new MoveSpecification(WHITE, G8, H8));
-      checkMoveSpecificationTest(board, "h4", new MoveSpecification(BLACK, H5, H4));
-      checkMoveSpecificationTest(board, "g4", new MoveSpecification(WHITE, G2, G4));
-      checkMoveSpecificationTest(board, "hxg3", new MoveSpecification(BLACK, H4, G3));
-      checkMoveSpecificationTest(board, "a4", new MoveSpecification(WHITE, A2, A4));
-      checkMoveSpecificationTest(board, "gxh2", new MoveSpecification(BLACK, G3, H2));
-      checkMoveSpecificationTest(board, "a5", new MoveSpecification(WHITE, A4, A5));
-      checkMoveSpecificationTest(board, "hxg1=Q", new MoveSpecification(BLACK, H2, G1, PromotionPieceType.QUEEN));
-      checkMoveSpecificationTest(board, "a6", new MoveSpecification(WHITE, A5, A6));
-      checkMoveSpecificationTest(board, "Qxh1", new MoveSpecification(BLACK, G1, H1));
+      checkMoveSpecificationTest(board, "e4", new MoveSpecification(E2, E4));
+      checkMoveSpecificationTest(board, "d5", new MoveSpecification(D7, D5));
+      checkMoveSpecificationTest(board, "exd5", new MoveSpecification(E4, D5));
+      checkMoveSpecificationTest(board, "e5", new MoveSpecification(E7, E5));
+      checkMoveSpecificationTest(board, "dxe6", new MoveSpecification(D5, E6));
+      checkMoveSpecificationTest(board, "h6", new MoveSpecification(H7, H6));
+      checkMoveSpecificationTest(board, "exf7+", new MoveSpecification(E6, F7));
+      checkMoveSpecificationTest(board, "Ke7", new MoveSpecification(E8, E7));
+      checkMoveSpecificationTest(board, "fxg8=Q", new MoveSpecification(F7, G8, PromotionPieceType.QUEEN));
+      checkMoveSpecificationTest(board, "h5", new MoveSpecification(H6, H5));
+      checkMoveSpecificationTest(board, "Qxh8", new MoveSpecification(G8, H8));
+      checkMoveSpecificationTest(board, "h4", new MoveSpecification(H5, H4));
+      checkMoveSpecificationTest(board, "g4", new MoveSpecification(G2, G4));
+      checkMoveSpecificationTest(board, "hxg3", new MoveSpecification(H4, G3));
+      checkMoveSpecificationTest(board, "a4", new MoveSpecification(A2, A4));
+      checkMoveSpecificationTest(board, "gxh2", new MoveSpecification(G3, H2));
+      checkMoveSpecificationTest(board, "a5", new MoveSpecification(A4, A5));
+      checkMoveSpecificationTest(board, "hxg1=Q", new MoveSpecification(H2, G1, PromotionPieceType.QUEEN));
+      checkMoveSpecificationTest(board, "a6", new MoveSpecification(A5, A6));
+      checkMoveSpecificationTest(board, "Qxh1", new MoveSpecification(G1, H1));
     } catch (@SuppressWarnings("unused") final Exception e) {
       isException = true;
     }

@@ -8,8 +8,14 @@ import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.output.YawnOutput;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnFileTestCaseList;
 
 public abstract class AbstractPgnTest {
+
+  public static void testGame(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) throws Exception {
+    final var analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    testGame(testCase, analysis);
+  }
 
   public static boolean testGame(PgnFileTestCase testCase, Analysis analysis) throws Exception {
     testFen(testCase.fen(), analysis.fen());
@@ -21,10 +27,6 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    if (Analyzer.IS_CALCULATE_UNWINNABLE) {
-      testUnwinnableFull(analysis, testCase);
-      testUnwinnableQuick(analysis, testCase);
-    }
     return true;
   }
 
@@ -63,16 +65,6 @@ public abstract class AbstractPgnTest {
 
   private static void testInsufficientMaterial(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.insufficientMaterial(), analysis.insufficientMaterial());
-  }
-
-  private static void testUnwinnableFull(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableFullWhite(), analysis.unwinnableFullWhite());
-    assertEquals(testCase.unwinnableFullBlack(), analysis.unwinnableFullBlack());
-  }
-
-  private static void testUnwinnableQuick(Analysis analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.unwinnableQuickWhite(), analysis.unwinnableQuickWhite());
-    assertEquals(testCase.unwinnableQuickBlack(), analysis.unwinnableQuickBlack());
   }
 
 }

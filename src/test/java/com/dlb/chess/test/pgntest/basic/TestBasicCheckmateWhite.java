@@ -51,32 +51,26 @@ class TestBasicCheckmateWhite extends AbstractTestBasic {
       logger.info(testCase.pgnFileName());
 
       switch (testCase.pgnFileName()) {
-        case "01_white_checkmate_rook_direct_adjacent.pgn" -> checkNonCaptureCheckmate(WHITE, D7, D8, WHITE_ROOK,
+        case "01_white_checkmate_rook_direct_adjacent.pgn" -> checkNonCaptureCheckmate(D7, D8, WHITE_ROOK, board);
+        case "02_white_checkmate_rook_direct_range.pgn" -> checkNonCaptureCheckmate(H7, H8, WHITE_ROOK, board);
+        case "03_white_checkmate_rook_discover.pgn" -> checkNonCaptureCheckmate(D7, H7, WHITE_ROOK, board);
+        case "04_white_checkmate_knight_direct.pgn" -> checkNonCaptureCheckmate(B4, C6, WHITE_KNIGHT, board);
+        case "05_white_checkmate_knight_discover_orthogonal.pgn" -> checkNonCaptureCheckmate(D5, F6, WHITE_KNIGHT,
             board);
-        case "02_white_checkmate_rook_direct_range.pgn" -> checkNonCaptureCheckmate(WHITE, H7, H8, WHITE_ROOK, board);
-        case "03_white_checkmate_rook_discover.pgn" -> checkNonCaptureCheckmate(WHITE, D7, H7, WHITE_ROOK, board);
-        case "04_white_checkmate_knight_direct.pgn" -> checkNonCaptureCheckmate(WHITE, B4, C6, WHITE_KNIGHT, board);
-        case "05_white_checkmate_knight_discover_orthogonal.pgn" -> checkNonCaptureCheckmate(WHITE, D5, F6,
-            WHITE_KNIGHT, board);
-        case "06_white_checkmate_knight_discover_diagonal.pgn" -> checkNonCaptureCheckmate(WHITE, F6, G8, WHITE_KNIGHT,
+        case "06_white_checkmate_knight_discover_diagonal.pgn" -> checkNonCaptureCheckmate(F6, G8, WHITE_KNIGHT, board);
+        case "07_white_checkmate_bishop_direct_adjacent.pgn" -> checkNonCaptureCheckmate(B3, C4, WHITE_BISHOP, board);
+        case "08_white_checkmate_bishop_direct_range.pgn" -> checkNonCaptureCheckmate(E2, F3, WHITE_BISHOP, board);
+        case "09_white_checkmate_bishop_discover.pgn" -> checkNonCaptureCheckmate(E5, C7, WHITE_BISHOP, board);
+        case "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn" -> checkNonCaptureCheckmate(F6, C6, WHITE_QUEEN,
             board);
-        case "07_white_checkmate_bishop_direct_adjacent.pgn" -> checkNonCaptureCheckmate(WHITE, B3, C4, WHITE_BISHOP,
+        case "11_white_checkmate_queen_direct_orthogonal_range.pgn" -> checkNonCaptureCheckmate(D8, A5, WHITE_QUEEN,
             board);
-        case "08_white_checkmate_bishop_direct_range.pgn" -> checkNonCaptureCheckmate(WHITE, E2, F3, WHITE_BISHOP,
+        case "12_white_checkmate_queen_direct_diagonal_adjacent.pgn" -> checkNonCaptureCheckmate(B6, B7, WHITE_QUEEN,
             board);
-        case "09_white_checkmate_bishop_discover.pgn" -> checkNonCaptureCheckmate(WHITE, E5, C7, WHITE_BISHOP, board);
-        case "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn" -> checkNonCaptureCheckmate(WHITE, F6, C6,
-            WHITE_QUEEN, board);
-        case "11_white_checkmate_queen_direct_orthogonal_range.pgn" -> checkNonCaptureCheckmate(WHITE, D8, A5,
-            WHITE_QUEEN, board);
-        case "12_white_checkmate_queen_direct_diagonal_adjacent.pgn" -> checkNonCaptureCheckmate(WHITE, B6, B7,
-            WHITE_QUEEN, board);
-        case "13_white_checkmate_queen_direct_diagonal_range.pgn" -> checkNonCaptureCheckmate(WHITE, C2, B3,
-            WHITE_QUEEN, board);
-        case "14_white_checkmate_king_discover_orthogonal.pgn" -> checkNonCaptureCheckmate(WHITE, G7, H6, WHITE_KING,
+        case "13_white_checkmate_queen_direct_diagonal_range.pgn" -> checkNonCaptureCheckmate(C2, B3, WHITE_QUEEN,
             board);
-        case "15_white_checkmate_king_discover_diagonal.pgn" -> checkNonCaptureCheckmate(WHITE, B6, B7, WHITE_KING,
-            board);
+        case "14_white_checkmate_king_discover_orthogonal.pgn" -> checkNonCaptureCheckmate(G7, H6, WHITE_KING, board);
+        case "15_white_checkmate_king_discover_diagonal.pgn" -> checkNonCaptureCheckmate(B6, B7, WHITE_KING, board);
         default -> throw new IllegalArgumentException();
       }
     }

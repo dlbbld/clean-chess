@@ -38,8 +38,9 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
   @Override
   public Set<String> getLegalMovesUci() {
     final Set<String> result = new TreeSet<>();
+    final Side havingMove = getHavingMove();
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      final String uci = UciMoveUtility.convertMoveSpecificationToUci(moveSpecification).text();
+      final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
       result.add(uci);
     }
     return result;
@@ -49,13 +50,14 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
   public List<MoveRepresentation> getLegalMovesRepresentation() {
     final List<MoveRepresentation> result = new ArrayList<>();
 
+    final Side havingMove = getHavingMove();
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
       this.performMove(moveSpecification);
       final LegalMove legalMove = getLastMove();
       final String san = getSan();
       final String lan = getLan();
       this.unperformMove();
-      final String uci = UciMoveUtility.convertMoveSpecificationToUci(moveSpecification).text();
+      final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
 
       final MoveRepresentation moveRepresentation = new MoveRepresentation(moveSpecification, legalMove, san, lan, uci);
       result.add(moveRepresentation);

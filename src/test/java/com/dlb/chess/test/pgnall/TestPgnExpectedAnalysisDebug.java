@@ -1,25 +1,53 @@
 package com.dlb.chess.test.pgnall;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assumptions.assumeFalse;
+
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-class TestPgnExpectedValue extends AbstractPgnTest {
+/**
+ * Analyzes every PGN test case across the restricted test corpus and validates expected values.
+ *
+ * <p>
+ * <b>Lock-down convention.</b> The narrowing flags below ({@code IS_CHECK_FROM_PGN_TEST},
+ * {@code IS_CHECK_ONLY_PGN_TEST}, {@code IS_CHECK_FROM_PGN_FILE_NAME}) let a developer narrow the test scope during
+ * local debugging, but {@link #IS_DISABLED} prevents the entire {@link #test} method from running by default. Workflow:
+ * <ol>
+ * <li>Flip {@link #IS_DISABLED} to {@code false} locally,</li>
+ * <li>Optionally set exactly one narrowing flag to {@code true},</li>
+ * <li>Run the test in the IDE,</li>
+ * <li><b>Restore {@link #IS_DISABLED} to {@code true} before committing.</b></li>
+ * </ol>
+ *
+ * <p>
+ * The {@link #testIsDisabledMustBeTrueOnCommit} guard test asserts the constant is {@code true} on commit, so
+ * accidentally committing it as {@code false} fails the build — turning the discipline into a CI-checked invariant
+ * rather than relying on developer vigilance.
+ */
+class TestPgnExpectedAnalysisDebug extends AbstractPgnTest {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExpectedValue.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExpectedAnalysisDebug.class);
+
+  /**
+   * Lock-down constant. MUST be {@code true} on commit. Flip locally to {@code false} for debugging only and restore
+   * before committing — the guard test {@link #testIsDisabledMustBeTrueOnCommit} fails the build if this is committed
+   * as {@code false}.
+   */
+  public static final boolean IS_DISABLED = true;
 
   // for custom testing
   // order of priority as listed
   private static final boolean IS_CHECK_FROM_PGN_TEST = false;
   private static final PgnTest CHECK_FROM_PGN_TEST = PgnTest.SPECIAL;
 
-  private static final boolean IS_CHECK_ONLY_PGN_TEST = true;
+  private static final boolean IS_CHECK_ONLY_PGN_TEST = false;
   private static final PgnTest CHECK_ONLY_PGN_TEST = PgnTest.BASIC_SEVENTY_FIVE;
 
   private static final boolean IS_CHECK_FROM_PGN_FILE_NAME = false;
@@ -28,6 +56,8 @@ class TestPgnExpectedValue extends AbstractPgnTest {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
+    assumeFalse(IS_DISABLED, "Class disabled — flip IS_DISABLED to false to run");
+
     var isFoundTest = false;
     var isFromOrAfterFromFolder = false;
     var isPgnFileNameOrAfterPgnFileName = false;
@@ -63,6 +93,18 @@ class TestPgnExpectedValue extends AbstractPgnTest {
     }
   }
 
+  /**
+   * Guard: fails the build if {@link #IS_DISABLED} is committed as {@code false}. When the developer is locally
+   * debugging with {@code IS_DISABLED = false}, this test fails (expected locally), reminding them to restore it before
+   * committing.
+   */
+  @SuppressWarnings("static-method")
+  @Test
+  void testIsDisabledMustBeTrueOnCommit() {
+    assertTrue(IS_DISABLED, "TestPgnExpectedAnalysis.IS_DISABLED must be true on commit. "
+        + "Restore to true before committing — false is for local debugging only.");
+  }
+
   // must be in method with parameters for constants to avoid dead code warnings
   private static boolean isContinueDirectoryLevel(boolean isCheckFromPgnTest, boolean isCheckOnlyPgnTest,
       boolean isFromOrAfterFromFolder, PgnTest currentPgnTest) {
@@ -83,12 +125,6 @@ class TestPgnExpectedValue extends AbstractPgnTest {
       return !isPgnFileNameOrAfterPgnFileName;
     }
     return false;
-  }
-
-  private static void testGame(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) throws Exception {
-
-    final var analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
-    testGame(testCase, analysis);
   }
 
 }

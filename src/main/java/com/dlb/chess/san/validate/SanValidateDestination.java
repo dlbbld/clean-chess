@@ -131,7 +131,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     }
     final Rank fromRank = Rank.calculatePreviousRank(havingMove, toSquare.getRank());
     final Square fromSquare = Square.calculate(sanConversion.fromFile(), fromRank);
-    final MoveSpecification pawnCapturingNonPromotionMove = new MoveSpecification(havingMove, fromSquare, toSquare);
+    final MoveSpecification pawnCapturingNonPromotionMove = new MoveSpecification(fromSquare, toSquare);
     return EnPassantCaptureUtility.calculateIsPotentialEnPassantCapture(board.getStaticPosition(),
         pawnCapturingNonPromotionMove);
   }

@@ -21,14 +21,10 @@ class TestUnwinnabilityQuickAgainstWinnability {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuickAgainstWinnability.class);
 
-  private static final boolean IS_START_FROM_PGN_FILE = false;
-  private static final String START_FROM_PGN_FILE_NAME = "ae_16.pgn";
-
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
 
-    var hasFound = false;
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
@@ -44,18 +40,6 @@ class TestUnwinnabilityQuickAgainstWinnability {
             default:
               continue;
           }
-        }
-        if (!hasFound) {
-          if (IS_START_FROM_PGN_FILE) {
-            if (START_FROM_PGN_FILE_NAME.equals(testCase.pgnFileName())) {
-              hasFound = true;
-            }
-          } else {
-            hasFound = true;
-          }
-        }
-        if (!hasFound) {
-          continue;
         }
 
         switch (testCase.pgnFileName()) {

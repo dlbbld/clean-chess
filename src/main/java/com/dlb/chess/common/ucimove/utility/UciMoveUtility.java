@@ -3,6 +3,7 @@ package com.dlb.chess.common.ucimove.utility;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.interfaces.ApiBoard;
@@ -12,13 +13,13 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 
 public abstract class UciMoveUtility {
 
-  public static UciMove convertMoveSpecificationToUci(MoveSpecification moveSpecification) {
+  public static UciMove convertMoveSpecificationToUci(Side havingMove, MoveSpecification moveSpecification) {
     Square fromSquare;
     Square toSquare;
     PromotionPieceType promotionPieceType;
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      fromSquare = CastlingUtility.calculateKingCastlingFrom(moveSpecification);
-      toSquare = CastlingUtility.calculateKingCastlingTo(moveSpecification);
+      fromSquare = CastlingUtility.calculateKingCastlingFrom(havingMove, moveSpecification);
+      toSquare = CastlingUtility.calculateKingCastlingTo(havingMove, moveSpecification);
       promotionPieceType = PromotionPieceType.NONE;
     } else {
       fromSquare = moveSpecification.fromSquare();
@@ -41,7 +42,7 @@ public abstract class UciMoveUtility {
     final Square toSquare = uciMove.toSquare();
 
     if (uciMove.isPromotion()) {
-      return new MoveSpecification(board.getHavingMove(), fromSquare, toSquare, uciMove.promotionPieceType());
+      return new MoveSpecification(fromSquare, toSquare, uciMove.promotionPieceType());
     }
 
     if (!board.getStaticPosition().isEmpty(fromSquare)
@@ -50,7 +51,7 @@ public abstract class UciMoveUtility {
       switch (potentialCastlingMove) {
         case KING_SIDE:
         case QUEEN_SIDE:
-          return new MoveSpecification(board.getHavingMove(), potentialCastlingMove);
+          return new MoveSpecification(potentialCastlingMove);
         case NONE:
           break;
         default:
@@ -58,7 +59,7 @@ public abstract class UciMoveUtility {
       }
     }
 
-    return new MoveSpecification(board.getHavingMove(), fromSquare, toSquare);
+    return new MoveSpecification(fromSquare, toSquare);
   }
 
   public static String convertUciMoveToSan(ApiBoard board, UciMove uciMove) {

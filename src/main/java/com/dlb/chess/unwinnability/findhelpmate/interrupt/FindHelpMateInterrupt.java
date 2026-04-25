@@ -50,7 +50,8 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());
         if (IS_DEBUG) {
-          final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.moveSpecification());
+          final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(),
+              legalMove.moveSpecification());
           System.out.println(uciMove.text() + " - " + (currentDepth + 1));
         }
 

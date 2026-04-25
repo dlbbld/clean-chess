@@ -28,11 +28,9 @@ public class GoingToCorner implements EnumConstants {
     final Square toSquare;
     final Square fromSquare;
     if (CastlingUtility.calculateIsCastlingMove(m.moveSpecification())) {
-      // the API does not treat the king as the moving piece for the castling move
-      // that castling is a king move does not mean the king is the moving piece in the move
-      movingPiece = Piece.calculateKingPiece(m.moveSpecification().havingMove());
-      toSquare = CastlingUtility.calculateKingCastlingTo(m.moveSpecification());
-      fromSquare = CastlingUtility.calculateKingCastlingFrom(m.moveSpecification());
+      movingPiece = m.movingPiece();
+      toSquare = CastlingUtility.calculateKingCastlingTo(m.havingMove(), m.moveSpecification());
+      fromSquare = CastlingUtility.calculateKingCastlingFrom(m.havingMove(), m.moveSpecification());
     } else {
       movingPiece = m.movingPiece();
       toSquare = m.moveSpecification().toSquare();

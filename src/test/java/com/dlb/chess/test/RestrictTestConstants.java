@@ -5,9 +5,9 @@ import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 public abstract class RestrictTestConstants {
 
   /**
-   * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Set to {@code false} to force every restricted
-   * PGN test to run at full coverage in one flip — avoids having to search-replace each individual flag. Individual
-   * flags that want to opt out of the master gate can be authored as a plain {@code true} instead of
+   * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Set to {@code false} to force every restricted PGN
+   * test to run at full coverage in one flip — avoids having to search-replace each individual flag. Individual flags
+   * that want to opt out of the master gate can be authored as a plain {@code true} instead of
    * {@code true && IS_RESTRICT_PGN}; that keeps the restriction on regardless.
    */
   public static final boolean IS_RESTRICT_PGN = true;
@@ -27,10 +27,15 @@ public abstract class RestrictTestConstants {
   public static final boolean IS_RESTRICT_PGN_WRITER_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_STARTING_POSITION_NONE_AGAINST_INITIAL_FEN_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST = true && IS_RESTRICT_PGN;
+  public static final boolean IS_RESTRICT_PGN_EXPECTED_ANALYSIS = true && IS_RESTRICT_PGN;
 
   public static final PgnTestInclusion PGN_TEST_INCLUSION = PgnTestInclusion.ALL_EXCEPT_LONGEST_POSSIBLE;
 
   // Long running tests — excluded entirely via JUnit assumeFalse
   public static final boolean IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST = true;
+
+  // TestUnwinnabilityFull.testPgnFileExpected analyzes one heavy PGN (~10 seconds). Only useful
+  // when changes touch the unwinnability-full analyzer; flip to false locally to run.
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST = true;
 
 }

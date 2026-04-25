@@ -3,6 +3,7 @@ package com.dlb.chess.moves.legal;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
@@ -12,10 +13,10 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
-import com.dlb.chess.model.PseudoLegalReason;
 import com.dlb.chess.moves.legal.king.KingLegalMoves;
 import com.dlb.chess.moves.legal.pawn.PawnLegalMoves;
 import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
@@ -83,14 +84,14 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     final Set<PseudoLegalMove> pseudoLegalMoveSet = new TreeSet<>();
 
     for (final Square toSquare : toSquareSet) {
-      final MoveSpecification moveSpecification = new MoveSpecification(havingMove, fromSquare, toSquare);
+      final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, toSquare);
       final var pieceCaptured = staticPosition.isEmpty(toSquare) ? Piece.NONE : staticPosition.get(toSquare);
 
       if (pieceCaptured != Piece.NONE && pieceCaptured.getPieceType() == PieceType.KING) {
         continue;
       }
 
-      if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, moveSpecification)) {
+      if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
         final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
         legalMoveSet.add(legalMove);
       } else {
@@ -98,15 +99,15 @@ public abstract class AbstractLegalMoves implements EnumConstants {
         pseudoLegalMoveSet.add(pseudoLegalMove);
       }
     }
-    final PseudoLegalReason pseudoLegalReason;
+    final KingSafetyCheck pseudoLegalKingSafety;
     if (!legalMoveSet.isEmpty() || pseudoLegalMoveSet.isEmpty()) {
-      pseudoLegalReason = PseudoLegalReason.NONE;
-    } else if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove.getOppositeSide())) {
-      pseudoLegalReason = PseudoLegalReason.KING_LEFT_IN_CHECK;
+      pseudoLegalKingSafety = KingSafetyCheck.SUCCESS;
+    } else if (StaticPositionUtility.calculateIsCheck(staticPosition, havingMove)) {
+      pseudoLegalKingSafety = KingSafetyCheck.NON_KING_LEFT_IN_CHECK;
     } else {
-      pseudoLegalReason = PseudoLegalReason.KING_EXPOSED_TO_CHECK;
+      pseudoLegalKingSafety = KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
     }
-    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet, pseudoLegalReason);
+    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet, pseudoLegalKingSafety);
   }
 
 }

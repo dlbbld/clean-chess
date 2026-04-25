@@ -1,4 +1,4 @@
-package com.dlb.chess.squares.to.threaten;
+package com.dlb.chess.squares.to.attacked;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -17,8 +17,8 @@ import com.dlb.chess.squares.to.AbstractToSquares;
  *
  *
  */
-public abstract class AbstractThreatenSquares extends AbstractToSquares {
-  public static Set<Square> calculateThreatenedSquares(StaticPosition staticPosition, Side havingMove) {
+public abstract class AbstractAttackedSquares extends AbstractToSquares {
+  public static Set<Square> calculateAttackedSquares(StaticPosition staticPosition, Side havingMove) {
 
     final Set<Square> squareSet = new TreeSet<>();
 
@@ -27,17 +27,17 @@ public abstract class AbstractThreatenSquares extends AbstractToSquares {
         final Piece piece = staticPosition.get(fromSquare);
         switch (piece.getPieceType()) {
           case PAWN -> squareSet
-              .addAll(PawnThreatenSquares.calculatePawnThreatenSquares(staticPosition, fromSquare, havingMove));
+              .addAll(PawnAttackedSquares.calculatePawnAttackedSquares(staticPosition, fromSquare, havingMove));
           case ROOK -> squareSet
-              .addAll(RookThreatenSquares.calculateRookThreatenSquares(staticPosition, fromSquare, havingMove));
+              .addAll(RookAttackedSquares.calculateRookAttackedSquares(staticPosition, fromSquare, havingMove));
           case KNIGHT -> squareSet
-              .addAll(KnightThreatenSquares.calculateKnightThreatenSquares(staticPosition, fromSquare, havingMove));
+              .addAll(KnightAttackedSquares.calculateKnightAttackedSquares(staticPosition, fromSquare, havingMove));
           case BISHOP -> squareSet
-              .addAll(BishopThreatenSquares.calculateBishopThreatenSquares(staticPosition, fromSquare, havingMove));
+              .addAll(BishopAttackedSquares.calculateBishopAttackedSquares(staticPosition, fromSquare, havingMove));
           case QUEEN -> squareSet
-              .addAll(QueenThreatenSquares.calculateQueenThreatenSquares(staticPosition, fromSquare, havingMove));
-          case KING -> squareSet.addAll(KingNonCastlingThreatenSquares
-              .calculateKingNonCastlingThreatenSquares(staticPosition, fromSquare, havingMove));
+              .addAll(QueenAttackedSquares.calculateQueenAttackedSquares(staticPosition, fromSquare, havingMove));
+          case KING -> squareSet.addAll(KingNonCastlingAttackedSquares
+              .calculateKingNonCastlingAttackedSquares(staticPosition, fromSquare, havingMove));
           case NONE -> throw new IllegalArgumentException();
           default -> throw new IllegalArgumentException();
         }

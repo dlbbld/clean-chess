@@ -333,9 +333,9 @@ public class GenerateRandomGame {
       if (i > 0 && i % 2 == 0) {
         moveList.append(" ");
       }
-      if (halfMove.moveSpecification().havingMove().getIsWhite()) {
+      if (halfMove.havingMove().getIsWhite()) {
         moveList.append(halfMove.fullMoveNumber()).append(". ");
-      } else if (halfMove.moveSpecification().havingMove().getIsBlack()) {
+      } else if (halfMove.havingMove().getIsBlack()) {
         moveList.append(" ");
       } else {
         throw new ProgrammingMistakeException("That should never happen");

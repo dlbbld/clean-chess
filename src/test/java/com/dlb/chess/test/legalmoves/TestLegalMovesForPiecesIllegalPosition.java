@@ -35,8 +35,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = RookLegalMoves.calculateRookLegalMoves(position, Side.WHITE, A1);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A1, B1));
-      expected.add(new MoveSpecification(WHITE, A1, C1));
+      expected.add(new MoveSpecification(A1, B1));
+      expected.add(new MoveSpecification(A1, C1));
 
       check(expected, calculatedLegalMoveSet);
     }
@@ -56,9 +56,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = RookLegalMoves.calculateRookLegalMoves(position, Side.WHITE, A1);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A1, A2));
-      expected.add(new MoveSpecification(WHITE, A1, A3));
-      expected.add(new MoveSpecification(WHITE, A1, A4));
+      expected.add(new MoveSpecification(A1, A2));
+      expected.add(new MoveSpecification(A1, A3));
+      expected.add(new MoveSpecification(A1, A4));
 
       check(expected, calculatedLegalMoveSet);
     }
@@ -80,8 +80,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           A8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A8, C7));
-      expected.add(new MoveSpecification(WHITE, A8, B6));
+      expected.add(new MoveSpecification(A8, C7));
+      expected.add(new MoveSpecification(A8, B6));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -102,11 +102,11 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           G6);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, G6, H4));
-      expected.add(new MoveSpecification(WHITE, G6, F4));
-      expected.add(new MoveSpecification(WHITE, G6, E5));
-      expected.add(new MoveSpecification(WHITE, G6, E7));
-      expected.add(new MoveSpecification(WHITE, G6, F8));
+      expected.add(new MoveSpecification(G6, H4));
+      expected.add(new MoveSpecification(G6, F4));
+      expected.add(new MoveSpecification(G6, E5));
+      expected.add(new MoveSpecification(G6, E7));
+      expected.add(new MoveSpecification(G6, F8));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -127,10 +127,10 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           D1);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, D1, E2));
-      expected.add(new MoveSpecification(WHITE, D1, F3));
-      expected.add(new MoveSpecification(WHITE, D1, G4));
-      expected.add(new MoveSpecification(WHITE, D1, H5));
+      expected.add(new MoveSpecification(D1, E2));
+      expected.add(new MoveSpecification(D1, F3));
+      expected.add(new MoveSpecification(D1, G4));
+      expected.add(new MoveSpecification(D1, H5));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -151,12 +151,12 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           D5);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, D5, E6));
-      expected.add(new MoveSpecification(WHITE, D5, F7));
-      expected.add(new MoveSpecification(WHITE, D5, C6));
-      expected.add(new MoveSpecification(WHITE, D5, B7));
-      expected.add(new MoveSpecification(WHITE, D5, A8));
-      expected.add(new MoveSpecification(WHITE, D5, C4));
+      expected.add(new MoveSpecification(D5, E6));
+      expected.add(new MoveSpecification(D5, F7));
+      expected.add(new MoveSpecification(D5, C6));
+      expected.add(new MoveSpecification(D5, B7));
+      expected.add(new MoveSpecification(D5, A8));
+      expected.add(new MoveSpecification(D5, C4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -167,7 +167,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           D5);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, D5, C4));
+      expected.add(new MoveSpecification(D5, C4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -177,7 +177,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = QueenLegalMoves.calculateQueenLegalMoves(position, Side.WHITE, A3);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A3, A4));
+      expected.add(new MoveSpecification(A3, A4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -187,7 +187,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = QueenLegalMoves.calculateQueenLegalMoves(position, Side.WHITE, A3);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A3, B2));
+      expected.add(new MoveSpecification(A3, B2));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -197,12 +197,12 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = QueenLegalMoves.calculateQueenLegalMoves(position, Side.WHITE, A8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A8, B8));
-      expected.add(new MoveSpecification(WHITE, A8, C8));
-      expected.add(new MoveSpecification(WHITE, A8, D8));
-      expected.add(new MoveSpecification(WHITE, A8, B7));
-      expected.add(new MoveSpecification(WHITE, A8, C6));
-      expected.add(new MoveSpecification(WHITE, A8, D5));
+      expected.add(new MoveSpecification(A8, B8));
+      expected.add(new MoveSpecification(A8, C8));
+      expected.add(new MoveSpecification(A8, D8));
+      expected.add(new MoveSpecification(A8, B7));
+      expected.add(new MoveSpecification(A8, C6));
+      expected.add(new MoveSpecification(A8, D5));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -222,8 +222,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.WHITE, C2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, C2, C3));
-      expected.add(new MoveSpecification(WHITE, C2, C4));
+      expected.add(new MoveSpecification(C2, C3));
+      expected.add(new MoveSpecification(C2, C4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -244,8 +244,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.WHITE, C2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, C2, C3));
-      expected.add(new MoveSpecification(WHITE, C2, C4));
+      expected.add(new MoveSpecification(C2, C3));
+      expected.add(new MoveSpecification(C2, C4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -256,7 +256,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.WHITE, C2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, C2, C4));
+      expected.add(new MoveSpecification(C2, C4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -267,9 +267,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.WHITE, A2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A2, B1));
-      expected.add(new MoveSpecification(WHITE, A2, B2));
-      expected.add(new MoveSpecification(WHITE, A2, B3));
+      expected.add(new MoveSpecification(A2, B1));
+      expected.add(new MoveSpecification(A2, B2));
+      expected.add(new MoveSpecification(A2, B3));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -280,8 +280,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.WHITE, A2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, A2, B1));
-      expected.add(new MoveSpecification(WHITE, A2, B2));
+      expected.add(new MoveSpecification(A2, B1));
+      expected.add(new MoveSpecification(A2, B2));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -292,8 +292,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.WHITE, C3);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(WHITE, C3, B4));
-      expected.add(new MoveSpecification(WHITE, C3, B2));
+      expected.add(new MoveSpecification(C3, B4));
+      expected.add(new MoveSpecification(C3, B2));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -314,9 +314,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = RookLegalMoves.calculateRookLegalMoves(position, Side.BLACK, B8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, B8, B7));
-      expected.add(new MoveSpecification(BLACK, B8, C8));
-      expected.add(new MoveSpecification(BLACK, B8, D8));
+      expected.add(new MoveSpecification(B8, B7));
+      expected.add(new MoveSpecification(B8, C8));
+      expected.add(new MoveSpecification(B8, D8));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -335,9 +335,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = RookLegalMoves.calculateRookLegalMoves(position, Side.BLACK, A7);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, A7, A6));
-      expected.add(new MoveSpecification(BLACK, A7, A5));
-      expected.add(new MoveSpecification(BLACK, A7, B7));
+      expected.add(new MoveSpecification(A7, A6));
+      expected.add(new MoveSpecification(A7, A5));
+      expected.add(new MoveSpecification(A7, B7));
 
       check(expected, calculatedLegalMoveSet);
     }
@@ -358,8 +358,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           G8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, G8, H6));
-      expected.add(new MoveSpecification(BLACK, G8, F6));
+      expected.add(new MoveSpecification(G8, H6));
+      expected.add(new MoveSpecification(G8, F6));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -370,7 +370,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           G8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, G8, E7));
+      expected.add(new MoveSpecification(G8, E7));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -381,8 +381,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           G8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, G8, E7));
-      expected.add(new MoveSpecification(BLACK, G8, H6));
+      expected.add(new MoveSpecification(G8, E7));
+      expected.add(new MoveSpecification(G8, H6));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -403,9 +403,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           H2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, H2, G1));
-      expected.add(new MoveSpecification(BLACK, H2, G3));
-      expected.add(new MoveSpecification(BLACK, H2, F4));
+      expected.add(new MoveSpecification(H2, G1));
+      expected.add(new MoveSpecification(H2, G3));
+      expected.add(new MoveSpecification(H2, F4));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -416,7 +416,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           H2);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, H2, E5));
+      expected.add(new MoveSpecification(H2, E5));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -446,8 +446,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = QueenLegalMoves.calculateQueenLegalMoves(position, Side.BLACK, H8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, H8, G8));
-      expected.add(new MoveSpecification(BLACK, H8, F8));
+      expected.add(new MoveSpecification(H8, G8));
+      expected.add(new MoveSpecification(H8, F8));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -466,7 +466,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = QueenLegalMoves.calculateQueenLegalMoves(position, Side.BLACK, H8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, H8, G8));
+      expected.add(new MoveSpecification(H8, G8));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -476,7 +476,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
       final Set<LegalMove> calculatedLegalMoveSet = QueenLegalMoves.calculateQueenLegalMoves(position, Side.BLACK, F8);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, F8, F3));
+      expected.add(new MoveSpecification(F8, F3));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -487,7 +487,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, E7);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, E7, E6));
+      expected.add(new MoveSpecification(E7, E6));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -498,7 +498,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, E7);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, E7, E5));
+      expected.add(new MoveSpecification(E7, E5));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -509,8 +509,8 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, E7);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, E7, E6));
-      expected.add(new MoveSpecification(BLACK, E7, E5));
+      expected.add(new MoveSpecification(E7, E6));
+      expected.add(new MoveSpecification(E7, E5));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -521,7 +521,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, E7);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, E7, E5));
+      expected.add(new MoveSpecification(E7, E5));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -532,7 +532,7 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, H5);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, H5, H6));
+      expected.add(new MoveSpecification(H5, H6));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -543,9 +543,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, H5);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, H5, H4));
-      expected.add(new MoveSpecification(BLACK, H5, G4));
-      expected.add(new MoveSpecification(BLACK, H5, H6));
+      expected.add(new MoveSpecification(H5, H4));
+      expected.add(new MoveSpecification(H5, G4));
+      expected.add(new MoveSpecification(H5, H6));
       check(expected, calculatedLegalMoveSet);
     }
 
@@ -556,9 +556,9 @@ class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
           Side.BLACK, G5);
 
       final Set<MoveSpecification> expected = new TreeSet<>();
-      expected.add(new MoveSpecification(BLACK, G5, H4));
-      expected.add(new MoveSpecification(BLACK, G5, H5));
-      expected.add(new MoveSpecification(BLACK, G5, H6));
+      expected.add(new MoveSpecification(G5, H4));
+      expected.add(new MoveSpecification(G5, H5));
+      expected.add(new MoveSpecification(G5, H6));
       check(expected, calculatedLegalMoveSet);
     }
 

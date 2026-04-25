@@ -22,7 +22,7 @@ public class ThreefoldClaimAheadPrint {
       final ClaimAhead claimAheadFirst = NonNullWrapperCommon.getFirst(claimAheadList);
       final LegalMove legalMoveFirst = claimAheadFirst.legalMove();
       final String fullMoveNumber = HalfMoveUtility.calculateFullMoveNumberInitialWithSpace(
-          claimAheadFirst.fullMoveNumber(), legalMoveFirst.moveSpecification().havingMove());
+          claimAheadFirst.fullMoveNumber(), legalMoveFirst.havingMove());
       line.append(fullMoveNumber);
 
       final List<String> claimAheadSanList = new ArrayList<>();
