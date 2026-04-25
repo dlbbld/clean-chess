@@ -5,9 +5,9 @@ import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 public abstract class RestrictTestConstants {
 
   /**
-   * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Set to {@code false} to force every restricted
-   * PGN test to run at full coverage in one flip — avoids having to search-replace each individual flag. Individual
-   * flags that want to opt out of the master gate can be authored as a plain {@code true} instead of
+   * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Set to {@code false} to force every restricted PGN
+   * test to run at full coverage in one flip — avoids having to search-replace each individual flag. Individual flags
+   * that want to opt out of the master gate can be authored as a plain {@code true} instead of
    * {@code true && IS_RESTRICT_PGN}; that keeps the restriction on regardless.
    */
   public static final boolean IS_RESTRICT_PGN = true;
