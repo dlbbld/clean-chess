@@ -69,7 +69,7 @@ public class FenParserAdvanced implements EnumConstants {
     final var havingMoveCheck = fenRaw.havingMove();
     final Side havingMove = validateHavingMove(havingMoveCheck);
 
-    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove)) {
+    if (StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove)) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_POSITION_CHECK,
           "the king of the opposing player is in check");
     }
@@ -376,7 +376,7 @@ public class FenParserAdvanced implements EnumConstants {
 
     final StaticPosition staticPositionBeforeTwoSquareAdvance = staticPosition.createChangedPosition(updateSquareList);
 
-    if (StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPositionBeforeTwoSquareAdvance, oppositeSide)) {
+    if (StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPositionBeforeTwoSquareAdvance, oppositeSide)) {
       throw new FenAdvancedValidationException(
           FenAdvancedValidationProblem.INVALID_EN_PASSANT_CAPTURE_PREVIOUS_POSITION_ILLEGAL,
           "the opponent king was in check before before performing the pawn two square advance");

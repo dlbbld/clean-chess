@@ -66,7 +66,7 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       throw new ProgrammingMistakeException("Castling king-safety is handled by CastlingCheck");
     }
-    return !StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification);
+    return !StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove, moveSpecification);
   }
 
   public static KingSafetyCheck analyzeKingSafety(StaticPosition staticPosition, Side havingMove,
@@ -81,7 +81,7 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     // King moves: their king-safety is fully covered by analyzeMovement (KING_CAPTURES_GUARDED_PIECE
     // / KING_MOVES_TO_ATTACKED_EMPTY_SQUARE). The was-in-check distinction has no analog for the
     // king itself, so this method only handles non-king moves.
-    if ((movingPiece.getPieceType() == KING) || !StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+    if ((movingPiece.getPieceType() == KING) || !StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove, moveSpecification)) {
       return KingSafetyCheck.SUCCESS;
     }
     final var wasInCheck = StaticPositionUtility.calculateIsCheck(staticPosition, havingMove);
@@ -227,7 +227,7 @@ public abstract class ChessRuleAnalyzer implements EnumConstants {
     // along an opponent long-range piece's line, the king itself was the blocker; pre-move
     // attackedSquares would not include the destination, but the king IS attacked there after
     // moving off its current square.
-    if (!StaticPositionUtility.calculateIsEvaluateAttackingKing(staticPosition, havingMove, moveSpecification)) {
+    if (!StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove, moveSpecification)) {
       return MovementCheck.SUCCESS;
     }
     if (pieceOnToSquare != Piece.NONE && pieceOnToSquare.getSide() == havingMove.getOppositeSide()) {
