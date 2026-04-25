@@ -18,11 +18,6 @@ public abstract class StaticPositionUtility implements EnumConstants {
   public static boolean calculateIsCheck(StaticPosition staticPosition, Side havingMove) {
     final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
         havingMove.getOppositeSide());
-    return calculateIsKingAttacked(staticPosition, havingMove, attackedSquares);
-  }
-
-  private static boolean calculateIsKingAttacked(StaticPosition staticPosition, Side havingMove,
-      Set<Square> attackedSquares) {
     final Square kingSquareHavingMove = StaticPositionUtility.calculateKingSquare(staticPosition, havingMove);
     return attackedSquares.contains(kingSquareHavingMove);
   }
@@ -83,15 +78,7 @@ public abstract class StaticPositionUtility implements EnumConstants {
       MoveSpecification moveSpecification) {
     final StaticPosition staticPositionEvaluateAfterMove = Board.createPositionAfterMove(staticPosition, havingMove,
         moveSpecification);
-    return calculateIsKingAttackedAfterMove(staticPositionEvaluateAfterMove, havingMove.getOppositeSide());
+    return calculateIsCheck(staticPositionEvaluateAfterMove, havingMove);
   }
 
-  public static boolean calculateIsKingAttackedAfterMove(StaticPosition staticPositionEvaluateAfterMove,
-      Side havingMove) {
-    final Set<Square> attackedSquares = AbstractAttackedSquares
-        .calculateAttackedSquares(staticPositionEvaluateAfterMove, havingMove);
-    final Square kingSquareNotHavingMove = calculateKingSquare(staticPositionEvaluateAfterMove,
-        havingMove.getOppositeSide());
-    return attackedSquares.contains(kingSquareNotHavingMove);
-  }
 }

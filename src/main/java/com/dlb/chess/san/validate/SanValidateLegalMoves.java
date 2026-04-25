@@ -411,7 +411,8 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
   }
 
   private static PseudoLegalReason calculatePseudoLegalReason(StaticPosition staticPosition, Side havingMove) {
-    if (StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove.getOppositeSide())) {
+    // is check works because already narrowed down by legal move calculation to one or the other case
+    if (StaticPositionUtility.calculateIsCheck(staticPosition, havingMove)) {
       return PseudoLegalReason.KING_LEFT_IN_CHECK;
     }
     return PseudoLegalReason.KING_EXPOSED_TO_CHECK;
