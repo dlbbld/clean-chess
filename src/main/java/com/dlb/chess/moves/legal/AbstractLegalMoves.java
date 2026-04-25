@@ -13,10 +13,10 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
+import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
-import com.dlb.chess.model.PseudoLegalReason;
 import com.dlb.chess.moves.legal.king.KingLegalMoves;
 import com.dlb.chess.moves.legal.pawn.PawnLegalMoves;
 import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
@@ -99,15 +99,15 @@ public abstract class AbstractLegalMoves implements EnumConstants {
         pseudoLegalMoveSet.add(pseudoLegalMove);
       }
     }
-    final PseudoLegalReason pseudoLegalReason;
+    final KingSafetyCheck pseudoLegalKingSafety;
     if (!legalMoveSet.isEmpty() || pseudoLegalMoveSet.isEmpty()) {
-      pseudoLegalReason = PseudoLegalReason.NONE;
+      pseudoLegalKingSafety = KingSafetyCheck.SUCCESS;
     } else if (StaticPositionUtility.calculateIsCheck(staticPosition, havingMove)) {
-      pseudoLegalReason = PseudoLegalReason.KING_LEFT_IN_CHECK;
+      pseudoLegalKingSafety = KingSafetyCheck.NON_KING_LEFT_IN_CHECK;
     } else {
-      pseudoLegalReason = PseudoLegalReason.KING_EXPOSED_TO_CHECK;
+      pseudoLegalKingSafety = KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
     }
-    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet, pseudoLegalReason);
+    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet, pseudoLegalKingSafety);
   }
 
 }
