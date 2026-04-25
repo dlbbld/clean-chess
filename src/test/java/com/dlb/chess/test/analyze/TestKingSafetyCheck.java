@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.EnumSet;
 import java.util.Set;
+import java.util.TreeSet;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
@@ -23,7 +24,7 @@ import com.dlb.chess.enums.KingSafetyCheck;
  */
 class TestKingSafetyCheck implements EnumConstants {
 
-  @SuppressWarnings("null") private static final Set<KingSafetyCheck> COVERED = EnumSet.noneOf(KingSafetyCheck.class);
+  private static final Set<KingSafetyCheck> COVERED = new TreeSet<>();
 
   private static KingSafetyCheck analyze(ApiBoard board, MoveSpecification move) {
     final KingSafetyCheck result = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(), board.getHavingMove(),
@@ -87,7 +88,6 @@ class TestKingSafetyCheck implements EnumConstants {
         KingSafetyCheck.KING_LEFT_IN_CHECK_NO_LEGAL_MOVES);
   }
 
-  @SuppressWarnings("null")
   @AfterAll
   static void verifyExhaustive() {
     final Set<KingSafetyCheck> missing = EnumSet.allOf(KingSafetyCheck.class);
