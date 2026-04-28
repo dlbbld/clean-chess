@@ -3,6 +3,7 @@ package com.dlb.chess.san.validate;
 import java.util.Set;
 
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
@@ -54,13 +55,13 @@ public class SanValidation extends AbstractSan {
   }
 
   /**
-   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic
-   * termination has been reached the game has ended permanently — no further moves are accepted.
+   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic termination has been
+   * reached the game has ended permanently — no further moves are accepted.
    *
-   * <p>The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE
-   * 5.2.2 dead position), fivefold repetition, and the 75-move rule. Single-side
-   * insufficient-material diagnostics, the claimable draws (3-fold repetition, 50-move rule),
-   * and ongoing positions are deliberately NOT rejected here.
+   * <p>
+   * The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE 5.2.2 dead position),
+   * fivefold repetition, and the 75-move rule. Single-side insufficient-material diagnostics, the claimable draws
+   * (3-fold repetition, 50-move rule), and ongoing positions are deliberately NOT rejected here.
    */
   private static void validateGameNotEnded(ApiBoard board) throws SanValidationException {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
@@ -68,6 +69,6 @@ public class SanValidation extends AbstractSan {
       return;
     }
     throw new SanValidationException(SanValidationProblem.GAME_ALREADY_ENDED,
-        Message.getString("validation.san.gameAlreadyEnded", gameStatus.name()), gameStatus);
+        Message.getString("validation.san.gameAlreadyEnded", NonNullWrapperCommon.name(gameStatus)), gameStatus);
   }
 }
