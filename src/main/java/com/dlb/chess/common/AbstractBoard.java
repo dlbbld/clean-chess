@@ -52,7 +52,7 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
 
     final Side havingMove = getHavingMove();
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      this.performMove(moveSpecification);
+      performMoveForRepresentation(moveSpecification);
       final LegalMove legalMove = getLastMove();
       final String san = getSan();
       final String lan = getLan();
@@ -63,6 +63,18 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
       result.add(moveRepresentation);
     }
     return result;
+  }
+
+  /**
+   * Performs a known-legal move (originating from {@link #getPossibleMoveSpecificationSet()})
+   * for the purpose of computing a {@link MoveRepresentation}. The default implementation
+   * routes through the public {@link #performMove(MoveSpecification)}; subclasses whose
+   * validation pipeline rejects further moves on terminal positions (e.g. the strict-pipeline
+   * {@code Board}) override this to skip that game-end check, since the legal-moves query
+   * must remain functional even when the game has ended.
+   */
+  protected void performMoveForRepresentation(MoveSpecification moveSpecification) {
+    this.performMove(moveSpecification);
   }
 
   @Override

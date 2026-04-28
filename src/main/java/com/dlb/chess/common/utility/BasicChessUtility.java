@@ -127,7 +127,7 @@ public abstract class BasicChessUtility {
     if (board.isInsufficientMaterial(board.getHavingMove())) {
       return GameStatus.INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY;
     }
-    return GameStatus.OTHER;
+    return GameStatus.ONGOING;
   }
 
   public static boolean calculateIsResetHalfMoveClock(LegalMove legalMove) {

@@ -13,9 +13,11 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
+import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
@@ -28,6 +30,8 @@ public class ValidateNewMove implements EnumConstants {
 
   public static MoveCheck validateNewMove(ApiBoard board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
+
+    validateGameNotEnded(board);
 
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       validateCastling(board, moveSpecification);
@@ -48,6 +52,24 @@ public class ValidateNewMove implements EnumConstants {
     validateKingSafety(board, moveSpecification);
 
     return MoveCheck.SUCCESS;
+  }
+
+  /**
+   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic
+   * termination has been reached the game has ended permanently — no further moves are accepted.
+   *
+   * <p>The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE
+   * 5.2.2 dead position), fivefold repetition, and the 75-move rule. Single-side
+   * insufficient-material diagnostics, the claimable draws (3-fold repetition, 50-move rule),
+   * and ongoing positions are deliberately NOT rejected here.
+   */
+  private static void validateGameNotEnded(ApiBoard board) throws InvalidMoveException {
+    final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
+    if (!gameStatus.isAutomaticTermination()) {
+      return;
+    }
+    throw new InvalidMoveException("the game has already ended by " + gameStatus,
+        MoveCheck.GAME_ALREADY_ENDED, gameStatus);
   }
 
   private static void validateCastling(ApiBoard board, MoveSpecification moveSpecification)

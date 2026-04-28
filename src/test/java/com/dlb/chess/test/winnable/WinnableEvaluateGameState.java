@@ -57,7 +57,7 @@ public class WinnableEvaluateGameState {
         case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY -> Winnable.NO;
         case FIVE_FOLD_REPETITION_RULE -> Winnable.NO;
         case SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
-        case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+        case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING -> Winnable.UNKNOWN;
         default -> throw new IllegalArgumentException();
       };
     }

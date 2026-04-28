@@ -15,6 +15,7 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 class TestStrictPgnParserAgainstLenientPgnParser {
 
@@ -32,6 +33,10 @@ class TestStrictPgnParserAgainstLenientPgnParser {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
 
         final String pgnFileName = testCase.pgnFileName();
+
+        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(pgnFileName)) {
+          continue;
+        }
 
         logger.info(pgnFileName);
 

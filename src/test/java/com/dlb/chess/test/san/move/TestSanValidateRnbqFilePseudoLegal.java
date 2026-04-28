@@ -77,7 +77,9 @@ class TestSanValidateRnbqFilePseudoLegal {
     // Two white bishops on d2 and d4, pinned on separate diagonals from c3.
     // d2 pinned along c3-d2-e1 (bishop e1), d4 pinned along c3-d4-e5 (bishop e5).
     // Both can reach e3 but each would expose king on its diagonal.
-    final ApiBoard board = new Board("k7/8/8/4b3/3B4/2K5/3B4/4b3 w - - 0 1");
+    // Black pawn on h7 breaks the otherwise mutual same-color-bishops-only material configuration
+    // so the position is not in INSUFFICIENT_MATERIAL_BOTH. h7 does not interact with the test.
+    final ApiBoard board = new Board("k7/7p/8/4b3/3B4/2K5/3B4/4b3 w - - 0 1");
     checkException("Bde3", board, SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_FILE_MULTIPLE);
   }
 
@@ -87,7 +89,9 @@ class TestSanValidateRnbqFilePseudoLegal {
     // Two black bishops on d7 and d5, pinned on separate diagonals from c6.
     // d7 pinned along c6-d7-e8 (bishop e8), d5 pinned along c6-d5-e4 (bishop e4).
     // Both can reach e6 but each would expose king on its diagonal.
-    final ApiBoard board = new Board("4B3/3b4/2k5/3b4/4B3/8/8/K7 b - - 0 1");
+    // White pawn on h2 breaks the otherwise mutual same-color-bishops-only material configuration
+    // so the position is not in INSUFFICIENT_MATERIAL_BOTH. h2 does not interact with the test.
+    final ApiBoard board = new Board("4B3/3b4/2k5/3b4/4B3/8/7P/K7 b - - 0 1");
     checkException("Bde6", board, SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_FILE_MULTIPLE);
   }
 

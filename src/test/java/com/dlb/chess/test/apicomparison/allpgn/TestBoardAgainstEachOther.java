@@ -16,6 +16,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 class TestBoardAgainstEachOther {
 
@@ -29,6 +30,12 @@ class TestBoardAgainstEachOther {
   void test() throws Exception {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
+        // PGNs whose recorded halfmove sequence continues past a FIDE-automatic termination
+        // cannot be fully replayed under the strict-game invariant; rejection is verified
+        // separately in TestPgnPlaysBeyondTerminationRejection.
+        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(testCase.pgnFileName())) {
+          continue;
+        }
         // takes 50 minutes with all test cases
         if (RestrictTestConstants.IS_RESTRICT_PGN_BOARD_API_AGAINST_EACH_OTHER_TEST) {
           switch (testCaseList.pgnTest()) {

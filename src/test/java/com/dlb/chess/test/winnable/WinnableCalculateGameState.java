@@ -60,6 +60,13 @@ public class WinnableCalculateGameState {
     for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
+      // If the first move creates a FIDE-automatic termination, the strict pipeline rejects
+      // any further move from this position. The terminal status is already informative for
+      // the analyzer; skip deeper exploration from this branch.
+      if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+        board.unperformMove();
+        continue;
+      }
       for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
@@ -86,6 +93,10 @@ public class WinnableCalculateGameState {
     for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
+      if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+        board.unperformMove();
+        continue;
+      }
       for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
@@ -112,9 +123,17 @@ public class WinnableCalculateGameState {
     for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
+      if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+        board.unperformMove();
+        continue;
+      }
       for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
+        if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+          board.unperformMove();
+          continue;
+        }
         for (final MoveRepresentation thirdHalfMove : board.getLegalMovesRepresentation()) {
           countEvaluatedPositions++;
           board.performMove(thirdHalfMove.moveSpecification());
@@ -144,9 +163,17 @@ public class WinnableCalculateGameState {
     for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
+      if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+        board.unperformMove();
+        continue;
+      }
       for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
+        if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+          board.unperformMove();
+          continue;
+        }
         for (final MoveRepresentation thirdHalfMove : board.getLegalMovesRepresentation()) {
           countEvaluatedPositions++;
           board.performMove(thirdHalfMove.moveSpecification());
@@ -190,7 +217,7 @@ public class WinnableCalculateGameState {
             board.unperformMove();
           }
           return new GameForced(evaluation, countForcedHalfMoves, sideMadeLastMove);
-        case OTHER:
+        case ONGOING:
           break;
         default:
           throw new IllegalArgumentException();
@@ -201,20 +228,20 @@ public class WinnableCalculateGameState {
     for (var i = 1; i <= countForcedHalfMoves; i++) {
       board.unperformMove();
     }
-    return new GameForced(GameStatus.OTHER, countForcedHalfMoves, sideMadeLastMove);
+    return new GameForced(GameStatus.ONGOING, countForcedHalfMoves, sideMadeLastMove);
   }
 
   private static boolean calculateIsEndMoveEvaluationMadeTheMove(GameStatus moveEvaluation) {
     return switch (moveEvaluation) {
       case CHECKMATE -> true;
-      case FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER, SEVENTY_FIVE_MOVE_RULE, STALEMATE -> false;
+      case FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING, SEVENTY_FIVE_MOVE_RULE, STALEMATE -> false;
       default -> throw new IllegalArgumentException();
     };
   }
 
   private static boolean calculateIsEndMoveEvaluationNotMadeTheMove(GameStatus moveEvaluation) {
     return switch (moveEvaluation) {
-      case OTHER, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY -> true;
+      case ONGOING, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY -> true;
       case CHECKMATE, FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, SEVENTY_FIVE_MOVE_RULE, STALEMATE -> false;
       default -> throw new IllegalArgumentException();
     };

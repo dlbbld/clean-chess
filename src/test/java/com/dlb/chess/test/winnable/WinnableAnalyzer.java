@@ -8,6 +8,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
 import com.dlb.chess.test.winnable.model.GameForced;
@@ -37,6 +38,15 @@ public class WinnableAnalyzer {
 
     if (board.isInsufficientMaterial(side) || board.isStalemate() || board.isFivefoldRepetition()
         || board.isSeventyFiftyMove()) {
+      return Winnable.NO;
+    }
+
+    // Defensive: if the position is in any FIDE-automatic termination not caught by the
+    // predicates above (e.g. mutual insufficient material without the per-side variant
+    // returning true on the queried side), the strict pipeline rejects further moves and the
+    // forced-line / move-tree analysis below would throw GAME_ALREADY_ENDED. Treat it as
+    // unwinnable.
+    if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
       return Winnable.NO;
     }
 
@@ -178,7 +188,7 @@ public class WinnableAnalyzer {
     return switch (gameStatusFinal) {
       case CHECKMATE -> Winnable.YES;
       case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING -> Winnable.UNKNOWN;
       default -> throw new IllegalArgumentException();
     };
   }
@@ -186,7 +196,7 @@ public class WinnableAnalyzer {
   private static Winnable calculateWinnableForcedNotMadeLastMove(GameStatus gameStatusFinal) {
     return switch (gameStatusFinal) {
       case CHECKMATE, STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, ONGOING -> Winnable.UNKNOWN;
       default -> throw new IllegalArgumentException();
     };
   }

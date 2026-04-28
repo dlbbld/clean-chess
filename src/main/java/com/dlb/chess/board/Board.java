@@ -171,6 +171,17 @@ public class Board extends AbstractBoard {
     return performMove(moveSpecification, false);
   }
 
+  /**
+   * Override of the AbstractBoard hook: bypasses the strict-pipeline validation (including the
+   * {@code GAME_ALREADY_ENDED} check) since {@link #getLegalMovesRepresentation()} explores
+   * moves that are already known to be legal in the position. Without this override, querying
+   * legal moves on a terminal-state board (e.g. mutual insufficient material) would throw.
+   */
+  @Override
+  protected void performMoveForRepresentation(MoveSpecification moveSpecification) {
+    this.performMoveWithoutValidation(moveSpecification);
+  }
+
   @Override
   public boolean performMove(MoveSpecification moveSpecification) throws InvalidMoveException {
     return performMove(moveSpecification, true);

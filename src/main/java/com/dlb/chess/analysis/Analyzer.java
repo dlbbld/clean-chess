@@ -64,9 +64,6 @@ public class Analyzer extends AnalyzerPrint {
     final var hasFiftyMoveRule = !yawnMoveListList.isEmpty();
     final var hasSeventyFiveMoveRule = calculateHasSeventyFiveMoveRule(yawnMoveListList);
 
-    final var isGameContinuedOverFivefoldRepetition = calculateGameContinuedOverFivefoldRepetition(halfMoveList);
-    final var isGameContinuedOverSeventyFiveMove = calculateGameContinuedOverSeventyFiveMove(yawnMoveListList);
-
     final var firstCapture = calculateFirstCapture(halfMoveList);
     final var hasCapture = calculateHasCapture(halfMoveList);
 
@@ -83,8 +80,7 @@ public class Analyzer extends AnalyzerPrint {
 
     return new Analysis(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
         yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
-        hasFiftyMoveRule, hasSeventyFiveMoveRule, isGameContinuedOverFivefoldRepetition,
-        isGameContinuedOverSeventyFiveMove, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
+        hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
         insufficientMaterial, fen, board);
   }
 
@@ -136,30 +132,6 @@ public class Analyzer extends AnalyzerPrint {
   private static boolean calculateHasCapture(List<HalfMove> halfMoveList) {
     for (final HalfMove halfMove : halfMoveList) {
       if (halfMove.isCapture()) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  private static boolean calculateGameContinuedOverFivefoldRepetition(List<HalfMove> halfMoveList) {
-
-    for (final HalfMove halfMove : halfMoveList) {
-      final var countRepetition = RepetitionUtility.getCountRepetition(halfMove,
-          EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
-      if (countRepetition >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD) {
-        return !halfMove.equals(NonNullWrapperCommon.getLast(halfMoveList));
-      }
-    }
-    return false;
-  }
-
-  private static boolean calculateGameContinuedOverSeventyFiveMove(List<List<YawnHalfMove>> yawnMoveListList) {
-
-    for (final List<YawnHalfMove> list : yawnMoveListList) {
-      final YawnHalfMove lastYawnHalfMove = NonNullWrapperCommon.getLast(list);
-
-      if (lastYawnHalfMove.sequenceLength() > ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
         return true;
       }
     }

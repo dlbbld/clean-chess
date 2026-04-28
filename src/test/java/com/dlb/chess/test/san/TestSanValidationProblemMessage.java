@@ -582,8 +582,10 @@ class TestSanValidationProblemMessage {
     }
 
     // NOT_REACHABLE_KING_NON_CASTLING: lone white king on e1 cannot reach c3 (not king-adjacent).
+    // Black rook on a8 ensures the position is not in INSUFFICIENT_MATERIAL_BOTH; it does not
+    // attack any square involved in the test.
     {
-      final ApiBoard board = new Board("7k/8/8/8/8/8/8/4K3 w - - 0 1");
+      final ApiBoard board = new Board("r6k/8/8/8/8/8/8/4K3 w - - 0 1");
       checkException("Kc3", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING,
           "The king cannot reach square c3.");
     }
@@ -785,9 +787,10 @@ class TestSanValidationProblemMessage {
     }
 
     // KING_MOVES_NEXT_TO_OPPONENT_KING: white king e1, black king e3. Ke2 lands adjacent to the
-    // black king.
+    // black king. Black rook on a8 ensures the position is not in mutual insufficient material;
+    // the rook attacks neither king.
     {
-      final ApiBoard board = new Board("8/8/8/8/8/4k3/8/4K3 w - - 0 1");
+      final ApiBoard board = new Board("r7/8/8/8/8/4k3/8/4K3 w - - 0 1");
       checkException("Ke2", board, SanValidationProblem.KING_MOVES_NEXT_TO_OPPONENT_KING,
           "The king cannot move to e2 because it would be next to the opponent king.");
     }
@@ -956,6 +959,23 @@ class TestSanValidationProblemMessage {
           "The move is check, but no symbol was specified.");
     }
 
+  }
+
+  // --- Game-end pre-check ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testGameAlreadyEnded() {
+    // GAME_ALREADY_ENDED carries the specific GameStatus that ended the game. The SAN string is
+    // syntactically valid and would otherwise be parsed normally; the strict-pipeline check at
+    // the top of SanValidation rejects it because the game has already terminated.
+
+    // Mutual insufficient material (FIDE 5.2.2 dead position): K vs K.
+    {
+      final ApiBoard board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
+      checkException("Ke2", board, SanValidationProblem.GAME_ALREADY_ENDED,
+          "The game has already ended by INSUFFICIENT_MATERIAL_BOTH - no further moves are accepted.");
+    }
   }
 
   /** Checks a SAN against the initial position. */

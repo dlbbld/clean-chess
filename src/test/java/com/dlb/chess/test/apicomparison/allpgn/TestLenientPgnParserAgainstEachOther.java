@@ -20,6 +20,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 class TestLenientPgnParserAgainstEachOther {
 
@@ -33,6 +34,10 @@ class TestLenientPgnParserAgainstEachOther {
   void test() throws Exception {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
+        // See note in TestBoardAgainstEachOther: skip PGNs that play past automatic terminations.
+        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(testCase.pgnFileName())) {
+          continue;
+        }
         if (RestrictTestConstants.IS_RESTRICT_PGN_LENIENT_PARSER_API_AGAINST_EACH_OTHER_TEST) {
           switch (testCaseList.pgnTest()) {
             case BASIC_CHECK_WHITE:

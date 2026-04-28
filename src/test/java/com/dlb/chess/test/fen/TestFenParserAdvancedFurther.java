@@ -9,7 +9,6 @@ import com.dlb.chess.common.enums.FenAdvancedFurtherValidationProblem;
 import com.dlb.chess.common.exceptions.FenAdvancedFurtherValidationException;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.FenParserAdvancedFurther;
-import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 
 class TestFenParserAdvancedFurther implements EnumConstants {
@@ -33,21 +32,12 @@ class TestFenParserAdvancedFurther implements EnumConstants {
     checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 22 11",
         FenAdvancedFurtherValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
 
-    final var whiteHavingMoveMaxHalfMoveClock = 2 * (FenConstants.MAX_FULL_MOVE_NUMBER - 1);
-    final var blackHavingMoveMaxHalfMoveClock = 2 * (FenConstants.MAX_FULL_MOVE_NUMBER - 1) + 1;
-
-    // max values exceeded by one
-    // max full move number - half-move clock one above possible value - white having the move
-    checkParseFenException(
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - " + (whiteHavingMoveMaxHalfMoveClock + 1) + " "
-            + FenConstants.MAX_FULL_MOVE_NUMBER,
-        FenAdvancedFurtherValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
-
-    // max full move number - half-move clock one above possible value - black having the move
-    checkParseFenException(
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - " + (blackHavingMoveMaxHalfMoveClock + 1) + " "
-            + FenConstants.MAX_FULL_MOVE_NUMBER,
-        FenAdvancedFurtherValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
+    // The MAX_FULL_MOVE_NUMBER boundary tests previously placed here exercised half-move clocks
+    // far above 150, which under the strict-game invariant are now rejected up-front by
+    // FenParserAdvanced (see TestFenParserAdvanced.testParseFenExceptionHalfMoveClockBeyondSeventyFiveMoveRule).
+    // The "too big relative to full move number" predicate is still exercised by the small-value
+    // cases above (lines 21-34); large-value boundary cases are no longer reachable through the
+    // Advanced layer because the half-move clock is capped at 150.
   }
 
   @SuppressWarnings("static-method")
