@@ -1,7 +1,7 @@
 package com.dlb.chess.test.pgn.parser.beyond;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 
@@ -15,20 +15,8 @@ import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
 /**
- * Strict-parser counterpart of {@link TestLenientPgnParserBeyondTermination}: every fixture
- * under {@code src/test/resources/pgnParser/common/beyond/} must be rejected by the strict
- * pipeline, with the expected {@link GameStatus} carried on the exception.
- *
- * <p>
- * Like the lenient counterpart, each fixture has its own {@code @Test} method with the
- * expected {@link GameStatus} hard-coded inline. No runtime filename parsing.
- *
- * <p>
- * The strict parser raises {@link StrictPgnParserValidationException} with
- * {@link StrictPgnParserValidationProblem#SAN} and
- * {@link SanValidationProblem#GAME_ALREADY_ENDED}; the
- * {@link StrictPgnParserValidationException#getGameStatus()} accessor returns the specific
- * termination cause.
+ * Strict-parser counterpart of {@link TestLenientPgnParserBeyondTermination}. Each fixture
+ * has its own {@code @Test} method with the expected {@link GameStatus} pinned literally.
  */
 class TestStrictPgnParserBeyondTermination {
 
@@ -103,19 +91,12 @@ class TestStrictPgnParserBeyondTermination {
   }
 
   private static void assertRejectedWith(String pgnFileName, GameStatus expectedStatus) {
-    try {
-      StrictPgnParser.parse(BEYOND_FOLDER, pgnFileName);
-      fail("Strict parser was expected to reject " + pgnFileName
-          + " (it plays past " + expectedStatus + ") but parsing succeeded");
-    } catch (final StrictPgnParserValidationException e) {
-      assertEquals(StrictPgnParserValidationProblem.SAN, e.getStrictPgnParserValidationProblem(),
-          "Expected SAN-level rejection for " + pgnFileName);
-      assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem(),
-          "Expected GAME_ALREADY_ENDED rejection for " + pgnFileName + ", got: "
-              + e.getSanValidationProblem());
-      assertEquals(expectedStatus, e.getGameStatus(),
-          "Expected termination by " + expectedStatus + " for " + pgnFileName
-              + ", got: " + e.getGameStatus());
-    }
+    final StrictPgnParserValidationException e = assertThrows(
+        StrictPgnParserValidationException.class,
+        () -> StrictPgnParser.parse(BEYOND_FOLDER, pgnFileName));
+
+    assertEquals(StrictPgnParserValidationProblem.SAN, e.getStrictPgnParserValidationProblem());
+    assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem());
+    assertEquals(expectedStatus, e.getGameStatus());
   }
 }

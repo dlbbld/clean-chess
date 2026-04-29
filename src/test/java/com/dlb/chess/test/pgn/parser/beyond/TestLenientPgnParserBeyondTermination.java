@@ -1,7 +1,7 @@
 package com.dlb.chess.test.pgn.parser.beyond;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.nio.file.Path;
 
@@ -20,18 +20,15 @@ import com.dlb.chess.san.enums.SanValidationProblem;
  * specific {@link GameStatus} that ended the game.
  *
  * <p>
- * Each fixture has its own {@code @Test} method with the expected {@link GameStatus} hard-coded
- * in the method body. There is no runtime filename-parsing or table-driven indirection — the
- * expected (fixture, status) pair is pinned literally per test method, so a fixture rename or a
- * misclassification surfaces as a compile-time or test-name change rather than a silent
- * re-classification.
+ * Each fixture has its own {@code @Test} method with the expected {@link GameStatus} pinned
+ * literally in the method body. No runtime filename parsing.
  *
  * <p>
  * The lenient parser raises {@link LenientPgnParserValidationException} with
  * {@link LenientPgnParserValidationProblem#SAN} and
  * {@link SanValidationProblem#GAME_ALREADY_ENDED}; the
  * {@link LenientPgnParserValidationException#getGameStatus()} accessor returns the specific
- * termination cause, which is asserted directly (no message-substring check).
+ * termination cause, which is asserted directly.
  */
 class TestLenientPgnParserBeyondTermination {
 
@@ -105,25 +102,13 @@ class TestLenientPgnParserBeyondTermination {
         GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
-  /**
-   * Common assertion body for the per-fixture tests above. Each test method supplies the
-   * fixture filename and the expected {@link GameStatus} verbatim; this method does the I/O
-   * and the typed assertions.
-   */
   private static void assertRejectedWith(String pgnFileName, GameStatus expectedStatus) {
-    try {
-      LenientPgnParser.parse(BEYOND_FOLDER, pgnFileName);
-      fail("Lenient parser was expected to reject " + pgnFileName
-          + " (it plays past " + expectedStatus + ") but parsing succeeded");
-    } catch (final LenientPgnParserValidationException e) {
-      assertEquals(LenientPgnParserValidationProblem.SAN, e.getLenientPgnParserValidationProblem(),
-          "Expected SAN-level rejection for " + pgnFileName);
-      assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem(),
-          "Expected GAME_ALREADY_ENDED rejection for " + pgnFileName + ", got: "
-              + e.getSanValidationProblem());
-      assertEquals(expectedStatus, e.getGameStatus(),
-          "Expected termination by " + expectedStatus + " for " + pgnFileName
-              + ", got: " + e.getGameStatus());
-    }
+    final LenientPgnParserValidationException e = assertThrows(
+        LenientPgnParserValidationException.class,
+        () -> LenientPgnParser.parse(BEYOND_FOLDER, pgnFileName));
+
+    assertEquals(LenientPgnParserValidationProblem.SAN, e.getLenientPgnParserValidationProblem());
+    assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem());
+    assertEquals(expectedStatus, e.getGameStatus());
   }
 }
