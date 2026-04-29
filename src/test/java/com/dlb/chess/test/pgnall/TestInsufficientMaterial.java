@@ -22,7 +22,6 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 class TestInsufficientMaterial implements EnumConstants {
 
@@ -48,9 +47,6 @@ class TestInsufficientMaterial implements EnumConstants {
         }
       }
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(testCase.pgnFileName())) {
-          continue;
-        }
         checkInsufficientMaterial(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       }
     }

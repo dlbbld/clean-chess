@@ -18,7 +18,6 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 class TestFenParserAll extends AbstractTestFenParser {
 
@@ -44,9 +43,6 @@ class TestFenParserAll extends AbstractTestFenParser {
         }
       }
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(testCase.pgnFileName())) {
-          continue;
-        }
         checkFromFen(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       }
     }

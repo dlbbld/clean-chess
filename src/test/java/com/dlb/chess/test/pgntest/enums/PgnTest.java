@@ -66,12 +66,10 @@ public enum PgnTest {
   VARIOUS(false, "various"),
   WCC2021(false, "wcc2021"),
   FIVEFOLD_CORRECT(false, "fivefold/correct"),
-  FIVEFOLD_BEYOND(false, "fivefold/beyond"),
   FIFTY_GENERAL(false, "fifty/general"),
   FIFTY_PATTERN(false, "fifty/pattern"),
 
   SEVENTY_FIVE_CORRECT(false, "seventyFive/correct"),
-  SEVENTY_FIVE_BEYOND(false, "seventyFive/beyond"),
   EARLY_DRAW(false, "earlyDraw"),
   WIKIPEDIA_THREEFOLD(false, "wikipedia/threefold"),
   WIKIPEDIA_FIFTY_MOVE(false, "wikipedia/fiftyMove"),

@@ -33,7 +33,6 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
@@ -61,11 +60,6 @@ class TestLegalMovesAgainstCreatedUsingValidation {
         }
       }
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        // PGNs whose recorded halfmove sequence continues past a FIDE-automatic termination
-        // cannot be fully replayed under the strict-game invariant.
-        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(testCase.pgnFileName())) {
-          continue;
-        }
         checkLegalMoves(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       }
     }

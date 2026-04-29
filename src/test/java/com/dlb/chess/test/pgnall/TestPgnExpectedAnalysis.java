@@ -8,7 +8,6 @@ import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.pgntest.PgnPlaysBeyondTermination;
 
 /**
  * Analyzes PGN test cases and validates expected values. Default scope (when
@@ -45,9 +44,6 @@ class TestPgnExpectedAnalysis extends AbstractPgnTest {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (RestrictTestConstants.IS_RESTRICT_PGN_EXPECTED_ANALYSIS && filesInFolder >= MAX_FILES_PER_FOLDER) {
           break;
-        }
-        if (PgnPlaysBeyondTermination.playsBeyondAutomaticTermination(testCase.pgnFileName())) {
-          continue;
         }
         logger.info(testCase.pgnFileName());
         testGame(testCaseList, testCase);
