@@ -1,15 +1,11 @@
 package com.dlb.chess.test.pgn.parser.beyond;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.nio.file.Path;
-import java.util.stream.Stream;
 
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
@@ -20,20 +16,22 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 
 /**
  * Verifies that the lenient PGN parser rejects every fixture under
- * {@code src/test/resources/pgnParser/common/beyond/} (root, not the legacy bucket) and that the
- * rejection reason carries the specific {@link GameStatus} that ended the game.
+ * {@code src/test/resources/pgnParser/common/beyond/} and that the rejection reason carries the
+ * specific {@link GameStatus} that ended the game.
  *
  * <p>
- * The fixtures are deliberately authored to play exactly one halfmove past a FIDE-automatic
- * termination (checkmate, stalemate, mutual insufficient material, fivefold repetition, 75-move
- * rule). The parser raises {@link LenientPgnParserValidationException} with
+ * Each fixture has its own {@code @Test} method with the expected {@link GameStatus} hard-coded
+ * in the method body. There is no runtime filename-parsing or table-driven indirection — the
+ * expected (fixture, status) pair is pinned literally per test method, so a fixture rename or a
+ * misclassification surfaces as a compile-time or test-name change rather than a silent
+ * re-classification.
+ *
+ * <p>
+ * The lenient parser raises {@link LenientPgnParserValidationException} with
  * {@link LenientPgnParserValidationProblem#SAN} and
- * {@link SanValidationProblem#GAME_ALREADY_ENDED}; the message text names the specific
- * {@link GameStatus} that ended the game, which the test asserts to distinguish the five
- * termination causes.
- *
- * <p>
- * The by-color split (with-white-move vs with-black-move) exercises both side-to-move codepaths.
+ * {@link SanValidationProblem#GAME_ALREADY_ENDED}; the
+ * {@link LenientPgnParserValidationException#getGameStatus()} accessor returns the specific
+ * termination cause, which is asserted directly (no message-substring check).
  */
 class TestLenientPgnParserBeyondTermination {
 
@@ -41,30 +39,78 @@ class TestLenientPgnParserBeyondTermination {
       com.dlb.chess.common.constants.ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH,
       "src/test/resources/pgnParser/common/beyond");
 
-  static Stream<Arguments> fixtures() {
-    return Stream.of(
-        Arguments.of("01_play_beyond_checkmate_with_white_move.pgn", GameStatus.CHECKMATE),
-        Arguments.of("02_play_beyond_checkmate_with_black_move.pgn", GameStatus.CHECKMATE),
-        Arguments.of("03_play_beyond_stalemate_with_white_move.pgn", GameStatus.STALEMATE),
-        Arguments.of("04_play_beyond_stalemate_with_black_move.pgn", GameStatus.STALEMATE),
-        Arguments.of("05_play_beyond_insufficient_material_with_white_move.pgn",
-            GameStatus.INSUFFICIENT_MATERIAL_BOTH),
-        Arguments.of("06_play_beyond_insufficient_material_with_black_move.pgn",
-            GameStatus.INSUFFICIENT_MATERIAL_BOTH),
-        Arguments.of("07_play_beyond_fivefold_repetition_with_white_move.pgn",
-            GameStatus.FIVE_FOLD_REPETITION_RULE),
-        Arguments.of("08_play_beyond_fivefold_repetition_with_black_move.pgn",
-            GameStatus.FIVE_FOLD_REPETITION_RULE),
-        Arguments.of("09_play_beyond_seventy_five_move_rule_with_white_move.pgn",
-            GameStatus.SEVENTY_FIVE_MOVE_RULE),
-        Arguments.of("10_play_beyond_seventy_five_move_rule_with_black_move.pgn",
-            GameStatus.SEVENTY_FIVE_MOVE_RULE));
+  @SuppressWarnings("static-method")
+  @Test
+  void test01PlayBeyondCheckmateWithWhiteMove() {
+    assertRejectedWith("01_play_beyond_checkmate_with_white_move.pgn", GameStatus.CHECKMATE);
   }
 
   @SuppressWarnings("static-method")
-  @ParameterizedTest(name = "{0} -> {1}")
-  @MethodSource("fixtures")
-  void rejectsWithExpectedTerminationReason(String pgnFileName, GameStatus expectedStatus) {
+  @Test
+  void test02PlayBeyondCheckmateWithBlackMove() {
+    assertRejectedWith("02_play_beyond_checkmate_with_black_move.pgn", GameStatus.CHECKMATE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test03PlayBeyondStalemateWithWhiteMove() {
+    assertRejectedWith("03_play_beyond_stalemate_with_white_move.pgn", GameStatus.STALEMATE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test04PlayBeyondStalemateWithBlackMove() {
+    assertRejectedWith("04_play_beyond_stalemate_with_black_move.pgn", GameStatus.STALEMATE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test05PlayBeyondInsufficientMaterialWithWhiteMove() {
+    assertRejectedWith("05_play_beyond_insufficient_material_with_white_move.pgn",
+        GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test06PlayBeyondInsufficientMaterialWithBlackMove() {
+    assertRejectedWith("06_play_beyond_insufficient_material_with_black_move.pgn",
+        GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test07PlayBeyondFivefoldRepetitionWithWhiteMove() {
+    assertRejectedWith("07_play_beyond_fivefold_repetition_with_white_move.pgn",
+        GameStatus.FIVE_FOLD_REPETITION_RULE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test08PlayBeyondFivefoldRepetitionWithBlackMove() {
+    assertRejectedWith("08_play_beyond_fivefold_repetition_with_black_move.pgn",
+        GameStatus.FIVE_FOLD_REPETITION_RULE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test09PlayBeyondSeventyFiveMoveRuleWithWhiteMove() {
+    assertRejectedWith("09_play_beyond_seventy_five_move_rule_with_white_move.pgn",
+        GameStatus.SEVENTY_FIVE_MOVE_RULE);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test10PlayBeyondSeventyFiveMoveRuleWithBlackMove() {
+    assertRejectedWith("10_play_beyond_seventy_five_move_rule_with_black_move.pgn",
+        GameStatus.SEVENTY_FIVE_MOVE_RULE);
+  }
+
+  /**
+   * Common assertion body for the per-fixture tests above. Each test method supplies the
+   * fixture filename and the expected {@link GameStatus} verbatim; this method does the I/O
+   * and the typed assertions.
+   */
+  private static void assertRejectedWith(String pgnFileName, GameStatus expectedStatus) {
     try {
       LenientPgnParser.parse(BEYOND_FOLDER, pgnFileName);
       fail("Lenient parser was expected to reject " + pgnFileName
@@ -75,12 +121,9 @@ class TestLenientPgnParserBeyondTermination {
       assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem(),
           "Expected GAME_ALREADY_ENDED rejection for " + pgnFileName + ", got: "
               + e.getSanValidationProblem());
-      // The parser flattens the SanValidationException into a message string; the GameStatus
-      // appears verbatim in the message, e.g. "...The game has already ended by CHECKMATE...".
-      // Assert it to distinguish the five termination causes.
-      assertTrue(e.getMessage().contains(expectedStatus.name()),
-          "Expected message to mention " + expectedStatus.name() + " for " + pgnFileName
-              + ", got: " + e.getMessage());
+      assertEquals(expectedStatus, e.getGameStatus(),
+          "Expected termination by " + expectedStatus + " for " + pgnFileName
+              + ", got: " + e.getGameStatus());
     }
   }
 }

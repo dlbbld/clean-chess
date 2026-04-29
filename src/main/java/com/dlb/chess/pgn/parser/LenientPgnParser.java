@@ -696,8 +696,11 @@ public final class LenientPgnParser {
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
+        // Propagate the GameStatus from the SanValidationException for the GAME_ALREADY_ENDED
+        // case so callers can react to the specific termination cause without parsing the
+        // human-readable message. For any other SAN problem the GameStatus is null.
         throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.SAN,
-            e.getSanValidationProblem(), message);
+            e.getSanValidationProblem(), message, e.getGameStatus());
       }
     }
   }

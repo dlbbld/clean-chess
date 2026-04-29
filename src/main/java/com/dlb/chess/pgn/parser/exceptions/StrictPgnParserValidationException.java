@@ -1,5 +1,8 @@
 package com.dlb.chess.pgn.parser.exceptions;
 
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.san.enums.SanValidationProblem;
@@ -10,11 +13,23 @@ public class StrictPgnParserValidationException extends UsageException {
 
   private final SanValidationProblem sanValidationProblem;
 
+  /**
+   * The {@link GameStatus} that ended the game when {@link #sanValidationProblem} is
+   * {@link SanValidationProblem#GAME_ALREADY_ENDED}; {@code null} otherwise.
+   */
+  private final @Nullable GameStatus gameStatus;
+
   public StrictPgnParserValidationException(StrictPgnParserValidationProblem strictPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message) {
+    this(strictPgnParserValidationProblem, sanValidationProblem, message, null);
+  }
+
+  public StrictPgnParserValidationException(StrictPgnParserValidationProblem strictPgnParserValidationProblem,
+      SanValidationProblem sanValidationProblem, String message, @Nullable GameStatus gameStatus) {
     super(message);
     this.strictPgnParserValidationProblem = strictPgnParserValidationProblem;
     this.sanValidationProblem = sanValidationProblem;
+    this.gameStatus = gameStatus;
   }
 
   public StrictPgnParserValidationProblem getStrictPgnParserValidationProblem() {
@@ -23,6 +38,14 @@ public class StrictPgnParserValidationException extends UsageException {
 
   public SanValidationProblem getSanValidationProblem() {
     return sanValidationProblem;
+  }
+
+  /**
+   * The {@link GameStatus} that ended the game when {@link #getSanValidationProblem()} is
+   * {@link SanValidationProblem#GAME_ALREADY_ENDED}; {@code null} otherwise.
+   */
+  public @Nullable GameStatus getGameStatus() {
+    return gameStatus;
   }
 
 }
