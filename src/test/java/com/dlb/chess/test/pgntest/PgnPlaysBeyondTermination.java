@@ -70,14 +70,15 @@ public final class PgnPlaysBeyondTermination {
       // basic/intervening — outer claim / inner automatic termination interactions.
       // 01_intervening_threefold_encapsulating_threefold.pgn does NOT cross an automatic
       // termination (both are claimable threefolds) — intentionally excluded.
-      "02_intervening_threefold_encapsulating_fivefold.pgn", "03_intervening_fivefold_encapsulating_threefold.pgn",
+      "02_intervening_threefold_encapsulating_fivefold.pgn",
+      // changed "03_intervening_fivefold_encapsulating_threefold.pgn",
       "04_intervening_fivefold_encapsulating_fivefold.pgn",
       // 05_intervening_threefold_interlocked_threefold.pgn and 06_*_interlocked_fivefold are
       // partly excluded — only 06_*_interlocked_fivefold and 07_*_interlocked_threefold cross
       // an automatic termination per the historical classification. 08_*_interlocked_fivefold
       // also crosses fivefold.
-      "06_intervening_threefold_interlocked_fivefold.pgn", "07_intervening_fivefold_interlocked_threefold.pgn",
-      "08_intervening_fivefold_interlocked_fivefold.pgn",
+      // changed "06_intervening_threefold_interlocked_fivefold.pgn",
+      "07_intervening_fivefold_interlocked_threefold.pgn", "08_intervening_fivefold_interlocked_fivefold.pgn",
 
       // basic/fivefold — fixture that explicitly continues one halfmove past the fivefold position.
       "05_fivefold_beyond.pgn",
