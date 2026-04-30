@@ -17,7 +17,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
 import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
 
-public abstract class AbstractTestAgainstCha {
+public abstract class AbstractCheckAgainstCha {
 
   public static List<UnwinnabilityRawRead> readChaRawResultList(Path fenAnalysisFilePath) throws Exception {
     final List<UnwinnabilityRawRead> resultList = new ArrayList<>();

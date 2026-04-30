@@ -19,7 +19,7 @@ import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
 
-public class TestAgainstChaFull extends AbstractTestAgainstCha {
+public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
 
   // lichess 30k
   // Difference found:
@@ -27,7 +27,7 @@ public class TestAgainstChaFull extends AbstractTestAgainstCha {
   // 8/6bk/8/1Q6/3P4/8/PP3PPP/3R2K1 b - - 0 36;eSHrCMEQ;full;b;undetermined;
   // 60'000 positions in 7 hours, about 0.4 seconds per position
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestAgainstChaFull.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(CheckAgainstChaFull.class);
 
   // format: fen;lichessGameId;mode;side;result;mateLine
   private static final Path CHA_FULL_RESULT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,

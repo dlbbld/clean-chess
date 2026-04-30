@@ -17,13 +17,11 @@ import com.github.bhlangonijr.chesslib.move.MoveConversionException;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 
-class TestApiCarlosVariousBugs {
+class PrintApiCarlosVariousBugs {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestApiCarlosVariousBugs.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(PrintApiCarlosVariousBugs.class);
 
-  @SuppressWarnings("static-method")
-  @Test
-  void test() throws Exception {
+  public static void main(String[] args) throws Exception {
 
     testPositionIdStableForUndoMove();
 
