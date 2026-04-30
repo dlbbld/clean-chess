@@ -44,6 +44,11 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap
  * on files per folder. {@code BASIC_FROM_FEN} fixtures (custom start positions) are included so
  * the contract is verified beyond the standard initial position too.
+ *
+ * <p>The regular corpus is asserted to contain only fixtures that fully replay under the
+ * strict-game invariant (see {@code TestPgnCorpusNotPlaysBeyondAudit}); this test relies on
+ * that and lets any plays-beyond exception propagate as a test failure rather than silently
+ * skipping.
  */
 class TestBoardUnperformMove {
 
@@ -54,35 +59,22 @@ class TestBoardUnperformMove {
   void testAllBasicPgns() {
     var pgnsExercised = 0;
     var halfMovesExercised = 0;
-    var pgnsSkippedAsPlaysBeyond = 0;
 
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       if (!testCaseList.pgnTest().getIsBasicTest()) {
         continue;
       }
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        final String pgnFileName = testCase.pgnFileName();
-        logger.info(pgnFileName);
-        try {
-          halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
-          pgnsExercised++;
-        } catch (final com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException e) {
-          // The PGN's recorded halfmove sequence continues past a FIDE-automatic termination
-          // and so cannot be fully replayed under the strict-game invariant. Such fixtures
-          // should not live in the regular corpus — relocating them is tracked as a separate
-          // task (see "TODO: corpus cleanup" in the open list). For now we log and skip so the
-          // unperform contract is still verified across the rest of the basic corpus.
-          pgnsSkippedAsPlaysBeyond++;
-          logger.warn("Skipping {} (plays past automatic termination): {}", pgnFileName, e.getMessage());
-        }
+        logger.info(testCase.pgnFileName());
+        halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
+        pgnsExercised++;
       }
     }
 
     if (pgnsExercised == 0) {
       fail("No basic PGNs were exercised — test or corpus is mis-configured");
     }
-    logger.info("TestBoardUnperformMove: {} basic PGNs verified ({} halfmoves), {} skipped as plays-beyond.",
-        pgnsExercised, halfMovesExercised, pgnsSkippedAsPlaysBeyond);
+    logger.info("TestBoardUnperformMove: {} basic PGNs verified ({} halfmoves).", pgnsExercised, halfMovesExercised);
   }
 
   /**

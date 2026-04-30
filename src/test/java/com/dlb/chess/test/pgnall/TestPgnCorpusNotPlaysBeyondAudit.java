@@ -1,5 +1,6 @@
 package com.dlb.chess.test.pgnall;
 
+import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
 
 import java.util.ArrayList;
@@ -19,20 +20,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 /**
  * Asserts the regular PGN test corpus contains no fixtures that play past a FIDE-automatic
  * termination — i.e. every file replays cleanly under the strict-game invariant. The class name
- * states the expected outcome ("not plays beyond"); the test reports any leftover.
- *
- * <h2>Audit mode (current)</h2>
- *
- * The test does NOT fail when the corpus still contains plays-beyond files. Each offender is
- * logged as a {@code WARN} so the output can be used to drive the corpus cleanup task —
- * relocating those files into the dedicated plays-beyond fixtures folder.
- *
- * <h2>Sharpening (planned)</h2>
- *
- * Once the cleanup is complete this test should be sharpened: replace the warning log with a
- * {@code fail()} on non-empty findings. Any future PGN added to the regular corpus that cannot
- * be replayed under the strict-game invariant will then surface immediately rather than
- * silently degrading coverage of other tests that use the corpus.
+ * states the expected outcome ("not plays beyond"); the test fails if any leftover is found.
  *
  * <h2>Scope and runtime</h2>
  *
@@ -79,11 +67,13 @@ class TestPgnCorpusNotPlaysBeyondAudit {
       return;
     }
 
-    logger.warn("Corpus audit: {} of {} PGN files cannot be fully replayed under the strict-game invariant.",
-        playsBeyondFiles.size(), totalFiles);
-    logger.warn("These files should be relocated out of the regular corpus (see open task list).");
+    final StringBuilder report = new StringBuilder().append("Corpus audit: ").append(playsBeyondFiles.size())
+        .append(" of ").append(totalFiles).append(" PGN files cannot be fully replayed under the strict-game ")
+        .append("invariant. They must be relocated out of the regular corpus into ")
+        .append("pgnParser/common/beyond/legacy/:\n");
     for (final String entry : playsBeyondFiles) {
-      logger.warn("  {}", entry);
+      report.append("  ").append(entry).append('\n');
     }
+    fail(report.toString());
   }
 }
