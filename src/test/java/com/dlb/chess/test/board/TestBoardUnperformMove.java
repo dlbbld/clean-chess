@@ -17,38 +17,37 @@ import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 
 /**
- * Verifies the {@link com.dlb.chess.board.Board#unperformMove} contract: after performing a move
- * and immediately unperforming it, the board must be in exactly the same state it was in before
- * the move. Run across every halfmove of every PGN in the basic test corpus.
+ * Verifies the {@link com.dlb.chess.board.Board#unperformMove} contract: after performing a move and immediately
+ * unperforming it, the board must be in exactly the same state it was in before the move. Run across every halfmove of
+ * every PGN in the basic test corpus.
  *
  * <h2>Design</h2>
  *
  * For each PGN, two independent boards are kept side-by-side:
  *
  * <ul>
- * <li>{@code expected} — only ever moves <em>forward</em>. It serves as the oracle; its state
- *     after halfmove {@code i-1} is the canonical pre-halfmove-{@code i} state, produced solely
- *     by {@code performMove} (independent of {@code unperformMove}, the unit under test).</li>
- * <li>{@code actual} — performs and then unperforms each halfmove, then is asserted to equal
- *     {@code expected}, then advanced by performing the move so the next iteration starts in
- *     lockstep.</li>
+ * <li>{@code expected} — only ever moves <em>forward</em>. It serves as the oracle; its state after halfmove
+ * {@code i-1} is the canonical pre-halfmove-{@code i} state, produced solely by {@code performMove} (independent of
+ * {@code unperformMove}, the unit under test).</li>
+ * <li>{@code actual} — performs and then unperforms each halfmove, then is asserted to equal {@code expected}, then
+ * advanced by performing the move so the next iteration starts in lockstep.</li>
  * </ul>
  *
- * <p>Equality is determined by {@link EqualsBuilder#reflectionEquals(Object, Object)}: every
- * declared field on {@code Board} (including all per-halfmove history lists) is compared. New
- * fields added to {@code Board} in the future are picked up automatically — the test does not
- * need to be updated when {@code Board}'s state representation grows.
+ * <p>
+ * Equality is determined by {@link EqualsBuilder#reflectionEquals(Object, Object)}: every declared field on
+ * {@code Board} (including all per-halfmove history lists) is compared. New fields added to {@code Board} in the future
+ * are picked up automatically — the test does not need to be updated when {@code Board}'s state representation grows.
  *
  * <h2>Scope</h2>
  *
- * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap
- * on files per folder. {@code BASIC_FROM_FEN} fixtures (custom start positions) are included so
- * the contract is verified beyond the standard initial position too.
+ * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap on files per folder.
+ * {@code BASIC_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the standard
+ * initial position too.
  *
- * <p>The regular corpus is asserted to contain only fixtures that fully replay under the
- * strict-game invariant (see {@code TestPgnCorpusNotPlaysBeyondAudit}); this test relies on
- * that and lets any plays-beyond exception propagate as a test failure rather than silently
- * skipping.
+ * <p>
+ * The regular corpus is asserted to contain only fixtures that fully replay under the strict-game invariant (see
+ * {@code TestPgnCorpusNotPlaysBeyondAudit}); this test relies on that and lets any plays-beyond exception propagate as
+ * a test failure rather than silently skipping.
  */
 class TestBoardUnperformMove {
 
@@ -56,14 +55,11 @@ class TestBoardUnperformMove {
 
   @SuppressWarnings("static-method")
   @Test
-  void testAllBasicPgns() {
+  void test() {
     var pgnsExercised = 0;
     var halfMovesExercised = 0;
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
-      if (!testCaseList.pgnTest().getIsBasicTest()) {
-        continue;
-      }
+    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         logger.info(testCase.pgnFileName());
         halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
@@ -78,9 +74,9 @@ class TestBoardUnperformMove {
   }
 
   /**
-   * Runs the perform/unperform contract test for a single PGN: for each halfmove the PGN records,
-   * performs and immediately unperforms it on {@code actual}, then asserts {@code actual} equals
-   * the parallel forward-only {@code expected} board. Returns the number of halfmoves verified.
+   * Runs the perform/unperform contract test for a single PGN: for each halfmove the PGN records, performs and
+   * immediately unperforms it on {@code actual}, then asserts {@code actual} equals the parallel forward-only
+   * {@code expected} board. Returns the number of halfmoves verified.
    */
   private static int runUnperformContractTest(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
