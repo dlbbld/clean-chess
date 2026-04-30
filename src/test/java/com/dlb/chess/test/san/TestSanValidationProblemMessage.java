@@ -570,8 +570,7 @@ class TestSanValidationProblemMessage {
 
     // NOT_REACHABLE_PAWN_NON_CAPTURING: from initial, e5 is out of reach for the e2 pawn
     // (which can only advance to e3 or e4).
-    checkException("e5", SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING,
-        "No pawn can reach square e5 without capturing.");
+    checkException("e5", SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING, "No pawn can reach square e5.");
 
     // NOT_REACHABLE_PAWN_CAPTURING: black pawn on d5, white c-pawn still on c2 — cxd5 cannot reach
     // (c2 can only capture diagonally on b3 or d3).
