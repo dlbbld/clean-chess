@@ -3,8 +3,10 @@ package com.dlb.chess.test.pgntest.basic;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -13,6 +15,8 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicCheckBlack extends AbstractTestBasic {
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBasicCheckBlack.class);
 
   static {
     final List<String> pgnFileNameList = new ArrayList<>();
@@ -41,6 +45,7 @@ class TestBasicCheckBlack extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.BASIC_CHECK_BLACK);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
+      logger.info(testCase.pgnFileName());
       final ApiBoard board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
           testCase.pgnFileName());
 

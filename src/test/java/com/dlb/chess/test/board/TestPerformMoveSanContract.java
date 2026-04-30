@@ -5,9 +5,11 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
@@ -55,11 +57,14 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  */
 class TestPerformMoveSanContract {
 
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPerformMoveSanContract.class);
+
   @SuppressWarnings("static-method")
   @Test
   void testPlayedMoveSanMoveSpecRoundtrip() {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
+        logger.info(testCase.pgnFileName());
         verifyPlayedMoveRoundtrip(testCaseList, testCase);
       }
     }
@@ -70,6 +75,7 @@ class TestPerformMoveSanContract {
   void testAllLegalMovesSanMoveSpecRoundtrip() {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
+        logger.info(testCase.pgnFileName());
         verifyAllLegalMovesRoundtrip(testCaseList, testCase);
       }
     }

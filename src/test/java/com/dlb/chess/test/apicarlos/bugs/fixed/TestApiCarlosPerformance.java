@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -19,6 +20,8 @@ import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
 class TestApiCarlosPerformance {
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestApiCarlosPerformance.class);
 
   private static final double LOAD_PGN_DURATION_MAX_MILLISECONDS = 1000.0;
 
@@ -35,7 +38,7 @@ class TestApiCarlosPerformance {
       final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();
-        System.out.printf("Processing %s%n", pgnFileName);
+        logger.info(pgnFileName);
         final Path filePath = FileUtility.calculateFilePath(pgnTest.getFolderPath(), pgnFileName);
         final var pgn = new PgnHolder(filePath.toAbsolutePath().toString());
 
