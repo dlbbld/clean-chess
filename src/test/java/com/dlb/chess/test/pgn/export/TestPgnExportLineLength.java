@@ -1,8 +1,10 @@
 package com.dlb.chess.test.pgn.export;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
@@ -25,10 +27,24 @@ class TestPgnExportLineLength {
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    checkFile("almtwali_vs_danielbaechli_2020.pgn");
-    checkFile("blatny_holzke_1997.pgn");
-    checkFile("gvetadze_milliet_2014.pgn");
+    final List<String> pgnFileNameList = calculatePgnFileNameList();
+    assertFalse(pgnFileNameList.isEmpty(), "The PGN export line-length test folder must contain PGN files");
 
+    for (final String pgnFileName : pgnFileNameList) {
+      checkFile(pgnFileName);
+    }
+  }
+
+  private static List<String> calculatePgnFileNameList() {
+    final List<String> result = new ArrayList<>();
+
+    for (final String fileName : FileUtility.readFileNameList(TEST_FOLDER_PATH)) {
+      if (fileName.endsWith(".pgn")) {
+        result.add(fileName);
+      }
+    }
+    result.sort(String::compareTo);
+    return result;
   }
 
   private static void checkFile(String pgnFileName) {
