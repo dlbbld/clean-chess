@@ -1,4 +1,4 @@
-package com.dlb.chess.test.analysis.output;
+package com.dlb.chess.test.analysis.representation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,9 +11,9 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 
-public class RepetitionOutput {
+public class RepetitionRepresentation {
 
-  private static String calculateOutputRepetitionList(List<HalfMove> halfMoveList,
+  private static String calculateRepresentationRepetitionList(List<HalfMove> halfMoveList,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     final StringBuilder result = new StringBuilder();
     // the moves must be sorted ascending, as this is expected in the result
@@ -33,15 +33,15 @@ public class RepetitionOutput {
     return NonNullWrapperCommon.toString(result);
   }
 
-  public static String calculateOutputRepetitionAnalysis(Analysis analysis,
+  public static String calculateRepresentationRepetitionAnalysis(Analysis analysis,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
     final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,
         enPassantCaptureRule);
-    return calculateOutputRepetitionListList(repetitionList, enPassantCaptureRule);
+    return calculateRepresentationRepetitionListList(repetitionList, enPassantCaptureRule);
   }
 
-  public static String calculateOutputRepetitionListList(List<List<HalfMove>> repetitionList,
+  public static String calculateRepresentationRepetitionListList(List<List<HalfMove>> repetitionList,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
     final List<String> resultList = new ArrayList<>();
@@ -49,7 +49,7 @@ public class RepetitionOutput {
     for (var i = 0; i < listLength; i++) {
       final List<HalfMove> repeatingPosition = NonNullWrapperCommon.get(repetitionList, i);
 
-      resultList.add(calculateOutputRepetitionList(repeatingPosition, enPassantCaptureRule));
+      resultList.add(calculateRepresentationRepetitionList(repeatingPosition, enPassantCaptureRule));
     }
     return BasicUtility.calculateSemicolonSeparatedList(resultList);
   }

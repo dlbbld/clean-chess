@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.test.analysis.output.RepetitionOutput;
+import com.dlb.chess.test.analysis.representation.RepetitionRepresentation;
 import com.dlb.chess.test.model.PgnFileTestCase;
 
 public abstract class RepetitionTestUtility {
@@ -20,7 +20,7 @@ public abstract class RepetitionTestUtility {
 
   public static void testRepetition(Analysis analysis, PgnFileTestCase testCase,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    final String calculatedRepetitionRepresentation = RepetitionOutput.calculateOutputRepetitionAnalysis(analysis,
+    final String calculatedRepetitionRepresentation = RepetitionRepresentation.calculateRepresentationRepetitionAnalysis(analysis,
         enPassantCaptureRule);
     assertEquals(getExpectedRepetition(testCase, enPassantCaptureRule), calculatedRepetitionRepresentation);
   }

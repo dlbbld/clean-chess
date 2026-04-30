@@ -1,10 +1,10 @@
-package com.dlb.chess.test.analysis;
+package com.dlb.chess.test.pgn.analysis;
 
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-public class TestAnalyzer {
+public class PrintSinglePgnAnalysis {
 
   public static void main(String[] args) throws Exception {
     printAnalysis("05_claim_for_own_move_correct_but_makes_move_on_board.pgn");

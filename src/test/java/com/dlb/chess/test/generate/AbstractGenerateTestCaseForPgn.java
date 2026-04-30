@@ -8,8 +8,8 @@ import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.test.analysis.output.RepetitionOutput;
-import com.dlb.chess.test.analysis.output.YawnOutput;
+import com.dlb.chess.test.analysis.representation.RepetitionRepresentation;
+import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.model.PgnFileTestCase;
 
 public abstract class AbstractGenerateTestCaseForPgn {
@@ -27,21 +27,21 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    final String repetition = RepetitionOutput.calculateOutputRepetitionAnalysis(analysis,
+    final String repetition = RepetitionRepresentation.calculateRepresentationRepetitionAnalysis(analysis,
         EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
     result.append("\"");
     result.append(repetition);
     result.append("\"");
     result.append(", ");
 
-    final String repetitionInitialEnPassantCapture = RepetitionOutput.calculateOutputRepetitionAnalysis(analysis,
+    final String repetitionInitialEnPassantCapture = RepetitionRepresentation.calculateRepresentationRepetitionAnalysis(analysis,
         EnPassantCaptureRuleThreefold.DO_IGNORE);
     result.append("\"");
     result.append(repetitionInitialEnPassantCapture);
     result.append("\"");
     result.append(", ");
 
-    final String yawnMove = YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList());
+    final String yawnMove = YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList());
     result.append("\"");
     result.append(yawnMove);
     result.append("\"");

@@ -1,4 +1,4 @@
-package com.dlb.chess.test.analysis.output;
+package com.dlb.chess.test.analysis.representation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.RepetitionUtility;
 
-public class BasicOutput {
+public class BasicRepresentation {
 
   private static final String ATTRIBUTE_FEN = "FEN";
   private static final String ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO = "Threefold ignoring en passant";
@@ -29,7 +29,7 @@ public class BasicOutput {
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
-  public static List<String> calculateVisualIndication(Analysis analysis, String pgnName) throws Exception {
+  public static List<String> calculateRepresentation(Analysis analysis, String pgnName) throws Exception {
     final List<String> list = new ArrayList<>();
 
     list.add("-----------------------------------------");
@@ -116,7 +116,7 @@ public class BasicOutput {
     if (!analysis.hasFiftyMoveRule()) {
       return calculateOutput(attribute, ATTRIBUTE_VALUE_NA);
     }
-    final String repetition = YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList());
+    final String repetition = YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList());
     return calculateOutput(attribute, repetition);
   }
 
@@ -132,9 +132,9 @@ public class BasicOutput {
     final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,
         enPassantCaptureRule);
     if (repetitionList.isEmpty()) {
-      return calculateOutput(attributeName, BasicOutput.ATTRIBUTE_VALUE_NA);
+      return calculateOutput(attributeName, BasicRepresentation.ATTRIBUTE_VALUE_NA);
     }
-    final String representation = RepetitionOutput.calculateOutputRepetitionListList(repetitionList,
+    final String representation = RepetitionRepresentation.calculateRepresentationRepetitionListList(repetitionList,
         enPassantCaptureRule);
     return calculateOutput(attributeName, representation);
   }

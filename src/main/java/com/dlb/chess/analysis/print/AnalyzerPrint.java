@@ -27,8 +27,8 @@ public class AnalyzerPrint {
   private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
   private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;
 
-  protected static void printAnalysis(String pgn) {
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+  protected static void printAnalysis(String pgnString) {
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
 
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     printAnalysis(board);

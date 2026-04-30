@@ -21,9 +21,9 @@ import com.dlb.chess.common.utility.YawnMoveUtility;
 
 public class Analyzer extends AnalyzerPrint {
 
-  public static void printAnalysis(String pgn) {
+  public static void printAnalysis(String pgnString) {
     // delegated to package protected method for class organization
-    AnalyzerPrint.printAnalysis(pgn);
+    AnalyzerPrint.printAnalysis(pgnString);
   }
 
   public static void printAnalysis(Path folderPath, String pgnFileName) {

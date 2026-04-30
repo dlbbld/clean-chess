@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.test.analysis.output.YawnOutput;
+import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -50,7 +50,7 @@ public abstract class AbstractPgnTest {
 
   private static void testYawnMoveRule(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.expectedYawnMoveRule(),
-        YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
+        YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList()));
   }
 
   private static void testFirstCapture(Analysis analysis, PgnFileTestCase testCase) {
