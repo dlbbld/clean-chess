@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.CastlingRightLoss;
@@ -28,7 +29,6 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.fen.FenBoard;
@@ -173,9 +173,9 @@ public class Board extends AbstractBoard {
 
   /**
    * Override of the AbstractBoard hook: bypasses the strict-pipeline validation (including the
-   * {@code GAME_ALREADY_ENDED} check) since {@link #getLegalMovesRepresentation()} explores
-   * moves that are already known to be legal in the position. Without this override, querying
-   * legal moves on a terminal-state board (e.g. mutual insufficient material) would throw.
+   * {@code GAME_ALREADY_ENDED} check) since {@link #getLegalMovesRepresentation()} explores moves that are already
+   * known to be legal in the position. Without this override, querying legal moves on a terminal-state board (e.g.
+   * mutual insufficient material) would throw.
    */
   @Override
   protected void performMoveForRepresentation(MoveSpecification moveSpecification) {
@@ -327,7 +327,8 @@ public class Board extends AbstractBoard {
   public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
-    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove, moveSpecification);
+    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove,
+        moveSpecification);
     return staticPosition.createChangedPosition(updateSquareList);
 
   }
@@ -347,38 +348,11 @@ public class Board extends AbstractBoard {
     return StandardMoveUtility.performStandardMovements(staticPosition, moveSpecification);
   }
 
-  private void correctnessCheck() {
-    // only to test our methods correctness we perform an undo and check against the previous position
-    // the below has no other purpose and could be removed
-    final LegalMove moveToUndo = getLastMove();
-
-    final StaticPosition staticPositionToUndo = NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
-    final StaticPosition staticPositionUndoExpected = NonNullWrapperCommon
-        .get(dynamicPositionList, dynamicPositionList.size() - 2).staticPosition();
-
-    List<UpdateSquare> updateSquareList;
-    if (moveToUndo.enPassantRole().isEnPassantCapture()) {
-      updateSquareList = EnPassantCaptureUtility.performEnPassantCaptureUndoMovements(moveToUndo);
-    } else if (CastlingUtility.calculateIsCastlingMove(moveToUndo.moveSpecification())) {
-      updateSquareList = CastlingUtility.performCastlingUndoMovements(moveToUndo);
-    } else if (PromotionUtility.calculateIsPromotion(moveToUndo.moveSpecification())) {
-      updateSquareList = PromotionUtility.performPromotionUndoMovements(moveToUndo);
-    } else {
-      updateSquareList = StandardMoveUtility.performStandardUndoMovements(moveToUndo);
-    }
-    final StaticPosition staticPositionUndoActual = staticPositionToUndo.createChangedPosition(updateSquareList);
-    if (!staticPositionUndoExpected.equals(staticPositionUndoActual)) {
-      throw new ProgrammingMistakeException("The undo position calculation is correct");
-    }
-  }
-
   @Override
   public void unperformMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("Undo move requested but no move to undo");
     }
-
-    correctnessCheck();
 
     this.performedLegalMoveList.remove(performedLegalMoveList.size() - 1);
     this.legalMoveListSet.remove(legalMoveListSet.size() - 1);

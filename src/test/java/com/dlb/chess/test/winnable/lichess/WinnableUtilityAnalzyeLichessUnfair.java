@@ -105,7 +105,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       return Winnable.NO;
     }
 
-    if (board.getLegalMovesRepresentation().isEmpty()) {
+    if (board.getLegalMoveSet().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");
     }
 
@@ -115,7 +115,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     // Q7/8/4Q3/7k/5Pp1/5KP1/7P/8 w - - 0 1
     // Example: Black can only stalemate or checkmate on first move
     // 8/6p1/5kP1/7K/2r2q2/8/8/8 b - - 1 52
-    final var numberOfFirstHalfMoves = board.getLegalMovesRepresentation().size();
+    final var numberOfFirstHalfMoves = board.getLegalMoveSet().size();
     final GameMultipleAnalysis evaluationFirst = evaluateOneMove(board);
     final WinnableAnalysis winnableFirst = calculateWinnableMultiple(evaluationFirst, sideToEvaluate);
 
@@ -305,7 +305,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
   private static GameMultipleAnalysis evaluateOneMove(ApiBoard board) {
 
     final Set<GameStatusAnalysis> gameTermination = new TreeSet<>();
-    final var numberOfHalfMoves = board.getLegalMovesRepresentation().size();
+    final var numberOfHalfMoves = board.getLegalMoveSet().size();
 
     final Side sidePerformingTheMove = board.getHavingMove();
 
