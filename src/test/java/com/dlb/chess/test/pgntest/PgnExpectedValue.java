@@ -1935,11 +1935,11 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "rnbqkbnr/1ppp1ppp/p7/4p3/4P3/P7/1PPP1PPP/RNBQKBNR w KQkq - 0 11"));
 
-    // 03_intervening_fivefold_encapsulating_threefold.pgn was edited by the user to no longer
-    // continue past the fivefold (the file now ends exactly at the terminating halfmove). Its
-    // historical expected analysis values do not match the truncated game; the entry is dropped
-    // here. The file remains in the corpus and is still exercised by parser- and
-    // board-comparison tests; only the full expected-analysis assertion no longer covers it.
+    list.add(new PgnFileTestCase("03_intervening_fivefold_encapsulating_threefold.pgn",
+        "repPos=5: 2...g5 4...Ng8 6...Ng8 8...Bf8 16...Nb8; repPos=3: 10...Ne5 12...Ne5 14...Ne5", "", "", -1, 28,
+        CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "rnbqkbnr/ppppp2p/8/5pp1/5PP1/8/PPPPP2P/RNBQKBNR w KQkq - 28 17"));
 
     list.add(new PgnFileTestCase("05_intervening_threefold_interlocked_threefold.pgn",
         "repPos=3: 2...g6 4...Bf8 8...Bf8; repPos=3: 5...Bh6 7...Bh6 9...Bh6", "", "", -1, 16, CheckmateOrStalemate.NA,
@@ -1947,8 +1947,11 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r1bqk1nr/p1pppp1p/1pn3pb/8/8/1PN3PB/P1PPPP1P/R1BQK1NR w KQkq - 16 11"));
 
-    // 06_intervening_threefold_interlocked_fivefold.pgn — same situation as 03; the user
-    // truncated the file to no longer continue past the fivefold. Entry dropped, file kept.
+    list.add(new PgnFileTestCase("06_intervening_threefold_interlocked_fivefold.pgn",
+        "repPos=3: 2...e5 4...Bc8 12...Bf8; repPos=5: 5...Bc5 7...Bc5 9...Bc5 11...Bc5 14...Bc5", "", "", -1, 24,
+        CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        "rnbqk1nr/p1pp1ppp/8/1pb1p3/1PB1P3/8/P1PP1PPP/RNBQK1NR w KQkq - 24 15"));
 
     return new PgnFileTestCaseList(PgnTest.BASIC_INTERVENING, list);
   }
@@ -2833,6 +2836,10 @@ public class PgnExpectedValue {
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 101"));
+    list.add(new PgnFileTestCase("various_pranav_savic_2021_incomplete_speculative_from_last_capture.pgn", "", "", "",
+        1, 73, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 45"));
 
     // repetition after promotion
     list.add(new PgnFileTestCase("various_keres_fischer_1962.pgn", "", "", "", 20, 17, CheckmateOrStalemate.NA, 1,

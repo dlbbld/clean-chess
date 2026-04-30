@@ -37,7 +37,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
  * {@code TestPgnCorpusNotPlaysBeyondAudit}, then fixed in code so a future change in parser
  * behaviour shows up as a precise mismatch rather than a vague rejection.
  *
- * <p>The legacy tree has 100 fixtures; iteration through the strict parser takes a few
+ * <p>The legacy tree has 101 fixtures; iteration through the strict parser takes a few
  * seconds. Heavier than per-test methods but a single iterating test keeps the explicit map
  * close to the assertions.
  */
@@ -93,8 +93,8 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       }
     }
 
-    if (totalFiles != 99) {
-      fail("Expected 99 legacy fixtures in the EXPECTED map, found " + totalFiles);
+    if (totalFiles != 101) {
+      fail("Expected 101 legacy fixtures in the EXPECTED map, found " + totalFiles);
     }
     if (!failures.isEmpty()) {
       final StringBuilder report = new StringBuilder()
@@ -243,7 +243,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     // ====== long (1) — historical long game crossing 75-move ======
     m.put("long/long_nikolic_arsovic_1989.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
 
-    // ====== longestMate (7) — synthetic mate sequences crossing 75-move ======
+    // ====== longestMate (9) — synthetic mate sequences crossing 75-move ======
     m.put("longestMate/longest_mate_seven_pieces_rank_1.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("longestMate/longest_mate_seven_pieces_rank_1_amend_repeat_position.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
@@ -252,6 +252,8 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put("longestMate/longest_mate_seven_pieces_rank_4.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("longestMate/longest_mate_seven_pieces_rank_5.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("longestMate/longest_mate_seven_pieces_rank_6.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("longestMate/longest_mate_seven_pieces_rank_7.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("longestMate/longest_mate_seven_pieces_rank_8.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
 
     // ====== random/noRepetition (4) — long random games crossing 75-move ======
     m.put("random/noRepetition/01_random_no_repetition.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
