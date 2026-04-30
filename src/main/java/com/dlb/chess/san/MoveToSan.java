@@ -20,7 +20,7 @@ import com.dlb.chess.san.enums.SanTerminalMarker;
 
 public class MoveToSan extends AbstractSan {
 
-  public static String calculateSanLastMove(LegalMove lastMove, Set<LegalMove> legalMoveBeforeLastHalfMoveSet,
+  public static String calculateSanLastMove(LegalMove lastMove, Set<LegalMove> legalMoveSetBeforeLastHalfMove,
       SanTerminalMarker sanTerminalMarker) {
 
     // first - check if castling move
@@ -28,7 +28,7 @@ public class MoveToSan extends AbstractSan {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       return calculateSanLastMoveCastling(moveSpecification, sanTerminalMarker);
     }
-    return calculateSanLastMoveNonCastling(lastMove, legalMoveBeforeLastHalfMoveSet, sanTerminalMarker);
+    return calculateSanLastMoveNonCastling(lastMove, legalMoveSetBeforeLastHalfMove, sanTerminalMarker);
   }
 
   private static SanSourceSpecification calculateSourceSpecification(LegalMove legalMove,
