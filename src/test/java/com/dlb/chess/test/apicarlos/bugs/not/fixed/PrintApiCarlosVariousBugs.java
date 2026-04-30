@@ -4,10 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.github.bhlangonijr.chesslib.Board;
 
-class TestApiCarlosVariousBugs {
+class PrintApiCarlosVariousBugs {
 
-  @SuppressWarnings("static-method")
-  void testInsufficientMaterial() throws Exception {
+  public static void main(String[] args) throws Exception {
+
     final Board board = new Board();
 
     // expected false but is true
