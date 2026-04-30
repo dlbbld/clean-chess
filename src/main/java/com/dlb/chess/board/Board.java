@@ -167,20 +167,13 @@ public class Board extends AbstractBoard {
     return this.performedLegalMoveList.isEmpty();
   }
 
-  private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
-    return performMove(moveSpecification, false);
-  }
-
   @Override
   public boolean performMove(MoveSpecification moveSpecification) throws InvalidMoveException {
-    return performMove(moveSpecification, true);
+    ValidateNewMove.validateNewMove(this, moveSpecification);
+    return performMoveWithoutValidation(moveSpecification);
   }
 
-  private boolean performMove(MoveSpecification moveSpecification, boolean isValidate) throws InvalidMoveException {
-
-    if (isValidate) {
-      ValidateNewMove.validateNewMove(this, moveSpecification);
-    }
+  private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
 
     final CastlingRight beforeCastlingRightWhite = NonNullWrapperCommon.getLast(dynamicPositionList)
         .castlingRightWhite();
