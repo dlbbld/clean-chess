@@ -40,14 +40,14 @@ class TestPgnExpectedAnalysis extends AbstractPgnTest {
         continue;
       }
 
-      var filesInFolder = 0;
+      var processedFilesInFolder = 0;
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (RestrictTestConstants.IS_RESTRICT_PGN_EXPECTED_ANALYSIS && filesInFolder >= MAX_FILES_PER_FOLDER) {
+        if (RestrictTestConstants.IS_RESTRICT_PGN_EXPECTED_ANALYSIS && processedFilesInFolder >= MAX_FILES_PER_FOLDER) {
           break;
         }
         logger.info(testCase.pgnFileName());
         testGame(testCaseList, testCase);
-        filesInFolder++;
+        processedFilesInFolder++;
       }
     }
   }
