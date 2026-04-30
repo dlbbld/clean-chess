@@ -38,4 +38,10 @@ public abstract class RestrictTestConstants {
   // when changes touch the unwinnability-full analyzer; flip to false locally to run.
   public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST = true;
 
+  // TestPgnCorpusNotPlaysBeyondAudit walks the whole corpus (~1300 PGN files) and parses each
+  // through the strict parser to confirm none plays beyond a FIDE-automatic termination. Takes
+  // a few minutes; only useful when the corpus changes or the strict-pipeline rules change.
+  // Flip to false locally to run.
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT = true;
+
 }
