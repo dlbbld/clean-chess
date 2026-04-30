@@ -36,6 +36,8 @@ public enum PgnTest {
   BASIC_SEVENTY_FIVE(true, "basic/seventyFive"),
   BASIC_INTERVENING(true, "basic/intervening"),
   BASIC_DOUBLE_DRAW(true, "basic/doubleDraw"),
+  BASIC_CASTLING_WHITE(true, "basic/castling/white"),
+  BASIC_CASTLING_BLACK(true, "basic/castling/black"),
   BASIC_CASTLING_SPECIAL_WHITE(true, "basic/castlingSpecial/white"),
   BASIC_CASTLING_SPECIAL_BLACK(true, "basic/castlingSpecial/black"),
   BASIC_FORCED(true, "basic/forced"),

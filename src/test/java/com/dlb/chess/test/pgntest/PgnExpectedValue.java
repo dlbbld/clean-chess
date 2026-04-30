@@ -28,6 +28,8 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList calculateTestCaseList(PgnTest pgnTest) {
 
     return switch (pgnTest) {
+      case BASIC_CASTLING_WHITE -> createTestCasesBasicCastlingWhite();
+      case BASIC_CASTLING_BLACK -> createTestCasesBasicCastlingBlack();
       case BASIC_CASTLING_SPECIAL_WHITE -> createTestCasesBasicCastlingSpecialWhite();
       case BASIC_CASTLING_SPECIAL_BLACK -> createTestCasesBasicCastlingSpecialBlack();
       case BASIC_MOVING_PIECE_WHITE -> createTestCasesBasicMovingPieceWhite();
@@ -1976,6 +1978,28 @@ public class PgnExpectedValue {
 
     return new PgnFileTestCaseList(PgnTest.BASIC_DOUBLE_DRAW, list);
 
+  }
+
+  private static PgnFileTestCaseList createTestCasesBasicCastlingWhite() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+    list.add(new PgnFileTestCase("01_white_castling_king_side.pgn", "", "", "", -1, 5, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4"));
+    list.add(new PgnFileTestCase("02_white_castling_queen_side.pgn", "", "", "", -1, 5, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "r2qkbnr/ppp2ppp/2n1p3/3p1b2/3P1B2/2NQ4/PPP1PPPP/2KR1BNR b kq - 1 5"));
+    return new PgnFileTestCaseList(PgnTest.BASIC_CASTLING_WHITE, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesBasicCastlingBlack() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+    list.add(new PgnFileTestCase("01_black_castling_king_side.pgn", "", "", "", -1, 4, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/3P1N1P/PPP2PP1/RNBQK2R w KQ - 1 6"));
+    list.add(new PgnFileTestCase("02_black_castling_queen_side.pgn", "", "", "", -1, 4, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableQuick.POSSIBLY_WINNABLE, "2kr1bnr/pppq1ppp/2n1p3/1B1p1b2/3P1B2/2N1PN2/PPP2PPP/R2QK2R w KQ - 4 7"));
+    return new PgnFileTestCaseList(PgnTest.BASIC_CASTLING_BLACK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesBasicCastlingSpecialWhite() {
