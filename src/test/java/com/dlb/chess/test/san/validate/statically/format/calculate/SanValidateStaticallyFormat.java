@@ -1,4 +1,4 @@
-package com.dlb.chess.san.validate.statically.format.calculate;
+package com.dlb.chess.test.san.validate.statically.format.calculate;
 
 import java.util.Map;
 import java.util.TreeMap;

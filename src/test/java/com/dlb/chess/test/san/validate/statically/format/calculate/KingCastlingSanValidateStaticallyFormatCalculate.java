@@ -1,4 +1,4 @@
-package com.dlb.chess.san.validate.statically.format.calculate;
+package com.dlb.chess.test.san.validate.statically.format.calculate;
 
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.test.san.validate.statically.strict.calculate.KingCastlingSanValidateStaticallyStrictCalculate;
