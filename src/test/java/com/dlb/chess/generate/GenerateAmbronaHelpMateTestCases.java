@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgntest;
+package com.dlb.chess.generate;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,13 +30,14 @@ import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
+import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-public class CreateAmbronaHelpMateTestCases {
+public class GenerateAmbronaHelpMateTestCases {
 
   private static final boolean IS_CREATE_UCI_REQUIRED = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(CreateAmbronaHelpMateTestCases.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateAmbronaHelpMateTestCases.class);
 
   private static final String OUTPUT_FOLDER_NAME = "lichessHelpmate";
   private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
