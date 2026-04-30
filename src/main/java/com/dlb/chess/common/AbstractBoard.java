@@ -1,7 +1,5 @@
 package com.dlb.chess.common;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -10,10 +8,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
-import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -44,36 +40,6 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
       result.add(uci);
     }
     return result;
-  }
-
-  @Override
-  public List<MoveRepresentation> getLegalMovesRepresentation() {
-    final List<MoveRepresentation> result = new ArrayList<>();
-
-    final Side havingMove = getHavingMove();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      performMoveForRepresentation(moveSpecification);
-      final LegalMove legalMove = getLastMove();
-      final String san = getSan();
-      final String lan = getLan();
-      this.unperformMove();
-      final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
-
-      final MoveRepresentation moveRepresentation = new MoveRepresentation(moveSpecification, legalMove, san, lan, uci);
-      result.add(moveRepresentation);
-    }
-    return result;
-  }
-
-  /**
-   * Performs a known-legal move (originating from {@link #getPossibleMoveSpecificationSet()}) for the purpose of
-   * computing a {@link MoveRepresentation}. The default implementation routes through the public
-   * {@link #performMove(MoveSpecification)}; subclasses whose validation pipeline rejects further moves on terminal
-   * positions (e.g. the strict-pipeline {@code Board}) override this to skip that game-end check, since the legal-moves
-   * query must remain functional even when the game has ended.
-   */
-  protected void performMoveForRepresentation(MoveSpecification moveSpecification) {
-    this.performMove(moveSpecification);
   }
 
   @Override

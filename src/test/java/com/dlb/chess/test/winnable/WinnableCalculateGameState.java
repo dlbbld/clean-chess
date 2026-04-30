@@ -4,11 +4,11 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.utility.BasicChessUtility;
+import com.dlb.chess.common.utility.SetUtility;
+import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
 import com.dlb.chess.test.winnable.model.GameForced;
 
@@ -19,7 +19,7 @@ public class WinnableCalculateGameState {
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
 
-    for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
+    for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
       final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
@@ -38,7 +38,7 @@ public class WinnableCalculateGameState {
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
 
-    for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
+    for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
       final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
@@ -57,7 +57,7 @@ public class WinnableCalculateGameState {
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
 
-    for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
+    for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
       // If the first move creates a FIDE-automatic termination, the strict pipeline rejects
@@ -67,7 +67,7 @@ public class WinnableCalculateGameState {
         board.unperformMove();
         continue;
       }
-      for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
+      for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
         final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
@@ -90,14 +90,15 @@ public class WinnableCalculateGameState {
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
 
-    for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
+    for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
         board.unperformMove();
         continue;
       }
-      for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
+      for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
+
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
         final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
@@ -120,21 +121,22 @@ public class WinnableCalculateGameState {
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
 
-    for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
+    for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
         board.unperformMove();
         continue;
       }
-      for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
+      for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
         if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
           board.unperformMove();
           continue;
         }
-        for (final MoveRepresentation thirdHalfMove : board.getLegalMovesRepresentation()) {
+        for (final LegalMove thirdHalfMove : board.getLegalMoveSet()) {
+
           countEvaluatedPositions++;
           board.performMove(thirdHalfMove.moveSpecification());
           final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
@@ -160,21 +162,22 @@ public class WinnableCalculateGameState {
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
 
-    for (final MoveRepresentation firstHalfMove : board.getLegalMovesRepresentation()) {
+    for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
       board.performMove(firstHalfMove.moveSpecification());
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
         board.unperformMove();
         continue;
       }
-      for (final MoveRepresentation secondHalfMove : board.getLegalMovesRepresentation()) {
+      for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
         countEvaluatedPositions++;
         board.performMove(secondHalfMove.moveSpecification());
         if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
           board.unperformMove();
           continue;
         }
-        for (final MoveRepresentation thirdHalfMove : board.getLegalMovesRepresentation()) {
+        for (final LegalMove thirdHalfMove : board.getLegalMoveSet()) {
+
           countEvaluatedPositions++;
           board.performMove(thirdHalfMove.moveSpecification());
           final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
@@ -199,10 +202,10 @@ public class WinnableCalculateGameState {
     // we check position after series of forced moves
     // we cannot use early returns for after evaluation we need to undo the moves
     var countForcedHalfMoves = 0;
-    while (board.getLegalMovesRepresentation().size() == 1) {
+    while (board.getLegalMoveSet().size() == 1) {
       countForcedHalfMoves++;
-      final MoveRepresentation moveRepresentation = NonNullWrapperCommon.get(board.getLegalMovesRepresentation(), 0);
-      board.performMove(moveRepresentation.moveSpecification());
+      final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
+      board.performMove(legalMove.moveSpecification());
       final GameStatus evaluation = BasicChessUtility.calculateGameStatus(board);
       switch (BasicChessUtility.calculateGameStatus(board)) {
         case CHECKMATE:
