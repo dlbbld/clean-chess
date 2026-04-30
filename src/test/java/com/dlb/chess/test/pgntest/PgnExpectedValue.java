@@ -1325,6 +1325,10 @@ public class PgnExpectedValue {
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "4k3/8/8/2K5/8/5N2/8/8 w - - 0 35"));
 
+    // K vs K reached on the last halfmove via captures — game ends at dead position, no moves past.
+    list.add(new PgnFileTestCase("insufficient_material_K_K.pgn", "", "", "", 3, 6, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "2K5/8/8/8/8/8/4k3/8 b - - 0 38"));
 
     list.add(new PgnFileTestCase("insufficient_material_K_KBw.pgn", "", "", "", 3, 4, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BOTH, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
