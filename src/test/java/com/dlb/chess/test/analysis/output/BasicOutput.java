@@ -1,19 +1,14 @@
 package com.dlb.chess.test.analysis.output;
 
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
-import com.dlb.chess.analysis.model.SingleOutput;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.RepetitionUtility;
 
 public class BasicOutput {
-
-  private static final boolean IS_FULL = true;
 
   private static final String ATTRIBUTE_FEN = "FEN";
   private static final String ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO = "Threefold ignoring en passant";
@@ -34,54 +29,41 @@ public class BasicOutput {
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
-  public static SingleOutput calculateTestResult(Path folderPath, String pgnFileName) throws Exception {
-    final var analysis = Analyzer.calculateAnalysis(folderPath, pgnFileName);
-    return calculateTestResult(analysis, pgnFileName);
-  }
+  public static List<String> calculateVisualIndication(Analysis analysis, String pgnName) throws Exception {
+    final List<String> list = new ArrayList<>();
 
-  public static SingleOutput calculateTestResult(Analysis analysis, String pgnName) throws Exception {
-    final List<String> output = new ArrayList<>();
+    list.add("-----------------------------------------");
+    list.add(pgnName);
+    list.add("-----------------------------------------");
 
-    output.add("-----------------------------------------");
-    output.add(pgnName);
-    output.add("-----------------------------------------");
+    list.add(calculateOutputFen(analysis));
 
-    if (IS_FULL) {
-      output.add(calculateOutputFen(analysis));
-    }
+    list.add(calculateOutputThreefoldRepetitionInitialEnPassantCapture(analysis));
+    list.add(calculateOutputRepetitionInitialEnPassantCapture(analysis));
 
-    if (IS_FULL) {
-      output.add(calculateOutputThreefoldRepetitionInitialEnPassantCapture(analysis));
-      output.add(calculateOutputRepetitionInitialEnPassantCapture(analysis));
-    }
-
-    output.add(calculateOutputThreefoldRepetition(analysis));
+    list.add(calculateOutputThreefoldRepetition(analysis));
 
     if (analysis.hasThreefoldRepetition()) {
-      output.add(calculateOutputRepetition(analysis));
-      output.add(calculateOutputFivefoldRepetition(analysis));
+      list.add(calculateOutputRepetition(analysis));
+      list.add(calculateOutputFivefoldRepetition(analysis));
       if (analysis.hasFivefoldRepetition()) {
-        output.add(calculateOutputFivefoldRepetition(analysis));
+        list.add(calculateOutputFivefoldRepetition(analysis));
       }
     }
 
-    output.add(calculateOutputYawnMoveRule(analysis));
+    list.add(calculateOutputYawnMoveRule(analysis));
 
     if (analysis.hasFiftyMoveRule()) {
-      output.add(calculateOutputYawnMoveRuleSequence(analysis));
+      list.add(calculateOutputYawnMoveRuleSequence(analysis));
     }
 
-    if (IS_FULL) {
-      output.add(calculateOutputFirstCapture(analysis));
-      output.add(calculateOutputMaxYawnSequence(analysis));
-    }
+    list.add(calculateOutputFirstCapture(analysis));
+    list.add(calculateOutputMaxYawnSequence(analysis));
 
-    if (IS_FULL) {
-      output.add(calculateOutputLastPositionEvaluation(analysis));
-      output.add(calculateOutputInsufficientMaterial(analysis));
-    }
+    list.add(calculateOutputLastPositionEvaluation(analysis));
+    list.add(calculateOutputInsufficientMaterial(analysis));
 
-    return new SingleOutput(analysis, output);
+    return list;
   }
 
   private static String calculateOutputMaxYawnSequence(Analysis analysis) {

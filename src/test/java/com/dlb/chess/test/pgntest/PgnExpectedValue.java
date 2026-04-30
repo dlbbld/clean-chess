@@ -174,7 +174,7 @@ public class PgnExpectedValue {
     return resultListList;
   }
 
-  public static PgnTest findPgnFileBelongingPgnTestHavingTestValuesAlready(String testPgnFileName) {
+  public static PgnTest findPgnTest(String testPgnFileName) {
     for (final PgnFileTestCaseList testCaseList : allTestCaseListList) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (testCase.pgnFileName().equals(testPgnFileName)) {
@@ -185,7 +185,7 @@ public class PgnExpectedValue {
     throw new IllegalArgumentException("No such file exists");
   }
 
-  public static PgnTest findPgnFileBelongingPgnTestNotHavingTestValuesAlready(String testPgnFileName) {
+  public static PgnTest findPgnTestPgnNotListed(String testPgnFileName) {
     for (final PgnFileTestCaseList testCaseList : allTestCaseListList) {
       if (FileUtility.exists(testCaseList.pgnTest().getFolderPath(), testPgnFileName)) {
         return testCaseList.pgnTest();
@@ -194,7 +194,7 @@ public class PgnExpectedValue {
     throw new IllegalArgumentException("No such file exists");
   }
 
-  public static PgnFileTestCase findPgnFileBelongingPgnTestCase(String testPgnFileName) {
+  public static PgnFileTestCase findTestCase(String testPgnFileName) {
     for (final PgnFileTestCaseList testCaseList : allTestCaseListList) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (testCase.pgnFileName().equals(testPgnFileName)) {

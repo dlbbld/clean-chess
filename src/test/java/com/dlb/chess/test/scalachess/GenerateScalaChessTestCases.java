@@ -39,7 +39,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   private static final boolean IS_GENERATE_FOR_PGN_FILE_NAME = true;
   private static final String GENERATE_PGN_FILE_NAME = "insufficient_material_KBbBb_K.pgn";
   private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = PgnExpectedValue
-      .findPgnFileBelongingPgnTestHavingTestValuesAlready(GENERATE_PGN_FILE_NAME);
+      .findPgnTest(GENERATE_PGN_FILE_NAME);
 
   // is ignored if test for file is true
   private static final boolean IS_GENERATE_ONLY_FOR_TEST_CASE = true;

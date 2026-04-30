@@ -35,7 +35,7 @@ public class TestAnalyzer {
   }
 
   static void printAnalysis(String pgnFileName) throws Exception {
-    final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
+    final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
     System.out.println(pgnFileName);
     Analyzer.printAnalysis(pgnTest.getFolderPath(), pgnFileName);
   }

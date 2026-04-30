@@ -13,7 +13,7 @@ public class GenerateTestCaseForPgnFile extends AbstractGenerateTestCaseForPgn {
   }
 
   private static void generateTestCaseForPgnFile(String pgnFileName) throws Exception {
-    final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
+    final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
     final String testCaseValues = generate(pgnTest.getFolderPath(), pgnFileName);
     System.out.println(testCaseValues);
   }
