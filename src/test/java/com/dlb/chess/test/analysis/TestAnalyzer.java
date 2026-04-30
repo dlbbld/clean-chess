@@ -7,7 +7,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 public class TestAnalyzer {
 
   public static void main(String[] args) throws Exception {
-    // printAnalysis("05_claim_for_own_move_correct_but_makes_move_on_board.pgn");
+    printAnalysis("05_claim_for_own_move_correct_but_makes_move_on_board.pgn");
 
     final var pgnString = """
         [Event "Rated Blitz game"]

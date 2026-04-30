@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.reference.SanValidateFormatBasic;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 import com.dlb.chess.test.RestrictTestConstants;
+import com.dlb.chess.test.san.reference.SanValidateFormatBasic;
 
 /**
  * Exhaustive completeness test: enumerates every string that can plausibly be a SAN move (drawn from a restricted

@@ -16,8 +16,8 @@ import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.reference.SanValidateFormatReference;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.test.san.reference.SanValidateFormatReference;
 
 class TestSanValidateFormat {
 
