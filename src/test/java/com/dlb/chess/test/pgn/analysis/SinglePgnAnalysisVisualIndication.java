@@ -12,11 +12,11 @@ import com.dlb.chess.test.pgnall.AbstractPgnTest;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
-public class PrintSinglePgnAnalysis extends AbstractPgnTest {
+public class SinglePgnAnalysisVisualIndication extends AbstractPgnTest {
 
   private static final String PGN_FILE_NAME = "various_gundavaa_tari_2022.pgn";
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(PrintSinglePgnAnalysis.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(SinglePgnAnalysisVisualIndication.class);
 
   public static void main(String[] args) throws Exception {
 
@@ -25,6 +25,7 @@ public class PrintSinglePgnAnalysis extends AbstractPgnTest {
     final List<String> visualIndication = BasicOutput.calculateVisualIndication(analysis, PGN_FILE_NAME);
 
     GeneralUtility.logLines(logger, visualIndication);
+
   }
 
 }
