@@ -62,6 +62,7 @@ public enum PgnTest {
   MAX_SAME_PIECE_PROMOTION_COMBINED(false, "edgeCases/max/maxPieces/combined"),
   DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "edgeCases/doubleCheckCheckmateBizarre/white"),
   DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "edgeCases/doubleCheckCheckmateBizarre/black"),
+  SPECIAL(false, "edgeCases/special"),
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
@@ -85,7 +86,6 @@ public enum PgnTest {
   EARLY_DRAW(false, "realGames/earlyDraw"),
   WIKIPEDIA_THREEFOLD(false, "review/wikipedia/threefold"),
   WIKIPEDIA_FIFTY_MOVE(false, "review/wikipedia/fiftyMove"),
-  SPECIAL(false, "special"),
   DGT_LIVE_CHESS(false, "review/dgt/liveChess"),
   DGT_CENTAUR(false, "review/dgt/centaur"),
 
