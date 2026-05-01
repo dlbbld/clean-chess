@@ -65,19 +65,19 @@ public enum PgnTest {
   RANDOM_FIVEFOLD(false, "random/fivefold"),
 
   VARIOUS(false, "various"),
-  WCC2021(false, "wcc2021"),
+  WCC2021(false, "review/wcc2021"),
   FIVEFOLD_CORRECT(false, "fivefold/correct"),
   FIFTY_GENERAL(false, "fifty/general"),
   FIFTY_PATTERN(false, "fifty/pattern"),
 
   SEVENTY_FIVE_CORRECT(false, "seventyFive/correct"),
   EARLY_DRAW(false, "earlyDraw"),
-  WIKIPEDIA_THREEFOLD(false, "wikipedia/threefold"),
-  WIKIPEDIA_FIFTY_MOVE(false, "wikipedia/fiftyMove"),
+  WIKIPEDIA_THREEFOLD(false, "review/wikipedia/threefold"),
+  WIKIPEDIA_FIFTY_MOVE(false, "review/wikipedia/fiftyMove"),
   SEQUENCE(false, "sequence"),
   SPECIAL(false, "special"),
-  DGT_LIVE_CHESS(false, "dgt/liveChess"),
-  DGT_CENTAUR(false, "dgt/centaur"),
+  DGT_LIVE_CHESS(false, "review/dgt/liveChess"),
+  DGT_CENTAUR(false, "review/dgt/centaur"),
 
   UNFAIR_LICHESS_EXAMPLES(false, "unfair/lichess/examples"),
   UNFAIR_LICHESS_HELPMATE(false, "unfair/lichess/helpmate"),
@@ -96,12 +96,12 @@ public enum PgnTest {
   DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "doubleCheckCheckmateBizarre/white"),
   DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "doubleCheckCheckmateBizarre/black"),
 
-  MONSTER_BLOG_INSTANT(false, "blog/instant"),
-  MONSTER_BLOG_PREDRAW(false, "blog/predraw"),
-  MONSTER_BLOG_TIMEOUT(false, "blog/timeout"),
+  MONSTER_BLOG_INSTANT(false, "review/blog/instant"),
+  MONSTER_BLOG_PREDRAW(false, "review/blog/predraw"),
+  MONSTER_BLOG_TIMEOUT(false, "review/blog/timeout"),
 
-  REPETITION_QUIZ_ONE(false, "repetitionQuiz/one"),
-  REPETITION_QUIZ_TWO(false, "repetitionQuiz/two");
+  REPETITION_QUIZ_ONE(false, "review/repetitionQuiz/one"),
+  REPETITION_QUIZ_TWO(false, "review/repetitionQuiz/two");
 
   private final boolean isBasicTest;
   private final String folderPart;
