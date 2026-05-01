@@ -56,8 +56,8 @@ public class PgnExpectedValue {
       case BASIC_FIFTY -> createTestCasesBasicFifty();
       case BASIC_FIVEFOLD -> createTestCasesBasicFivefold();
       case BASIC_FORCED -> createTestCasesBasicForced();
-      case BASIC_YAWN_SEQUENCES_WHITE -> createTestBasicCasesYawnSequencesWhite();
-      case BASIC_YAWN_SEQUENCES_BLACK -> createTestBasicCasesYawnSequencesBlack();
+      case BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE -> createTestBasicCasesYawnSequencesWhite();
+      case BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK -> createTestBasicCasesYawnSequencesBlack();
       case PARSER_FROM_FEN -> createTestCasesParserFromFen();
       case BASIC_INSUFFICIENT_MATERIAL_BOTH -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.BOTH,
           PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH);
@@ -100,7 +100,7 @@ public class PgnExpectedValue {
       case RANDOM_SEVENTY_FIVE -> createTestCasesRandomSeventyFive();
       case RANDOM_STALEMATE -> createTestCasesRandomStalemate();
       case RANDOM_THREEFOLD -> createTestCasesRandomThreefold();
-      case SEQUENCE -> createTestCasesSequence();
+      case BASIC_ANALYSIS_REPETITION -> createTestCasesSequence();
       case SEVENTY_FIVE_CORRECT -> createTestCasesSeventyFiveCorrect();
       case SPECIAL -> createTestCasesSpecial();
       case WIKIPEDIA_FIFTY_MOVE -> createTestCasesWikipediaFiftyMove();
@@ -2508,7 +2508,7 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "Q7/3p1q2/2pkp3/8/7P/5PPK/8/8 w - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_YAWN_SEQUENCES_WHITE, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE, list);
   }
 
   private static PgnFileTestCaseList createTestBasicCasesYawnSequencesBlack() {
@@ -2540,7 +2540,7 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/6pk/8/4q1n1/2NQ4/8/1KP1P3/8 b - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_YAWN_SEQUENCES_BLACK, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLongestPossible() {
@@ -3340,7 +3340,7 @@ public class PgnExpectedValue {
         "", "", -1, 16, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 16 9"));
-    return new PgnFileTestCaseList(PgnTest.SEQUENCE, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_ANALYSIS_REPETITION, list);
   }
 
   private static PgnFileTestCaseList createTestCasesCapture() {

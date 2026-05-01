@@ -46,8 +46,9 @@ public enum PgnTest {
   BASIC_CASTLING_SPECIAL_WHITE(true, "basic/castling/special/white"),
   BASIC_CASTLING_SPECIAL_BLACK(true, "basic/castling/special/black"),
   BASIC_FORCED(true, "basic/forced"),
-  BASIC_YAWN_SEQUENCES_WHITE(true, "basic/yawnSequences/white"),
-  BASIC_YAWN_SEQUENCES_BLACK(true, "basic/yawnSequences/black"),
+  BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE(true, "basic/analysis/yawn/white"),
+  BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK(true, "basic/analysis/yawn/black"),
+  BASIC_ANALYSIS_REPETITION(false, "basic/analysis/repetition"),
 
   PARSER_FROM_FEN(false, "parserFenMechanics/"),
 
@@ -69,17 +70,16 @@ public enum PgnTest {
   RANDOM_THREEFOLD(false, "random/threefold"),
   RANDOM_FIVEFOLD(false, "random/fivefold"),
 
-  VARIOUS(false, "various"),
+  VARIOUS(false, "realGames/various"),
   WCC2021(false, "review/wcc2021"),
-  FIVEFOLD_CORRECT(false, "fivefold/correct"),
-  FIFTY_GENERAL(false, "fifty/general"),
-  FIFTY_PATTERN(false, "fifty/pattern"),
+  FIVEFOLD_CORRECT(false, "realGames/fivefold/correct"),
+  FIFTY_GENERAL(false, "realGames/fifty/general"),
+  FIFTY_PATTERN(false, "realGames/fifty/pattern"),
 
-  SEVENTY_FIVE_CORRECT(false, "seventyFive/correct"),
-  EARLY_DRAW(false, "earlyDraw"),
+  SEVENTY_FIVE_CORRECT(false, "realGames/seventyFive/correct"),
+  EARLY_DRAW(false, "realGames/earlyDraw"),
   WIKIPEDIA_THREEFOLD(false, "review/wikipedia/threefold"),
   WIKIPEDIA_FIFTY_MOVE(false, "review/wikipedia/fiftyMove"),
-  SEQUENCE(false, "sequence"),
   SPECIAL(false, "special"),
   DGT_LIVE_CHESS(false, "review/dgt/liveChess"),
   DGT_CENTAUR(false, "review/dgt/centaur"),
@@ -92,7 +92,7 @@ public enum PgnTest {
 
   PAWN_WALL(false, "cua/pawnWall"),
 
-  LAST_MOVE_ADDED_ACCIDENTALLY(false, "lastMoveAddedAccidentally"),
+  LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
 
   MAX_SAME_PIECE_PROMOTION_WHITE(false, "max/maxPieces/white"),
   MAX_SAME_PIECE_PROMOTION_BLACK(false, "max/maxPieces/black"),
