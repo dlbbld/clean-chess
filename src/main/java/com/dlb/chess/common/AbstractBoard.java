@@ -1,7 +1,5 @@
 package com.dlb.chess.common;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -10,10 +8,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
-import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -42,25 +38,6 @@ public abstract class AbstractBoard implements ApiBoard, EnumConstants {
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
       result.add(uci);
-    }
-    return result;
-  }
-
-  @Override
-  public List<MoveRepresentation> getLegalMovesRepresentation() {
-    final List<MoveRepresentation> result = new ArrayList<>();
-
-    final Side havingMove = getHavingMove();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      this.performMove(moveSpecification);
-      final LegalMove legalMove = getLastMove();
-      final String san = getSan();
-      final String lan = getLan();
-      this.unperformMove();
-      final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
-
-      final MoveRepresentation moveRepresentation = new MoveRepresentation(moveSpecification, legalMove, san, lan, uci);
-      result.add(moveRepresentation);
     }
     return result;
   }

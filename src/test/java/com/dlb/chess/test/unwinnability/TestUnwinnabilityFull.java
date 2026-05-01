@@ -51,7 +51,7 @@ class TestUnwinnabilityFull {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST);
     final var pgnFileName = "unfair_ambrona_10.pgn";
 
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findPgnFileBelongingPgnTestCase(pgnFileName);
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase(pgnFileName);
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileName);
 

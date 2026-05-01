@@ -38,8 +38,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   // if true test for folder is ignored
   private static final boolean IS_GENERATE_FOR_PGN_FILE_NAME = true;
   private static final String GENERATE_PGN_FILE_NAME = "insufficient_material_KBbBb_K.pgn";
-  private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = PgnExpectedValue
-      .findPgnFileBelongingPgnTestHavingTestValuesAlready(GENERATE_PGN_FILE_NAME);
+  private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = PgnExpectedValue.findPgnTest(GENERATE_PGN_FILE_NAME);
 
   // is ignored if test for file is true
   private static final boolean IS_GENERATE_ONLY_FOR_TEST_CASE = true;
@@ -92,9 +91,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
       // below must be created separately as together the resulting test case is too big for Scala too handle
       switch (testCaseList.pgnTest()) {
-        case LONG:
-        case LONGEST_MATE:
-        case LONGEST_POSSIBLE:
+        case MAX_MOVES:
         case RANDOM_NO_REPETITION:
           break;
         // $CASES-OMITTED$
@@ -219,7 +216,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
   protected static void generateScalaMoveList() {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases
-        .getPgn(PgnTest.BASIC_INSUFFICIENT_MATERIAL.getFolderPath(), "insufficient_material_KBbBb_K.pgn");
+        .getPgn(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH.getFolderPath(), "insufficient_material_KBbBb_K.pgn");
 
     if (pgnFile.startFen() != FenConstants.FEN_INITIAL) {
       throw new ProgrammingMistakeException("Only test cases from initial FEN are supported");
@@ -255,7 +252,8 @@ public class GenerateScalaChessTestCases implements EnumConstants {
     final List<String> sanQuotedMoveList = new ArrayList<>();
     for (var i = 0; i <= endIndex; i++) {
       final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
-      final String uciAdapted = convertMoveSpecificationToUciForScala(halfMove.havingMove(), halfMove.moveSpecification());
+      final String uciAdapted = convertMoveSpecificationToUciForScala(halfMove.havingMove(),
+          halfMove.moveSpecification());
       sanQuotedMoveList.add("\"" + uciAdapted + "\"");
     }
     return BasicUtility.calculateCommaSeparatedList(sanQuotedMoveList);

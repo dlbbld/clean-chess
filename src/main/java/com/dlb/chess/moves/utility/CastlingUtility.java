@@ -111,8 +111,7 @@ public abstract class CastlingUtility implements EnumConstants {
   public static CastlingCheck calculateQueenSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
 
     final Side oppositeSide = havingMove.getOppositeSide();
-    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
-        oppositeSide);
+    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition, oppositeSide);
 
     if (attackedSquares.contains(calculateKingOriginalSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_IN_CHECK;
@@ -129,8 +128,7 @@ public abstract class CastlingUtility implements EnumConstants {
   public static CastlingCheck calculateKingSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
 
     final Side oppositeSide = havingMove.getOppositeSide();
-    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
-        oppositeSide);
+    final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition, oppositeSide);
 
     if (attackedSquares.contains(calculateKingOriginalSquare(havingMove))) {
       return CastlingCheck.TEMPORARY_KING_IN_CHECK;
@@ -172,12 +170,6 @@ public abstract class CastlingUtility implements EnumConstants {
   public static List<UpdateSquare> performCastlingMovements(Side havingMove, MoveSpecification moveSpecification) {
     final List<UpdateSquare> result = new ArrayList<>(performKingMovement(havingMove, moveSpecification));
     result.addAll(performRookMovement(havingMove, moveSpecification));
-    return result;
-  }
-
-  public static List<UpdateSquare> performCastlingUndoMovements(LegalMove move) {
-    final List<UpdateSquare> result = new ArrayList<>(performKingUndoMovement(move));
-    result.addAll(performRookUndoMovement(move));
     return result;
   }
 
@@ -266,98 +258,6 @@ public abstract class CastlingUtility implements EnumConstants {
       default:
         throw new IllegalArgumentException();
     }
-    return result;
-  }
-
-  private static List<UpdateSquare> performKingUndoMovement(LegalMove legalMove) {
-
-    final List<UpdateSquare> result = new ArrayList<>();
-
-    final MoveSpecification moveSpecification = legalMove.moveSpecification();
-    switch (moveSpecification.castlingMove()) {
-      case KING_SIDE:
-        switch (legalMove.havingMove()) {
-          case BLACK -> {
-            // undo king move
-            result.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM, BLACK_KING));
-            result.add(new UpdateSquare(CastlingConstants.BLACK_KING_KING_SIDE_CASTLING_TO));
-          }
-          case WHITE -> {
-            // undo king move
-            result.add(new UpdateSquare(CastlingConstants.WHITE_KING_FROM, WHITE_KING));
-            result.add(new UpdateSquare(CastlingConstants.WHITE_KING_KING_SIDE_CASTLING_TO));
-          }
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        }
-        break;
-      case QUEEN_SIDE:
-        switch (legalMove.havingMove()) {
-          case BLACK -> {
-            // king move
-            result.add(new UpdateSquare(CastlingConstants.BLACK_KING_FROM, BLACK_KING));
-            result.add(new UpdateSquare(CastlingConstants.BLACK_KING_QUEEN_SIDE_CASTLING_TO));
-          }
-          case WHITE -> {
-            // king move
-            result.add(new UpdateSquare(CastlingConstants.WHITE_KING_FROM, WHITE_KING));
-            result.add(new UpdateSquare(CastlingConstants.WHITE_KING_QUEEN_SIDE_CASTLING_TO));
-          }
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        }
-        break;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
-
-    return result;
-  }
-
-  private static List<UpdateSquare> performRookUndoMovement(LegalMove legalMove) {
-
-    final List<UpdateSquare> result = new ArrayList<>();
-
-    final MoveSpecification moveSpecification = legalMove.moveSpecification();
-    switch (moveSpecification.castlingMove()) {
-      case KING_SIDE:
-        switch (legalMove.havingMove()) {
-          case BLACK -> {
-            // undo rook move
-            result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_FROM, BLACK_ROOK));
-            result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_KING_SIDE_CASTLING_TO));
-          }
-          case WHITE -> {
-            // undo rook move
-            result.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_FROM, WHITE_ROOK));
-            result.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_KING_SIDE_CASTLING_TO));
-          }
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        }
-        break;
-      case QUEEN_SIDE:
-        switch (legalMove.havingMove()) {
-          case BLACK -> {
-            // rook move
-            result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_FROM, BLACK_ROOK));
-            result.add(new UpdateSquare(CastlingConstants.BLACK_ROOK_QUEEN_SIDE_CASTLING_TO));
-          }
-          case WHITE -> {
-            // rook move
-            result.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_FROM, WHITE_ROOK));
-            result.add(new UpdateSquare(CastlingConstants.WHITE_ROOK_QUEEN_SIDE_CASTLING_TO));
-          }
-          case NONE -> throw new IllegalArgumentException();
-          default -> throw new IllegalArgumentException();
-        }
-        break;
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
-
     return result;
   }
 

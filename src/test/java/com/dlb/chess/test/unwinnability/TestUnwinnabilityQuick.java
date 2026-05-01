@@ -73,7 +73,7 @@ class TestUnwinnabilityQuick {
   void testPgnFileValue() {
     final var pgnFileName = "unwinnable_fivefold_inevitable.pgn";
 
-    final PgnTest pgnTest = PgnExpectedValue.findPgnFileBelongingPgnTestNotHavingTestValuesAlready(pgnFileName);
+    final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
@@ -89,7 +89,7 @@ class TestUnwinnabilityQuick {
   @Test
   void testPgnFileExpected() {
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue
-        .findPgnFileBelongingPgnTestCase("25_black_capture_king_pawn.pgn");
+        .findTestCase("25_black_capture_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 

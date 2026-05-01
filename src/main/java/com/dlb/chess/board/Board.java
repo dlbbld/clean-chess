@@ -8,6 +8,7 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.CastlingRightLoss;
@@ -28,7 +29,6 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.fen.FenBoard;
@@ -54,7 +54,7 @@ public class Board extends AbstractBoard {
 
   private final Fen initialFen;
   private final List<LegalMove> performedLegalMoveList;
-  private final List<Set<LegalMove>> legalMoveListSet;
+  private final List<Set<LegalMove>> legalMoveSetList;
   private final List<Boolean> isCheckList;
   private final List<Boolean> isCheckmateList;
   private final List<Boolean> isStalemateList;
@@ -90,10 +90,10 @@ public class Board extends AbstractBoard {
     this.initialFen = initialFenUse;
 
     this.performedLegalMoveList = new ArrayList<>();
-    this.legalMoveListSet = new ArrayList<>();
+    this.legalMoveSetList = new ArrayList<>();
     final Set<LegalMove> legalMoveSet = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition, initialHavingMove,
         initialCastlingRight, initialEnPassantCaptureTargetSquare);
-    this.legalMoveListSet.add(legalMoveSet);
+    this.legalMoveSetList.add(legalMoveSet);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(initialStaticPosition,
         initialHavingMove.getOppositeSide());
@@ -167,20 +167,13 @@ public class Board extends AbstractBoard {
     return this.performedLegalMoveList.isEmpty();
   }
 
-  private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
-    return performMove(moveSpecification, false);
-  }
-
   @Override
   public boolean performMove(MoveSpecification moveSpecification) throws InvalidMoveException {
-    return performMove(moveSpecification, true);
+    ValidateNewMove.validateNewMove(this, moveSpecification);
+    return performMoveWithoutValidation(moveSpecification);
   }
 
-  private boolean performMove(MoveSpecification moveSpecification, boolean isValidate) throws InvalidMoveException {
-
-    if (isValidate) {
-      ValidateNewMove.validateNewMove(this, moveSpecification);
-    }
+  private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
 
     final CastlingRight beforeCastlingRightWhite = NonNullWrapperCommon.getLast(dynamicPositionList)
         .castlingRightWhite();
@@ -217,9 +210,9 @@ public class Board extends AbstractBoard {
     this.performedLegalMoveList.add(moveToPerform);
 
     // now we have a depencency on instruction execution: the move must be performed before calling the legal moves
-    final Set<LegalMove> legalMovesAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
+    final Set<LegalMove> legalMoveSetAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
         afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
-    this.legalMoveListSet.add(legalMovesAfterMove);
+    this.legalMoveSetList.add(legalMoveSetAfterMove);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(afterStaticPosition,
         afterHavingMove.getOppositeSide());
@@ -229,10 +222,10 @@ public class Board extends AbstractBoard {
     final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
-    final var isCheckmate = isCheck && legalMovesAfterMove.isEmpty();
+    final var isCheckmate = isCheck && legalMoveSetAfterMove.isEmpty();
     this.isCheckmateList.add(isCheckmate);
 
-    final var isStalemate = !isCheck && legalMovesAfterMove.isEmpty();
+    final var isStalemate = !isCheck && legalMoveSetAfterMove.isEmpty();
     this.isStalemateList.add(isStalemate);
 
     final var newDynamicPosition = new DynamicPosition(afterHavingMove, afterStaticPosition,
@@ -249,12 +242,12 @@ public class Board extends AbstractBoard {
         dynamicPositionList, newDynamicPosition, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
     this.repetitionCountList.add(newRepetitionCount);
 
-    final Set<LegalMove> legalMoveBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveListSet,
-        legalMoveListSet.size() - 2);
+    final Set<LegalMove> legalMoveSetBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveSetList,
+        legalMoveSetList.size() - 2);
 
     final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck, isCheckmate);
 
-    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveBeforeLastHalfMoveSet, sanTerminalMarker));
+    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));
     this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
@@ -316,7 +309,8 @@ public class Board extends AbstractBoard {
   public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
-    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove, moveSpecification);
+    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove,
+        moveSpecification);
     return staticPosition.createChangedPosition(updateSquareList);
 
   }
@@ -336,41 +330,14 @@ public class Board extends AbstractBoard {
     return StandardMoveUtility.performStandardMovements(staticPosition, moveSpecification);
   }
 
-  private void correctnessCheck() {
-    // only to test our methods correctness we perform an undo and check against the previous position
-    // the below has no other purpose and could be removed
-    final LegalMove moveToUndo = getLastMove();
-
-    final StaticPosition staticPositionToUndo = NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
-    final StaticPosition staticPositionUndoExpected = NonNullWrapperCommon
-        .get(dynamicPositionList, dynamicPositionList.size() - 2).staticPosition();
-
-    List<UpdateSquare> updateSquareList;
-    if (moveToUndo.enPassantRole().isEnPassantCapture()) {
-      updateSquareList = EnPassantCaptureUtility.performEnPassantCaptureUndoMovements(moveToUndo);
-    } else if (CastlingUtility.calculateIsCastlingMove(moveToUndo.moveSpecification())) {
-      updateSquareList = CastlingUtility.performCastlingUndoMovements(moveToUndo);
-    } else if (PromotionUtility.calculateIsPromotion(moveToUndo.moveSpecification())) {
-      updateSquareList = PromotionUtility.performPromotionUndoMovements(moveToUndo);
-    } else {
-      updateSquareList = StandardMoveUtility.performStandardUndoMovements(moveToUndo);
-    }
-    final StaticPosition staticPositionUndoActual = staticPositionToUndo.createChangedPosition(updateSquareList);
-    if (!staticPositionUndoExpected.equals(staticPositionUndoActual)) {
-      throw new ProgrammingMistakeException("The undo position calculation is correct");
-    }
-  }
-
   @Override
   public void unperformMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("Undo move requested but no move to undo");
     }
 
-    correctnessCheck();
-
     this.performedLegalMoveList.remove(performedLegalMoveList.size() - 1);
-    this.legalMoveListSet.remove(legalMoveListSet.size() - 1);
+    this.legalMoveSetList.remove(legalMoveSetList.size() - 1);
 
     this.isCheckList.remove(isCheckList.size() - 1);
     this.isCheckmateList.remove(isCheckmateList.size() - 1);
@@ -402,7 +369,7 @@ public class Board extends AbstractBoard {
 
   @Override
   public Set<LegalMove> getLegalMoveSet() {
-    return NonNullWrapperCommon.getLast(legalMoveListSet);
+    return NonNullWrapperCommon.getLast(legalMoveSetList);
   }
 
   @Override
@@ -742,7 +709,7 @@ public class Board extends AbstractBoard {
   @Override
   public int hashCode() {
     return Objects.hash(dynamicPositionList, halfMoveClockList, halfMoveList, initialFen, isCheckList, isCheckmateList,
-        isStalemateList, lanList, legalMoveListSet, performedLegalMoveList, repetitionCountList, sanList);
+        isStalemateList, lanList, legalMoveSetList, performedLegalMoveList, repetitionCountList, sanList);
   }
 
   @Override
@@ -759,7 +726,7 @@ public class Board extends AbstractBoard {
         && Objects.equals(halfMoveList, other.halfMoveList) && Objects.equals(initialFen, other.initialFen)
         && Objects.equals(isCheckList, other.isCheckList) && Objects.equals(isCheckmateList, other.isCheckmateList)
         && Objects.equals(isStalemateList, other.isStalemateList) && Objects.equals(lanList, other.lanList)
-        && Objects.equals(legalMoveListSet, other.legalMoveListSet)
+        && Objects.equals(legalMoveSetList, other.legalMoveSetList)
         && Objects.equals(performedLegalMoveList, other.performedLegalMoveList)
         && Objects.equals(repetitionCountList, other.repetitionCountList) && Objects.equals(sanList, other.sanList);
   }

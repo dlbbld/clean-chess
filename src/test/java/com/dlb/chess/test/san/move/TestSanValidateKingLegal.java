@@ -15,11 +15,16 @@ class TestSanValidateKingLegal {
 
   // --- Not reachable, non-capturing ---
 
+  // Each test FEN includes a corner rook so that the position is not in mutual insufficient
+  // material (which would otherwise trigger the strict-pipeline GAME_ALREADY_ENDED check before
+  // SAN validation runs). The rook is placed where it neither attacks the king-mobility paths
+  // under test nor checks any king.
+
   @SuppressWarnings("static-method")
   @Test
   void testWhiteNotReachable() {
     // White king e1 trying to move three squares away to e4.
-    final ApiBoard board = new Board("7k/8/8/8/8/8/8/4K3 w - - 0 1");
+    final ApiBoard board = new Board("r6k/8/8/8/8/8/8/4K3 w - - 0 1");
     checkException("Ke4", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
@@ -27,7 +32,7 @@ class TestSanValidateKingLegal {
   @Test
   void testBlackNotReachable() {
     // Black king e8 trying to move three squares away to e5.
-    final ApiBoard board = new Board("4k3/8/8/8/8/8/8/7K b - - 0 1");
+    final ApiBoard board = new Board("4k3/8/8/8/8/8/8/R6K b - - 0 1");
     checkException("Ke5", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
@@ -37,7 +42,7 @@ class TestSanValidateKingLegal {
   @Test
   void testWhiteCaptureNotReachable() {
     // White king e1 trying to capture a black knight three squares away on e4.
-    final ApiBoard board = new Board("7k/8/8/8/4n3/8/8/4K3 w - - 0 1");
+    final ApiBoard board = new Board("r6k/8/8/8/4n3/8/8/4K3 w - - 0 1");
     checkException("Kxe4", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 
@@ -45,7 +50,7 @@ class TestSanValidateKingLegal {
   @Test
   void testBlackCaptureNotReachable() {
     // Black king e8 trying to capture a white knight three squares away on e5.
-    final ApiBoard board = new Board("4k3/8/8/4N3/8/8/8/7K b - - 0 1");
+    final ApiBoard board = new Board("4k3/8/8/4N3/8/8/8/R6K b - - 0 1");
     checkException("Kxe5", board, SanValidationProblem.NOT_REACHABLE_KING_NON_CASTLING);
   }
 

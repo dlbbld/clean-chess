@@ -37,7 +37,7 @@ class TestBoardAgainstEachOther {
             case BASIC_CHECKMATE_WHITE:
             case BASIC_CHECKMATE_BLACK:
             case BASIC_STALEMATE:
-            case BASIC_FROM_FEN:
+            case PARSER_FROM_FEN:
               break;
             // $CASES-OMITTED$
             default:

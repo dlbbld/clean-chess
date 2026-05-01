@@ -5,19 +5,26 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.test.analysis.output.YawnOutput;
+import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.pgntest.PgnExpectedValue;
 
 public abstract class AbstractPgnTest {
 
-  public static void testGame(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) throws Exception {
-    final var analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
-    testGame(testCase, analysis);
+  public static void testAnalysisAgainstTestCase(String pgnFileName, Analysis analysis) throws Exception {
+    final PgnFileTestCase testCase = PgnExpectedValue.findTestCase(pgnFileName);
+    testAnalysisAgainstTestCase(testCase, analysis);
   }
 
-  public static boolean testGame(PgnFileTestCase testCase, Analysis analysis) throws Exception {
+  public static void testAnalysisAgainstTestCase(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase)
+      throws Exception {
+    final var analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    testAnalysisAgainstTestCase(testCase, analysis);
+  }
+
+  public static void testAnalysisAgainstTestCase(PgnFileTestCase testCase, Analysis analysis) throws Exception {
     testFen(testCase.fen(), analysis.fen());
     testRepetition(analysis, testCase);
     testRepetitionInitialEnPassantCapture(analysis, testCase);
@@ -27,7 +34,6 @@ public abstract class AbstractPgnTest {
     testCheckmateOrStalemate(analysis, testCase);
     testRepetitionCountFinalPosition(analysis, testCase);
     testInsufficientMaterial(analysis, testCase);
-    return true;
   }
 
   private static void testFen(String expectedFen, String actualFen) {
@@ -44,7 +50,7 @@ public abstract class AbstractPgnTest {
 
   private static void testYawnMoveRule(Analysis analysis, PgnFileTestCase testCase) {
     assertEquals(testCase.expectedYawnMoveRule(),
-        YawnOutput.calculateOutputYawnMoveListList(analysis.yawnMoveListList()));
+        YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList()));
   }
 
   private static void testFirstCapture(Analysis analysis, PgnFileTestCase testCase) {

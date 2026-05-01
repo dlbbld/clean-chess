@@ -651,8 +651,11 @@ public final class StrictPgnParser {
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
-        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
-            message);
+        // Propagate the GameStatus from the SanValidationException for the GAME_ALREADY_ENDED
+        // case so callers can distinguish the five FIDE-automatic termination causes without
+        // parsing the human-readable message.
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN,
+            e.getSanValidationProblem(), message, e.getGameStatus());
       }
     }
   }

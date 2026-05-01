@@ -38,17 +38,4 @@ public abstract class PromotionUtility implements EnumConstants {
     return result;
   }
 
-  public static List<UpdateSquare> performPromotionUndoMovements(LegalMove lastMove) {
-
-    final List<UpdateSquare> result = new ArrayList<>();
-
-    if (lastMove.pieceCaptured() != Piece.NONE) {
-      result.add(new UpdateSquare(lastMove.moveSpecification().toSquare(), lastMove.pieceCaptured()));
-    } else {
-      result.add(new UpdateSquare(lastMove.moveSpecification().toSquare()));
-    }
-    result.add(new UpdateSquare(lastMove.moveSpecification().fromSquare(), lastMove.movingPiece()));
-
-    return result;
-  }
 }

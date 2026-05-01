@@ -29,7 +29,10 @@ class TestSanValidateKingPseudoLegal {
   @Test
   void testKingMovesNextToOpponentKing() {
     // White king e1, black king e3. Ke2 lands adjacent to the black king.
-    final ApiBoard board = new Board("8/8/8/8/8/4k3/8/4K3 w - - 0 1");
+    // Black rook on a8 ensures the position is not in mutual insufficient material (which
+    // would otherwise trigger GAME_ALREADY_ENDED before SAN validation runs); the rook
+    // attacks neither king nor the squares involved in the test.
+    final ApiBoard board = new Board("r7/8/8/8/8/4k3/8/4K3 w - - 0 1");
     checkException("Ke2", board, SanValidationProblem.KING_MOVES_NEXT_TO_OPPONENT_KING);
   }
 

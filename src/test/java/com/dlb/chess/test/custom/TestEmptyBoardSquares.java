@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.generate.squares.GenerateEmptyBoardSquares;
-import com.dlb.chess.generate.squares.GeneratePawnMoveType;
 import com.dlb.chess.range.model.BishopRange;
 import com.dlb.chess.range.model.QueenRange;
 import com.dlb.chess.range.model.RookRange;
@@ -23,6 +21,8 @@ import com.dlb.chess.squares.emptyboard.KnightEmptyBoardSquares;
 import com.dlb.chess.squares.emptyboard.PawnAnyAdvanceEmptyBoardSquares;
 import com.dlb.chess.squares.emptyboard.QueenEmptyBoardSquares;
 import com.dlb.chess.squares.emptyboard.RookEmptyBoardSquares;
+import com.dlb.chess.test.generate.squares.GenerateEmptyBoardSquares;
+import com.dlb.chess.test.generate.squares.GeneratePawnMoveType;
 import com.google.common.collect.ImmutableList;
 
 class TestEmptyBoardSquares implements EnumConstants {

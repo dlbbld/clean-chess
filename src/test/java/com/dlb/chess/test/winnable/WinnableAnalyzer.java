@@ -8,6 +8,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
 import com.dlb.chess.test.winnable.model.GameForced;
@@ -40,7 +41,16 @@ public class WinnableAnalyzer {
       return Winnable.NO;
     }
 
-    if (board.getLegalMovesRepresentation().isEmpty()) {
+    // Defensive: if the position is in any FIDE-automatic termination not caught by the
+    // predicates above (e.g. mutual insufficient material without the per-side variant
+    // returning true on the queried side), the strict pipeline rejects further moves and the
+    // forced-line / move-tree analysis below would throw GAME_ALREADY_ENDED. Treat it as
+    // unwinnable.
+    if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+      return Winnable.NO;
+    }
+
+    if (board.getLegalMoveSet().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");
     }
 
@@ -74,7 +84,7 @@ public class WinnableAnalyzer {
       }
     }
 
-    if (board.getLegalMovesRepresentation().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
+    if (board.getLegalMoveSet().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
       {
         final EvaluatePositions evaluatePositions = WinnableCalculateGameState
             .evaluateSecondHalfMoveNotMadeTheMove(board);
@@ -110,7 +120,7 @@ public class WinnableAnalyzer {
 
     final Side sideToEvaluate = board.getHavingMove().getOppositeSide();
 
-    if (board.getLegalMovesRepresentation().isEmpty()) {
+    if (board.getLegalMoveSet().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");
     }
 
@@ -135,7 +145,7 @@ public class WinnableAnalyzer {
       }
     }
 
-    if (board.getLegalMovesRepresentation().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
+    if (board.getLegalMoveSet().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
       {
         final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateSecondHalfMoveMadeTheMove(board);
         logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
@@ -178,7 +188,7 @@ public class WinnableAnalyzer {
     return switch (gameStatusFinal) {
       case CHECKMATE -> Winnable.YES;
       case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING -> Winnable.UNKNOWN;
       default -> throw new IllegalArgumentException();
     };
   }
@@ -186,7 +196,7 @@ public class WinnableAnalyzer {
   private static Winnable calculateWinnableForcedNotMadeLastMove(GameStatus gameStatusFinal) {
     return switch (gameStatusFinal) {
       case CHECKMATE, STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> Winnable.NO;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, OTHER -> Winnable.UNKNOWN;
+      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, ONGOING -> Winnable.UNKNOWN;
       default -> throw new IllegalArgumentException();
     };
   }

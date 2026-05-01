@@ -13,9 +13,10 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatusAnalysis;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
-import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
+import com.dlb.chess.common.utility.SetUtility;
+import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.winnable.PawnWall;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.GameForcedAnalysis;
@@ -105,7 +106,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       return Winnable.NO;
     }
 
-    if (board.getLegalMovesRepresentation().isEmpty()) {
+    if (board.getLegalMoveSet().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");
     }
 
@@ -115,7 +116,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     // Q7/8/4Q3/7k/5Pp1/5KP1/7P/8 w - - 0 1
     // Example: Black can only stalemate or checkmate on first move
     // 8/6p1/5kP1/7K/2r2q2/8/8/8 b - - 1 52
-    final var numberOfFirstHalfMoves = board.getLegalMovesRepresentation().size();
+    final var numberOfFirstHalfMoves = board.getLegalMoveSet().size();
     final GameMultipleAnalysis evaluationFirst = evaluateOneMove(board);
     final WinnableAnalysis winnableFirst = calculateWinnableMultiple(evaluationFirst, sideToEvaluate);
 
@@ -132,9 +133,8 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       var isKingOnlyNonFlagging = "na";
       var isKingOnlyFlagging = "na";
       if (numberOfFirstHalfMoves == 1) {
-        final MoveRepresentation moveRepresentation = NonNullWrapperCommon
-            .getFirst(board.getLegalMovesRepresentation());
-        board.performMove(moveRepresentation.moveSpecification());
+        final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
+        board.performMove(legalMove.moveSpecification());
         if (MaterialUtility.calculateHasKingOnly(board.getHavingMove(), board.getStaticPosition())) {
           isKingOnlyNonFlagging = "yes";
         } else {
@@ -157,9 +157,9 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     }
 
     // only one move, perform the move and see what's next, then unperform!
-    final MoveRepresentation moveRepresentation = NonNullWrapperCommon.get(board.getLegalMovesRepresentation(), 0);
-    board.performMove(moveRepresentation.moveSpecification());
-    final var numberOfSecondHalfMoves = board.getLegalMovesRepresentation().size();
+    final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
+    board.performMove(legalMove.moveSpecification());
+    final var numberOfSecondHalfMoves = board.getLegalMoveSet().size();
     final GameMultipleAnalysis evaluationSecond = evaluateOneMove(board);
     board.unperformMove();
     final WinnableAnalysis winnableSecond = calculateWinnableMultiple(evaluationSecond, sideToEvaluate);
@@ -305,12 +305,12 @@ public class WinnableUtilityAnalzyeLichessUnfair {
   private static GameMultipleAnalysis evaluateOneMove(ApiBoard board) {
 
     final Set<GameStatusAnalysis> gameTermination = new TreeSet<>();
-    final var numberOfHalfMoves = board.getLegalMovesRepresentation().size();
+    final var numberOfHalfMoves = board.getLegalMoveSet().size();
 
     final Side sidePerformingTheMove = board.getHavingMove();
 
-    for (final MoveRepresentation moveRepresentation : board.getLegalMovesRepresentation()) {
-      board.performMove(moveRepresentation.moveSpecification());
+    for (final LegalMove legalMove : board.getLegalMoveSet()) {
+      board.performMove(legalMove.moveSpecification());
       if (board.isCheckmate()) {
         switch (sidePerformingTheMove) {
           case WHITE -> gameTermination.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
@@ -344,10 +344,10 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     // we cannot use early returns for after evaluation we need to undo the moves
     var countForcedHalfMoves = 0;
     var evaluation = GameStatusAnalysis.OTHER;
-    while (board.getLegalMovesRepresentation().size() == 1) {
+    while (board.getLegalMoveSet().size() == 1) {
       countForcedHalfMoves++;
-      final MoveRepresentation moveRepresentation = NonNullWrapperCommon.get(board.getLegalMovesRepresentation(), 0);
-      board.performMove(moveRepresentation.moveSpecification());
+      final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
+      board.performMove(legalMove.moveSpecification());
       evaluation = calculateGameStatusAnalysis(board, sideToEvaluate);
       if (evaluation != GameStatusAnalysis.OTHER) {
         break;

@@ -1,0 +1,112 @@
+package com.dlb.chess.test.board;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
+
+import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.model.PgnHalfMove;
+import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
+import com.dlb.chess.test.pgntest.PgnExpectedValue;
+
+/**
+ * Verifies the {@link com.dlb.chess.board.Board#unperformMove} contract: after performing a move and immediately
+ * unperforming it, the board must be in exactly the same state it was in before the move. Run across every halfmove of
+ * every PGN in the basic test corpus.
+ *
+ * <h2>Design</h2>
+ *
+ * For each PGN, two independent boards are kept side-by-side:
+ *
+ * <ul>
+ * <li>{@code expected} — only ever moves <em>forward</em>. It serves as the oracle; its state after halfmove
+ * {@code i-1} is the canonical pre-halfmove-{@code i} state, produced solely by {@code performMove} (independent of
+ * {@code unperformMove}, the unit under test).</li>
+ * <li>{@code actual} — performs and then unperforms each halfmove, then is asserted to equal {@code expected}, then
+ * advanced by performing the move so the next iteration starts in lockstep.</li>
+ * </ul>
+ *
+ * <p>
+ * Equality is determined by {@link EqualsBuilder#reflectionEquals(Object, Object)}: every declared field on
+ * {@code Board} (including all per-halfmove history lists) is compared. New fields added to {@code Board} in the future
+ * are picked up automatically — the test does not need to be updated when {@code Board}'s state representation grows.
+ *
+ * <h2>Scope</h2>
+ *
+ * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap on files per folder.
+ * {@code PARSER_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the standard
+ * initial position too.
+ *
+ * <p>
+ * The regular corpus is asserted to contain only fixtures that fully replay under the strict-game invariant (see
+ * {@code TestPgnCorpusNotPlaysBeyondAudit}); this test relies on that and lets any plays-beyond exception propagate as
+ * a test failure rather than silently skipping.
+ */
+class TestBoardUnperformMove {
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBoardUnperformMove.class);
+
+  @SuppressWarnings("static-method")
+  @Test
+  void test() {
+    var pgnsExercised = 0;
+    var halfMovesExercised = 0;
+
+    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
+      for (final PgnFileTestCase testCase : testCaseList.list()) {
+        logger.info(testCase.pgnFileName());
+        halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
+        pgnsExercised++;
+      }
+    }
+
+    if (pgnsExercised == 0) {
+      fail("No basic PGNs were exercised — test or corpus is mis-configured");
+    }
+    logger.info("TestBoardUnperformMove: {} basic PGNs verified ({} halfmoves).", pgnsExercised, halfMovesExercised);
+  }
+
+  /**
+   * Runs the perform/unperform contract test for a single PGN: for each halfmove the PGN records, performs and
+   * immediately unperforms it on {@code actual}, then asserts {@code actual} equals the parallel forward-only
+   * {@code expected} board. Returns the number of halfmoves verified.
+   */
+  private static int runUnperformContractTest(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) {
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
+        testCase.pgnFileName());
+
+    final ApiBoard expected = new Board(pgnFile.startFen());
+    final ApiBoard actual = new Board(pgnFile.startFen());
+
+    var halfMoveIndex = 0;
+    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+      halfMoveIndex++;
+      final String san = halfMove.san();
+
+      // Test: perform then unperform on actual; it must return to the pre-move state.
+      actual.performMove(san);
+      actual.unperformMove();
+      assertBoardsEqual(expected, actual, testCase.pgnFileName(), halfMoveIndex, san);
+
+      // Advance both boards by the (now-unperformed) move so the next iteration starts in lockstep.
+      expected.performMove(san);
+      actual.performMove(san);
+    }
+    return halfMoveIndex;
+  }
+
+  private static void assertBoardsEqual(ApiBoard expected, ApiBoard actual, String pgnFileName, int halfMoveIndex,
+      String san) {
+    if (!EqualsBuilder.reflectionEquals(expected, actual)) {
+      fail("Boards differ in " + pgnFileName + " after perform+unperform of halfmove " + halfMoveIndex + " (" + san
+          + ")");
+    }
+  }
+}

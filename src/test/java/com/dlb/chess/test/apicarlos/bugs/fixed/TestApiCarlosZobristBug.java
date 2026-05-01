@@ -35,7 +35,7 @@ class TestApiCarlosZobristBug {
   void test() throws Exception {
 
     if (IS_RUN_ALL) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.LONGEST_MATE);
+      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.RANDOM_NO_REPETITION);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final Path pgnFilePath = FileUtility.calculateFilePath(testCaseList.pgnTest().getFolderPath(),
             testCase.pgnFileName());

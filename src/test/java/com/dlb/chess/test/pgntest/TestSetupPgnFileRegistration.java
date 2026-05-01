@@ -1,0 +1,89 @@
+package com.dlb.chess.test.pgntest;
+
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.TreeSet;
+import java.util.stream.Stream;
+
+import org.junit.jupiter.api.Test;
+
+import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
+import com.dlb.chess.test.pgntest.enums.PgnTest;
+
+/**
+ * Setup invariant: every PGN file under {@code src/test/resources/pgn} has a corresponding
+ * test case registered in {@link PgnExpectedValue}, and every registered test case has a
+ * matching PGN file on disk. The two sets must agree exactly.
+ *
+ * <p>Rationale: the test corpus is driven by the registry — a PGN file with no expected-value
+ * entry is invisible to every corpus-iterating test, and a registered entry without a disk
+ * file would fail mid-run rather than at setup time. Comparing the two sets up front surfaces
+ * either kind of drift with enough information to fix it (the set of orphan file names on
+ * each side).
+ *
+ * <p>The check relies on the existing uniqueness invariant on registered file names enforced
+ * by {@code PgnExpectedValue.checkUniqueFileNames}, which lets a single set of file names
+ * stand in for the registry without losing information.
+ */
+class TestSetupPgnFileRegistration {
+
+  @SuppressWarnings("static-method")
+  @Test
+  void everyPgnFileOnDiskIsRegisteredAndViceVersa() throws IOException {
+    final Set<String> diskFileNames = collectPgnFileNamesOnDisk();
+    final Set<String> registeredFileNames = collectRegisteredPgnFileNames();
+
+    final Set<String> onDiskNotRegistered = new TreeSet<>(diskFileNames);
+    onDiskNotRegistered.removeAll(registeredFileNames);
+
+    final Set<String> registeredNotOnDisk = new TreeSet<>(registeredFileNames);
+    registeredNotOnDisk.removeAll(diskFileNames);
+
+    if (onDiskNotRegistered.isEmpty() && registeredNotOnDisk.isEmpty()) {
+      return;
+    }
+
+    final StringBuilder report = new StringBuilder();
+    report.append("PGN corpus and PgnExpectedValue registry are out of sync (").append(diskFileNames.size())
+        .append(" on disk vs ").append(registeredFileNames.size()).append(" registered).\n");
+    if (!onDiskNotRegistered.isEmpty()) {
+      report.append(onDiskNotRegistered.size()).append(" PGN file(s) on disk with no registered test case:\n");
+      for (final String fileName : onDiskNotRegistered) {
+        report.append("  ").append(fileName).append('\n');
+      }
+    }
+    if (!registeredNotOnDisk.isEmpty()) {
+      report.append(registeredNotOnDisk.size()).append(" registered test case(s) with no PGN file on disk:\n");
+      for (final String fileName : registeredNotOnDisk) {
+        report.append("  ").append(fileName).append('\n');
+      }
+    }
+    fail(report.toString());
+  }
+
+  private static Set<String> collectPgnFileNamesOnDisk() throws IOException {
+    final Set<String> names = new TreeSet<>();
+    try (Stream<Path> paths = Files.walk(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
+      paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".pgn"))
+          .forEach(p -> names.add(p.getFileName().toString()));
+    }
+    return names;
+  }
+
+  private static Set<String> collectRegisteredPgnFileNames() {
+    final Set<String> names = new TreeSet<>();
+    for (final PgnTest pgnTest : PgnTest.values()) {
+      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+      for (final PgnFileTestCase testCase : testCaseList.list()) {
+        names.add(testCase.pgnFileName());
+      }
+    }
+    return names;
+  }
+}

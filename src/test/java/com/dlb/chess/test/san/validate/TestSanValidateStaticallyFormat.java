@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
+import com.dlb.chess.test.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
 //at this stage we allow a lot of invalid SAN's which are then checked later
 class TestSanValidateStaticallyFormat implements EnumConstants {

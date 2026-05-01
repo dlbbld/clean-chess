@@ -33,13 +33,16 @@ class TestInsufficientMaterial implements EnumConstants {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_INSUFFICIENT_MATERIAL_TEST) {
         switch (testCaseList.pgnTest()) {
-          case BASIC_INSUFFICIENT_MATERIAL:
+          case BASIC_INSUFFICIENT_MATERIAL_BOTH:
+          case BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE:
+          case BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK:
+          case BASIC_INSUFFICIENT_MATERIAL_NONE:
           case BASIC_CHECK_WHITE:
           case BASIC_CHECK_BLACK:
           case BASIC_CHECKMATE_WHITE:
           case BASIC_CHECKMATE_BLACK:
           case BASIC_STALEMATE:
-          case BASIC_FROM_FEN:
+          case PARSER_FROM_FEN:
             break;
           // $CASES-OMITTED$
           default:

@@ -22,6 +22,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ApiBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.PgnHalfMove;
@@ -51,7 +52,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
           case BASIC_CHECKMATE_WHITE:
           case BASIC_CHECKMATE_BLACK:
           case BASIC_STALEMATE:
-          case BASIC_FROM_FEN:
+          case PARSER_FROM_FEN:
             break;
           // $CASES-OMITTED$
           default:
@@ -81,6 +82,15 @@ class TestLegalMovesAgainstCreatedUsingValidation {
   }
 
   private static void checkLegalMoves(ApiBoard board) {
+
+    // Under the strict-game invariant, positions in FIDE-automatic termination cannot accept
+    // any further move; ValidateNewMove rejects everything with GAME_ALREADY_ENDED. The
+    // bottom-up legal-move generator still reports geometrically-legal moves on such positions
+    // (e.g. king moves on a K-vs-K board), so the two sets cannot match here. This consistency
+    // check is meaningful only on ongoing positions.
+    if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
+      return;
+    }
 
     final Set<LegalMove> legalMovesActual = board.getLegalMoveSet();
 

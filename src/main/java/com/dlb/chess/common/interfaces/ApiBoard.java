@@ -13,7 +13,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.model.MoveRepresentation;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
@@ -138,8 +137,6 @@ public interface ApiBoard {
   List<MoveSpecification> getPerformedMoveSpecificationList();
 
   List<LegalMove> getPerformedLegalMoveList();
-
-  List<MoveRepresentation> getLegalMovesRepresentation();
 
   Set<String> getLegalMovesSan();
 
