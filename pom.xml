@@ -6,7 +6,7 @@
 
 	<groupId>com.github.dlbbld.clean-chess</groupId>
 	<artifactId>clean-chess</artifactId>
-	<version>2.23</version>
+	<version>3.0</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
