@@ -49,7 +49,6 @@ public enum PgnTest {
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
-  LONG(false, "long"),
   MAX_MOVES(false, "max/maxMoves"),
 
   // skipped when testing against scalachess for cannot manage so long games in

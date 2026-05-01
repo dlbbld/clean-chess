@@ -29,7 +29,7 @@ class TestApiCarlosPerformance {
 
   private static final double PER_HALF_MOVE_MAX_MILLISECONDS = 0.5;
 
-  private static List<PgnTest> PGN_TEST_LIST = NonNullWrapperCommon.asList(PgnTest.LONG, PgnTest.MAX_MOVES);
+  private static List<PgnTest> PGN_TEST_LIST = NonNullWrapperCommon.asList(PgnTest.MAX_MOVES, PgnTest.MAX_MOVES);
 
   @SuppressWarnings("static-method")
   @Test

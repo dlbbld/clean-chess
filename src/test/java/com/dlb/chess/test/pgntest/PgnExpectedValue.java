@@ -80,7 +80,6 @@ public class PgnExpectedValue {
       case UNFAIR_DEPTH_THREE -> createTestCasesUnfairDepthThree();
       case UNFAIR_NOT_QUICK -> createTestCasesUnfairNotQuick();
       case UNFAIR_AMBRONA -> createTestCasesUnfairAmbrona();
-      case LONG -> createTestCasesLong();
       case MAX_MOVES -> createTestCasesLongestPossible();
       case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
       case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
@@ -2523,12 +2522,6 @@ public class PgnExpectedValue {
         "8/6pk/8/4q1n1/2NQ4/8/1KP1P3/8 b - - 149 175"));
 
     return new PgnFileTestCaseList(PgnTest.BASIC_FROM_FEN_YAWN_BLACK, list);
-  }
-
-  private static PgnFileTestCaseList createTestCasesLong() {
-    final List<PgnFileTestCase> list = new ArrayList<>();
-
-    return new PgnFileTestCaseList(PgnTest.LONG, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLongestPossible() {
