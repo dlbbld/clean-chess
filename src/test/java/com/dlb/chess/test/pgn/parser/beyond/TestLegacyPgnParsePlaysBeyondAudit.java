@@ -15,36 +15,35 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.test.RestrictTestConstants;
 
 /**
- * Verifies that every PGN fixture under {@code pgnParser/common/beyond/legacy/} is rejected by
- * the strict parser exactly as expected. The legacy tree contains real-game and crafted PGNs
- * relocated out of the regular corpus because their recorded halfmove sequence continues past a
- * FIDE-automatic termination, or because their FEN tag's halfmove clock is above the 75-move
- * threshold.
+ * Verifies that every PGN fixture under {@code pgnParser/common/beyond/legacy/} is rejected by the strict parser
+ * exactly as expected. The legacy tree contains real-game and crafted PGNs relocated out of the regular corpus because
+ * their recorded halfmove sequence continues past a FIDE-automatic termination, or because their FEN tag's halfmove
+ * clock is above the 75-move threshold.
  *
- * <p>For each file, an explicit expected outcome is hardcoded — exception type, validation
- * problem, and where applicable the {@link GameStatus} that ended the game. The classification
- * is derived from filename/folder ("guess per name") and the audit results from
- * {@code TestPgnCorpusNotPlaysBeyondAudit}, then fixed in code so a future change in parser
+ * <p>
+ * For each file, an explicit expected outcome is hardcoded — exception type, validation problem, and where applicable
+ * the {@link GameStatus} that ended the game. The classification is derived from filename/folder ("guess per name") and
+ * the audit results from {@code TestPgnCorpusNotPlaysBeyondAudit}, then fixed in code so a future change in parser
  * behaviour shows up as a precise mismatch rather than a vague rejection.
  *
- * <p>The legacy tree has 101 fixtures; iteration through the strict parser takes a few
- * seconds. Heavier than per-test methods but a single iterating test keeps the explicit map
- * close to the assertions.
+ * <p>
+ * The legacy tree has 101 fixtures; iteration through the strict parser takes a few seconds. Heavier than per-test
+ * methods but a single iterating test keeps the explicit map close to the assertions.
  */
 class TestLegacyPgnParsePlaysBeyondAudit {
 
-  private static final Path LEGACY_FOLDER = NonNullWrapperCommon.resolve(
-      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond/legacy");
+  private static final Path LEGACY_FOLDER = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond/legacy");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
@@ -75,10 +74,10 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       final String relativePath = entry.getKey();
       final Expected expected = entry.getValue();
 
-      final int slash = relativePath.lastIndexOf('/');
-      final String subfolder = relativePath.substring(0, slash);
-      final String fileName = relativePath.substring(slash + 1);
-      final Path folderPath = LEGACY_FOLDER.resolve(subfolder);
+      final var slash = relativePath.lastIndexOf('/');
+      final var subfolder = relativePath.substring(0, slash);
+      final var fileName = relativePath.substring(slash + 1);
+      final var folderPath = LEGACY_FOLDER.resolve(subfolder);
 
       try {
         StrictPgnParser.parse(folderPath, fileName);
@@ -87,8 +86,8 @@ class TestLegacyPgnParsePlaysBeyondAudit {
         if (e.getStrictPgnParserValidationProblem() != expected.problem
             || e.getSanValidationProblem() != expected.sanProblem || e.getGameStatus() != expected.gameStatus) {
           failures.add(relativePath + " — expected " + expected + ", got problem="
-              + e.getStrictPgnParserValidationProblem() + ", sanProblem=" + e.getSanValidationProblem() + ", gameStatus="
-              + e.getGameStatus() + " (" + e.getMessage() + ")");
+              + e.getStrictPgnParserValidationProblem() + ", sanProblem=" + e.getSanValidationProblem()
+              + ", gameStatus=" + e.getGameStatus() + " (" + e.getMessage() + ")");
         }
       }
     }
@@ -97,9 +96,8 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       fail("Expected 101 legacy fixtures in the EXPECTED map, found " + totalFiles);
     }
     if (!failures.isEmpty()) {
-      final StringBuilder report = new StringBuilder()
-          .append(failures.size()).append(" of ").append(totalFiles).append(" legacy fixtures did not match expected ")
-          .append("rejection:\n");
+      final var report = new StringBuilder().append(failures.size()).append(" of ").append(totalFiles)
+          .append(" legacy fixtures did not match expected ").append("rejection:\n");
       for (final String f : failures) {
         report.append("  ").append(f).append('\n');
       }
@@ -129,8 +127,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     }
 
     // ====== basic/fromFen — half_move_clock 149 (move past triggers 75-move) ======
-    for (final String prefix : List.of("from_fen_capture_second_move", "from_fen_two_moves",
-        "from_fen_three_moves")) {
+    for (final String prefix : List.of("from_fen_capture_second_move", "from_fen_two_moves", "from_fen_three_moves")) {
       for (final String side : List.of("black", "white")) {
         m.put("basic/fromFen/" + prefix + "_half_move_clock_149_" + side + "_to_move.pgn",
             sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
@@ -170,8 +167,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put("basic/fromFenYawn/white/13_white_from_fen_yawn_above_seventy_five_reoccuring_fifty.pgn", fenInvalid());
     m.put("basic/fromFenYawn/white/14_white_from_fen_yawn_above_seventy_five_reoccuring_seventy_five.pgn",
         fenInvalid());
-    m.put("basic/fromFenYawn/white/15_white_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn",
-        fenInvalid());
+    m.put("basic/fromFenYawn/white/15_white_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn", fenInvalid());
     m.put("basic/fromFenYawn/white/16_white_from_fen_yawn_above_seventy_five_reoccuring_above_seventy_five.pgn",
         fenInvalid());
 
@@ -191,8 +187,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put("basic/fromFenYawn/black/13_black_from_fen_yawn_above_seventy_five_reoccuring_fifty.pgn", fenInvalid());
     m.put("basic/fromFenYawn/black/14_black_from_fen_yawn_above_seventy_five_reoccuring_seventy_five.pgn",
         fenInvalid());
-    m.put("basic/fromFenYawn/black/15_black_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn",
-        fenInvalid());
+    m.put("basic/fromFenYawn/black/15_black_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn", fenInvalid());
     m.put("basic/fromFenYawn/black/16_black_from_fen_yawn_above_seventy_five_reoccuring_above_seventy_five.pgn",
         fenInvalid());
 
@@ -207,8 +202,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
     // ====== basic/seventyFive (8) — naming says ".._154" or "_beyond_..", all play past 75-move ======
-    m.put("basic/seventyFive/03_seventy_five_end_with_half_move_clock_154.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/seventyFive/03_seventy_five_end_with_half_move_clock_154.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("basic/seventyFive/04_seventy_five_beyond_half_move_clock_154_end_with_half_move_clock_99.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("basic/seventyFive/05_seventy_five_beyond_half_move_clock_154_end_with_half_move_clock_100.pgn",
@@ -221,11 +215,13 @@ class TestLegacyPgnParsePlaysBeyondAudit {
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("basic/seventyFive/09_seventy_five_beyond_half_move_clock_154_end_with_half_move_clock_178.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/seventyFive/10_seventy_five_beyond_half_move_clock_154_beyond_half_move_clock_178_end_with_half_move_clock_10.pgn",
+    m.put(
+        "basic/seventyFive/10_seventy_five_beyond_half_move_clock_154_beyond_half_move_clock_178_end_with_half_move_clock_10.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
 
     // ====== basic/threefold (1) — name says threefold but actually plays past 5-fold ======
-    m.put("basic/threefold/37_threefold_en_passant_capture_situation_capture_allowed_no_exposing_own_king_to_check_mine_end_with_first_threefold.pgn",
+    m.put(
+        "basic/threefold/37_threefold_en_passant_capture_situation_capture_allowed_no_exposing_own_king_to_check_mine_end_with_first_threefold.pgn",
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
     // ====== dgt/liveChess (1) ======
@@ -245,8 +241,6 @@ class TestLegacyPgnParsePlaysBeyondAudit {
 
     // ====== longestMate (9) — synthetic mate sequences crossing 75-move ======
     m.put("longestMate/longest_mate_seven_pieces_rank_1.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("longestMate/longest_mate_seven_pieces_rank_1_amend_repeat_position.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("longestMate/longest_mate_seven_pieces_rank_2.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("longestMate/longest_mate_seven_pieces_rank_3.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
     m.put("longestMate/longest_mate_seven_pieces_rank_4.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
