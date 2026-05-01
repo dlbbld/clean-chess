@@ -56,9 +56,9 @@ public class PgnExpectedValue {
       case BASIC_FIFTY -> createTestCasesBasicFifty();
       case BASIC_FIVEFOLD -> createTestCasesBasicFivefold();
       case BASIC_FORCED -> createTestCasesBasicForced();
-      case BASIC_FROM_FEN -> createTestCasesBasicFromFen();
-      case BASIC_FROM_FEN_YAWN_WHITE -> createTestCasesBasicFromFenYawnWhite();
-      case BASIC_FROM_FEN_YAWN_BLACK -> createTestCasesBasicFromFenYawnBlack();
+      case PARSER_FROM_FEN -> createTestCasesParserFromFen();
+      case PARSER_FROM_FEN_YAWN_WHITE -> createTestCasesParserFromFenYawnWhite();
+      case PARSER_FROM_FEN_YAWN_BLACK -> createTestCasesParserFromFenYawnBlack();
       case BASIC_INSUFFICIENT_MATERIAL_BOTH -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.BOTH,
           PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH);
       case BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE -> createTestCasesBasicInsufficientMaterial(
@@ -271,7 +271,7 @@ public class PgnExpectedValue {
         "10_white_checkmate_queen_direct_orthogonal_adjacent.pgn", "14_white_checkmate_king_discover_orthogonal.pgn"));
     // One black-side fixture to exercise side-to-move plumbing end-to-end.
     result.add(filterBucket(PgnTest.BASIC_CHECKMATE_BLACK, "01_black_checkmate_rook_direct_adjacent.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
+    result.add(filterBucket(PgnTest.PARSER_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn",
         "from_fen_no_move_half_move_clock_099_black_to_move.pgn"));
     return result;
   }
@@ -286,7 +286,7 @@ public class PgnExpectedValue {
         "06_white_castling_special_queenside_check.pgn"));
     result.add(filterBucket(PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE, "01_white_en_passant_capture_right_a6.pgn",
         "08_white_en_passant_capture_left_b6.pgn"));
-    result.add(filterBucket(PgnTest.BASIC_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn"));
+    result.add(filterBucket(PgnTest.PARSER_FROM_FEN, "from_fen_no_move_half_move_clock_099_white_to_move.pgn"));
     return result;
   }
 
@@ -2150,7 +2150,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.BASIC_FORCED, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicFromFen() {
+  private static PgnFileTestCaseList createTestCasesParserFromFen() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("from_fen_capture_first_move_half_move_clock_100_black_to_move.pgn", "", "",
@@ -2476,10 +2476,10 @@ public class PgnExpectedValue {
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1rb1kb1r/pp1pqppp/2p2Q2/3Bp3/PR1NP3/Bn2N3/2PP1PPP/5RK1 w k - 101 101"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_FROM_FEN, list);
+    return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicFromFenYawnWhite() {
+  private static PgnFileTestCaseList createTestCasesParserFromFenYawnWhite() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_white_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
@@ -2508,10 +2508,10 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "Q7/3p1q2/2pkp3/8/7P/5PPK/8/8 w - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_FROM_FEN_YAWN_WHITE, list);
+    return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN_YAWN_WHITE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicFromFenYawnBlack() {
+  private static PgnFileTestCaseList createTestCasesParserFromFenYawnBlack() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_black_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
@@ -2540,7 +2540,7 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/6pk/8/4q1n1/2NQ4/8/1KP1P3/8 b - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_FROM_FEN_YAWN_BLACK, list);
+    return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN_YAWN_BLACK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLongestPossible() {

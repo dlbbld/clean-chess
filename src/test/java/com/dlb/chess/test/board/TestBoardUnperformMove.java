@@ -41,7 +41,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  * <h2>Scope</h2>
  *
  * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap on files per folder.
- * {@code BASIC_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the standard
+ * {@code PARSER_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the standard
  * initial position too.
  *
  * <p>

@@ -46,9 +46,9 @@ public enum PgnTest {
   BASIC_CASTLING_SPECIAL_WHITE(true, "basic/castling/special/white"),
   BASIC_CASTLING_SPECIAL_BLACK(true, "basic/castling/special/black"),
   BASIC_FORCED(true, "basic/forced"),
-  BASIC_FROM_FEN(true, "basic/fromFen"),
-  BASIC_FROM_FEN_YAWN_WHITE(true, "basic/fromFenYawn/white"),
-  BASIC_FROM_FEN_YAWN_BLACK(true, "basic/fromFenYawn/black"),
+  PARSER_FROM_FEN(false, "parserMechanics/fromFen"),
+  PARSER_FROM_FEN_YAWN_WHITE(false, "parserMechanics/fromFenYawn/white"),
+  PARSER_FROM_FEN_YAWN_BLACK(false, "parserMechanics/fromFenYawn/black"),
 
   CAPTURE_AND_MAX_YAWN(false, "captureLastMove"),
 
