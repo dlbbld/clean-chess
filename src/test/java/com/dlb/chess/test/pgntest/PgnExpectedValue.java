@@ -56,9 +56,9 @@ public class PgnExpectedValue {
       case BASIC_FIFTY -> createTestCasesBasicFifty();
       case BASIC_FIVEFOLD -> createTestCasesBasicFivefold();
       case BASIC_FORCED -> createTestCasesBasicForced();
+      case BASIC_YAWN_SEQUENCES_WHITE -> createTestBasicCasesYawnSequencesWhite();
+      case BASIC_YAWN_SEQUENCES_BLACK -> createTestBasicCasesYawnSequencesBlack();
       case PARSER_FROM_FEN -> createTestCasesParserFromFen();
-      case PARSER_FROM_FEN_YAWN_WHITE -> createTestCasesParserFromFenYawnWhite();
-      case PARSER_FROM_FEN_YAWN_BLACK -> createTestCasesParserFromFenYawnBlack();
       case BASIC_INSUFFICIENT_MATERIAL_BOTH -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.BOTH,
           PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH);
       case BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE -> createTestCasesBasicInsufficientMaterial(
@@ -2479,7 +2479,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesParserFromFenYawnWhite() {
+  private static PgnFileTestCaseList createTestBasicCasesYawnSequencesWhite() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_white_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
@@ -2508,10 +2508,10 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "Q7/3p1q2/2pkp3/8/7P/5PPK/8/8 w - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN_YAWN_WHITE, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_YAWN_SEQUENCES_WHITE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesParserFromFenYawnBlack() {
+  private static PgnFileTestCaseList createTestBasicCasesYawnSequencesBlack() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_black_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
@@ -2540,7 +2540,7 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/6pk/8/4q1n1/2NQ4/8/1KP1P3/8 b - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN_YAWN_BLACK, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_YAWN_SEQUENCES_BLACK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLongestPossible() {
