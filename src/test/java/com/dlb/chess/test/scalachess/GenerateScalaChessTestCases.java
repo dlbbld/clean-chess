@@ -92,7 +92,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
       // below must be created separately as together the resulting test case is too big for Scala too handle
       switch (testCaseList.pgnTest()) {
         case LONG:
-        case LONGEST_POSSIBLE:
+        case MAX_MOVES:
         case RANDOM_NO_REPETITION:
           break;
         // $CASES-OMITTED$

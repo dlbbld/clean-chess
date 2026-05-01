@@ -50,7 +50,7 @@ public enum PgnTest {
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
   LONG(false, "long"),
-  LONGEST_POSSIBLE(false, "longestPossible"),
+  MAX_MOVES(false, "max/maxMoves"),
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
@@ -89,9 +89,9 @@ public enum PgnTest {
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "lastMoveAddedAccidentally"),
 
-  MAX_SAME_PIECE_PROMOTION_WHITE(false, "maxPiece/white"),
-  MAX_SAME_PIECE_PROMOTION_BLACK(false, "maxPiece/black"),
-  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "maxPiece/combined"),
+  MAX_SAME_PIECE_PROMOTION_WHITE(false, "max/maxPieces/white"),
+  MAX_SAME_PIECE_PROMOTION_BLACK(false, "max/maxPieces/black"),
+  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "max/maxPieces/combined"),
 
   DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "doubleCheckCheckmateBizarre/white"),
   DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "doubleCheckCheckmateBizarre/black"),

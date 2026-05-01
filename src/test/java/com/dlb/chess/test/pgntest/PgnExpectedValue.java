@@ -81,7 +81,7 @@ public class PgnExpectedValue {
       case UNFAIR_NOT_QUICK -> createTestCasesUnfairNotQuick();
       case UNFAIR_AMBRONA -> createTestCasesUnfairAmbrona();
       case LONG -> createTestCasesLong();
-      case LONGEST_POSSIBLE -> createTestCasesLongestPossible();
+      case MAX_MOVES -> createTestCasesLongestPossible();
       case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
       case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
       case MAX_SAME_PIECE_PROMOTION_COMBINED -> createTestCasesMaxSamePiecePromotionByCombined();
@@ -125,7 +125,7 @@ public class PgnExpectedValue {
       allTestCaseListMap.put(pgnTest, testCaseList);
       allTestCaseListList.add(testCaseList);
 
-      if (pgnTest == PgnTest.LONGEST_POSSIBLE) {
+      if (pgnTest == PgnTest.MAX_MOVES) {
         switch (RestrictTestConstants.PGN_TEST_INCLUSION) {
           case ALL:
           case ONLY_LONGEST_POSSIBLE:
@@ -2547,7 +2547,7 @@ public class PgnExpectedValue {
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE,
         "8/8/8/5K2/6Qk/8/8/8 b - - 150 8849"));
 
-    return new PgnFileTestCaseList(PgnTest.LONGEST_POSSIBLE, list);
+    return new PgnFileTestCaseList(PgnTest.MAX_MOVES, list);
   }
 
   private static PgnFileTestCaseList createTestCasesRandomNoRepetition() {
