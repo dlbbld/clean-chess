@@ -2854,11 +2854,6 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/5p2/1p2p2p/6pk/r6q/4Q3/5P2/2R3K1 w - - 6 41"));
 
-    // Ambrona 83
-    list.add(new PgnFileTestCase("various_Ob5ozxgG.pgn", "", "", "", 5, 83, CheckmateOrStalemate.NA, 2,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
-
     list.add(new PgnFileTestCase("various_gundavaa_tari_2022.pgn", "", "", "", 8, 13, CheckmateOrStalemate.NA, 2,
         InsufficientMaterial.NONE, UnwinnableFull.UNDETERMINED, UnwinnableFull.UNDETERMINED,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
@@ -5236,6 +5231,11 @@ public class PgnExpectedValue {
         100, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
         UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "k7/p1p1p1p1/P1P1P1P1/P1P1P1P1/8/8/6K1/8 b - - 100 883"));
+
+    // Ambrona 83
+    list.add(new PgnFileTestCase("pawn_wall_ambrona_real_game.pgn", "", "", "", 5, 83, CheckmateOrStalemate.NA, 2,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
 
     return new PgnFileTestCaseList(PgnTest.PAWN_WALL, list);
   }
