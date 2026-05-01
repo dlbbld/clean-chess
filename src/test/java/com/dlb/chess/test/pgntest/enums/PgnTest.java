@@ -9,8 +9,9 @@ public enum PgnTest {
 
   BASIC_MOVING_PIECE_WHITE(true, "basic/movingPiece/white"),
   BASIC_MOVING_PIECE_BLACK(true, "basic/movingPiece/black"),
-  BASIC_CAPTURE_WHITE(true, "basic/capture/white"),
-  BASIC_CAPTURE_BLACK(true, "basic/capture/black"),
+  BASIC_CAPTURE_WHITE(true, "basic/capture/systematic/white"),
+  BASIC_CAPTURE_BLACK(true, "basic/capture/systematic/black"),
+  BASIC_CAPTURE_LAST_MOVE(true, "basic/capture/lastMove"),
   BASIC_EN_PASSANT_CAPTURE_WHITE(true, "basic/enPassantCapture/white"),
   BASIC_EN_PASSANT_CAPTURE_BLACK(true, "basic/enPassantCapture/black"),
   BASIC_PROMOTION_PIECE_WHITE(true, "basic/promotionPiece/white"),
@@ -21,8 +22,8 @@ public enum PgnTest {
   BASIC_CHECK_BLACK(true, "basic/check/black"),
   BASIC_CHECKMATE_WHITE(true, "basic/checkmate/rbnqkVariations/white"),
   BASIC_CHECKMATE_BLACK(true, "basic/checkmate/rbnqkVariations/black"),
-  BASIC_CHECKMATE_VARIOUS_WHITE(false, "basic/checkmate/various/white"),
-  BASIC_CHECKMATE_VARIOUS_BLACK(false, "basic/checkmate/various/black"),
+  BASIC_CHECKMATE_VARIOUS_WHITE(true, "basic/checkmate/various/white"),
+  BASIC_CHECKMATE_VARIOUS_BLACK(true, "basic/checkmate/various/black"),
 
   BASIC_DOUBLE_CHECK_WHITE(true, "basic/doubleCheck/noCheckmate/white"),
   BASIC_DOUBLE_CHECK_BLACK(true, "basic/doubleCheck/noCheckmate/black"),
@@ -49,14 +50,18 @@ public enum PgnTest {
   BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE(true, "basic/analysis/yawn/white"),
   BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK(true, "basic/analysis/yawn/black"),
   BASIC_ANALYSIS_REPETITION(false, "basic/analysis/repetition"),
+  BASIC_ANALYSIS_MAX_YAWN(false, "basic/analysis/maxYawn"),
 
   PARSER_FROM_FEN(false, "parserFenMechanics/"),
-
-  CAPTURE_AND_MAX_YAWN(false, "captureLastMove"),
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
   MAX_MOVES(false, "edgeCases/max/maxMoves"),
+  MAX_SAME_PIECE_PROMOTION_WHITE(false, "edgeCases/max/maxPieces/white"),
+  MAX_SAME_PIECE_PROMOTION_BLACK(false, "edgeCases/max/maxPieces/black"),
+  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "edgeCases/max/maxPieces/combined"),
+  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "edgeCases/doubleCheckCheckmateBizarre/white"),
+  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "edgeCases/doubleCheckCheckmateBizarre/black"),
 
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
@@ -93,13 +98,6 @@ public enum PgnTest {
   PAWN_WALL(false, "cua/pawnWall"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
-
-  MAX_SAME_PIECE_PROMOTION_WHITE(false, "max/maxPieces/white"),
-  MAX_SAME_PIECE_PROMOTION_BLACK(false, "max/maxPieces/black"),
-  MAX_SAME_PIECE_PROMOTION_COMBINED(false, "max/maxPieces/combined"),
-
-  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_WHITE(false, "edgeCases/doubleCheckCheckmateBizarre/white"),
-  DOUBLE_CHECK_CHECKMATE_BIZARRE_CHECKMATE_BLACK(false, "edgeCases/doubleCheckCheckmateBizarre/black"),
 
   MONSTER_BLOG_INSTANT(false, "review/blog/instant"),
   MONSTER_BLOG_PREDRAW(false, "review/blog/predraw"),

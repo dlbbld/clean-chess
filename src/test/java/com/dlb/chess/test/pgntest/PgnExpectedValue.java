@@ -36,6 +36,7 @@ public class PgnExpectedValue {
       case BASIC_MOVING_PIECE_BLACK -> createTestCasesBasicMovingPieceBlack();
       case BASIC_CAPTURE_WHITE -> createTestCasesBasicCaptureWhite();
       case BASIC_CAPTURE_BLACK -> createTestCasesBasicCaptureBlack();
+      case BASIC_CAPTURE_LAST_MOVE -> createTestBasicCaptureLastMove();
       case BASIC_EN_PASSANT_CAPTURE_WHITE -> createTestCasesBasicEnPassantCaptureWhite();
       case BASIC_EN_PASSANT_CAPTURE_BLACK -> createTestCasesBasicEnPassantCaptureBlack();
       case BASIC_PROMOTION_PIECE_WHITE -> createTestCasesBasicPromotionPieceWhite();
@@ -56,8 +57,10 @@ public class PgnExpectedValue {
       case BASIC_FIFTY -> createTestCasesBasicFifty();
       case BASIC_FIVEFOLD -> createTestCasesBasicFivefold();
       case BASIC_FORCED -> createTestCasesBasicForced();
-      case BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE -> createTestBasicCasesYawnSequencesWhite();
-      case BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK -> createTestBasicCasesYawnSequencesBlack();
+      case BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE -> createTestCasesBasicYawnSequencesWhite();
+      case BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK -> createTestCasesBasicYawnSequencesBlack();
+      case BASIC_ANALYSIS_MAX_YAWN -> createTestCasesBasicMaxYawn();
+
       case PARSER_FROM_FEN -> createTestCasesParserFromFen();
       case BASIC_INSUFFICIENT_MATERIAL_BOTH -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.BOTH,
           PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH);
@@ -72,7 +75,6 @@ public class PgnExpectedValue {
       case BASIC_STALEMATE -> createTestCasesBasicStalemate();
       case BASIC_THREEFOLD -> createTestCasesBasicThreefold();
       case BASIC_THREEFOLD_INITIAL_EP -> createTestCasesBasicThreefoldInitialEnPassantCapture();
-      case CAPTURE_AND_MAX_YAWN -> createTestCasesCapture();
       case DGT_CENTAUR -> createTestCasesDgtCentaur();
       case DGT_LIVE_CHESS -> createTestCasesDgtLiveChess();
       case EARLY_DRAW -> createTestCasesEarlyDraw();
@@ -2479,7 +2481,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN, list);
   }
 
-  private static PgnFileTestCaseList createTestBasicCasesYawnSequencesWhite() {
+  private static PgnFileTestCaseList createTestCasesBasicYawnSequencesWhite() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_white_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
@@ -2511,7 +2513,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE, list);
   }
 
-  private static PgnFileTestCaseList createTestBasicCasesYawnSequencesBlack() {
+  private static PgnFileTestCaseList createTestCasesBasicYawnSequencesBlack() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_black_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
@@ -3343,7 +3345,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.BASIC_ANALYSIS_REPETITION, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesCapture() {
+  private static PgnFileTestCaseList createTestBasicCaptureLastMove() {
     final List<PgnFileTestCase> list = new ArrayList<>();
     list.add(new PgnFileTestCase("01_capture_last_move_none.pgn", "", "", "", -1, 4, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
@@ -3359,6 +3361,11 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("04_capture_last_move_mate.pgn", "", "", "", 37, 16, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
         UnwinnableQuick.UNWINNABLE, "r1b1n2k/1ppqNp1Q/pbnp3p/4pBp1/PP2P1P1/3P1N1P/2P2P2/R1B1K2R b KQ - 0 19"));
+    return new PgnFileTestCaseList(PgnTest.BASIC_CAPTURE_LAST_MOVE, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesBasicMaxYawn() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
     list.add(new PgnFileTestCase("05_capture_last_move_piece_more_moves_max_yawn_unchanged.pgn", "", "", "", 21, 4,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
@@ -3376,7 +3383,7 @@ public class PgnExpectedValue {
         25, 9, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r1bq1rk1/1p3p2/1bPp3p/p2Np1pn/B2NP1P1/P2Pn2P/2PQKP2/R1B3R1 b - - 9 19"));
-    return new PgnFileTestCaseList(PgnTest.CAPTURE_AND_MAX_YAWN, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_ANALYSIS_MAX_YAWN, list);
   }
 
   private static PgnFileTestCaseList createTestCasesSpecial() {
