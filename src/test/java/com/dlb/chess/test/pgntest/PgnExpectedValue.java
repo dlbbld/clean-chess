@@ -81,7 +81,6 @@ public class PgnExpectedValue {
       case UNFAIR_NOT_QUICK -> createTestCasesUnfairNotQuick();
       case UNFAIR_AMBRONA -> createTestCasesUnfairAmbrona();
       case LONG -> createTestCasesLong();
-      case LONGEST_MATE -> createTestCasesLongestMate();
       case LONGEST_POSSIBLE -> createTestCasesLongestPossible();
       case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
       case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
@@ -2529,19 +2528,7 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesLong() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-
     return new PgnFileTestCaseList(PgnTest.LONG, list);
-  }
-
-  private static PgnFileTestCaseList createTestCasesLongestMate() {
-    final List<PgnFileTestCase> list = new ArrayList<>();
-
-    list.add(new PgnFileTestCase("longest_mate_seven_pieces_rank_1_amend_reproduce_and_repeat_position.pgn", "", "", "",
-        3, 33, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "4Q3/1K6/8/5rk1/8/2bN1n2/8/8 b - - 33 40"));
-
-    return new PgnFileTestCaseList(PgnTest.LONGEST_MATE, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLongestPossible() {

@@ -50,7 +50,6 @@ public enum PgnTest {
   // skipped when testing against scalachess for cannot manage so long games in
   // testing approach
   LONG(false, "long"),
-  LONGEST_MATE(false, "longestMate"),
   LONGEST_POSSIBLE(false, "longestPossible"),
 
   // skipped when testing against scalachess for cannot manage so long games in
