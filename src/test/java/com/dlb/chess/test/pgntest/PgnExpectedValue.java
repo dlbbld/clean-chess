@@ -59,7 +59,14 @@ public class PgnExpectedValue {
       case BASIC_FROM_FEN -> createTestCasesBasicFromFen();
       case BASIC_FROM_FEN_YAWN_WHITE -> createTestCasesBasicFromFenYawnWhite();
       case BASIC_FROM_FEN_YAWN_BLACK -> createTestCasesBasicFromFenYawnBlack();
-      case BASIC_INSUFFICIENT_MATERIAL -> createTestCasesBasicInsufficientMaterial();
+      case BASIC_INSUFFICIENT_MATERIAL_BOTH -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.BOTH,
+          PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH);
+      case BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE -> createTestCasesBasicInsufficientMaterial(
+          InsufficientMaterial.WHITE_ONLY, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE);
+      case BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK -> createTestCasesBasicInsufficientMaterial(
+          InsufficientMaterial.BLACK_ONLY, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK);
+      case BASIC_INSUFFICIENT_MATERIAL_NONE -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.NONE,
+          PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE);
       case BASIC_INTERVENING -> createTestCasesBasicIntervening();
       case BASIC_SEVENTY_FIVE -> createTestCasesBasicSeventyFive();
       case BASIC_STALEMATE -> createTestCasesBasicStalemate();
@@ -1278,7 +1285,8 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.BASIC_STALEMATE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicInsufficientMaterial() {
+  private static PgnFileTestCaseList createTestCasesBasicInsufficientMaterial(InsufficientMaterial insufficientMaterial,
+      PgnTest pgnTest) {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("insufficient_material_KBwBb_K.pgn", "", "", "", 3, 4, CheckmateOrStalemate.NA, 1,
@@ -1571,7 +1579,18 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("insufficient_material_KQR_KBw.pgn", "", "", "", 3, 2, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "1R6/8/4k3/8/8/3b4/3Q4/4K3 w - - 0 27"));
-    return new PgnFileTestCaseList(PgnTest.BASIC_INSUFFICIENT_MATERIAL, list);
+    return filterInsufficientMaterial(pgnTest, list, insufficientMaterial);
+  }
+
+  private static PgnFileTestCaseList filterInsufficientMaterial(PgnTest pgnTest, List<PgnFileTestCase> list,
+      InsufficientMaterial insufficientMaterial) {
+    final List<PgnFileTestCase> result = new ArrayList<>();
+    for (final PgnFileTestCase testCase : list) {
+      if (testCase.insufficientMaterial() == insufficientMaterial) {
+        result.add(testCase);
+      }
+    }
+    return new PgnFileTestCaseList(pgnTest, result);
   }
 
   private static PgnFileTestCaseList createTestCasesBasicThreefold() {

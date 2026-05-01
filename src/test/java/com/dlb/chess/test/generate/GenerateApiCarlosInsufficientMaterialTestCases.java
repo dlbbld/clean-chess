@@ -18,38 +18,40 @@ public class GenerateApiCarlosInsufficientMaterialTestCases {
 
   private static void generateTestCase() throws Exception {
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL);
+    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH,
+        PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK,
+        PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
+      for (final PgnFileTestCase testCase : testCaseList.list()) {
 
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+        final Analysis analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(),
+            testCase.pgnFileName());
 
-      final Analysis analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(),
-          testCase.pgnFileName());
+        final InsufficientMaterial insufficientMaterial = analysis.insufficientMaterial();
+        final String fen = analysis.fen();
 
-      final InsufficientMaterial insufficientMaterial = analysis.insufficientMaterial();
-      final String fen = analysis.fen();
+        final String testCaseTitel = calculateTestCaseTitel(testCase.pgnFileName());
+        System.out.println("//" + testCaseTitel);
+        System.out.println("board.loadFromFen(\"" + fen + "\");");
 
-      final String testCaseTitel = calculateTestCaseTitel(testCase.pgnFileName());
-      System.out.println("//" + testCaseTitel);
-      System.out.println("board.loadFromFen(\"" + fen + "\");");
-
-      if (insufficientMaterial == InsufficientMaterial.BOTH) {
-        System.out.println("assertTrue(board.isInsufficientMaterial());");
-      } else {
-        System.out.println("assertFalse(board.isInsufficientMaterial());");
+        if (insufficientMaterial == InsufficientMaterial.BOTH) {
+          System.out.println("assertTrue(board.isInsufficientMaterial());");
+        } else {
+          System.out.println("assertFalse(board.isInsufficientMaterial());");
+        }
+        if (insufficientMaterial == InsufficientMaterial.BOTH
+            || insufficientMaterial == InsufficientMaterial.WHITE_ONLY) {
+          System.out.println("assertTrue(board.isInsufficientMaterial(Side.WHITE));");
+        } else {
+          System.out.println("assertFalse(board.isInsufficientMaterial(Side.WHITE));");
+        }
+        if (insufficientMaterial == InsufficientMaterial.BOTH
+            || insufficientMaterial == InsufficientMaterial.BLACK_ONLY) {
+          System.out.println("assertTrue(board.isInsufficientMaterial(Side.BLACK));");
+        } else {
+          System.out.println("assertFalse(board.isInsufficientMaterial(Side.BLACK));");
+        }
+        System.out.println("");
       }
-      if (insufficientMaterial == InsufficientMaterial.BOTH
-          || insufficientMaterial == InsufficientMaterial.WHITE_ONLY) {
-        System.out.println("assertTrue(board.isInsufficientMaterial(Side.WHITE));");
-      } else {
-        System.out.println("assertFalse(board.isInsufficientMaterial(Side.WHITE));");
-      }
-      if (insufficientMaterial == InsufficientMaterial.BOTH
-          || insufficientMaterial == InsufficientMaterial.BLACK_ONLY) {
-        System.out.println("assertTrue(board.isInsufficientMaterial(Side.BLACK));");
-      } else {
-        System.out.println("assertFalse(board.isInsufficientMaterial(Side.BLACK));");
-      }
-      System.out.println("");
     }
   }
 
