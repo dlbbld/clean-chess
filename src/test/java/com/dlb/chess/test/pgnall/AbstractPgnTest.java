@@ -6,7 +6,7 @@ import com.dlb.chess.analysis.Analyzer;
 import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.test.analysis.representation.YawnRepresentation;
-import com.dlb.chess.test.apicomparison.utility.RepetitionTestUtility;
+import com.dlb.chess.test.librarycomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;

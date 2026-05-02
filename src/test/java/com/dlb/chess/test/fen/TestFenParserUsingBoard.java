@@ -10,8 +10,8 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
 import com.dlb.chess.test.custom.AbstractTestFenParser;
+import com.dlb.chess.test.librarycomparison.utility.CommonTestUtility;
 
 class TestFenParserUsingBoard extends AbstractTestFenParser {
 

@@ -13,7 +13,7 @@ import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.RandomUtility;
-import com.dlb.chess.test.apicomparison.enums.FindRandomGame;
+import com.dlb.chess.test.librarycomparison.enums.FindRandomGame;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 
 public class GenerateRandomGame {

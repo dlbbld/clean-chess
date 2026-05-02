@@ -13,7 +13,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
+import com.dlb.chess.test.librarycomparison.utility.CommonTestUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserFromCustomPosition {

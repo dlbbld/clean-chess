@@ -8,7 +8,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.test.apicomparison.utility.CommonTestUtility;
+import com.dlb.chess.test.librarycomparison.utility.CommonTestUtility;
 
 public abstract class AbstractTestFenParser implements EnumConstants {
   // Using true takes much longer. With above second game about one minute to run through.
