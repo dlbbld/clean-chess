@@ -57,6 +57,7 @@ class TestWinnability {
   }
 
   @SuppressWarnings("static-method")
+  // TODO not workin
   // @Test
   void testFolder() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA);
