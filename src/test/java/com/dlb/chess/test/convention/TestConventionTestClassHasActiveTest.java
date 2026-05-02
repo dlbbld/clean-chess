@@ -51,15 +51,15 @@ class TestConventionTestClassHasActiveTest {
     final List<String> violations = new ArrayList<>();
 
     for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
-      if (!p.toString().endsWith(".java")) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".java")) {
         continue;
       }
-      if (!p.getFileName().toString().startsWith(REQUIRED_NAME_PREFIX)) {
+      if (!NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
         continue;
       }
       final String contents = FileUtility.readFileAsString(p);
       if (!TEST_ANNOTATION.matcher(contents).find()) {
-        violations.add(NonNullWrapperCommon.replace(TEST_JAVA_ROOT.relativize(p).toString(), '\\', '/'));
+        violations.add(NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(TEST_JAVA_ROOT.relativize(p)), '\\', '/'));
       }
     }
 

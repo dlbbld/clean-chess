@@ -69,10 +69,10 @@ class TestSetupPgnFileRegistration {
   private static Set<String> collectPgnFileNamesOnDisk() {
     final Set<String> names = new TreeSet<>();
     for (final Path p : FileUtility.listAllFilesRecursively(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
-      if (!p.toString().endsWith(".pgn")) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".pgn")) {
         continue;
       }
-      names.add(NonNullWrapperCommon.toString(p.getFileName()));
+      names.add(NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)));
     }
     return names;
   }

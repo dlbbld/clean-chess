@@ -269,6 +269,10 @@ public class NonNullWrapperCommon {
     return directoryPath.resolve(filePath);
   }
 
+  public static Path getFileName(Path path) {
+    return checkResult(path.getFileName());
+  }
+
   @SuppressWarnings({ "null", "unchecked" })
   public static <E> Set<E> setOf(E... items) {
     return Set.of(items);

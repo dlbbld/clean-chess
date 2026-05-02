@@ -209,9 +209,10 @@ public abstract class FileUtility {
    * The underlying {@link Stream} is fully drained and closed before this method returns, so callers do not
    * have to (and should not try to) manage stream lifetime themselves.
    */
+  @SuppressWarnings("null")
   public static List<Path> listAllFilesRecursively(Path root) {
-    try (Stream<Path> stream = Files.walk(root)) {
-      @SuppressWarnings("null") @NonNull final List<@NonNull Path> result = stream.filter(Files::isRegularFile).toList();
+    try (Stream<@NonNull Path> stream = Files.walk(root)) {
+      @NonNull final List<@NonNull Path> result = stream.filter(Files::isRegularFile).toList();
       return result;
     } catch (final IOException ioe) {
       throw new FileSystemAccessException("Recursive file listing of \"" + root + "\" failed", ioe);

@@ -41,14 +41,14 @@ class TestConventionTestPackageNaming {
     final List<String> violations = new ArrayList<>();
 
     for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
-      if (!p.toString().endsWith(".java")) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".java")) {
         continue;
       }
       final String packageName = derivePackageName(p);
       if (!packageName.equals(REQUIRED_PACKAGE_PREFIX)
           && !packageName.startsWith(REQUIRED_PACKAGE_PREFIX + ".")) {
         violations.add(packageName + "  in  "
-            + NonNullWrapperCommon.replace(TEST_JAVA_ROOT.relativize(p).toString(), '\\', '/'));
+            + NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(TEST_JAVA_ROOT.relativize(p)), '\\', '/'));
       }
     }
 
@@ -70,6 +70,6 @@ class TestConventionTestPackageNaming {
     }
     final Path relative = TEST_JAVA_ROOT.relativize(parent);
     return NonNullWrapperCommon.replace(
-        NonNullWrapperCommon.replace(relative.toString(), '\\', '.'), '/', '.');
+        NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(relative), '\\', '.'), '/', '.');
   }
 }
