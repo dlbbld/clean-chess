@@ -28,7 +28,7 @@ class TestUnwinnabilityQuick {
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityQuick.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testStartPosition() {
     final Board board = new Board();
     assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
@@ -69,17 +69,16 @@ class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testPgnFileValue() {
-    final var pgnFileName = "unwinnable_fivefold_inevitable.pgn";
+    final var pgnFileName = "special_unwinnable_fivefold_inevitable.pgn";
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
     final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
+    assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
 
     assertEquals(UnwinnableQuick.UNWINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
@@ -88,8 +87,7 @@ class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileExpected() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue
-        .findTestCase("25_black_capture_king_pawn.pgn");
+    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase("25_black_capture_king_pawn.pgn");
     final ApiBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
@@ -102,7 +100,7 @@ class TestUnwinnabilityQuick {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
