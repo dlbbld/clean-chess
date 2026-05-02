@@ -64,6 +64,10 @@ public class NonNullWrapperCommon {
     return checkResult(Character.toString(c));
   }
 
+  public static String toString(Object obj) {
+    return checkResult(obj.toString());
+  }
+
   public static String substring(String string, int beginIndex) {
     return checkResult(string.substring(beginIndex));
   }
@@ -78,6 +82,10 @@ public class NonNullWrapperCommon {
 
   public static String replace(String string, String oldString, String newString) {
     return checkResult(string.replace(oldString, newString));
+  }
+
+  public static String replace(String string, char oldChar, char newChar) {
+    return checkResult(string.replace(oldChar, newChar));
   }
 
   public static String replaceAll(String string, String regex, String replacement) {
@@ -150,14 +158,6 @@ public class NonNullWrapperCommon {
 
   public static String capitalize(final String str) {
     return checkResult(StringUtils.capitalize(str));
-  }
-
-  public static String replace(String string, char oldChar, char newChar) {
-    return checkResult(string.replace(oldChar, newChar));
-  }
-
-  public static String toString(Object obj) {
-    return checkResult(obj.toString());
   }
 
   public static Pattern compile(String regex) {

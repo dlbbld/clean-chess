@@ -1,9 +1,6 @@
-package com.dlb.chess.test.fen;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
+package com.dlb.chess.test.generate;
 
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
@@ -18,16 +15,44 @@ import com.dlb.chess.common.utility.FenUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.FenParserAdvanced;
 
-class TestFenInsufficientMaterial {
+public class GeneratePiecePositions {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFenInsufficientMaterial.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePiecePositions.class);
 
-  @SuppressWarnings("static-method")
-  @Test
-  void testKingVersusKing() {
+  // Current generated counts:
+  // K vs K:
+  // - White to move: 3612
+  // - Black to move: 3612
+  //
+  // K+N vs K:
+  // Runtime note: takes about two minutes.
+  // - White to move: 205496
+  // - Black to move: 223944
+  //
+  // K+B vs K:
+  // Runtime note: takes about four minutes.
+  // - Light-square bishop, white to move: 96642
+  // - Light-square bishop, black to move: 111972
+  // - Dark-square bishop, white to move: 96642
+  // - Dark-square bishop, black to move: 111972
+  // - Any bishop square, white to move: 193284
+  // - Any bishop square, black to move: 223944
+  //
+  // K+B vs K+B, bishops on the same colour square:
+  // Runtime note: not completed run yet, takes maybe hours.
+  // - Light squares, white to move: 193284
+  // - Light squares, black to move: 193284
 
-    assertEquals(3612, calculateKingVersusKing(Side.WHITE));
-    assertEquals(3612, calculateKingVersusKing(Side.BLACK));
+  public static void main(String[] args) {
+    generateKingVersusKing();
+    generateKingKnightVersusKing();
+    generateKingBishopVersusKing();
+    generateKingBishopVersusBishopSameColourSquare();
+  }
+
+  private static void generateKingVersusKing() {
+    printCount("K vs K, white to move", calculateKingVersusKing(Side.WHITE));
+    printCount("K vs K, black to move", calculateKingVersusKing(Side.BLACK));
   }
 
   private static int calculateKingVersusKing(Side side) {
@@ -45,81 +70,53 @@ class TestFenInsufficientMaterial {
         final String fen = FenUtility.createDummyFenForPiecePlacement(piecePlacement, side);
         try {
           FenParserAdvanced.parseFenAdvanced(fen);
-          // counting if valid
           counter++;
-          // we check by the side if we have illegal material
-          final Board board = new Board(fen);
-          if (board.isCheckmate()) {
-            throw new ProgrammingMistakeException("We don't have insufficient material. The FEN is \"" + fen + "\".");
-          }
+          ensureNotCheckmate(fen);
         } catch (@SuppressWarnings("unused") final FenAdvancedValidationException fve) {
           // not counting if invalid
         }
         staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing);
       }
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing);
-      if (!staticPositionWork.equals(StaticPosition.EMPTY_POSITION)) {
-        throw new ProgrammingMistakeException();
-      }
+      ensureEmpty(staticPositionWork);
     }
     return counter;
   }
 
-  @SuppressWarnings("static-method")
-  // @Test
-  // takes about two minutes - so commented out
-  void testKingKnightVersusKing() {
-
-    System.out.println(calculateKingKnightVersusKing(Side.WHITE));
-    System.out.println(calculateKingKnightVersusKing(Side.BLACK));
-
-    assertEquals(205496, calculateKingKnightVersusKing(Side.WHITE));
-    assertEquals(223944, calculateKingKnightVersusKing(Side.BLACK));
+  private static void generateKingKnightVersusKing() {
+    // Takes about two minutes.
+    printCount("K+N vs K, white to move", calculateKingKnightVersusKing(Side.WHITE));
+    printCount("K+N vs K, black to move", calculateKingKnightVersusKing(Side.BLACK));
   }
 
   private static int calculateKingKnightVersusKing(Side side) {
     return calculateKingPieceVersusKing(side, Piece.WHITE_KNIGHT, SquareType.NONE);
   }
 
-  @SuppressWarnings("static-method")
-  // @Test
-  // takes about four minutes - so commented out
-  void testKingBishopVersusKing() {
-
-    final var actualCountLightSquareBishopWhiteHavingMove = calculateKingPieceVersusKing(Side.WHITE, Piece.WHITE_BISHOP,
-        SquareType.LIGHT_SQUARE);
-    assertEquals(96642, actualCountLightSquareBishopWhiteHavingMove);
-
-    final var actualCountLightSquareBishopBlackHavingMove = calculateKingPieceVersusKing(Side.BLACK, Piece.WHITE_BISHOP,
-        SquareType.LIGHT_SQUARE);
-    assertEquals(111972, actualCountLightSquareBishopBlackHavingMove);
-
-    final var actualCountDarkSquareBishopWhiteHavingMove = calculateKingPieceVersusKing(Side.WHITE, Piece.WHITE_BISHOP,
-        SquareType.DARK_SQUARE);
-    assertEquals(96642, actualCountDarkSquareBishopWhiteHavingMove);
-
-    final var actualCountDarkSquareBishopBlackHavingMove = calculateKingPieceVersusKing(Side.BLACK, Piece.WHITE_BISHOP,
-        SquareType.DARK_SQUARE);
-    assertEquals(111972, actualCountDarkSquareBishopBlackHavingMove);
-
-    assertEquals(193284, 2 * 96642);
-    assertEquals(223944, 2 * 111972);
-
-    assertEquals(193284, calculateKingBishopVersusKing(Side.WHITE));
-    assertEquals(223944, calculateKingBishopVersusKing(Side.BLACK));
-
+  private static void generateKingBishopVersusKing() {
+    // Takes about four minutes.
+    printCount("K+B vs K, light-square bishop, white to move",
+        calculateKingPieceVersusKing(Side.WHITE, Piece.WHITE_BISHOP, SquareType.LIGHT_SQUARE));
+    printCount("K+B vs K, light-square bishop, black to move",
+        calculateKingPieceVersusKing(Side.BLACK, Piece.WHITE_BISHOP, SquareType.LIGHT_SQUARE));
+    printCount("K+B vs K, dark-square bishop, white to move",
+        calculateKingPieceVersusKing(Side.WHITE, Piece.WHITE_BISHOP, SquareType.DARK_SQUARE));
+    printCount("K+B vs K, dark-square bishop, black to move",
+        calculateKingPieceVersusKing(Side.BLACK, Piece.WHITE_BISHOP, SquareType.DARK_SQUARE));
+    printCount("K+B vs K, any bishop square, white to move", calculateKingBishopVersusKing(Side.WHITE));
+    printCount("K+B vs K, any bishop square, black to move", calculateKingBishopVersusKing(Side.BLACK));
   }
 
   private static int calculateKingBishopVersusKing(Side side) {
     return calculateKingPieceVersusKing(side, Piece.WHITE_BISHOP, SquareType.NONE);
   }
 
-  @SuppressWarnings("static-method")
-  // @Test
-  // not completed run yet, takes maybe hours
-  void testKingBishopVersusBishopSameColourSquare() {
-    assertEquals(193284, calculateKingBishopVersusBishopSameColourSquare(Side.WHITE, SquareType.LIGHT_SQUARE));
-    assertEquals(193284, calculateKingBishopVersusBishopSameColourSquare(Side.BLACK, SquareType.LIGHT_SQUARE));
+  private static void generateKingBishopVersusBishopSameColourSquare() {
+    // Not completed run yet, takes maybe hours.
+    printCount("K+B vs K+B, light squares, white to move",
+        calculateKingBishopVersusBishopSameColourSquare(Side.WHITE, SquareType.LIGHT_SQUARE));
+    printCount("K+B vs K+B, light squares, black to move",
+        calculateKingBishopVersusBishopSameColourSquare(Side.BLACK, SquareType.LIGHT_SQUARE));
   }
 
   private static int calculateKingBishopVersusBishopSameColourSquare(Side side, SquareType squareType) {
@@ -150,14 +147,8 @@ class TestFenInsufficientMaterial {
             final String fen = FenUtility.createDummyFenForPiecePlacement(piecePlacement, side);
             try {
               FenParserAdvanced.parseFenAdvanced(fen);
-              // counting if valid
               counter++;
-              // we check by the side if we have illegal material
-              final Board board = new Board(fen);
-              if (board.isCheckmate()) {
-                throw new ProgrammingMistakeException(
-                    "We don't have insufficient material. The FEN is \"" + fen + "\".");
-              }
+              ensureNotCheckmate(fen);
             } catch (@SuppressWarnings("unused") final FenAdvancedValidationException fve) {
               // not counting if invalid
             }
@@ -169,9 +160,7 @@ class TestFenInsufficientMaterial {
         staticPositionWork = staticPositionWork.createChangedPosition(squareFirstBishop);
       }
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing);
-      if (!staticPositionWork.equals(StaticPosition.EMPTY_POSITION)) {
-        throw new ProgrammingMistakeException();
-      }
+      ensureEmpty(staticPositionWork);
     }
     return counter;
   }
@@ -182,25 +171,13 @@ class TestFenInsufficientMaterial {
     StaticPosition staticPositionWork = StaticPosition.EMPTY_POSITION;
     for (final Square squareFirstKing : Square.REAL) {
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing, Piece.WHITE_KING);
-      for (final Square squareKnight : Square.REAL) {
-        if (squareKnight == squareFirstKing) {
+      for (final Square squarePiece : Square.REAL) {
+        if (squarePiece == squareFirstKing || !isSelectedSquareType(squarePiece, squareType)) {
           continue;
         }
-        switch (squareType) {
-          case LIGHT_SQUARE:
-          case DARK_SQUARE:
-            if (squareKnight.getSquareType() != squareType) {
-              continue;
-            }
-            break;
-          case NONE:
-            break;
-          default:
-            throw new IllegalArgumentException();
-        }
-        staticPositionWork = staticPositionWork.createChangedPosition(squareKnight, piece);
+        staticPositionWork = staticPositionWork.createChangedPosition(squarePiece, piece);
         for (final Square squareSecondKing : Square.REAL) {
-          if (squareSecondKing == squareKnight || squareSecondKing == squareFirstKing) {
+          if (squareSecondKing == squarePiece || squareSecondKing == squareFirstKing) {
             continue;
           }
           staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing, Piece.BLACK_KING);
@@ -208,26 +185,43 @@ class TestFenInsufficientMaterial {
           final String fen = FenUtility.createDummyFenForPiecePlacement(piecePlacement, side);
           try {
             FenParserAdvanced.parseFenAdvanced(fen);
-            // counting if valid
             counter++;
-            // we check by the side if we have illegal material
-            final Board board = new Board(fen);
-            if (board.isCheckmate()) {
-              throw new ProgrammingMistakeException("We don't have insufficient material. The FEN is \"" + fen + "\".");
-            }
+            ensureNotCheckmate(fen);
           } catch (@SuppressWarnings("unused") final FenAdvancedValidationException fve) {
             // not counting if invalid
           }
           staticPositionWork = staticPositionWork.createChangedPosition(squareSecondKing);
         }
-        staticPositionWork = staticPositionWork.createChangedPosition(squareKnight);
+        staticPositionWork = staticPositionWork.createChangedPosition(squarePiece);
       }
       staticPositionWork = staticPositionWork.createChangedPosition(squareFirstKing);
-      if (!staticPositionWork.equals(StaticPosition.EMPTY_POSITION)) {
-        throw new ProgrammingMistakeException();
-      }
+      ensureEmpty(staticPositionWork);
     }
     return counter;
   }
 
+  private static boolean isSelectedSquareType(Square square, SquareType squareType) {
+    return switch (squareType) {
+      case LIGHT_SQUARE, DARK_SQUARE -> square.getSquareType() == squareType;
+      case NONE -> true;
+      default -> throw new IllegalArgumentException();
+    };
+  }
+
+  private static void ensureNotCheckmate(String fen) {
+    final Board board = new Board(fen);
+    if (board.isCheckmate()) {
+      throw new ProgrammingMistakeException("We don't have insufficient material. The FEN is \"" + fen + "\".");
+    }
+  }
+
+  private static void ensureEmpty(StaticPosition staticPosition) {
+    if (!staticPosition.equals(StaticPosition.EMPTY_POSITION)) {
+      throw new ProgrammingMistakeException();
+    }
+  }
+
+  private static void printCount(String name, int count) {
+    System.out.println(name + ": " + count);
+  }
 }

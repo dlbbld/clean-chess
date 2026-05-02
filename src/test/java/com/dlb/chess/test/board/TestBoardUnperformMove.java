@@ -23,6 +23,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Design</h2>
  *
+ * <p>
  * For each PGN, two independent boards are kept side-by-side:
  *
  * <ul>
@@ -40,9 +41,10 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Scope</h2>
  *
+ * <p>
  * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap on files per folder.
- * {@code PARSER_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the standard
- * initial position too.
+ * {@code PARSER_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the
+ * standard initial position too.
  *
  * <p>
  * The regular corpus is asserted to contain only fixtures that fully replay under the strict-game invariant (see

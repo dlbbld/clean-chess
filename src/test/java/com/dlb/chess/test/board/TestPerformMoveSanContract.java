@@ -25,6 +25,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Forward (played moves)</h2>
  *
+ * <p>
  * For each halfmove of each PGN: derive the MoveSpec via {@code validateSan(san, board)} <em>before</em> performing,
  * then perform via {@code board.performMove(san)} and assert:
  *
@@ -36,6 +37,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Reverse (every legal move at every position)</h2>
  *
+ * <p>
  * At each position reached during PGN playthrough, for <em>every</em> legal move from {@link ApiBoard#getLegalMoveSet
  * getLegalMoveSet}: perform the move so the board can compute its SAN, capture the SAN, unperform back to the original
  * position, then derive a fresh MoveSpec from that SAN via {@code validateSan} and assert it equals the LegalMove's
@@ -43,6 +45,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Scope and runtime</h2>
  *
+ * <p>
  * Iterates the parser-integration smoke list (~45 PGNs spanning every major parser code path — standard moves,
  * captures, en passant, promotion, castling, check, checkmate, custom starting positions). The reverse test is the
  * slower of the two but completes in seconds.
