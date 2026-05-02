@@ -75,9 +75,9 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       final Expected expected = entry.getValue();
 
       final var slash = relativePath.lastIndexOf('/');
-      final var subfolder = relativePath.substring(0, slash);
-      final var fileName = relativePath.substring(slash + 1);
-      final var folderPath = LEGACY_FOLDER.resolve(subfolder);
+      final var subfolder = NonNullWrapperCommon.substring(relativePath, 0, slash);
+      final var fileName = NonNullWrapperCommon.substring(relativePath, slash + 1);
+      final var folderPath = NonNullWrapperCommon.resolve(LEGACY_FOLDER, subfolder);
 
       try {
         StrictPgnParser.parse(folderPath, fileName);
@@ -272,6 +272,6 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put("wikipedia/threefold/wikipedia_threefold_4_0_1_pest_paris_six_fold.pgn",
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
-    return Map.copyOf(m);
+    return NonNullWrapperCommon.copyOfMap(m);
   }
 }

@@ -206,4 +206,9 @@ public abstract class BasicUtility {
   public static String convertToString(List<String> list) {
     return NonNullWrapperCommon.join("\n", list);
   }
+
+  @SuppressWarnings("null")
+  public static String getMessage(Throwable throwable) {
+    return String.valueOf(throwable.getMessage());
+  }
 }

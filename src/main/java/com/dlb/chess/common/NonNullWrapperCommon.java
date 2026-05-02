@@ -1,6 +1,8 @@
 package com.dlb.chess.common;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -12,6 +14,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
@@ -146,6 +150,26 @@ public class NonNullWrapperCommon {
 
   public static String capitalize(final String str) {
     return checkResult(StringUtils.capitalize(str));
+  }
+
+  public static String replace(String string, char oldChar, char newChar) {
+    return checkResult(string.replace(oldChar, newChar));
+  }
+
+  public static String toString(Object obj) {
+    return checkResult(obj.toString());
+  }
+
+  public static Pattern compile(String regex) {
+    return checkResult(Pattern.compile(regex));
+  }
+
+  public static Stream<Path> walk(Path start) throws IOException {
+    return checkResult(Files.walk(start));
+  }
+
+  public static String readString(Path path) throws IOException {
+    return checkResult(Files.readString(path));
   }
 
   @SuppressWarnings("null")

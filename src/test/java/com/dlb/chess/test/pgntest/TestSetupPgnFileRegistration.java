@@ -11,6 +11,7 @@ import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -69,9 +70,9 @@ class TestSetupPgnFileRegistration {
 
   private static Set<String> collectPgnFileNamesOnDisk() throws IOException {
     final Set<String> names = new TreeSet<>();
-    try (Stream<Path> paths = Files.walk(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
+    try (Stream<Path> paths = NonNullWrapperCommon.walk(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
       paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".pgn"))
-          .forEach(p -> names.add(p.getFileName().toString()));
+          .forEach(p -> names.add(NonNullWrapperCommon.toString(p.getFileName())));
     }
     return names;
   }

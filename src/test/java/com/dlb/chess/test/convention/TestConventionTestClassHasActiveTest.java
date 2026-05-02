@@ -45,19 +45,19 @@ class TestConventionTestClassHasActiveTest {
 
   private static final String REQUIRED_NAME_PREFIX = "Test";
 
-  private static final Pattern TEST_ANNOTATION = Pattern.compile("@Test\\b");
+  private static final Pattern TEST_ANNOTATION = NonNullWrapperCommon.compile("@Test\\b");
 
   @SuppressWarnings("static-method")
   @Test
   void everyTestPrefixedClassDeclaresAtLeastOneTestMethod() throws IOException {
     final List<String> violations = new ArrayList<>();
 
-    try (Stream<Path> paths = Files.walk(TEST_JAVA_ROOT)) {
+    try (Stream<Path> paths = NonNullWrapperCommon.walk(TEST_JAVA_ROOT)) {
       paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java"))
           .filter(p -> p.getFileName().toString().startsWith(REQUIRED_NAME_PREFIX)).forEach(p -> {
             final String contents = readSource(p);
             if (!TEST_ANNOTATION.matcher(contents).find()) {
-              violations.add(TEST_JAVA_ROOT.relativize(p).toString().replace('\\', '/'));
+              violations.add(NonNullWrapperCommon.replace(TEST_JAVA_ROOT.relativize(p).toString(), '\\', '/'));
             }
           });
     }
@@ -74,7 +74,7 @@ class TestConventionTestClassHasActiveTest {
 
   private static String readSource(Path javaFile) {
     try {
-      return Files.readString(javaFile);
+      return NonNullWrapperCommon.readString(javaFile);
     } catch (final IOException e) {
       throw new IllegalStateException("Failed to read " + javaFile, e);
     }

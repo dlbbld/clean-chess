@@ -10,7 +10,9 @@ import java.util.function.BiFunction;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -44,7 +46,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  */
 abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
-  private static final List<PgnTest> BUCKETS = List.of(PgnTest.PARSER_FROM_FEN);
+  private static final List<PgnTest> BUCKETS = NonNullWrapperCommon.listOf(PgnTest.PARSER_FROM_FEN);
 
   protected static void runForBuckets(BiFunction<java.nio.file.Path, String, PgnFile> parse, Logger logger) {
     final List<String> failures = new ArrayList<>();
@@ -68,7 +70,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
           assertEquals(testCase.fen(), board.getFen(),
               () -> bucket + " / " + pgnFileName + " — final FEN mismatch (halfmove-clock or move-number drift)");
         } catch (final AssertionError e) {
-          failures.add(e.getMessage());
+          failures.add(BasicUtility.getMessage(e));
         }
       }
     }

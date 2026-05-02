@@ -42,12 +42,13 @@ class TestConventionTestPackageNaming {
   void everyTestSourceFileIsUnderRequiredPackagePrefix() throws IOException {
     final List<String> violations = new ArrayList<>();
 
-    try (Stream<Path> paths = Files.walk(TEST_JAVA_ROOT)) {
+    try (Stream<Path> paths = NonNullWrapperCommon.walk(TEST_JAVA_ROOT)) {
       paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java")).forEach(p -> {
         final String packageName = derivePackageName(p);
         if (!packageName.equals(REQUIRED_PACKAGE_PREFIX)
             && !packageName.startsWith(REQUIRED_PACKAGE_PREFIX + ".")) {
-          violations.add(packageName + "  in  " + TEST_JAVA_ROOT.relativize(p).toString().replace('\\', '/'));
+          violations.add(packageName + "  in  "
+              + NonNullWrapperCommon.replace(TEST_JAVA_ROOT.relativize(p).toString(), '\\', '/'));
         }
       });
     }
@@ -69,6 +70,7 @@ class TestConventionTestPackageNaming {
       return "";
     }
     final Path relative = TEST_JAVA_ROOT.relativize(parent);
-    return relative.toString().replace('\\', '.').replace('/', '.');
+    return NonNullWrapperCommon.replace(
+        NonNullWrapperCommon.replace(relative.toString(), '\\', '.'), '/', '.');
   }
 }
