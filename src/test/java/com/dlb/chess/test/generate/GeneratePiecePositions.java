@@ -40,8 +40,8 @@ public class GeneratePiecePositions {
   //
   // K+B vs K+B, bishops on the same colour square:
   // Runtime note: not completed run yet, takes maybe hours.
-  // - Light squares, white to move: 193284
-  // - Light squares, black to move: 193284
+  // - Light squares, white to move: ?
+  // - Light squares, black to move: ?
 
   public static void main(String[] args) {
     generateKingVersusKing();
