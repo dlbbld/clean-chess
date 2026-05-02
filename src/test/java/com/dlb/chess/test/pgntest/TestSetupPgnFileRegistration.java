@@ -2,16 +2,14 @@ package com.dlb.chess.test.pgntest;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
 import java.util.TreeSet;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -36,7 +34,7 @@ class TestSetupPgnFileRegistration {
 
   @SuppressWarnings("static-method")
   @Test
-  void everyPgnFileOnDiskIsRegisteredAndViceVersa() throws IOException {
+  void everyPgnFileOnDiskIsRegisteredAndViceVersa() {
     final Set<String> diskFileNames = collectPgnFileNamesOnDisk();
     final Set<String> registeredFileNames = collectRegisteredPgnFileNames();
 
@@ -68,11 +66,13 @@ class TestSetupPgnFileRegistration {
     fail(report.toString());
   }
 
-  private static Set<String> collectPgnFileNamesOnDisk() throws IOException {
+  private static Set<String> collectPgnFileNamesOnDisk() {
     final Set<String> names = new TreeSet<>();
-    try (Stream<Path> paths = NonNullWrapperCommon.walk(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
-      paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".pgn"))
-          .forEach(p -> names.add(NonNullWrapperCommon.toString(p.getFileName())));
+    for (final Path p : FileUtility.listAllFilesRecursively(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
+      if (!p.toString().endsWith(".pgn")) {
+        continue;
+      }
+      names.add(NonNullWrapperCommon.toString(p.getFileName()));
     }
     return names;
   }

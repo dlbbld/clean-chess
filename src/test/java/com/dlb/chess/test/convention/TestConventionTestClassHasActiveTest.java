@@ -2,18 +2,16 @@ package com.dlb.chess.test.convention;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
+import com.dlb.chess.common.utility.FileUtility;
 
 /**
  * Convention test: every Java class under {@code src/test/java} whose simple name starts with
@@ -49,17 +47,20 @@ class TestConventionTestClassHasActiveTest {
 
   @SuppressWarnings("static-method")
   @Test
-  void everyTestPrefixedClassDeclaresAtLeastOneTestMethod() throws IOException {
+  void everyTestPrefixedClassDeclaresAtLeastOneTestMethod() {
     final List<String> violations = new ArrayList<>();
 
-    try (Stream<Path> paths = NonNullWrapperCommon.walk(TEST_JAVA_ROOT)) {
-      paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java"))
-          .filter(p -> p.getFileName().toString().startsWith(REQUIRED_NAME_PREFIX)).forEach(p -> {
-            final String contents = readSource(p);
-            if (!TEST_ANNOTATION.matcher(contents).find()) {
-              violations.add(NonNullWrapperCommon.replace(TEST_JAVA_ROOT.relativize(p).toString(), '\\', '/'));
-            }
-          });
+    for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
+      if (!p.toString().endsWith(".java")) {
+        continue;
+      }
+      if (!p.getFileName().toString().startsWith(REQUIRED_NAME_PREFIX)) {
+        continue;
+      }
+      final String contents = FileUtility.readFileAsString(p);
+      if (!TEST_ANNOTATION.matcher(contents).find()) {
+        violations.add(NonNullWrapperCommon.replace(TEST_JAVA_ROOT.relativize(p).toString(), '\\', '/'));
+      }
     }
 
     if (!violations.isEmpty()) {
@@ -69,14 +70,6 @@ class TestConventionTestClassHasActiveTest {
         report.append("  ").append(violation).append('\n');
       }
       fail(report.toString());
-    }
-  }
-
-  private static String readSource(Path javaFile) {
-    try {
-      return NonNullWrapperCommon.readString(javaFile);
-    } catch (final IOException e) {
-      throw new IllegalStateException("Failed to read " + javaFile, e);
     }
   }
 }
