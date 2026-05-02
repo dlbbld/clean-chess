@@ -1,18 +1,18 @@
-package com.dlb.chess.test.librarycarlos.bugs.fixed;
+package com.dlb.chess.test.librarycarlos.test.notpass;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.junit.jupiter.api.Test;
 
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Square;
 
-class TestLibraryCarlosEnPassantCapture {
+class TestLibraryCarlosEnPassantCaptureNotPass {
 
   @SuppressWarnings("static-method")
   @Test
-  void testEnPassantCaptureExpectedBugs() throws Exception {
+  void test() throws Exception {
     final Board board = new Board();
     board.doMove("e4");
     board.doMove("Nf6");
@@ -20,10 +20,10 @@ class TestLibraryCarlosEnPassantCapture {
     board.doMove("d5");
 
     // expected D6 but results is D5
-    assertEquals(Square.D5, board.getEnPassantTarget());
+    assertNotEquals(Square.D6, board.getEnPassantTarget());
 
     // expected D6 but is NONE
-    assertEquals(Square.NONE, board.getBackup().getLast().getEnPassantTarget());
+    assertNotEquals(Square.D6, board.getBackup().getLast().getEnPassantTarget());
 
     // expected true but is false
     board.doMove("exd6");

@@ -1,4 +1,4 @@
-package com.dlb.chess.test.librarycarlos.bugs.fixed;
+package com.dlb.chess.test.librarycarlos.test.pass;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,9 +19,9 @@ import com.github.bhlangonijr.chesslib.game.Game;
 import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
-class TestLibraryCarlosHash {
+class TestLibraryCarlosHashPass {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosHash.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosHashPass.class);
 
   private static final int SHOW_COMPLETION_PROGRESS_NUMBER_OF_PROCESSED_FILES = 1;
 

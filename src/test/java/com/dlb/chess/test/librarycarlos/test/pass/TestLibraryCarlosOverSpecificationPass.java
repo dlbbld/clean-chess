@@ -1,14 +1,16 @@
-package com.dlb.chess.test.librarycarlos.bugs.fixed;
+package com.dlb.chess.test.librarycarlos.test.pass;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
 import com.github.bhlangonijr.chesslib.Square;
 import com.github.bhlangonijr.chesslib.move.Move;
+import com.github.bhlangonijr.chesslib.move.MoveConversionException;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 
-class TestLibraryCarlosOverSpecification {
+class TestLibraryCarlosOverSpecificationPass {
 
   @SuppressWarnings("static-method")
   @Test
@@ -42,6 +44,22 @@ class TestLibraryCarlosOverSpecification {
     // correct, first move is not Nge2 because the knight on c3 cannot move to e2
     moveList.add(new Move(Square.E8, Square.E7)); // Ne2
     assertEquals("Ne2 Ke7", moveList.toSan().trim());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testSanParseExceptionOnOverspecification() throws Exception {
+    {
+      final MoveList moveList = new MoveList("4k3/8/8/8/1b6/2N5/8/4K1N1 w - - 0 1");
+      var isException = false;
+      try {
+        moveList.addSanMove("Nge2", false, true);
+      } catch (@SuppressWarnings("unused") final MoveConversionException e) {
+        isException = true;
+      }
+      assertTrue(isException);
+    }
+
   }
 
 }

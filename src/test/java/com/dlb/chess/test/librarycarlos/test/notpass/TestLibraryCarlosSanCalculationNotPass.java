@@ -1,6 +1,7 @@
-package com.dlb.chess.test.librarycarlos.bugs.fixed;
+package com.dlb.chess.test.librarycarlos.test.notpass;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,28 +16,30 @@ import com.github.bhlangonijr.chesslib.Square;
 import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 
-class TestLibraryCarlosFromFen {
+class TestLibraryCarlosSanCalculationNotPass {
 
   @SuppressWarnings("static-method")
   @Test
-  void test() throws Exception {
+  void testWithFen() throws Exception {
     final Board board = new Board();
-    board.doMove(new Move(Square.E2, Square.E4));
-    assertEquals("e4", calculateLan(board)); // works fine
-
     final var fen = "8/8/3KP3/5P2/8/3p4/3kp3/8 w - - 0 100";
     board.loadFromFen(fen);
 
     board.doMove(new Move(Square.E6, Square.E5));
 
+    boolean isException;
     try {
-      assertEquals("e5", calculateLan(board)); // throws NPE
+      // expected e5 but exception
+      assertEquals("e5", calculateSan(board));
+      isException = false;
     } catch (@SuppressWarnings("unused") final NullPointerException npe) {
-      System.out.println("Should not throw NPE");
+      isException = true;
     }
+    // expected no exception but is exception
+    assertTrue(isException);
   }
 
-  private static String calculateLan(Board board) {
+  private static String calculateSan(Board board) {
     final MoveList moveList = new MoveList();
     moveList.addAll(calculateMoveList(board));
     final var sanArray = moveList.toSanArray();

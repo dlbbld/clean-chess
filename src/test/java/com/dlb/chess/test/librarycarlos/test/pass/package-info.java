@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.test.librarycarlos.bugs.fixed;
+package com.dlb.chess.test.librarycarlos.test.pass;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

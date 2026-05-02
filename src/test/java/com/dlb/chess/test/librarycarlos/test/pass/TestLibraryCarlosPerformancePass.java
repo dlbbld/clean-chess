@@ -1,4 +1,4 @@
-package com.dlb.chess.test.librarycarlos.bugs.fixed;
+package com.dlb.chess.test.librarycarlos.test.pass;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -19,9 +19,9 @@ import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
-class TestLibraryCarlosPerformance {
+class TestLibraryCarlosPerformancePass {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosPerformance.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosPerformancePass.class);
 
   private static final double LOAD_PGN_DURATION_MAX_MILLISECONDS = 1000.0;
 
