@@ -12,7 +12,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatusAnalysis;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.SetUtility;
@@ -75,7 +75,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     }
   }
 
-  public static Winnable calculateWinnable(ApiBoard board, Side sideToEvaluate) {
+  public static Winnable calculateWinnable(ChessBoard board, Side sideToEvaluate) {
 
     // we need an ongoing game
     if (board.isCheckmate()) {
@@ -302,7 +302,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     return new WinnableAnalysis(winnable, gameStatusSet);
   }
 
-  private static GameMultipleAnalysis evaluateOneMove(ApiBoard board) {
+  private static GameMultipleAnalysis evaluateOneMove(ChessBoard board) {
 
     final Set<GameStatusAnalysis> gameTermination = new TreeSet<>();
     final var numberOfHalfMoves = board.getLegalMoveSet().size();
@@ -339,7 +339,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     return new GameMultipleAnalysis(gameTermination, numberOfHalfMoves, board.getHavingMove());
   }
 
-  private static GameForcedAnalysis evaluateForced(ApiBoard board, Side sideToEvaluate) {
+  private static GameForcedAnalysis evaluateForced(ChessBoard board, Side sideToEvaluate) {
     // we check position after series of forced moves
     // we cannot use early returns for after evaluation we need to undo the moves
     var countForcedHalfMoves = 0;
@@ -362,7 +362,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     return new GameForcedAnalysis(evaluation, countForcedHalfMoves);
   }
 
-  private static GameStatusAnalysis calculateGameStatusAnalysis(ApiBoard board, Side sideToEvaluate) {
+  private static GameStatusAnalysis calculateGameStatusAnalysis(ChessBoard board, Side sideToEvaluate) {
     if (board.isCheckmate()) {
       if (board.getHavingMove() == Side.WHITE) {
         return GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE;
@@ -392,7 +392,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     return GameStatusAnalysis.OTHER;
   }
 
-  private static void logResult(boolean isLogResult, String message, WinnableAnalysis winnable, ApiBoard board,
+  private static void logResult(boolean isLogResult, String message, WinnableAnalysis winnable, ChessBoard board,
       Side sideToEvaluate, String isKingOnlyNonFlagging, String isKingOnlyFlagging) {
     // we need the non flagging player for the lichess examples
     if (isLogResult && sideToEvaluate == board.getHavingMove().getOppositeSide()) {

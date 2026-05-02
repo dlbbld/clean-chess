@@ -9,7 +9,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 
 class TestPerformMoveMainlyStaticPositionState implements EnumConstants {
@@ -17,7 +17,7 @@ class TestPerformMoveMainlyStaticPositionState implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testGameWithMostBasicMoves() {
-    final ApiBoard apiBoard = new Board();
+    final ChessBoard apiBoard = new Board();
     final StaticPosition staticPosition0 = StaticPosition.INITIAL_POSITION;
     assertEquals(staticPosition0, apiBoard.getStaticPosition());
     assertEquals(WHITE, apiBoard.getHavingMove());

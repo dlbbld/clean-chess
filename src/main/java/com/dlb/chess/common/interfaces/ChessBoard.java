@@ -21,7 +21,7 @@ import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public interface ApiBoard {
+public interface ChessBoard {
 
   boolean performMove(MoveSpecification moveSpecification);
 

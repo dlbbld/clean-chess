@@ -5,7 +5,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
@@ -19,8 +19,8 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   @Test
   void testInitial() {
     final Fen fen = FenParserAdvanced.parseFenAdvanced(FenConstants.FEN_INITIAL_STR);
-    final ApiBoard boardFromFenInitial = new Board(fen);
-    final ApiBoard board = new Board();
+    final ChessBoard boardFromFenInitial = new Board(fen);
+    final ChessBoard board = new Board();
 
     CommonTestUtility.checkBoardsAgainstEachOtherExcludeHistory(board, boardFromFenInitial);
   }
@@ -28,7 +28,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   @SuppressWarnings("static-method")
   @Test
   void testAlongMovesExcludingHistory() {
-    final ApiBoard boardMakeMoves = new Board();
+    final ChessBoard boardMakeMoves = new Board();
 
     boardMakeMoves.performMoves("d4", "d5", "Nc3", "Nf6", "Bf4", "a6", "e3", "b5", "Bd3", "e6", "Nf3", "c5", "O-O",
         "Bb7", "Ne5", "Nbd7", "a3", "Nxe5", "Bxe5", "Bd6", "f4", "O-O", "Qf3", "c4", "Be2", "Ne4", "Nxe4", "dxe4",
@@ -56,7 +56,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   @SuppressWarnings("static-method")
   @Test
   void testAlongMovesIncludingHistory() {
-    final ApiBoard boardMakeMoves = new Board();
+    final ChessBoard boardMakeMoves = new Board();
     boardMakeMoves.performMoves("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "d6", "d4", "exd4", "cxd4", "Bxd4",
         "Nxd4", "Nxd4", "O-O", "Nf6", "Re1", "Nxe4", "Nc3", "O-O");
 

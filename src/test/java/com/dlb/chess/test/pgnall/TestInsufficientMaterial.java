@@ -12,7 +12,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.PgnHalfMove;
@@ -60,7 +60,7 @@ class TestInsufficientMaterial implements EnumConstants {
     logger.info(pgnFileName);
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
-    final ApiBoard boardFromFen = new Board(pgnFile.startFen());
+    final ChessBoard boardFromFen = new Board(pgnFile.startFen());
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       boardFromFen.performMove(halfMove.san());
     }

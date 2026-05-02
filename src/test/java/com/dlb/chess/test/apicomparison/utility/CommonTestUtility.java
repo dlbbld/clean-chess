@@ -3,15 +3,15 @@ package com.dlb.chess.test.apicomparison.utility;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 
 public abstract class CommonTestUtility implements EnumConstants {
 
-  public static void checkBoardsAgainstEachOtherAll(ApiBoard boardFirst, ApiBoard boardSecond) {
+  public static void checkBoardsAgainstEachOtherAll(ChessBoard boardFirst, ChessBoard boardSecond) {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, true);
   }
 
-  public static void checkBoardsAgainstEachOtherExcludeHistory(ApiBoard boardFirst, ApiBoard boardSecond) {
+  public static void checkBoardsAgainstEachOtherExcludeHistory(ChessBoard boardFirst, ChessBoard boardSecond) {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, false);
   }
 
@@ -19,7 +19,7 @@ public abstract class CommonTestUtility implements EnumConstants {
   // Must contain all methods in API interface which are not implemented in AbstractBoard
   // that is also crucial performance wise because in AbstractBoard there are methods taking very long,
   // and testing against makes no sense as always true as long board implentation match, what we test here.
-  private static void checkBoardsAgainstEachOther(ApiBoard boardFirst, ApiBoard boardSecond, boolean isIncludeHistory) {
+  private static void checkBoardsAgainstEachOther(ChessBoard boardFirst, ChessBoard boardSecond, boolean isIncludeHistory) {
 
     assertEquals(boardFirst.isCheck(), boardSecond.isCheck());
     assertEquals(boardFirst.isCheckmate(), boardSecond.isCheckmate());

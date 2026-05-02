@@ -8,7 +8,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -33,7 +33,7 @@ public class GenerateRandomGame {
   }
 
   private static void generateRandomGame(FindRandomGame findRandomGame) {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     Set<MoveSpecification> legalMoveSet = board.getPossibleMoveSpecificationSet();
     var numberOfMoveOptions = legalMoveSet.size();
@@ -154,7 +154,7 @@ public class GenerateRandomGame {
   }
 
   private static void generateNoRepetition() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     Set<MoveSpecification> legalMoveSet = board.getPossibleMoveSpecificationSet();
     var numberOfMoveOptions = legalMoveSet.size();
@@ -193,7 +193,7 @@ public class GenerateRandomGame {
   // we only want one sequence over 50, so after passing 50 first time, we try to reach 75 and if not successful that's
   // it, then try again
   private static void generateSeventyFive() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     Set<MoveSpecification> legalMoveSet = board.getPossibleMoveSpecificationSet();
     var numberOfMoveOptions = legalMoveSet.size();
@@ -261,7 +261,7 @@ public class GenerateRandomGame {
   }
 
   private static boolean generateRepetition(int repetitionNumber) {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     Set<MoveSpecification> legalMoveSet = board.getPossibleMoveSpecificationSet();
     var numberOfMoveOptions = legalMoveSet.size();

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -52,7 +52,7 @@ class TestUnwinnabilityFull {
     final var pgnFileName = "unfair_ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase(pgnFileName);
-    final ApiBoard board = new Board(pgnFileTestCase.fen());
+    final ChessBoard board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileName);
 
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
@@ -70,7 +70,7 @@ class TestUnwinnabilityFull {
   void testUnfairLichessExamples() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ApiBoard board = new Board(testCase.fen());
+      final ChessBoard board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 
@@ -91,7 +91,7 @@ class TestUnwinnabilityFull {
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ApiBoard board = new Board(testCase.fen());
+      final ChessBoard board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 

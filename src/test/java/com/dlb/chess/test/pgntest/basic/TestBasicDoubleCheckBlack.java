@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -35,7 +35,7 @@ class TestBasicDoubleCheckBlack extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.BASIC_DOUBLE_CHECK_BLACK);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ApiBoard board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
+      final ChessBoard board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
           testCase.pgnFileName());
 
       logger.info(testCase.pgnFileName());

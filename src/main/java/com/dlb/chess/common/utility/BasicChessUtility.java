@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.fen.FenParserRaw;
@@ -104,7 +104,7 @@ public abstract class BasicChessUtility {
     };
   }
 
-  public static GameStatus calculateGameStatus(ApiBoard board) {
+  public static GameStatus calculateGameStatus(ChessBoard board) {
 
     if (board.isCheckmate()) {
       return GameStatus.CHECKMATE;

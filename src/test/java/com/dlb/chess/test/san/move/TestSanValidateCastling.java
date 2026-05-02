@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingRightLoss;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.CastlingCheckMapper;
@@ -19,7 +19,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testNoRightKingMoved() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMoves("e4", "e5", "Ke2", "d6", "Ke1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.KING_MOVED);
@@ -32,7 +32,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testNoRightKingSideRookMoved() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMoves("h4", "e5", "Rh3", "d6", "Rh1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.ROOK_MOVED);
@@ -41,7 +41,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testNoRightQueenSideRookMoved() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMoves("a4", "e5", "Ra3", "d6", "Ra1", "d5");
     board.performMoves("b3", "Nc6", "Bb2", "Be7", "Nc3", "Nf6", "Qc1", "a6");
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT,
@@ -53,7 +53,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testNoRightUnknownFenImport() {
-    final ApiBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1");
+    final ChessBoard board = new Board("r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w - - 0 1");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.UNKNOWN_FEN_IMPORT);
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT,
@@ -65,7 +65,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testSquaresNotEmpty() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMoves("e4");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
         CastlingRightLoss.NOT_LOST);
@@ -78,7 +78,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testKingInCheck() {
-    final ApiBoard board = new Board("rnbqk2r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1bPP/R1BQK2R w KQkq - 0 5");
+    final ChessBoard board = new Board("rnbqk2r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1bPP/R1BQK2R w KQkq - 0 5");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_IN_CHECK, CastlingRightLoss.NOT_LOST);
   }
 
@@ -87,7 +87,7 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testKingWouldTravelThroughCheck() {
-    final ApiBoard board = new Board("rnb1kbnr/pppp2pp/5q2/8/2B5/7N/PPPP2PP/RNBQK2R w KQkq - 0 25");
+    final ChessBoard board = new Board("rnb1kbnr/pppp2pp/5q2/8/2B5/7N/PPPP2PP/RNBQK2R w KQkq - 0 25");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
         CastlingRightLoss.NOT_LOST);
   }
@@ -97,12 +97,12 @@ class TestSanValidateCastling {
   @SuppressWarnings("static-method")
   @Test
   void testKingWouldEndInCheck() {
-    final ApiBoard board = new Board("rnbqk1nr/pppp1ppp/4p3/2b5/2B1P3/5P1N/PPPP2PP/RNBQK2R w KQkq - 0 25");
+    final ChessBoard board = new Board("rnbqk1nr/pppp1ppp/4p3/2b5/2B1P3/5P1N/PPPP2PP/RNBQK2R w KQkq - 0 25");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK,
         CastlingRightLoss.NOT_LOST);
   }
 
-  private static void checkCastlingException(String san, ApiBoard board, CastlingCheck expectedCastlingCheck,
+  private static void checkCastlingException(String san, ChessBoard board, CastlingCheck expectedCastlingCheck,
       CastlingRightLoss expectedLoss) {
     try {
       SanValidation.validateSan(san, board);

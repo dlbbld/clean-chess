@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -19,7 +19,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
 
     // rook
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("a4");
       board.performMove("d5");
@@ -29,7 +29,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // knight
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("Nc3");
       board.performMove("Nf6");
@@ -39,7 +39,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // bishop
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("e4");
       board.performMove("e5");
@@ -49,7 +49,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // queen
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("e4");
       board.performMove("e5");
@@ -59,7 +59,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // king
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("e4");
       board.performMove("e5");
@@ -77,7 +77,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
   void testBlack() {
     // rook
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("e4");
       board.performMove("h5");
@@ -88,7 +88,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // knight
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("Nc3");
       board.performMove("Nf6");
@@ -97,7 +97,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // bishop
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("Nf3");
       board.performMove("d5");
@@ -108,7 +108,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // queen
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("e4");
       board.performMove("e5");
@@ -119,7 +119,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // king
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMove("e4");
       board.performMove("e5");
@@ -131,7 +131,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     // pawn diagonal move must contain capture symbol by format specification
   }
 
-  private static void checkException(String san, ApiBoard board) {
+  private static void checkException(String san, ChessBoard board) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);

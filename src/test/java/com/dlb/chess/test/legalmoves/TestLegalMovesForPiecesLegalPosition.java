@@ -18,7 +18,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
@@ -34,7 +34,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testRookMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // test initital position
     // white
@@ -399,7 +399,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testKnightMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // test initital position
     // white
@@ -951,7 +951,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testBishopMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // test initital position
     // white
@@ -1595,7 +1595,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testQueenMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // test initital position
     // white
@@ -2021,7 +2021,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testPawnMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // test initital position
     // white
@@ -2499,7 +2499,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingInitialMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // test initital position
     // white
@@ -2519,7 +2519,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingWalk() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white king possible moves
       final Set<LegalMove> calculatedLegalMoveSet = KingLegalMoves.calculateKingLegalMoves(board.getStaticPosition(),
@@ -3144,7 +3144,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingKingSideCastlingMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white king possible moves
       final Set<LegalMove> calculatedLegalMoveSet = KingLegalMoves.calculateKingLegalMoves(board.getStaticPosition(),
@@ -3692,7 +3692,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingQueenSideCastlingMoves() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white king possible moves
       final Set<LegalMove> calculatedLegalMoveSet = KingLegalMoves.calculateKingLegalMoves(board.getStaticPosition(),
@@ -4140,7 +4140,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingKingSideCastlingRightChangeForRookMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
@@ -4272,7 +4272,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingKingSideCastlingRightChangeForKingMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
@@ -4408,7 +4408,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingQueenSideCastlingRightChangeForRookMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white move
       final MoveSpecification move = new MoveSpecification(B2, B3);
@@ -4562,7 +4562,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingQueenSideCastlingRightChangeForKingMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D2, D4);
@@ -4715,7 +4715,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   static void testKingKingQueenSideCastlingRightChangeForKingMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);

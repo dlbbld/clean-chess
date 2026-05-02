@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.Movetext;
 import com.dlb.chess.common.utility.BasicChessUtility;
@@ -31,7 +31,7 @@ public class PgnCreate {
   // per PGN standard, the maximum line length is 79 characters
   private static final int MAX_LINE_LENGTH = 79;
 
-  public static String createPgnFileString(ApiBoard board) {
+  public static String createPgnFileString(ChessBoard board) {
     return createPgnFileString(createPgnFile(board));
   }
 
@@ -102,7 +102,7 @@ public class PgnCreate {
     return halfMoveList;
   }
 
-  private static ResultTagValue calculateResultTagValue(ApiBoard board) {
+  private static ResultTagValue calculateResultTagValue(ChessBoard board) {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
 
     return switch (gameStatus) {
@@ -188,14 +188,14 @@ public class PgnCreate {
     return BasicUtility.calculateWrappedLines(movetext.movetext(), MAX_LINE_LENGTH);
   }
 
-  public static PgnFile createPgnFile(ApiBoard board, List<Tag> tagList) {
+  public static PgnFile createPgnFile(ChessBoard board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
     return new PgnFile(tagList, board.getInitialFen(), "", halfMoveList);
   }
 
-  public static PgnFile createPgnFile(ApiBoard board) {
+  public static PgnFile createPgnFile(ChessBoard board) {
 
     final ResultTagValue resultTagValue = calculateResultTagValue(board);
     final List<Tag> tagList = createBoardPlaceHolderTagList(resultTagValue);

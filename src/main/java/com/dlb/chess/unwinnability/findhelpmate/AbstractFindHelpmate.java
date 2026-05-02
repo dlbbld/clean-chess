@@ -9,7 +9,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
@@ -20,7 +20,7 @@ public abstract class AbstractFindHelpmate {
 
   private static final boolean IS_DEBUG = false;
 
-  protected static ApiBoard checkHelpmate(String fen, List<LegalMove> moveProgressList) {
+  protected static ChessBoard checkHelpmate(String fen, List<LegalMove> moveProgressList) {
 
     final var boardCheck = new Board(fen);
 
@@ -57,7 +57,7 @@ public abstract class AbstractFindHelpmate {
     return boardCheck;
   }
 
-  protected static ApiBoard checkClassicalCheckmate(Side color, String fen, List<LegalMove> moveProgressList) {
+  protected static ChessBoard checkClassicalCheckmate(Side color, String fen, List<LegalMove> moveProgressList) {
 
     final var boardCheck = new Board(fen);
 

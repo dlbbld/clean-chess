@@ -11,7 +11,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.moves.utility.CastlingUtility;
@@ -22,7 +22,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testTrivial() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white move 1
     // test before move
@@ -628,7 +628,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
     }
   }
 
-  private static boolean calculateIsEnPassantCaptureLastMove(ApiBoard board) {
+  private static boolean calculateIsEnPassantCaptureLastMove(ChessBoard board) {
     return board.getLastMove().enPassantRole().isEnPassantCapture();
   }
 }

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
@@ -15,7 +15,7 @@ class TestSanValidateSanTerminalMarker {
   @SuppressWarnings("static-method")
   @Test
   void testWhite() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     checkException("e4#", SanValidationProblem.CHECKMATE_SYMBOL_BUT_NO_CHECK, board);
     checkException("e4+", SanValidationProblem.CHECK_SYMBOL_BUT_NO_CHECK, board);
@@ -32,7 +32,7 @@ class TestSanValidateSanTerminalMarker {
   @SuppressWarnings("static-method")
   @Test
   void testBlack() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     board.performMove("e4");
 
@@ -48,7 +48,7 @@ class TestSanValidateSanTerminalMarker {
     checkException("Qxf2", SanValidationProblem.NO_SYMBOL_BUT_CHECKMATE, board);
   }
 
-  private static void checkException(String san, SanValidationProblem problem, ApiBoard board) {
+  private static void checkException(String san, SanValidationProblem problem, ChessBoard board) {
     boolean isException;
     try {
       board.performMove(san);

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -17,7 +17,7 @@ class TestSanValidateBlank {
   @Test
   void test() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     checkException("", board);
     checkException(" ", board);
@@ -34,7 +34,7 @@ class TestSanValidateBlank {
 
   }
 
-  private static void checkException(String san, ApiBoard board) {
+  private static void checkException(String san, ChessBoard board) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);

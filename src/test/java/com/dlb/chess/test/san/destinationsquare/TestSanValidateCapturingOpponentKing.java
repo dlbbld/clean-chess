@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -18,7 +18,7 @@ class TestSanValidateCapturingOpponentKing {
   void testWhite() {
     // Position: black king on a8, white pieces on rank 1-2, none attacking a8
     // White: K on f1, Q on d1, B on c1, N on b1, R on h2
-    final ApiBoard board = new Board("k7/8/8/8/8/8/7R/1NBQ1K2 w - - 0 1");
+    final ChessBoard board = new Board("k7/8/8/8/8/8/7R/1NBQ1K2 w - - 0 1");
 
     // rook
     checkException("Rxa8", board);
@@ -41,7 +41,7 @@ class TestSanValidateCapturingOpponentKing {
   void testBlack() {
     // Position: white king on a1, black pieces on rank 7-8, none attacking a1
     // Black: k on f8, q on d8, b on c8, n on b8, r on h7
-    final ApiBoard board = new Board("1nbq1k2/7r/8/8/8/8/8/K7 b - - 0 1");
+    final ChessBoard board = new Board("1nbq1k2/7r/8/8/8/8/8/K7 b - - 0 1");
 
     // rook
     checkException("Rxa1", board);
@@ -59,7 +59,7 @@ class TestSanValidateCapturingOpponentKing {
     checkException("Kxa1", board);
   }
 
-  private static void checkException(String san, ApiBoard board) {
+  private static void checkException(String san, ChessBoard board) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);

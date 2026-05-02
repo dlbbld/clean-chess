@@ -13,7 +13,7 @@ import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
@@ -31,18 +31,18 @@ public class Analyzer extends AnalyzerPrint {
     AnalyzerPrint.printAnalysis(folderPath, pgnFileName);
   }
 
-  public static void printAnalysis(ApiBoard board) {
+  public static void printAnalysis(ChessBoard board) {
     // delegated to package protected method for class organization
     AnalyzerPrint.printAnalysis(board);
   }
 
   public static Analysis calculateAnalysis(Path folderPath, String pgnFileName) throws Exception {
 
-    final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateAnalysis(board);
   }
 
-  public static Analysis calculateAnalysis(ApiBoard board) {
+  public static Analysis calculateAnalysis(ChessBoard board) {
 
     final String invariant = board.getFen();
 
@@ -138,7 +138,7 @@ public class Analyzer extends AnalyzerPrint {
     return false;
   }
 
-  private static int calculateMaxYawnSequence(ApiBoard board) {
+  private static int calculateMaxYawnSequence(ChessBoard board) {
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
     if (board.getHalfMoveList().isEmpty()) {

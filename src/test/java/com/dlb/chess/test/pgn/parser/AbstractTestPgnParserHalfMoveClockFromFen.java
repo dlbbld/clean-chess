@@ -11,7 +11,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
@@ -61,7 +61,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
         final PgnFile pgnFile = parse.apply(bucket.getFolderPath(), pgnFileName);
 
-        final ApiBoard board = new Board(pgnFile.startFen());
+        final ChessBoard board = new Board(pgnFile.startFen());
         for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
           board.performMove(halfMove.san());
         }

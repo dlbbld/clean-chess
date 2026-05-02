@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.PromotionPieceType;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 
@@ -13,7 +13,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @Test
   @SuppressWarnings("static-method")
   void testWhiteMovingPiece() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     MoveSpecification move = new MoveSpecification(E3, E4);
 
     check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
@@ -144,7 +144,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testWhiteCapturingNonPawn() {
 
     // capturing own pieces
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // rook
     MoveSpecification move = new MoveSpecification(A1, A2);
@@ -209,7 +209,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testWhiteCapturingPawn() {
 
-    ApiBoard board = new Board("rnb1kbnr/pppq1ppp/8/3pp3/3P4/P7/1PPQPPPP/RNB1KBNR w KQkq - 2 4");
+    ChessBoard board = new Board("rnb1kbnr/pppq1ppp/8/3pp3/3P4/P7/1PPQPPPP/RNB1KBNR w KQkq - 2 4");
 
     // pawn
     MoveSpecification move = new MoveSpecification(A3, A4);
@@ -483,7 +483,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testWhitePawnTwoSquareAdvanceMoves() {
     // pawn two advance moves
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, C3);
     board.performMove(move);
@@ -529,7 +529,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testWhiteKingMoves() {
 
-    ApiBoard board = new Board();
+    ChessBoard board = new Board();
 
     // king
     board = new Board();
@@ -693,7 +693,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testWhitePromotionPieceWronglySet() {
 
-    ApiBoard board = new Board();
+    ChessBoard board = new Board();
     // non pawn move - promotion piece set
     board = new Board();
 
@@ -837,7 +837,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @Test
   @SuppressWarnings("static-method")
   void testBlackMovingPieces() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     board.performMove("e4");
 
@@ -970,7 +970,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testBlackCapturingNonPawn() {
 
     // capturing own pieces
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMove("e4");
 
     // rook
@@ -1037,7 +1037,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testBlackCapturingPawn() {
     // pawn
 
-    ApiBoard board = new Board();
+    ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A3);
     board.performMove(move);
@@ -1245,7 +1245,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testBlackPawnTwoSquareAdvanceMoves() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(E2, E4);
     board.performMove(move);
@@ -1316,7 +1316,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testBlackKingMoves() {
 
-    ApiBoard board = new Board();
+    ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, C3);
     board.performMove(move);
@@ -1374,7 +1374,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testBlackPromotionPieceWronglySet() {
 
-    ApiBoard board = new Board();
+    ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A4);
     board.performMove(move);

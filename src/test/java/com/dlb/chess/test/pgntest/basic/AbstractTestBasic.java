@@ -14,7 +14,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.TestSetupException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.model.EnPassantRole;
@@ -79,13 +79,13 @@ public abstract class AbstractTestBasic implements EnumConstants {
     return result;
   }
 
-  protected static void checkCheckmate(ApiBoard board) {
+  protected static void checkCheckmate(ChessBoard board) {
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
     assertFalse(board.isStalemate());
   }
 
-  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, ApiBoard board) {
+  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, ChessBoard board) {
     assertTrue(board.isCapture());
     assertFalse(board.isCheckmate());
     assertFalse(board.isStalemate());
@@ -95,7 +95,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkNonCaptureCheck(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
+  static void checkNonCaptureCheck(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertFalse(board.isCheckmate());
@@ -106,7 +106,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkNonCaptureCheckmate(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
+  static void checkNonCaptureCheckmate(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
@@ -117,7 +117,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkEnPassantCapture(Side side, Square fromSquare, Square toSquare, ApiBoard board) {
+  static void checkEnPassantCapture(Side side, Square fromSquare, Square toSquare, ChessBoard board) {
 
     assertTrue(board.isCapture());
     assertFalse(board.isCheck());
@@ -146,12 +146,12 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, lastMoveEnPassantCapture);
   }
 
-  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board) {
+  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board) {
 
     checkMovingPiece(fromSquare, toSquare, movingPiece, board, EnPassantRole.NONE);
   }
 
-  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ApiBoard board,
+  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board,
       EnPassantRole enPassantRole) {
 
     assertFalse(board.isCapture());
@@ -166,7 +166,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
   }
 
   static void checkPromotion(Side side, Square fromSquare, Square toSquare, Piece capturedPiece,
-      PromotionPieceType promotionPieceType, ApiBoard board) {
+      PromotionPieceType promotionPieceType, ChessBoard board) {
 
     if (capturedPiece == Piece.NONE) {
       assertFalse(board.isCapture());
@@ -183,13 +183,13 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkCastle(Side side, CastlingMove castlingMove, ApiBoard board) {
+  static void checkCastle(Side side, CastlingMove castlingMove, ChessBoard board) {
     final var moveSpecification = new MoveSpecification(castlingMove);
     final LegalMove expected = new LegalMove(moveSpecification, Piece.calculateKingPiece(side), Piece.NONE);
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkDoubleCheck(Piece movingPiece, ApiBoard board) {
+  static void checkDoubleCheck(Piece movingPiece, ChessBoard board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertFalse(board.isCheckmate());
@@ -198,7 +198,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(movingPiece, board.getLastMove().movingPiece());
   }
 
-  static void checkDoubleCheckCheckmate(Piece movingPiece, ApiBoard board) {
+  static void checkDoubleCheckCheckmate(Piece movingPiece, ChessBoard board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
@@ -207,7 +207,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(movingPiece, board.getLastMove().movingPiece());
   }
 
-  private static boolean calculateIsEnPassantCaptureLastMove(ApiBoard board) {
+  private static boolean calculateIsEnPassantCaptureLastMove(ChessBoard board) {
     return board.getLastMove().enPassantRole().isEnPassantCapture();
   }
 
