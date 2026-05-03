@@ -29,7 +29,7 @@ class TestLibraryCarlosPerformancePass {
 
   private static final double PER_HALF_MOVE_MAX_MILLISECONDS = 0.5;
 
-  private static List<PgnTest> PGN_TEST_LIST = NonNullWrapperCommon.asList(PgnTest.MAX_MOVES, PgnTest.MAX_MOVES);
+  private static List<PgnTest> PGN_TEST_LIST = NonNullWrapperCommon.asList(PgnTest.MAX_MOVES);
 
   @SuppressWarnings("static-method")
   @Test
@@ -48,7 +48,7 @@ class TestLibraryCarlosPerformancePass {
 
         assertTrue(millisecondDurationLoadPgn < LOAD_PGN_DURATION_MAX_MILLISECONDS);
 
-        System.out.printf("loadPgn duration seconds: %f%n", millisecondDurationLoadPgn / 1000);
+        logger.info("loadPgn duration seconds: {}", millisecondDurationLoadPgn / 1000);
 
         final var game = NonNullWrapperCommon.getFirst(NonNullWrapperLibraryCarlos.getGames(pgn));
         final var millisecondsBeforeLoadMoveText = System.currentTimeMillis();
@@ -56,11 +56,11 @@ class TestLibraryCarlosPerformancePass {
         final var millisecondDurationLoadMoveText = System.currentTimeMillis() - millisecondsBeforeLoadMoveText;
         assertTrue(millisecondDurationLoadMoveText < LOAD_MOVE_TEXT_DURATION_MAX_MILLISECONDS);
 
-        System.out.printf("loadMoveText duration seconds: %f%n", millisecondDurationLoadPgn / 1000);
+        logger.info("loadMoveText duration seconds: {}", millisecondDurationLoadMoveText / 1000);
 
         final var moves = game.getHalfMoves();
         final var halfMoves = moves.size();
-        System.out.printf("Half-moves to perform: %d%n", halfMoves);
+        logger.info("Half-moves to perform: {}", halfMoves);
         final Board board = new Board();
         final var millisecondsBeforePlayingMoves = System.currentTimeMillis();
         for (final Move move : moves) {
@@ -71,8 +71,8 @@ class TestLibraryCarlosPerformancePass {
         final double perHalfMoveMilliseconds = millisecondDurationPlayingMoves / halfMoves;
 
         assertTrue(perHalfMoveMilliseconds < PER_HALF_MOVE_MAX_MILLISECONDS);
-        System.out.printf("Milliseconds per half-move: %f%n", millisecondDurationLoadPgn / halfMoves);
-        System.out.println();
+        logger.info("Milliseconds per half-move: {}", perHalfMoveMilliseconds);
+        logger.info("");
       }
     }
 
