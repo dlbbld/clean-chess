@@ -202,8 +202,8 @@ class TestLibraryCarlosThreefoldPass {
     assertFalse(isThreefold(moves));
   }
 
-  private static boolean isThreefold(String moves) {
-    final PgnFile pgnFile = LenientPgnParser.parseText(moves);
+  private static boolean isThreefold(String pgnText) {
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgnText);
     final com.dlb.chess.board.Board boardActual = PgnUtility.calculateBoardPerLastMove(pgnFile);
     return boardActual.isThreefoldRepetition();
   }
