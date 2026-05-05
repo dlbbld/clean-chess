@@ -23,28 +23,34 @@ import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
+import com.dlb.chess.utility.PgnUtility;
 import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
 
 public class PgnCreate {
 
   // per PGN standard, the maximum line length is 79 characters
-  private static final int MAX_LINE_LENGTH = 79;
+  public static final int MAX_LINE_LENGTH = 79;
 
   public static String createPgnFileString(ChessBoard board) {
     return createPgnFileString(createPgnFile(board));
   }
 
   public static String createPgnFileString(PgnFile pgnFile) {
-    return BasicUtility
-        .convertToString(calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.startFen(), pgnFile.halfMoveList()));
+    return appendEmptyLine(BasicUtility.convertToString(calculatePgnFileFileLines(pgnFile.tagList(),
+        pgnFile.leadingCommentary(), pgnFile.startFen(), pgnFile.halfMoveList())));
+  }
+
+  private static String appendEmptyLine(String text) {
+    return text + "\n";
   }
 
   public static List<String> createPgnFileLines(PgnFile pgnFile) {
-    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.startFen(), pgnFile.halfMoveList());
+    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.leadingCommentary(), pgnFile.startFen(),
+        pgnFile.halfMoveList());
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, Fen startFen,
+  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, String leadingCommentary, Fen startFen,
       List<PgnHalfMove> halfMoveList) {
 
     final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
@@ -59,10 +65,24 @@ public class PgnCreate {
     fileLines.add("");
 
     // add the moves and game termination marker
-    final List<String> movetextWithLineBreaks = calculateMovetextWithLineBreaks(startFen.fullMoveNumber(),
-        startFen.havingMove(), halfMoveList, resultTagValue);
+    final Movetext movetext = PgnCreate.calculateMovetext(startFen.fullMoveNumber(), startFen.havingMove(),
+        halfMoveList, resultTagValue);
 
-    fileLines.addAll(movetextWithLineBreaks);
+    final String movetextString = movetext.movetext();
+
+    // add the leading commentary if any as a comment before the movetext
+    String movetextIncludingLeadingCommentary;
+    if (!"".equals(leadingCommentary)) {
+      if (movetextString.isEmpty()) {
+        movetextIncludingLeadingCommentary = "{" + leadingCommentary + "}";
+      } else {
+        movetextIncludingLeadingCommentary = "{" + leadingCommentary + "} " + movetextString;
+      }
+    } else {
+      movetextIncludingLeadingCommentary = movetextString;
+    }
+
+    fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingLeadingCommentary, PgnCreate.MAX_LINE_LENGTH));
 
     // finally add an empty line
     fileLines.add("");
@@ -171,21 +191,13 @@ public class PgnCreate {
 
   }
 
-  private static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
+  public static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
       ResultTagValue resultTagValue) {
 
     final String movetextWithoutGameTerminationMarker = calculateMovetextWithoutGameTerminationMarker(fullMoveNumber,
         havingMove, halfMoveList);
     final var movetext = movetextWithoutGameTerminationMarker + " " + resultTagValue.getValue();
     return new Movetext(movetext);
-  }
-
-  private static List<String> calculateMovetextWithLineBreaks(int fullMoveNumber, Side havingMove,
-      List<PgnHalfMove> halfMoveList, ResultTagValue resultTagValue) {
-
-    final Movetext movetext = calculateMovetext(fullMoveNumber, havingMove, halfMoveList, resultTagValue);
-
-    return BasicUtility.calculateWrappedLines(movetext.movetext(), MAX_LINE_LENGTH);
   }
 
   public static PgnFile createPgnFile(ChessBoard board, List<Tag> tagList) {
