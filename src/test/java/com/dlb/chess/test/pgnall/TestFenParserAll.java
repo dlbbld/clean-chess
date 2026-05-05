@@ -35,7 +35,6 @@ class TestFenParserAll extends AbstractTestFenParser {
           case BASIC_CHECKMATE_WHITE:
           case BASIC_CHECKMATE_BLACK:
           case BASIC_STALEMATE:
-          case PARSER_FROM_FEN:
             break;
           // $CASES-OMITTED$
           default:

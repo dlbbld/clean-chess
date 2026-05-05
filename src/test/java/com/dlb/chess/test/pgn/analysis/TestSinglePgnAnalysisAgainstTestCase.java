@@ -15,7 +15,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestSinglePgnAnalysisAgainstTestCase extends AbstractPgnTest {
 
-  private static final String PGN_FILE_NAME = "03_claim_for_own_move_incorrect_castling_right_lost_for_king_move.pgn";
+  private static final String PGN_FILE_NAME = "various_pranav_savic_2021_incomplete_speculative_from_last_capture.pgn";
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestSinglePgnAnalysisAgainstTestCase.class);
 

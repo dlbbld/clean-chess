@@ -52,7 +52,6 @@ class TestLegalMovesAgainstCreatedUsingValidation {
           case BASIC_CHECKMATE_WHITE:
           case BASIC_CHECKMATE_BLACK:
           case BASIC_STALEMATE:
-          case PARSER_FROM_FEN:
             break;
           // $CASES-OMITTED$
           default:
@@ -179,8 +178,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
         if (boardPiece.getPieceType() == PieceType.PAWN
             && Rank.calculateIsPromotionRank(havingMove, toSquare.getRank())) {
           for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
-            final MoveSpecification promotionMove = new MoveSpecification(fromSquare, toSquare,
-                promotionPieceType);
+            final MoveSpecification promotionMove = new MoveSpecification(fromSquare, toSquare, promotionPieceType);
             try {
               ValidateNewMove.validateNewMove(board, promotionMove);
               listForSquare.add(promotionMove);
