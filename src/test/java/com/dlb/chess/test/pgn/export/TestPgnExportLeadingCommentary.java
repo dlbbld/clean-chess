@@ -70,6 +70,24 @@ class TestPgnExportLeadingCommentary {
 
   @SuppressWarnings("static-method")
   @Test
+  void testFromImportStrictHasLinebreaks() {
+
+    final var leadingCommentary = "This is the leading\ncommentary.";
+
+    final PgnFile fileImport = StrictPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " 1. e4 e5 *\n\n");
+    assertEquals(leadingCommentary, fileImport.leadingCommentary());
+
+    final String fileString = PgnCreate.createPgnFileString(fileImport);
+
+    final PgnFile fileExport = StrictPgnParser.parseText(fileString);
+
+    assertEquals(leadingCommentary, fileExport.leadingCommentary());
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testFromImportLenientHasMoves() {
 
     final var leadingCommentary = "This is the leading commentary.";
