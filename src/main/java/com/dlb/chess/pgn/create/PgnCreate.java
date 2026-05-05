@@ -53,8 +53,6 @@ public class PgnCreate {
   private static List<String> calculatePgnFileFileLines(List<Tag> tagList, String leadingCommentary, Fen startFen,
       List<PgnHalfMove> halfMoveList) {
 
-    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
-
     final List<String> fileLines = new ArrayList<>();
     // first add the existing tags
     for (final Tag tag : tagList) {
@@ -65,21 +63,22 @@ public class PgnCreate {
     fileLines.add("");
 
     // add the moves and game termination marker
+    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
     final Movetext movetext = PgnCreate.calculateMovetext(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList, resultTagValue);
 
-    final String movetextString = movetext.movetext();
+    final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
+        halfMoveList);
 
     // add the leading commentary if any as a comment before the movetext
     String movetextIncludingLeadingCommentary;
-    if (!"".equals(leadingCommentary)) {
-      if (movetextString.isEmpty()) {
-        movetextIncludingLeadingCommentary = "{" + leadingCommentary + "}";
-      } else {
-        movetextIncludingLeadingCommentary = "{" + leadingCommentary + "} " + movetextString;
-      }
+    if ("".equals(leadingCommentary)) {
+      movetextIncludingLeadingCommentary = moves + " " + resultTagValue.getValue();
+    } else if (moves.isEmpty()) {
+      movetextIncludingLeadingCommentary = "{" + leadingCommentary + "}" + " " + resultTagValue.getValue();
     } else {
-      movetextIncludingLeadingCommentary = movetextString;
+      movetextIncludingLeadingCommentary = "{" + leadingCommentary + "}" + " " + moves + " "
+          + resultTagValue.getValue();
     }
 
     fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingLeadingCommentary, PgnCreate.MAX_LINE_LENGTH));
@@ -191,7 +190,8 @@ public class PgnCreate {
 
   }
 
-  public static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
+  // includes the game termination marker by the PGN spec
+  private static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
       ResultTagValue resultTagValue) {
 
     final String movetextWithoutGameTerminationMarker = calculateMovetextWithoutGameTerminationMarker(fullMoveNumber,

@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
@@ -30,6 +31,49 @@ class TestCommentaryLenient {
   void v01_leadingCommentaryOnly() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{opening remark} 1. e4 e5 *\n\n");
     assertEquals("opening remark", file.leadingCommentary());
+    assertEquals(2, file.halfMoveList().size());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void v01_leadingCommentaryLongNoLinebreaks() {
+    final var leadingCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
+    assertEquals(leadingCommentary, file.leadingCommentary());
+    assertEquals(2, file.halfMoveList().size());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void v01_leadingCommentaryLongWithLinebreaks() {
+    final var leadingCommentaryExpected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    final var leadingCommentary = """
+        Lorem ipsum dolor sit amet,
+        consectetur adipiscing elit,
+        sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua.
+        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+        Duis aute irure dolor in reprehenderit in
+        voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+        Excepteur sint occaecat cupidatat non proident,
+        sunt in culpa qui officia deserunt mollit anim id est laborum.
+            """;
+    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
+    assertEquals(leadingCommentaryExpected, file.leadingCommentary());
+    assertEquals(2, file.halfMoveList().size());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void v01_leadingCommentaryOnlySpaces() {
+    final var leadingCommentary = "   ";
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
+    assertEquals(leadingCommentary, file.leadingCommentary());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -249,4 +293,16 @@ class TestCommentaryLenient {
     }
     assertTrue(isException, "Expected " + expected + " but parser accepted the input");
   }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void v11_commentaryWithLinebreaks() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4!? {spicy\n" + "groovy}" + " e5 *\n\n");
+    assertEquals("spicy\ngroovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("spicy groovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
+        NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
+  }
+
 }

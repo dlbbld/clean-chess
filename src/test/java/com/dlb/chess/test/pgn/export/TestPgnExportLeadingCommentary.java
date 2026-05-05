@@ -15,7 +15,7 @@ class TestPgnExportLeadingCommentary {
 
   @SuppressWarnings("static-method")
   @Test
-  void testFromImportStrict() {
+  void testFromImportStrictHasMoves() {
 
     final var leadingCommentary = "This is the leading commentary.";
 
@@ -25,7 +25,23 @@ class TestPgnExportLeadingCommentary {
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
-    assertTrue(fileString.contains(leadingCommentary));
+    final PgnFile fileExport = StrictPgnParser.parseText(fileString);
+
+    assertEquals(leadingCommentary, fileExport.leadingCommentary());
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testFromImportStrictHasNoMoves() {
+
+    final var leadingCommentary = "This is the leading commentary.";
+
+    final PgnFile fileImport = StrictPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
+    assertEquals(leadingCommentary, fileImport.leadingCommentary());
+
+    final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = StrictPgnParser.parseText(fileString);
 
@@ -35,7 +51,26 @@ class TestPgnExportLeadingCommentary {
 
   @SuppressWarnings("static-method")
   @Test
-  void testFromImportLenient() {
+  void testFromImportStrictLong() {
+
+    final var leadingCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+
+    final PgnFile fileImport = StrictPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
+    assertEquals(leadingCommentary, fileImport.leadingCommentary());
+
+    final String fileString = PgnCreate.createPgnFileString(fileImport);
+
+    final PgnFile fileExport = StrictPgnParser.parseText(fileString);
+
+    assertEquals(leadingCommentary, fileExport.leadingCommentary());
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testFromImportLenientHasMoves() {
 
     final var leadingCommentary = "This is the leading commentary.";
 
@@ -45,7 +80,42 @@ class TestPgnExportLeadingCommentary {
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
-    assertTrue(fileString.contains(leadingCommentary));
+    final PgnFile fileExport = LenientPgnParser.parseText(fileString);
+
+    assertEquals(leadingCommentary, fileExport.leadingCommentary());
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testFromImportLenientHasNoMoves() {
+
+    final var leadingCommentary = "This is the leading commentary.";
+
+    final PgnFile fileImport = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
+    assertEquals(leadingCommentary, fileImport.leadingCommentary());
+
+    final String fileString = PgnCreate.createPgnFileString(fileImport);
+
+    final PgnFile fileExport = LenientPgnParser.parseText(fileString);
+
+    assertEquals(leadingCommentary, fileExport.leadingCommentary());
+
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testFromImportLenientLong() {
+
+    final var leadingCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+
+    final PgnFile fileImport = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
+    assertEquals(leadingCommentary, fileImport.leadingCommentary());
+
+    final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = LenientPgnParser.parseText(fileString);
 
