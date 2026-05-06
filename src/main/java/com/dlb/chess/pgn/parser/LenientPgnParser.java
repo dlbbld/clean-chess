@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
@@ -24,6 +25,7 @@ import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
+import com.dlb.chess.pgn.parser.model.PgnCommentary;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.pgn.parser.sequential.PgnCharStream;
@@ -321,12 +323,12 @@ public final class LenientPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, String leadingCommentary,
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary leadingCommentary,
       @Nullable ResultTagValue terminationResult) {
   }
 
   private MovetextOutcome parseMovetext() {
-    var leadingCommentary = "";
+    var leadingCommentary = PgnCommentary.EMPTY;
     final List<PgnHalfMove> halfMoves = new ArrayList<>();
     @Nullable ResultTagValue terminationResult = null;
 
@@ -492,7 +494,7 @@ public final class LenientPgnParser {
       suffix = parseMoveSuffix(tokenizer.next().text());
     }
 
-    return new PgnHalfMove(san, suffix, "");
+    return new PgnHalfMove(san, suffix, PgnCommentary.EMPTY);
   }
 
   private static boolean isBareCheckOrMate(String text) {
@@ -505,11 +507,18 @@ public final class LenientPgnParser {
    * unclosed, nested, or stray closing brace — throws the corresponding validation error. Lenient here behaves the
    * same as strict: continuing past malformed commentary yields unreliable downstream results.
    */
-  private String consumeCommentaryOrThrow() {
+  private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
       case BRACE_COMMENT:
-        return token.text();
+        try {
+          // Lenient policy: substitute tab / newline / CR / CRLF with single spaces, then validate.
+          // Surviving control characters (e.g. bell, escape) still cause rejection via the constructor.
+          return PgnCommentary.fromLenientImport(token.text());
+        } catch (final PgnCommentaryValidationException pcve) {
+          throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
+              pcve.getMessage());
+        }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");

@@ -131,7 +131,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
       List<String> commentaryListExpected) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
         pgnFileName);
-    assertEquals(leadingCommentaryExpected, pgnFile.leadingCommentary());
+    assertEquals(leadingCommentaryExpected, pgnFile.leadingCommentary().value());
     assertEquals(sanListExpected, calculateSanList(pgnFile.halfMoveList()));
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
     assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));

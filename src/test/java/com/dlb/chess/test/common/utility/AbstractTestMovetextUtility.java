@@ -33,7 +33,7 @@ public abstract class AbstractTestMovetextUtility implements EnumConstants {
   public static List<String> calculateCommentaryList(List<PgnHalfMove> halfMoveList) {
     final List<String> commentaryList = new ArrayList<>();
     for (final PgnHalfMove halfMove : halfMoveList) {
-      commentaryList.add(halfMove.commentary());
+      commentaryList.add(halfMove.commentary().value());
     }
     return commentaryList;
   }

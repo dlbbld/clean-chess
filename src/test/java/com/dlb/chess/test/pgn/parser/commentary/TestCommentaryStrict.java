@@ -38,77 +38,84 @@ class TestCommentaryStrict {
   @Test
   void v1_leadingCommentaryOnly() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{opening remark} 1. e4 e5 *\n\n");
-    assertEquals("opening remark", file.leadingCommentary());
+    assertEquals("opening remark", file.leadingCommentary().value());
     assertEquals(2, file.halfMoveList().size());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v2_trailingCommentaryAfterWhiteMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {good opening} e5 *\n\n");
-    assertEquals("", file.leadingCommentary());
-    assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
+    assertEquals("", file.leadingCommentary().value());
+    assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v3_trailingCommentaryAfterBlackMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 {symmetric} 2. Nf3 Nc6 *\n\n");
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v4_commentaryAfterEveryHalfMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a} e5 {b} 2. Nf3 {c} Nc6 {d} *\n\n");
-    assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
-    assertEquals("c", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary());
-    assertEquals("d", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary());
+    assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
+    assertEquals("c", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
+    assertEquals("d", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v5_leadingAndTrailingCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{intro} 1. e4 {after-1-white} e5 *\n\n");
-    assertEquals("intro", file.leadingCommentary());
-    assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
+    assertEquals("intro", file.leadingCommentary().value());
+    assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v6_emptyCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {} e5 *\n\n");
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v7_commentaryWithPunctuationButNoBraces() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {special chars !? + # - / .} e5 *\n\n");
-    assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
+  /**
+   * Per the commentary contract, strict rejects newlines inside braces (FIDE/PGN-Standard whitespace handling
+   * leaves the choice of how to treat physical line breaks to the implementation; we reject as a strict-validity
+   * concern so that round-trip is byte-stable and downstream consumers see a single-line commentary string).
+   */
   @SuppressWarnings("static-method")
   @Test
-  void v8_multilineCommentary() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} e5 *\n\n");
-    assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+  void v8_multilineCommentaryRejected() {
+    final var thrown = org.junit.jupiter.api.Assertions.assertThrows(StrictPgnParserValidationException.class,
+        () -> StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} e5 *\n\n"));
+    assertEquals(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
+        thrown.getStrictPgnParserValidationProblem());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v9_commentaryAfterSuffixAnnotation() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4!? {spicy} e5 *\n\n");
-    assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
         NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
   }
@@ -117,7 +124,7 @@ class TestCommentaryStrict {
   @Test
   void v10_zeroMoveGameWithLeadingCommentaryOnly() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{no moves played} *\n\n");
-    assertEquals("no moves played", file.leadingCommentary());
+    assertEquals("no moves played", file.leadingCommentary().value());
     assertEquals(0, file.halfMoveList().size());
   }
 
@@ -248,6 +255,54 @@ class TestCommentaryStrict {
   void postTermination_randomSymbolIsRejected() {
     expectError(header("*") + "1. e4 e5 * garbage\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Forbidden-character contract — strict rejects tab / CR / LF / other control chars in commentary.
+  // The lenient parser substitutes tab / CR / LF / CRLF with single space; strict accepts neither.
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void forbidden_tabInLeadingCommentary() {
+    expectError(header("*") + "{a\tb} 1. e4 e5 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void forbidden_tabInMoveCommentary() {
+    expectError(header("*") + "1. e4 {a\tb} e5 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void forbidden_carriageReturnInLeadingCommentary() {
+    expectError(header("*") + "{a\rb} 1. e4 e5 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void forbidden_otherControlCharInCommentary() {
+    // Bell character (U+0007).
+    expectError(header("*") + "1. e4 {ab} e5 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void doubleSpacesInCommentaryArePreservedAsIs() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a  b} e5 *\n\n");
+    assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void doubleSpacesInLeadingCommentaryArePreservedAsIs() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "{line one  line two} 1. e4 e5 *\n\n");
+    assertEquals("line one  line two", file.leadingCommentary().value());
   }
 
   // -------------------------------------------------------------------------------------------------

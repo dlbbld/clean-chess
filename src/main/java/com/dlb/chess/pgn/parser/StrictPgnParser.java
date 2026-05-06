@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
@@ -23,6 +24,7 @@ import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.model.PgnCommentary;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
 import com.dlb.chess.pgn.parser.model.Tag;
@@ -360,12 +362,12 @@ public final class StrictPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, String leadingCommentary) {
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary leadingCommentary) {
   }
 
   private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
     // Leading commentary (optional).
-    var leadingCommentary = "";
+    var leadingCommentary = PgnCommentary.EMPTY;
     if (isBraceToken(tokenizer.peek().type())) {
       leadingCommentary = consumeCommentaryOrThrow();
       expectSpaceAfterComment();
@@ -417,7 +419,7 @@ public final class StrictPgnParser {
       expectInterTokenSeparatorOrMissingTermination(resultTagValue);
 
       // Optional brace commentary attached to this half-move.
-      var commentary = "";
+      var commentary = PgnCommentary.EMPTY;
       if (isBraceToken(tokenizer.peek().type())) {
         commentary = consumeCommentaryOrThrow();
         expectSpaceAfterComment();
@@ -438,11 +440,17 @@ public final class StrictPgnParser {
    * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. Throws the corresponding validation error
    * for each ill-formed brace variant — unclosed, nested, or stray closing brace.
    */
-  private String consumeCommentaryOrThrow() {
+  private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
       case BRACE_COMMENT:
-        return token.text();
+        try {
+          return new PgnCommentary(token.text());
+        } catch (final PgnCommentaryValidationException pcve) {
+          // Strict policy: tab/newline/CR/control inside commentary is rejected as a strict-parser error.
+          throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
+              pcve.getMessage());
+        }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");

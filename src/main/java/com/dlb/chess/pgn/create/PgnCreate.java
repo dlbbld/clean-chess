@@ -21,6 +21,7 @@ import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.enums.ResultTagValue;
 import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.PgnCommentary;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.utility.PgnUtility;
@@ -50,8 +51,8 @@ public class PgnCreate {
         pgnFile.halfMoveList());
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, String leadingCommentary, Fen startFen,
-      List<PgnHalfMove> halfMoveList) {
+  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary leadingCommentary,
+      Fen startFen, List<PgnHalfMove> halfMoveList) {
 
     final List<String> fileLines = new ArrayList<>();
     // first add the existing tags
@@ -70,14 +71,16 @@ public class PgnCreate {
     final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList);
 
-    // add the leading commentary if any as a comment before the movetext
-    String movetextIncludingLeadingCommentary;
-    if ("".equals(leadingCommentary)) {
+    // add the leading commentary if any as a comment before the movetext.
+    // PgnCommentary's value is contract-validated (no tab/newline/CR/control), so we can write it as-is.
+    final String leadingCommentaryValue = leadingCommentary.value();
+    final String movetextIncludingLeadingCommentary;
+    if (leadingCommentaryValue.isEmpty()) {
       movetextIncludingLeadingCommentary = moves + " " + resultTagValue.getValue();
     } else if (moves.isEmpty()) {
-      movetextIncludingLeadingCommentary = "{" + leadingCommentary + "}" + " " + resultTagValue.getValue();
+      movetextIncludingLeadingCommentary = "{" + leadingCommentaryValue + "}" + " " + resultTagValue.getValue();
     } else {
-      movetextIncludingLeadingCommentary = "{" + leadingCommentary + "}" + " " + moves + " "
+      movetextIncludingLeadingCommentary = "{" + leadingCommentaryValue + "}" + " " + moves + " "
           + resultTagValue.getValue();
     }
 
@@ -114,7 +117,7 @@ public class PgnCreate {
       if (boardHalfMove.havingMove() != Side.WHITE && boardHalfMove.havingMove() != Side.BLACK) {
         throw new ProgrammingMistakeException("The program created an inconsistent alternating halfmove list");
       }
-      halfMove = new PgnHalfMove(boardHalfMove.san(), MoveSuffixAnnotation.NONE, "");
+      halfMove = new PgnHalfMove(boardHalfMove.san(), MoveSuffixAnnotation.NONE, PgnCommentary.EMPTY);
       halfMoveList.add(halfMove);
     }
 
@@ -174,9 +177,11 @@ public class PgnCreate {
         result.append(halfMove.moveSuffixAnnotation().getSuffix());
       }
 
-      if (!halfMove.commentary().isBlank()) {
+      // PgnCommentary's value is contract-validated; emit as-is.
+      final String commentaryValue = halfMove.commentary().value();
+      if (!commentaryValue.isEmpty()) {
         result.append(" {");
-        result.append(halfMove.commentary());
+        result.append(commentaryValue);
         result.append("}");
       }
 
@@ -204,7 +209,7 @@ public class PgnCreate {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(tagList, board.getInitialFen(), "", halfMoveList);
+    return new PgnFile(tagList, board.getInitialFen(), PgnCommentary.EMPTY, halfMoveList);
   }
 
   public static PgnFile createPgnFile(ChessBoard board) {

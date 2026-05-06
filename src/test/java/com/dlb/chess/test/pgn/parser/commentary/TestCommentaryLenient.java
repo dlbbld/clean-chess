@@ -30,7 +30,7 @@ class TestCommentaryLenient {
   @Test
   void v01_leadingCommentaryOnly() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{opening remark} 1. e4 e5 *\n\n");
-    assertEquals("opening remark", file.leadingCommentary());
+    assertEquals("opening remark", file.leadingCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -41,7 +41,7 @@ class TestCommentaryLenient {
     assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, file.leadingCommentary());
+    assertEquals(leadingCommentary, file.leadingCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -63,7 +63,7 @@ class TestCommentaryLenient {
     assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentaryExpected, file.leadingCommentary());
+    assertEquals(leadingCommentaryExpected, file.leadingCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -73,7 +73,7 @@ class TestCommentaryLenient {
     final var leadingCommentary = "   ";
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, file.leadingCommentary());
+    assertEquals(leadingCommentary, file.leadingCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -81,7 +81,7 @@ class TestCommentaryLenient {
   @Test
   void v02_trailingCommentaryAfterWhiteMove() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {good opening} e5 *\n\n");
-    assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -89,7 +89,7 @@ class TestCommentaryLenient {
   void v03_trailingCommentaryAfterBlackMove() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 e5 {symmetric} 2. Nf3 Nc6 *\n\n");
-    assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
+    assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -97,10 +97,10 @@ class TestCommentaryLenient {
   void v04_commentaryAfterEveryHalfMove() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a} e5 {b} 2. Nf3 {c} Nc6 {d} *\n\n");
-    assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary());
-    assertEquals("c", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary());
-    assertEquals("d", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary());
+    assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
+    assertEquals("c", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
+    assertEquals("d", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -108,15 +108,15 @@ class TestCommentaryLenient {
   void v05_leadingAndTrailingCommentary() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro} 1. e4 {after-1-white} e5 *\n\n");
-    assertEquals("intro", file.leadingCommentary());
-    assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("intro", file.leadingCommentary().value());
+    assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v06_emptyCommentary() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {} e5 *\n\n");
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -124,21 +124,26 @@ class TestCommentaryLenient {
   void v07_commentaryWithPunctuationButNoBraces() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {special chars !? + # - / .} e5 *\n\n");
-    assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
+  /**
+   * Per the commentary contract, lenient substitutes newline (\n), carriage return (\r), CRLF (\r\n) and tab (\t)
+   * with single spaces and stores the result. The substitution is character-by-character (CRLF as a single unit),
+   * preserving space counts elsewhere — multiple consecutive spaces are NOT collapsed.
+   */
   @SuppressWarnings("static-method")
   @Test
-  void v08_multilineCommentary() {
+  void v08_multilineCommentaryNewlineSubstitutedWithSpace() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {line one\nline two} e5 *\n\n");
-    assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("line one line two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v09_commentaryAfterSuffixAnnotation() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4!? {spicy} e5 *\n\n");
-    assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
         NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
   }
@@ -147,7 +152,7 @@ class TestCommentaryLenient {
   @Test
   void v10_zeroMoveGameWithLeadingCommentaryOnly() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{no moves played} *\n\n");
-    assertEquals("no moves played", file.leadingCommentary());
+    assertEquals("no moves played", file.leadingCommentary().value());
     assertEquals(0, file.halfMoveList().size());
   }
 
@@ -276,6 +281,69 @@ class TestCommentaryLenient {
   void postTermination_randomSymbolIsRejected() {
     expectError(PgnTestHelper.header("*") + "1. e4 e5 * garbage\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Whitespace substitution contract — lenient substitutes tab / CR / LF / CRLF with single space,
+  // preserves space counts (does NOT collapse runs), still rejects non-whitespace control characters.
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void substitution_tabInMoveCommentaryBecomesSingleSpace() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {a\tb} e5 *\n\n");
+    assertEquals("a b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void substitution_carriageReturnInMoveCommentaryBecomesSingleSpace() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
+    assertEquals("a b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void substitution_crlfBecomesSingleSpace() {
+    // CRLF is recognised as a single newline unit and substituted with one space — not two.
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {a\r\nb} e5 *\n\n");
+    assertEquals("a b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void substitution_doubleSpaceFromConsecutiveTabsIsPreserved() {
+    // Two tabs become two spaces. Lenient does NOT collapse consecutive spaces.
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {a\t\tb} e5 *\n\n");
+    assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void substitution_tabInLeadingCommentary() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{intro\tnote} 1. e4 e5 *\n\n");
+    assertEquals("intro note", file.leadingCommentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void substitution_doubleSpacesInSourceArePreservedAsIs() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {a  b} e5 *\n\n");
+    assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void forbidden_otherControlCharStillRejected() {
+    // Bell (U+0007) is not in the substitution set; it remains a forbidden control character even for lenient.
+    expectError(PgnTestHelper.header("*") + "1. e4 {ab} e5 *\n\n",
+        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
   }
 
   // -------------------------------------------------------------------------------------------------
