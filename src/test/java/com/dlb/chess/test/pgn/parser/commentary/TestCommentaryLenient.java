@@ -45,10 +45,15 @@ class TestCommentaryLenient {
     assertEquals(2, file.halfMoveList().size());
   }
 
+  /**
+   * Per the no-trim policy in the commentary contract, lenient preserves any trailing whitespace from the source.
+   * The Java text-block below ends with a newline before the closing {@code """}; lenient substitutes that to a
+   * single trailing space, so {@code expected} also ends with a single trailing space.
+   */
   @SuppressWarnings("static-method")
   @Test
   void v01_leadingCommentaryLongWithLinebreaks() {
-    final var leadingCommentaryExpected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    final var leadingCommentaryExpected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ";
     final var leadingCommentary = """
         Lorem ipsum dolor sit amet,
         consectetur adipiscing elit,
@@ -367,8 +372,8 @@ class TestCommentaryLenient {
   void v11_commentaryWithLinebreaks() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4!? {spicy\n" + "groovy}" + " e5 *\n\n");
-    assertEquals("spicy\ngroovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
-    assertEquals("spicy groovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary());
+    // Per the commentary contract, lenient substitutes the embedded \n with a single space.
+    assertEquals("spicy groovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
         NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
   }
