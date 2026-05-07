@@ -215,6 +215,8 @@ The library implements the [Chess Unwinnability Analyzer (CHA)](https://github.c
 A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
 If the position is unwinnable for both players, it's a dead position.
 
+> **Note:** Unwinnable-position detection (CHA algorithm) is not automatically checked after every move for performance reasons. Therefore, games may continue in theoretically dead positions unless the check is triggered manually.
+
 ## Methods
 The library provides an implementation of CHA. So for both situations, there is a quick and a full method.
 
