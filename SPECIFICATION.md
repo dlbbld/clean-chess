@@ -211,57 +211,30 @@ Packages depend in roughly that order (top to bottom).
 
 ---
 
-## 6. PGN — design decisions
+## 6. PGN — intentional deviations from the specification
 
-The PGN section is the most spec-heavy area of the library because PGN is a textual format with sharp edges and a real specification document to reconcile against. The decisions below capture the *why*; the code is the authoritative *what*.
+The library implements the PGN specification closely. Two areas are intentional departures, in both cases following **python-chess** as the de-facto reference (and, for pre-game commentary, also **Lichess**), where the formal spec is silent, ambiguous, or marked as not fully defined.
 
-### 6.1 Commentary contract
+### 6.1 Newlines and tabs preserved in commentary content
 
-`PgnCommentary` is the value object for `{...}` commentary content (both pre-game commentary on `PgnFile` and trailing commentary on each `PgnHalfMove`).
+The PGN specification's strict export format implies that brace commentary should fit on a single line — newlines normalised to spaces, non-printing characters generally absent. Two factors qualify that:
 
-**Forbidden content:**
+- The export format itself is explicitly noted in the spec as **not fully defined**.
+- The strict prohibition on non-printing characters in the spec applies to **string tokens** (tag values), not to brace commentary content. The commentary case is silent.
 
-- `}` — would terminate the `{...}` grammar on export.
-- `\r` — the model invariant is canonical-LF (see §6.4); CR cannot reach the model from a parser path, and direct construction with `\r` is rejected for symmetry.
-- All `Cc` control characters except `\t` and `\n`.
-- Lone surrogates (`Cs`), unassigned code points (`Cn`), private-use code points (`Co`).
+clean-chess takes the more permissive (and more useful) reading: **`\t` and `\n` inside `{...}` commentary are content**, preserved verbatim through `parse → export → parse`. The rationale is round-trip fidelity for real-world PGN, where comments often carry multi-line annotation. This matches python-chess.
 
-**Allowed content:**
+The library still rejects malformed Unicode (lone surrogates, unassigned code points) and other control characters (e.g. bell, escape). The deviation is specifically about tab and LF; CR / CRLF are normalised to LF on input, so the model never carries CR directly.
 
-- All printable Unicode — letters, marks, numbers, punctuation, symbols, separators, and format characters (zero-width joiner, BOM, bidi marks).
-- `\t` and `\n` (the PGN spec restricts non-printing characters from *string tokens*, but is silent on commentary content; we follow python-chess and Lichess in preserving these).
-- `{` — per PGN spec §8.2.5 ("a left brace character appearing in a brace comment loses its special meaning"), an inner `{` is content. Both parsers consume it as such; only `}` closes a comment.
+### 6.2 Pre-game commentary
 
-The contract is enforced in `PgnCommentary`'s compact constructor; validation iterates by Unicode code point so supplementary characters (emoji, rare scripts) round-trip cleanly.
+The PGN specification defines brace commentary attached to half-moves, but **does not formally specify a "pre-game" commentary slot** — commentary that appears between the tag pair section and the first move. python-chess exposes this as `Game.comment`; Lichess supports it on import.
 
-### 6.2 Move-number indicator after intervening commentary (T-002)
+clean-chess follows the same convention: `PgnFile.pregameCommentary()` carries any `{...}` content found before the first half-move, validated under the same commentary contract as move-attached commentary. This is an additive extension rather than a contradiction — a PGN that uses pre-game commentary remains well-formed for any reader that ignores it; readers that recognise it gain a structured place for game-level annotation.
 
-PGN spec §8.2.2 case 1 requires an explicit `N...` move-number indicator before a Black move when commentary intervenes between the previous White move and that Black move. Without the indicator the move-text is ambiguous.
+### 6.3 Conformance for everything else
 
-| Parser | Indicator present | Indicator missing |
-|---|---|---|
-| Strict | required (correct number); accepts | rejected |
-| Lenient | accepted | accepted |
-
-The exporter (`PgnCreate`) always emits the indicator. Mirrors python-chess's `force_movenumber` flag.
-
-### 6.3 Inner brace as content (T-003)
-
-Per PGN spec §8.2.5, an inner `{` inside an open brace comment is content, not a nested-comment opener. Both parsers consume it as a literal; only `}` closes a comment. Commentary cannot nest, but `{` inside content is harmless.
-
-### 6.4 Canonical-LF newlines (T-005)
-
-All PGN text handled by the library uses **LF (`\n`) as the canonical newline**, internally and on export.
-
-- **Input normalisation**: both parsers normalise `\r\n` and lone `\r` to `\n` at the constructor before tokenisation. Implementation: `NewlineNormalization.toLf(String)`.
-- **Model invariant**: `PgnCommentary` forbids `\r` in content. The invariant is symmetric — no parser path can produce `\r`, and direct construction with `\r` throws.
-- **Exporter**: `PgnCreate` writes only `\n`. CRLF input round-trips to LF in the exported PGN. There is no platform-dependent line-ending behaviour.
-
-### 6.5 Brace-aware wrap
-
-`PgnUtility.calculateWrappedLines` treats each `{...}` region as a single atom — spaces inside commentary are content, never wrap candidates. A brace region that exceeds `MAX_LINE_LENGTH` (79, the PGN export-format guideline) is emitted on its own line rather than broken. Matches python-chess's "long comment produces a long line, the 79-char guideline is a soft target".
-
-With this in place, `parse → export → parse` is byte-stable for arbitrarily long commentary content (subject to the CR/CRLF normalisation in §6.4).
+The rest of the library's PGN handling follows the specification: brace-grammar rules, move-number indicators (PGN §8.2.2), inner-brace-as-content (PGN §8.2.5), seven-tag-roster requirements, FIDE game-termination markers, the strict-vs-import format split. Implementation-level decisions in these areas are captured in code comments tagged `T-002`, `T-003`, `T-005` etc. for traceability — they are not reproduced here because the spec already documents the *what*; the code is the authoritative *how*.
 
 ---
 
