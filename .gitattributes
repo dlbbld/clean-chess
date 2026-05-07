@@ -1,0 +1,33 @@
+# Repo-wide line-ending normalisation: LF on all platforms, on-disk and in-index.
+# Aligns with the PGN parser's canonical-LF model invariant (T-005).
+#
+# Rule: every text file is normalised to LF in the working tree and the index, regardless of
+# platform. Git auto-detects text vs. binary; explicit exceptions below cover the cases where
+# CRLF (or mixed line endings) must be preserved.
+
+* text=auto eol=lf
+
+# Windows-only shell scripts must keep CRLF — cmd.exe rejects LF-only .bat/.cmd files.
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# PGN fixtures that deliberately use non-LF line endings to verify the lenient parser's
+# tolerance for Windows / mixed line endings. Marked `-text` so git treats them as opaque
+# bytes — neither the index nor the working tree may be normalised.
+src/test/resources/pgnParser/lenient/lineBreaks/02_windows.pgn -text
+src/test/resources/pgnParser/lenient/lineBreaks/03_mixed.pgn -text
+
+# Common binary types — flagged defensively so git never tries to normalise them, even if the
+# auto-detection misjudges a particular file.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.ico  binary
+*.pdf  binary
+*.jar  binary
+*.zip  binary
+*.gz   binary
+*.tar  binary
+*.7z   binary
+*.class binary
