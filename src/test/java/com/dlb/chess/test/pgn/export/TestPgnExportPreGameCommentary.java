@@ -93,7 +93,7 @@ class TestPgnExportPreGameCommentary {
   @Test
   void testFromImportStrictWithLinebreakIsPreservedThroughRoundTrip() {
 
-    final var pregameCommentary = "This is the leading\ncommentary.";
+    final var pregameCommentary = "This is the pregame\ncommentary.";
 
     final PgnFile fileImport = StrictPgnParser
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
