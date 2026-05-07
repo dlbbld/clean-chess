@@ -1,4 +1,4 @@
-package com.dlb.chess.test.common.utility;
+package com.dlb.chess.test.pgn.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -13,7 +13,7 @@ import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
+import com.dlb.chess.test.common.utility.AbstractTestMovetextUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
@@ -21,7 +21,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
  * (pregame commentary success/exception, non-pregame-commentary success/exception, combined commentary success) are now
  * covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored here.
  */
-class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
+class TestStrictPgnParserMoveSuffixAnnotation extends AbstractTestMovetextUtility {
 
   private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = NonNullWrapperCommon
       .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "movementSpecification");
