@@ -64,9 +64,39 @@ The PGN standard restricts non-printing characters from *string tokens* (tag val
 
 For any input that satisfies the contract, `parse → export → parse` produces an equal model on both sides for short comments (any length up to one-physical-line in the export). For long comments that get wrapped at `MAX_LINE_LENGTH`, the round-trip is currently *not* byte-stable because `PgnUtility.calculateWrappedLines` may insert a newline at a space boundary inside `{...}`. This is tracked as a follow-up (brace-aware wrap) — when the wrap stops breaking inside braces, byte-stability is restored for arbitrary lengths.
 
+### Move-number indicator after intervening commentary
+
+PGN spec §8.2.2 case 1 requires an explicit `N...` move-number indicator before a Black move when commentary intervenes between the previous White move and that Black move. Without the indicator, a reader scanning the move-text cannot disambiguate "trailing commentary on White's move, then Black's response" from "leading commentary on a new full-move pair, then White's move."
+
+Applies to:
+
+- The strict parser (`StrictPgnParser`).
+- The lenient parser (`LenientPgnParser`).
+- The exporter (`PgnCreate`).
+
+#### Parser rules
+
+| Parser | Indicator present | Indicator missing |
+|---|---|---|
+| Strict | Accepted. The full-move number must equal the current full-move number. A wrong number (e.g. `2...` where `1...` was expected) surfaces with the same dedicated category as a missing indicator. | Rejected with `MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY`. |
+| Lenient | Accepted. The indicator is consumed and discarded — same code path as any other move-number token. | Accepted. Real-world PGN sources frequently omit the indicator and the lenient parser must tolerate that. |
+
+The rule fires only when commentary actually intervened on the previous (White) move. A plain `1. e4 e5` continues to parse without any indicator. Commentary on a Black move does not trigger the rule — the next move is White's, which already requires its own move-number for an unrelated reason.
+
+#### Exporter behavior
+
+`PgnCreate.calculateMovetextWithoutGameTerminationMarker` always emits the `N...` indicator before a Black move when the previous half-move had attached commentary. The exporter never produces output that the strict parser would reject for this reason.
+
+This mirrors python-chess's `force_movenumber` flag: tools that import lenient input then re-export get back a strict-valid PGN.
+
+#### Round-trip semantics
+
+- **Strict input → export → strict re-parse.** Byte-stable.
+- **Lenient input without indicator → export → strict re-parse.** Not byte-stable on the move-text bytes (the export adds the indicator), but the parsed model is equal on both sides.
+- **Lenient input with indicator → export → strict re-parse.** Byte-stable.
+
 ### Open follow-ups
 
 - **Brace-aware wrap.** `PgnUtility.calculateWrappedLines` currently splits on space without awareness of `{...}` regions. For long single-line commentary, this transforms internal spaces into newlines, producing valid (per the new contract) but content-different output on round-trip. Fix: don't break inside `{...}`. Mirrors python-chess's "long comment produces a long line, accepting the 80-char file-export-format guideline as a soft target." Tests `testFromImportStrictLong` and `testFromImportLenientLong` are `@Disabled` until this lands.
-- **Move-number-after-commentary (T-002).** PGN spec §8.2.2 case 1 requires emitting `N...` before a Black move when commentary intervenes between the previous White move and this Black move. Strict parser must require the indicator on input; lenient must accept both forms (with and without). Export must always emit it (mirroring python-chess's `force_movenumber` flag). Not yet implemented.
 - **Spec-compliant brace-comment parsing (T-003).** The PGN spec says *"a left brace character appearing in a brace comment loses its special meaning and is ignored"* — i.e., `{` inside a comment is content, not a nested-comment error. Both parsers currently reject this case. Open question on the value object's policy for `{` in content if/when this lands.
 - **Rename `leadingCommentary` → `preGameCommentary` (T-004).** Mostly mechanical. The current name is fine but `preGameCommentary` reads more clearly and matches the conceptual position (before the game starts).

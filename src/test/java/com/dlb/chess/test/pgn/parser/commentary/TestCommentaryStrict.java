@@ -47,7 +47,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void v2_trailingCommentaryAfterWhiteMove() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {good opening} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {good opening} 1... e5 *\n\n");
     assertEquals("", file.leadingCommentary().value());
     assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -66,7 +66,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void v4_commentaryAfterEveryHalfMove() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a} e5 {b} 2. Nf3 {c} Nc6 {d} *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a} 1... e5 {b} 2. Nf3 {c} 2... Nc6 {d} *\n\n");
     assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
     assertEquals("c", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
@@ -76,7 +76,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void v5_leadingAndTrailingCommentary() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "{intro} 1. e4 {after-1-white} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "{intro} 1. e4 {after-1-white} 1... e5 *\n\n");
     assertEquals("intro", file.leadingCommentary().value());
     assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -85,7 +85,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void v6_emptyCommentary() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {} 1... e5 *\n\n");
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
@@ -93,7 +93,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void v7_commentaryWithPunctuationButNoBraces() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {special chars !? + # - / .} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {special chars !? + # - / .} 1... e5 *\n\n");
     assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -105,14 +105,14 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void v8_multilineCommentaryPreservedVerbatim() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} 1... e5 *\n\n");
     assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v9_commentaryAfterSuffixAnnotation() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4!? {spicy} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4!? {spicy} 1... e5 *\n\n");
     assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
         NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
@@ -208,7 +208,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void r4_braceBeforeBlackSan() {
-    expectError(header("*") + "1. e4 {c1} {c2} e5 *\n\n",
+    expectError(header("*") + "1. e4 {c1} 1... {c2} e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_ALLOWED_IN_SAN);
   }
 
@@ -271,7 +271,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void tabInMoveCommentaryIsPreserved() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a\tb} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a\tb} 1... e5 *\n\n");
     assertEquals("a\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -293,7 +293,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void doubleSpacesInCommentaryArePreservedAsIs() {
-    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a  b} e5 *\n\n");
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a  b} 1... e5 *\n\n");
     assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -302,6 +302,70 @@ class TestCommentaryStrict {
   void doubleSpacesInLeadingCommentaryArePreservedAsIs() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{line one  line two} 1. e4 e5 *\n\n");
     assertEquals("line one  line two", file.leadingCommentary().value());
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // T-002 — move-number indicator after intervening commentary (PGN spec §8.2.2 case 1)
+  //
+  // When commentary intervenes between the previous White move and the next Black move, the strict parser REQUIRES
+  // an explicit "N..." move-number indicator before the Black move. This mirrors python-chess's `force_movenumber`
+  // export behavior and the spec's literal phrasing. The lenient parser accepts both forms (with and without the
+  // indicator) — see TestCommentaryLenient.
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_rejectMissingMoveNumberAfterCommentaryOnWhite() {
+    // Canonical violation: commentary on White's move, then Black's move with no "1..." indicator. Strict must
+    // reject this with the dedicated category; the previous (non-T-002) categorization would have classified
+    // this differently or accepted it.
+    expectError(header("*") + "1. e4 {after-white} e5 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_rejectMissingMoveNumberAfterCommentaryOnWhiteHigherFullMoveNumber() {
+    // The required indicator is the current full-move number followed by "...". Verify it's not hardcoded to "1".
+    expectError(header("*") + "1. e4 e5 2. Nf3 {after-white-2} Nc6 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_acceptCanonicalMoveNumberAfterCommentaryOnWhite() {
+    // Canonical acceptance: "1..." indicator present after intervening commentary.
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {after-white} 1... e5 *\n\n");
+    assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_rejectWrongMoveNumberAfterCommentaryOnWhite() {
+    // Indicator present but wrong number — strict must reject. Surfaces with the same dedicated category as
+    // a missing indicator (same defect class: "the required indicator is not the one we found").
+    expectError(header("*") + "1. e4 {after-white} 2... e5 *\n\n",
+        StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_noIndicatorRequiredWhenNoCommentaryIntervenes() {
+    // Sanity check that T-002 only fires when commentary actually intervened. A plain "1. e4 e5" must still parse
+    // — the indicator must NOT be required when there's no intervening commentary.
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 *\n\n");
+    assertEquals(2, file.halfMoveList().size());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_indicatorNotRequiredWhenCommentaryIsOnBlackMove() {
+    // Commentary on Black's move does not trigger T-002 — the next move is a White move and already requires
+    // its own move number for an unrelated reason.
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 {after-black} 2. Nf3 *\n\n");
+    assertEquals("after-black", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
+    assertEquals("Nf3", NonNullWrapperCommon.get(file.halfMoveList(), 2).san());
   }
 
   // -------------------------------------------------------------------------------------------------

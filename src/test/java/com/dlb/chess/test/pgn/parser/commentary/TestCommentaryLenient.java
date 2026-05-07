@@ -349,6 +349,43 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
+  // T-002 — move-number indicator after intervening commentary
+  //
+  // Lenient must accept BOTH forms: with the "N..." indicator (canonical, what the strict parser requires) and
+  // without (real-world PGN that omits the indicator). The strict-parser companion test in TestCommentaryStrict
+  // covers the rejection side.
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_acceptCanonicalMoveNumberAfterCommentaryOnWhite() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {after-white} 1... e5 *\n\n");
+    assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_acceptMissingMoveNumberAfterCommentaryOnWhite() {
+    // Without "1..." indicator — strict rejects, lenient accepts. Real-world PGN sources frequently omit the
+    // indicator since many tools do not enforce it.
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {after-white} e5 *\n\n");
+    assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t002_acceptMissingMoveNumberAfterCommentaryAtHigherFullMoveNumber() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 {after-white-2} Nc6 *\n\n");
+    assertEquals("after-white-2", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
+    assertEquals("Nc6", NonNullWrapperCommon.get(file.halfMoveList(), 3).san());
+  }
+
+  // -------------------------------------------------------------------------------------------------
   // Helpers
   // -------------------------------------------------------------------------------------------------
 

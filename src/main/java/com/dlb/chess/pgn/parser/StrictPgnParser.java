@@ -388,6 +388,11 @@ public final class StrictPgnParser {
       return new MovetextOutcome(halfMoves, leadingCommentary);
     }
 
+    // Tracks whether the last completed half-move had attached commentary. Per PGN spec §8.2.2 case 1, an
+    // intervening commentary between White's move and Black's move requires the next Black move to be preceded
+    // by a "N..." move-number indicator.
+    boolean priorCommentaryAttached = false;
+
     while (true) {
       // Termination marker ends the movetext — checked first so the loop terminates before we try to read
       // non-existent move-number / half-move tokens.
@@ -397,12 +402,27 @@ public final class StrictPgnParser {
         return new MovetextOutcome(halfMoves, leadingCommentary);
       }
 
-      // Catch illegal move-number-before-black-non-initial here, before expectMoveNumber is skipped.
+      // Move-number handling for non-initial Black moves splits two ways:
+      //   (a) Commentary intervened on the previous (White) move → "N..." indicator REQUIRED (PGN spec §8.2.2).
+      //   (b) No commentary intervened → no move-number is allowed.
       if (!isFirstMove && havingMove == Side.BLACK) {
-        final PgnTokenType t = tokenizer.peek().type();
-        if (t == PgnTokenType.MOVE_NUMBER_WHITE || t == PgnTokenType.MOVE_NUMBER_BLACK) {
-          throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
-              "Move number specified for Black non initial move.");
+        if (priorCommentaryAttached) {
+          final PgnToken token = tokenizer.peek();
+          final String expected = HalfMoveUtility
+              .calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber, Side.BLACK);
+          if (token.type() != PgnTokenType.MOVE_NUMBER_BLACK || !token.text().equals(expected)) {
+            throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY,
+                "Black move after intervening commentary requires move-number indicator \"" + expected + "\".");
+          }
+          tokenizer.next();
+          expectInterTokenSpace(StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT,
+              "A move number must be followed by a single space.");
+        } else {
+          final PgnTokenType t = tokenizer.peek().type();
+          if (t == PgnTokenType.MOVE_NUMBER_WHITE || t == PgnTokenType.MOVE_NUMBER_BLACK) {
+            throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
+                "Move number specified for Black non initial move.");
+          }
         }
       }
 
@@ -423,6 +443,9 @@ public final class StrictPgnParser {
       if (isBraceToken(tokenizer.peek().type())) {
         commentary = consumeCommentaryOrThrow();
         expectSpaceAfterComment();
+        priorCommentaryAttached = true;
+      } else {
+        priorCommentaryAttached = false;
       }
 
       halfMoves.add(new PgnHalfMove(sanAndSuffix.san(), sanAndSuffix.suffix(), commentary));

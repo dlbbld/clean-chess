@@ -157,17 +157,26 @@ public class PgnCreate {
     var currentFullMoveNumber = fullMoveNumber;
     Side currentHavingMove = havingMove;
     var isFirstMove = true;
+    // Tracks whether the previous half-move had attached commentary. Per PGN spec §8.2.2 case 1, an intervening
+    // commentary between White's move and Black's move requires emitting "N..." before Black's move.
+    var priorCommentaryAttached = false;
     for (final PgnHalfMove halfMove : halfMoveList) {
 
-      // write first move number (before first move which can be White or Black)
+      // Emit the move-number indicator in the three cases the PGN export-format requires it:
+      //   (i)  before the very first half-move (always — White or Black depending on starting FEN);
+      //   (ii) before every White move (continuation);
+      //   (iii) before a Black move when commentary intervened on the previous White move (PGN spec §8.2.2).
       if (isFirstMove) {
         isFirstMove = false;
         final var fullMoveNumberPart = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber,
             currentHavingMove);
         result.append(fullMoveNumberPart);
       } else if (currentHavingMove == Side.WHITE) {
-        // write following move numbers (before White move)
         final var fullMoveNumberPart = currentFullMoveNumber + ".";
+        result.append(" ").append(fullMoveNumberPart);
+      } else if (priorCommentaryAttached) {
+        // Black move after intervening commentary on White's move — emit "N..." indicator.
+        final var fullMoveNumberPart = currentFullMoveNumber + "...";
         result.append(" ").append(fullMoveNumberPart);
       }
 
@@ -183,6 +192,9 @@ public class PgnCreate {
         result.append(" {");
         result.append(commentaryValue);
         result.append("}");
+        priorCommentaryAttached = true;
+      } else {
+        priorCommentaryAttached = false;
       }
 
       // fullMoveNumber is incremented after Black's move
