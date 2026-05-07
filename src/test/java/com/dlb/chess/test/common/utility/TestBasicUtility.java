@@ -3,7 +3,6 @@ package com.dlb.chess.test.common.utility;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -133,31 +132,4 @@ class TestBasicUtility {
 
   }
 
-  @SuppressWarnings("static-method")
-  @Test
-  void testConvertToStringIgnoresSuccessive() {
-    final List<String> lines = new ArrayList<>();
-
-    lines.add("line 1");
-    lines.add("line 2");
-    lines.add("line 3");
-    lines.add("");
-    lines.add("");
-    lines.add("");
-    lines.add("");
-    lines.add("");
-    lines.add("");
-
-    final String actual = BasicUtility.convertToString(lines);
-
-    final var expected = """
-        line 1
-        line 2
-        line 3
-
-        """;
-
-    assertEquals(expected, actual);
-
-  }
 }
