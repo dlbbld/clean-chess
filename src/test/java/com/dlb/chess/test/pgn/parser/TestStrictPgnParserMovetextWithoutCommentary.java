@@ -1,42 +1,18 @@
-package com.dlb.chess.test.common.utility;
+package com.dlb.chess.test.pgn.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 
-/**
- * Partial restoration of the original {@code TestMovetextUtilityUsingText}. The old version drove the now-deleted
- * {@code MovetextUtility.parseMovetextAfterInitialComment(String, int, Side, boolean)} API directly with raw movetext
- * bodies and exercised many error-category nuances of that utility.
- *
- * <p>
- * What's restored here: the happy-path {@code testInitialWithoutCommentary} cases from initial position, driven
- * end-to-end against the sequential strict parser by wrapping each body in a minimal seven-tag-roster PGN. These still
- * add value because they combine many small movetext syntax shapes in inline form.
- *
- * <p>
- * What's intentionally not restored:
- * <ul>
- * <li>{@code testInitialWithCommentary}, {@code testNonInitialWithCommentary}, {@code testInitialAll},
- * {@code testNonInitialAll} — commentary-specific; covered by
- * {@code com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict}.
- * <li>{@code testInitialException}, {@code testNonInitialException} — extensive category assertions that map to the old
- * parser's error granularity. The sequential strict parser uses finer-grained categories (e.g. the first-move mismatch
- * surfaces as {@code MOVETEXT_MOVE_NUMBER_DOES_NOT_BEGIN_WITH_WHITE_MOVE} rather than the generic
- * {@code _DOES_NOT_BEGIN_WITH_CORRECT}). Equivalent coverage is now in {@code TestStrictPgnParserNotSanException}
- * driven by the {@code exception/notSan} corpus.
- * <li>{@code testNonInitialWithoutCommentary} — required constructing a valid FEN for each arbitrary starting move
- * number / side-to-move combination that makes the subsequent moves legal. That work is covered by
- * {@code TestStrictPgnParserFromCustomPosition} and {@code TestStrictPgnParserFromInitialPositionUsingFen}.
- * </ul>
- */
-class TestMovetextUtilityUsingText extends AbstractTestMovetextUtility {
+class TestStrictPgnParserMovetextWithoutCommentary {
 
   @SuppressWarnings("static-method")
   @Test
@@ -91,4 +67,13 @@ class TestMovetextUtilityUsingText extends AbstractTestMovetextUtility {
 
         """;
   }
+
+  private static List<String> calculateSanList(List<PgnHalfMove> halfMoveList) {
+    final List<String> sanList = new ArrayList<>();
+    for (final PgnHalfMove halfMove : halfMoveList) {
+      sanList.add(halfMove.san());
+    }
+    return sanList;
+  }
+
 }

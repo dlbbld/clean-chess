@@ -4,24 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
+import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.common.utility.AbstractTestMovetextUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
-/**
- * Restored non-commentary portion of the original {@code TestMoveTextUtilityUsingPgn}. Commentary-specific tests
- * (pregame commentary success/exception, non-pregame-commentary success/exception, combined commentary success) are now
- * covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored here.
- */
-class TestStrictPgnParserMoveSuffixAnnotation extends AbstractTestMovetextUtility {
+class TestStrictPgnParserMoveSuffixAnnotation {
 
   private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = NonNullWrapperCommon
       .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "moveSuffixAnnotation");
@@ -135,5 +131,29 @@ class TestStrictPgnParserMoveSuffixAnnotation extends AbstractTestMovetextUtilit
     assertEquals(sanListExpected, calculateSanList(pgnFile.halfMoveList()));
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
     assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));
+  }
+
+  private static List<String> calculateSanList(List<PgnHalfMove> halfMoveList) {
+    final List<String> sanList = new ArrayList<>();
+    for (final PgnHalfMove halfMove : halfMoveList) {
+      sanList.add(halfMove.san());
+    }
+    return sanList;
+  }
+
+  private static List<MoveSuffixAnnotation> calculateMoveSuffixAnnotationList(List<PgnHalfMove> halfMoveList) {
+    final List<MoveSuffixAnnotation> moveSuffixAnnotationList = new ArrayList<>();
+    for (final PgnHalfMove halfMove : halfMoveList) {
+      moveSuffixAnnotationList.add(halfMove.moveSuffixAnnotation());
+    }
+    return moveSuffixAnnotationList;
+  }
+
+  private static List<String> calculateCommentaryList(List<PgnHalfMove> halfMoveList) {
+    final List<String> commentaryList = new ArrayList<>();
+    for (final PgnHalfMove halfMove : halfMoveList) {
+      commentaryList.add(halfMove.commentary().value());
+    }
+    return commentaryList;
   }
 }
