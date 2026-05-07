@@ -129,37 +129,6 @@ public abstract class BasicUtility {
     return counter;
   }
 
-  public static List<String> calculateWrappedLines(String line, int lineLength) {
-    final List<String> result = new ArrayList<>();
-    final var blockArray = line.split(" ");
-
-    if (blockArray.length == 0) {
-      throw new ProgrammingMistakeException("As the passed text cannot be null the array cannot be empty");
-    }
-    final var firstBlock = blockArray[0];
-    StringBuilder wrappedLine = new StringBuilder();
-    // we add the first block unconditionally without leading space
-    // if checking and then first adding line as for other elements that would produce an empty line
-    wrappedLine.append(firstBlock);
-
-    // we add the remaining blocks with a leading space
-    if (blockArray.length >= 2) {
-      for (var i = 1; i < blockArray.length; i++) {
-        // +1 for the space we also need to append
-        final var block = blockArray[i];
-        if (wrappedLine.length() + 1 + block.length() <= lineLength) {
-          wrappedLine.append(" ").append(block);
-        } else {
-          result.add(NonNullWrapperCommon.toString(wrappedLine));
-          wrappedLine = new StringBuilder();
-          wrappedLine.append(block);
-        }
-      }
-    }
-    result.add(NonNullWrapperCommon.toString(wrappedLine));
-    return result;
-  }
-
   @SuppressWarnings("null")
   public static String calculateTodayDate() {
     // SimpleDateFormat should not be static according to SonarLint reason gives is threading
@@ -205,5 +174,10 @@ public abstract class BasicUtility {
 
   public static String convertToString(List<String> list) {
     return NonNullWrapperCommon.join("\n", list);
+  }
+
+  @SuppressWarnings("null")
+  public static String getMessage(Throwable throwable) {
+    return String.valueOf(throwable.getMessage());
   }
 }

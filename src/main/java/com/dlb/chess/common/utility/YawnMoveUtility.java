@@ -11,12 +11,12 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 
 public abstract class YawnMoveUtility {
 
-  public static List<List<YawnHalfMove>> calculateYawnMoveRule(ApiBoard board, int numberOfHalfMovesThreshold) {
+  public static List<List<YawnHalfMove>> calculateYawnMoveRule(ChessBoard board, int numberOfHalfMovesThreshold) {
 
     final List<YawnIndex> indexList = YawnMoveUtility.calculateYawnMoveIndex(board, numberOfHalfMovesThreshold);
 
@@ -147,7 +147,7 @@ public abstract class YawnMoveUtility {
     return new YawnHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
   }
 
-  private static List<YawnIndex> calculateYawnMoveIndex(ApiBoard board, int numberOfHalfMovesThreshold) {
+  private static List<YawnIndex> calculateYawnMoveIndex(ChessBoard board, int numberOfHalfMovesThreshold) {
 
     if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
       throw new IllegalArgumentException("The threshold cannot be below fifty moves");

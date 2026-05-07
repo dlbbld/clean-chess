@@ -1,6 +1,6 @@
 package com.dlb.chess.san.validate;
 
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.san.AbstractSan;
@@ -10,7 +10,7 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 
 public abstract class SanValidateCheck extends AbstractSan {
 
-  public static void validateSanTerminalMarker(ApiBoard board, SanTerminalMarker sanSanTerminalMarker,
+  public static void validateSanTerminalMarker(ChessBoard board, SanTerminalMarker sanSanTerminalMarker,
       MoveSpecification moveSpecification) {
     final SanTerminalMarker boardSanTerminalMarker = calculateBoardSanTerminalMarker(board, moveSpecification);
 
@@ -61,7 +61,7 @@ public abstract class SanValidateCheck extends AbstractSan {
     }
   }
 
-  private static SanTerminalMarker calculateBoardSanTerminalMarker(ApiBoard board,
+  private static SanTerminalMarker calculateBoardSanTerminalMarker(ChessBoard board,
       MoveSpecification moveSpecification) {
     board.performMove(moveSpecification);
 

@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.analysis.representation.RepetitionRepresentation;
 import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -76,7 +76,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(insufficientMaterial.name());
     result.append(", ");
 
-    final ApiBoard finalBoard = analysis.board();
+    final ChessBoard finalBoard = analysis.board();
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
         .unwinnableFull();
     final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)

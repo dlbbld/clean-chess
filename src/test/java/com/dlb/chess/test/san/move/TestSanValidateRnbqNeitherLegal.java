@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -17,7 +17,7 @@ class TestSanValidateRnbqNeitherLegal {
   @Test
   void testPieceNeither1NoLegalMove() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     checkException(board, "Ra3", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE);
@@ -46,7 +46,7 @@ class TestSanValidateRnbqNeitherLegal {
   @Test
   void testPieceNeither2MultipleLegalMoves() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // white rook
@@ -102,7 +102,7 @@ class TestSanValidateRnbqNeitherLegal {
     board.performMove("Q4f4");
   }
 
-  private static void checkException(ApiBoard board, String san, SanValidationProblem expectedValidation) {
+  private static void checkException(ChessBoard board, String san, SanValidationProblem expectedValidation) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);

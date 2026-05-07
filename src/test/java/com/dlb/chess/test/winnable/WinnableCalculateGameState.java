@@ -5,7 +5,7 @@ import java.util.TreeSet;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.model.LegalMove;
@@ -14,7 +14,7 @@ import com.dlb.chess.test.winnable.model.GameForced;
 
 public class WinnableCalculateGameState {
 
-  static EvaluatePositions evaluateFirstHalfMoveMadeTheMove(ApiBoard board) {
+  static EvaluatePositions evaluateFirstHalfMoveMadeTheMove(ChessBoard board) {
 
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
@@ -33,7 +33,7 @@ public class WinnableCalculateGameState {
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
 
-  static EvaluatePositions evaluateFirstHalfMoveNotMadeTheMove(ApiBoard board) {
+  static EvaluatePositions evaluateFirstHalfMoveNotMadeTheMove(ChessBoard board) {
 
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
@@ -52,7 +52,7 @@ public class WinnableCalculateGameState {
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
 
-  static EvaluatePositions evaluateSecondHalfMoveMadeTheMove(ApiBoard board) {
+  static EvaluatePositions evaluateSecondHalfMoveMadeTheMove(ChessBoard board) {
 
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
@@ -85,7 +85,7 @@ public class WinnableCalculateGameState {
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
 
-  static EvaluatePositions evaluateSecondHalfMoveNotMadeTheMove(ApiBoard board) {
+  static EvaluatePositions evaluateSecondHalfMoveNotMadeTheMove(ChessBoard board) {
 
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
@@ -116,7 +116,7 @@ public class WinnableCalculateGameState {
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
 
-  static EvaluatePositions evaluateThirdHalfMoveMadeTheMove(ApiBoard board) {
+  static EvaluatePositions evaluateThirdHalfMoveMadeTheMove(ChessBoard board) {
 
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
@@ -157,7 +157,7 @@ public class WinnableCalculateGameState {
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
 
-  static EvaluatePositions evaluateThirdHalfMoveNotMadeTheMove(ApiBoard board) {
+  static EvaluatePositions evaluateThirdHalfMoveNotMadeTheMove(ChessBoard board) {
 
     final Set<GameStatus> gameStatusSet = new TreeSet<>();
     var countEvaluatedPositions = 0;
@@ -198,7 +198,7 @@ public class WinnableCalculateGameState {
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
 
-  static GameForced evaluateForcedLine(ApiBoard board) {
+  static GameForced evaluateForcedLine(ChessBoard board) {
     // we check position after series of forced moves
     // we cannot use early returns for after evaluation we need to undo the moves
     var countForcedHalfMoves = 0;

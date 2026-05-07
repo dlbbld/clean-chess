@@ -10,7 +10,7 @@ import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
@@ -30,17 +30,17 @@ public class AnalyzerPrint {
   protected static void printAnalysis(String pgnString) {
     final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
 
-    final ApiBoard board = GeneralUtility.calculateBoard(pgnFile);
+    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
     printAnalysis(board);
   }
 
   protected static void printAnalysis(Path folderPath, String pgnFileName) {
 
-    final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     printAnalysis(board);
   }
 
-  protected static void printAnalysis(ApiBoard board) {
+  protected static void printAnalysis(ChessBoard board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition

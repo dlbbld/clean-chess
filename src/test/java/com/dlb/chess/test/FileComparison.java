@@ -8,11 +8,10 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.pgn.export.linebreaks.TestPgnExportLineBreaks;
 
 public class FileComparison {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineBreaks.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(FileComparison.class);
 
   // problem PGN files in Eclipse suddenly have windows line breaks instead of unix line breaks
   @SuppressWarnings("null")

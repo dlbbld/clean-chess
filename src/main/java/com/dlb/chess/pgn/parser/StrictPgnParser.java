@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
@@ -23,6 +24,7 @@ import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.parser.model.PgnCommentary;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
 import com.dlb.chess.pgn.parser.model.Tag;
@@ -35,13 +37,9 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.utility.TagUtility;
 
 /**
- * Strict PGN parser. Consumes a PGN source as a single forward-only token stream, performing validation and semantic
- * construction in one pass — no intermediate whole-file representations, no multiple passes over the input.
- *
- * <p>
- * The parser produces a {@link PgnFile} record with tags sorted canonically, the start FEN derived from tag data, the
- * leading commentary if present, and the full half-move list. Structural violations surface as
- * {@link StrictPgnParserValidationException} with a fine-grained {@link StrictPgnParserValidationProblem} category.
+ * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen
+ * together. Structural violations throw {@link StrictPgnParserValidationException} with a fine-grained
+ * {@link StrictPgnParserValidationProblem} category.
  */
 public final class StrictPgnParser {
 
@@ -53,8 +51,8 @@ public final class StrictPgnParser {
   private final PgnTokenizer tokenizer;
 
   private StrictPgnParser(String source) {
-    this.source = source;
-    this.tokenizer = new PgnTokenizer(new PgnCharStream(source));
+    this.source = NewlineNormalization.toLf(source);
+    this.tokenizer = new PgnTokenizer(new PgnCharStream(this.source));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -66,8 +64,7 @@ public final class StrictPgnParser {
   }
 
   public static PgnFile parse(Path pgnFilePath) {
-    // Read raw bytes so that file-structure invariants (trailing newline, blank-line layout) see the actual source
-    // rather than a normalized line-by-line reconstruction.
+    // Read raw bytes — line-based reconstruction would hide whether the source's trailing newline is actually present.
     return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
@@ -111,10 +108,7 @@ public final class StrictPgnParser {
     }
   }
 
-  /**
-   * Validates a PGN source and returns a structured result rather than throwing. Intended for callers that want to
-   * inspect the problem category programmatically instead of catching exceptions.
-   */
+  /** Like {@link #parseText(String)} but returns a structured result instead of throwing. */
   public static StrictPgnParserValidationResult validateText(String pgn) {
     try {
       parseText(pgn);
@@ -135,8 +129,6 @@ public final class StrictPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   private PgnFile parseInternal() {
-    // Whole-file structural checks up front — these correspond to the existing parser's line-counting validations
-    // and keep the token-driven parse below focused on content.
     StrictFileStructurePreScan.validate(source);
 
     final List<Tag> tagList = parseTagSection();
@@ -156,7 +148,7 @@ public final class StrictPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.leadingCommentary(), movetext.halfMoveList());
+    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -176,8 +168,6 @@ public final class StrictPgnParser {
         throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID, "Unexpected end of input in tags.");
       }
       tags.add(parseTag());
-      // After the closing ] the tag line must end. Any further content on the same line is reported as a
-      // right-bracket error because semantically the tag didn't end cleanly at the bracket.
       final PgnToken eol = tokenizer.next();
       if (eol.type() != PgnTokenType.NEWLINE) {
         throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET,
@@ -209,8 +199,6 @@ public final class StrictPgnParser {
     validateTagNameCharacters(tagName);
     validateTagNameLength(tagName);
 
-    // The existing strict parser's regex-based validator classifies "no space between tag name and value" as a
-    // generic TAG_FORMAT_INVALID rather than a distinct missing-space error. We match that here.
     final PgnToken afterName = tokenizer.peek();
     if (afterName.type() != PgnTokenType.SPACES || afterName.text().length() != 1) {
       throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
@@ -220,10 +208,8 @@ public final class StrictPgnParser {
 
     final PgnToken valueToken = tokenizer.next();
     if (valueToken.type() == PgnTokenType.TAG_VALUE_STRING_UNTERMINATED) {
-      // Split on whether the tag line still ends with ]. The captured content of an unterminated string stops at
-      // the next newline or EOF, so its trailing character (if any) is whatever came right before that boundary —
-      // including a stray ] if the source had one on that line. The existing regex-based validator uses the same
-      // heuristic: line endsWith("]") maps to TAG_FORMAT_INVALID, otherwise NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET.
+      // If the unterminated content ends with `]` the source had `["Tag "value]` (closing quote missing but bracket
+      // present) → unterminated-string error; otherwise the bracket itself is missing.
       final String content = valueToken.text();
       if (!content.isEmpty() && content.charAt(content.length() - 1) == ']') {
         throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
@@ -360,14 +346,14 @@ public final class StrictPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, String leadingCommentary) {
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary pregameCommentary) {
   }
 
   private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
-    // Leading commentary (optional).
-    var leadingCommentary = "";
+    // Pregame commentary (optional).
+    var pregameCommentary = PgnCommentary.EMPTY;
     if (isBraceToken(tokenizer.peek().type())) {
-      leadingCommentary = consumeCommentaryOrThrow();
+      pregameCommentary = consumeCommentaryOrThrow();
       expectSpaceAfterComment();
     }
 
@@ -376,31 +362,44 @@ public final class StrictPgnParser {
     var fullMoveNumber = startFen.fullMoveNumber();
     var isFirstMove = true;
 
-    // Zero-move game: the movetext body is just <space><terminator>, with no move numbers or SANs at all. The
-    // leading single space is the same one a half-move would emit after itself, only no half-move preceded it.
+    // Zero-move game: just <space><terminator> after the (optional) pregame commentary — no move numbers, no SANs.
     if (tokenizer.peek().type() == PgnTokenType.SPACES && tokenizer.peek().text().length() == 1
         && tokenizer.peekNext().type() == PgnTokenType.TERMINATION_MARKER) {
       tokenizer.next();
       final PgnToken terminator = tokenizer.next();
       validateTermination(terminator, resultTagValue);
-      return new MovetextOutcome(halfMoves, leadingCommentary);
+      return new MovetextOutcome(halfMoves, pregameCommentary);
     }
 
+    // T-002 / PGN spec §8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
+    var priorCommentaryAttached = false;
+
     while (true) {
-      // Termination marker ends the movetext — checked first so the loop terminates before we try to read
-      // non-existent move-number / half-move tokens.
       if (tokenizer.peek().type() == PgnTokenType.TERMINATION_MARKER) {
         final PgnToken terminator = tokenizer.next();
         validateTermination(terminator, resultTagValue);
-        return new MovetextOutcome(halfMoves, leadingCommentary);
+        return new MovetextOutcome(halfMoves, pregameCommentary);
       }
 
-      // Catch illegal move-number-before-black-non-initial here, before expectMoveNumber is skipped.
+      // Non-initial Black move: with prior commentary, "N..." indicator is required (T-002); without, forbidden.
       if (!isFirstMove && havingMove == Side.BLACK) {
-        final PgnTokenType t = tokenizer.peek().type();
-        if (t == PgnTokenType.MOVE_NUMBER_WHITE || t == PgnTokenType.MOVE_NUMBER_BLACK) {
-          throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
-              "Move number specified for Black non initial move.");
+        if (priorCommentaryAttached) {
+          final PgnToken token = tokenizer.peek();
+          final String expected = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber,
+              Side.BLACK);
+          if (token.type() != PgnTokenType.MOVE_NUMBER_BLACK || !token.text().equals(expected)) {
+            throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY,
+                "Black move after intervening commentary requires move-number indicator \"" + expected + "\".");
+          }
+          tokenizer.next();
+          expectInterTokenSpace(StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT,
+              "A move number must be followed by a single space.");
+        } else {
+          final PgnTokenType t = tokenizer.peek().type();
+          if (t == PgnTokenType.MOVE_NUMBER_WHITE || t == PgnTokenType.MOVE_NUMBER_BLACK) {
+            throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
+                "Move number specified for Black non initial move.");
+          }
         }
       }
 
@@ -412,15 +411,16 @@ public final class StrictPgnParser {
 
       final SanAndSuffix sanAndSuffix = parseSanAndSuffix();
 
-      // Consume the single separator before next content. If we're at the trailing blank line instead, the file
-      // has no termination marker — report that specifically rather than as a generic structural error.
+      // Trailing blank line at this position → file has no termination marker; report specifically.
       expectInterTokenSeparatorOrMissingTermination(resultTagValue);
 
-      // Optional brace commentary attached to this half-move.
-      var commentary = "";
+      var commentary = PgnCommentary.EMPTY;
       if (isBraceToken(tokenizer.peek().type())) {
         commentary = consumeCommentaryOrThrow();
         expectSpaceAfterComment();
+        priorCommentaryAttached = true;
+      } else {
+        priorCommentaryAttached = false;
       }
 
       halfMoves.add(new PgnHalfMove(sanAndSuffix.san(), sanAndSuffix.suffix(), commentary));
@@ -433,34 +433,32 @@ public final class StrictPgnParser {
     }
   }
 
-  /**
-   * Consumes a brace-related token at a position where commentary is allowed (leading or trailing slot). Returns the
-   * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. Throws the corresponding validation error
-   * for each ill-formed brace variant — unclosed, nested, or stray closing brace.
-   */
-  private String consumeCommentaryOrThrow() {
+  /** Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category. */
+  private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
       case BRACE_COMMENT:
-        return token.text();
+        try {
+          return new PgnCommentary(token.text());
+        } catch (final PgnCommentaryValidationException pcve) {
+          // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
+              pcve.getMessage());
+        }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");
-      case BRACE_COMMENT_NESTED:
-        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
-            "A commentary cannot contain another opening brace {.");
       case BRACE_STRAY_CLOSE:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
       default:
-        throw new ProgrammingMistakeException(
-            "consumeCommentaryOrThrow called for non-brace token: " + token.type());
+        throw new ProgrammingMistakeException("consumeCommentaryOrThrow called for non-brace token: " + token.type());
     }
   }
 
   private static boolean isBraceToken(PgnTokenType type) {
     return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED
-        || type == PgnTokenType.BRACE_COMMENT_NESTED || type == PgnTokenType.BRACE_STRAY_CLOSE;
+        || type == PgnTokenType.BRACE_STRAY_CLOSE;
   }
 
   private void expectSpaceAfterComment() {
@@ -469,19 +467,13 @@ public final class StrictPgnParser {
       tokenizer.next();
       return;
     }
-    // A broken brace directly after the just-consumed commentary reports the brace-specific error, not the generic
-    // missing-space error — it is more informative to say "stray closing brace" than "no space here".
+    // A broken brace right after the closed commentary reports its specific category, not the generic missing-space.
     throwIfBrokenBrace(token);
     throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_FOLLOWED_BY_SPACE,
         "The movetext doesnt continue with a space after a comment");
   }
 
-  /**
-   * After {@link #parseMovetext(Fen, ResultTagValue)} has consumed the termination marker, the remaining tokens must
-   * be nothing but whitespace/newlines leading up to EOF. Any other content — a stray commentary, a reappearing
-   * tag-bracket, random symbols — is rejected. Broken brace variants surface with their specific lexical category
-   * (R1/R2/R3); everything else maps to {@link StrictPgnParserValidationProblem#MOVETEXT_CONTENT_AFTER_TERMINATION}.
-   */
+  /** After the termination marker only whitespace/newlines may appear before EOF. */
   private void expectOnlyTrailingWhitespaceUntilEof() {
     while (true) {
       final PgnToken token = tokenizer.peek();
@@ -498,19 +490,12 @@ public final class StrictPgnParser {
     }
   }
 
-  /**
-   * If the given token is a malformed brace variant, throws the matching category-specific error (R1/R2/R3). Returns
-   * normally for any other token. Used at positions where a broken brace should surface with its precise category
-   * rather than be subsumed by a more generic structural error.
-   */
+  /** Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise. */
   private static void throwIfBrokenBrace(PgnToken token) {
     switch (token.type()) {
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");
-      case BRACE_COMMENT_NESTED:
-        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
-            "A commentary cannot contain another opening brace {.");
       case BRACE_STRAY_CLOSE:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
@@ -547,7 +532,6 @@ public final class StrictPgnParser {
   private SanAndSuffix parseSanAndSuffix() {
     final PgnToken token = tokenizer.peek();
     if (isBraceToken(token.type())) {
-      // Prefer the specific broken-brace error when applicable; otherwise fall through to the positional R4.
       throwIfBrokenBrace(token);
       throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_ALLOWED_IN_SAN,
           "A commentary brace cannot occur where a SAN half-move is expected.");
@@ -580,8 +564,6 @@ public final class StrictPgnParser {
 
     if (havingMove == Side.BLACK) {
       if (!isFirstMove) {
-        // Move number before a non-initial black move is forbidden. We only reach here if a move number was
-        // emitted when we expected a SAN — signalled by peek type.
         if (token.type() == PgnTokenType.MOVE_NUMBER_BLACK || token.type() == PgnTokenType.MOVE_NUMBER_WHITE) {
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_FOR_BLACK_NON_INITIAL_MOVE,
               "Move number specified for Black non initial move.");
@@ -651,11 +633,9 @@ public final class StrictPgnParser {
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
-        // Propagate the GameStatus from the SanValidationException for the GAME_ALREADY_ENDED
-        // case so callers can distinguish the five FIDE-automatic termination causes without
-        // parsing the human-readable message.
-        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN,
-            e.getSanValidationProblem(), message, e.getGameStatus());
+        // Propagate GameStatus so callers can distinguish FIDE-automatic termination causes without parsing the message.
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
+            message, e.getGameStatus());
       }
     }
   }

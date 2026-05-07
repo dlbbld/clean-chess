@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -16,7 +16,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testKingNonCastling() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // black
     board.performMoves("e4");
@@ -28,7 +28,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPawnNonPromotion() {
-    final ApiBoard board = new Board("8/8/8/2Rpk3/2R5/4K3/8/8 b - - 0 100");
+    final ChessBoard board = new Board("8/8/8/2Rpk3/2R5/4K3/8/8 b - - 0 100");
 
     checkException(board, "d4", SanValidationProblem.KING_EXPOSED_TO_CHECK_PAWN);
     checkException(board, "dxc4", SanValidationProblem.KING_EXPOSED_TO_CHECK_PAWN);
@@ -40,11 +40,11 @@ class TestSanValidateAgainstLegalMoves {
   void testPawnPromotion() {
     // black
     {
-      final ApiBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
+      final ChessBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
       checkException(board, "f1=N+", SanValidationProblem.KING_EXPOSED_TO_CHECK_PAWN);
     }
     {
-      final ApiBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
+      final ChessBoard board = new Board("8/8/8/4K3/8/8/2R2p1k/6R1 b - - 0 100");
       checkException(board, "fxg1=Q+", SanValidationProblem.KING_EXPOSED_TO_CHECK_PAWN);
     }
 
@@ -53,7 +53,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceFile1NoLegalMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // rook
@@ -87,7 +87,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceFile2OnlyOneLegalMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // rook
@@ -128,7 +128,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceFile2OnlyOneLegalMoveMore() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMoves("e4", "e5", "d3", "Bb4+", "Nc3", "Nf6");
     checkException(board, "Nge2", SanValidationProblem.OVERSPECIFIED_RNBQ_FILE_ONLY_ONE_LEGAL_MOVE);
   }
@@ -137,7 +137,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceFile3MustUseRank() {
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("a4", "a5", "h4", "h5", "Ra3", "Ra6", "Rhh3", "Rhh6", "Rad3", "Rac6", "Rd4", "Rc5", "Rhd3",
           "Rhc6", "Rd5", "Rc4");
@@ -195,7 +195,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("e4", "e5", "Bc4", "Bc5", "Nf3", "Nf6", "O-O", "O-O", "Nxe5", "Nxe4", "Qg4", "Qg5", "Na3",
           "Na6", "d4", "d5", "Be3", "Be6", "Bb5", "Bb4", "c4", "c5", "cxd5", "cxd4", "d6", "d3", "d7", "d2", "d8=R",
@@ -221,7 +221,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceFile4MustUseRankOrSquare() {
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=N", "gxh1=N", "Nc3", "Nf6", "Nf3",
           "Nc6", "Nb6", "Ng3", "Nba4", "Ngh5", "Nc5", "Nf4", "Ng5", "Nb4", "Nge4", "Nbd5", "Ng5", "Nb4");
@@ -241,7 +241,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=N", "gxh1=N", "Nc3", "Nf6", "Nf3",
           "Nc6", "Nb6", "Ng3", "Nba4", "Ngh5", "Nc5", "Nf4", "Ng5", "Nb4", "Nge4", "Nbd5", "Ng5", "Nb4", "a4", "h5",
@@ -262,7 +262,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=B", "gxh1=B", "e4", "d5", "e5", "d4",
           "e6", "d3", "Qc2", "Nh6", "Bh3", "dxc2", "Bg4", "cxb1=B", "Bgf3", "Nf7", "exf7+", "Kd7", "Be2", "Rg8",
@@ -300,7 +300,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("f4", "c5", "f5", "c4", "f6", "c3", "fxg7", "cxb2", "gxh8=Q", "bxa1=Q", "c4", "f5", "c5", "f4",
           "c6", "f3", "cxb7", "fxg2", "bxa8=Q", "gxh1=Q", "Qb3", "Qf3", "Qab7", "Qe5", "Qf6", "Qeh5", "Qd6", "e6",
@@ -352,7 +352,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceRank1NoLegalMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // rook
@@ -386,7 +386,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceRank2OnlyOneLegalMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // rook
@@ -427,7 +427,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceRank3MustUseFile() {
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("a4", "a5", "h4", "h5", "Ra3", "Ra6", "Rhh3", "Rhh6", "Rab3", "Rad6", "Rhd3", "Rd5", "Rd4",
           "Rg6");
@@ -489,7 +489,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceRank4MustUseFileOrSquare() {
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=N", "gxh1=N", "Nc3", "Nf6", "Nf3",
           "Nc6", "Nb6", "Ng3", "Nba4", "Ngh5", "Nc5", "Nf4", "Ng5", "Nb4", "Nge4", "Nbd5", "Ng5", "Nb4");
@@ -509,7 +509,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=N", "gxh1=N", "Nc3", "Nf6", "Nf3",
           "Nc6", "Nb6", "Ng3", "Nba4", "Ngh5", "Nc5", "Nf4", "Ng5", "Nb4", "Nge4", "Nbd5", "Ng5", "Nb4", "a4", "h5",
@@ -530,7 +530,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=B", "gxh1=B", "e4", "d5", "e5", "d4",
           "e6", "d3", "Qc2", "Nh6", "Bh3", "dxc2", "Bg4", "cxb1=B", "Bgf3", "Nf7", "exf7+", "Kd7", "Be2", "Rg8",
@@ -568,7 +568,7 @@ class TestSanValidateAgainstLegalMoves {
     }
 
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("f4", "c5", "f5", "c4", "f6", "c3", "fxg7", "cxb2", "gxh8=Q", "bxa1=Q", "c4", "f5", "c5", "f4",
           "c6", "f3", "cxb7", "fxg2", "bxa8=Q", "gxh1=Q", "Qb3", "Qf3", "Qab7", "Qe5", "Qf6", "Qeh5", "Qd6", "e6",
@@ -620,7 +620,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceSquare1NoLegalMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // rook no square specification allowed
@@ -650,7 +650,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceSquare1NoLegalMoveMore() {
-    final ApiBoard board = new Board("kn6/3p4/8/8/1Qp1pQ2/3p4/3Q4/2K5 w - - 0 100");
+    final ChessBoard board = new Board("kn6/3p4/8/8/1Qp1pQ2/3p4/3Q4/2K5 w - - 0 100");
 
     // queen
     checkException(board, "Qd2d4", SanValidationProblem.NOT_REACHABLE_RNBQ_SQUARE);
@@ -659,7 +659,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceSquare2OnlyOneLegalMove() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // white
     // rook no square specification allowed
@@ -693,7 +693,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceSquare2OnlyOneLegalMoveMore() {
-    final ApiBoard board = new Board("kn6/3p4/3Q4/3p4/1Qp1p3/8/3Q4/2K5 w - - 0 100");
+    final ChessBoard board = new Board("kn6/3p4/3Q4/3p4/1Qp1p3/8/3Q4/2K5 w - - 0 100");
 
     // queen
     checkException(board, "Qd2d4", SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE);
@@ -703,7 +703,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceSquare3OnlyOnPieceOnFile() {
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("a4", "a5", "h4", "h5", "Ra3", "Ra6", "Rhh3", "Rhh6", "Rab3", "Rad6", "Rhd3", "Rd5", "Rd4",
           "Rg6");
@@ -760,7 +760,7 @@ class TestSanValidateAgainstLegalMoves {
   @SuppressWarnings("static-method")
   @Test
   void testPieceSquare3OnlyOnPieceOnFileMore() {
-    final ApiBoard board = new Board("kn6/3p4/8/8/1Q3Q2/3Q4/8/2K5 w - - 0 100");
+    final ChessBoard board = new Board("kn6/3p4/8/8/1Q3Q2/3Q4/8/2K5 w - - 0 100");
 
     // queen
     checkException(board, "Qd3d4", SanValidationProblem.OVERSPECIFIED_RNBQ_SQUARE_RANK_NOT_NECESSARY);
@@ -770,7 +770,7 @@ class TestSanValidateAgainstLegalMoves {
   @Test
   void testPieceSquare4OnlyOnPieceOnRank() {
     {
-      final ApiBoard board = new Board();
+      final ChessBoard board = new Board();
 
       board.performMoves("a4", "a5", "h4", "h5", "Ra3", "Ra6", "Rhh3", "Rhh6", "Rad3", "Rac6", "Rd4", "Rc5", "Rhd3",
           "Rhc6", "Rd5", "Rc4");
@@ -824,7 +824,7 @@ class TestSanValidateAgainstLegalMoves {
     }
   }
 
-  private static void checkException(ApiBoard board, String san, SanValidationProblem expectedValidation) {
+  private static void checkException(ChessBoard board, String san, SanValidationProblem expectedValidation) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);

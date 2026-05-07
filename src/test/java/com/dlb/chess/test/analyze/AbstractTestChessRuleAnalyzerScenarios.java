@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
@@ -37,7 +37,7 @@ import com.dlb.chess.exceptions.InvalidMoveException;
  */
 public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumConstants {
 
-  static void check(ApiBoard board, MoveSpecification move, MoveCheck expectedMoveCheck) {
+  static void check(ChessBoard board, MoveSpecification move, MoveCheck expectedMoveCheck) {
     final @Nullable MovementCheck expectedMc = toMovementCheck(expectedMoveCheck);
     if (expectedMc != null) {
       final MovementCheck actual = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),

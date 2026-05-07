@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -23,6 +23,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Design</h2>
  *
+ * <p>
  * For each PGN, two independent boards are kept side-by-side:
  *
  * <ul>
@@ -40,9 +41,10 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Scope</h2>
  *
+ * <p>
  * Iterates every {@link com.dlb.chess.test.pgntest.enums.PgnTest} category marked basic, no cap on files per folder.
- * {@code PARSER_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the standard
- * initial position too.
+ * {@code PARSER_FROM_FEN} fixtures (custom start positions) are included so the contract is verified beyond the
+ * standard initial position too.
  *
  * <p>
  * The regular corpus is asserted to contain only fixtures that fully replay under the strict-game invariant (see
@@ -82,8 +84,8 @@ class TestBoardUnperformMove {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
 
-    final ApiBoard expected = new Board(pgnFile.startFen());
-    final ApiBoard actual = new Board(pgnFile.startFen());
+    final ChessBoard expected = new Board(pgnFile.startFen());
+    final ChessBoard actual = new Board(pgnFile.startFen());
 
     var halfMoveIndex = 0;
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -102,7 +104,7 @@ class TestBoardUnperformMove {
     return halfMoveIndex;
   }
 
-  private static void assertBoardsEqual(ApiBoard expected, ApiBoard actual, String pgnFileName, int halfMoveIndex,
+  private static void assertBoardsEqual(ChessBoard expected, ChessBoard actual, String pgnFileName, int halfMoveIndex,
       String san) {
     if (!EqualsBuilder.reflectionEquals(expected, actual)) {
       fail("Boards differ in " + pgnFileName + " after perform+unperform of halfmove " + halfMoveIndex + " (" + san

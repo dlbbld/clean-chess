@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.internationalization.Message;
@@ -19,7 +19,7 @@ import com.dlb.chess.san.validate.movement.SanValidateMovement;
 
 public class SanValidation extends AbstractSan {
 
-  public static MoveSpecification validateSan(String san, ApiBoard board) throws SanValidationException {
+  public static MoveSpecification validateSan(String san, ChessBoard board) throws SanValidationException {
     validateGameNotEnded(board);
 
     final var sanParse = SanValidateFormat.validateFormat(san);
@@ -63,7 +63,7 @@ public class SanValidation extends AbstractSan {
    * fivefold repetition, and the 75-move rule. Single-side insufficient-material diagnostics, the claimable draws
    * (3-fold repetition, 50-move rule), and ongoing positions are deliberately NOT rejected here.
    */
-  private static void validateGameNotEnded(ApiBoard board) throws SanValidationException {
+  private static void validateGameNotEnded(ChessBoard board) throws SanValidationException {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
     if (!gameStatus.isAutomaticTermination()) {
       return;

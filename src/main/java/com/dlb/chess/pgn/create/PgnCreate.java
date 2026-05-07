@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.Movetext;
 import com.dlb.chess.common.utility.BasicChessUtility;
@@ -21,50 +21,67 @@ import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.enums.ResultTagValue;
 import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.parser.model.PgnCommentary;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
+import com.dlb.chess.utility.PgnUtility;
 import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
 
 public class PgnCreate {
 
-  // per PGN standard, the maximum line length is 79 characters
-  private static final int MAX_LINE_LENGTH = 79;
+  /** PGN export-format guideline: lines should not exceed 79 characters. */
+  public static final int MAX_LINE_LENGTH = 79;
 
-  public static String createPgnFileString(ApiBoard board) {
+  public static String createPgnFileString(ChessBoard board) {
     return createPgnFileString(createPgnFile(board));
   }
 
   public static String createPgnFileString(PgnFile pgnFile) {
-    return BasicUtility
-        .convertToString(calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.startFen(), pgnFile.halfMoveList()));
+    return appendEmptyLine(BasicUtility.convertToString(calculatePgnFileFileLines(pgnFile.tagList(),
+        pgnFile.pregameCommentary(), pgnFile.startFen(), pgnFile.halfMoveList())));
+  }
+
+  private static String appendEmptyLine(String text) {
+    return text + "\n";
   }
 
   public static List<String> createPgnFileLines(PgnFile pgnFile) {
-    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.startFen(), pgnFile.halfMoveList());
+    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.pregameCommentary(), pgnFile.startFen(),
+        pgnFile.halfMoveList());
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, Fen startFen,
-      List<PgnHalfMove> halfMoveList) {
-
-    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
+  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary pregameCommentary,
+      Fen startFen, List<PgnHalfMove> halfMoveList) {
 
     final List<String> fileLines = new ArrayList<>();
-    // first add the existing tags
     for (final Tag tag : tagList) {
       fileLines.add(calculateTagEntry(tag));
     }
-
-    // add the empty line between tags and move text
+    // Empty separator line between tags and movetext.
     fileLines.add("");
 
-    // add the moves and game termination marker
-    final List<String> movetextWithLineBreaks = calculateMovetextWithLineBreaks(startFen.fullMoveNumber(),
-        startFen.havingMove(), halfMoveList, resultTagValue);
+    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
+    final Movetext movetext = PgnCreate.calculateMovetext(startFen.fullMoveNumber(), startFen.havingMove(),
+        halfMoveList, resultTagValue);
 
-    fileLines.addAll(movetextWithLineBreaks);
+    final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
+        halfMoveList);
 
-    // finally add an empty line
+    // PgnCommentary is contract-validated (no `}`, no `\r`), so the value writes verbatim into {...}.
+    final String pregameCommentaryValue = pregameCommentary.value();
+    final String movetextIncludingPreGameCommentary;
+    if (pregameCommentaryValue.isEmpty()) {
+      movetextIncludingPreGameCommentary = moves + " " + resultTagValue.getValue();
+    } else if (moves.isEmpty()) {
+      movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + resultTagValue.getValue();
+    } else {
+      movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + moves + " "
+          + resultTagValue.getValue();
+    }
+
+    fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
+    // Trailing blank line per the strict format.
     fileLines.add("");
 
     return fileLines;
@@ -95,14 +112,14 @@ public class PgnCreate {
       if (boardHalfMove.havingMove() != Side.WHITE && boardHalfMove.havingMove() != Side.BLACK) {
         throw new ProgrammingMistakeException("The program created an inconsistent alternating halfmove list");
       }
-      halfMove = new PgnHalfMove(boardHalfMove.san(), MoveSuffixAnnotation.NONE, "");
+      halfMove = new PgnHalfMove(boardHalfMove.san(), MoveSuffixAnnotation.NONE, PgnCommentary.EMPTY);
       halfMoveList.add(halfMove);
     }
 
     return halfMoveList;
   }
 
-  private static ResultTagValue calculateResultTagValue(ApiBoard board) {
+  private static ResultTagValue calculateResultTagValue(ChessBoard board) {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
 
     return switch (gameStatus) {
@@ -135,18 +152,21 @@ public class PgnCreate {
     var currentFullMoveNumber = fullMoveNumber;
     Side currentHavingMove = havingMove;
     var isFirstMove = true;
+    // T-002 / PGN spec §8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
+    var priorCommentaryAttached = false;
     for (final PgnHalfMove halfMove : halfMoveList) {
 
-      // write first move number (before first move which can be White or Black)
+      // Emit the move-number indicator in the three required cases: first half-move, before any White move, or
+      // before a Black move that follows commentary on White's move (T-002).
       if (isFirstMove) {
         isFirstMove = false;
         final var fullMoveNumberPart = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber,
             currentHavingMove);
         result.append(fullMoveNumberPart);
       } else if (currentHavingMove == Side.WHITE) {
-        // write following move numbers (before White move)
-        final var fullMoveNumberPart = currentFullMoveNumber + ".";
-        result.append(" ").append(fullMoveNumberPart);
+        result.append(" ").append(currentFullMoveNumber).append('.');
+      } else if (priorCommentaryAttached) {
+        result.append(" ").append(currentFullMoveNumber).append("...");
       }
 
       final String san = halfMove.san();
@@ -155,20 +175,20 @@ public class PgnCreate {
         result.append(halfMove.moveSuffixAnnotation().getSuffix());
       }
 
-      if (!halfMove.commentary().isBlank()) {
-        result.append(" {");
-        result.append(halfMove.commentary());
-        result.append("}");
+      final String commentaryValue = halfMove.commentary().value();
+      if (!commentaryValue.isEmpty()) {
+        result.append(" {").append(commentaryValue).append('}');
+        priorCommentaryAttached = true;
+      } else {
+        priorCommentaryAttached = false;
       }
 
-      // fullMoveNumber is incremented after Black's move
       if (currentHavingMove == Side.BLACK) {
         currentFullMoveNumber++;
       }
       currentHavingMove = currentHavingMove.getOppositeSide();
     }
     return NonNullWrapperCommon.toString(result);
-
   }
 
   private static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
@@ -180,22 +200,14 @@ public class PgnCreate {
     return new Movetext(movetext);
   }
 
-  private static List<String> calculateMovetextWithLineBreaks(int fullMoveNumber, Side havingMove,
-      List<PgnHalfMove> halfMoveList, ResultTagValue resultTagValue) {
-
-    final Movetext movetext = calculateMovetext(fullMoveNumber, havingMove, halfMoveList, resultTagValue);
-
-    return BasicUtility.calculateWrappedLines(movetext.movetext(), MAX_LINE_LENGTH);
-  }
-
-  public static PgnFile createPgnFile(ApiBoard board, List<Tag> tagList) {
+  public static PgnFile createPgnFile(ChessBoard board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(tagList, board.getInitialFen(), "", halfMoveList);
+    return new PgnFile(tagList, board.getInitialFen(), PgnCommentary.EMPTY, halfMoveList);
   }
 
-  public static PgnFile createPgnFile(ApiBoard board) {
+  public static PgnFile createPgnFile(ChessBoard board) {
 
     final ResultTagValue resultTagValue = calculateResultTagValue(board);
     final List<Tag> tagList = createBoardPlaceHolderTagList(resultTagValue);

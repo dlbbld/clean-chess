@@ -11,7 +11,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.unwinnability.mobility.enums.VariableState;
 import com.dlb.chess.unwinnability.mobility.model.Clearability;
@@ -28,7 +28,7 @@ public class Mobility {
 
   // Inputs: a position
   // Output: mobility solution {MP!s}P in pos,s in S
-  public static MobilitySolution mobility(ApiBoard board) {
+  public static MobilitySolution mobility(ChessBoard board) {
 
     // 1: set MP->s := 0, CP := 0, Rcs
     // := 0 for all P in pos, s in S and c in {w, b} and let X_arrow be

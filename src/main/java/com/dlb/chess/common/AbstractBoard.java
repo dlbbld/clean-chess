@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
@@ -17,7 +17,7 @@ import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
-public abstract class AbstractBoard implements ApiBoard, EnumConstants {
+public abstract class AbstractBoard implements ChessBoard, EnumConstants {
 
   @Override
   public Set<String> getLegalMovesSan() {

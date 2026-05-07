@@ -5,12 +5,9 @@ import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
 /**
- * One-pass structural validation of a PGN source string. Enforces the whole-file invariants that the strict format
- * demands: file not empty, does not start with a blank line, ends with a blank line, exactly two blank lines in
- * total, and those two blank lines are not adjacent.
- *
- * <p>Kept as a dedicated pre-scan so that the main sequential parser does not have to weave these global counts into
- * its per-token control flow. The pass is itself forward-only and allocation-free beyond a small integer counter.
+ * Whole-file structural pre-scan for the strict format: file non-empty, no leading blank line, trailing blank line
+ * present, exactly two blank lines total, no two adjacent. Kept separate from the sequential parser so global counts
+ * stay out of the per-token control flow.
  */
 final class StrictFileStructurePreScan {
 
@@ -38,10 +35,7 @@ final class StrictFileStructurePreScan {
           "The PGN must end with an empty line.");
     }
 
-    // Count blank lines and track whether any two are adjacent. A "blank line" is an empty logical line — either
-    // two line terminators back to back (interior), or a terminator immediately preceded by another terminator at
-    // the start (cannot happen given the first-char check), or a terminator followed only by EOF in the trailing
-    // position. We walk once.
+    // Count blank lines (a line with no content chars) and detect adjacency in one forward walk.
     int blankCount = 0;
     int previousBlankLineNumber = -1;
     int currentLineNumber = 1;

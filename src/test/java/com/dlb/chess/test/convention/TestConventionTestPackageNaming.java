@@ -2,17 +2,15 @@ package com.dlb.chess.test.convention;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
+import com.dlb.chess.common.utility.FileUtility;
 
 /**
  * Convention test: every Java file under {@code src/test/java} must declare a package starting
@@ -39,17 +37,19 @@ class TestConventionTestPackageNaming {
 
   @SuppressWarnings("static-method")
   @Test
-  void everyTestSourceFileIsUnderRequiredPackagePrefix() throws IOException {
+  void everyTestSourceFileIsUnderRequiredPackagePrefix() {
     final List<String> violations = new ArrayList<>();
 
-    try (Stream<Path> paths = Files.walk(TEST_JAVA_ROOT)) {
-      paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java")).forEach(p -> {
-        final String packageName = derivePackageName(p);
-        if (!packageName.equals(REQUIRED_PACKAGE_PREFIX)
-            && !packageName.startsWith(REQUIRED_PACKAGE_PREFIX + ".")) {
-          violations.add(packageName + "  in  " + TEST_JAVA_ROOT.relativize(p).toString().replace('\\', '/'));
-        }
-      });
+    for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".java")) {
+        continue;
+      }
+      final String packageName = derivePackageName(p);
+      if (!packageName.equals(REQUIRED_PACKAGE_PREFIX)
+          && !packageName.startsWith(REQUIRED_PACKAGE_PREFIX + ".")) {
+        violations.add(packageName + "  in  "
+            + NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(TEST_JAVA_ROOT.relativize(p)), '\\', '/'));
+      }
     }
 
     if (!violations.isEmpty()) {
@@ -69,6 +69,7 @@ class TestConventionTestPackageNaming {
       return "";
     }
     final Path relative = TEST_JAVA_ROOT.relativize(parent);
-    return relative.toString().replace('\\', '.').replace('/', '.');
+    return NonNullWrapperCommon.replace(
+        NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(relative), '\\', '.'), '/', '.');
   }
 }

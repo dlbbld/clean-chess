@@ -8,7 +8,7 @@ public abstract class AbstractTestLenientPgnParser {
 
   static void assertEqualsButTagList(PgnFile expected, PgnFile actual) {
     assertEquals(expected.halfMoveList(), actual.halfMoveList());
-    assertEquals(expected.leadingCommentary(), actual.leadingCommentary());
+    assertEquals(expected.pregameCommentary(), actual.pregameCommentary());
     // assertEquals(expected.tagList(), actual.tagList());
     assertEquals(expected.startFen(), actual.startFen());
   }
@@ -16,7 +16,7 @@ public abstract class AbstractTestLenientPgnParser {
   static void assertEqualsButTagListAndResult(PgnFile expected, PgnFile actual) {
     // assertEquals(expected.resultTagValue(), actual.resultTagValue());
     assertEquals(expected.halfMoveList(), actual.halfMoveList());
-    assertEquals(expected.leadingCommentary(), actual.leadingCommentary());
+    assertEquals(expected.pregameCommentary(), actual.pregameCommentary());
     // assertEquals(expected.tagList(), actual.tagList());
     assertEquals(expected.startFen(), actual.startFen());
   }

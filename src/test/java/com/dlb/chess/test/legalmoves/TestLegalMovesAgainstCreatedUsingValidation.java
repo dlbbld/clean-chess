@@ -20,7 +20,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -52,7 +52,6 @@ class TestLegalMovesAgainstCreatedUsingValidation {
           case BASIC_CHECKMATE_WHITE:
           case BASIC_CHECKMATE_BLACK:
           case BASIC_STALEMATE:
-          case PARSER_FROM_FEN:
             break;
           // $CASES-OMITTED$
           default:
@@ -71,7 +70,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final ApiBoard board = new Board(pgnFile.startFen());
+    final ChessBoard board = new Board(pgnFile.startFen());
     checkLegalMoves(board);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -81,7 +80,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
   }
 
-  private static void checkLegalMoves(ApiBoard board) {
+  private static void checkLegalMoves(ChessBoard board) {
 
     // Under the strict-game invariant, positions in FIDE-automatic termination cannot accept
     // any further move; ValidateNewMove rejects everything with GAME_ALREADY_ENDED. The
@@ -109,7 +108,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     assertEquals(legalMovesExpected, legalMovesActual);
   }
 
-  private static Set<LegalMove> calculateLegalMovesFromValidation(ApiBoard board,
+  private static Set<LegalMove> calculateLegalMovesFromValidation(ChessBoard board,
       Set<MoveSpecification> moveSpecificationsFromValidation) {
     final Set<LegalMove> result = new TreeSet<>();
     for (final MoveSpecification moveSpecification : moveSpecificationsFromValidation) {
@@ -121,7 +120,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
   }
 
-  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(ApiBoard board) {
+  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(ChessBoard board) {
     final Set<MoveSpecification> listForBoard = new TreeSet<>();
     // now we do something crazy:
     // we loop through all possible from/to square combinations and filter out the legal ones using the validation
@@ -133,7 +132,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     return listForBoard;
   }
 
-  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(ApiBoard board, Square fromSquare) {
+  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(ChessBoard board, Square fromSquare) {
     final Side havingMove = board.getHavingMove();
 
     final Set<MoveSpecification> listForSquare = new TreeSet<>();
@@ -179,8 +178,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
         if (boardPiece.getPieceType() == PieceType.PAWN
             && Rank.calculateIsPromotionRank(havingMove, toSquare.getRank())) {
           for (final PromotionPieceType promotionPieceType : PromotionPieceType.REAL) {
-            final MoveSpecification promotionMove = new MoveSpecification(fromSquare, toSquare,
-                promotionPieceType);
+            final MoveSpecification promotionMove = new MoveSpecification(fromSquare, toSquare, promotionPieceType);
             try {
               ValidateNewMove.validateNewMove(board, promotionMove);
               listForSquare.add(promotionMove);

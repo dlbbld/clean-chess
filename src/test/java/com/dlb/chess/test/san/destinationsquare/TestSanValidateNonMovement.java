@@ -3,7 +3,7 @@ package com.dlb.chess.test.san.destinationsquare;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.test.san.AbstractTestSanValidate;
 
@@ -15,7 +15,7 @@ class TestSanValidateNonMovement extends AbstractTestSanValidate {
 
     // attention for kings this is disallowed by format definition
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     checkExceptionNonMovement("Ra1a1", board);
     checkExceptionNonMovement("Nb1b1", board);

@@ -11,7 +11,7 @@ import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.model.UciMove;
@@ -20,7 +20,7 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
 
 public abstract class GeneralUtility {
 
-  public static CheckmateOrStalemate calculateLastPositionEvaluation(ApiBoard board) {
+  public static CheckmateOrStalemate calculateLastPositionEvaluation(ChessBoard board) {
     // order is crucial
     if (board.isCheckmate()) {
       return CheckmateOrStalemate.CHECKMATE;
@@ -58,14 +58,14 @@ public abstract class GeneralUtility {
     return board;
   }
 
-  public static ApiBoard calculateBoard(Path folderPath, String pgnFileName) {
+  public static ChessBoard calculateBoard(Path folderPath, String pgnFileName) {
 
     final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
 
     return calculateBoard(pgnFile);
   }
 
-  public static ApiBoard calculateBoard(List<HalfMove> halfMoveList) {
+  public static ChessBoard calculateBoard(List<HalfMove> halfMoveList) {
 
     final var board = new Board();
 

@@ -11,7 +11,7 @@ import java.util.Random;
 import java.util.Set;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.AbstractSan;
@@ -26,7 +26,7 @@ import com.sun.net.httpserver.HttpServer;
 @SuppressWarnings("null")
 public class SanTrainerServer {
 
-  private static ApiBoard board = new Board();
+  private static ChessBoard board = new Board();
   private static final Random RANDOM = new Random();
   private static final Path HTML_PATH = Path.of("C:/Users/danie/claude/index.html");
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
@@ -25,6 +25,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Forward (played moves)</h2>
  *
+ * <p>
  * For each halfmove of each PGN: derive the MoveSpec via {@code validateSan(san, board)} <em>before</em> performing,
  * then perform via {@code board.performMove(san)} and assert:
  *
@@ -36,13 +37,15 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <h2>Reverse (every legal move at every position)</h2>
  *
- * At each position reached during PGN playthrough, for <em>every</em> legal move from {@link ApiBoard#getLegalMoveSet
+ * <p>
+ * At each position reached during PGN playthrough, for <em>every</em> legal move from {@link ChessBoard#getLegalMoveSet
  * getLegalMoveSet}: perform the move so the board can compute its SAN, capture the SAN, unperform back to the original
  * position, then derive a fresh MoveSpec from that SAN via {@code validateSan} and assert it equals the LegalMove's
  * stored MoveSpec. This checks the round-trip on every legal move, not just the chosen line.
  *
  * <h2>Scope and runtime</h2>
  *
+ * <p>
  * Iterates the parser-integration smoke list (~45 PGNs spanning every major parser code path — standard moves,
  * captures, en passant, promotion, castling, check, checkmate, custom starting positions). The reverse test is the
  * slower of the two but completes in seconds.
@@ -80,7 +83,7 @@ class TestPerformMoveSanContract {
   private static void verifyProvidedSanToCalculatedSan(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
-    final ApiBoard board = new Board(pgnFile.startFen());
+    final ChessBoard board = new Board(pgnFile.startFen());
 
     var halfMoveIndex = 0;
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -112,7 +115,7 @@ class TestPerformMoveSanContract {
       PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
-    final ApiBoard board = new Board(pgnFile.startFen());
+    final ChessBoard board = new Board(pgnFile.startFen());
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       board.performMove(halfMove.san());

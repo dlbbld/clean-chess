@@ -2,18 +2,16 @@ package com.dlb.chess.test.convention;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
+import com.dlb.chess.common.utility.FileUtility;
 
 /**
  * Convention test: every Java class under {@code src/test/java} whose simple name starts with
@@ -29,14 +27,14 @@ import com.dlb.chess.common.constants.ConfigurationConstants;
  * {@code @Test} (they are {@code main}-driven utilities). Together the two enforce a clean
  * shape: a class is runnable as a JUnit test iff its simple name starts with {@code Test}.
  *
- * <p>Detection is a literal regex {@code @Test\b} against the source file's contents — strict,
- * so {@code @TestFactory}/{@code @TestTemplate}/{@code @ParameterizedTest}/{@code @RepeatedTest}
- * do not satisfy the invariant. The codebase uses only plain {@code @Test} today; if a future
- * test introduces one of those forms, broaden the pattern at that point so the convention
- * keeps matching reality.
+ * <p>Detection is a regex against the source file's contents matching any JUnit-Jupiter
+ * test-method annotation: plain {@code @Test}, plus the parameterized / repeated / templated /
+ * factory variants ({@code @ParameterizedTest}, {@code @RepeatedTest}, {@code @TestTemplate},
+ * {@code @TestFactory}). All of these are runnable JUnit methods, so any one is enough to
+ * make a {@code Test}-prefixed class non-empty.
  *
  * <p>The test class itself satisfies the invariant — its name starts with {@code Test} and it
- * has the {@code @Test} above {@link #everyTestPrefixedClassDeclaresAtLeastOneTestMethod()}.
+ * has a plain {@code @Test} above {@link #everyTestPrefixedClassDeclaresAtLeastOneTestMethod()}.
  */
 class TestConventionTestClassHasActiveTest {
 
@@ -45,21 +43,27 @@ class TestConventionTestClassHasActiveTest {
 
   private static final String REQUIRED_NAME_PREFIX = "Test";
 
-  private static final Pattern TEST_ANNOTATION = Pattern.compile("@Test\\b");
+  // Matches @Test, @ParameterizedTest, @RepeatedTest, @TestTemplate, @TestFactory. Any of these
+  // makes a class runnable as a JUnit test.
+  private static final Pattern TEST_ANNOTATION = NonNullWrapperCommon
+      .compile("@(?:Test|ParameterizedTest|RepeatedTest|TestTemplate|TestFactory)\\b");
 
   @SuppressWarnings("static-method")
   @Test
-  void everyTestPrefixedClassDeclaresAtLeastOneTestMethod() throws IOException {
+  void everyTestPrefixedClassDeclaresAtLeastOneTestMethod() {
     final List<String> violations = new ArrayList<>();
 
-    try (Stream<Path> paths = Files.walk(TEST_JAVA_ROOT)) {
-      paths.filter(Files::isRegularFile).filter(p -> p.toString().endsWith(".java"))
-          .filter(p -> p.getFileName().toString().startsWith(REQUIRED_NAME_PREFIX)).forEach(p -> {
-            final String contents = readSource(p);
-            if (!TEST_ANNOTATION.matcher(contents).find()) {
-              violations.add(TEST_JAVA_ROOT.relativize(p).toString().replace('\\', '/'));
-            }
-          });
+    for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".java")) {
+        continue;
+      }
+      if (!NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
+        continue;
+      }
+      final String contents = FileUtility.readFileAsString(p);
+      if (!TEST_ANNOTATION.matcher(contents).find()) {
+        violations.add(NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(TEST_JAVA_ROOT.relativize(p)), '\\', '/'));
+      }
     }
 
     if (!violations.isEmpty()) {
@@ -69,14 +73,6 @@ class TestConventionTestClassHasActiveTest {
         report.append("  ").append(violation).append('\n');
       }
       fail(report.toString());
-    }
-  }
-
-  private static String readSource(Path javaFile) {
-    try {
-      return Files.readString(javaFile);
-    } catch (final IOException e) {
-      throw new IllegalStateException("Failed to read " + javaFile, e);
     }
   }
 }

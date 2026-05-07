@@ -6,14 +6,14 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 
 class TestLanCalculation implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     board.performMove("e4");
     assertEquals("e2e4", board.getLan());

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 
 class TestFenGeneration {
@@ -13,7 +13,7 @@ class TestFenGeneration {
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // initial position
     check(FenConstants.FEN_INITIAL_STR, board);
@@ -59,7 +59,7 @@ class TestFenGeneration {
 
   }
 
-  private static void check(String expected, ApiBoard board) {
+  private static void check(String expected, ChessBoard board) {
     final String actual = board.getFen();
     assertEquals(expected, actual);
   }

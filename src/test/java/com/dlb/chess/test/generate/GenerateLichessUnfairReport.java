@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -33,7 +33,7 @@ public class GenerateLichessUnfairReport {
       if (isPawnWallAmbrona) {
         logger.info(pgnFileName + ";" + "pawn wall");
       } else {
-        final ApiBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+        final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
         final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
         final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
 

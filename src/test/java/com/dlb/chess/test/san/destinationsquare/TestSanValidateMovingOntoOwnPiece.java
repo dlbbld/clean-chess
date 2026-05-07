@@ -3,7 +3,7 @@ package com.dlb.chess.test.san.destinationsquare;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.san.AbstractTestSanValidate;
 
 class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
@@ -11,7 +11,7 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
   @SuppressWarnings("static-method")
   @Test
   void testUnderstanding() {
-    final ApiBoard board = new Board("8/3k4/3r4/R7/4K3/8/8/R7 b - - 0 1");
+    final ChessBoard board = new Board("8/3k4/3r4/R7/4K3/8/8/R7 b - - 0 1");
 
     checkExceptionRnbqkMovingOntoOwnPiece("Rd6", board);
     board.performMoves("Rc6");
@@ -23,7 +23,7 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
   @Test
   void testWhite() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
 
     // rook
     checkExceptionRnbqkCapturingOwnPiece("Rxa2", board);
@@ -51,7 +51,7 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
   @Test
   void testBlack() {
 
-    final ApiBoard board = new Board();
+    final ChessBoard board = new Board();
     board.performMoves("e4");
 
     // rook

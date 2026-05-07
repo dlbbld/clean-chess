@@ -7,7 +7,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.findhelpmate.interrupt.FindHelpMateInterrupt;
@@ -19,11 +19,11 @@ import com.dlb.chess.unwinnability.semistatic.UnwinnableSemiStatic;
 
 public class UnwinnableQuickAnalyzer {
 
-  public static UnwinnableQuick unwinnableQuick(ApiBoard board, Side c) {
+  public static UnwinnableQuick unwinnableQuick(ChessBoard board, Side c) {
     return unwinnableQuick(board, c, false, new MobilitySolution());
   }
 
-  public static UnwinnableQuick unwinnableQuick(ApiBoard board, Side c, boolean isHasMobilitySolution,
+  public static UnwinnableQuick unwinnableQuick(ChessBoard board, Side c, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     final String invariant = board.getFen();
@@ -130,7 +130,7 @@ public class UnwinnableQuickAnalyzer {
         && !MaterialUtility.calculateHasQueen(staticPosition);
   }
 
-  private static void unperformHalfmoves(ApiBoard board, int countHalfmoves) {
+  private static void unperformHalfmoves(ChessBoard board, int countHalfmoves) {
     for (var i = 1; i <= countHalfmoves; i++) {
       board.unperformMove();
     }

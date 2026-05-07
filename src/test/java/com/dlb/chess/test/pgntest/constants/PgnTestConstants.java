@@ -10,6 +10,9 @@ public abstract class PgnTestConstants {
   public static final Path PGN_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgn");
 
+  public static final Path PGN_PARSER_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser");
+
   public static final Path LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient");
 

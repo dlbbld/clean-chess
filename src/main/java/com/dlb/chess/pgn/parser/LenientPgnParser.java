@@ -11,6 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
@@ -24,6 +25,7 @@ import com.dlb.chess.pgn.parser.enums.SetUpTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
+import com.dlb.chess.pgn.parser.model.PgnCommentary;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.pgn.parser.sequential.PgnCharStream;
@@ -36,14 +38,9 @@ import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
 
 /**
- * Lenient PGN parser. Pull-based token consumption with permissive inter-token rules: any amount of whitespace is
- * treated as a token separator, move number indicators are consumed and ignored, the game termination marker is
- * optional, space before a move suffix annotation or a check/mate glyph is tolerated, and missing seven-tag-roster
- * entries are patched in with placeholders rather than rejected.
- *
- * <p>
- * Independent validation pipeline — does not share logic with {@link StrictPgnParser}. Tokenizer primitives are shared
- * via the {@code sequential} sub-package.
+ * Lenient PGN parser. Permissive inter-token rules: any whitespace separates tokens, move-number indicators are
+ * consumed and ignored, termination marker is optional, space before suffixes is tolerated, missing seven-tag-roster
+ * entries are patched with placeholders. Independent validation pipeline from {@link StrictPgnParser}.
  */
 public final class LenientPgnParser {
 
@@ -54,7 +51,7 @@ public final class LenientPgnParser {
   private final PgnTokenizer tokenizer;
 
   private LenientPgnParser(String source) {
-    this.source = stripUtf8Bom(source);
+    this.source = NewlineNormalization.toLf(stripUtf8Bom(source));
     this.tokenizer = new PgnTokenizer(new PgnCharStream(this.source));
   }
 
@@ -111,10 +108,7 @@ public final class LenientPgnParser {
     }
   }
 
-  /**
-   * Validates a PGN source and returns a structured result rather than throwing. Intended for callers that want to
-   * inspect the problem category programmatically instead of catching exceptions.
-   */
+  /** Like {@link #parseText(String)} but returns a structured result instead of throwing. */
   public static LenientPgnParserValidationResult validateText(String pgn) {
     try {
       parseText(pgn);
@@ -151,18 +145,14 @@ public final class LenientPgnParser {
 
     skipInsignificantWhitespace();
     final MovetextOutcome movetext = parseMovetext();
-
-    // After the movetext, only whitespace may appear before end of input. Anything else is rejected so inputs like
-    // "1. e4 e5 * {after result}" or "1. e4 e5 * }" cannot slip through silently.
     expectOnlyTrailingContentUntilEof();
 
     final ResultTagValue resultTagValue = reconcileResult(tagList, movetext.terminationResult());
     fixTagListForResultIfRequired(tagList, resultTagValue);
 
     validateTagSetUpValue(tagList);
-    // Lenient policy — derive setup-from-position strictly from the presence of the FEN tag. A SetUp tag with
-    // value "1" but no FEN is logically inconsistent; the existing lenient pipeline resolves that by ignoring
-    // the stale SetUp and starting from the initial position, then the fix-up below removes the stale tag.
+    // Lenient policy: presence of the FEN tag drives the setup-from-position decision; a stale SetUp without FEN
+    // is dropped by the fix-up below.
     final var isStartFromPosition = TagUtility.hasFen(tagList);
     fixTagListForSetUpIfRequired(tagList, isStartFromPosition);
 
@@ -175,7 +165,7 @@ public final class LenientPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.leadingCommentary(), movetext.halfMoveList());
+    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -191,9 +181,7 @@ public final class LenientPgnParser {
         tags.add(parseTag());
         continue;
       }
-      // Lenient rule: any line that still contains [ or ] is treated as a tag-line candidate. If the line could not
-      // be parsed as a tag (which is the case here, since the peek is not a bracket open), report TAG_FORMAT_INVALID
-      // rather than silently starting movetext parsing with malformed tag content.
+      // Any line still containing [ or ] is a tag-line candidate; report it rather than slip into movetext parsing.
       if (currentLineContainsTagBracket(peek.line())) {
         throw tagFormatError("A tag line with an invalid format was found on line " + peek.line() + ".");
       }
@@ -201,10 +189,7 @@ public final class LenientPgnParser {
     }
   }
 
-  /**
-   * Returns true if the source line numbered {@code lineNumber} (1-based) contains either {@code [} or {@code ]}.
-   * Mirrors the existing lenient parser's {@code isConsideredTagLine} check at the sequential layer.
-   */
+  /** Returns true if line {@code lineNumber} (1-based) contains {@code [} or {@code ]}. */
   private boolean currentLineContainsTagBracket(int lineNumber) {
     var index = 0;
     var currentLine = 1;
@@ -321,20 +306,20 @@ public final class LenientPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, String leadingCommentary,
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary pregameCommentary,
       @Nullable ResultTagValue terminationResult) {
   }
 
   private MovetextOutcome parseMovetext() {
-    var leadingCommentary = "";
+    var pregameCommentary = PgnCommentary.EMPTY;
     final List<PgnHalfMove> halfMoves = new ArrayList<>();
     @Nullable ResultTagValue terminationResult = null;
 
     skipInsignificantWhitespace();
-    // Leading-commentary slot: exactly one commentary allowed before the first move. Additional braces before any
+    // Pregame-commentary slot: exactly one commentary allowed before the first move. Additional braces before any
     // half-move fall through to the main loop and are reported as R4 (brace at SAN-expected position).
     if (isBraceToken(tokenizer.peek().type())) {
-      leadingCommentary = consumeCommentaryOrThrow();
+      pregameCommentary = consumeCommentaryOrThrow();
     }
 
     while (true) {
@@ -358,8 +343,6 @@ public final class LenientPgnParser {
         continue;
       }
       if (isBraceToken(type)) {
-        // Broken brace variants surface with their specific category (R1/R2/R3). A well-formed brace at this
-        // position is R4 — SAN-expected slot, commentary not allowed there.
         throwIfBrokenBrace(peek);
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_NOT_ALLOWED_IN_SAN,
             "A commentary brace cannot occur where a SAN half-move is expected.");
@@ -377,16 +360,12 @@ public final class LenientPgnParser {
         continue;
       }
       if (type == PgnTokenType.SYMBOL) {
-        // Lenient tolerance for spaced move-number indicators like `1 . e4` and `1 ... e5`. The old pipeline
-        // normalized these by stripping " ." / " ..." before parsing; in the sequential tokenizer the digits and
-        // dots arrive as separate SYMBOL tokens, so we reassemble the intent here and skip the pseudo-move-number.
+        // Tolerate spaced move-number indicators like `1 . e4` and `1 ... e5` — see consumedSpacedMoveNumber.
         if (consumedSpacedMoveNumber(peek)) {
           continue;
         }
         final PgnHalfMove halfMove = parseHalfMoveLenient();
         halfMoves.add(halfMove);
-        // Trailing-commentary slot: exactly one commentary directly after this half-move. A second brace here falls
-        // through to the next loop iteration and fires R4 at the loop-top guard above.
         skipInsignificantWhitespace();
         if (isBraceToken(tokenizer.peek().type())) {
           final var commentary = consumeCommentaryOrThrow();
@@ -396,30 +375,24 @@ public final class LenientPgnParser {
         }
         continue;
       }
-      // Anything else at movetext position is an unexpected format.
       throw new LenientPgnParserValidationException(
           LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION, SanValidationProblem.NONE,
           "Unexpected token \"" + peek.text() + "\" at line " + peek.line() + ".");
     }
 
-    return new MovetextOutcome(halfMoves, leadingCommentary, terminationResult);
+    return new MovetextOutcome(halfMoves, pregameCommentary, terminationResult);
   }
 
   /**
-   * Detects and consumes a spaced move-number indicator of the form {@code N . } or {@code N ... } where the digits
-   * and dots arrive as separate {@link PgnTokenType#SYMBOL} tokens because whitespace split them. Returns true when
-   * such a pattern was matched and consumed; returns false without consuming anything otherwise.
-   *
-   * <p>A {@code peek} of digits-only followed immediately by a dots-only symbol also counts (covers the contiguous
-   * {@code N..} or {@code N.e4} edge case where the tokenizer already produced separate digit and dot tokens).
+   * Detects and consumes a spaced move-number indicator (`N . ` or `N ... `) where digits and dots arrive as
+   * separate symbols because whitespace split them. Returns true on consumption.
    */
   private boolean consumedSpacedMoveNumber(PgnToken digitsPeek) {
     if (!isPurelyDigits(digitsPeek.text())) {
       return false;
     }
-    // Pattern 1 — digits + SPACES + dots-only symbol. The 2-slot peek can see the SPACES; we must commit to
-    // consuming the digits to look past the SPACES for the dots symbol. That commitment is safe: a lone digits
-    // symbol is not a valid SAN, so if no dots follow we throw the equivalent length error below.
+    // Pattern 1 — digits + SPACES + dots-only symbol. Committing to consume the digits is safe because a lone
+    // digits symbol is not a valid SAN; the length-error path below catches the no-dots case.
     final PgnTokenType next = tokenizer.peekNext().type();
     if (next == PgnTokenType.SPACES) {
       tokenizer.next(); // digits
@@ -432,9 +405,7 @@ public final class LenientPgnParser {
       throw movetextError(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
           "The movetext contains the SAN '" + digitsPeek.text() + "' with an invalid SAN length.");
     }
-    // Pattern 2 — digits immediately followed by a dots-only SYMBOL (no separating SPACES). Rare in practice
-    // because the tokenizer normally folds adjacent digits and dots into a MOVE_NUMBER_* token, but covered here
-    // for robustness.
+    // Pattern 2 — digits + dots-only SYMBOL with no separating SPACES. Rare; tokenizer normally coalesces these.
     if (next == PgnTokenType.SYMBOL && isAllDots(tokenizer.peekNext().text())) {
       tokenizer.next(); // digits
       tokenizer.next(); // dots
@@ -448,7 +419,7 @@ public final class LenientPgnParser {
       return false;
     }
     for (var i = 0; i < text.length(); i++) {
-      final char c = text.charAt(i);
+      final var c = text.charAt(i);
       if (c < '0' || c > '9') {
         return false;
       }
@@ -492,30 +463,28 @@ public final class LenientPgnParser {
       suffix = parseMoveSuffix(tokenizer.next().text());
     }
 
-    return new PgnHalfMove(san, suffix, "");
+    return new PgnHalfMove(san, suffix, PgnCommentary.EMPTY);
   }
 
   private static boolean isBareCheckOrMate(String text) {
     return "+".equals(text) || "#".equals(text);
   }
 
-  /**
-   * Consumes a brace-related token at a position where commentary is allowed (leading or trailing slot). Returns the
-   * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. For every ill-formed brace variant —
-   * unclosed, nested, or stray closing brace — throws the corresponding validation error. Lenient here behaves the
-   * same as strict: continuing past malformed commentary yields unreliable downstream results.
-   */
-  private String consumeCommentaryOrThrow() {
+  /** Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category. */
+  private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
       case BRACE_COMMENT:
-        return token.text();
+        try {
+          return new PgnCommentary(token.text());
+        } catch (final PgnCommentaryValidationException pcve) {
+          // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
+              pcve.getMessage());
+        }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");
-      case BRACE_COMMENT_NESTED:
-        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
-            "A commentary cannot contain another opening brace {.");
       case BRACE_STRAY_CLOSE:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
@@ -527,15 +496,10 @@ public final class LenientPgnParser {
 
   private static boolean isBraceToken(PgnTokenType type) {
     return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED
-        || type == PgnTokenType.BRACE_COMMENT_NESTED || type == PgnTokenType.BRACE_STRAY_CLOSE;
+        || type == PgnTokenType.BRACE_STRAY_CLOSE;
   }
 
-  /**
-   * After {@link #parseMovetext()} has consumed the termination marker (or bailed at EOF with none), the remaining
-   * tokens must be whitespace/newlines only until EOF. Tag-like content triggers {@code TAG_REAPPEAR}; broken braces
-   * surface with their specific lexical category (R1/R2/R3); anything else — including a well-formed brace — is
-   * rejected with {@link LenientPgnParserValidationProblem#MOVETEXT_CONTENT_AFTER_TERMINATION}.
-   */
+  /** After the termination marker (or EOF) only whitespace may appear before EOF. */
   private void expectOnlyTrailingContentUntilEof() {
     while (true) {
       final PgnToken token = tokenizer.peek();
@@ -555,19 +519,12 @@ public final class LenientPgnParser {
     }
   }
 
-  /**
-   * If the given token is a malformed brace variant, throws the matching category-specific error (R1/R2/R3). Returns
-   * normally for any other token. Used at positions where a broken brace should surface with its precise category
-   * rather than be subsumed by a more generic positional error.
-   */
+  /** Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise. */
   private static void throwIfBrokenBrace(PgnToken token) {
     switch (token.type()) {
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");
-      case BRACE_COMMENT_NESTED:
-        throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
-            "A commentary cannot contain another opening brace {.");
       case BRACE_STRAY_CLOSE:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
@@ -582,8 +539,8 @@ public final class LenientPgnParser {
   }
 
   private static MoveSuffixAnnotation parseMoveSuffix(String text) {
+    // Lenient: unknown suffixes downgrade to NONE rather than fail.
     if (!MoveSuffixAnnotation.exists(text)) {
-      // Fall back to NONE rather than failing — lenient parsing should not reject unusual suffixes.
       return MoveSuffixAnnotation.NONE;
     }
     return MoveSuffixAnnotation.calculate(text);

@@ -18,7 +18,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
@@ -41,7 +41,7 @@ import com.dlb.chess.squares.to.potential.AbstractPotentialToSquares;
 
 public abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstants {
 
-  public static MoveSpecification calculateMoveSpecificationForSan(ApiBoard board, Side havingMove, SanFormat sanFormat,
+  public static MoveSpecification calculateMoveSpecificationForSan(ChessBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
 
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
@@ -125,7 +125,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     }
   }
 
-  public static Set<LegalMove> calculateLegalMovesCandidates(ApiBoard board, Side havingMove, SanParse sanParse) {
+  public static Set<LegalMove> calculateLegalMovesCandidates(ChessBoard board, Side havingMove, SanParse sanParse) {
     final var sanFormat = sanParse.sanFormat();
     final var sanConversion = sanParse.sanConversion();
 
@@ -178,7 +178,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     return calculateOnlyElement(filtered3);
   }
 
-  public static void validateAgainstLegalMoves(ApiBoard board, Side havingMove, Set<LegalMove> legalMovesCandidates,
+  public static void validateAgainstLegalMoves(ChessBoard board, Side havingMove, Set<LegalMove> legalMovesCandidates,
       SanFormat sanFormat, SanConversion sanConversion) {
 
     final StaticPosition staticPosition = board.getStaticPosition();
@@ -362,7 +362,7 @@ public abstract class SanValidateLegalMoves extends AbstractSan implements EnumC
     }
   }
 
-  private static void throwCastlingException(ApiBoard board, Side havingMove, String sideLabel,
+  private static void throwCastlingException(ChessBoard board, Side havingMove, String sideLabel,
       CastlingMove castlingMove) {
     final CastlingRight castlingRight = board.getCastlingRight(havingMove);
     final var castlingCheck = castlingMove == CastlingMove.QUEEN_SIDE

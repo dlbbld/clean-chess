@@ -25,7 +25,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.test.RestrictTestConstants;
 
 /**
- * Verifies that every PGN fixture under {@code pgnParser/common/beyond/legacy/} is rejected by the strict parser
+ * Verifies that every PGN fixture under {@code pgnParser/legacy/common/beyond/} is rejected by the strict parser
  * exactly as expected. The legacy tree contains real-game and crafted PGNs relocated out of the regular corpus because
  * their recorded halfmove sequence continues past a FIDE-automatic termination, or because their FEN tag's halfmove
  * clock is above the 75-move threshold.
@@ -43,7 +43,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Path LEGACY_FOLDER = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond/legacy");
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
@@ -75,9 +75,9 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       final Expected expected = entry.getValue();
 
       final var slash = relativePath.lastIndexOf('/');
-      final var subfolder = relativePath.substring(0, slash);
-      final var fileName = relativePath.substring(slash + 1);
-      final var folderPath = LEGACY_FOLDER.resolve(subfolder);
+      final var subfolder = NonNullWrapperCommon.substring(relativePath, 0, slash);
+      final var fileName = NonNullWrapperCommon.substring(relativePath, slash + 1);
+      final var folderPath = NonNullWrapperCommon.resolve(LEGACY_FOLDER, subfolder);
 
       try {
         StrictPgnParser.parse(folderPath, fileName);
@@ -272,6 +272,6 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put("wikipedia/threefold/wikipedia_threefold_4_0_1_pest_paris_six_fold.pgn",
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
-    return Map.copyOf(m);
+    return NonNullWrapperCommon.copyOfMap(m);
   }
 }

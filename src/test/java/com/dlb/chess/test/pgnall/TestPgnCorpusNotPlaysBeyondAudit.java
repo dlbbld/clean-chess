@@ -18,18 +18,17 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
- * Asserts the regular PGN test corpus contains no fixtures that play past a FIDE-automatic
- * termination — i.e. every file replays cleanly under the strict-game invariant. The class name
- * states the expected outcome ("not plays beyond"); the test fails if any leftover is found.
+ * Asserts the regular PGN test corpus contains no fixtures that play past a FIDE-automatic termination — i.e. every
+ * file replays cleanly under the strict-game invariant. The class name states the expected outcome ("not plays
+ * beyond"); the test fails if any leftover is found.
  *
  * <h2>Scope and runtime</h2>
  *
- * Iterates every category in {@link PgnTest} (including {@code LONGEST_POSSIBLE}) — the full
- * corpus, not the restricted/smoke subsets, because corpus debt anywhere is corpus debt. The
- * full sweep takes a few minutes; the test is gated behind
- * {@link RestrictTestConstants#IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT} and
- * skipped via {@code assumeFalse} during routine runs. Flip the flag to {@code false} locally
- * to run.
+ * <p>
+ * Iterates every category in {@link PgnTest} (including {@code LONGEST_POSSIBLE}) — the full corpus, not the
+ * restricted/smoke subsets, because corpus debt anywhere is corpus debt. The full sweep takes a few minutes; the test
+ * is gated behind {@link RestrictTestConstants#IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT} and skipped
+ * via {@code assumeFalse} during routine runs. Flip the flag to {@code false} locally to run.
  */
 class TestPgnCorpusNotPlaysBeyondAudit {
 
@@ -67,10 +66,10 @@ class TestPgnCorpusNotPlaysBeyondAudit {
       return;
     }
 
-    final StringBuilder report = new StringBuilder().append("Corpus audit: ").append(playsBeyondFiles.size())
+    final var report = new StringBuilder().append("Corpus audit: ").append(playsBeyondFiles.size())
         .append(" of ").append(totalFiles).append(" PGN files cannot be fully replayed under the strict-game ")
         .append("invariant. They must be relocated out of the regular corpus into ")
-        .append("pgnParser/common/beyond/legacy/:\n");
+        .append("pgnParser/legacy/common/beyond/:\n");
     for (final String entry : playsBeyondFiles) {
       report.append("  ").append(entry).append('\n');
     }

@@ -173,6 +173,27 @@ public class Board extends AbstractBoard {
     return performMoveWithoutValidation(moveSpecification);
   }
 
+  @Override
+  public boolean performMove(String san) {
+    return performMoves(san);
+  }
+
+  @Override
+  public boolean performMoves(String... sanArray) {
+    for (final String san : sanArray) {
+      if (san == null) {
+        throw new IllegalArgumentException("The SAN cannot be null");
+      }
+      final MoveSpecification moveSpecification = SanValidation.validateSan(san, this);
+      this.performMoveWithoutValidation(moveSpecification);
+      if (!san.equals(this.getSan())) {
+        throw new ProgrammingMistakeException(
+            "The provided SAN and generated SAN are different, this should not happen");
+      }
+    }
+    return true;
+  }
+
   private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
 
     final CastlingRight beforeCastlingRightWhite = NonNullWrapperCommon.getLast(dynamicPositionList)
@@ -247,7 +268,8 @@ public class Board extends AbstractBoard {
 
     final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck, isCheckmate);
 
-    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));
+    this.sanList
+        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));
     this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
@@ -255,27 +277,6 @@ public class Board extends AbstractBoard {
 
     return true;
 
-  }
-
-  @Override
-  public boolean performMove(String san) {
-    return performMoves(san);
-  }
-
-  @Override
-  public boolean performMoves(String... sanArray) {
-    for (final String san : sanArray) {
-      if (san == null) {
-        throw new IllegalArgumentException("The SAN cannot be null");
-      }
-      final MoveSpecification moveSpecification = SanValidation.validateSan(san, this);
-      this.performMoveWithoutValidation(moveSpecification);
-      if (!san.equals(this.getSan())) {
-        throw new ProgrammingMistakeException(
-            "The provided SAN and generated SAN are different, this should not happen");
-      }
-    }
-    return true;
   }
 
   // Here we rely on that moveSpecification was validated as legal move. If this does not hold the below method will

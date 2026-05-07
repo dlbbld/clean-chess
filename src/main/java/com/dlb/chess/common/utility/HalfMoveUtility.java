@@ -6,19 +6,19 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.enums.AddSpace;
 
 public abstract class HalfMoveUtility {
-  public static HalfMove calculateHalfMove(MoveSpecification moveSpecification, ApiBoard board) {
+  public static HalfMove calculateHalfMove(MoveSpecification moveSpecification, ChessBoard board) {
     final String san = board.getSan();
     return calculateHalfMoveInternal(moveSpecification, board, san);
   }
 
-  private static HalfMove calculateHalfMoveInternal(MoveSpecification moveSpecification, ApiBoard board, String san) {
+  private static HalfMove calculateHalfMoveInternal(MoveSpecification moveSpecification, ChessBoard board, String san) {
 
     final var halfMoveCount = board.getPerformedHalfMoveCount();
     final var index = halfMoveCount - 1;

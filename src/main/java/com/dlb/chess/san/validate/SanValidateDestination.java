@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.model.SanConversion;
@@ -19,7 +19,7 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 
 public abstract class SanValidateDestination extends AbstractSan implements EnumConstants {
 
-  public static void validateDestinationSquareSemantics(ApiBoard board, Side havingMove, SanFormat sanFormat,
+  public static void validateDestinationSquareSemantics(ChessBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion) {
     if (sanFormat.isKingCastlingMove()) {
       return;
@@ -37,7 +37,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     }
   }
 
-  private static void validatePawnDestination(ApiBoard board, Side havingMove, SanFormat sanFormat,
+  private static void validatePawnDestination(ChessBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion, Square toSquare, Piece pieceOnToSquare) {
     final boolean isCapture = sanFormat.isCapture();
 
@@ -124,7 +124,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
     // non-capturing move to empty destination: valid, fall through
   }
 
-  private static boolean calculateIsPotentialEnPassantCapture(ApiBoard board, Side havingMove, SanFormat sanFormat,
+  private static boolean calculateIsPotentialEnPassantCapture(ChessBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion, Square toSquare) {
     if (sanFormat != SanFormat.PAWN_CAPTURING_NON_PROMOTION) {
       return false;

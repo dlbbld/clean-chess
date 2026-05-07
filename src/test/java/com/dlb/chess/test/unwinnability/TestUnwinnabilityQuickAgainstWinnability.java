@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -52,7 +52,7 @@ class TestUnwinnabilityQuickAgainstWinnability {
             break;
         }
 
-        final ApiBoard board = new Board(testCase.fen());
+        final ChessBoard board = new Board(testCase.fen());
 
         logger.info(testCase.pgnFileName());
 

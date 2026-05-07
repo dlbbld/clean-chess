@@ -5,14 +5,9 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.common.NonNullWrapperCommon;
 
 /**
- * Pull-based PGN tokenizer. The tokenizer is deliberately lenient in what it recognizes — it emits tokens for every
- * construct the strict-mode grammar cares about, without enforcing strict-specific inter-token constraints (exact
- * single spacing, required move numbers, termination marker presence). Those checks belong to the parser, which has
- * full contextual awareness.
- *
- * <p>
- * The tokenizer operates as a finite automaton driven by the next character in the stream. It never looks further than
- * the next few characters and never retains the whole source, making it usable over a future streaming source.
+ * Pull-based PGN tokenizer. Emits tokens for every construct the grammar cares about; strict-specific inter-token
+ * constraints (exact single spacing, required move numbers, termination presence) are enforced by the parser, not
+ * here.
  */
 public final class PgnTokenizer {
 
@@ -20,8 +15,7 @@ public final class PgnTokenizer {
 
   private final PgnCharStream stream;
 
-  // The peek slots are lazily filled — null means "not yet read". Captured into locals before use so that JDT's
-  // flow analysis can narrow them back to @NonNull before they escape as return values.
+  // Lazy peek slots. Captured into locals before use so JDT can narrow them to @NonNull before they escape.
   private @Nullable PgnToken peekedAt0;
   private @Nullable PgnToken peekedAt1;
 
@@ -38,9 +32,7 @@ public final class PgnTokenizer {
     return result;
   }
 
-  /**
-   * One-token lookahead past {@link #peek()}.
-   */
+  /** One-token lookahead past {@link #peek()}. */
   public PgnToken peekNext() {
     if (peekedAt0 == null) {
       peekedAt0 = readNext();
@@ -90,7 +82,6 @@ public final class PgnTokenizer {
       case '{':
         return readBraceComment(line, column);
       case '}':
-        // Stray closing brace outside of any open commentary — always an error; the parser surfaces it.
         stream.read();
         return new PgnToken(PgnTokenType.BRACE_STRAY_CLOSE, "}", line, column);
       case '!':
@@ -162,26 +153,20 @@ public final class PgnTokenizer {
     while (true) {
       final var c = stream.peek();
       if (c == CHAR_EOF) {
-        // EOF before matching } — unclosed commentary.
         return new PgnToken(PgnTokenType.BRACE_COMMENT_UNCLOSED, NonNullWrapperCommon.toString(text), line, column);
-      }
-      if (c == '{') {
-        // A second { before the first } — commentary cannot nest. Leave the inner { unconsumed; the parser throws
-        // on the nested-token, so what follows in the stream does not matter for correctness.
-        return new PgnToken(PgnTokenType.BRACE_COMMENT_NESTED, NonNullWrapperCommon.toString(text), line, column);
       }
       if (c == '}') {
         stream.read();
         return new PgnToken(PgnTokenType.BRACE_COMMENT, NonNullWrapperCommon.toString(text), line, column);
       }
+      // PGN spec §8.2.5: an inner `{` is content, not a nested-comment opener. Only `}` closes a comment.
       text.append((char) stream.read());
     }
   }
 
   private PgnToken readMoveSuffixAnnotation(int line, int column) {
-    // Consume every consecutive ! / ? character as a single suffix token. Over-long runs like `!!!` or `!?!` become
-    // one token so the parser can surface them with MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID rather than being split
-    // and misdiagnosed as a spacing error.
+    // Coalesce consecutive ! / ? into one token so over-long runs (`!!!`, `!?!`) surface as
+    // MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID rather than misdiagnosing as a spacing error.
     final StringBuilder text = new StringBuilder();
     while (true) {
       final var c = stream.peek();
@@ -244,8 +229,7 @@ public final class PgnTokenizer {
       text.append((char) stream.read());
     }
     if (text.length() == 0) {
-      // Unrecognized single character — consume it so we always make progress. The parser will reject this as a
-      // structural error when it encounters the resulting symbol.
+      // Unrecognised single character — consume it so we always make progress. The parser surfaces the rejection.
       text.append((char) stream.read());
     }
     return new PgnToken(PgnTokenType.SYMBOL, NonNullWrapperCommon.toString(text), line, column);

@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ApiBoard;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.SanValidation;
@@ -18,7 +18,7 @@ class TestSanValidatePawnDestinationRank {
   void testWhite() {
 
     {
-      final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
+      final ChessBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
 
       checkException("d2", board);
       checkException("d1=Q", board);
@@ -35,7 +35,7 @@ class TestSanValidatePawnDestinationRank {
   void testBlack() {
 
     {
-      final ApiBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
+      final ChessBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
 
       checkException("f7", board);
       checkException("f8=Q", board);
@@ -47,11 +47,11 @@ class TestSanValidatePawnDestinationRank {
 
   }
 
-  private static void checkException(String san, ApiBoard board) {
+  private static void checkException(String san, ChessBoard board) {
     checkException(san, board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
   }
 
-  private static void checkException(String san, ApiBoard board, SanValidationProblem svp) {
+  private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
     boolean isException;
     try {
       SanValidation.validateSan(san, board);

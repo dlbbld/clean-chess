@@ -14,6 +14,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
@@ -200,6 +201,21 @@ public abstract class FileUtility {
         throw new FileSystemAccessException(
             "The file " + file.getAbsolutePath() + " could not be deleted - permission issue", ioe);
       }
+    }
+  }
+
+  /**
+   * Walks {@code root} recursively and returns every regular file under it as a {@link List} of {@link Path}.
+   * The underlying {@link Stream} is fully drained and closed before this method returns, so callers do not
+   * have to (and should not try to) manage stream lifetime themselves.
+   */
+  @SuppressWarnings("null")
+  public static List<Path> listAllFilesRecursively(Path root) {
+    try (Stream<@NonNull Path> stream = Files.walk(root)) {
+      @NonNull final List<@NonNull Path> result = stream.filter(Files::isRegularFile).toList();
+      return result;
+    } catch (final IOException ioe) {
+      throw new FileSystemAccessException("Recursive file listing of \"" + root + "\" failed", ioe);
     }
   }
 
