@@ -69,7 +69,7 @@ class TestPgnCorpusNotPlaysBeyondAudit {
     final var report = new StringBuilder().append("Corpus audit: ").append(playsBeyondFiles.size())
         .append(" of ").append(totalFiles).append(" PGN files cannot be fully replayed under the strict-game ")
         .append("invariant. They must be relocated out of the regular corpus into ")
-        .append("pgnParser/common/beyond/legacy/:\n");
+        .append("pgnParser/legacy/common/beyond/:\n");
     for (final String entry : playsBeyondFiles) {
       report.append("  ").append(entry).append('\n');
     }

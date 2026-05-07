@@ -44,7 +44,7 @@ public abstract class RestrictTestConstants {
   // Flip to false locally to run.
   public static final boolean IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT = true;
 
-  // TestLegacyPgnParsePlaysBeyondAudit parses every fixture under pgnParser/common/beyond/legacy
+  // TestLegacyPgnParsePlaysBeyondAudit parses every fixture under pgnParser/legacy/common/beyond
   // through the strict parser and asserts the rejection (problem + GameStatus) matches the
   // hardcoded expectation per file. ~15 seconds. Useful when the legacy tree or strict-pipeline
   // rules change. Flip to false locally to run.

@@ -25,7 +25,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.test.RestrictTestConstants;
 
 /**
- * Verifies that every PGN fixture under {@code pgnParser/common/beyond/legacy/} is rejected by the strict parser
+ * Verifies that every PGN fixture under {@code pgnParser/legacy/common/beyond/} is rejected by the strict parser
  * exactly as expected. The legacy tree contains real-game and crafted PGNs relocated out of the regular corpus because
  * their recorded halfmove sequence continues past a FIDE-automatic termination, or because their FEN tag's halfmove
  * clock is above the 75-move threshold.
