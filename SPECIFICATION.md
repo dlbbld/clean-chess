@@ -234,7 +234,7 @@ clean-chess follows the same convention: `PgnFile.pregameCommentary()` carries a
 
 ### 6.3 Conformance for everything else
 
-The rest of the library's PGN handling follows the specification: brace-grammar rules, move-number indicators (PGN §8.2.2), inner-brace-as-content (PGN §8.2.5), seven-tag-roster requirements, FIDE game-termination markers, the strict-vs-import format split. Implementation-level decisions in these areas are captured in code comments tagged `T-002`, `T-003`, `T-005` etc. for traceability — they are not reproduced here because the spec already documents the *what*; the code is the authoritative *how*.
+The rest of the library's PGN handling follows the specification: brace-grammar rules, move-number indicators (PGN §8.2.2), inner-brace-as-content (PGN §8.2.5), seven-tag-roster requirements, FIDE game-termination markers, the strict-vs-import format split. The PGN standard already documents the *what*; the code is the authoritative *how*.
 
 ---
 
@@ -255,15 +255,9 @@ The test suite is the project's safety net. Refactors are expected to leave the 
 
 ## 8. Comment style
 
-Comment policy for the codebase, established under T-006:
+Comment policy for the codebase:
 
-- **Keep:** decisions, trade-offs, spec references (`PGN spec §8.2.5`, `FIDE 9.6.2`), subtle invariants, counter-intuitive behaviour, task tags (`T-002`, `T-003`, `T-005`) for traceability.
+- **Keep:** decisions, trade-offs, spec references (e.g. `PGN spec §8.2.5`, `FIDE 9.6.2`), subtle invariants, counter-intuitive behaviour.
 - **Drop:** restating the code, narration of implementation steps, double-bookkeeping of test intent, and especially **filesystem paths or other physically-mirrored facts in prose** — those duplicate information the code already carries and silently rot when the code is reorganised.
 
 No fixed line-count rule; a longer comment is fine when the content is genuinely irreplaceable. Rule of thumb: if an AI could regenerate the comment from the code, the comment is a maintenance liability.
-
----
-
-## 9. Companion documents
-
-Future additions to capture more detailed material — e.g. FIDE-deviation log, future ideas, performance notes — would go under `docs/` and be linked from here. Empty for now; this section is a placeholder so the structure exists when the first companion is needed.
