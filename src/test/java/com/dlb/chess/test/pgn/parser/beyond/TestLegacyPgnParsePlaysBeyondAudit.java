@@ -43,7 +43,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Path LEGACY_FOLDER = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond/legacy");
+      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
