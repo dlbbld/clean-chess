@@ -67,7 +67,7 @@ class TestPgnCommentary {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Constructor — accepts whitespace previously rejected (tab / newline / CR / CRLF)
+  // Constructor — tab and newline accepted; CR rejected (T-005 model invariant: no `\r` ever).
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -84,20 +84,28 @@ class TestPgnCommentary {
 
   @SuppressWarnings("static-method")
   @Test
-  void carriageReturnIsAcceptedAndPreservedVerbatim() {
-    assertEquals("a\rb", new PgnCommentary("a\rb").value());
+  void carriageReturnIsRejected() {
+    // T-005: parser input is normalised to LF, so `\r` cannot reach the model from a parse path. Direct
+    // construction with `\r` violates the invariant and must throw.
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a\rb"));
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void crlfSequenceIsAcceptedAndPreservedVerbatim() {
-    assertEquals("a\r\nb", new PgnCommentary("a\r\nb").value());
+  void crlfSequenceIsRejected() {
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a\r\nb"));
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void mixedWhitespaceIsAcceptedAndPreservedVerbatim() {
-    assertEquals("a \t b\n c\r d", new PgnCommentary("a \t b\n c\r d").value());
+  void mixedWhitespaceWithCrIsRejected() {
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a \t b\n c\r d"));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void mixedWhitespaceWithoutCrIsAcceptedAndPreservedVerbatim() {
+    assertEquals("a \t b\n c d", new PgnCommentary("a \t b\n c d").value());
   }
 
   // -------------------------------------------------------------------------------------------------

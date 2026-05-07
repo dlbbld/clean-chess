@@ -314,18 +314,19 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void carriageReturnInMoveCommentaryIsPreservedVerbatim() {
+  void carriageReturnInMoveCommentaryIsNormalisedToLf() {
+    // T-005: CRLF and lone CR are normalised to LF at the parser input boundary. The model never sees `\r`.
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
-    assertEquals("a\rb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void crlfInMoveCommentaryIsPreservedVerbatim() {
+  void crlfInMoveCommentaryIsNormalisedToLf() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\r\nb} e5 *\n\n");
-    assertEquals("a\r\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")

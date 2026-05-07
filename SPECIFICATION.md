@@ -31,7 +31,7 @@ The opening brace `{` is **allowed** in commentary content. Per PGN spec §8.2.5
 
 | Category | What it covers | Why forbidden |
 |---|---|---|
-| `Cc` (`Character.CONTROL`) | ASCII / C0 / C1 control characters | They serve no purpose in commentary content. **Exception:** `\t` (U+0009), `\n` (U+000A), and `\r` (U+000D) are explicitly permitted. |
+| `Cc` (`Character.CONTROL`) | ASCII / C0 / C1 control characters | They serve no purpose in commentary content. **Exception:** `\t` (U+0009) and `\n` (U+000A) are explicitly permitted. `\r` (U+000D) is **forbidden** — see [Newline handling](#newline-handling) below. |
 | `Cs` (`Character.SURROGATE`) | Lone high or low surrogate code points | UTF-16 encoding artefacts, not real characters. A `String` containing a lone surrogate is malformed. |
 | `Cn` (`Character.UNASSIGNED`) | Code points not assigned by the Unicode Standard | Including the noncharacter ranges (e.g. U+FDD0–U+FDEF, U+FFFE, U+FFFF) and any code point Unicode has not yet allocated. |
 | `Co` (`Character.PRIVATE_USE`) | U+E000–U+F8FF and the Plane 15/16 private-use areas | Reserved for private agreement (custom fonts, in-house symbols). Chess commentary should not depend on these. |
@@ -50,7 +50,7 @@ All other Unicode categories, including:
 - Format characters (Cf) — zero-width joiner, BOM, bidi marks, soft hyphen. Invisible but legitimate in non-Latin scripts and emoji sequences.
 - Supplementary characters (above U+FFFF) — emoji, rare scripts. Validator iterates by code point, not by `char`, so surrogate pairs forming a valid supplementary code point are accepted.
 
-The three explicitly permitted control characters (`\t`, `\n`, `\r`) and CRLF (`\r\n`) round-trip verbatim through both parsers and the exporter — no normalisation, no substitution.
+The two explicitly permitted control characters (`\t`, `\n`) round-trip verbatim through both parsers and the exporter — no substitution. `\r` is normalised to `\n` at the parser input boundary; see [Newline handling](#newline-handling).
 
 #### Why this contract
 
@@ -96,6 +96,38 @@ This mirrors python-chess's `force_movenumber` flag: tools that import lenient i
 - **Strict input → export → strict re-parse.** Byte-stable.
 - **Lenient input without indicator → export → strict re-parse.** Not byte-stable on the move-text bytes (the export adds the indicator), but the parsed model is equal on both sides.
 - **Lenient input with indicator → export → strict re-parse.** Byte-stable.
+
+### Newline handling
+
+All PGN text handled by the library uses **LF (`\n`) as the canonical newline**, internally and on export. This applies uniformly to tag values, movetext, and `{...}` commentary content.
+
+#### Input normalisation
+
+Both parsers (`StrictPgnParser`, `LenientPgnParser`) normalise the input string at the constructor before tokenisation:
+
+- `\r\n` (CRLF) → `\n`
+- standalone `\r` (lone CR) → `\n`
+- `\n` → `\n` (no change)
+
+Normalisation is implemented in `NewlineNormalization.toLf(String)`. Inputs that already use only LF are returned unchanged.
+
+#### Model invariant
+
+`PgnCommentary` forbids `\r` in its content — direct construction with `\r` throws `PgnCommentaryValidationException`. The invariant is symmetric with the parser-input rule: the model never sees `\r`, regardless of whether the value came from a parser or from a direct API call.
+
+#### Exporter
+
+`PgnCreate` writes only `\n`. CRLF input round-trips to LF in the exported PGN. There is no platform-dependent line-ending behaviour.
+
+#### Round-trip semantics
+
+For an input containing CRLF or lone CR in commentary content:
+
+- `parse(input)` produces a model with `\n` only (input CR/CRLF normalised).
+- `export(parse(input))` writes `\n` only.
+- `parse(export(parse(input))) ≡ parse(input)` — equality on both sides because both go through the same normalisation.
+
+The round-trip is **not byte-stable** for inputs that used CR or CRLF; it is byte-stable for inputs that already used LF only.
 
 ### Open follow-ups
 

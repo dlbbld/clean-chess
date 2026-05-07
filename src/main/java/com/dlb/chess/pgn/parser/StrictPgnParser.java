@@ -55,8 +55,8 @@ public final class StrictPgnParser {
   private final PgnTokenizer tokenizer;
 
   private StrictPgnParser(String source) {
-    this.source = source;
-    this.tokenizer = new PgnTokenizer(new PgnCharStream(source));
+    this.source = NewlineNormalization.toLf(source);
+    this.tokenizer = new PgnTokenizer(new PgnCharStream(this.source));
   }
 
   // -------------------------------------------------------------------------------------------------

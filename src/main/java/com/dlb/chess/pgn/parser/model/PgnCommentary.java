@@ -23,9 +23,11 @@ import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
  * <p>
  * <b>Forbidden — Unicode categories:</b>
  * <ul>
- * <li>{@link Character#CONTROL} (Cc) — except for the three explicitly permitted control characters
- *     {@code \t} (U+0009), {@code \n} (U+000A), and {@code \r} (U+000D), which are valid commentary content
- *     per the PGN standard's distinction between string tokens and brace commentary.</li>
+ * <li>{@link Character#CONTROL} (Cc) — except for the two explicitly permitted control characters
+ *     {@code \t} (U+0009) and {@code \n} (U+000A). {@code \r} (U+000D) is also forbidden: per T-005 the library
+ *     normalises CRLF and lone CR to LF at the parser input boundary, so {@code \r} can never appear in
+ *     parser-produced content. Direct {@link PgnCommentary} construction with {@code \r} therefore violates the
+ *     model invariant.</li>
  * <li>{@link Character#SURROGATE} (Cs) — lone high or low surrogate code points; these are UTF-16 encoding
  *     artefacts, not real characters.</li>
  * <li>{@link Character#UNASSIGNED} (Cn) — code points not assigned by the Unicode Standard.</li>
@@ -82,8 +84,9 @@ public record PgnCommentary(String value) {
         throw new PgnCommentaryValidationException(formatBraceProblem(value, i));
       }
 
-      // The three control characters explicitly permitted in commentary.
-      if (cp != '\t' && cp != '\n' && cp != '\r') {
+      // The two control characters explicitly permitted in commentary. `\r` is excluded — T-005 normalises
+      // CRLF and lone CR to LF at the parser input boundary, so the model invariant is "no CR ever".
+      if (cp != '\t' && cp != '\n') {
         final int type = Character.getType(cp);
         if (type == Character.CONTROL
             || type == Character.SURROGATE

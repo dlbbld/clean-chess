@@ -292,9 +292,24 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void carriageReturnInPreGameCommentaryIsPreserved() {
+  void carriageReturnInPreGameCommentaryIsNormalisedToLf() {
+    // T-005: CRLF and lone CR are normalised to LF at the parser input boundary. The model never sees `\r`.
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\rb} 1. e4 e5 *\n\n");
-    assertEquals("a\rb", file.pregameCommentary().value());
+    assertEquals("a\nb", file.pregameCommentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void crlfInPreGameCommentaryIsNormalisedToLf() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\r\nb} 1. e4 e5 *\n\n");
+    assertEquals("a\nb", file.pregameCommentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void crlfInMoveCommentaryIsNormalisedToLf() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a\r\nb} 1... e5 *\n\n");
+    assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")

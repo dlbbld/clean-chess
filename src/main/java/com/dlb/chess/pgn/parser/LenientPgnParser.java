@@ -56,7 +56,7 @@ public final class LenientPgnParser {
   private final PgnTokenizer tokenizer;
 
   private LenientPgnParser(String source) {
-    this.source = stripUtf8Bom(source);
+    this.source = NewlineNormalization.toLf(stripUtf8Bom(source));
     this.tokenizer = new PgnTokenizer(new PgnCharStream(this.source));
   }
 

@@ -168,14 +168,13 @@ class TestPgnExportPreGameCommentary {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Round-trip property — semantic preservation of commentary content through parse + export. Per the
-  // commentary contract, both strict and lenient preserve source bytes verbatim, so the round-trip is
-  // byte-stable for tabs, newlines, CR, and CRLF embedded in commentary.
+  // Round-trip property — semantic preservation of commentary content through parse + export.
   //
-  // parse(export(parse(text))) ≡ parse(text)
+  //   parse(export(parse(text))) ≡ parse(text)
   //
-  // (No export-side "no forbidden chars" assertion any more — the PGN spec allows these characters in
-  // commentary and we preserve them.)
+  // Tabs and LF in commentary are byte-stable. CR and CRLF are normalised to LF on parse (T-005), so the
+  // first parse already canonicalises them; the equality still holds because both sides of the equation go
+  // through normalisation.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -221,9 +220,8 @@ class TestPgnExportPreGameCommentary {
   }
 
   /**
-   * Asserts the round-trip property: parsing the input, exporting, and re-parsing yields a model equal to the first
-   * parse. Per the commentary contract this is byte-stable for tabs, newlines, CR, and CRLF — none of these is
-   * normalised by the parser, so what goes in comes back out.
+   * Asserts {@code parse(export(parse(text))) ≡ parse(text)}. Tab/LF are byte-stable; CR/CRLF are normalised to LF
+   * by the first parse, then identity holds because both sides of the equation go through that same normalisation.
    */
   private static void assertRoundTripStable(String inputPgn) {
     final PgnFile p1 = LenientPgnParser.parseText(inputPgn);
@@ -231,6 +229,20 @@ class TestPgnExportPreGameCommentary {
     final PgnFile p2 = LenientPgnParser.parseText(t1);
 
     assertEquals(p1, p2, "Round-trip changed the parsed model");
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // T-005 export-side observations: exporter writes only LF, never CR.
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void crlfInputProducesLfOnlyExport() {
+    final PgnFile fileImport = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "{intro\r\nnote} 1. e4 {move\r\nnote} e5 *\n\n");
+    final String exported = PgnCreate.createPgnFileString(fileImport);
+    org.junit.jupiter.api.Assertions.assertFalse(exported.contains("\r"),
+        "Export must not contain CR; T-005 says LF is the canonical line ending.");
   }
 
 }
