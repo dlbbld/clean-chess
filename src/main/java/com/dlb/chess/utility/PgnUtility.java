@@ -19,35 +19,72 @@ public abstract class PgnUtility {
     return board;
   }
 
+  /**
+   * Wraps {@code line} into ≤ {@code lineLength}-char lines, splitting on spaces — except inside {@code {...}}
+   * brace comments, which are atomic. A brace region longer than {@code lineLength} is emitted on its own line
+   * rather than broken: spaces inside commentary are content, not wrap candidates. The 79-char export-format
+   * guideline is a soft target, matching python-chess.
+   */
   public static List<String> calculateWrappedLines(String line, int lineLength) {
-    final List<String> result = new ArrayList<>();
-    final var blockArray = line.split(" ");
-
-    if (blockArray.length == 0) {
+    final List<String> atoms = splitIntoAtoms(line);
+    if (atoms.isEmpty()) {
       throw new ProgrammingMistakeException("As the passed text cannot be null the array cannot be empty");
     }
-    final var firstBlock = blockArray[0];
+    final List<String> result = new ArrayList<>();
     StringBuilder wrappedLine = new StringBuilder();
-    // we add the first block unconditionally without leading space
-    // if checking and then first adding line as for other elements that would produce an empty line
-    wrappedLine.append(firstBlock);
-
-    // we add the remaining blocks with a leading space
-    if (blockArray.length >= 2) {
-      for (var i = 1; i < blockArray.length; i++) {
-        // +1 for the space we also need to append
-        final var block = blockArray[i];
-        if (wrappedLine.length() + 1 + block.length() <= lineLength) {
-          wrappedLine.append(" ").append(block);
-        } else {
-          result.add(NonNullWrapperCommon.toString(wrappedLine));
-          wrappedLine = new StringBuilder();
-          wrappedLine.append(block);
-        }
+    wrappedLine.append(NonNullWrapperCommon.get(atoms, 0));
+    for (var i = 1; i < atoms.size(); i++) {
+      final String atom = NonNullWrapperCommon.get(atoms, i);
+      if (wrappedLine.length() + 1 + atom.length() <= lineLength) {
+        wrappedLine.append(" ").append(atom);
+      } else {
+        result.add(NonNullWrapperCommon.toString(wrappedLine));
+        wrappedLine = new StringBuilder();
+        wrappedLine.append(atom);
       }
     }
     result.add(NonNullWrapperCommon.toString(wrappedLine));
     return result;
+  }
+
+  /**
+   * Splits {@code line} into space-separated atoms; each {@code {...}} region is one indivisible atom. Spaces and
+   * other characters inside a brace region are content, not separators. Per PGN spec §8.2.5 an inner {@code {} is
+   * content too, so only {@code }} ends a region.
+   */
+  private static List<String> splitIntoAtoms(String line) {
+    final List<String> atoms = new ArrayList<>();
+    final int len = line.length();
+    var i = 0;
+    while (i < len) {
+      final char c = line.charAt(i);
+      if (c == ' ') {
+        i++;
+        continue;
+      }
+      if (c == '{') {
+        var j = i + 1;
+        while (j < len && line.charAt(j) != '}') {
+          j++;
+        }
+        if (j < len) {
+          atoms.add(NonNullWrapperCommon.substring(line, i, j + 1));
+          i = j + 1;
+        } else {
+          // Defensive — PgnCreate emits balanced braces, so unreachable in practice.
+          atoms.add(NonNullWrapperCommon.substring(line, i));
+          i = len;
+        }
+        continue;
+      }
+      var j = i;
+      while (j < len && line.charAt(j) != ' ' && line.charAt(j) != '{') {
+        j++;
+      }
+      atoms.add(NonNullWrapperCommon.substring(line, i, j));
+      i = j;
+    }
+    return atoms;
   }
 
 }

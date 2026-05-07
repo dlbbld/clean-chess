@@ -129,9 +129,11 @@ For an input containing CRLF or lone CR in commentary content:
 
 The round-trip is **not byte-stable** for inputs that used CR or CRLF; it is byte-stable for inputs that already used LF only.
 
-### Open follow-ups
+### Brace-aware wrap
 
-- **Brace-aware wrap.** `PgnUtility.calculateWrappedLines` currently splits on space without awareness of `{...}` regions. For long single-line commentary, this transforms internal spaces into newlines, producing valid (per the new contract) but content-different output on round-trip. Fix: don't break inside `{...}`. Mirrors python-chess's "long comment produces a long line, accepting the 80-char file-export-format guideline as a soft target." Tests `testFromImportStrictLong` and `testFromImportLenientLong` are `@Disabled` until this lands.
+`PgnUtility.calculateWrappedLines` treats each `{...}` region as a single atom — spaces inside commentary are content, never wrap candidates. A brace region that exceeds `MAX_LINE_LENGTH` is emitted on its own line rather than broken. This matches python-chess's "long comment produces a long line, accepting the 80-char export-format guideline as a soft target."
+
+With this in place, `parse → export → parse` is byte-stable for arbitrarily long commentary content (subject to the CR/CRLF normalisation noted under "Newline handling").
 
 ### Comment style (T-006)
 

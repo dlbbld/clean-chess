@@ -49,8 +49,6 @@ class TestPgnExportPreGameCommentary {
 
   }
 
-  /** Disabled pending the brace-aware-wrap follow-up (see SPECIFICATION.md). */
-  @org.junit.jupiter.api.Disabled("brace-aware wrap follow-up: see SPECIFICATION.md")
   @SuppressWarnings("static-method")
   @Test
   void testFromImportStrictLong() {
@@ -124,8 +122,6 @@ class TestPgnExportPreGameCommentary {
 
   }
 
-  /** Same brace-aware-wrap follow-up as {@link #testFromImportStrictLong()}. */
-  @org.junit.jupiter.api.Disabled("brace-aware wrap follow-up: see SPECIFICATION.md")
   @SuppressWarnings("static-method")
   @Test
   void testFromImportLenientLong() {

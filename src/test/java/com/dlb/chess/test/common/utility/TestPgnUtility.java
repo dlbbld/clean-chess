@@ -39,6 +39,60 @@ class TestPgnUtility {
 
   }
 
+  // -------------------------------------------------------------------------------------------------
+  // Brace-aware wrap: spaces inside `{...}` are content, never wrap candidates. A brace region wider than
+  // lineLength goes on its own line rather than being broken.
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBraceRegionTreatedAsAtomic() {
+    // The brace region "{a b c}" is 7 chars and exceeds lineLength=5; emitted alone, not split on its inner spaces.
+    checkWrappedLines("{a b c}", 5, "{a b c}");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testBraceRegionWithFollowingMoves() {
+    // Brace alone on first line (longer than 10), then "1. e4" packs onto the next line.
+    checkWrappedLines("{long comment} 1. e4", 10, "{long comment}", "1. e4");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testShortBraceFitsOnSameLine() {
+    checkWrappedLines("{c} 1. e4 e5", 20, "{c} 1. e4 e5");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testInnerSpacesNeverBecomeNewlines() {
+    // The 30-char brace region has internal spaces, none of which may be turned into a wrap point.
+    checkWrappedLines("{a very spaced out comment here} 1. e4", 15,
+        "{a very spaced out comment here}", "1. e4");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testInnerOpenBraceIsContent() {
+    // T-003: an inner `{` is content; only `}` ends the region. The whole "{a {b c}" is one atom.
+    checkWrappedLines("{a {b c} 1. e4", 5, "{a {b c}", "1. e4");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testMultipleBraceRegions() {
+    checkWrappedLines("1. e4 {one} 1... e5 {two}", 30, "1. e4 {one} 1... e5 {two}");
+    checkWrappedLines("1. e4 {one} 1... e5 {two}", 12, "1. e4 {one}", "1... e5", "{two}");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWordsBeforeAndAfterBrace() {
+    // Words before the brace pack normally; the brace lands on its own line if too long; words after re-pack.
+    checkWrappedLines("a b {long comment} c d", 5, "a b", "{long comment}", "c d");
+  }
+
   private static void checkWrappedLines(String line, int lineLength, String... expectedLineArray) {
     @SuppressWarnings("null") final List<String> expectedResult = Arrays.asList(expectedLineArray);
     final List<String> actualResult = PgnUtility.calculateWrappedLines(line, lineLength);
