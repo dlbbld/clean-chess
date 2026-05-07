@@ -177,7 +177,7 @@ public final class LenientPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.preGameCommentary(), movetext.halfMoveList());
+    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -323,20 +323,20 @@ public final class LenientPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary preGameCommentary,
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary pregameCommentary,
       @Nullable ResultTagValue terminationResult) {
   }
 
   private MovetextOutcome parseMovetext() {
-    var preGameCommentary = PgnCommentary.EMPTY;
+    var pregameCommentary = PgnCommentary.EMPTY;
     final List<PgnHalfMove> halfMoves = new ArrayList<>();
     @Nullable ResultTagValue terminationResult = null;
 
     skipInsignificantWhitespace();
-    // Leading-commentary slot: exactly one commentary allowed before the first move. Additional braces before any
+    // Pregame-commentary slot: exactly one commentary allowed before the first move. Additional braces before any
     // half-move fall through to the main loop and are reported as R4 (brace at SAN-expected position).
     if (isBraceToken(tokenizer.peek().type())) {
-      preGameCommentary = consumeCommentaryOrThrow();
+      pregameCommentary = consumeCommentaryOrThrow();
     }
 
     while (true) {
@@ -404,15 +404,16 @@ public final class LenientPgnParser {
           "Unexpected token \"" + peek.text() + "\" at line " + peek.line() + ".");
     }
 
-    return new MovetextOutcome(halfMoves, preGameCommentary, terminationResult);
+    return new MovetextOutcome(halfMoves, pregameCommentary, terminationResult);
   }
 
   /**
-   * Detects and consumes a spaced move-number indicator of the form {@code N . } or {@code N ... } where the digits
-   * and dots arrive as separate {@link PgnTokenType#SYMBOL} tokens because whitespace split them. Returns true when
-   * such a pattern was matched and consumed; returns false without consuming anything otherwise.
+   * Detects and consumes a spaced move-number indicator of the form {@code N . } or {@code N ... } where the digits and
+   * dots arrive as separate {@link PgnTokenType#SYMBOL} tokens because whitespace split them. Returns true when such a
+   * pattern was matched and consumed; returns false without consuming anything otherwise.
    *
-   * <p>A {@code peek} of digits-only followed immediately by a dots-only symbol also counts (covers the contiguous
+   * <p>
+   * A {@code peek} of digits-only followed immediately by a dots-only symbol also counts (covers the contiguous
    * {@code N..} or {@code N.e4} edge case where the tokenizer already produced separate digit and dot tokens).
    */
   private boolean consumedSpacedMoveNumber(PgnToken digitsPeek) {
@@ -450,7 +451,7 @@ public final class LenientPgnParser {
       return false;
     }
     for (var i = 0; i < text.length(); i++) {
-      final char c = text.charAt(i);
+      final var c = text.charAt(i);
       if (c < '0' || c > '9') {
         return false;
       }
@@ -502,10 +503,10 @@ public final class LenientPgnParser {
   }
 
   /**
-   * Consumes a brace-related token at a position where commentary is allowed (leading or trailing slot). Returns the
+   * Consumes a brace-related token at a position where commentary is allowed (pregame or after move). Returns the
    * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. For every ill-formed brace variant —
-   * unclosed, nested, or stray closing brace — throws the corresponding validation error. Lenient here behaves the
-   * same as strict: continuing past malformed commentary yields unreliable downstream results.
+   * unclosed, nested, or stray closing brace — throws the corresponding validation error. Lenient here behaves the same
+   * as strict: continuing past malformed commentary yields unreliable downstream results.
    */
   private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();

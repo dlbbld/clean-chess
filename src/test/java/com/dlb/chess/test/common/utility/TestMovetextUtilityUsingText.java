@@ -71,7 +71,7 @@ class TestMovetextUtilityUsingText extends AbstractTestMovetextUtility {
    */
   private static void checkInitialWithoutCommentary(String movetextPart, List<String> expectedSanList) {
     final PgnFile file = StrictPgnParser.parseText(header() + movetextPart + " *\n\n");
-    assertEquals("", file.preGameCommentary().value());
+    assertEquals("", file.pregameCommentary().value());
     assertEquals(expectedSanList, calculateSanList(file.halfMoveList()));
     for (final com.dlb.chess.model.PgnHalfMove halfMove : file.halfMoveList()) {
       assertEquals("", halfMove.commentary().value(), "Expected no commentary on " + halfMove.san());

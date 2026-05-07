@@ -11,23 +11,23 @@ import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.PgnTestHelper;
 
-class TestPgnExportLeadingCommentary {
+class TestPgnExportPreGameCommentary {
 
   @SuppressWarnings("static-method")
   @Test
   void testFromImportStrictHasMoves() {
 
-    final var leadingCommentary = "This is the leading commentary.";
+    final var pregameCommentary = "This is the pregame commentary.";
 
     final PgnFile fileImport = StrictPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = StrictPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
@@ -35,73 +35,75 @@ class TestPgnExportLeadingCommentary {
   @Test
   void testFromImportStrictHasNoMoves() {
 
-    final var leadingCommentary = "This is the leading commentary.";
+    final var pregameCommentary = "This is the pregame commentary.";
 
     final PgnFile fileImport = StrictPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = StrictPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
   /**
-   * Round-trip with a long single-line commentary currently fails on byte-stability: {@code PgnCreate} wraps the
-   * entire movetext (including brace content) at {@link PgnCreate#MAX_LINE_LENGTH} via
+   * Round-trip with a long single-line commentary currently fails on byte-stability: {@code PgnCreate} wraps the entire
+   * movetext (including brace content) at {@link PgnCreate#MAX_LINE_LENGTH} via
    * {@code PgnUtility.calculateWrappedLines}, replacing some original spaces with newlines INSIDE the {@code {...}}
    * region. After T-001 (preserve newlines/tabs verbatim per the spec), strict no longer rejects the wrapped output —
    * but the re-parsed model has {@code \n} in positions where the input had spaces, so {@code assertEquals(original,
    * roundTripped)} still fails.
    *
-   * <p>Fix needed in {@code PgnCreate.calculatePgnFileFileLines} / {@code PgnUtility.calculateWrappedLines}: wrapping
-   * must respect brace boundaries — a long brace-comment must stay on a single line (matching python-chess's
-   * "don't break inside {...}" approach), so original whitespace inside commentary is not transformed.
+   * <p>
+   * Fix needed in {@code PgnCreate.calculatePgnFileFileLines} / {@code PgnUtility.calculateWrappedLines}: wrapping must
+   * respect brace boundaries — a long brace-comment must stay on a single line (matching python-chess's "don't break
+   * inside {...}" approach), so original whitespace inside commentary is not transformed.
    *
-   * <p>Disabled until that brace-aware wrap fix lands.
+   * <p>
+   * Disabled until that brace-aware wrap fix lands.
    */
   @org.junit.jupiter.api.Disabled("PgnCreate wrap replaces spaces with \\n inside long {...} — round-trip not byte-stable; needs brace-aware wrap")
   @SuppressWarnings("static-method")
   @Test
   void testFromImportStrictLong() {
 
-    final var leadingCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+    final var pregameCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    assertTrue(pregameCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
 
     final PgnFile fileImport = StrictPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = StrictPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
   /**
-   * Per the commentary contract, strict (like lenient) preserves source bytes verbatim including embedded newlines.
-   * The PGN spec restricts non-printing characters from string tokens, not from {@code {...}} commentary.
+   * Per the commentary contract, strict (like lenient) preserves source bytes verbatim including embedded newlines. The
+   * PGN spec restricts non-printing characters from string tokens, not from {@code {...}} commentary.
    */
   @SuppressWarnings("static-method")
   @Test
   void testFromImportStrictWithLinebreakIsPreservedThroughRoundTrip() {
 
-    final var leadingCommentary = "This is the leading\ncommentary.";
+    final var pregameCommentary = "This is the leading\ncommentary.";
 
     final PgnFile fileImport = StrictPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = StrictPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
@@ -109,17 +111,17 @@ class TestPgnExportLeadingCommentary {
   @Test
   void testFromImportLenientHasMoves() {
 
-    final var leadingCommentary = "This is the leading commentary.";
+    final var pregameCommentary = "This is the pregame commentary.";
 
     final PgnFile fileImport = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = LenientPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
@@ -127,17 +129,17 @@ class TestPgnExportLeadingCommentary {
   @Test
   void testFromImportLenientHasNoMoves() {
 
-    final var leadingCommentary = "This is the leading commentary.";
+    final var pregameCommentary = "This is the pregame" + " commentary.";
 
     final PgnFile fileImport = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = LenientPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
@@ -150,18 +152,18 @@ class TestPgnExportLeadingCommentary {
   @Test
   void testFromImportLenientLong() {
 
-    final var leadingCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+    final var pregameCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    assertTrue(pregameCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
 
     final PgnFile fileImport = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "}" + " *\n\n");
-    assertEquals(leadingCommentary, fileImport.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
+    assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
     final String fileString = PgnCreate.createPgnFileString(fileImport);
 
     final PgnFile fileExport = LenientPgnParser.parseText(fileString);
 
-    assertEquals(leadingCommentary, fileExport.leadingCommentary().value());
+    assertEquals(pregameCommentary, fileExport.pregameCommentary().value());
 
   }
 
@@ -170,7 +172,7 @@ class TestPgnExportLeadingCommentary {
   // commentary contract, both strict and lenient preserve source bytes verbatim, so the round-trip is
   // byte-stable for tabs, newlines, CR, and CRLF embedded in commentary.
   //
-  //   parse(export(parse(text))) ≡ parse(text)
+  // parse(export(parse(text))) ≡ parse(text)
   //
   // (No export-side "no forbidden chars" assertion any more — the PGN spec allows these characters in
   // commentary and we preserve them.)
@@ -178,19 +180,19 @@ class TestPgnExportLeadingCommentary {
 
   @SuppressWarnings("static-method")
   @Test
-  void roundTripLeadingCommentaryWithNewline() {
+  void roundTripPreGameCommentaryWithNewline() {
     assertRoundTripStable(PgnTestHelper.header("*") + "{line one\nline two} 1. e4 e5 *\n\n");
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void roundTripLeadingCommentaryWithTab() {
+  void roundTripPreGameCommentaryWithTab() {
     assertRoundTripStable(PgnTestHelper.header("*") + "{line one\tline two} 1. e4 e5 *\n\n");
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void roundTripLeadingCommentaryWithCrlf() {
+  void roundTripPreGameCommentaryWithCrlf() {
     assertRoundTripStable(PgnTestHelper.header("*") + "{line one\r\nline two} 1. e4 e5 *\n\n");
   }
 
@@ -209,8 +211,7 @@ class TestPgnExportLeadingCommentary {
   @SuppressWarnings("static-method")
   @Test
   void roundTripBothLeadingAndMoveCommentary() {
-    assertRoundTripStable(
-        PgnTestHelper.header("*") + "{intro\nline} 1. e4 {one\ttwo} e5 {three\rfour} *\n\n");
+    assertRoundTripStable(PgnTestHelper.header("*") + "{intro\nline} 1. e4 {one\ttwo} e5 {three\rfour} *\n\n");
   }
 
   @SuppressWarnings("static-method")
@@ -220,9 +221,9 @@ class TestPgnExportLeadingCommentary {
   }
 
   /**
-   * Asserts the round-trip property: parsing the input, exporting, and re-parsing yields a model equal to the
-   * first parse. Per the commentary contract this is byte-stable for tabs, newlines, CR, and CRLF — none of these
-   * is normalised by the parser, so what goes in comes back out.
+   * Asserts the round-trip property: parsing the input, exporting, and re-parsing yields a model equal to the first
+   * parse. Per the commentary contract this is byte-stable for tabs, newlines, CR, and CRLF — none of these is
+   * normalised by the parser, so what goes in comes back out.
    */
   private static void assertRoundTripStable(String inputPgn) {
     final PgnFile p1 = LenientPgnParser.parseText(inputPgn);

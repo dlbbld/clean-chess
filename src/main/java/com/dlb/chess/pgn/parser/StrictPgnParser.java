@@ -42,7 +42,7 @@ import com.dlb.chess.utility.TagUtility;
  *
  * <p>
  * The parser produces a {@link PgnFile} record with tags sorted canonically, the start FEN derived from tag data, the
- * pre-game commentary if present, and the full half-move list. Structural violations surface as
+ * pregame commentary if present, and the full half-move list. Structural violations surface as
  * {@link StrictPgnParserValidationException} with a fine-grained {@link StrictPgnParserValidationProblem} category.
  */
 public final class StrictPgnParser {
@@ -158,7 +158,7 @@ public final class StrictPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.preGameCommentary(), movetext.halfMoveList());
+    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -362,14 +362,14 @@ public final class StrictPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary preGameCommentary) {
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary pregameCommentary) {
   }
 
   private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
-    // Pre-game commentary (optional).
-    var preGameCommentary = PgnCommentary.EMPTY;
+    // Pregame commentary (optional).
+    var pregameCommentary = PgnCommentary.EMPTY;
     if (isBraceToken(tokenizer.peek().type())) {
-      preGameCommentary = consumeCommentaryOrThrow();
+      pregameCommentary = consumeCommentaryOrThrow();
       expectSpaceAfterComment();
     }
 
@@ -385,13 +385,13 @@ public final class StrictPgnParser {
       tokenizer.next();
       final PgnToken terminator = tokenizer.next();
       validateTermination(terminator, resultTagValue);
-      return new MovetextOutcome(halfMoves, preGameCommentary);
+      return new MovetextOutcome(halfMoves, pregameCommentary);
     }
 
     // Tracks whether the last completed half-move had attached commentary. Per PGN spec §8.2.2 case 1, an
     // intervening commentary between White's move and Black's move requires the next Black move to be preceded
     // by a "N..." move-number indicator.
-    boolean priorCommentaryAttached = false;
+    var priorCommentaryAttached = false;
 
     while (true) {
       // Termination marker ends the movetext — checked first so the loop terminates before we try to read
@@ -399,17 +399,17 @@ public final class StrictPgnParser {
       if (tokenizer.peek().type() == PgnTokenType.TERMINATION_MARKER) {
         final PgnToken terminator = tokenizer.next();
         validateTermination(terminator, resultTagValue);
-        return new MovetextOutcome(halfMoves, preGameCommentary);
+        return new MovetextOutcome(halfMoves, pregameCommentary);
       }
 
       // Move-number handling for non-initial Black moves splits two ways:
-      //   (a) Commentary intervened on the previous (White) move → "N..." indicator REQUIRED (PGN spec §8.2.2).
-      //   (b) No commentary intervened → no move-number is allowed.
+      // (a) Commentary intervened on the previous (White) move → "N..." indicator REQUIRED (PGN spec §8.2.2).
+      // (b) No commentary intervened → no move-number is allowed.
       if (!isFirstMove && havingMove == Side.BLACK) {
         if (priorCommentaryAttached) {
           final PgnToken token = tokenizer.peek();
-          final String expected = HalfMoveUtility
-              .calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber, Side.BLACK);
+          final String expected = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber,
+              Side.BLACK);
           if (token.type() != PgnTokenType.MOVE_NUMBER_BLACK || !token.text().equals(expected)) {
             throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY,
                 "Black move after intervening commentary requires move-number indicator \"" + expected + "\".");
@@ -460,8 +460,8 @@ public final class StrictPgnParser {
 
   /**
    * Consumes a brace-related token at a position where commentary is allowed (leading or trailing slot). Returns the
-   * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. Throws the corresponding validation error
-   * for each ill-formed brace variant — unclosed, nested, or stray closing brace.
+   * commentary text for a well-formed {@link PgnTokenType#BRACE_COMMENT}. Throws the corresponding validation error for
+   * each ill-formed brace variant — unclosed, nested, or stray closing brace.
    */
   private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
@@ -489,8 +489,7 @@ public final class StrictPgnParser {
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
       default:
-        throw new ProgrammingMistakeException(
-            "consumeCommentaryOrThrow called for non-brace token: " + token.type());
+        throw new ProgrammingMistakeException("consumeCommentaryOrThrow called for non-brace token: " + token.type());
     }
   }
 
@@ -513,8 +512,8 @@ public final class StrictPgnParser {
   }
 
   /**
-   * After {@link #parseMovetext(Fen, ResultTagValue)} has consumed the termination marker, the remaining tokens must
-   * be nothing but whitespace/newlines leading up to EOF. Any other content — a stray commentary, a reappearing
+   * After {@link #parseMovetext(Fen, ResultTagValue)} has consumed the termination marker, the remaining tokens must be
+   * nothing but whitespace/newlines leading up to EOF. Any other content — a stray commentary, a reappearing
    * tag-bracket, random symbols — is rejected. Broken brace variants surface with their specific lexical category
    * (R1/R2/R3); everything else maps to {@link StrictPgnParserValidationProblem#MOVETEXT_CONTENT_AFTER_TERMINATION}.
    */
@@ -690,8 +689,8 @@ public final class StrictPgnParser {
         // Propagate the GameStatus from the SanValidationException for the GAME_ALREADY_ENDED
         // case so callers can distinguish the five FIDE-automatic termination causes without
         // parsing the human-readable message.
-        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN,
-            e.getSanValidationProblem(), message, e.getGameStatus());
+        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
+            message, e.getGameStatus());
       }
     }
   }

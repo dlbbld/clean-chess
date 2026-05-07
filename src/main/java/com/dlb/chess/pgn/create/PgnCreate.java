@@ -39,7 +39,7 @@ public class PgnCreate {
 
   public static String createPgnFileString(PgnFile pgnFile) {
     return appendEmptyLine(BasicUtility.convertToString(calculatePgnFileFileLines(pgnFile.tagList(),
-        pgnFile.preGameCommentary(), pgnFile.startFen(), pgnFile.halfMoveList())));
+        pgnFile.pregameCommentary(), pgnFile.startFen(), pgnFile.halfMoveList())));
   }
 
   private static String appendEmptyLine(String text) {
@@ -47,11 +47,11 @@ public class PgnCreate {
   }
 
   public static List<String> createPgnFileLines(PgnFile pgnFile) {
-    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.preGameCommentary(), pgnFile.startFen(),
+    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.pregameCommentary(), pgnFile.startFen(),
         pgnFile.halfMoveList());
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary preGameCommentary,
+  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary pregameCommentary,
       Fen startFen, List<PgnHalfMove> halfMoveList) {
 
     final List<String> fileLines = new ArrayList<>();
@@ -71,16 +71,16 @@ public class PgnCreate {
     final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList);
 
-    // add the pre-game commentary if any as a comment before the movetext.
+    // add the pregame commentary if any as a comment before the movetext.
     // PgnCommentary's value is contract-validated (no tab/newline/CR/control), so we can write it as-is.
-    final String preGameCommentaryValue = preGameCommentary.value();
+    final String pregameCommentaryValue = pregameCommentary.value();
     final String movetextIncludingPreGameCommentary;
-    if (preGameCommentaryValue.isEmpty()) {
+    if (pregameCommentaryValue.isEmpty()) {
       movetextIncludingPreGameCommentary = moves + " " + resultTagValue.getValue();
     } else if (moves.isEmpty()) {
-      movetextIncludingPreGameCommentary = "{" + preGameCommentaryValue + "}" + " " + resultTagValue.getValue();
+      movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + resultTagValue.getValue();
     } else {
-      movetextIncludingPreGameCommentary = "{" + preGameCommentaryValue + "}" + " " + moves + " "
+      movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + moves + " "
           + resultTagValue.getValue();
     }
 
@@ -163,9 +163,9 @@ public class PgnCreate {
     for (final PgnHalfMove halfMove : halfMoveList) {
 
       // Emit the move-number indicator in the three cases the PGN export-format requires it:
-      //   (i)  before the very first half-move (always — White or Black depending on starting FEN);
-      //   (ii) before every White move (continuation);
-      //   (iii) before a Black move when commentary intervened on the previous White move (PGN spec §8.2.2).
+      // (i) before the very first half-move (always — White or Black depending on starting FEN);
+      // (ii) before every White move (continuation);
+      // (iii) before a Black move when commentary intervened on the previous White move (PGN spec §8.2.2).
       if (isFirstMove) {
         isFirstMove = false;
         final var fullMoveNumberPart = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber,

@@ -18,9 +18,8 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
  * Restored non-commentary portion of the original {@code TestMoveTextUtilityUsingPgn}. Commentary-specific tests
- * (pre-game commentary success/exception, non-leading-commentary success/exception, combined commentary success) are
- * now covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored
- * here.
+ * (pregame commentary success/exception, non-pregame-commentary success/exception, combined commentary success) are now
+ * covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored here.
  */
 class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
@@ -114,25 +113,25 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @SuppressWarnings("static-method")
   @Test
   void testCombinedSuccess() {
-    // These fixtures exercise the full combination of pre-game commentary, trailing commentary, move-suffix
+    // These fixtures exercise the full combination of pregame commentary, trailing commentary, move-suffix
     // annotations, and SAN. Commentary correctness in isolation is covered by TestCommentaryStrict; here we assert
     // that all features parse together without loss of any component.
-    checkCombinedSuccess("01_example.pgn", "leading commentary", NonNullWrapperCommon.asList("e4", "d5", "d4"),
+    checkCombinedSuccess("01_example.pgn", "pregame commentary", NonNullWrapperCommon.asList("e4", "d5", "d4"),
         NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
             MoveSuffixAnnotation.BRILLIANT_MOVE),
         NonNullWrapperCommon.asList("commentWhite1", "commentBlack", "commentWhite2"));
-    checkCombinedSuccess("02_example.pgn", "leading commentary", NonNullWrapperCommon.asList("d5", "a3", "Qd6"),
+    checkCombinedSuccess("02_example.pgn", "pregame commentary", NonNullWrapperCommon.asList("d5", "a3", "Qd6"),
         NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
             MoveSuffixAnnotation.BRILLIANT_MOVE),
         NonNullWrapperCommon.asList("commentBlack1", "commentWhite", "commentBlack2"));
   }
 
-  private static void checkCombinedSuccess(String pgnFileName, String preGameCommentaryExpected,
+  private static void checkCombinedSuccess(String pgnFileName, String pregameCommentaryExpected,
       List<String> sanListExpected, List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected,
       List<String> commentaryListExpected) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
         pgnFileName);
-    assertEquals(preGameCommentaryExpected, pgnFile.preGameCommentary().value());
+    assertEquals(pregameCommentaryExpected, pgnFile.pregameCommentary().value());
     assertEquals(sanListExpected, calculateSanList(pgnFile.halfMoveList()));
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
     assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));
