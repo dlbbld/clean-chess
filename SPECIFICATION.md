@@ -14,15 +14,22 @@ The library is **not**:
 - A performance-first library — move generation is not optimised for raw throughput.
 - A complete tournament-management toolkit — clock handling, draw-offer state machines, and similar interactive concerns belong outside the library (scope of the companion `dumb-chessboard` project).
 
-In spirit it is a **proof-of-concept**: that the FIDE Laws of Chess can be implemented in Java at a high level of programming quality while remaining a usable library. Where correctness and performance conflict, correctness wins.
+In spirit it is a **proof-of-concept**: that the FIDE Laws of Chess can be implemented in Java at a high level of programming quality while remaining a usable library.
 
 ---
 
 ## 2. Philosophy
 
-### 2.1 Correctness over performance
+### 2.1 Clarity and reproducibility over clever optimisation
 
-Correctness is a hard constraint, performance a secondary concern. Most position-level questions still resolve in microseconds and full unwinnability searches in seconds, but no path is optimised at the expense of rule fidelity. Where the FIDE Laws are ambiguous, the library follows the most rule-faithful reading.
+Other Java chess libraries are correct too — clean-chess does not claim a correctness advantage over them. What differs is **implementation style**: the project deliberately prefers straightforward, reproducible code paths over complex optimisations that buy speed at the cost of being expert-only to read or audit.
+
+Two concrete examples:
+
+- **Move history stores derived facts directly.** Whether a move was a two-square pawn advance or an en passant capture is recorded in the move history rather than recomputed from the position when needed. Engines like Stockfish compute these on demand because the savings matter at engine speeds. clean-chess stores them because the resulting code is shorter, more obviously correct, and easier to maintain.
+- **Position repetition uses direct position equality, not Zobrist hashing.** Zobrist hashing is the standard fast technique and works correctly when implemented carefully — but it is empirically a frequent source of subtle bugs (this author helped fix a Zobrist bug in another open-source chess library before this rule was adopted here). Direct equality is slower, but harder to get wrong.
+
+These choices cost performance and pay clarity. Most position-level questions still resolve in microseconds and full unwinnability searches in seconds. Where the FIDE Laws are ambiguous, the library follows the most rule-faithful reading.
 
 ### 2.2 Functional style and compile-time guarantees
 
@@ -143,13 +150,3 @@ clean-chess relies on a large regression test suite:
 
 The test suite is the project's safety net. Refactors are expected to leave the test count unchanged or growing; if they don't, the change is suspect.
 
----
-
-## 7. Comment style
-
-Comment policy for the codebase:
-
-- **Keep:** decisions, trade-offs, spec references (e.g. `PGN spec §8.2.5`, `FIDE 9.6.2`), subtle invariants, counter-intuitive behaviour.
-- **Drop:** restating the code, narration of implementation steps, double-bookkeeping of test intent, and especially **filesystem paths or other physically-mirrored facts in prose** — those duplicate information the code already carries and silently rot when the code is reorganised.
-
-No fixed line-count rule; a longer comment is fine when the content is genuinely irreplaceable. Rule of thumb: if an AI could regenerate the comment from the code, the comment is a maintenance liability.
