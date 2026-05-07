@@ -16,50 +16,52 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
- * Cross-parser fidelity test for the commentary fixtures. Each fixture is parsed once with the strict parser and
- * once with the lenient parser; the two resulting {@link PgnFile} models must be equal. This proves both that
+ * Cross-parser fidelity test for the commentary fixtures. Each fixture is parsed once with the strict parser and once
+ * with the lenient parser; the two resulting {@link PgnFile} models must be equal. This proves both that
  *
  * <ol>
  * <li>the fixtures are well-formed enough for the strict parser (every White-move commentary is followed by the
  * required {@code N...} indicator per T-002), and
- * <li>the lenient parser produces the same model as strict on canonically-formed input — which is the contract:
- * lenient is a superset of strict, so it must agree on every input strict accepts.
+ * <li>the lenient parser produces the same model as strict on canonically-formed input — which is the contract: lenient
+ * is a superset of strict, so it must agree on every input strict accepts.
  * </ol>
  *
- * <p>Adding a new commentary fixture under any of the three covered directories ({@code leadingCommentary/success},
- * {@code nonLeadingCommentary/success}, {@code combinedCommentary/success}) is automatically picked up via the
+ * <p>
+ * Adding a new commentary fixture under any of the three covered directories ({@code pregameCommentary/success},
+ * {@code nonPregameCommentary/success}, {@code combinedCommentary/success}) is automatically picked up via the
  * {@link MethodSource} feeders below — no test method needs editing.
  *
- * <p>The two left-curly-bracket fixtures
- * ({@code nonLeadingCommentary/success/07_example_left_curly_bracket_in_comment.pgn} and
- * {@code leadingCommentary/success/10_example_left_curly_bracket_in_comment.pgn}) are now included — T-003 made
- * a literal {@code {} inside a brace comment legal content for both parsers per PGN spec §8.2.5.
+ * <p>
+ * The two left-curly-bracket fixtures
+ * ({@code nonPregameCommentary/success/07_example_left_curly_bracket_in_comment.pgn} and
+ * {@code pregameCommentary/success/10_example_left_curly_bracket_in_comment.pgn}) are now included — T-003 made a
+ * literal {@code {} inside a brace comment legal content for both parsers per PGN spec §8.2.5.
  */
 class TestCommentaryFixturesBothParsers {
 
   private static final Path COMMENTARY_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "movementSpecification/commentary");
+      .resolve(PgnTestConstants.PGN_PARSER_TEST_ROOT_FOLDER_PATH, "common/commentary");
 
   private static final Path LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(COMMENTARY_FOLDER_PATH, "leadingCommentary/success");
+      .resolve(COMMENTARY_FOLDER_PATH, "pregameCommentary/success");
 
   private static final Path NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(COMMENTARY_FOLDER_PATH, "nonLeadingCommentary/success");
+      .resolve(COMMENTARY_FOLDER_PATH, "nonPregameCommentary/success");
 
   private static final Path COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
       .resolve(COMMENTARY_FOLDER_PATH, "combinedCommentary/success");
 
-  @ParameterizedTest(name = "leadingCommentary/success/{0}")
-  @MethodSource("leadingCommentaryFixtures")
+  @ParameterizedTest(name = "pregameCommentary/success/{0}")
+  @MethodSource("pregameCommentaryFixtures")
   @SuppressWarnings("static-method")
-  void parseAgreesAcrossParsers_leadingCommentary(String pgnFileName) {
+  void parseAgreesAcrossParsers_pregameCommentary(String pgnFileName) {
     assertParseAgrees(LEADING_COMMENTARY_SUCCESS_FOLDER_PATH, pgnFileName);
   }
 
-  @ParameterizedTest(name = "nonLeadingCommentary/success/{0}")
-  @MethodSource("nonLeadingCommentaryFixtures")
+  @ParameterizedTest(name = "nonPregameCommentary/success/{0}")
+  @MethodSource("nonPregameCommentaryFixtures")
   @SuppressWarnings("static-method")
-  void parseAgreesAcrossParsers_nonLeadingCommentary(String pgnFileName) {
+  void parseAgreesAcrossParsers_nonPregameCommentary(String pgnFileName) {
     assertParseAgrees(NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH, pgnFileName);
   }
 
@@ -81,12 +83,12 @@ class TestCommentaryFixturesBothParsers {
   // Fixture feeders. All success fixtures parse identically through both strict and lenient post-T-003.
   // -------------------------------------------------------------------------------------------------
 
-  static Stream<Arguments> leadingCommentaryFixtures() {
+  static Stream<Arguments> pregameCommentaryFixtures() {
     return Stream.of(Arguments.of("01_example.pgn"), Arguments.of("02_example.pgn"), Arguments.of("03_example.pgn"),
         Arguments.of("10_example_left_curly_bracket_in_comment.pgn"));
   }
 
-  static Stream<Arguments> nonLeadingCommentaryFixtures() {
+  static Stream<Arguments> nonPregameCommentaryFixtures() {
     return Stream.of(Arguments.of("02_1_example.pgn"), Arguments.of("02_2_example.pgn"),
         Arguments.of("02_3_example.pgn"), Arguments.of("02_4_example.pgn"), Arguments.of("03_1_example.pgn"),
         Arguments.of("03_2_example.pgn"), Arguments.of("03_3_example.pgn"), Arguments.of("03_4_example.pgn"),
@@ -97,11 +99,11 @@ class TestCommentaryFixturesBothParsers {
   }
 
   static Stream<Arguments> combinedCommentaryFixtures() {
-    return Stream.of(Arguments.of("01_example.pgn"), Arguments.of("02_1_example.pgn"),
-        Arguments.of("02_2_example.pgn"), Arguments.of("02_3_example.pgn"), Arguments.of("02_4_example.pgn"),
-        Arguments.of("03_1_example.pgn"), Arguments.of("03_2_example.pgn"), Arguments.of("03_3_example.pgn"),
-        Arguments.of("03_4_example.pgn"), Arguments.of("03_5_example.pgn"), Arguments.of("03_6_example.pgn"),
-        Arguments.of("04_1_example.pgn"), Arguments.of("04_2_example.pgn"), Arguments.of("04_3_example.pgn"),
-        Arguments.of("04_4_example.pgn"), Arguments.of("05_1_example.pgn"), Arguments.of("06_example_whitespace.pgn"));
+    return Stream.of(Arguments.of("01_example.pgn"), Arguments.of("02_1_example.pgn"), Arguments.of("02_2_example.pgn"),
+        Arguments.of("02_3_example.pgn"), Arguments.of("02_4_example.pgn"), Arguments.of("03_1_example.pgn"),
+        Arguments.of("03_2_example.pgn"), Arguments.of("03_3_example.pgn"), Arguments.of("03_4_example.pgn"),
+        Arguments.of("03_5_example.pgn"), Arguments.of("03_6_example.pgn"), Arguments.of("04_1_example.pgn"),
+        Arguments.of("04_2_example.pgn"), Arguments.of("04_3_example.pgn"), Arguments.of("04_4_example.pgn"),
+        Arguments.of("05_1_example.pgn"), Arguments.of("06_example_whitespace.pgn"));
   }
 }
