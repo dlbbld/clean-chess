@@ -342,11 +342,10 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void otherControlCharInCommentaryIsPreserved() {
-    // Bell (U+0007). Spec doesn't forbid; preserve for python-chess interop.
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {ab} e5 *\n\n");
-    assertEquals("ab", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  void otherControlCharInCommentaryIsRejected() {
+    // Bell (U+0007), Cc category (other than \t \n \r) — rejected per the Unicode contract.
+    expectError(PgnTestHelper.header("*") + "1. e4 {ab} e5 *\n\n",
+        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
   }
 
   // -------------------------------------------------------------------------------------------------
