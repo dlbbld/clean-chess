@@ -81,6 +81,8 @@ Miguel Ambrona's CHA is the only published algorithm that decides these cases co
 
 `Dead position` is the symmetric notion with the analogous three-valued return.
 
+Both variants are **opt-in**. clean-chess does not invoke CHA automatically when a move is performed: the only deadness check that runs as part of the per-move game-status query is the structural insufficient-material test (§3.1). The deeper analyses are skipped on every move for performance reasons — even the quick variant adds latency most callers do not want to pay per move. Callers invoke either variant explicitly when needed; the quick variant is cheap enough (microsecond-scale) to call freely, e.g. on resignation, flag fall, or as part of a separate analysis pass.
+
 ### 3.3 SAN, FEN, PGN
 
 - **SAN** — parsing, validation, and generation with canonical disambiguation. A single `Board.performMove(String)` validation is reached from both the programmatic and the PGN-driven paths.
