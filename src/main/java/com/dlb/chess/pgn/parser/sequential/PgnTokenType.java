@@ -67,13 +67,6 @@ public enum PgnTokenType {
   BRACE_COMMENT_UNCLOSED,
 
   /**
-   * A brace commentary that contained another "{" before its closing "}". Commentary cannot nest: this is always an
-   * error. The token text holds the content scanned up to (but not including) the inner "{", and the inner "{" is left
-   * for subsequent tokenization so error reporting can carry its exact position if desired.
-   */
-  BRACE_COMMENT_NESTED,
-
-  /**
    * A closing brace {@code }} encountered outside any open commentary. Always an error — commentary must be opened
    * before it can be closed.
    */

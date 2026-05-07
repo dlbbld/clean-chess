@@ -23,7 +23,9 @@ Both fields are typed as `PgnCommentary` (a value-object record). Construction v
 
 #### Forbidden — grammar
 
-The wrapped string must contain neither `{` nor `}`. These are the brace-comment delimiters; including either in the content would corrupt the grammar on export (and would never appear in content emitted by the parsers, which handle braces at tokenisation time).
+The wrapped string must not contain `}`. The closing brace is the brace-comment terminator; including it in content would corrupt the grammar on export.
+
+The opening brace `{` is **allowed** in commentary content. Per PGN spec §8.2.5, "a left brace character appearing in a brace comment loses its special meaning"; both parsers consume an inner `{` as a literal content character (only `}` can close a brace comment), and the exporter writes it verbatim. The inner `{` round-trips unchanged.
 
 #### Forbidden — Unicode categories
 
@@ -98,4 +100,3 @@ This mirrors python-chess's `force_movenumber` flag: tools that import lenient i
 ### Open follow-ups
 
 - **Brace-aware wrap.** `PgnUtility.calculateWrappedLines` currently splits on space without awareness of `{...}` regions. For long single-line commentary, this transforms internal spaces into newlines, producing valid (per the new contract) but content-different output on round-trip. Fix: don't break inside `{...}`. Mirrors python-chess's "long comment produces a long line, accepting the 80-char file-export-format guideline as a soft target." Tests `testFromImportStrictLong` and `testFromImportLenientLong` are `@Disabled` until this lands.
-- **Spec-compliant brace-comment parsing (T-003).** The PGN spec says *"a left brace character appearing in a brace comment loses its special meaning and is ignored"* — i.e., `{` inside a comment is content, not a nested-comment error. Both parsers currently reject this case. Open question on the value object's policy for `{` in content if/when this lands.

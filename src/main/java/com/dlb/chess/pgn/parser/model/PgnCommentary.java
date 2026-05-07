@@ -11,9 +11,14 @@ import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
  * <p>
  * <b>Forbidden — grammar:</b>
  * <ul>
- * <li>{@code {} — opening brace, ambiguous on export (would be re-parsed as a comment opener).</li>
  * <li>{@code }} — closing brace, terminates the {@code {...}} grammar on export.</li>
  * </ul>
+ *
+ * <p>
+ * Note: {@code {} (opening brace) is <em>allowed</em> in commentary content per the PGN spec — "a left brace
+ * character appearing in a brace comment loses its special meaning and is ignored" (§8.2.5). Both parsers consume
+ * inner {@code {} as a literal content character, and the exporter writes it verbatim; the inner {@code {} round-trips
+ * unchanged because only {@code }} can close a brace comment.
  *
  * <p>
  * <b>Forbidden — Unicode categories:</b>
@@ -69,9 +74,12 @@ public record PgnCommentary(String value) {
     for (int i = 0; i < value.length();) {
       final int cp = value.codePointAt(i);
 
-      // Grammar prohibition takes priority — applies regardless of Unicode category.
-      if (cp == '{' || cp == '}') {
-        throw new PgnCommentaryValidationException(formatBraceProblem(value, i, cp));
+      // Grammar prohibition takes priority — applies regardless of Unicode category. Only the closing brace `}`
+      // is forbidden, since `}` would terminate the {...} grammar on export. The opening brace `{` is allowed
+      // in content per the PGN spec (§8.2.5: "a left brace character appearing in a brace comment loses its
+      // special meaning"); it round-trips unchanged.
+      if (cp == '}') {
+        throw new PgnCommentaryValidationException(formatBraceProblem(value, i));
       }
 
       // The three control characters explicitly permitted in commentary.
@@ -89,9 +97,8 @@ public record PgnCommentary(String value) {
     }
   }
 
-  private static String formatBraceProblem(String value, int index, int cp) {
-    final String charLabel = (cp == '{') ? "opening brace" : "closing brace";
-    return "PGN commentary must not contain " + charLabel + " (at index " + index + " of: \""
+  private static String formatBraceProblem(String value, int index) {
+    return "PGN commentary must not contain closing brace (at index " + index + " of: \""
         + summarizeForError(value) + "\").";
   }
 

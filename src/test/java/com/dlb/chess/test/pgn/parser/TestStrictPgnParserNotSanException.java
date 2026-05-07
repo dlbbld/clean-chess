@@ -67,10 +67,11 @@ class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserExce
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkException("25_2_invalid_commentary.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
-    // 25_3 contains "{{" (two opening braces back-to-back). Previously surfaced as the generic unclosed-commentary
-    // error; now distinguished as the more specific nested-commentary error via the tokenizer's BRACE_COMMENT_NESTED.
+    // 25_3 contains "{{two start commentary braces 114. e7 1-0" with no closing brace before EOF. Per T-003 the
+    // inner `{` is now consumed as content; the outer commentary then runs to EOF unclosed, so this surfaces as
+    // the unclosed-commentary error instead of the previous nested-commentary error.
     checkException("25_3_invalid_commentary.pgn",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
     checkException("25_4_invalid_commentary.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_DOES_NOT_CONTINUE_AS_EXPECTED);
     // 25_5 contains "{wrong count}}" — a closed commentary followed by a stray close brace. Previously surfaced as

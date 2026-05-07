@@ -30,14 +30,10 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
  * {@code nonLeadingCommentary/success}, {@code combinedCommentary/success}) is automatically picked up via the
  * {@link MethodSource} feeders below — no test method needs editing.
  *
- * <p>Two fixtures are intentionally excluded:
- *
- * <ul>
- * <li>{@code nonLeadingCommentary/success/07_example_left_curly_bracket_in_comment.pgn} and
- * {@code leadingCommentary/success/10_example_left_curly_bracket_in_comment.pgn} — both contain a literal {@code {}
- * inside a brace comment, currently rejected by both parsers (open follow-up T-003: spec-compliant brace-comment
- * parsing). They will become valid for both parsers when T-003 lands and can be added back then.
- * </ul>
+ * <p>The two left-curly-bracket fixtures
+ * ({@code nonLeadingCommentary/success/07_example_left_curly_bracket_in_comment.pgn} and
+ * {@code leadingCommentary/success/10_example_left_curly_bracket_in_comment.pgn}) are now included — T-003 made
+ * a literal {@code {} inside a brace comment legal content for both parsers per PGN spec §8.2.5.
  */
 class TestCommentaryFixturesBothParsers {
 
@@ -82,11 +78,12 @@ class TestCommentaryFixturesBothParsers {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Fixture feeders. The leading-curly-bracket fixtures (T-003 follow-up) are excluded by name.
+  // Fixture feeders. All success fixtures parse identically through both strict and lenient post-T-003.
   // -------------------------------------------------------------------------------------------------
 
   static Stream<Arguments> leadingCommentaryFixtures() {
-    return Stream.of(Arguments.of("01_example.pgn"), Arguments.of("02_example.pgn"), Arguments.of("03_example.pgn"));
+    return Stream.of(Arguments.of("01_example.pgn"), Arguments.of("02_example.pgn"), Arguments.of("03_example.pgn"),
+        Arguments.of("10_example_left_curly_bracket_in_comment.pgn"));
   }
 
   static Stream<Arguments> nonLeadingCommentaryFixtures() {
@@ -95,7 +92,8 @@ class TestCommentaryFixturesBothParsers {
         Arguments.of("03_2_example.pgn"), Arguments.of("03_3_example.pgn"), Arguments.of("03_4_example.pgn"),
         Arguments.of("03_5_example.pgn"), Arguments.of("03_6_example.pgn"), Arguments.of("04_1_example.pgn"),
         Arguments.of("04_2_example.pgn"), Arguments.of("04_3_example.pgn"), Arguments.of("04_4_example.pgn"),
-        Arguments.of("05_1_example.pgn"), Arguments.of("06_example_whitespace.pgn"));
+        Arguments.of("05_1_example.pgn"), Arguments.of("06_example_whitespace.pgn"),
+        Arguments.of("07_example_left_curly_bracket_in_comment.pgn"));
   }
 
   static Stream<Arguments> combinedCommentaryFixtures() {

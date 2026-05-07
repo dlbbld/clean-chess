@@ -482,9 +482,6 @@ public final class StrictPgnParser {
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");
-      case BRACE_COMMENT_NESTED:
-        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
-            "A commentary cannot contain another opening brace {.");
       case BRACE_STRAY_CLOSE:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
@@ -495,7 +492,7 @@ public final class StrictPgnParser {
 
   private static boolean isBraceToken(PgnTokenType type) {
     return type == PgnTokenType.BRACE_COMMENT || type == PgnTokenType.BRACE_COMMENT_UNCLOSED
-        || type == PgnTokenType.BRACE_COMMENT_NESTED || type == PgnTokenType.BRACE_STRAY_CLOSE;
+        || type == PgnTokenType.BRACE_STRAY_CLOSE;
   }
 
   private void expectSpaceAfterComment() {
@@ -543,9 +540,6 @@ public final class StrictPgnParser {
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
             "A commentary opened with { was not closed with } before end of input.");
-      case BRACE_COMMENT_NESTED:
-        throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE,
-            "A commentary cannot contain another opening brace {.");
       case BRACE_STRAY_CLOSE:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");

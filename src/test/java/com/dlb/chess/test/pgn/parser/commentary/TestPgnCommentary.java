@@ -235,16 +235,16 @@ class TestPgnCommentary {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Constructor — rejects { and } (the only forbidden characters in commentary content)
+  // Constructor — only `}` is forbidden in commentary content. `{` is allowed per PGN spec §8.2.5
+  // ("a left brace character appearing in a brace comment loses its special meaning").
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
-  void openingBraceIsRejected() {
-    final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("a { b"));
-    org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("opening brace"),
-        "Message should name the offending character: " + thrown.getMessage());
+  void openingBraceIsAllowedInContent() {
+    // T-003: `{` survives validation and round-trips verbatim. Only `}` would terminate the {...} grammar.
+    final var commentary = new PgnCommentary("a { b");
+    org.junit.jupiter.api.Assertions.assertEquals("a { b", commentary.value());
   }
 
   @SuppressWarnings("static-method")
@@ -258,8 +258,10 @@ class TestPgnCommentary {
 
   @SuppressWarnings("static-method")
   @Test
-  void openingBraceAtStartIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("{commentary"));
+  void openingBraceAtStartIsAllowedInContent() {
+    // T-003: `{` at any position is content, not an error. Round-trips verbatim.
+    final var commentary = new PgnCommentary("{commentary");
+    org.junit.jupiter.api.Assertions.assertEquals("{commentary", commentary.value());
   }
 
   @SuppressWarnings("static-method")

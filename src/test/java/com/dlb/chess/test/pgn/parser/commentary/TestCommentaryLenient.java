@@ -178,28 +178,40 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // R2 — nested commentary
+  // T-003 — left brace inside an open brace comment is content, not a nested-comment error.
+  //
+  // Lenient mirrors strict here — the rule comes from the PGN spec, not from strictness preferences. See the
+  // matching block in TestCommentaryStrict for the rationale.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
-  void r2_nestedInPreGameCommentary() {
-    expectError(PgnTestHelper.header("*") + "{outer {inner}} 1. e4 e5 *\n\n",
-        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
+  void t003_openBraceInPreGameCommentaryIsContent() {
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{outer {inner} 1. e4 e5 *\n\n");
+    assertEquals("outer {inner", file.pregameCommentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void r2_nestedInTrailingCommentary() {
+  void t003_openBraceInTrailingCommentaryIsContent() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {outer {inner} e5 *\n\n");
+    assertEquals("outer {inner", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t003_openBraceImmediatelyAtStartOfContent() {
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {{nested right away} e5 *\n\n");
+    assertEquals("{nested right away", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t003_strayCloseAfterClosedCommentaryWithInnerOpenBraceIsR3() {
     expectError(PgnTestHelper.header("*") + "1. e4 {outer {inner}} e5 *\n\n",
-        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void r2_nestedImmediatelyAtStartOfInnerComment() {
-    expectError(PgnTestHelper.header("*") + "1. e4 {{nested right away} e5 *\n\n",
-        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
+        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   // -------------------------------------------------------------------------------------------------

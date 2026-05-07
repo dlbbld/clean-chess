@@ -165,15 +165,13 @@ public final class PgnTokenizer {
         // EOF before matching } — unclosed commentary.
         return new PgnToken(PgnTokenType.BRACE_COMMENT_UNCLOSED, NonNullWrapperCommon.toString(text), line, column);
       }
-      if (c == '{') {
-        // A second { before the first } — commentary cannot nest. Leave the inner { unconsumed; the parser throws
-        // on the nested-token, so what follows in the stream does not matter for correctness.
-        return new PgnToken(PgnTokenType.BRACE_COMMENT_NESTED, NonNullWrapperCommon.toString(text), line, column);
-      }
       if (c == '}') {
         stream.read();
         return new PgnToken(PgnTokenType.BRACE_COMMENT, NonNullWrapperCommon.toString(text), line, column);
       }
+      // Per PGN spec §8.2.5: "a left brace character appearing in a brace comment loses its special meaning". We
+      // consume the inner { as a literal content character — the same convention python-chess uses. Only } can
+      // close the comment; commentary therefore cannot nest, but { inside content is harmless.
       text.append((char) stream.read());
     }
   }

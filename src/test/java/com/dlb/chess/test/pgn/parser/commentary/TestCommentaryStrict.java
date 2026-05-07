@@ -145,28 +145,43 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // R2 — nested commentary (start brace inside an open commentary)
+  // T-003 — left brace inside an open brace comment is content, not a nested-comment error.
+  //
+  // Per PGN spec §8.2.5: "a left brace character appearing in a brace comment loses its special meaning". Both
+  // parsers consume `{` as a literal content character — the comment is closed only by the next `}`. The previous
+  // R2 rule (rejection of any `{` inside an open comment) has been removed, and the corresponding problem code
+  // MOVETEXT_COMMENTARY_CONTAINS_START_BRACE is gone. A `}` after the comment closes is still R3 (stray close).
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
-  void r2_nestedInPreGameCommentary() {
-    expectError(header("*") + "{outer {inner}} 1. e4 e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
+  void t003_openBraceInPreGameCommentaryIsContent() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "{outer {inner} 1. e4 e5 *\n\n");
+    assertEquals("outer {inner", file.pregameCommentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void r2_nestedInTrailingCommentary() {
+  void t003_openBraceInTrailingCommentaryIsContent() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {outer {inner} 1... e5 *\n\n");
+    assertEquals("outer {inner", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t003_openBraceImmediatelyAtStartOfContent() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {{nested right away} 1... e5 *\n\n");
+    assertEquals("{nested right away", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void t003_strayCloseAfterClosedCommentaryWithInnerOpenBraceIsR3() {
+    // The well-formed `{outer {inner}` closes at the first `}` (its content is "outer {inner"). The trailing `}`
+    // is then a stray close — categorized as R3. T-003 changes the comment-internal handling, not the stray-close
+    // rule.
     expectError(header("*") + "1. e4 {outer {inner}} e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void r2_nestedImmediatelyAtStartOfInnerComment() {
-    expectError(header("*") + "1. e4 {{nested right away} e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
+        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   // -------------------------------------------------------------------------------------------------
