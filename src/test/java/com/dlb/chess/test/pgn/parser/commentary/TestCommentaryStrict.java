@@ -98,17 +98,15 @@ class TestCommentaryStrict {
   }
 
   /**
-   * Per the commentary contract, strict rejects newlines inside braces (FIDE/PGN-Standard whitespace handling
-   * leaves the choice of how to treat physical line breaks to the implementation; we reject as a strict-validity
-   * concern so that round-trip is byte-stable and downstream consumers see a single-line commentary string).
+   * Per the commentary contract, the PGN spec allows newlines inside {@code {...}} commentary (the spec's prohibition
+   * on non-printing characters applies only to <em>string tokens</em>, i.e. tag values, not to commentary). Strict
+   * preserves the source bytes verbatim, including embedded newlines.
    */
   @SuppressWarnings("static-method")
   @Test
-  void v8_multilineCommentaryRejected() {
-    final var thrown = org.junit.jupiter.api.Assertions.assertThrows(StrictPgnParserValidationException.class,
-        () -> StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} e5 *\n\n"));
-    assertEquals(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
-        thrown.getStrictPgnParserValidationProblem());
+  void v8_multilineCommentaryPreservedVerbatim() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} e5 *\n\n");
+    assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -258,37 +256,38 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Forbidden-character contract — strict rejects tab / CR / LF / other control chars in commentary.
-  // The lenient parser substitutes tab / CR / LF / CRLF with single space; strict accepts neither.
+  // Whitespace and control-character handling — per the commentary contract, the PGN spec restricts non-printing
+  // characters from string tokens, NOT from {...} commentary. Both strict and lenient preserve source bytes
+  // verbatim. These tests cover acceptance and round-trip-faithful storage.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
-  void forbidden_tabInLeadingCommentary() {
-    expectError(header("*") + "{a\tb} 1. e4 e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  void tabInLeadingCommentaryIsPreserved() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\tb} 1. e4 e5 *\n\n");
+    assertEquals("a\tb", file.leadingCommentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void forbidden_tabInMoveCommentary() {
-    expectError(header("*") + "1. e4 {a\tb} e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  void tabInMoveCommentaryIsPreserved() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a\tb} e5 *\n\n");
+    assertEquals("a\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void forbidden_carriageReturnInLeadingCommentary() {
-    expectError(header("*") + "{a\rb} 1. e4 e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  void carriageReturnInLeadingCommentaryIsPreserved() {
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\rb} 1. e4 e5 *\n\n");
+    assertEquals("a\rb", file.leadingCommentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void forbidden_otherControlCharInCommentary() {
-    // Bell character (U+0007).
-    expectError(header("*") + "1. e4 {ab} e5 *\n\n",
-        StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  void otherControlCharInCommentaryIsPreserved() {
+    // Bell character (U+0007). Spec doesn't forbid; preserve for python-chess interop.
+    final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {ab} e5 *\n\n");
+    assertEquals("ab", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")

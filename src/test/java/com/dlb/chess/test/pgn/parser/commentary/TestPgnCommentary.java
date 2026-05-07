@@ -12,17 +12,18 @@ import com.dlb.chess.pgn.parser.model.PgnCommentary;
 /**
  * Direct tests for the {@link PgnCommentary} value object. The parser-side behaviour is exercised in
  * {@link TestCommentaryStrict} and {@link TestCommentaryLenient}; this test class covers the programmatic-API
- * contract for callers constructing commentary outside the parsers (manually-built {@code PgnFile} or
- * {@code PgnHalfMove}).
+ * contract for callers constructing commentary outside the parsers.
  *
  * <p>
- * Contract: a constructed {@code PgnCommentary} must contain none of tab, newline (LF), carriage return (CR), or other
- * ASCII control characters. Spaces are permitted, including consecutive spaces.
+ * Contract: a constructed {@code PgnCommentary} must contain neither {@code {} nor {@code }}. Everything else is
+ * permitted, including tabs, newlines, carriage returns, extended-ASCII characters, and other ASCII control
+ * characters. The contract mirrors python-chess's commentary handling — preserve source bytes verbatim, only the
+ * brace characters are forbidden because they would corrupt the {@code {...}} grammar on export.
  */
 class TestPgnCommentary {
 
   // -------------------------------------------------------------------------------------------------
-  // Constructor — accepted values
+  // Constructor — accepted values (printing characters and ordinary whitespace)
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -62,98 +63,98 @@ class TestPgnCommentary {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Constructor — rejected values
+  // Constructor — accepts whitespace previously rejected (tab / newline / CR / CRLF)
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
-  void tabIsRejected() {
+  void tabIsAcceptedAndPreservedVerbatim() {
+    assertEquals("a\tb", new PgnCommentary("a\tb").value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void newlineIsAcceptedAndPreservedVerbatim() {
+    assertEquals("line one\nline two", new PgnCommentary("line one\nline two").value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void carriageReturnIsAcceptedAndPreservedVerbatim() {
+    assertEquals("a\rb", new PgnCommentary("a\rb").value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void crlfSequenceIsAcceptedAndPreservedVerbatim() {
+    assertEquals("a\r\nb", new PgnCommentary("a\r\nb").value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void mixedWhitespaceIsAcceptedAndPreservedVerbatim() {
+    assertEquals("a \t b\n c\r d", new PgnCommentary("a \t b\n c\r d").value());
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Constructor — accepts other control characters (per python-chess interop)
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void bellControlCharacterIsAccepted() {
+    assertEquals("ab", new PgnCommentary("ab").value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void escapeControlCharacterIsAccepted() {
+    assertEquals("ab", new PgnCommentary("ab").value());
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void delCharacterIsAccepted() {
+    assertEquals("ab", new PgnCommentary("ab").value());
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Constructor — rejects { and } (the only forbidden characters in commentary content)
+  // -------------------------------------------------------------------------------------------------
+
+  @SuppressWarnings("static-method")
+  @Test
+  void openingBraceIsRejected() {
     final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("a\tb"));
-    org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("tab"),
+        () -> new PgnCommentary("a { b"));
+    org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("opening brace"),
         "Message should name the offending character: " + thrown.getMessage());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void newlineIsRejected() {
+  void closingBraceIsRejected() {
     final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("a\nb"));
-    org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("newline"),
+        () -> new PgnCommentary("a } b"));
+    org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("closing brace"),
         "Message should name the offending character: " + thrown.getMessage());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void carriageReturnIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a\rb"));
+  void openingBraceAtStartIsRejected() {
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("{commentary"));
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void crlfSequenceIsRejected() {
-    // CRLF is two forbidden characters in a row; the constructor reports the first (CR).
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a\r\nb"));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void bellControlCharacterIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("ab"));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void escapeControlCharacterIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("ab"));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void delCharacterIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("ab"));
+  void closingBraceAtEndIsRejected() {
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("commentary}"));
   }
 
   // -------------------------------------------------------------------------------------------------
-  // fromLenientImport — substitution + validation factory
+  // EMPTY constant
   // -------------------------------------------------------------------------------------------------
-
-  @SuppressWarnings("static-method")
-  @Test
-  void fromLenientImportSubstitutesTabWithSpace() {
-    assertEquals("a b", PgnCommentary.fromLenientImport("a\tb").value());
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void fromLenientImportSubstitutesNewlineWithSpace() {
-    assertEquals("a b", PgnCommentary.fromLenientImport("a\nb").value());
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void fromLenientImportSubstitutesCarriageReturnWithSpace() {
-    assertEquals("a b", PgnCommentary.fromLenientImport("a\rb").value());
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void fromLenientImportTreatsCrlfAsSingleSpace() {
-    assertEquals("a b", PgnCommentary.fromLenientImport("a\r\nb").value());
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void fromLenientImportPreservesConsecutiveSpaces() {
-    // Two tabs → two spaces — the substitution is character-level, not run-collapsing.
-    assertEquals("a  b", PgnCommentary.fromLenientImport("a\t\tb").value());
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void fromLenientImportStillRejectsBell() {
-    assertThrows(PgnCommentaryValidationException.class, () -> PgnCommentary.fromLenientImport("ab"));
-  }
 
   @SuppressWarnings("static-method")
   @Test

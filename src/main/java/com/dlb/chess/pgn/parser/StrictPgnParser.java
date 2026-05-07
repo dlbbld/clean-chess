@@ -445,9 +445,14 @@ public final class StrictPgnParser {
     switch (token.type()) {
       case BRACE_COMMENT:
         try {
+          // Strict and lenient both preserve commentary bytes verbatim. The PGN spec restricts non-printing
+          // characters from string tokens, not from commentary; tabs and line breaks inside {...} are valid
+          // content and round-trip unchanged.
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
-          // Strict policy: tab/newline/CR/control inside commentary is rejected as a strict-parser error.
+          // Defensive: the tokenizer never produces { or } in BRACE_COMMENT content (those are handled by
+          // dedicated token types), so this catch is effectively unreachable. Kept so a future tokenizer
+          // refactor surfaces such a regression as a parser-level error rather than an unwrapped exception.
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               pcve.getMessage());
         }

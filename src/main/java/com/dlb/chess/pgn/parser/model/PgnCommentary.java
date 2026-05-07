@@ -1,6 +1,5 @@
 package com.dlb.chess.pgn.parser.model;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 
 /**
@@ -9,27 +8,33 @@ import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
  *
  * <h2>Contract</h2> The wrapped {@link String} must contain none of:
  * <ul>
- * <li>tab character ({@code \t}, U+0009),</li>
- * <li>newline characters ({@code \n}, U+000A; {@code \r}, U+000D),</li>
- * <li>any other ASCII control character (U+0000–U+001F, U+007F).</li>
+ * <li>{@code {} — opening brace, ambiguous on export (would be re-parsed as a comment opener).</li>
+ * <li>{@code }} — closing brace, terminates the {@code {...}} grammar on export.</li>
  * </ul>
- * Spaces are permitted, including consecutive spaces.
+ * Everything else is permitted, including:
+ * <ul>
+ * <li>tab ({@code \t}, U+0009),</li>
+ * <li>line breaks ({@code \n} U+000A, {@code \r} U+000D, including the {@code \r\n} sequence),</li>
+ * <li>extended-ASCII / multi-byte printable characters,</li>
+ * <li>other ASCII control characters (bell, escape, DEL, …).</li>
+ * </ul>
+ *
+ * <h2>Why this contract</h2>
+ * <p>
+ * The PGN standard restricts non-printing characters from <em>string tokens</em> (tag values), but is silent on
+ * non-printing characters inside {@code {...}} commentary. Multiple chess tools — python-chess, Lichess — preserve
+ * tabs and line breaks in commentary verbatim through the parse / export round-trip. We follow that convention: the
+ * commentary content is whatever bytes lived between the braces in the source, modulo the grammar-mandated brace
+ * exclusions.
  *
  * <h2>Sources of values</h2>
  * <ul>
- * <li>Strict-parser path: parsed brace content goes directly through the constructor; forbidden characters surface as a
- * strict-parser validation exception via the parser's wrapping logic.</li>
- * <li>Lenient-parser path: parsed brace content goes through {@link #fromLenientImport(String)} which substitutes
- * tab / newline / carriage return / CRLF with single spaces, then validates via the constructor — remaining control
- * characters surface as a lenient-parser validation exception via the parser's wrapping logic.</li>
+ * <li>Strict and lenient parsers: parsed brace content goes directly through the constructor. Both parsers preserve
+ * source bytes verbatim. The previous lenient-side substitution of tab / newline / CR with single space has been
+ * removed — that was over-strict.</li>
  * <li>Programmatic API: any caller invoking the constructor directly sees a
  * {@link PgnCommentaryValidationException} on contract violation.</li>
  * </ul>
- *
- * <h2>Whitespace policy (deliberate)</h2> Multiple consecutive spaces are <strong>preserved</strong>, never collapsed.
- * This keeps strict and lenient semantics aligned — strict accepts the source as-is, lenient only substitutes the
- * forbidden whitespace classes (tab/newline/CR) with single spaces. Two parses of the same content always produce equal
- * {@code PgnCommentary} values.
  */
 public record PgnCommentary(String value) {
 
@@ -43,42 +48,20 @@ public record PgnCommentary(String value) {
   /** The empty commentary. Convenience for the very common "no commentary" case. */
   public static final PgnCommentary EMPTY = new PgnCommentary("");
 
-  /**
-   * Builds a {@code PgnCommentary} from raw text extracted by the lenient parser.
-   *
-   * <p>
-   * Substitutes tab, newline, carriage return, and CRLF with single spaces. CRLF is recognised as a unit and replaced
-   * with a single space; loose CR or LF each become a space. Tab becomes a space. After substitution the constructor
-   * validates the result; if any non-tab/newline/CR control character remains, the constructor throws.
-   */
-  public static PgnCommentary fromLenientImport(String raw) {
-    final String s1 = NonNullWrapperCommon.replace(raw, "\r\n", " ");
-    final String s2 = NonNullWrapperCommon.replace(s1, "\r", " ");
-    final String s3 = NonNullWrapperCommon.replace(s2, "\n", " ");
-    final String substituted = NonNullWrapperCommon.replace(s3, "\t", " ");
-    return new PgnCommentary(substituted);
-  }
-
   private static void validate(String value) {
     for (int i = 0; i < value.length(); i++) {
       final char c = value.charAt(i);
-      if (isForbidden(c)) {
+      if (c == '{' || c == '}') {
         throw new PgnCommentaryValidationException(formatProblem(value, i, c));
       }
     }
   }
 
-  private static boolean isForbidden(char c) {
-    // ASCII control characters (C0): U+0000–U+001F. DEL: U+007F.
-    return c < 0x20 || c == 0x7F;
-  }
-
   private static String formatProblem(String value, int index, char c) {
     final String charLabel = switch (c) {
-      case '\t' -> "tab";
-      case '\n' -> "newline (LF)";
-      case '\r' -> "carriage return (CR)";
-      default -> NonNullWrapperCommon.format("control character U+%04X", (int) c);
+      case '{' -> "opening brace";
+      case '}' -> "closing brace";
+      default -> "character '" + c + "'";
     };
     return "PGN commentary must not contain " + charLabel + " (at index " + index + " of: \""
         + summarizeForError(value) + "\").";
@@ -88,7 +71,7 @@ public record PgnCommentary(String value) {
     if (value.length() <= 80) {
       return value;
     }
-    return NonNullWrapperCommon.substring(value, 0, 77) + "...";
+    return value.substring(0, 77) + "...";
   }
 
 }

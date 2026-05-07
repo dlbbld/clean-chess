@@ -46,14 +46,12 @@ class TestCommentaryLenient {
   }
 
   /**
-   * Per the no-trim policy in the commentary contract, lenient preserves any trailing whitespace from the source.
-   * The Java text-block below ends with a newline before the closing {@code """}; lenient substitutes that to a
-   * single trailing space, so {@code expected} also ends with a single trailing space.
+   * Per the commentary contract, lenient preserves source bytes verbatim — the embedded newlines from the Java
+   * text-block stay in the model exactly as written. No trim, no substitution.
    */
   @SuppressWarnings("static-method")
   @Test
   void v01_leadingCommentaryLongWithLinebreaks() {
-    final var leadingCommentaryExpected = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. ";
     final var leadingCommentary = """
         Lorem ipsum dolor sit amet,
         consectetur adipiscing elit,
@@ -68,7 +66,7 @@ class TestCommentaryLenient {
     assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentaryExpected, file.leadingCommentary().value());
+    assertEquals(leadingCommentary, file.leadingCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -133,15 +131,15 @@ class TestCommentaryLenient {
   }
 
   /**
-   * Per the commentary contract, lenient substitutes newline (\n), carriage return (\r), CRLF (\r\n) and tab (\t)
-   * with single spaces and stores the result. The substitution is character-by-character (CRLF as a single unit),
-   * preserving space counts elsewhere — multiple consecutive spaces are NOT collapsed.
+   * Per the commentary contract, the PGN spec allows newlines inside {@code {...}} commentary. Lenient (like strict)
+   * preserves source bytes verbatim. The previous lenient-side substitution of newline-to-space has been removed —
+   * tabs and line breaks are valid commentary content per spec, not whitespace to be normalised.
    */
   @SuppressWarnings("static-method")
   @Test
-  void v08_multilineCommentaryNewlineSubstitutedWithSpace() {
+  void v08_multilineCommentaryPreservedVerbatim() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {line one\nline two} e5 *\n\n");
-    assertEquals("line one line two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -289,55 +287,54 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Whitespace substitution contract — lenient substitutes tab / CR / LF / CRLF with single space,
-  // preserves space counts (does NOT collapse runs), still rejects non-whitespace control characters.
+  // Whitespace and control-character handling — per the commentary contract, lenient (like strict) preserves
+  // source bytes verbatim. The PGN spec restricts non-printing characters from string tokens, NOT from {...}
+  // commentary. Tabs, line breaks, and other control characters all round-trip unchanged.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
-  void substitution_tabInMoveCommentaryBecomesSingleSpace() {
+  void tabInMoveCommentaryIsPreservedVerbatim() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\tb} e5 *\n\n");
-    assertEquals("a b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void substitution_carriageReturnInMoveCommentaryBecomesSingleSpace() {
+  void carriageReturnInMoveCommentaryIsPreservedVerbatim() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
-    assertEquals("a b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\rb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void substitution_crlfBecomesSingleSpace() {
-    // CRLF is recognised as a single newline unit and substituted with one space — not two.
+  void crlfInMoveCommentaryIsPreservedVerbatim() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\r\nb} e5 *\n\n");
-    assertEquals("a b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\r\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void substitution_doubleSpaceFromConsecutiveTabsIsPreserved() {
-    // Two tabs become two spaces. Lenient does NOT collapse consecutive spaces.
+  void consecutiveTabsArePreservedVerbatim() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\t\tb} e5 *\n\n");
-    assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\t\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void substitution_tabInLeadingCommentary() {
+  void tabInLeadingCommentaryIsPreservedVerbatim() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro\tnote} 1. e4 e5 *\n\n");
-    assertEquals("intro note", file.leadingCommentary().value());
+    assertEquals("intro\tnote", file.leadingCommentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void substitution_doubleSpacesInSourceArePreservedAsIs() {
+  void doubleSpacesInSourceArePreservedAsIs() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a  b} e5 *\n\n");
     assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -345,10 +342,11 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void forbidden_otherControlCharStillRejected() {
-    // Bell (U+0007) is not in the substitution set; it remains a forbidden control character even for lenient.
-    expectError(PgnTestHelper.header("*") + "1. e4 {ab} e5 *\n\n",
-        LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER);
+  void otherControlCharInCommentaryIsPreserved() {
+    // Bell (U+0007). Spec doesn't forbid; preserve for python-chess interop.
+    final PgnFile file = LenientPgnParser
+        .parseText(PgnTestHelper.header("*") + "1. e4 {ab} e5 *\n\n");
+    assertEquals("ab", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -372,8 +370,8 @@ class TestCommentaryLenient {
   void v11_commentaryWithLinebreaks() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4!? {spicy\n" + "groovy}" + " e5 *\n\n");
-    // Per the commentary contract, lenient substitutes the embedded \n with a single space.
-    assertEquals("spicy groovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    // Per the commentary contract, lenient preserves the embedded \n verbatim.
+    assertEquals("spicy\ngroovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
         NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
   }

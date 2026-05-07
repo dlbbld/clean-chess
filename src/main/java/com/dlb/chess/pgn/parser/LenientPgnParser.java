@@ -512,10 +512,14 @@ public final class LenientPgnParser {
     switch (token.type()) {
       case BRACE_COMMENT:
         try {
-          // Lenient policy: substitute tab / newline / CR / CRLF with single spaces, then validate.
-          // Surviving control characters (e.g. bell, escape) still cause rejection via the constructor.
-          return PgnCommentary.fromLenientImport(token.text());
+          // Lenient and strict both preserve commentary bytes verbatim. The PGN spec restricts non-printing
+          // characters from string tokens, not from commentary; tabs and line breaks inside {...} are valid
+          // content and round-trip unchanged.
+          return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
+          // Defensive: the tokenizer never produces { or } in BRACE_COMMENT content (those are handled by
+          // dedicated token types), so this catch is effectively unreachable. Kept so a future tokenizer
+          // refactor surfaces such a regression as a parser-level error rather than an unwrapped exception.
           throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               pcve.getMessage());
         }
