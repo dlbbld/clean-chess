@@ -9,6 +9,6 @@ import com.dlb.chess.model.PgnHalfMove;
 
 @SuppressWarnings("null")
 public record PgnFile(@NonNull List<@NonNull Tag> tagList, @NonNull Fen startFen,
-    @NonNull PgnCommentary leadingCommentary, @NonNull List<@NonNull PgnHalfMove> halfMoveList) {
+    @NonNull PgnCommentary preGameCommentary, @NonNull List<@NonNull PgnHalfMove> halfMoveList) {
 
 }

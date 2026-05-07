@@ -18,8 +18,9 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
  * Restored non-commentary portion of the original {@code TestMoveTextUtilityUsingPgn}. Commentary-specific tests
- * (leading-commentary success/exception, non-leading-commentary success/exception, combined commentary success) are now
- * covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored here.
+ * (pre-game commentary success/exception, non-leading-commentary success/exception, combined commentary success) are
+ * now covered by {@link com.dlb.chess.test.pgn.parser.commentary.TestCommentaryStrict} and intentionally not restored
+ * here.
  */
 class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
 
@@ -113,7 +114,7 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
   @SuppressWarnings("static-method")
   @Test
   void testCombinedSuccess() {
-    // These fixtures exercise the full combination of leading commentary, trailing commentary, move-suffix
+    // These fixtures exercise the full combination of pre-game commentary, trailing commentary, move-suffix
     // annotations, and SAN. Commentary correctness in isolation is covered by TestCommentaryStrict; here we assert
     // that all features parse together without loss of any component.
     checkCombinedSuccess("01_example.pgn", "leading commentary", NonNullWrapperCommon.asList("e4", "d5", "d4"),
@@ -126,12 +127,12 @@ class TestMoveTextUtilityUsingPgn extends AbstractTestMovetextUtility {
         NonNullWrapperCommon.asList("commentBlack1", "commentWhite", "commentBlack2"));
   }
 
-  private static void checkCombinedSuccess(String pgnFileName, String leadingCommentaryExpected,
+  private static void checkCombinedSuccess(String pgnFileName, String preGameCommentaryExpected,
       List<String> sanListExpected, List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected,
       List<String> commentaryListExpected) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
         pgnFileName);
-    assertEquals(leadingCommentaryExpected, pgnFile.leadingCommentary().value());
+    assertEquals(preGameCommentaryExpected, pgnFile.preGameCommentary().value());
     assertEquals(sanListExpected, calculateSanList(pgnFile.halfMoveList()));
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
     assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));

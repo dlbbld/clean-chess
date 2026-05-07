@@ -39,7 +39,7 @@ public class PgnCreate {
 
   public static String createPgnFileString(PgnFile pgnFile) {
     return appendEmptyLine(BasicUtility.convertToString(calculatePgnFileFileLines(pgnFile.tagList(),
-        pgnFile.leadingCommentary(), pgnFile.startFen(), pgnFile.halfMoveList())));
+        pgnFile.preGameCommentary(), pgnFile.startFen(), pgnFile.halfMoveList())));
   }
 
   private static String appendEmptyLine(String text) {
@@ -47,11 +47,11 @@ public class PgnCreate {
   }
 
   public static List<String> createPgnFileLines(PgnFile pgnFile) {
-    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.leadingCommentary(), pgnFile.startFen(),
+    return calculatePgnFileFileLines(pgnFile.tagList(), pgnFile.preGameCommentary(), pgnFile.startFen(),
         pgnFile.halfMoveList());
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary leadingCommentary,
+  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary preGameCommentary,
       Fen startFen, List<PgnHalfMove> halfMoveList) {
 
     final List<String> fileLines = new ArrayList<>();
@@ -71,20 +71,20 @@ public class PgnCreate {
     final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList);
 
-    // add the leading commentary if any as a comment before the movetext.
+    // add the pre-game commentary if any as a comment before the movetext.
     // PgnCommentary's value is contract-validated (no tab/newline/CR/control), so we can write it as-is.
-    final String leadingCommentaryValue = leadingCommentary.value();
-    final String movetextIncludingLeadingCommentary;
-    if (leadingCommentaryValue.isEmpty()) {
-      movetextIncludingLeadingCommentary = moves + " " + resultTagValue.getValue();
+    final String preGameCommentaryValue = preGameCommentary.value();
+    final String movetextIncludingPreGameCommentary;
+    if (preGameCommentaryValue.isEmpty()) {
+      movetextIncludingPreGameCommentary = moves + " " + resultTagValue.getValue();
     } else if (moves.isEmpty()) {
-      movetextIncludingLeadingCommentary = "{" + leadingCommentaryValue + "}" + " " + resultTagValue.getValue();
+      movetextIncludingPreGameCommentary = "{" + preGameCommentaryValue + "}" + " " + resultTagValue.getValue();
     } else {
-      movetextIncludingLeadingCommentary = "{" + leadingCommentaryValue + "}" + " " + moves + " "
+      movetextIncludingPreGameCommentary = "{" + preGameCommentaryValue + "}" + " " + moves + " "
           + resultTagValue.getValue();
     }
 
-    fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingLeadingCommentary, PgnCreate.MAX_LINE_LENGTH));
+    fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
 
     // finally add an empty line
     fileLines.add("");

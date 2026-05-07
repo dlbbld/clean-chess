@@ -24,7 +24,7 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
  *
  * <p>
  * Also covers the positive path: where commentary is legal (leading slot, trailing-after-half-move slot) and how the
- * parser populates {@link PgnFile#leadingCommentary()} and each {@code PgnHalfMove.commentary()}. These are the first
+ * parser populates {@link PgnFile#preGameCommentary()} and each {@code PgnHalfMove.commentary()}. These are the first
  * dedicated tests for commentary in the codebase — previously commentary was only exercised incidentally by a handful
  * of game fixtures.
  */
@@ -36,9 +36,9 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v1_leadingCommentaryOnly() {
+  void v1_preGameCommentaryOnly() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{opening remark} 1. e4 e5 *\n\n");
-    assertEquals("opening remark", file.leadingCommentary().value());
+    assertEquals("opening remark", file.preGameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -48,7 +48,7 @@ class TestCommentaryStrict {
   @Test
   void v2_trailingCommentaryAfterWhiteMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {good opening} 1... e5 *\n\n");
-    assertEquals("", file.leadingCommentary().value());
+    assertEquals("", file.preGameCommentary().value());
     assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
@@ -77,7 +77,7 @@ class TestCommentaryStrict {
   @Test
   void v5_leadingAndTrailingCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{intro} 1. e4 {after-1-white} 1... e5 *\n\n");
-    assertEquals("intro", file.leadingCommentary().value());
+    assertEquals("intro", file.preGameCommentary().value());
     assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
   }
@@ -120,9 +120,9 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v10_zeroMoveGameWithLeadingCommentaryOnly() {
+  void v10_zeroMoveGameWithPreGameCommentaryOnly() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{no moves played} *\n\n");
-    assertEquals("no moves played", file.leadingCommentary().value());
+    assertEquals("no moves played", file.preGameCommentary().value());
     assertEquals(0, file.halfMoveList().size());
   }
 
@@ -139,7 +139,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void r1_unclosedLeadingCommentary() {
+  void r1_unclosedPreGameCommentary() {
     expectError(header("*") + "{unclosed leading 1. e4 e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
   }
@@ -150,7 +150,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void r2_nestedInLeadingCommentary() {
+  void r2_nestedInPreGameCommentary() {
     expectError(header("*") + "{outer {inner}} 1. e4 e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
   }
@@ -263,9 +263,9 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void tabInLeadingCommentaryIsPreserved() {
+  void tabInPreGameCommentaryIsPreserved() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\tb} 1. e4 e5 *\n\n");
-    assertEquals("a\tb", file.leadingCommentary().value());
+    assertEquals("a\tb", file.preGameCommentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -277,9 +277,9 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void carriageReturnInLeadingCommentaryIsPreserved() {
+  void carriageReturnInPreGameCommentaryIsPreserved() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\rb} 1. e4 e5 *\n\n");
-    assertEquals("a\rb", file.leadingCommentary().value());
+    assertEquals("a\rb", file.preGameCommentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -299,9 +299,9 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void doubleSpacesInLeadingCommentaryArePreservedAsIs() {
+  void doubleSpacesInPreGameCommentaryArePreservedAsIs() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{line one  line two} 1. e4 e5 *\n\n");
-    assertEquals("line one  line two", file.leadingCommentary().value());
+    assertEquals("line one  line two", file.preGameCommentary().value());
   }
 
   // -------------------------------------------------------------------------------------------------

@@ -28,20 +28,20 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void v01_leadingCommentaryOnly() {
+  void v01_preGameCommentaryOnly() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{opening remark} 1. e4 e5 *\n\n");
-    assertEquals("opening remark", file.leadingCommentary().value());
+    assertEquals("opening remark", file.preGameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void v01_leadingCommentaryLongNoLinebreaks() {
-    final var leadingCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
-    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+  void v01_preGameCommentaryLongNoLinebreaks() {
+    final var preGameCommentary = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.";
+    assertTrue(preGameCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
     final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, file.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + preGameCommentary + "} 1. e4 e5 *\n\n");
+    assertEquals(preGameCommentary, file.preGameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -51,8 +51,8 @@ class TestCommentaryLenient {
    */
   @SuppressWarnings("static-method")
   @Test
-  void v01_leadingCommentaryLongWithLinebreaks() {
-    final var leadingCommentary = """
+  void v01_preGameCommentaryLongWithLinebreaks() {
+    final var preGameCommentary = """
         Lorem ipsum dolor sit amet,
         consectetur adipiscing elit,
         sed do eiusmod
@@ -63,20 +63,20 @@ class TestCommentaryLenient {
         Excepteur sint occaecat cupidatat non proident,
         sunt in culpa qui officia deserunt mollit anim id est laborum.
             """;
-    assertTrue(leadingCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
+    assertTrue(preGameCommentary.length() > PgnCreate.MAX_LINE_LENGTH);
     final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, file.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + preGameCommentary + "} 1. e4 e5 *\n\n");
+    assertEquals(preGameCommentary, file.preGameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void v01_leadingCommentaryOnlySpaces() {
-    final var leadingCommentary = "   ";
+  void v01_preGameCommentaryOnlySpaces() {
+    final var preGameCommentary = "   ";
     final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{" + leadingCommentary + "} 1. e4 e5 *\n\n");
-    assertEquals(leadingCommentary, file.leadingCommentary().value());
+        .parseText(PgnTestHelper.header("*") + "{" + preGameCommentary + "} 1. e4 e5 *\n\n");
+    assertEquals(preGameCommentary, file.preGameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
   }
 
@@ -111,7 +111,7 @@ class TestCommentaryLenient {
   void v05_leadingAndTrailingCommentary() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro} 1. e4 {after-1-white} e5 *\n\n");
-    assertEquals("intro", file.leadingCommentary().value());
+    assertEquals("intro", file.preGameCommentary().value());
     assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -153,9 +153,9 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void v10_zeroMoveGameWithLeadingCommentaryOnly() {
+  void v10_zeroMoveGameWithPreGameCommentaryOnly() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{no moves played} *\n\n");
-    assertEquals("no moves played", file.leadingCommentary().value());
+    assertEquals("no moves played", file.preGameCommentary().value());
     assertEquals(0, file.halfMoveList().size());
   }
 
@@ -172,7 +172,7 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void r1_unclosedLeadingCommentary() {
+  void r1_unclosedPreGameCommentary() {
     expectError(PgnTestHelper.header("*") + "{unclosed leading 1. e4 e5 *\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
   }
@@ -183,7 +183,7 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void r2_nestedInLeadingCommentary() {
+  void r2_nestedInPreGameCommentary() {
     expectError(PgnTestHelper.header("*") + "{outer {inner}} 1. e4 e5 *\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_START_BRACE);
   }
@@ -326,10 +326,10 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void tabInLeadingCommentaryIsPreservedVerbatim() {
+  void tabInPreGameCommentaryIsPreservedVerbatim() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro\tnote} 1. e4 e5 *\n\n");
-    assertEquals("intro\tnote", file.leadingCommentary().value());
+    assertEquals("intro\tnote", file.preGameCommentary().value());
   }
 
   @SuppressWarnings("static-method")

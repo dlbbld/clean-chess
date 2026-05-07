@@ -42,7 +42,7 @@ import com.dlb.chess.utility.TagUtility;
  *
  * <p>
  * The parser produces a {@link PgnFile} record with tags sorted canonically, the start FEN derived from tag data, the
- * leading commentary if present, and the full half-move list. Structural violations surface as
+ * pre-game commentary if present, and the full half-move list. Structural violations surface as
  * {@link StrictPgnParserValidationException} with a fine-grained {@link StrictPgnParserValidationProblem} category.
  */
 public final class StrictPgnParser {
@@ -158,7 +158,7 @@ public final class StrictPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.leadingCommentary(), movetext.halfMoveList());
+    return new PgnFile(tagList, startFen, movetext.preGameCommentary(), movetext.halfMoveList());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -362,14 +362,14 @@ public final class StrictPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary leadingCommentary) {
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary preGameCommentary) {
   }
 
   private MovetextOutcome parseMovetext(Fen startFen, ResultTagValue resultTagValue) {
-    // Leading commentary (optional).
-    var leadingCommentary = PgnCommentary.EMPTY;
+    // Pre-game commentary (optional).
+    var preGameCommentary = PgnCommentary.EMPTY;
     if (isBraceToken(tokenizer.peek().type())) {
-      leadingCommentary = consumeCommentaryOrThrow();
+      preGameCommentary = consumeCommentaryOrThrow();
       expectSpaceAfterComment();
     }
 
@@ -385,7 +385,7 @@ public final class StrictPgnParser {
       tokenizer.next();
       final PgnToken terminator = tokenizer.next();
       validateTermination(terminator, resultTagValue);
-      return new MovetextOutcome(halfMoves, leadingCommentary);
+      return new MovetextOutcome(halfMoves, preGameCommentary);
     }
 
     // Tracks whether the last completed half-move had attached commentary. Per PGN spec §8.2.2 case 1, an
@@ -399,7 +399,7 @@ public final class StrictPgnParser {
       if (tokenizer.peek().type() == PgnTokenType.TERMINATION_MARKER) {
         final PgnToken terminator = tokenizer.next();
         validateTermination(terminator, resultTagValue);
-        return new MovetextOutcome(halfMoves, leadingCommentary);
+        return new MovetextOutcome(halfMoves, preGameCommentary);
       }
 
       // Move-number handling for non-initial Black moves splits two ways:

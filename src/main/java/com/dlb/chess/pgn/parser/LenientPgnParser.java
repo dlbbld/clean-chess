@@ -177,7 +177,7 @@ public final class LenientPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.leadingCommentary(), movetext.halfMoveList());
+    return new PgnFile(tagList, startFen, movetext.preGameCommentary(), movetext.halfMoveList());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -323,12 +323,12 @@ public final class LenientPgnParser {
   // Movetext section
   // -------------------------------------------------------------------------------------------------
 
-  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary leadingCommentary,
+  private record MovetextOutcome(List<PgnHalfMove> halfMoveList, PgnCommentary preGameCommentary,
       @Nullable ResultTagValue terminationResult) {
   }
 
   private MovetextOutcome parseMovetext() {
-    var leadingCommentary = PgnCommentary.EMPTY;
+    var preGameCommentary = PgnCommentary.EMPTY;
     final List<PgnHalfMove> halfMoves = new ArrayList<>();
     @Nullable ResultTagValue terminationResult = null;
 
@@ -336,7 +336,7 @@ public final class LenientPgnParser {
     // Leading-commentary slot: exactly one commentary allowed before the first move. Additional braces before any
     // half-move fall through to the main loop and are reported as R4 (brace at SAN-expected position).
     if (isBraceToken(tokenizer.peek().type())) {
-      leadingCommentary = consumeCommentaryOrThrow();
+      preGameCommentary = consumeCommentaryOrThrow();
     }
 
     while (true) {
@@ -404,7 +404,7 @@ public final class LenientPgnParser {
           "Unexpected token \"" + peek.text() + "\" at line " + peek.line() + ".");
     }
 
-    return new MovetextOutcome(halfMoves, leadingCommentary, terminationResult);
+    return new MovetextOutcome(halfMoves, preGameCommentary, terminationResult);
   }
 
   /**

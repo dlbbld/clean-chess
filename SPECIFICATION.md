@@ -16,7 +16,7 @@ This file is the project's specification root. As individual concerns grow large
 
 Applies to:
 
-- `PgnFile.leadingCommentary()` — commentary before the first move (also called "pre-game" / "root-node" commentary; see python-chess's `Game.comment` and Lichess's leading-commentary support).
+- `PgnFile.preGameCommentary()` — commentary before the first move (also called "leading" / "root-node" commentary; see python-chess's `Game.comment` and Lichess's leading-commentary support).
 - `PgnHalfMove.commentary()` — commentary attached to a half-move.
 
 Both fields are typed as `PgnCommentary` (a value-object record). Construction validates the contract; once a `PgnCommentary` instance exists, its content is guaranteed to satisfy the contract. Downstream code — including the exporter — does not validate again.
@@ -99,4 +99,3 @@ This mirrors python-chess's `force_movenumber` flag: tools that import lenient i
 
 - **Brace-aware wrap.** `PgnUtility.calculateWrappedLines` currently splits on space without awareness of `{...}` regions. For long single-line commentary, this transforms internal spaces into newlines, producing valid (per the new contract) but content-different output on round-trip. Fix: don't break inside `{...}`. Mirrors python-chess's "long comment produces a long line, accepting the 80-char file-export-format guideline as a soft target." Tests `testFromImportStrictLong` and `testFromImportLenientLong` are `@Disabled` until this lands.
 - **Spec-compliant brace-comment parsing (T-003).** The PGN spec says *"a left brace character appearing in a brace comment loses its special meaning and is ignored"* — i.e., `{` inside a comment is content, not a nested-comment error. Both parsers currently reject this case. Open question on the value object's policy for `{` in content if/when this lands.
-- **Rename `leadingCommentary` → `preGameCommentary` (T-004).** Mostly mechanical. The current name is fine but `preGameCommentary` reads more clearly and matches the conceptual position (before the game starts).
