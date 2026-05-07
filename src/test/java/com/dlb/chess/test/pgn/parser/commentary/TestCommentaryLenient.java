@@ -14,11 +14,10 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.PgnTestHelper;
 
 /**
- * Commentary brace validation for {@link LenientPgnParser}. The lenient parser is strict-equivalent on all four
- * commentary rules — continuing past malformed commentary produces unreliable downstream results, so the tolerance that
- * used to fold unclosed braces into accepted comment text has been removed.
+ * Commentary brace validation for {@link LenientPgnParser}. Lenient is strict-equivalent on the brace rules
+ * (R1/R3/R4); continuing past malformed commentary would produce unreliable downstream results.
  *
- * @see TestCommentaryStrict for the matching rule set documented there.
+ * @see TestCommentaryStrict
  */
 class TestCommentaryLenient {
 
@@ -178,10 +177,7 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // T-003 — left brace inside an open brace comment is content, not a nested-comment error.
-  //
-  // Lenient mirrors strict here — the rule comes from the PGN spec, not from strictness preferences. See the
-  // matching block in TestCommentaryStrict for the rationale.
+  // T-003 — inner `{` is content (PGN spec §8.2.5), same as strict.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -260,8 +256,7 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void r3_strayCloseAtSanExpectedPosition() {
-    // Broken brace variants always surface with their specific category, even at SAN-expected positions — see
-    // TestCommentaryStrict for the rationale.
+    // Broken-brace lexical errors take precedence over the positional R4.
     expectError(PgnTestHelper.header("*") + "1. } e4 e5 *\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -299,9 +294,7 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Whitespace and control-character handling — per the commentary contract, lenient (like strict) preserves
-  // source bytes verbatim. The PGN spec restricts non-printing characters from string tokens, NOT from {...}
-  // commentary. Tabs, line breaks, and other control characters all round-trip unchanged.
+  // Whitespace and control-character handling in commentary content.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -315,7 +308,7 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void carriageReturnInMoveCommentaryIsNormalisedToLf() {
-    // T-005: CRLF and lone CR are normalised to LF at the parser input boundary. The model never sees `\r`.
+    // T-005: lone CR → LF at parser input.
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
     assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -362,11 +355,7 @@ class TestCommentaryLenient {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // T-002 — move-number indicator after intervening commentary
-  //
-  // Lenient must accept BOTH forms: with the "N..." indicator (canonical, what the strict parser requires) and
-  // without (real-world PGN that omits the indicator). The strict-parser companion test in TestCommentaryStrict
-  // covers the rejection side.
+  // T-002 — lenient accepts both forms (with and without "N..."). Strict requires it; see TestCommentaryStrict.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -381,8 +370,6 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void t002_acceptMissingMoveNumberAfterCommentaryOnWhite() {
-    // Without "1..." indicator — strict rejects, lenient accepts. Real-world PGN sources frequently omit the
-    // indicator since many tools do not enforce it.
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {after-white} e5 *\n\n");
     assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -419,7 +406,6 @@ class TestCommentaryLenient {
   void v11_commentaryWithLinebreaks() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4!? {spicy\n" + "groovy}" + " e5 *\n\n");
-    // Per the commentary contract, lenient preserves the embedded \n verbatim.
     assertEquals("spicy\ngroovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
         NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());

@@ -30,7 +30,7 @@ import com.dlb.chess.utility.TagUtility;
 
 public class PgnCreate {
 
-  // per PGN standard, the maximum line length is 79 characters
+  /** PGN export-format guideline: lines should not exceed 79 characters. */
   public static final int MAX_LINE_LENGTH = 79;
 
   public static String createPgnFileString(ChessBoard board) {
@@ -55,15 +55,12 @@ public class PgnCreate {
       Fen startFen, List<PgnHalfMove> halfMoveList) {
 
     final List<String> fileLines = new ArrayList<>();
-    // first add the existing tags
     for (final Tag tag : tagList) {
       fileLines.add(calculateTagEntry(tag));
     }
-
-    // add the empty line between tags and move text
+    // Empty separator line between tags and movetext.
     fileLines.add("");
 
-    // add the moves and game termination marker
     final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
     final Movetext movetext = PgnCreate.calculateMovetext(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList, resultTagValue);
@@ -71,8 +68,7 @@ public class PgnCreate {
     final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList);
 
-    // add the pregame commentary if any as a comment before the movetext.
-    // PgnCommentary's value is contract-validated (no tab/newline/CR/control), so we can write it as-is.
+    // PgnCommentary is contract-validated (no `}`, no `\r`), so the value writes verbatim into {...}.
     final String pregameCommentaryValue = pregameCommentary.value();
     final String movetextIncludingPreGameCommentary;
     if (pregameCommentaryValue.isEmpty()) {
@@ -85,8 +81,7 @@ public class PgnCreate {
     }
 
     fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
-
-    // finally add an empty line
+    // Trailing blank line per the strict format.
     fileLines.add("");
 
     return fileLines;
@@ -157,27 +152,21 @@ public class PgnCreate {
     var currentFullMoveNumber = fullMoveNumber;
     Side currentHavingMove = havingMove;
     var isFirstMove = true;
-    // Tracks whether the previous half-move had attached commentary. Per PGN spec §8.2.2 case 1, an intervening
-    // commentary between White's move and Black's move requires emitting "N..." before Black's move.
+    // T-002 / PGN spec §8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
     var priorCommentaryAttached = false;
     for (final PgnHalfMove halfMove : halfMoveList) {
 
-      // Emit the move-number indicator in the three cases the PGN export-format requires it:
-      // (i) before the very first half-move (always — White or Black depending on starting FEN);
-      // (ii) before every White move (continuation);
-      // (iii) before a Black move when commentary intervened on the previous White move (PGN spec §8.2.2).
+      // Emit the move-number indicator in the three required cases: first half-move, before any White move, or
+      // before a Black move that follows commentary on White's move (T-002).
       if (isFirstMove) {
         isFirstMove = false;
         final var fullMoveNumberPart = HalfMoveUtility.calculateFullMoveNumberInitialWithoutSpace(fullMoveNumber,
             currentHavingMove);
         result.append(fullMoveNumberPart);
       } else if (currentHavingMove == Side.WHITE) {
-        final var fullMoveNumberPart = currentFullMoveNumber + ".";
-        result.append(" ").append(fullMoveNumberPart);
+        result.append(" ").append(currentFullMoveNumber).append('.');
       } else if (priorCommentaryAttached) {
-        // Black move after intervening commentary on White's move — emit "N..." indicator.
-        final var fullMoveNumberPart = currentFullMoveNumber + "...";
-        result.append(" ").append(fullMoveNumberPart);
+        result.append(" ").append(currentFullMoveNumber).append("...");
       }
 
       final String san = halfMove.san();
@@ -186,28 +175,22 @@ public class PgnCreate {
         result.append(halfMove.moveSuffixAnnotation().getSuffix());
       }
 
-      // PgnCommentary's value is contract-validated; emit as-is.
       final String commentaryValue = halfMove.commentary().value();
       if (!commentaryValue.isEmpty()) {
-        result.append(" {");
-        result.append(commentaryValue);
-        result.append("}");
+        result.append(" {").append(commentaryValue).append('}');
         priorCommentaryAttached = true;
       } else {
         priorCommentaryAttached = false;
       }
 
-      // fullMoveNumber is incremented after Black's move
       if (currentHavingMove == Side.BLACK) {
         currentFullMoveNumber++;
       }
       currentHavingMove = currentHavingMove.getOppositeSide();
     }
     return NonNullWrapperCommon.toString(result);
-
   }
 
-  // includes the game termination marker by the PGN spec
   private static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
       ResultTagValue resultTagValue) {
 

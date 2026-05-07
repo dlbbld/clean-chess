@@ -49,23 +49,8 @@ class TestPgnExportPreGameCommentary {
 
   }
 
-  /**
-   * Round-trip with a long single-line commentary currently fails on byte-stability: {@code PgnCreate} wraps the entire
-   * movetext (including brace content) at {@link PgnCreate#MAX_LINE_LENGTH} via
-   * {@code PgnUtility.calculateWrappedLines}, replacing some original spaces with newlines INSIDE the {@code {...}}
-   * region. After T-001 (preserve newlines/tabs verbatim per the spec), strict no longer rejects the wrapped output —
-   * but the re-parsed model has {@code \n} in positions where the input had spaces, so {@code assertEquals(original,
-   * roundTripped)} still fails.
-   *
-   * <p>
-   * Fix needed in {@code PgnCreate.calculatePgnFileFileLines} / {@code PgnUtility.calculateWrappedLines}: wrapping must
-   * respect brace boundaries — a long brace-comment must stay on a single line (matching python-chess's "don't break
-   * inside {...}" approach), so original whitespace inside commentary is not transformed.
-   *
-   * <p>
-   * Disabled until that brace-aware wrap fix lands.
-   */
-  @org.junit.jupiter.api.Disabled("PgnCreate wrap replaces spaces with \\n inside long {...} — round-trip not byte-stable; needs brace-aware wrap")
+  /** Disabled pending the brace-aware-wrap follow-up (see SPECIFICATION.md). */
+  @org.junit.jupiter.api.Disabled("brace-aware wrap follow-up: see SPECIFICATION.md")
   @SuppressWarnings("static-method")
   @Test
   void testFromImportStrictLong() {
@@ -85,10 +70,6 @@ class TestPgnExportPreGameCommentary {
 
   }
 
-  /**
-   * Per the commentary contract, strict (like lenient) preserves source bytes verbatim including embedded newlines. The
-   * PGN spec restricts non-printing characters from string tokens, not from {@code {...}} commentary.
-   */
   @SuppressWarnings("static-method")
   @Test
   void testFromImportStrictWithLinebreakIsPreservedThroughRoundTrip() {
@@ -143,11 +124,8 @@ class TestPgnExportPreGameCommentary {
 
   }
 
-  /**
-   * Same brace-aware-wrap issue as {@link #testFromImportStrictLong()} — once the wrap stops breaking inside
-   * {@code {...}}, this test will pass as-is.
-   */
-  @org.junit.jupiter.api.Disabled("PgnCreate wrap replaces spaces with \\n inside long {...} — round-trip not byte-stable; needs brace-aware wrap")
+  /** Same brace-aware-wrap follow-up as {@link #testFromImportStrictLong()}. */
+  @org.junit.jupiter.api.Disabled("brace-aware wrap follow-up: see SPECIFICATION.md")
   @SuppressWarnings("static-method")
   @Test
   void testFromImportLenientLong() {
@@ -168,13 +146,7 @@ class TestPgnExportPreGameCommentary {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Round-trip property — semantic preservation of commentary content through parse + export.
-  //
-  //   parse(export(parse(text))) ≡ parse(text)
-  //
-  // Tabs and LF in commentary are byte-stable. CR and CRLF are normalised to LF on parse (T-005), so the
-  // first parse already canonicalises them; the equality still holds because both sides of the equation go
-  // through normalisation.
+  // Round-trip property: parse(export(parse(text))) ≡ parse(text). T-005 normalises CR/CRLF to LF.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -219,10 +191,6 @@ class TestPgnExportPreGameCommentary {
     assertRoundTripStable(PgnTestHelper.header("*") + "1. e4 {a  b  c} e5 *\n\n");
   }
 
-  /**
-   * Asserts {@code parse(export(parse(text))) ≡ parse(text)}. Tab/LF are byte-stable; CR/CRLF are normalised to LF
-   * by the first parse, then identity holds because both sides of the equation go through that same normalisation.
-   */
   private static void assertRoundTripStable(String inputPgn) {
     final PgnFile p1 = LenientPgnParser.parseText(inputPgn);
     final String t1 = PgnCreate.createPgnFileString(p1);
@@ -231,18 +199,14 @@ class TestPgnExportPreGameCommentary {
     assertEquals(p1, p2, "Round-trip changed the parsed model");
   }
 
-  // -------------------------------------------------------------------------------------------------
-  // T-005 export-side observations: exporter writes only LF, never CR.
-  // -------------------------------------------------------------------------------------------------
-
   @SuppressWarnings("static-method")
   @Test
   void crlfInputProducesLfOnlyExport() {
+    // T-005: export emits LF only.
     final PgnFile fileImport = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro\r\nnote} 1. e4 {move\r\nnote} e5 *\n\n");
     final String exported = PgnCreate.createPgnFileString(fileImport);
-    org.junit.jupiter.api.Assertions.assertFalse(exported.contains("\r"),
-        "Export must not contain CR; T-005 says LF is the canonical line ending.");
+    org.junit.jupiter.api.Assertions.assertFalse(exported.contains("\r"));
   }
 
 }

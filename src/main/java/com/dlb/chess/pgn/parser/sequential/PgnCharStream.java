@@ -1,9 +1,8 @@
 package com.dlb.chess.pgn.parser.sequential;
 
 /**
- * Forward-only character stream over a PGN source. Tracks one-based line and column numbers so tokenizers and parsers
- * can report positions in error messages. The source text is held verbatim — no line-ending normalization is performed
- * here, leaving that decision to the tokenizer.
+ * Forward-only character stream with one-based line/column tracking for error messages. Newline normalisation
+ * (CRLF/CR → LF) is the parser's responsibility — see {@code NewlineNormalization}.
  */
 public final class PgnCharStream {
 
@@ -44,7 +43,7 @@ public final class PgnCharStream {
       line++;
       column = 1;
     } else if (c == CARRIAGE_RETURN) {
-      // column stays; a following \n handles the line increment. A lone \r still opens a new line.
+      // Defensive — parsers normalise CR/CRLF to LF before construction, so this branch is normally unreached.
       if (peek() != LINE_FEED) {
         line++;
         column = 1;

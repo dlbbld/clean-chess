@@ -12,21 +12,15 @@ import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 
 /**
- * Commentary brace validation for {@link StrictPgnParser}. Covers the four rules agreed on for commentary:
+ * Commentary brace validation for {@link StrictPgnParser}. Three brace rules:
  *
  * <ul>
- * <li>R1 — every {@code {} must have a matching {@code }}.
- * <li>R2 — a {@code {} inside an already-open commentary is an error (no nesting).
- *   
-<li>R3 — a {@code }} outside any open commentary is an error (stray close).
- * <li>R4 — a brace token where a SAN half-move is expected is an error.
+ * <li>R1 — every {@code {} must have a matching {@code }} (else unclosed-commentary error).
+ * <li>R3 — a {@code }} outside any open commentary is a stray-close error.
+ * <li>R4 — a brace token where a SAN half-move is expected is rejected.
  * </ul>
  *
- * <p>
- * Also covers the positive path: where commentary is legal (leading slot, trailing-after-half-move slot) and how the
- * parser populates {@link PgnFile#pregameCommentary()} and each {@code PgnHalfMove.commentary()}. These are the first
- * dedicated tests for commentary in the codebase — previously commentary was only exercised incidentally by a handful
- * of game fixtures.
+ * <p>(R2 — nesting — was retired by T-003; an inner {@code {} is now content per PGN spec §8.2.5.)
  */
 class TestCommentaryStrict {
 
@@ -97,11 +91,6 @@ class TestCommentaryStrict {
     assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
-  /**
-   * Per the commentary contract, the PGN spec allows newlines inside {@code {...}} commentary (the spec's prohibition
-   * on non-printing characters applies only to <em>string tokens</em>, i.e. tag values, not to commentary). Strict
-   * preserves the source bytes verbatim, including embedded newlines.
-   */
   @SuppressWarnings("static-method")
   @Test
   void v8_multilineCommentaryPreservedVerbatim() {
@@ -145,12 +134,7 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // T-003 — left brace inside an open brace comment is content, not a nested-comment error.
-  //
-  // Per PGN spec §8.2.5: "a left brace character appearing in a brace comment loses its special meaning". Both
-  // parsers consume `{` as a literal content character — the comment is closed only by the next `}`. The previous
-  // R2 rule (rejection of any `{` inside an open comment) has been removed, and the corresponding problem code
-  // MOVETEXT_COMMENTARY_CONTAINS_START_BRACE is gone. A `}` after the comment closes is still R3 (stray close).
+  // T-003 — inner `{` is content (PGN spec §8.2.5). Only `}` closes a comment.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -177,9 +161,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t003_strayCloseAfterClosedCommentaryWithInnerOpenBraceIsR3() {
-    // The well-formed `{outer {inner}` closes at the first `}` (its content is "outer {inner"). The trailing `}`
-    // is then a stray close — categorized as R3. T-003 changes the comment-internal handling, not the stray-close
-    // rule.
+    // `{outer {inner}` closes at the first `}` with content "outer {inner"; the trailing `}` is a stray close (R3).
     expectError(header("*") + "1. e4 {outer {inner}} e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -230,9 +212,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void r3_strayCloseAtSanExpectedPosition() {
-    // Broken brace variants (stray close, unclosed, nested) always surface with their specific lexical category,
-    // regardless of whether the position would otherwise be a SAN-expected slot. R4 is reserved for well-formed
-    // braces that appear in the wrong position.
+    // Broken-brace lexical errors take precedence over the positional R4 — `}` here is R3, not R4.
     expectError(header("*") + "1. } e4 e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -251,7 +231,6 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void postTermination_strayCloseUsesSpecificCategory() {
-    // Broken-brace lexical errors fire regardless of position, including after the termination marker.
     expectError(header("*") + "1. e4 e5 * }\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -271,9 +250,7 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Whitespace and control-character handling — per the commentary contract, the PGN spec restricts non-printing
-  // characters from string tokens, NOT from {...} commentary. Both strict and lenient preserve source bytes
-  // verbatim. These tests cover acceptance and round-trip-faithful storage.
+  // Whitespace and control-character handling in commentary content.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -293,7 +270,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void carriageReturnInPreGameCommentaryIsNormalisedToLf() {
-    // T-005: CRLF and lone CR are normalised to LF at the parser input boundary. The model never sees `\r`.
+    // T-005: lone CR → LF at parser input.
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{a\rb} 1. e4 e5 *\n\n");
     assertEquals("a\nb", file.pregameCommentary().value());
   }
@@ -335,20 +312,13 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // T-002 — move-number indicator after intervening commentary (PGN spec §8.2.2 case 1)
-  //
-  // When commentary intervenes between the previous White move and the next Black move, the strict parser REQUIRES
-  // an explicit "N..." move-number indicator before the Black move. This mirrors python-chess's `force_movenumber`
-  // export behavior and the spec's literal phrasing. The lenient parser accepts both forms (with and without the
-  // indicator) — see TestCommentaryLenient.
+  // T-002 — strict requires "N..." before a Black move when commentary intervened on White's move
+  // (PGN spec §8.2.2 case 1). Lenient accepts both forms; see TestCommentaryLenient.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
   @Test
   void t002_rejectMissingMoveNumberAfterCommentaryOnWhite() {
-    // Canonical violation: commentary on White's move, then Black's move with no "1..." indicator. Strict must
-    // reject this with the dedicated category; the previous (non-T-002) categorization would have classified
-    // this differently or accepted it.
     expectError(header("*") + "1. e4 {after-white} e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY);
   }
@@ -356,7 +326,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t002_rejectMissingMoveNumberAfterCommentaryOnWhiteHigherFullMoveNumber() {
-    // The required indicator is the current full-move number followed by "...". Verify it's not hardcoded to "1".
+    // Verifies the indicator is the current full-move number, not hardcoded to "1".
     expectError(header("*") + "1. e4 e5 2. Nf3 {after-white-2} Nc6 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY);
   }
@@ -364,7 +334,6 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t002_acceptCanonicalMoveNumberAfterCommentaryOnWhite() {
-    // Canonical acceptance: "1..." indicator present after intervening commentary.
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {after-white} 1... e5 *\n\n");
     assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
@@ -373,8 +342,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t002_rejectWrongMoveNumberAfterCommentaryOnWhite() {
-    // Indicator present but wrong number — strict must reject. Surfaces with the same dedicated category as
-    // a missing indicator (same defect class: "the required indicator is not the one we found").
+    // Indicator with wrong number surfaces with the same category as a missing indicator.
     expectError(header("*") + "1. e4 {after-white} 2... e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_NUMBER_REQUIRED_AFTER_COMMENTARY);
   }
@@ -382,8 +350,6 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t002_noIndicatorRequiredWhenNoCommentaryIntervenes() {
-    // Sanity check that T-002 only fires when commentary actually intervened. A plain "1. e4 e5" must still parse
-    // — the indicator must NOT be required when there's no intervening commentary.
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 *\n\n");
     assertEquals(2, file.halfMoveList().size());
   }
@@ -391,8 +357,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t002_indicatorNotRequiredWhenCommentaryIsOnBlackMove() {
-    // Commentary on Black's move does not trigger T-002 — the next move is a White move and already requires
-    // its own move number for an unrelated reason.
+    // Commentary on Black's move does not trigger T-002 — the next move (White) carries its own move number anyway.
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 {after-black} 2. Nf3 *\n\n");
     assertEquals("after-black", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
     assertEquals("Nf3", NonNullWrapperCommon.get(file.halfMoveList(), 2).san());

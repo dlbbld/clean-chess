@@ -1,21 +1,12 @@
 package com.dlb.chess.pgn.parser;
 
-/**
- * Normalises any line-ending convention in a PGN source string to a single canonical form: LF (`\n`).
- *
- * <p>CRLF and lone CR are both rewritten to LF before tokenization. The library's invariant — applied uniformly to
- * tag values, movetext, and {@code {...}} commentary content — is that no `\r` ever reaches the model.
- */
+/** Normalises CRLF and lone CR to LF — see SPECIFICATION.md (Newline handling). */
 public final class NewlineNormalization {
 
   private NewlineNormalization() {
-    // utility class
   }
 
-  /**
-   * Returns {@code source} with every CRLF and every standalone CR replaced by LF. Inputs that already use only LF
-   * are returned unchanged (and short-circuited so the common case allocates nothing).
-   */
+  /** Returns {@code source} unchanged if it has no {@code \r}; otherwise returns a copy with every CR/CRLF → LF. */
   public static String toLf(String source) {
     if (source.indexOf('\r') < 0) {
       return source;

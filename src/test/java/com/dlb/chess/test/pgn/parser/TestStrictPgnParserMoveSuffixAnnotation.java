@@ -35,10 +35,7 @@ class TestStrictPgnParserMoveSuffixAnnotation {
     // 01: `e4!!!` — three !/? characters lex as one suffix token; the resulting "!!!" fails validation.
     checkMoveSuffixAnnotationException("01_example.pgn",
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
-    // 02: `e5!x` — a valid suffix `!` immediately followed by a letter with no separating space. The sequential
-    // tokenizer splits them cleanly (SUFFIX `!` + SYMBOL `x`), so the diagnosis surfaces as an unexpected-format
-    // violation rather than a suffix-value violation. Both are correct detections; the category differs from the
-    // previous parser pipeline.
+    // 02: `e5!x` — `!` then letter with no space. Tokenises as SUFFIX + SYMBOL, surfaces as UNEXPECTED_FORMAT.
     checkMoveSuffixAnnotationException("02_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_UNEXPECTED_FORMAT);
     // 03: `Qxf7#!?!` — trailing `!?!` lex as one suffix token; "!?!" fails validation.
     checkMoveSuffixAnnotationException("03_example.pgn",
@@ -86,8 +83,6 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   @SuppressWarnings("static-method")
   @Test
   void testCombinedException() {
-    // The original suite included a third combined-exception fixture that fires a commentary-specific error. That
-    // case is now covered by TestCommentaryStrict and intentionally omitted here.
     checkCombinedException("01_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID);
     checkCombinedException("02_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
   }
@@ -109,9 +104,7 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   @SuppressWarnings("static-method")
   @Test
   void testCombinedSuccess() {
-    // These fixtures exercise the full combination of pregame commentary, trailing commentary, move-suffix
-    // annotations, and SAN. Commentary correctness in isolation is covered by TestCommentaryStrict; here we assert
-    // that all features parse together without loss of any component.
+    // SAN + suffix + commentary together. Commentary alone is covered by TestCommentaryStrict.
     checkCombinedSuccess("01_example.pgn", "pregame commentary", NonNullWrapperCommon.asList("e4", "d5", "d4"),
         NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
             MoveSuffixAnnotation.BRILLIANT_MOVE),

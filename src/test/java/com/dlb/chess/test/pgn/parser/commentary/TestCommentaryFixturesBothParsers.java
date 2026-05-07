@@ -16,26 +16,8 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
- * Cross-parser fidelity test for the commentary fixtures. Each fixture is parsed once with the strict parser and once
- * with the lenient parser; the two resulting {@link PgnFile} models must be equal. This proves both that
- *
- * <ol>
- * <li>the fixtures are well-formed enough for the strict parser (every White-move commentary is followed by the
- * required {@code N...} indicator per T-002), and
- * <li>the lenient parser produces the same model as strict on canonically-formed input — which is the contract: lenient
- * is a superset of strict, so it must agree on every input strict accepts.
- * </ol>
- *
- * <p>
- * Adding a new commentary fixture under any of the three covered directories ({@code pregameCommentary/success},
- * {@code nonPregameCommentary/success}, {@code combinedCommentary/success}) is automatically picked up via the
- * {@link MethodSource} feeders below — no test method needs editing.
- *
- * <p>
- * The two left-curly-bracket fixtures
- * ({@code nonPregameCommentary/success/07_example_left_curly_bracket_in_comment.pgn} and
- * {@code pregameCommentary/success/10_example_left_curly_bracket_in_comment.pgn}) are now included — T-003 made a
- * literal {@code {} inside a brace comment legal content for both parsers per PGN spec §8.2.5.
+ * Cross-parser fidelity: each fixture must yield the same {@link PgnFile} through both strict and lenient. New
+ * fixtures are picked up via the {@link MethodSource} feeders below.
  */
 class TestCommentaryFixturesBothParsers {
 
@@ -78,10 +60,6 @@ class TestCommentaryFixturesBothParsers {
     assertEquals(strictModel, lenientModel,
         "Strict and lenient parsers disagree on " + folder.getFileName() + "/" + pgnFileName);
   }
-
-  // -------------------------------------------------------------------------------------------------
-  // Fixture feeders. All success fixtures parse identically through both strict and lenient post-T-003.
-  // -------------------------------------------------------------------------------------------------
 
   static Stream<Arguments> pregameCommentaryFixtures() {
     return Stream.of(Arguments.of("01_example.pgn"), Arguments.of("02_example.pgn"), Arguments.of("03_example.pgn"),

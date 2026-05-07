@@ -132,4 +132,12 @@ The round-trip is **not byte-stable** for inputs that used CR or CRLF; it is byt
 ### Open follow-ups
 
 - **Brace-aware wrap.** `PgnUtility.calculateWrappedLines` currently splits on space without awareness of `{...}` regions. For long single-line commentary, this transforms internal spaces into newlines, producing valid (per the new contract) but content-different output on round-trip. Fix: don't break inside `{...}`. Mirrors python-chess's "long comment produces a long line, accepting the 80-char file-export-format guideline as a soft target." Tests `testFromImportStrictLong` and `testFromImportLenientLong` are `@Disabled` until this lands.
-- **Javadoc minimisation pass (T-006).** Reduce Javadoc and inline comments to the minimum that survives ordinary refactors. Guidance: keep "why" comments (decisions, trade-offs, spec references like `PGN spec §8.2.5`, subtle invariants, counter-intuitive behaviour). Drop "what" comments (restating the code), narration of implementation steps, double-bookkeeping of test intent, and especially **filesystem paths or other physically-mirrored facts in prose** — those duplicate information the code already carries and silently rot when the code is reorganised. No fixed line-count rule; a longer comment is fine when the content is genuinely irreplaceable. Rule of thumb: if an AI could regenerate the comment from the code, the comment is a maintenance liability.
+
+### Comment style (T-006)
+
+A first pass over the PGN parser/exporter and their tests trimmed Javadoc and inline comments to the minimum that survives ordinary refactors. The rule going forward:
+
+- **Keep:** decisions, trade-offs, spec references (`PGN spec §8.2.5`), subtle invariants, counter-intuitive behaviour.
+- **Drop:** restating the code, narration of implementation steps, double-bookkeeping of test intent, and especially **filesystem paths or other physically-mirrored facts in prose** — those duplicate information the code already carries and silently rot when the code is reorganised.
+
+No fixed line-count rule; a longer comment is fine when the content is genuinely irreplaceable. Rule of thumb: if an AI could regenerate the comment from the code, the comment is a maintenance liability.

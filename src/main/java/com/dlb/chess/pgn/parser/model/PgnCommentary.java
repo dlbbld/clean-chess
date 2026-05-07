@@ -3,89 +3,28 @@ package com.dlb.chess.pgn.parser.model;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 
 /**
- * Value object holding a PGN commentary string. Construction validates the contract; once a {@code PgnCommentary}
- * exists, its content satisfies the contract by typing — downstream code does not need to validate again.
- *
- * <h2>Contract</h2>
- *
- * <p>
- * <b>Forbidden — grammar:</b>
- * <ul>
- * <li>{@code }} — closing brace, terminates the {@code {...}} grammar on export.</li>
- * </ul>
- *
- * <p>
- * Note: {@code {} (opening brace) is <em>allowed</em> in commentary content per the PGN spec — "a left brace
- * character appearing in a brace comment loses its special meaning and is ignored" (§8.2.5). Both parsers consume
- * inner {@code {} as a literal content character, and the exporter writes it verbatim; the inner {@code {} round-trips
- * unchanged because only {@code }} can close a brace comment.
- *
- * <p>
- * <b>Forbidden — Unicode categories:</b>
- * <ul>
- * <li>{@link Character#CONTROL} (Cc) — except for the two explicitly permitted control characters
- *     {@code \t} (U+0009) and {@code \n} (U+000A). {@code \r} (U+000D) is also forbidden: per T-005 the library
- *     normalises CRLF and lone CR to LF at the parser input boundary, so {@code \r} can never appear in
- *     parser-produced content. Direct {@link PgnCommentary} construction with {@code \r} therefore violates the
- *     model invariant.</li>
- * <li>{@link Character#SURROGATE} (Cs) — lone high or low surrogate code points; these are UTF-16 encoding
- *     artefacts, not real characters.</li>
- * <li>{@link Character#UNASSIGNED} (Cn) — code points not assigned by the Unicode Standard.</li>
- * <li>{@link Character#PRIVATE_USE} (Co) — code points reserved for private agreement; chess commentary should
- *     not depend on private fonts or in-house symbols.</li>
- * </ul>
- *
- * <p>
- * <b>Allowed:</b> all other Unicode categories — letters, marks, numbers, punctuation, symbols, separators,
- * format characters (Cf — zero-width joiner, BOM, bidi marks, soft hyphen). Supplementary characters above
- * U+FFFF (e.g. emoji, rare scripts encoded as surrogate pairs) round-trip correctly because the validator
- * iterates by code point, not by char.
- *
- * <h2>Why this contract</h2>
- *
- * <p>
- * The PGN standard restricts non-printing characters from <em>string tokens</em> (tag values), but is silent on
- * non-printing characters inside {@code {...}} commentary. Multiple chess tools — python-chess, Lichess — preserve
- * tabs and line breaks in commentary verbatim through the parse / export round-trip. We follow that convention,
- * extended with sanity checks against malformed Unicode (lone surrogates, unassigned code points) and obviously
- * inappropriate content (other control characters, private-use code points). The result is permissive enough
- * for legitimate text and strict enough to surface data corruption at the model boundary.
- *
- * <h2>Sources of values</h2>
- * <ul>
- * <li>Strict and lenient parsers: parsed brace content goes directly through the constructor. Both parsers preserve
- *     source bytes verbatim.</li>
- * <li>Programmatic API: any caller invoking the constructor directly sees a
- *     {@link PgnCommentaryValidationException} on contract violation, with the offending character's index and
- *     Unicode category named in the message.</li>
- * </ul>
+ * Value object for PGN commentary content. Construction validates the contract — see SPECIFICATION.md
+ * (Commentary contract).
  */
 public record PgnCommentary(String value) {
 
-  /**
-   * Compact constructor — validates the contract. Throws {@link PgnCommentaryValidationException} on violation.
-   */
   public PgnCommentary {
     validate(value);
   }
 
-  /** The empty commentary. Convenience for the very common "no commentary" case. */
   public static final PgnCommentary EMPTY = new PgnCommentary("");
 
   private static void validate(String value) {
     for (int i = 0; i < value.length();) {
       final int cp = value.codePointAt(i);
 
-      // Grammar prohibition takes priority — applies regardless of Unicode category. Only the closing brace `}`
-      // is forbidden, since `}` would terminate the {...} grammar on export. The opening brace `{` is allowed
-      // in content per the PGN spec (§8.2.5: "a left brace character appearing in a brace comment loses its
-      // special meaning"); it round-trips unchanged.
+      // `}` would terminate the {...} grammar on export. `{` is allowed (PGN spec §8.2.5).
       if (cp == '}') {
         throw new PgnCommentaryValidationException(formatBraceProblem(value, i));
       }
 
-      // The two control characters explicitly permitted in commentary. `\r` is excluded — T-005 normalises
-      // CRLF and lone CR to LF at the parser input boundary, so the model invariant is "no CR ever".
+      // `\t` and `\n` are the only permitted control characters. `\r` is rejected — T-005 normalises CR to
+      // LF at the parser input, so the model invariant is "no CR ever".
       if (cp != '\t' && cp != '\n') {
         final int type = Character.getType(cp);
         if (type == Character.CONTROL
