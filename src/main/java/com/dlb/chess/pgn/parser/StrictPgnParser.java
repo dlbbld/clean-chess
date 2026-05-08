@@ -131,7 +131,8 @@ public final class StrictPgnParser {
     }
   }
 
-  private static String unexpectedValidationErrorMessage(RuntimeException e) {
+  @SuppressWarnings("null")
+  private static @NonNull String unexpectedValidationErrorMessage(RuntimeException e) {
     final @Nullable String nullableReason = e.getMessage();
     final String reason = nullableReason == null ? "" : nullableReason;
     return "An unexpected error occurred during validation. Reason: " + reason;
