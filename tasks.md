@@ -14,12 +14,8 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [ ] Move `log4j-core` to `<scope>runtime</scope>` (or remove); keep only `log4j-api` as compile dep
 - [x] Remove file appender from `src/main/resources/log4j2.xml` — library no longer writes to a temp file at runtime (commit `612a93b`; dangling `AppenderRef` references cleaned up afterwards). Console-only config retained as a safe default.
 
-### 4. Public API immutability
-- [ ] `Board` — defensive copies on the three list-returning accessors (lines ~661, 666, 706)
-- [ ] `PgnFile` — defensive copy of list components in compact constructor and accessors
-
 ### 5. Public API discoverability & naming
-- [ ] `isSeventyFiftyMove()` → `isSeventyFiveMove()`
+- [x] `isSeventyFiftyMove()` → `isSeventyFiveMove()` (commit `eee221e`)
 - [ ] Pull CHA methods (`isUnwinnableQuick/Full`, `isDeadPositionQuick/Full`) down from `AbstractBoard` to `Board` — or document the split somewhere visible
 - [ ] Rename one of `analyze` / `analysis` so they don't differ by one letter
 - [ ] Collapse `Analyzer extends AnalyzerPrint` into one `final` class
@@ -50,7 +46,7 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] Rename `SPECIFICATION.md` → `specification.md`
 - [x] Rename `Agents.md` → `agents.md`
 - [x] Update all cross-references (README, Javadocs)
-- [ ] Verify no lingering uppercase references
+- [x] Verify no lingering uppercase references (grep clean after `05a8a04`)
 
 ### 14. License hygiene
 - [x] Add copyright/preamble header to `LICENSE` before the GPL v3 text
@@ -141,3 +137,15 @@ For clean-chess, adapt: short project description, copyright line, GPL v3 refere
   - `trainer/SanTrainerServer` deleted
   - `Message.main()` removed
   - Broader 248-public-types audit deferred (see *Current release → 3 residual*)
+- [x] **4. Public API immutability — done deeper than originally scoped** (`55ee163`, `7707c75`, `f867357`)
+  - Originally just "defensive copies"; ended up making the immutability visible at the type level via Guava `ImmutableList<X>` / `ImmutableSet<X>`.
+  - `ChessBoard` interface: all 8 list/set accessors return `ImmutableList<X>` or `ImmutableSet<X>`.
+  - `Board.legalMoveSetList: List<ImmutableSet<LegalMove>>` — inner sets sealed at write time via `AbstractLegalMoves.calculateLegalMoves` boundary.
+  - `Board` persistent-field accessors wrap with `NonNullWrapperCommon.copyOfList` per call (Approach A — clarity over micro-optimisation).
+  - `Board` freshly-built accessors wrap once at end of method.
+  - `LegalMoveCalculation` record's two move-set components are `ImmutableSet<X>`.
+  - `PgnFile` record: `tagList`, `halfMoveList` are `ImmutableList<X>` with compact-constructor defensive copy.
+  - `LibraryCarlosBoard` (test impl) mirrors the new return types.
+- [x] **Eclipse compiler warnings & infos cleanup (out-of-band)** (`997f51c`, `142e19f`, `305bff5`, `7e85eb6`, `06ca493`, `498b300`)
+  - Project now compiles warning-free under JDT settings.
+  - Includes: `unexpectedValidationErrorMessage` `@NonNull` annotation, three `pcve.getMessage()` / `e.getMessage()` `@SuppressWarnings("null")` extractions, `boxing` no-op suppression removed, log4j2.xml schema declaration + DTD download fix, class-level `@SuppressWarnings("null")` for JUnit Assertions / JDK BiFunction in 4 test classes.
