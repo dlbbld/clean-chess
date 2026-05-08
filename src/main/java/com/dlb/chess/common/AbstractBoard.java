@@ -16,11 +16,12 @@ import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.google.common.collect.ImmutableSet;
 
 public abstract class AbstractBoard implements ChessBoard, EnumConstants {
 
   @Override
-  public Set<String> getLegalMovesSan() {
+  public ImmutableSet<String> getLegalMovesSan() {
     final Set<String> result = new TreeSet<>();
 
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
@@ -28,18 +29,18 @@ public abstract class AbstractBoard implements ChessBoard, EnumConstants {
       result.add(getSan());
       this.unperformMove();
     }
-    return result;
+    return NonNullWrapperCommon.copyOfSet(result);
   }
 
   @Override
-  public Set<String> getLegalMovesUci() {
+  public ImmutableSet<String> getLegalMovesUci() {
     final Set<String> result = new TreeSet<>();
     final Side havingMove = getHavingMove();
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
       result.add(uci);
     }
-    return result;
+    return NonNullWrapperCommon.copyOfSet(result);
   }
 
   @Override

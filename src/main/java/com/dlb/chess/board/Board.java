@@ -49,6 +49,7 @@ import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.validate.SanValidation;
 import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 public class Board extends AbstractBoard {
@@ -375,12 +376,12 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public List<MoveSpecification> getPerformedMoveSpecificationList() {
+  public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
     for (final LegalMove legalMove : this.performedLegalMoveList) {
       moveSpecificationList.add(legalMove.moveSpecification());
     }
-    return moveSpecificationList;
+    return NonNullWrapperCommon.copyOfList(moveSpecificationList);
   }
 
   private boolean calculateIsCapture() {
@@ -659,13 +660,13 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public List<DynamicPosition> getDynamicPositionList() {
-    return dynamicPositionList;
+  public ImmutableList<DynamicPosition> getDynamicPositionList() {
+    return NonNullWrapperCommon.copyOfList(dynamicPositionList);
   }
 
   @Override
-  public List<HalfMove> getHalfMoveList() {
-    return halfMoveList;
+  public ImmutableList<HalfMove> getHalfMoveList() {
+    return NonNullWrapperCommon.copyOfList(halfMoveList);
   }
 
   @Override
@@ -674,12 +675,12 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public Set<MoveSpecification> getPossibleMoveSpecificationSet() {
+  public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
     final Set<MoveSpecification> result = new TreeSet<>();
     for (final LegalMove legalMove : this.getLegalMoveSet()) {
       result.add(legalMove.moveSpecification());
     }
-    return result;
+    return NonNullWrapperCommon.copyOfSet(result);
   }
 
   @Override
@@ -704,8 +705,8 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public List<LegalMove> getPerformedLegalMoveList() {
-    return performedLegalMoveList;
+  public ImmutableList<LegalMove> getPerformedLegalMoveList() {
+    return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
   }
 
   @Override

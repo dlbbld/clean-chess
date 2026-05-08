@@ -192,7 +192,8 @@ public class PgnCreate {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(tagList, board.getInitialFen(), PgnCommentary.EMPTY, halfMoveList);
+    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
+        NonNullWrapperCommon.copyOfList(halfMoveList));
   }
 
   public static PgnFile createPgnFile(ChessBoard board) {

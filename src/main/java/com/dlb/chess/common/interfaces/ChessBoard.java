@@ -18,6 +18,7 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
@@ -125,23 +126,23 @@ public interface ChessBoard {
 
   int getPerformedHalfMoveCount();
 
-  List<DynamicPosition> getDynamicPositionList();
+  ImmutableList<DynamicPosition> getDynamicPositionList();
 
   DynamicPosition getDynamicPosition();
 
-  List<HalfMove> getHalfMoveList();
+  ImmutableList<HalfMove> getHalfMoveList();
 
-  Set<MoveSpecification> getPossibleMoveSpecificationSet();
+  ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet();
 
   ImmutableSet<LegalMove> getLegalMoveSet();
 
-  List<MoveSpecification> getPerformedMoveSpecificationList();
+  ImmutableList<MoveSpecification> getPerformedMoveSpecificationList();
 
-  List<LegalMove> getPerformedLegalMoveList();
+  ImmutableList<LegalMove> getPerformedLegalMoveList();
 
-  Set<String> getLegalMovesSan();
+  ImmutableSet<String> getLegalMovesSan();
 
-  Set<String> getLegalMovesUci();
+  ImmutableSet<String> getLegalMovesUci();
 
   LegalMove getLastMove();
 

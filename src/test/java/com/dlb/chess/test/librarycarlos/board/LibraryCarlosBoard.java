@@ -33,6 +33,7 @@ import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
@@ -395,13 +396,13 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public List<DynamicPosition> getDynamicPositionList() {
-    return dynamicPositionList;
+  public ImmutableList<DynamicPosition> getDynamicPositionList() {
+    return NonNullWrapperCommon.copyOfList(dynamicPositionList);
   }
 
   @Override
-  public List<HalfMove> getHalfMoveList() {
-    return halfMoveList;
+  public ImmutableList<HalfMove> getHalfMoveList() {
+    return NonNullWrapperCommon.copyOfList(halfMoveList);
   }
 
   @Override
@@ -410,8 +411,8 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public Set<MoveSpecification> getPossibleMoveSpecificationSet() {
-    return generateMoveSpecificationSet(this.board);
+  public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
+    return NonNullWrapperCommon.copyOfSet(generateMoveSpecificationSet(this.board));
   }
 
   // the API does not return null
@@ -500,7 +501,7 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public List<MoveSpecification> getPerformedMoveSpecificationList() {
+  public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
     for (final MoveBackup moveBackup : NonNullWrapperLibraryCarlos.getBackup(this.board)) {
 
@@ -509,7 +510,7 @@ public class LibraryCarlosBoard extends AbstractBoard {
 
       moveSpecificationList.add(MoveConversionUtility.convertMove(move, movingPiece));
     }
-    return moveSpecificationList;
+    return NonNullWrapperCommon.copyOfList(moveSpecificationList);
   }
 
   @Override
@@ -574,8 +575,8 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public List<LegalMove> getPerformedLegalMoveList() {
-    return performedLegalMoveList;
+  public ImmutableList<LegalMove> getPerformedLegalMoveList() {
+    return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
   }
 
   @Override

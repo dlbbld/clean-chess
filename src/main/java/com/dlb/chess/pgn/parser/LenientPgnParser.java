@@ -178,7 +178,8 @@ public final class LenientPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
+    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+        NonNullWrapperCommon.copyOfList(movetext.halfMoveList()));
   }
 
   // -------------------------------------------------------------------------------------------------
