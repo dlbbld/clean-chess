@@ -10,8 +10,8 @@ Theme: documentation, obvious issues, major bugs. No new features.
 
 ### 2. pom.xml / build configuration
 - [x] Drop `maven.compiler.release` 26 → 17
-- [ ] Reconcile `groupId` between `pom.xml` and `README.md`
-- [ ] Move `log4j-core` to `<scope>runtime</scope>` (or remove); keep only `log4j-api` as compile dep
+- [x] Reconcile `groupId` between `pom.xml` and `README.md` (commit `ef8de9c`: pom now `com.github.dlbbld`, matches what README documented all along)
+- [x] Move `log4j-core` to `<scope>runtime</scope>` (commit `ef8de9c`); compile-time deps narrowed to `log4j-api`
 - [x] Remove file appender from `src/main/resources/log4j2.xml` — library no longer writes to a temp file at runtime (commit `612a93b`; dangling `AppenderRef` references cleaned up afterwards). Console-only config retained as a safe default.
 
 ### 5. Public API discoverability & naming
@@ -22,12 +22,14 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
 
 ### 6. Release-gate test runs
-- [ ] Maven profile `-Pfull` enabling the heavy excluded suites (currently default-off via `RestrictTestConstants`)
-- [ ] Document the requirement (release checklist note) **or** add a CI workflow that runs `-Pfull` on tag push
+- [x] Maven profile `-Pfull` enabling the heavy excluded suites (commit `ef8de9c`). Default `mvn test` runs the restricted fast suite; `mvn test -Pfull` flips `RestrictTestConstants` (via the `clean-chess.full` system property) and runs every gated audit, plus switches `PgnTestInclusion` to `ALL`.
+- [x] Documented the release-time requirement in `specification.md` §6.1 — release-tagger must run `mvn test -Pfull` and confirm green. CI workflow is a separate optional follow-up.
 
 ### 7. specification.md polish
-- [ ] Soften "no nulls" claim (§2.2)
-- [ ] Soften "the only published algorithm" about CHA (§1)
+- [x] Soften "no nulls" claim (§2.2) — replaced with a more honest framing about Java's compromises (commit forthcoming)
+- [x] Soften "the only published algorithm" about CHA (§1, §3.2) — qualified with "to the author's knowledge"
+- [x] Bonus: updated §4 architecture table to reflect `analysis` → `report` rename (and the corrected description of `analyze`)
+- [x] Bonus: added §6.1 documenting the restricted vs full suite and the release-tagging requirement
 
 ### 8. Eclipse / Checkstyle configuration in repo
 - [ ] Export Checkstyle XML rule file to repo (currently `internal_config_*.xml` in plugin storage)

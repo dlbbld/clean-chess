@@ -6,7 +6,7 @@ The **technical specification** for clean-chess: design goals, architecture, phi
 
 ## 1. Purpose & non-goals
 
-clean-chess is a Java chess library focused on **rule correctness and reproducibility**. Its flagship feature is a Java port of Miguel Ambrona's [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess), the only published algorithm that decides unwinnability and dead-position questions correctly across all positions.
+clean-chess is a Java chess library focused on **rule correctness and reproducibility**. Its flagship feature is a Java port of Miguel Ambrona's [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess), to the author's knowledge the only published algorithm that decides unwinnability and dead-position questions correctly across all positions.
 
 The library is **not**:
 
@@ -33,7 +33,7 @@ These choices cost performance and pay clarity. Most position-level questions st
 
 ### 2.2 Functional style and compile-time guarantees
 
-The codebase is written in as functional a style as Java reasonably permits: records, immutable value objects, pure helpers; mutable state is confined to a small number of well-defined classes (notably `Board`). The aspirational target is Haskell — total functions, types that make illegal states unrepresentable, no nulls.
+The codebase is written in as functional a style as Java reasonably permits: records, immutable value objects, pure helpers; mutable state is confined to a small number of well-defined classes (notably `Board`). The aspirational target is Haskell — total functions and types that make illegal states unrepresentable. Where Java forces compromise (mutable accessors, nullable JDK return types), the compromises are localised and crossed with explicit annotations.
 
 Concretely:
 
@@ -74,7 +74,7 @@ For the claimable rules, the library exposes both the **on-board** predicate (cu
 
 The library's **flagship feature**. A position is *unwinnable for a side* if that side has no theoretical mating sequence assuming worst-case play by the opponent. A *dead position* is one unwinnable for both sides. Insufficient material covers the trivial cases; positions like blocked pawn walls, certain wrong-bishop endgames, and many forced-only-moves continuations are dead but not insufficient — and most chess libraries get them wrong.
 
-Miguel Ambrona's CHA is the only published algorithm that decides these cases correctly across the full range of positions. clean-chess implements it in Java, in two variants:
+Miguel Ambrona's CHA is, to the author's knowledge, the only published algorithm that decides these cases correctly across the full range of positions. clean-chess implements it in Java, in two variants:
 
 - **Quick** — microsecond-scale, structural, three-valued: `WINNABLE`, `UNWINNABLE`, `POSSIBLY_WINNABLE`. The third value is a deliberate honesty signal.
 - **Full** — deep search, three-valued: `WINNABLE`, `UNWINNABLE`, `UNDETERMINED`. The undetermined case is bounded by a 500 000-position limit; most positions resolve well below that.
@@ -106,8 +106,8 @@ The top-level package `com.dlb.chess` is organised by concern:
 | `pgn.parser` | Strict and lenient PGN parsers; shared tokenizer in `pgn.parser.sequential` |
 | `pgn.create` | PGN export |
 | `unwinnability` | CHA implementation, quick and full |
-| `analysis` | Game-level analysis: threefold-claim-ahead reports, repetition, 50-move sequences |
-| `analyze` | Higher-level orchestration over `analysis` |
+| `report` | Game-level reports: threefold-claim-ahead, repetition, 50-move sequences |
+| `analyze` | Stateless chess-rule analysis used by SAN and movement validation pipelines |
 | `common` | Generic utilities and exceptions |
 
 Packages depend in roughly that order (top to bottom).
@@ -151,4 +151,18 @@ clean-chess relies on a large regression test suite:
 - **Cross-library validation** — selected fixtures are processed by other chess libraries; disagreements surface as test failures and have, in the past, led to bug reports against those libraries.
 
 The test suite is the project's safety net. Refactors are expected to leave the test count unchanged or growing; if they don't, the change is suspect.
+
+### 6.1 Restricted vs full suite
+
+Day-to-day iteration runs a restricted subset (`mvn test`). A handful of long-running audits are gated by `RestrictTestConstants`: the cross-corpus parser audits, a multi-second unwinnability full-search test, the legacy parser-rejection audit. They take from a few seconds to a few minutes apiece and are not useful on every iteration.
+
+The full suite is a Maven profile:
+
+```
+mvn test -Pfull
+```
+
+`-Pfull` sets the `clean-chess.full` system property, which flips every gate inside `RestrictTestConstants` and switches `PgnTestInclusion` to `ALL` (including the longest-possible-game corpus).
+
+**Release-time requirement:** before tagging a release, run `mvn test -Pfull` and confirm green. The default suite is *not* sufficient to certify a release.
 
