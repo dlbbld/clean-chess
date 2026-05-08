@@ -2,7 +2,6 @@ package com.dlb.chess.common;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -192,7 +191,7 @@ public class NonNullWrapperCommon {
 
   @SuppressWarnings("null")
   public static Path get(final String filePath) {
-    return Paths.get(filePath); // not null by API
+    return Path.of(filePath); // not null by API
   }
 
   @NonNull

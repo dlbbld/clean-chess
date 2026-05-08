@@ -81,9 +81,8 @@ public abstract class FileUtility {
     return NonNullWrapperCommon.resolve(folderPath, fileName);
   }
 
-  @SuppressWarnings("null")
   public static Path calculateFilePath(String filePath) {
-    return Path.of(filePath);
+    return NonNullWrapperCommon.get(filePath);
   }
 
   public static void writeFile(Path folderPath, String fileName, List<String> lineList) {
