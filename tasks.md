@@ -19,7 +19,7 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] ~~Pull CHA methods down from `AbstractBoard` to `Board`~~ — superseded by Task 16 (default methods on `ChessBoard`); CHA methods now appear directly on the interface
 - [x] Rename `analysis` → `report` (commit `7ac91e4`): `Analyzer` → `Reporter`, `AnalyzerPrint` → `ReportPrint`, `Analysis` (record) → `Report`. The remaining `analyze` package now differs by more than one letter.
 - [x] Collapse `Reporter extends ReportPrint` into one `final` class — `ReportPrint.java` deleted, all its content merged into `Reporter`; `Reporter` now `final` with private constructor; `printAnalysis(...)` renamed to `printReport(...)` end-to-end
-- [ ] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
+- [x] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
 
 ### 6. Release-gate test runs
 - [ ] Maven profile `-Pfull` enabling the heavy excluded suites (currently default-off via `RestrictTestConstants`)

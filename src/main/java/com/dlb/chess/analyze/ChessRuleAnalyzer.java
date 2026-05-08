@@ -39,7 +39,10 @@ import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
  * <li>{@code move.fromSquare()} holds an own piece for {@code havingMove}.</li>
  * </ul>
  */
-public abstract class ChessRuleAnalyzer implements EnumConstants {
+public final class ChessRuleAnalyzer implements EnumConstants {
+
+  private ChessRuleAnalyzer() {
+  }
 
   public static MovementCheck analyzeMovement(StaticPosition staticPosition, Side havingMove,
       Square enPassantCaptureTargetSquare, MoveSpecification moveSpecification) {
