@@ -10,7 +10,7 @@ It's not a chess engine — it does not calculate best moves for a given positio
 It's also not built for performance; if you need fast move generation, use for example Stockfish.
 It is built for correctness and comprehension — for example, it produces meaningful messages for SAN, FEN, and PGN validation.
 
-For the design philosophy, architecture, and rule-level decisions, see [SPECIFICATION.md](SPECIFICATION.md).
+For the design philosophy, architecture, and rule-level decisions, see [specification.md](specification.md).
 
 ## Not supported
 

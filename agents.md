@@ -1,4 +1,4 @@
-# Agents.md
+# Agents
 
 ## Coding conventions
 
