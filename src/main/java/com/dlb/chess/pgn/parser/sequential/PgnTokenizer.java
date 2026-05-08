@@ -6,8 +6,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 
 /**
  * Pull-based PGN tokenizer. Emits tokens for every construct the grammar cares about; strict-specific inter-token
- * constraints (exact single spacing, required move numbers, termination presence) are enforced by the parser, not
- * here.
+ * constraints (exact single spacing, required move numbers, termination presence) are enforced by the parser, not here.
  */
 public final class PgnTokenizer {
 
@@ -32,7 +31,9 @@ public final class PgnTokenizer {
     return result;
   }
 
-  /** One-token lookahead past {@link #peek()}. */
+  /**
+   * One-token lookahead past {@link #peek()}.
+   */
   public PgnToken peekNext() {
     if (peekedAt0 == null) {
       peekedAt0 = readNext();
@@ -170,11 +171,10 @@ public final class PgnTokenizer {
     final StringBuilder text = new StringBuilder();
     while (true) {
       final var c = stream.peek();
-      if (c == '!' || c == '?') {
-        text.append((char) stream.read());
-      } else {
+      if ((c != '!') && (c != '?')) {
         break;
       }
+      text.append((char) stream.read());
     }
     return new PgnToken(PgnTokenType.MOVE_SUFFIX_ANNOTATION, NonNullWrapperCommon.toString(text), line, column);
   }

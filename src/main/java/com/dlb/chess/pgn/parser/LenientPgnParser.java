@@ -11,8 +11,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
@@ -112,7 +112,9 @@ public final class LenientPgnParser {
     }
   }
 
-  /** Like {@link #parseText(String)} but returns a structured result instead of throwing. */
+  /**
+   * Like {@link #parseText(String)} but returns a structured result instead of throwing.
+   */
   public static LenientPgnParserValidationResult validateText(String pgn) {
     try {
       parseText(pgn);
@@ -193,7 +195,9 @@ public final class LenientPgnParser {
     }
   }
 
-  /** Returns true if line {@code lineNumber} (1-based) contains {@code [} or {@code ]}. */
+  /**
+   * Returns true if line {@code lineNumber} (1-based) contains {@code [} or {@code ]}.
+   */
   private boolean currentLineContainsTagBracket(int lineNumber) {
     var index = 0;
     var currentLine = 1;
@@ -474,7 +478,9 @@ public final class LenientPgnParser {
     return "+".equals(text) || "#".equals(text);
   }
 
-  /** Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category. */
+  /**
+   * Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category.
+   */
   private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
@@ -523,7 +529,9 @@ public final class LenientPgnParser {
     }
   }
 
-  /** Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise. */
+  /**
+   * Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise.
+   */
   private static void throwIfBrokenBrace(PgnToken token) {
     switch (token.type()) {
       case BRACE_COMMENT_UNCLOSED:

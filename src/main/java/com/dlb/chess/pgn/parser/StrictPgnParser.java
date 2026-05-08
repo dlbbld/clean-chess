@@ -10,9 +10,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
@@ -112,7 +112,9 @@ public final class StrictPgnParser {
     }
   }
 
-  /** Like {@link #parseText(String)} but returns a structured result instead of throwing. */
+  /**
+   * Like {@link #parseText(String)} but returns a structured result instead of throwing.
+   */
   public static StrictPgnParserValidationResult validateText(String pgn) {
     try {
       parseText(pgn);
@@ -437,7 +439,9 @@ public final class StrictPgnParser {
     }
   }
 
-  /** Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category. */
+  /**
+   * Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category.
+   */
   private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
@@ -494,7 +498,9 @@ public final class StrictPgnParser {
     }
   }
 
-  /** Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise. */
+  /**
+   * Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise.
+   */
   private static void throwIfBrokenBrace(PgnToken token) {
     switch (token.type()) {
       case BRACE_COMMENT_UNCLOSED:
