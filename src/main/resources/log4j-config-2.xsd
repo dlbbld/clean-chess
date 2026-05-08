@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://logging.apache.org/xml/ns"
+           xmlns="https://logging.apache.org/xml/ns"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+  <xs:element name="Configuration">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="Appenders" type="AppendersType" />
+        <xs:element name="Loggers" type="LoggersType" />
+      </xs:sequence>
+      <xs:attribute name="status" type="xs:string" use="optional" />
+    </xs:complexType>
+  </xs:element>
+
+  <xs:complexType name="AppendersType">
+    <xs:sequence>
+      <xs:element name="Console" type="ConsoleType" maxOccurs="unbounded" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="ConsoleType">
+    <xs:sequence>
+      <xs:element name="PatternLayout" type="PatternLayoutType" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="target" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="PatternLayoutType">
+    <xs:attribute name="pattern" type="xs:string" use="required" />
+  </xs:complexType>
+
+  <xs:complexType name="LoggersType">
+    <xs:sequence>
+      <xs:element name="Logger" type="LoggerType" minOccurs="0" maxOccurs="unbounded" />
+      <xs:element name="Root" type="RootType" />
+    </xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="LoggerType">
+    <xs:sequence>
+      <xs:element name="AppenderRef" type="AppenderRefType" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string" use="required" />
+    <xs:attribute name="level" type="xs:string" use="optional" />
+    <xs:attribute name="additivity" type="xs:boolean" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="RootType">
+    <xs:sequence>
+      <xs:element name="AppenderRef" type="AppenderRefType" maxOccurs="unbounded" />
+    </xs:sequence>
+    <xs:attribute name="level" type="xs:string" use="optional" />
+  </xs:complexType>
+
+  <xs:complexType name="AppenderRefType">
+    <xs:attribute name="ref" type="xs:string" use="required" />
+  </xs:complexType>
+</xs:schema>
