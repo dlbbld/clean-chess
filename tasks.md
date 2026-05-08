@@ -38,7 +38,7 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] Check in `.settings/org.eclipse.jdt.ui.prefs` (`fdb23a9`: cleanup, save actions, profile names)
 - [x] Align Manual Clean Up with Cleanup on Save (`dc149fb`: four divergent rules flipped)
 - [x] Update `coding-conventions.md` — replaced "known gap" section with a setup.md pointer
-- [ ] Verify on a fresh checkout that the rule sets activate without manual file copies
+- [x] Verify on a fresh checkout that the rule sets activate without manual file copies — confirmed: Eclipse import → Checkstyle, compiler warnings, cleanup-on-save all work from the start
 
 ### Create setup.md
 - [x] Document project setup
