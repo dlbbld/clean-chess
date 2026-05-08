@@ -73,8 +73,8 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     return resultSet;
   }
 
-  public static Set<LegalMove> calculateLegalMoveSet(StaticPosition staticPosition, Side havingMove, Square fromSquare,
-      Set<Square> toSquareSet) {
+  public static ImmutableSet<LegalMove> calculateLegalMoveSet(StaticPosition staticPosition, Side havingMove,
+      Square fromSquare, Set<Square> toSquareSet) {
     return calculateLegalMoveCalculation(staticPosition, havingMove, fromSquare, toSquareSet).legalMoveSet();
   }
 
@@ -110,7 +110,8 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     } else {
       pseudoLegalKingSafety = KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
     }
-    return new LegalMoveCalculation(legalMoveSet, pseudoLegalMoveSet, pseudoLegalKingSafety);
+    return new LegalMoveCalculation(NonNullWrapperCommon.copyOfSet(legalMoveSet),
+        NonNullWrapperCommon.copyOfSet(pseudoLegalMoveSet), pseudoLegalKingSafety);
   }
 
 }

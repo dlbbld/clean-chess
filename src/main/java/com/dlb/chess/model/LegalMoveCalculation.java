@@ -1,10 +1,9 @@
 package com.dlb.chess.model;
 
-import java.util.Set;
-
 import com.dlb.chess.enums.KingSafetyCheck;
+import com.google.common.collect.ImmutableSet;
 
-public record LegalMoveCalculation(Set<LegalMove> legalMoveSet, Set<PseudoLegalMove> pseudoLegalMoveSet,
+public record LegalMoveCalculation(ImmutableSet<LegalMove> legalMoveSet, ImmutableSet<PseudoLegalMove> pseudoLegalMoveSet,
     KingSafetyCheck pseudoLegalKingSafety) {
 
 }
