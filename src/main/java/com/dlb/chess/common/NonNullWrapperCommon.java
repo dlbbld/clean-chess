@@ -268,6 +268,11 @@ public class NonNullWrapperCommon {
     return directoryPath.resolve(filePath);
   }
 
+  @SuppressWarnings("null")
+  public static Path pathRelativize(final Path directoryPath, final Path other) {
+    return directoryPath.relativize(other);
+  }
+
   public static Path getFileName(Path path) {
     return checkResult(path.getFileName());
   }

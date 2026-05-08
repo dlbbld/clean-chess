@@ -1,5 +1,7 @@
 package com.dlb.chess.pgn.parser;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
+
 /** Normalises CRLF and lone CR to LF — see SPECIFICATION.md (Newline handling). */
 public final class NewlineNormalization {
 
@@ -27,6 +29,6 @@ public final class NewlineNormalization {
         result.append(c);
       }
     }
-    return result.toString();
+    return NonNullWrapperCommon.toString(result);
   }
 }

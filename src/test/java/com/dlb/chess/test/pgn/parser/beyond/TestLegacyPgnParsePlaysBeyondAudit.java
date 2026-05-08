@@ -42,8 +42,8 @@ import com.dlb.chess.test.RestrictTestConstants;
  */
 class TestLegacyPgnParsePlaysBeyondAudit {
 
-  private static final Path LEGACY_FOLDER = NonNullWrapperCommon
-      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
+  private static final Path LEGACY_FOLDER = NonNullWrapperCommon.pathResolve(
+      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
@@ -69,10 +69,10 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     final List<String> failures = new ArrayList<>();
     var totalFiles = 0;
 
-    for (final Map.Entry<String, Expected> entry : EXPECTED.entrySet()) {
+    for (final Map.Entry<String, Expected> entry : NonNullWrapperCommon.entrySet(EXPECTED)) {
       totalFiles++;
-      final String relativePath = entry.getKey();
-      final Expected expected = entry.getValue();
+      final String relativePath = NonNullWrapperCommon.getKey(entry);
+      final Expected expected = NonNullWrapperCommon.getValue(entry);
 
       final var slash = relativePath.lastIndexOf('/');
       final var subfolder = NonNullWrapperCommon.substring(relativePath, 0, slash);
