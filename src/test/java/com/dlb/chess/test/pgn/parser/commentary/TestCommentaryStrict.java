@@ -12,15 +12,15 @@ import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 
 /**
- * Commentary brace validation for {@link StrictPgnParser}. Three brace rules:
+ * Commentary delimiter validation for StrictPgnParser. Three delimiter rules:
  *
  * <ul>
- * <li>R1 — every {@code {} must have a matching {@code }} (else unclosed-commentary error).
- * <li>R3 — a {@code }} outside any open commentary is a stray-close error.
- * <li>R4 — a brace token where a SAN half-move is expected is rejected.
+ * <li>R1 — every opening delimiter must have a matching closing delimiter (else unclosed-commentary error).
+ * <li>R3 — a closing delimiter outside any open commentary is a stray-close error.
+ * <li>R4 — a commentary delimiter where a SAN half-move is expected is rejected.
  * </ul>
  *
- * <p>(R2 — nesting — was retired by T-003; an inner {@code {} is now content per PGN spec §8.2.5.)
+ * <p>(R2 — nesting — was retired by T-003; an inner opening delimiter is now content per PGN spec §8.2.5.)
  */
 class TestCommentaryStrict {
 
@@ -134,7 +134,7 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // T-003 — inner `{` is content (PGN spec §8.2.5). Only `}` closes a comment.
+  // T-003 — an inner opening delimiter is content (PGN spec §8.2.5). Only the closing delimiter closes a comment.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -161,7 +161,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t003_strayCloseAfterClosedCommentaryWithInnerOpenBraceIsR3() {
-    // `{outer {inner}` closes at the first `}` with content "outer {inner"; the trailing `}` is a stray close (R3).
+    // The comment closes at the first closing delimiter; the trailing closing delimiter is a stray close (R3).
     expectError(header("*") + "1. e4 {outer {inner}} e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -212,7 +212,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void r3_strayCloseAtSanExpectedPosition() {
-    // Broken-brace lexical errors take precedence over the positional R4 — `}` here is R3, not R4.
+    // Broken-delimiter lexical errors take precedence over the positional R4 — this case is R3, not R4.
     expectError(header("*") + "1. } e4 e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
