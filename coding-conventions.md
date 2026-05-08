@@ -18,6 +18,8 @@ Enforced by:
 ^(?:[a-z]+[0-9]+_)?[a-z][a-z0-9][a-zA-Z0-9]*$
 ```
 
+**JUnit method references.** Avoid hardcoded method names as string arguments in JUnit annotations (e.g. `@MethodSource("supplierName")`). Prefer the no-argument `@MethodSource` (which picks up a static method with the same name as the test) or `@ArgumentsSource(Provider.class)` — both are compiler-checked. The string form silently drifts from the method name under refactor and is only caught at test runtime. Allow only where the alternatives are materially worse.
+
 ## Eclipse compiler warnings
 
 All code must compile under the project's Eclipse JDT compiler settings with **zero warnings**. Many diagnostics are configured as errors rather than warnings — null-annotation violations, unused imports, missing `@Override`, raw types, etc. Treat the warning ceiling as a hard rule, not a guideline: fix the cause, do not silence with `@SuppressWarnings` unless the reason is genuinely localized and documented inline.
