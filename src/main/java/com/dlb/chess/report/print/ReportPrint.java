@@ -1,4 +1,4 @@
-package com.dlb.chess.analysis.print;
+package com.dlb.chess.report.print;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
@@ -20,9 +19,10 @@ import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.report.model.YawnHalfMove;
 
 //for class organization only, keep methods protected as already used as delegate in main class Analysis
-public class AnalyzerPrint {
+public class ReportPrint {
 
   private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
   private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;

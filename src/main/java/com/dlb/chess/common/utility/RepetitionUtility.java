@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.HalfMoveListListComparator;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
@@ -14,6 +13,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.report.model.Report;
 
 public abstract class RepetitionUtility {
 
@@ -151,7 +151,7 @@ public abstract class RepetitionUtility {
     return false;
   }
 
-  public static List<List<HalfMove>> getRepetitionListListType(Analysis analysis,
+  public static List<List<HalfMove>> getRepetitionListListType(Report analysis,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     return switch (enPassantCaptureRule) {
       case DO_IGNORE -> analysis.repetitionListListInitialEnPassantCapture();

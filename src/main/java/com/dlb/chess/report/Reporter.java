@@ -1,12 +1,9 @@
-package com.dlb.chess.analysis;
+package com.dlb.chess.report;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.model.Analysis;
-import com.dlb.chess.analysis.model.YawnHalfMove;
-import com.dlb.chess.analysis.print.AnalyzerPrint;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
@@ -18,31 +15,34 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.YawnMoveUtility;
+import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.model.YawnHalfMove;
+import com.dlb.chess.report.print.ReportPrint;
 
-public class Analyzer extends AnalyzerPrint {
+public class Reporter extends ReportPrint {
 
   public static void printAnalysis(String pgnString) {
     // delegated to package protected method for class organization
-    AnalyzerPrint.printAnalysis(pgnString);
+    ReportPrint.printAnalysis(pgnString);
   }
 
   public static void printAnalysis(Path folderPath, String pgnFileName) {
     // delegated to package protected method for class organization
-    AnalyzerPrint.printAnalysis(folderPath, pgnFileName);
+    ReportPrint.printAnalysis(folderPath, pgnFileName);
   }
 
   public static void printAnalysis(ChessBoard board) {
     // delegated to package protected method for class organization
-    AnalyzerPrint.printAnalysis(board);
+    ReportPrint.printAnalysis(board);
   }
 
-  public static Analysis calculateAnalysis(Path folderPath, String pgnFileName) throws Exception {
+  public static Report calculateAnalysis(Path folderPath, String pgnFileName) throws Exception {
 
     final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateAnalysis(board);
   }
 
-  public static Analysis calculateAnalysis(ChessBoard board) {
+  public static Report calculateAnalysis(ChessBoard board) {
 
     final String invariant = board.getFen();
 
@@ -78,7 +78,7 @@ public class Analyzer extends AnalyzerPrint {
       throw new ProgrammingMistakeException("Board was changed");
     }
 
-    return new Analysis(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
+    return new Report(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
         yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
         hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
         insufficientMaterial, fen, board);

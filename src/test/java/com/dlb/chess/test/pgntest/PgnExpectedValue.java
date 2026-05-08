@@ -9,9 +9,9 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.test.RestrictTestConstants;

@@ -1,16 +1,16 @@
-package com.dlb.chess.analysis.print;
+package com.dlb.chess.report.print;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.dlb.chess.analysis.print.model.RepetitionMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.PositionIdentifierUtility;
 import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.report.print.model.RepetitionMove;
 
 public class RepetitionPrint {
 

@@ -7,7 +7,6 @@ import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -17,6 +16,7 @@ import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.report.enums.CheckmateOrStalemate;
 
 public abstract class GeneralUtility {
 

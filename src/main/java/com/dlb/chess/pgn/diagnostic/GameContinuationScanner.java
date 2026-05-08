@@ -2,12 +2,12 @@ package com.dlb.chess.pgn.diagnostic;
 
 import java.util.List;
 
-import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.report.model.YawnHalfMove;
 
 /**
  * Standalone scanner that detects whether a sequence of halfmoves continued past one of the two

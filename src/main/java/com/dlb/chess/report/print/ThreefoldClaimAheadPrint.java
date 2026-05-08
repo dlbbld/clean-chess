@@ -1,4 +1,4 @@
-package com.dlb.chess.analysis.print;
+package com.dlb.chess.report.print;
 
 import java.util.ArrayList;
 import java.util.List;

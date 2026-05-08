@@ -3,10 +3,10 @@ package com.dlb.chess.test.analysis.representation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.report.model.Report;
 
 public class BasicRepresentation {
 
@@ -29,7 +29,7 @@ public class BasicRepresentation {
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
-  public static List<String> calculateRepresentation(Analysis analysis, String pgnName) throws Exception {
+  public static List<String> calculateRepresentation(Report analysis, String pgnName) throws Exception {
     final List<String> list = new ArrayList<>();
 
     list.add("-----------------------------------------");
@@ -66,19 +66,19 @@ public class BasicRepresentation {
     return list;
   }
 
-  private static String calculateOutputMaxYawnSequence(Analysis analysis) {
+  private static String calculateOutputMaxYawnSequence(Report analysis) {
     return calculateOutput(ATTRIBUTE_MAX_YAWN_SEQUENCE, analysis.maxYawnSequence());
   }
 
-  private static String calculateOutputLastPositionEvaluation(Analysis analysis) {
+  private static String calculateOutputLastPositionEvaluation(Report analysis) {
     return calculateOutput(ATTRIBUTE_BOARD_RESULT_NAME, analysis.checkmateOrStalemate().getDescription());
   }
 
-  private static String calculateOutputInsufficientMaterial(Analysis analysis) {
+  private static String calculateOutputInsufficientMaterial(Report analysis) {
     return calculateOutput(ATTRIBUTE_INSUFFICIENT_MATERIAL, analysis.insufficientMaterial().getDescription());
   }
 
-  private static String calculateOutputFirstCapture(Analysis analysis) {
+  private static String calculateOutputFirstCapture(Report analysis) {
     final String attribute = ATTRIBUTE_FIRST_CAPTURE;
     if (analysis.firstCapture() == 0) {
       return calculateOutput(attribute, " none");
@@ -86,32 +86,32 @@ public class BasicRepresentation {
     return calculateOutput(attribute, analysis.firstCapture());
   }
 
-  private static String calculateOutputFen(Analysis analysis) {
+  private static String calculateOutputFen(Report analysis) {
     return calculateOutput(ATTRIBUTE_FEN, analysis.fen());
   }
 
-  private static String calculateOutputThreefoldRepetitionInitialEnPassantCapture(Analysis analysis) {
+  private static String calculateOutputThreefoldRepetitionInitialEnPassantCapture(Report analysis) {
     return calculateOutput(ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
         analysis.hasThreefoldRepetitionInitialEnPassantCapture());
   }
 
-  private static String calculateOutputFivefoldRepetition(Analysis analysis) {
+  private static String calculateOutputFivefoldRepetition(Report analysis) {
     return calculateOutput(ATTRIBUTE_FIVEFOLD_YES_NO, analysis.hasFivefoldRepetition());
   }
 
-  private static String calculateOutputRepetition(Analysis analysis) {
+  private static String calculateOutputRepetition(Report analysis) {
     return calculateOutputRepetitionType(analysis, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
   }
 
-  private static String calculateOutputRepetitionInitialEnPassantCapture(Analysis analysis) {
+  private static String calculateOutputRepetitionInitialEnPassantCapture(Report analysis) {
     return calculateOutputRepetitionType(analysis, EnPassantCaptureRuleThreefold.DO_IGNORE);
   }
 
-  private static String calculateOutputYawnMoveRule(Analysis analysis) {
+  private static String calculateOutputYawnMoveRule(Report analysis) {
     return calculateOutput(ATTRIBUTE_YAWN_MOVE_RULE_YES_NO, analysis.hasFiftyMoveRule());
   }
 
-  private static String calculateOutputYawnMoveRuleSequence(Analysis analysis) {
+  private static String calculateOutputYawnMoveRuleSequence(Report analysis) {
     final String attribute = ATTRIBUTE_YAWN_MOVE_RULE_SEQUENCE;
     if (!analysis.hasFiftyMoveRule()) {
       return calculateOutput(attribute, ATTRIBUTE_VALUE_NA);
@@ -120,12 +120,12 @@ public class BasicRepresentation {
     return calculateOutput(attribute, repetition);
   }
 
-  private static String calculateOutputThreefoldRepetition(Analysis analysis) {
+  private static String calculateOutputThreefoldRepetition(Report analysis) {
     return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
         analysis.hasThreefoldRepetition());
   }
 
-  private static String calculateOutputRepetitionType(Analysis analysis,
+  private static String calculateOutputRepetitionType(Report analysis,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     final String attributeName = calculateRepetitionAttributeSequence(enPassantCaptureRule);
 

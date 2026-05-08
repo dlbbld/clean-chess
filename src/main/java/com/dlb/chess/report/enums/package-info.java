@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.analysis.print.model;
+package com.dlb.chess.report.enums;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

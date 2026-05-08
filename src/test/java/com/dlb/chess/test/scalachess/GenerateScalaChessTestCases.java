@@ -6,8 +6,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.analysis.Analyzer;
-import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -27,6 +25,8 @@ import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.report.Reporter;
+import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
@@ -124,7 +124,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
         logger.info("Processing game " + testCase.pgnFileName());
 
-        final Analysis analysis = Analyzer.calculateAnalysis(testCaseList.pgnTest().getFolderPath(),
+        final Report analysis = Reporter.calculateAnalysis(testCaseList.pgnTest().getFolderPath(),
             testCase.pgnFileName());
         processScalaChessCodeLine("", counterList, codeLineList);
         processScalaChessCodeLine("  println(\"Declaring test case for " + testCase.pgnFileName() + "\")", counterList,

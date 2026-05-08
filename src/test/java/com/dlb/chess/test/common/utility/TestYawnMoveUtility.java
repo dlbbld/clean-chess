@@ -7,11 +7,11 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.utility.YawnMoveUtility;
+import com.dlb.chess.report.model.YawnHalfMove;
 
 class TestYawnMoveUtility {
 
