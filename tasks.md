@@ -55,7 +55,7 @@ Theme: documentation, obvious issues, major bugs. No new features.
 ### 14. License hygiene
 - [x] Add copyright/preamble header to `LICENSE` before the GPL v3 text
 - [x] Add License section to `README.md` with CHA-derivation note
-- [ ] (Optional, separate pass) Add GPL v3 source-file headers to all `.java` files under `src/main/`. Mechanical, noisy in diffs — best done in isolation.
+- Source-file GPL headers moved to Task 15 (deferred to unwinnability release)
 
 ### 3 (residual). Audit broader public API surface
 Deferred from Task 3. Do **after** the lenient-SAN release lands so files don't churn twice.
@@ -87,6 +87,37 @@ Single feature, headline release.
 ---
 
 ## Future release — Auto-CHA (DeepSquare moment)
+
+### 15. GPL v3 source-file headers
+
+Add a short GPL preamble at the top of every source file, in the style CHA (D3-Chess) uses on its own files. The unwinnability release is the natural moment because the file headers are the strongest place to assert the CHA derivation that this release leans into.
+
+Reference — CHA's header style:
+
+```
+/*
+  Chess Unwinnability Analyzer, an implementation of a decision procedure for
+  checking whether a certain player can deliver checkmate (i.e. win) in a given
+  chess position.
+
+  This software leverages Stockfish as a backend for chess-related functions.
+  Stockfish is free software provided under the GNU General Public License
+  (see <http://www.gnu.org/licenses/>) and so is this tool.
+  The full source code of Stockfish can be found here:
+  <https://github.com/official-stockfish/Stockfish>.
+
+  Chess Unwinnability Analyzer is distributed in the hope that it will be
+  useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU GPL for more
+  details.
+*/
+```
+
+For clean-chess, adapt: short project description, copyright line, GPL v3 reference, credit to CHA as the derivation source for the unwinnability code, standard no-warranty boilerplate.
+
+- [ ] Design the clean-chess header text (one paragraph + boilerplate)
+- [ ] Apply to every `.java` file under `src/main/` and `src/test/` via a script
+- [ ] One isolated commit (noisy diff, do not bundle with semantic changes)
 
 ### 11. Auto-CHA after every move
 - [ ] Per-move pipeline: invoke `isUnwinnableQuick` for both sides after every legal move; both unwinnable ⇒ `DEAD_POSITION` automatic termination
