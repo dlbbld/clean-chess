@@ -49,7 +49,7 @@ public abstract class FileUtility {
    * Reading a file linewise, without including linebreaks or adding spaces after a line break.
    */
   public static List<String> readFileLines(Path folderPath, String fileName) {
-    return readFileLines(calculateFilePath(folderPath, fileName));
+    return readFileLines(NonNullWrapperCommon.pathResolve(folderPath, fileName));
   }
 
   public static List<String> readFileLines(Path filePath) {
@@ -77,23 +77,15 @@ public abstract class FileUtility {
     return fileLines;
   }
 
-  public static Path calculateFilePath(Path folderPath, String fileName) {
-    return NonNullWrapperCommon.resolve(folderPath, fileName);
-  }
-
-  public static Path calculateFilePath(String filePath) {
-    return NonNullWrapperCommon.get(filePath);
-  }
-
   public static void writeFile(Path folderPath, String fileName, List<String> lineList) {
-    writeFile(calculateFilePath(folderPath, fileName), lineList);
+    writeFile(NonNullWrapperCommon.pathResolve(folderPath, fileName), lineList);
   }
 
   public static void writeFile(Path folderPath, String fileName, String line) {
     final List<String> lineList = new ArrayList<>();
     lineList.add(line);
 
-    writeFile(calculateFilePath(folderPath, fileName), lineList);
+    writeFile(NonNullWrapperCommon.pathResolve(folderPath, fileName), lineList);
   }
 
   public static void writeFile(Path filePath, String line) {
@@ -158,7 +150,7 @@ public abstract class FileUtility {
   }
 
   public static boolean exists(Path folderPath, String fileName) {
-    return exists(calculateFilePath(folderPath, fileName));
+    return exists(NonNullWrapperCommon.pathResolve(folderPath, fileName));
   }
 
   public static boolean exists(Path path) {
@@ -166,7 +158,7 @@ public abstract class FileUtility {
   }
 
   public static void deleteFile(Path folderPath, String fileName) {
-    deleteFile(calculateFilePath(folderPath, fileName));
+    deleteFile(NonNullWrapperCommon.pathResolve(folderPath, fileName));
   }
 
   public static void deleteFile(Path path) {

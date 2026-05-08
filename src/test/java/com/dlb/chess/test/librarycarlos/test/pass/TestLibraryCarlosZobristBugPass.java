@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -34,7 +33,7 @@ class TestLibraryCarlosZobristBugPass {
 
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.MAX_MOVES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Path pgnFilePath = FileUtility.calculateFilePath(testCaseList.pgnTest().getFolderPath(),
+      final Path pgnFilePath = NonNullWrapperCommon.pathResolve(testCaseList.pgnTest().getFolderPath(),
           testCase.pgnFileName());
       logger.info(testCase.pgnFileName());
       testPrintingPosition(pgnFilePath);

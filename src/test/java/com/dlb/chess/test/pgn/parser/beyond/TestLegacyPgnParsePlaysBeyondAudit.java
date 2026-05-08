@@ -43,7 +43,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Path LEGACY_FOLDER = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
+      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
@@ -77,7 +77,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       final var slash = relativePath.lastIndexOf('/');
       final var subfolder = NonNullWrapperCommon.substring(relativePath, 0, slash);
       final var fileName = NonNullWrapperCommon.substring(relativePath, slash + 1);
-      final var folderPath = NonNullWrapperCommon.resolve(LEGACY_FOLDER, subfolder);
+      final var folderPath = NonNullWrapperCommon.pathResolve(LEGACY_FOLDER, subfolder);
 
       try {
         StrictPgnParser.parse(folderPath, fileName);

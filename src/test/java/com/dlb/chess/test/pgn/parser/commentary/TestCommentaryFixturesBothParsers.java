@@ -22,16 +22,16 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 class TestCommentaryFixturesBothParsers {
 
   private static final Path COMMENTARY_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.PGN_PARSER_TEST_ROOT_FOLDER_PATH, "common/commentary");
+      .pathResolve(PgnTestConstants.PGN_PARSER_TEST_ROOT_FOLDER_PATH, "common/commentary");
 
   private static final Path LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(COMMENTARY_FOLDER_PATH, "pregameCommentary/success");
+      .pathResolve(COMMENTARY_FOLDER_PATH, "pregameCommentary/success");
 
   private static final Path NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(COMMENTARY_FOLDER_PATH, "nonPregameCommentary/success");
+      .pathResolve(COMMENTARY_FOLDER_PATH, "nonPregameCommentary/success");
 
   private static final Path COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(COMMENTARY_FOLDER_PATH, "combinedCommentary/success");
+      .pathResolve(COMMENTARY_FOLDER_PATH, "combinedCommentary/success");
 
   @ParameterizedTest(name = "pregameCommentary/success/{0}")
   @MethodSource("pregameCommentaryFixtures")

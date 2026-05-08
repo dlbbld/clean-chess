@@ -30,10 +30,10 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
   private static final Logger logger = NonNullWrapperCommon.getLogger(CheckAgainstChaFull.class);
 
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final Path CHA_FULL_RESULT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path CHA_FULL_RESULT = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "chaFullResult.txt");
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final Path MINE_OUT = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path MINE_OUT = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "mineFullResult.txt");
 
   public static void main(String[] args) throws Exception {

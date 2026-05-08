@@ -12,11 +12,11 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -29,7 +29,7 @@ public class GenerateChaTestCases implements EnumConstants {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateChaTestCases.class);
 
   private static final Path LIST_FOR_CHA_FILE_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "list_cha_2.txt");
+      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "list_cha_2.txt");
 
   public static void main(String[] args) throws Exception {
     generateChaTestCases(LIST_FOR_CHA_FILE_PATH);

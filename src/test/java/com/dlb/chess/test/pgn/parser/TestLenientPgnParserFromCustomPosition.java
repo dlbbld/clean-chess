@@ -12,7 +12,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParser {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "fromCustomPosition");
+      .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "fromCustomPosition");
 
   @SuppressWarnings("static-method")
   @Test

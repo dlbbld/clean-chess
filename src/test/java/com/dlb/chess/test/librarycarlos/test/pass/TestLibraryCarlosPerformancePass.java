@@ -9,7 +9,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -39,7 +38,7 @@ class TestLibraryCarlosPerformancePass {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();
         logger.info(pgnFileName);
-        final Path filePath = FileUtility.calculateFilePath(pgnTest.getFolderPath(), pgnFileName);
+        final Path filePath = NonNullWrapperCommon.pathResolve(pgnTest.getFolderPath(), pgnFileName);
         final var pgn = new PgnHolder(filePath.toAbsolutePath().toString());
 
         final var millisecondsBeforeLoadPgn = System.currentTimeMillis();

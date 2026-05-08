@@ -115,7 +115,7 @@ public enum PgnTest {
   }
 
   public Path getFolderPath() {
-    return NonNullWrapperCommon.resolve(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH, folderPart);
+    return NonNullWrapperCommon.pathResolve(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH, folderPart);
   }
 
   public boolean getIsBasicTest() {

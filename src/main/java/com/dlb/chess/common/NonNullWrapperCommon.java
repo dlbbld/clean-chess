@@ -190,7 +190,7 @@ public class NonNullWrapperCommon {
   }
 
   @SuppressWarnings("null")
-  public static Path get(final String filePath) {
+  public static Path pathOf(final String filePath) {
     return Path.of(filePath); // not null by API
   }
 
@@ -264,7 +264,7 @@ public class NonNullWrapperCommon {
   }
 
   @SuppressWarnings("null")
-  public static Path resolve(final Path directoryPath, final String filePath) {
+  public static Path pathResolve(final Path directoryPath, final String filePath) {
     return directoryPath.resolve(filePath);
   }
 

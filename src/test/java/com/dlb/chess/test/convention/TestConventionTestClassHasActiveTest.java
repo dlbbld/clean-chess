@@ -39,7 +39,7 @@ import com.dlb.chess.common.utility.FileUtility;
 class TestConventionTestClassHasActiveTest {
 
   private static final Path TEST_JAVA_ROOT = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
+      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
 
   private static final String REQUIRED_NAME_PREFIX = "Test";
 

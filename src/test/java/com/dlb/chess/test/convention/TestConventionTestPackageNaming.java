@@ -9,8 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.common.constants.ConfigurationConstants;
 
 /**
  * Convention test: every Java file under {@code src/test/java} must declare a package starting
@@ -31,7 +31,7 @@ import com.dlb.chess.common.utility.FileUtility;
 class TestConventionTestPackageNaming {
 
   private static final Path TEST_JAVA_ROOT = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
+      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
 
   private static final String REQUIRED_PACKAGE_PREFIX = "com.dlb.chess.test";
 

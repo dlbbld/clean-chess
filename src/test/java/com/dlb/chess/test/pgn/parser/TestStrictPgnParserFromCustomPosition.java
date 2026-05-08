@@ -18,7 +18,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserFromCustomPosition {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "fromCustomPosition");
+      .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "fromCustomPosition");
 
   @SuppressWarnings("static-method")
   @Test

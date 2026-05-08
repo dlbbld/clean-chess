@@ -32,8 +32,8 @@ public class GeneratePythonTestCases implements EnumConstants {
   private static final int PRINT_GENERATED_LINES_INTERVAL = 1000;
 
   private static final int WRITE_LINE_INTERVAL = 100000;
-  private static final Path PYTHON_SCRIPT = FileUtility.calculateFilePath(
-      NonNullWrapperCommon.resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
+  private static final Path PYTHON_SCRIPT = NonNullWrapperCommon.pathResolve(
+      NonNullWrapperCommon.pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
       "test_play_game.py");
 
   public static void main(String[] args) throws Exception {

@@ -147,7 +147,7 @@ public class TestLenientPgnParserUtf8 {
     logger.info(pgn);
 
     final PgnFile pgnFileExpected = LenientPgnParser.parseText(pgn);
-    final Path filePath = NonNullWrapperCommon.resolve(PgnTestConstants.LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH,
+    final Path filePath = NonNullWrapperCommon.pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH,
         fileName);
     final PgnFile pgnFileActual = LenientPgnParser.parse(filePath);
 

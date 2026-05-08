@@ -15,7 +15,7 @@ import com.dlb.chess.utility.TagUtility;
 
 class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "tag");
+      .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "tag");
 
   @SuppressWarnings("static-method")
   @Test

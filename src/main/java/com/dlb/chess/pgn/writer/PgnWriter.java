@@ -13,11 +13,11 @@ import com.dlb.chess.pgn.parser.model.Tag;
 public class PgnWriter {
 
   public static void writePgnFile(PgnFile pgnFile, String pgnFilePath) {
-    writePgnFile(pgnFile, NonNullWrapperCommon.get(pgnFilePath));
+    writePgnFile(pgnFile, NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName) {
-    final Path filePath = FileUtility.calculateFilePath(folderPath, pgnFileName);
+    final Path filePath = NonNullWrapperCommon.pathResolve(folderPath, pgnFileName);
     writePgnFile(pgnFile, filePath);
   }
 

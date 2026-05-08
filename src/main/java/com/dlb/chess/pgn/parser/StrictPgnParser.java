@@ -10,9 +10,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
@@ -69,11 +69,11 @@ public final class StrictPgnParser {
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+    return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static PgnFile parse(String pgnFilePath) {
-    return parse(NonNullWrapperCommon.get(pgnFilePath));
+    return parse(NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -90,11 +90,11 @@ public final class StrictPgnParser {
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+    return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static StrictPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(FileUtility.calculateFilePath(pgnFilePath));
+    return validate(NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFilePath) {

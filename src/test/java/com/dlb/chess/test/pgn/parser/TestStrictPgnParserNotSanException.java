@@ -15,7 +15,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserException {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/notSan");
+      .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/notSan");
 
   @SuppressWarnings("static-method")
   @Test

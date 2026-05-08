@@ -2,7 +2,7 @@ package com.dlb.chess.test.librarycarlos.utility;
 
 import java.nio.file.Path;
 
-import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.github.bhlangonijr.chesslib.game.Game;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
@@ -14,7 +14,7 @@ public class PgnParserUtilityLibraryCarlos {
 
   public static Game parse(Path pgnFolderPath, String pgnFileName) {
 
-    final Path pgnFilePath = FileUtility.calculateFilePath(pgnFolderPath, pgnFileName);
+    final Path pgnFilePath = NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName);
 
     final var pgnHolder = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
     try {

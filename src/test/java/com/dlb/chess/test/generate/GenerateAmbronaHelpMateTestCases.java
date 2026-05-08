@@ -40,7 +40,7 @@ public class GenerateAmbronaHelpMateTestCases {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateAmbronaHelpMateTestCases.class);
 
   private static final String OUTPUT_FOLDER_NAME = "lichessHelpmate";
-  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       OUTPUT_FOLDER_NAME);
 
   public static void main(String[] args) throws Exception {
