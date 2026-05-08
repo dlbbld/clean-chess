@@ -56,12 +56,6 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] Add License section to `README.md` with CHA-derivation note
 - Source-file GPL headers moved to the GPL v3 source-file headers task in the future release
 
-### Audit broader public API surface (residual from "strip demo/dev code")
-Deferred. Do **after** the lenient-SAN release lands so files don't churn twice.
-- [ ] Audit ~248 top-level public types under `src/main`
-- [ ] Drop non-API types to package-private
-- [ ] Decide stable public-API boundary
-
 ---
 
 ## Next release — Lenient SAN
@@ -83,7 +77,13 @@ Depends on the previous task.
 - [ ] Update lenient-PGN test fixtures (one fixture per forgiven code)
 - [ ] Update README "Lenient PGN parser" section — new tolerances are a real selling point
 
----
+## Future release — API surface
+
+### Audit broader public API surface (residual from "strip demo/dev code")
+Deferred. Do **after** the lenient-SAN release lands so files don't churn twice.
+- [ ] Audit ~248 top-level public types under `src/main`
+- [ ] Drop non-API types to package-private
+- [ ] Decide stable public-API boundary
 
 ## Future release — Auto-CHA (DeepSquare moment)
 
