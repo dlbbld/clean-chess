@@ -15,8 +15,8 @@ import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.AbstractBoard;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -46,7 +46,7 @@ import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 
-public class LibraryCarlosBoard extends AbstractBoard {
+public class LibraryCarlosBoard implements ChessBoard {
 
   private final Board board = new Board();
 

@@ -16,8 +16,8 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.model.UpdateSquare;
-import com.dlb.chess.common.AbstractBoard;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
@@ -52,7 +52,7 @@ import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-public class Board extends AbstractBoard {
+public class Board implements ChessBoard {
 
   private final Fen initialFen;
   private final List<LegalMove> performedLegalMoveList;

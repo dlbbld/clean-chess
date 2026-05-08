@@ -16,7 +16,7 @@ Theme: documentation, obvious issues, major bugs. No new features.
 
 ### 5. Public API discoverability & naming
 - [x] `isSeventyFiftyMove()` → `isSeventyFiveMove()` (commit `eee221e`)
-- [ ] Pull CHA methods (`isUnwinnableQuick/Full`, `isDeadPositionQuick/Full`) down from `AbstractBoard` to `Board` — or document the split somewhere visible
+- [x] ~~Pull CHA methods down from `AbstractBoard` to `Board`~~ — superseded by Task 16 (default methods on `ChessBoard`); CHA methods now appear directly on the interface
 - [ ] Rename one of `analyze` / `analysis` so they don't differ by one letter
 - [ ] Collapse `Analyzer extends AnalyzerPrint` into one `final` class
 - [ ] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
@@ -59,20 +59,7 @@ Deferred from Task 3. Do **after** the lenient-SAN release lands so files don't 
 - [ ] Drop non-API types to package-private
 - [ ] Decide stable public-API boundary
 
-### 16. Replace AbstractBoard with default methods on ChessBoard interface
-
-`AbstractBoard` was originally introduced to share logic between `Board` and a second implementation (`LibraryCarlosBoard`, test-only). Every method on it is a stateless derivation expressible in terms of the `ChessBoard` interface — `getLegalMovesSan/Uci`, `getCastlingRight(Side)`, `isDeadPositionQuick/Full`, `isUnwinnableQuick/Full`, `calculateInsufficientMaterial`, `isGameEnd`, `canClaimFiftyMoveRule`, `canClaimThreefoldRepetitionRule`, `getFullMoveNumberForNextHalfMove`. None has any state.
-
-That's the textbook case for `default` methods on the interface. The right move is:
-
-- [ ] Move all methods from `AbstractBoard` to `ChessBoard` as `default` methods (qualifying enum references with `Side.WHITE` / `Side.BLACK` rather than going through `EnumConstants`)
-- [ ] `Board` and `LibraryCarlosBoard` both `implements ChessBoard` directly; remove `extends AbstractBoard`
-- [ ] Delete `AbstractBoard`
-- [ ] Verify CHA methods (`isUnwinnableQuick/Full`, `isDeadPositionQuick/Full`) now show up directly on `ChessBoard` and `Board` IDE completion — supersedes the related sub-bullet in Task 5
-
-**Supersedes:** the "Pull CHA methods down from AbstractBoard to Board" sub-bullet of Task 5. Default methods make those methods directly visible on the interface, no inheritance walk needed.
-
-This is a cleaner, more impactful refactor than the several sub-bullets it replaces — single mechanical move with the discoverability fix as a free side-effect.
+### ~~16. Replace AbstractBoard with default methods on ChessBoard interface~~ — done (moved to Done)
 
 ### 17. python-chess as primary cross-validation reference (discussion + design)
 
@@ -191,6 +178,13 @@ For clean-chess, adapt: short project description, copyright line, GPL v3 refere
   - `LegalMoveCalculation` record's two move-set components are `ImmutableSet<X>`.
   - `PgnFile` record: `tagList`, `halfMoveList` are `ImmutableList<X>` with compact-constructor defensive copy.
   - `LibraryCarlosBoard` (test impl) mirrors the new return types.
+- [x] **16. Collapse AbstractBoard → default methods on ChessBoard interface**
+  - All 12 stateless derivations from `AbstractBoard` moved to `ChessBoard` as `default` methods (`getCastlingRight(Side)`, `canClaimFiftyMoveRule`, `canClaimThreefoldRepetitionRule`, CHA quartet, `calculateInsufficientMaterial`, `isGameEnd`, `getFullMoveNumberForNextHalfMove`, `getLegalMovesSan`, `getLegalMovesUci`).
+  - `isGameDraw` kept as a private interface method (Java 9+ feature).
+  - `ChessBoard extends EnumConstants` so existing implementations keep their unqualified enum constants without breakage.
+  - `Board` and `LibraryCarlosBoard` now `implements ChessBoard` directly.
+  - `AbstractBoard.java` deleted.
+  - Net effect: no public abstract class on the API surface; CHA methods appear directly in IDE completion on `Board`; cross-validation contract is the interface (the right level for it).
 - [x] **Eclipse compiler warnings & infos cleanup (out-of-band)** (`997f51c`, `142e19f`, `305bff5`, `7e85eb6`, `06ca493`, `498b300`)
   - Project now compiles warning-free under JDT settings.
   - Includes: `unexpectedValidationErrorMessage` `@NonNull` annotation, three `pcve.getMessage()` / `e.getMessage()` `@SuppressWarnings("null")` extractions, `boxing` no-op suppression removed, log4j2.xml schema declaration + DTD download fix, class-level `@SuppressWarnings("null")` for JUnit Assertions / JDK BiFunction in 4 test classes.
