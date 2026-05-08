@@ -48,7 +48,7 @@ class ReadMeTest {
         fxe5 16. Bxe5 b6 17. Bg2 Nxe5 18. Bxa8 Nf7 19. Bg2 bxc5 20. Nxc5 Qb6 21. Qf2
         Qb5 22. Bf1 Qc6 23. Bg2 Qb5 24. Bf1 Qc6 25. Bg2""";
 
-    Reporter.printAnalysis(pgn);
+    Reporter.printReport(pgn);
   }
 
   private static void checkThreefoldOnTheBoard() {
@@ -62,7 +62,7 @@ class ReadMeTest {
         40. Qf4 Qd1+ 41. Qf1 Qd7 42. Rxh5 Nxe3 43. Qf3 Qd4 44. Qa8+ Ke7 45. Qb7+ Kf8 46.
         Qb8+""";
 
-    Reporter.printAnalysis(pgn);
+    Reporter.printReport(pgn);
   }
 
   private static void checkFiftyMoves() {
@@ -87,7 +87,7 @@ class ReadMeTest {
         109. Bf5 Rf1 110. Ndf4 Ra1 111. Ng6+ Kg8 112. Ne7+ Kh8 113. Ng5 Ra6+ 114. Kf7
         Rf6+""";
 
-    Reporter.printAnalysis(pgn);
+    Reporter.printReport(pgn);
   }
 
   private static void checkUnwinnability() {
