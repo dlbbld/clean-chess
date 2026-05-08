@@ -40,8 +40,8 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [ ] Verify on a fresh checkout that the rule sets activate without manual file copies
 
 ### 12. Create setup.md
-- [ ] Document project setup (currently kept separately, outside the repo)
-- [ ] Cover: required JDK, required Eclipse plugins, project import steps, anything that has to be done by hand
+- [x] Document project setup (commit forthcoming)
+- [x] Cover: required JDK, required Eclipse plugins, project import steps, manual workspace cosmetics
 - [ ] Cross-link from `README.md` and `coding-conventions.md`
 
 ### 13. Standardize markdown filename casing
