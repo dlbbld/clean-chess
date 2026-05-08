@@ -13,13 +13,6 @@ public class Message {
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
       .getBundle(Message.class.getPackageName() + ".messages");
 
-  public static void main(String[] args) {
-    System.out.println(RESOURCE_BUNDLE.getString("error.message.invalidMovement"));
-    System.out.println(getString("error.message.invalidMovementWithPlaceholder", "knight"));
-
-    System.out.println(getString("error.message.invalidMovementWithTwoPlaceholders", "knight", "stupidly"));
-  }
-
   @SuppressWarnings("null")
   public static String getString(String key) {
     return NonNullWrapperCommon.normalizeSpace(RESOURCE_BUNDLE.getString(key));
