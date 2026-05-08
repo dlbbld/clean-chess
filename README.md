@@ -52,7 +52,7 @@ clean-chess dependency can be added via the jitpack repository.
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>3.1</version>
+  <version>3.2</version>
 </dependency>
 ```
 
@@ -68,7 +68,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    compile 'com.github.dlbbld:clean-chess:3.1'
+    compile 'com.github.dlbbld:clean-chess:3.2'
     ...
 }
 ```
