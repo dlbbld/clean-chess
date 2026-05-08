@@ -653,3 +653,11 @@ Checks whether a PGN adheres to the export format per the PGN specification.
     final StrictPgnParserValidationResult result = StrictPgnParser.validate("C:\\temp\\myFile.pgn");
     System.out.println(result.isValid());
 ```
+
+# License
+
+Copyright (C) 2024-2026  Daniel Bächli
+
+clean-chess is free software, licensed under the GNU General Public License, version 3 (GPL v3). See [LICENSE](LICENSE) for the full text.
+
+The unwinnability and dead-position detection is a Java port of the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) by Miguel Ambrona, also licensed under GPL v3.

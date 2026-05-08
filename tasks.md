@@ -52,6 +52,11 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] Update all cross-references (README, Javadocs)
 - [ ] Verify no lingering uppercase references
 
+### 14. License hygiene
+- [x] Add copyright/preamble header to `LICENSE` before the GPL v3 text
+- [x] Add License section to `README.md` with CHA-derivation note
+- [ ] (Optional, separate pass) Add GPL v3 source-file headers to all `.java` files under `src/main/`. Mechanical, noisy in diffs — best done in isolation.
+
 ### 3 (residual). Audit broader public API surface
 Deferred from Task 3. Do **after** the lenient-SAN release lands so files don't churn twice.
 - [ ] Audit ~248 top-level public types under `src/main`
