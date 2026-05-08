@@ -224,28 +224,28 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_wellFormedBraceIsRejected() {
+  void postTerminationWellFormedBraceIsRejected() {
     expectError(header("*") + "1. e4 e5 * {after result}\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_strayCloseUsesSpecificCategory() {
+  void postTerminationStrayCloseUsesSpecificCategory() {
     expectError(header("*") + "1. e4 e5 * }\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_unclosedBraceUsesSpecificCategory() {
+  void postTerminationUnclosedBraceUsesSpecificCategory() {
     expectError(header("*") + "1. e4 e5 * {no closing\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_randomSymbolIsRejected() {
+  void postTerminationRandomSymbolIsRejected() {
     expectError(header("*") + "1. e4 e5 * garbage\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
   }

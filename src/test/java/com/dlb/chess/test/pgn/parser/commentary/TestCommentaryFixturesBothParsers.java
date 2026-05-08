@@ -16,8 +16,8 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
- * Cross-parser fidelity: each fixture must yield the same {@link PgnFile} through both strict and lenient. New
- * fixtures are picked up via the {@link MethodSource} feeders below.
+ * Cross-parser fidelity: each fixture must yield the same {@link PgnFile} through both strict and lenient. New fixtures
+ * are picked up via the {@link MethodSource} feeders below.
  */
 class TestCommentaryFixturesBothParsers {
 
@@ -36,21 +36,21 @@ class TestCommentaryFixturesBothParsers {
   @ParameterizedTest(name = "pregameCommentary/success/{0}")
   @MethodSource("pregameCommentaryFixtures")
   @SuppressWarnings("static-method")
-  void parseAgreesAcrossParsers_pregameCommentary(String pgnFileName) {
+  void parseAgreesAcrossParsersPregameCommentary(String pgnFileName) {
     assertParseAgrees(LEADING_COMMENTARY_SUCCESS_FOLDER_PATH, pgnFileName);
   }
 
   @ParameterizedTest(name = "nonPregameCommentary/success/{0}")
   @MethodSource("nonPregameCommentaryFixtures")
   @SuppressWarnings("static-method")
-  void parseAgreesAcrossParsers_nonPregameCommentary(String pgnFileName) {
+  void parseAgreesAcrossParsersNonPregameCommentary(String pgnFileName) {
     assertParseAgrees(NON_LEADING_COMMENTARY_SUCCESS_FOLDER_PATH, pgnFileName);
   }
 
   @ParameterizedTest(name = "combinedCommentary/success/{0}")
   @MethodSource("combinedCommentaryFixtures")
   @SuppressWarnings("static-method")
-  void parseAgreesAcrossParsers_combinedCommentary(String pgnFileName) {
+  void parseAgreesAcrossParsersCombinedCommentary(String pgnFileName) {
     assertParseAgrees(COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH, pgnFileName);
   }
 
