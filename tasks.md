@@ -12,7 +12,7 @@ Theme: documentation, obvious issues, major bugs. No new features.
 - [x] Drop `maven.compiler.release` 26 → 17
 - [ ] Reconcile `groupId` between `pom.xml` and `README.md`
 - [ ] Move `log4j-core` to `<scope>runtime</scope>` (or remove); keep only `log4j-api` as compile dep
-- [ ] Remove `src/main/resources/log4j2.xml` (or move to `src/test/resources`) — library should not impose logging config
+- [x] Remove file appender from `src/main/resources/log4j2.xml` — library no longer writes to a temp file at runtime (commit `612a93b`; dangling `AppenderRef` references cleaned up afterwards). Console-only config retained as a safe default.
 
 ### 4. Public API immutability
 - [ ] `Board` — defensive copies on the three list-returning accessors (lines ~661, 666, 706)
