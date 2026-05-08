@@ -31,7 +31,7 @@ public class UnwinnableQuickAnalyzer {
     // 1: advance the position as long as there is only one legal move
     // if position is advanced cannot use the provided mobility solution if any
     var isCanUseMobilitySolution = true;
-    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
+    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
     var isForcedMove = true;
     var countHalfmoves = 0;
     while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
@@ -62,7 +62,7 @@ public class UnwinnableQuickAnalyzer {
         final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
         final LegalMove legalMove = NonNullWrapperCommon.getFirst(legalMoveList);
         board.performMove(legalMove.moveSpecification());
-        isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
+        isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
         countHalfmoves++;
       }
     }

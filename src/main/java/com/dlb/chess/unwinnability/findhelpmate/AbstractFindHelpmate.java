@@ -32,7 +32,7 @@ public abstract class AbstractFindHelpmate {
         isFoundFivefold = true;
       }
 
-      if (!isFoundSeventyFiveMoves && boardCheck.isSeventyFiftyMove()) {
+      if (!isFoundSeventyFiveMoves && boardCheck.isSeventyFiveMove()) {
         isFoundSeventyFiveMoves = true;
       }
     }

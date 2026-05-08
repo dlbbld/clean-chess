@@ -37,7 +37,7 @@ public class WinnableAnalyzer {
     }
 
     if (board.isInsufficientMaterial(side) || board.isStalemate() || board.isFivefoldRepetition()
-        || board.isSeventyFiftyMove()) {
+        || board.isSeventyFiveMove()) {
       return Winnable.NO;
     }
 

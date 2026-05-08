@@ -123,7 +123,7 @@ public abstract class AbstractBoard implements ChessBoard, EnumConstants {
 
   private boolean isGameDraw() {
     return isStalemate() || isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION || isFivefoldRepetition()
-        || isSeventyFiftyMove();
+        || isSeventyFiveMove();
   }
 
   @Override

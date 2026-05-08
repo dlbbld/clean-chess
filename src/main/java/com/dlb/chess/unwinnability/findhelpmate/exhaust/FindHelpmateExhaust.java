@@ -134,7 +134,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     store(cacheKey, movesLeft);
 
     // adding fivefold repetition and seventy-five move rule
-    if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+    if (board.isFivefoldRepetition() || board.isSeventyFiveMove()) {
       return FindHelpmateRecursionResult.FALSE;
     }
 

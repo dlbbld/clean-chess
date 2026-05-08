@@ -85,7 +85,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
       return Winnable.YES;
     }
 
-    if (board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+    if (board.isStalemate() || board.isFivefoldRepetition() || board.isSeventyFiveMove()) {
       return Winnable.NO;
     }
 
@@ -324,7 +324,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
         gameTermination.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_BOTH);
       } else if (board.isFivefoldRepetition()) {
         gameTermination.add(GameStatusAnalysis.FIVE_FOLD_REPETITION_RULE);
-      } else if (board.isSeventyFiftyMove()) {
+      } else if (board.isSeventyFiveMove()) {
         gameTermination.add(GameStatusAnalysis.SEVENTY_FIVE_MOVE_RULE);
       } else if (board.isInsufficientMaterial(Side.WHITE)) {
         gameTermination.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_WHITE_ONLY);
@@ -378,7 +378,7 @@ public class WinnableUtilityAnalzyeLichessUnfair {
     if (board.isFivefoldRepetition()) {
       return GameStatusAnalysis.FIVE_FOLD_REPETITION_RULE;
     }
-    if (board.isSeventyFiftyMove()) {
+    if (board.isSeventyFiveMove()) {
       return GameStatusAnalysis.SEVENTY_FIVE_MOVE_RULE;
     }
     if (board.isInsufficientMaterial(sideToEvaluate)) {

@@ -45,7 +45,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
     }
 
     if (currentDepth < D && !board.isInsufficientMaterial(c) && !board.isFivefoldRepetition()
-        && !board.isSeventyFiftyMove()) {
+        && !board.isSeventyFiveMove()) {
 
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
         board.performMove(legalMove.moveSpecification());

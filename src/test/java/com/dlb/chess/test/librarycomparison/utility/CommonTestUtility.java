@@ -47,7 +47,7 @@ public abstract class CommonTestUtility implements EnumConstants {
     assertEquals(boardFirst.canClaimFiftyMoveRuleWithOwnMove(), boardSecond.canClaimFiftyMoveRuleWithOwnMove());
     // extremely slow for performing and unperforming all legal moves per position
     assertEquals(boardFirst.canClaimFiftyMoveRule(), boardSecond.canClaimFiftyMoveRule());
-    assertEquals(boardFirst.isSeventyFiftyMove(), boardSecond.isSeventyFiftyMove());
+    assertEquals(boardFirst.isSeventyFiveMove(), boardSecond.isSeventyFiveMove());
 
     if (isIncludeHistory) {
       assertEquals(boardFirst.isThreefoldRepetition(), boardSecond.isThreefoldRepetition());

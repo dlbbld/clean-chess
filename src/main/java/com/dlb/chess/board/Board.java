@@ -566,7 +566,7 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public boolean isSeventyFiftyMove() {
+  public boolean isSeventyFiveMove() {
     return getHalfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
   }
 

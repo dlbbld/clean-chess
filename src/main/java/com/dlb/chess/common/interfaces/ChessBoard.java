@@ -67,7 +67,7 @@ public interface ChessBoard {
 
   boolean canClaimFiftyMoveRule();
 
-  boolean isSeventyFiftyMove();
+  boolean isSeventyFiveMove();
 
   boolean isThreefoldRepetition();
 
