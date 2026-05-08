@@ -346,9 +346,10 @@ public final class StrictPgnParser {
         try {
           FenParserAdvanced.parseFenAdvanced(fen);
         } catch (final com.dlb.chess.common.exceptions.FenAdvancedValidationException e) {
+          @SuppressWarnings("null") @NonNull final String fenErrorReason = e.getMessage();
           throw new StrictPgnParserValidationException(
               StrictPgnParserValidationProblem.TAG_SET_UP_REQUIRES_FEN_TAG_BUT_FEN_INVALID, SanValidationProblem.NONE,
-              "The required FEN tag was provided but is invalid. The error message when parsing was \"" + e.getMessage()
+              "The required FEN tag was provided but is invalid. The error message when parsing was \"" + fenErrorReason
                   + "\".");
         }
       }
@@ -458,8 +459,9 @@ public final class StrictPgnParser {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
           // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          @SuppressWarnings("null") @NonNull final String message = pcve.getMessage();
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
-              pcve.getMessage());
+              message);
         }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,

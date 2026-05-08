@@ -496,8 +496,9 @@ public final class LenientPgnParser {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
           // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          @SuppressWarnings("null") @NonNull final String message = pcve.getMessage();
           throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
-              pcve.getMessage());
+              message);
         }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,

@@ -60,7 +60,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Map<String, Expected> EXPECTED = buildExpected();
 
-  @SuppressWarnings({ "static-method", "boxing" })
+  @SuppressWarnings("static-method")
   @Test
   void test() {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_LEGACY_PGN_PARSE_PLAYS_BEYOND_AUDIT,

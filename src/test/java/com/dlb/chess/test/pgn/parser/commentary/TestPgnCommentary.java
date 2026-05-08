@@ -24,6 +24,7 @@ import com.dlb.chess.pgn.parser.model.PgnCommentary;
  * Everything else is permitted — letters, marks, numbers, punctuation, symbols, separators, format characters
  * (zero-width joiner etc.), and supplementary characters above U+FFFF (emoji, rare scripts).
  */
+@SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestPgnCommentary {
 
   // -------------------------------------------------------------------------------------------------

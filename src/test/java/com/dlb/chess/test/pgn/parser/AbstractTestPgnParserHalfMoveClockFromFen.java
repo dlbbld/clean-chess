@@ -44,6 +44,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * <p>
  * Logs each fixture's name as it runs so a failure mid-iteration shows progress.
  */
+@SuppressWarnings("null") // BiFunction lacks JDT null annotations
 abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
   private static final List<PgnTest> BUCKETS = NonNullWrapperCommon.listOf(PgnTest.PARSER_FROM_FEN);
