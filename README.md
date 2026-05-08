@@ -22,7 +22,7 @@ For the design philosophy, architecture, and rule-level decisions, see [specific
 
 # Building/Installing
 
-Requires JDK 17 or later.
+Requires JDK 17 or later. For full Eclipse setup instructions including project import, see [setup.md](setup.md).
 
 ## From source
 

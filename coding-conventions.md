@@ -24,11 +24,6 @@ Enforced by:
 
 All code must compile under the project's Eclipse JDT compiler settings with **zero warnings**. Many diagnostics are configured as errors rather than warnings — null-annotation violations, unused imports, missing `@Override`, raw types, etc. Treat the warning ceiling as a hard rule, not a guideline: fix the cause, do not silence with `@SuppressWarnings` unless the reason is genuinely localized and documented inline.
 
-## Setup for contributors — known gap
+## Setup
 
-The two files that pin the rule sets locally are **not yet checked in to the repository**:
-
-- The Checkstyle XML config (referenced from `.checkstyle` as `internal_config_1646660467605.xml`) lives inside the Eclipse Checkstyle plugin's local storage.
-- The Eclipse JDT compiler preferences (`.settings/org.eclipse.jdt.core.prefs`) and formatter preferences (`.settings/org.eclipse.jdt.ui.prefs`) are not in `.settings/`.
-
-Until these are exported and committed, an outside contributor cannot reproduce the same Checkstyle rules or the same compiler warning levels locally. This is an open task to address before broader collaboration.
+The Checkstyle XML rules (`checkstyle.xml`, `checkstyle-suppressions.xml`, `checkstyle-xpath-suppressions.xml`) and the Eclipse JDT compiler / formatter / cleanup / save-actions settings (`.settings/org.eclipse.jdt.core.prefs`, `.settings/org.eclipse.jdt.ui.prefs`) are checked into the repo and auto-loaded after import. See [setup.md](setup.md) for the install procedure.
