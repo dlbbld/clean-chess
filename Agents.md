@@ -1,5 +1,9 @@
 # Agents.md
 
+## Coding conventions
+
+See [coding-conventions.md](coding-conventions.md).
+
 ## Commit messages
 
 Commit messages should be concise. Use a short imperative subject by default.
