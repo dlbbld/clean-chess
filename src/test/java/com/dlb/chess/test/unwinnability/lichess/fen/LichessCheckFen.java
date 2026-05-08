@@ -27,8 +27,8 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
       throw new IllegalArgumentException("\"" + FEN_FOLDER_PATH + "\" directory does not exist");
     }
 
-    final var fenFilePathIn = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH, FEN_FILE_NAME_IN);
-    final Path fenFilePathOut = NonNullWrapperCommon.resolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT);
+    final var fenFilePathIn = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_IN);
+    final Path fenFilePathOut = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT);
 
     boolean isResumeFromLichessGameId;
     String lastProcessedLichessGameId;

@@ -12,11 +12,11 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
@@ -75,7 +75,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     if (IS_DEBUG) {
-      final var filePath = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "fenListMine.txt");
+      final var filePath = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "fenListMine.txt");
       FileUtility.writeFile(filePath, evalFenList);
     }
 
@@ -134,7 +134,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     store(cacheKey, movesLeft);
 
     // adding fivefold repetition and seventy-five move rule
-    if (board.isFivefoldRepetition() || board.isSeventyFiftyMove()) {
+    if (board.isFivefoldRepetition() || board.isSeventyFiveMove()) {
       return FindHelpmateRecursionResult.FALSE;
     }
 

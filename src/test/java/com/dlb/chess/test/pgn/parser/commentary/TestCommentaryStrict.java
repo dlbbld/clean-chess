@@ -12,15 +12,16 @@ import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 
 /**
- * Commentary brace validation for {@link StrictPgnParser}. Three brace rules:
+ * Commentary delimiter validation for StrictPgnParser. Three delimiter rules:
  *
  * <ul>
- * <li>R1 — every {@code {} must have a matching {@code }} (else unclosed-commentary error).
- * <li>R3 — a {@code }} outside any open commentary is a stray-close error.
- * <li>R4 — a brace token where a SAN half-move is expected is rejected.
+ * <li>R1 — every opening delimiter must have a matching closing delimiter (else unclosed-commentary error).
+ * <li>R3 — a closing delimiter outside any open commentary is a stray-close error.
+ * <li>R4 — a commentary delimiter where a SAN half-move is expected is rejected.
  * </ul>
  *
- * <p>(R2 — nesting — was retired by T-003; an inner {@code {} is now content per PGN spec §8.2.5.)
+ * <p>
+ * (R2 — nesting — was retired by T-003; an inner opening delimiter is now content per PGN spec §8.2.5.)
  */
 class TestCommentaryStrict {
 
@@ -30,7 +31,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v1_pregameCommentaryOnly() {
+  void v01_pregameCommentaryOnly() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{opening remark} 1. e4 e5 *\n\n");
     assertEquals("opening remark", file.pregameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
@@ -40,7 +41,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v2_trailingCommentaryAfterWhiteMove() {
+  void v02_trailingCommentaryAfterWhiteMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {good opening} 1... e5 *\n\n");
     assertEquals("", file.pregameCommentary().value());
     assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -49,7 +50,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v3_trailingCommentaryAfterBlackMove() {
+  void v03_trailingCommentaryAfterBlackMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 {symmetric} 2. Nf3 Nc6 *\n\n");
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -59,7 +60,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v4_commentaryAfterEveryHalfMove() {
+  void v04_commentaryAfterEveryHalfMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a} 1... e5 {b} 2. Nf3 {c} 2... Nc6 {d} *\n\n");
     assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -69,7 +70,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v5_leadingAndTrailingCommentary() {
+  void v05_leadingAndTrailingCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{intro} 1. e4 {after-1-white} 1... e5 *\n\n");
     assertEquals("intro", file.pregameCommentary().value());
     assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -78,7 +79,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v6_emptyCommentary() {
+  void v06_emptyCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {} 1... e5 *\n\n");
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -86,21 +87,21 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v7_commentaryWithPunctuationButNoBraces() {
+  void v07_commentaryWithPunctuationButNoBraces() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {special chars !? + # - / .} 1... e5 *\n\n");
     assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void v8_multilineCommentaryPreservedVerbatim() {
+  void v08_multilineCommentaryPreservedVerbatim() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} 1... e5 *\n\n");
     assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void v9_commentaryAfterSuffixAnnotation() {
+  void v09_commentaryAfterSuffixAnnotation() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4!? {spicy} 1... e5 *\n\n");
     assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
@@ -134,7 +135,7 @@ class TestCommentaryStrict {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // T-003 — inner `{` is content (PGN spec §8.2.5). Only `}` closes a comment.
+  // T-003 — an inner opening delimiter is content (PGN spec §8.2.5). Only the closing delimiter closes a comment.
   // -------------------------------------------------------------------------------------------------
 
   @SuppressWarnings("static-method")
@@ -161,7 +162,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void t003_strayCloseAfterClosedCommentaryWithInnerOpenBraceIsR3() {
-    // `{outer {inner}` closes at the first `}` with content "outer {inner"; the trailing `}` is a stray close (R3).
+    // The comment closes at the first closing delimiter; the trailing closing delimiter is a stray close (R3).
     expectError(header("*") + "1. e4 {outer {inner}} e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -212,7 +213,7 @@ class TestCommentaryStrict {
   @SuppressWarnings("static-method")
   @Test
   void r3_strayCloseAtSanExpectedPosition() {
-    // Broken-brace lexical errors take precedence over the positional R4 — `}` here is R3, not R4.
+    // Broken-delimiter lexical errors take precedence over the positional R4 — this case is R3, not R4.
     expectError(header("*") + "1. } e4 e5 *\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
@@ -223,28 +224,28 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_wellFormedBraceIsRejected() {
+  void postTerminationWellFormedBraceIsRejected() {
     expectError(header("*") + "1. e4 e5 * {after result}\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_strayCloseUsesSpecificCategory() {
+  void postTerminationStrayCloseUsesSpecificCategory() {
     expectError(header("*") + "1. e4 e5 * }\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_unclosedBraceUsesSpecificCategory() {
+  void postTerminationUnclosedBraceUsesSpecificCategory() {
     expectError(header("*") + "1. e4 e5 * {no closing\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_randomSymbolIsRejected() {
+  void postTerminationRandomSymbolIsRejected() {
     expectError(header("*") + "1. e4 e5 * garbage\n\n",
         StrictPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
   }

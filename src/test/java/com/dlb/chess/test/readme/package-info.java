@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.analysis.print;
+package com.dlb.chess.test.readme;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

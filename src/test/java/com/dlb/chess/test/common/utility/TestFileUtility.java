@@ -16,14 +16,14 @@ import com.dlb.chess.test.FileComparison;
 public class TestFileUtility {
 
   private static final Path TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/fileUtility/utf8");
+      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/fileUtility/utf8");
 
   private static final String TEST_FILE_NAME = "utf8.txt";
 
-  private static final Path TEST_SOURCE_FILE_PATH = NonNullWrapperCommon.resolve(TEST_FOLDER_PATH, TEST_FILE_NAME);
+  private static final Path TEST_SOURCE_FILE_PATH = NonNullWrapperCommon.pathResolve(TEST_FOLDER_PATH, TEST_FILE_NAME);
 
   private static final Path TEST_DESTINATION_FILE_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, TEST_FILE_NAME);
+      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, TEST_FILE_NAME);
 
   // UTF-8 test string with diverse characters
   private static final String TEST_CONTENT = """

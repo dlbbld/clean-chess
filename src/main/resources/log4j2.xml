@@ -1,23 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Configuration status="OFF">
+<?xml-model href="log4j-config-2.xsd" type="application/xml" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<Configuration xmlns="https://logging.apache.org/xml/ns"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="https://logging.apache.org/xml/ns log4j-config-2.xsd"
+               status="OFF">
   <Appenders>
     <Console name="LogToConsole" target="SYSTEM_OUT">
       <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
     </Console>
-    <File name="LogToFile" fileName="${sys:java.io.tmpdir}/clean-chess.log">
-      <PatternLayout>
-        <Pattern>%d %p %c [%t] %m%n</Pattern>
-      </PatternLayout>
-    </File>
   </Appenders>
   <Loggers>
     <Logger name="com.dlb" level="info" additivity="false">
-      <AppenderRef ref="LogToFile" />
       <AppenderRef ref="LogToConsole" />
     </Logger>
     <Root level="error">
-      <AppenderRef ref="LogToFile" />
       <AppenderRef ref="LogToConsole" />
     </Root>
-  </Loggers> 
+  </Loggers>
 </Configuration>

@@ -1,15 +1,29 @@
 clean-chess
 ===========
 
-clean-chess is a java chess library with the main feature of implementing the 
-[Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess).
+clean-chess is a Java chess library focused on rule correctness and reproducibility.
+It implements SAN, FEN, and PGN parsing, validation, and export with a strict/lenient parser pair,
+and includes a Java port of the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) as a flagship feature.
 
-It's not a chess engine - it does not calculate best moves for a given position.
+It's not a chess engine — it does not calculate best moves for a given position.
 
-It's also not built for performance, if you need fast move generation, use for example Stockfish. 
-It is built for correctness and comprehension, for example it will produce meaningfull messages for SAN or PGN validation.
+It's also not built for performance; if you need fast move generation, use for example Stockfish.
+It is built for correctness and comprehension — for example, it produces meaningful messages for SAN, FEN, and PGN validation.
+
+For the design philosophy, architecture, and rule-level decisions, see [specification.md](specification.md).
+
+## Not supported
+
+- PGN move variations
+- PGN Numeric Annotation Glyphs (NAGs, e.g. `$1`, `$10`)
+- PGN move suffix annotations (`!`, `?`, `!!`, `??`, `!?`, `?!`)
+- Multi-game PGN files (one game per file)
+- Byte order marks (BOM) in input
 
 # Building/Installing
+
+Requires JDK 17 or later. For full Eclipse setup instructions including project import, see [setup.md](setup.md).
+
 ## From source
 
 ```
@@ -38,7 +52,7 @@ clean-chess dependency can be added via the jitpack repository.
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>1.0</version>
+  <version>3.2</version>
 </dependency>
 ```
 
@@ -54,7 +68,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    compile 'com.github.dlbbld:clean-chess:1.0'
+    compile 'com.github.dlbbld:clean-chess:3.2'
     ...
 }
 ```
@@ -94,7 +108,7 @@ Current chess programs cannot correctly determine unwinnability and dead positio
 The [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) provides an algorithm to close the gap. I implemented the algorithm in Java.
 
 ## Java chess library
-There are several Java chess libraries, but because this chess libary is about game-deciding situations of having a potential draw or not, I did not
+There are several Java chess libraries, but because this chess library is about game-deciding situations of having a potential draw or not, I did not
 want to rely on other chess libraries, for I want to be sure that what I have is 100% correct. Because I heavily rely on tests and PGNs are indispensable in tests, I implemented a PGN reader and writer. And because these tests must be accurate, I spent a lot of time making the PGN reader
 accurate for every situation.
 
@@ -288,7 +302,7 @@ White could have won.
 ```
 
 #### Common positions
-When there are still a lot of pieces on the board, so a mate is very likely, the quick algorithm says POSSIBLE_WINNABLE.
+When there are still a lot of pieces on the board, so a mate is very likely, the quick algorithm says POSSIBLY_WINNABLE.
 It makes an educated guess only. The full algorithm calculates an actual mate and is accurate but much slower.
 [Game](https://lichess.org/SCKpvJQX#57)
 
@@ -345,7 +359,7 @@ Positions can also often be dead due to forced moves.
 ## PGN parser
       
 ### Lenient PGN parser
-The common PGN parser - trying to read the file with best effort. For example below space after "[" is ignored etc. Only PGNs with move variations are not supported.
+The common PGN parser — reads the file with best effort. For example, the space after `[` below is ignored. See the [Not supported](#not-supported) section above for what neither parser accepts.
 
 #### PGN valid
 
@@ -464,7 +478,7 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
       System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
     } catch (final StrictPgnParserValidationException e) {
       System.out.println(e.getMessage());
-      // The left square bracked [must be followed by the tag name, but a space was found.
+      // The left square bracket [ must be followed by the tag name, but a space was found.
       return;
     }
 ```
@@ -512,7 +526,7 @@ You can create the PGN for a game played in the library or export an imported PG
 	 System.out.println(pgnFile);
     // [Event "?"]
     // [Site "?"]
-    // [Date "2026.03.30"]
+    // [Date "<today>"]
     // [Round "?"]
     // [White "?"]
     // [Black "?"]
@@ -552,7 +566,7 @@ A PGN can be written to the file system as below.
 ## PGN validation
 
 ### PGN lenient validation
-Checks weather a PGN can be parsed using the PGN lenient parser.
+Checks whether a PGN can be parsed using the PGN lenient parser.
 
 #### PGN valid
 
@@ -587,13 +601,13 @@ Checks weather a PGN can be parsed using the PGN lenient parser.
 #### File validation
 
 ```java
-    final LenientPgnParserValidationResult result = LenientPgnParser.validateText("C:\\temp\\myFile.pgn");
+    final LenientPgnParserValidationResult result = LenientPgnParser.validate("C:\\temp\\myFile.pgn");
     System.out.println(result.isValid());
 ```
 
 ### PGN strict validation
 
-Checks weather a PGN adhers to the export format per the PGN specification.
+Checks whether a PGN adheres to the export format per the PGN specification.
 
 #### PGN valid
 
@@ -636,6 +650,14 @@ Checks weather a PGN adhers to the export format per the PGN specification.
 #### File validation
 
 ```java
-    final StrictPgnParserValidationResult result = StrictPgnParser.validateText("C:\\temp\\myFile.pgn");
+    final StrictPgnParserValidationResult result = StrictPgnParser.validate("C:\\temp\\myFile.pgn");
     System.out.println(result.isValid());
 ```
+
+# License
+
+Copyright (C) 2024-2026  Daniel Bächli
+
+clean-chess is free software, licensed under the GNU General Public License, version 3 (GPL v3). See [LICENSE](LICENSE) for the full text.
+
+The unwinnability and dead-position detection is a Java port of the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess) by Miguel Ambrona, also licensed under GPL v3.

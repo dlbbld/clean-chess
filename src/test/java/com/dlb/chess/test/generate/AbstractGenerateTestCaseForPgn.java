@@ -2,14 +2,14 @@ package com.dlb.chess.test.generate;
 
 import java.nio.file.Path;
 
-import com.dlb.chess.analysis.Analyzer;
-import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
-import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.report.Reporter;
+import com.dlb.chess.report.enums.CheckmateOrStalemate;
+import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.analysis.representation.RepetitionRepresentation;
 import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -22,7 +22,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
 
   static String generate(Path pgnFolderPath, String pgnFileName) throws Exception {
 
-    final Analysis analysis = Analyzer.calculateAnalysis(pgnFolderPath, pgnFileName);
+    final Report analysis = Reporter.calculateAnalysis(pgnFolderPath, pgnFileName);
 
     final StringBuilder result = new StringBuilder();
     result.append("list.add(new ").append(PgnFileTestCase.class.getSimpleName()).append("(");

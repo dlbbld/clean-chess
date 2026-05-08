@@ -1,4 +1,8 @@
-# Agents.md
+# Agents
+
+## Coding conventions
+
+See [coding-conventions.md](coding-conventions.md).
 
 ## Commit messages
 

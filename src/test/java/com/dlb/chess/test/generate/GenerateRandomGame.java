@@ -215,7 +215,7 @@ public class GenerateRandomGame {
           System.out.println("Number of half-moves performed: " + numberOfHalfMovesPerformed);
         }
 
-        if (board.isSeventyFiftyMove()) {
+        if (board.isSeventyFiveMove()) {
           System.out.println("A game with " + board.getPerformedHalfMoveCount() / 2.0
               + " moves ending with seventy-five-move rule was generated");
           final String moveList = calculateMoveList(board.getHalfMoveList());

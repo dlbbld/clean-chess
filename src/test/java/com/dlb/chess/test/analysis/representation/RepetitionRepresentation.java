@@ -3,13 +3,13 @@ package com.dlb.chess.test.analysis.representation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.report.model.Report;
 
 public class RepetitionRepresentation {
 
@@ -33,7 +33,7 @@ public class RepetitionRepresentation {
     return NonNullWrapperCommon.toString(result);
   }
 
-  public static String calculateRepresentationRepetitionAnalysis(Analysis analysis,
+  public static String calculateRepresentationRepetitionAnalysis(Report analysis,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
     final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,

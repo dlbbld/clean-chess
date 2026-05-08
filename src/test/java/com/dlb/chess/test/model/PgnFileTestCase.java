@@ -2,8 +2,8 @@ package com.dlb.chess.test.model;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.analysis.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
+import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 

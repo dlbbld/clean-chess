@@ -11,7 +11,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestLenientPgnParserResultException extends AbstractTestLenientPgnParserException {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "result");
+      .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "result");
 
   @SuppressWarnings("static-method")
   @Test

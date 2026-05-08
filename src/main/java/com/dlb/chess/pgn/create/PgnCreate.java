@@ -10,7 +10,6 @@ import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.model.Movetext;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
@@ -62,8 +61,6 @@ public class PgnCreate {
     fileLines.add("");
 
     final ResultTagValue resultTagValue = TagUtility.readResultTagValue(tagList);
-    final Movetext movetext = PgnCreate.calculateMovetext(startFen.fullMoveNumber(), startFen.havingMove(),
-        halfMoveList, resultTagValue);
 
     final String moves = calculateMovetextWithoutGameTerminationMarker(startFen.fullMoveNumber(), startFen.havingMove(),
         halfMoveList);
@@ -191,20 +188,12 @@ public class PgnCreate {
     return NonNullWrapperCommon.toString(result);
   }
 
-  private static Movetext calculateMovetext(int fullMoveNumber, Side havingMove, List<PgnHalfMove> halfMoveList,
-      ResultTagValue resultTagValue) {
-
-    final String movetextWithoutGameTerminationMarker = calculateMovetextWithoutGameTerminationMarker(fullMoveNumber,
-        havingMove, halfMoveList);
-    final var movetext = movetextWithoutGameTerminationMarker + " " + resultTagValue.getValue();
-    return new Movetext(movetext);
-  }
-
   public static PgnFile createPgnFile(ChessBoard board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(tagList, board.getInitialFen(), PgnCommentary.EMPTY, halfMoveList);
+    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
+        NonNullWrapperCommon.copyOfList(halfMoveList));
   }
 
   public static PgnFile createPgnFile(ChessBoard board) {

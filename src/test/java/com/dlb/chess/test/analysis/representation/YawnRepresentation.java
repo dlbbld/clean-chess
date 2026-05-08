@@ -3,10 +3,10 @@ package com.dlb.chess.test.analysis.representation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.model.YawnHalfMove;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.report.model.YawnHalfMove;
 
 public class YawnRepresentation {
 

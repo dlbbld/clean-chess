@@ -115,7 +115,7 @@ public abstract class BasicChessUtility {
     if (board.isFivefoldRepetition()) {
       return GameStatus.FIVE_FOLD_REPETITION_RULE;
     }
-    if (board.isSeventyFiftyMove()) {
+    if (board.isSeventyFiveMove()) {
       return GameStatus.SEVENTY_FIVE_MOVE_RULE;
     }
     if (board.isInsufficientMaterial()) {

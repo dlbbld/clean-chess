@@ -42,8 +42,8 @@ import com.dlb.chess.test.RestrictTestConstants;
  */
 class TestLegacyPgnParsePlaysBeyondAudit {
 
-  private static final Path LEGACY_FOLDER = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
+  private static final Path LEGACY_FOLDER = NonNullWrapperCommon.pathResolve(
+      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
@@ -60,7 +60,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Map<String, Expected> EXPECTED = buildExpected();
 
-  @SuppressWarnings({ "static-method", "boxing" })
+  @SuppressWarnings("static-method")
   @Test
   void test() {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_LEGACY_PGN_PARSE_PLAYS_BEYOND_AUDIT,
@@ -69,15 +69,15 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     final List<String> failures = new ArrayList<>();
     var totalFiles = 0;
 
-    for (final Map.Entry<String, Expected> entry : EXPECTED.entrySet()) {
+    for (final Map.Entry<String, Expected> entry : NonNullWrapperCommon.entrySet(EXPECTED)) {
       totalFiles++;
-      final String relativePath = entry.getKey();
-      final Expected expected = entry.getValue();
+      final String relativePath = NonNullWrapperCommon.getKey(entry);
+      final Expected expected = NonNullWrapperCommon.getValue(entry);
 
       final var slash = relativePath.lastIndexOf('/');
       final var subfolder = NonNullWrapperCommon.substring(relativePath, 0, slash);
       final var fileName = NonNullWrapperCommon.substring(relativePath, slash + 1);
-      final var folderPath = NonNullWrapperCommon.resolve(LEGACY_FOLDER, subfolder);
+      final var folderPath = NonNullWrapperCommon.pathResolve(LEGACY_FOLDER, subfolder);
 
       try {
         StrictPgnParser.parse(folderPath, fileName);

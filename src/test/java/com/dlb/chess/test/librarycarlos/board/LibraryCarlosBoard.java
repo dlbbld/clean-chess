@@ -15,8 +15,8 @@ import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.AbstractBoard;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -33,6 +33,8 @@ import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.Board;
@@ -44,7 +46,7 @@ import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 
-public class LibraryCarlosBoard extends AbstractBoard {
+public class LibraryCarlosBoard implements ChessBoard {
 
   private final Board board = new Board();
 
@@ -336,7 +338,7 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public boolean isSeventyFiftyMove() {
+  public boolean isSeventyFiveMove() {
     return getHalfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
   }
 
@@ -394,13 +396,13 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public List<DynamicPosition> getDynamicPositionList() {
-    return dynamicPositionList;
+  public ImmutableList<DynamicPosition> getDynamicPositionList() {
+    return NonNullWrapperCommon.copyOfList(dynamicPositionList);
   }
 
   @Override
-  public List<HalfMove> getHalfMoveList() {
-    return halfMoveList;
+  public ImmutableList<HalfMove> getHalfMoveList() {
+    return NonNullWrapperCommon.copyOfList(halfMoveList);
   }
 
   @Override
@@ -409,8 +411,8 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public Set<MoveSpecification> getPossibleMoveSpecificationSet() {
-    return generateMoveSpecificationSet(this.board);
+  public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
+    return NonNullWrapperCommon.copyOfSet(generateMoveSpecificationSet(this.board));
   }
 
   // the API does not return null
@@ -499,7 +501,7 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public List<MoveSpecification> getPerformedMoveSpecificationList() {
+  public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
     for (final MoveBackup moveBackup : NonNullWrapperLibraryCarlos.getBackup(this.board)) {
 
@@ -508,12 +510,12 @@ public class LibraryCarlosBoard extends AbstractBoard {
 
       moveSpecificationList.add(MoveConversionUtility.convertMove(move, movingPiece));
     }
-    return moveSpecificationList;
+    return NonNullWrapperCommon.copyOfList(moveSpecificationList);
   }
 
   @Override
-  public Set<LegalMove> getLegalMoveSet() {
-    return generateLegalMoveSet(this.board);
+  public ImmutableSet<LegalMove> getLegalMoveSet() {
+    return NonNullWrapperCommon.copyOfSet(generateLegalMoveSet(this.board));
   }
 
   private static boolean calculateIsPawnMove(MoveBackup moveBackup) {
@@ -573,8 +575,8 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public List<LegalMove> getPerformedLegalMoveList() {
-    return performedLegalMoveList;
+  public ImmutableList<LegalMove> getPerformedLegalMoveList() {
+    return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
   }
 
   @Override

@@ -25,9 +25,9 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 public abstract class FileUtility {
 
   /**
-   * Reads the entire contents of a file as a single UTF-8 string, preserving line terminators exactly as they
-   * appear on disk. Complements {@link #readFileLines(Path)} — use this when the parser needs to see the raw source
-   * (for example to detect a missing trailing newline).
+   * Reads the entire contents of a file as a single UTF-8 string, preserving line terminators exactly as they appear on
+   * disk. Complements {@link #readFileLines(Path)} — use this when the parser needs to see the raw source (for example
+   * to detect a missing trailing newline).
    */
   public static String readFileAsString(Path filePath) {
     final var file = filePath.toFile();
@@ -49,7 +49,7 @@ public abstract class FileUtility {
    * Reading a file linewise, without including linebreaks or adding spaces after a line break.
    */
   public static List<String> readFileLines(Path folderPath, String fileName) {
-    return readFileLines(calculateFilePath(folderPath, fileName));
+    return readFileLines(NonNullWrapperCommon.pathResolve(folderPath, fileName));
   }
 
   public static List<String> readFileLines(Path filePath) {
@@ -77,19 +77,15 @@ public abstract class FileUtility {
     return fileLines;
   }
 
-  public static Path calculateFilePath(Path folderPath, String fileName) {
-    return NonNullWrapperCommon.resolve(folderPath, fileName);
-  }
-
   public static void writeFile(Path folderPath, String fileName, List<String> lineList) {
-    writeFile(calculateFilePath(folderPath, fileName), lineList);
+    writeFile(NonNullWrapperCommon.pathResolve(folderPath, fileName), lineList);
   }
 
   public static void writeFile(Path folderPath, String fileName, String line) {
     final List<String> lineList = new ArrayList<>();
     lineList.add(line);
 
-    writeFile(calculateFilePath(folderPath, fileName), lineList);
+    writeFile(NonNullWrapperCommon.pathResolve(folderPath, fileName), lineList);
   }
 
   public static void writeFile(Path filePath, String line) {
@@ -154,7 +150,7 @@ public abstract class FileUtility {
   }
 
   public static boolean exists(Path folderPath, String fileName) {
-    return exists(calculateFilePath(folderPath, fileName));
+    return exists(NonNullWrapperCommon.pathResolve(folderPath, fileName));
   }
 
   public static boolean exists(Path path) {
@@ -162,7 +158,7 @@ public abstract class FileUtility {
   }
 
   public static void deleteFile(Path folderPath, String fileName) {
-    deleteFile(calculateFilePath(folderPath, fileName));
+    deleteFile(NonNullWrapperCommon.pathResolve(folderPath, fileName));
   }
 
   public static void deleteFile(Path path) {
@@ -205,9 +201,9 @@ public abstract class FileUtility {
   }
 
   /**
-   * Walks {@code root} recursively and returns every regular file under it as a {@link List} of {@link Path}.
-   * The underlying {@link Stream} is fully drained and closed before this method returns, so callers do not
-   * have to (and should not try to) manage stream lifetime themselves.
+   * Walks {@code root} recursively and returns every regular file under it as a {@link List} of {@link Path}. The
+   * underlying {@link Stream} is fully drained and closed before this method returns, so callers do not have to (and
+   * should not try to) manage stream lifetime themselves.
    */
   @SuppressWarnings("null")
   public static List<Path> listAllFilesRecursively(Path root) {

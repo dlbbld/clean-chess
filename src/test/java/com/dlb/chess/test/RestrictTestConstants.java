@@ -5,15 +5,22 @@ import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 public abstract class RestrictTestConstants {
 
   /**
-   * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Set to {@code false} to force every restricted PGN
-   * test to run at full coverage in one flip — avoids having to search-replace each individual flag. Individual flags
-   * that want to opt out of the master gate can be authored as a plain {@code true} instead of
-   * {@code true && IS_RESTRICT_PGN}; that keeps the restriction on regardless.
+   * Master switch driven by the {@code clean-chess.full} system property. Set to {@code true} via Maven profile
+   * {@code -Pfull} to run the full heavy test suite. Default: {@code false} — restricted, fast suite for normal
+   * iteration. Required to be {@code true} before tagging a release (see {@code specification.md} §6).
    */
-  public static final boolean IS_RESTRICT_PGN = true;
+  private static final boolean IS_FULL = Boolean.parseBoolean(System.getProperty("clean-chess.full", "false"));
+
+  /**
+   * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Driven by {@link #IS_FULL}: in full mode the master
+   * is {@code false}, all restricted PGN tests run at full coverage. Individual flags that want to opt out of the master
+   * gate can be authored as a plain {@code true} instead of {@code true && IS_RESTRICT_PGN}; that keeps the restriction
+   * on regardless of the master.
+   */
+  public static final boolean IS_RESTRICT_PGN = !IS_FULL;
 
   // PGN tests — iterate over PGN test case lists. Each flag is the conjunction of its own restriction and the
-  // master gate above, so one edit to IS_RESTRICT_PGN turns off every individual restriction simultaneously.
+  // master gate above, so the master flips every individual restriction simultaneously.
   public static final boolean IS_RESTRICT_PGN_BOARD_API_AGAINST_EACH_OTHER_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_FEN_PARSER_ALL_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_INSUFFICIENT_MATERIAL_TEST = true && IS_RESTRICT_PGN;
@@ -21,7 +28,7 @@ public abstract class RestrictTestConstants {
   public static final boolean IS_RESTRICT_PGN_LENIENT_PARSER_API_AGAINST_EACH_OTHER_TEST = true && IS_RESTRICT_PGN;
   // The three flags below toggle between a curated smoke subset (true) and the full ALL_EXCEPT_LONGEST_POSSIBLE
   // corpus (false). Smoke subsets live in PgnExpectedValue.getParserIntegrationSmokeList() and
-  // getExportRoundtripSmokeList(). Flipping IS_RESTRICT_PGN to false turns these off along with the rest.
+  // getExportRoundtripSmokeList(). The master flip turns these off along with the rest.
   public static final boolean IS_RESTRICT_PGN_STRICT_AGAINST_LENIENT_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_EXPORT_IDEMPOTENCY_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_WRITER_TEST = true && IS_RESTRICT_PGN;
@@ -29,25 +36,25 @@ public abstract class RestrictTestConstants {
   public static final boolean IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_EXPECTED_ANALYSIS = true && IS_RESTRICT_PGN;
 
-  public static final PgnTestInclusion PGN_TEST_INCLUSION = PgnTestInclusion.ALL_EXCEPT_LONGEST_POSSIBLE;
+  public static final PgnTestInclusion PGN_TEST_INCLUSION = IS_FULL ? PgnTestInclusion.ALL
+      : PgnTestInclusion.ALL_EXCEPT_LONGEST_POSSIBLE;
 
-  // Long running tests — excluded entirely via JUnit assumeFalse
-  public static final boolean IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST = true;
+  // Long running tests — excluded entirely via JUnit assumeFalse. Driven by the master switch.
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST = !IS_FULL;
 
   // TestUnwinnabilityFull.testPgnFileExpected analyzes one heavy PGN (~10 seconds). Only useful
-  // when changes touch the unwinnability-full analyzer; flip to false locally to run.
-  public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST = true;
+  // when changes touch the unwinnability-full analyzer.
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST = !IS_FULL;
 
   // TestPgnCorpusNotPlaysBeyondAudit walks the whole corpus (~1300 PGN files) and parses each
   // through the strict parser to confirm none plays beyond a FIDE-automatic termination. Takes
   // a few minutes; only useful when the corpus changes or the strict-pipeline rules change.
-  // Flip to false locally to run.
-  public static final boolean IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT = true;
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT = !IS_FULL;
 
   // TestLegacyPgnParsePlaysBeyondAudit parses every fixture under pgnParser/legacy/common/beyond
   // through the strict parser and asserts the rejection (problem + GameStatus) matches the
   // hardcoded expectation per file. ~15 seconds. Useful when the legacy tree or strict-pipeline
-  // rules change. Flip to false locally to run.
-  public static final boolean IS_EXCLUDE_LONG_RUNNING_LEGACY_PGN_PARSE_PLAYS_BEYOND_AUDIT = true;
+  // rules change.
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_LEGACY_PGN_PARSE_PLAYS_BEYOND_AUDIT = !IS_FULL;
 
 }

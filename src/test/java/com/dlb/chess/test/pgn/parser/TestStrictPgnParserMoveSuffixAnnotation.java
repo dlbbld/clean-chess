@@ -20,14 +20,14 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 class TestStrictPgnParserMoveSuffixAnnotation {
 
   private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "moveSuffixAnnotation");
+      .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "moveSuffixAnnotation");
 
   // -------------------------------------------------------------------------------------------------
   // Move-suffix annotation — exception and success
   // -------------------------------------------------------------------------------------------------
 
   private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationOnly/exception");
+      .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationOnly/exception");
 
   @SuppressWarnings("static-method")
   @Test
@@ -55,7 +55,7 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   }
 
   private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationOnly/success");
+      .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationOnly/success");
 
   @SuppressWarnings("static-method")
   @Test
@@ -78,7 +78,7 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   // -------------------------------------------------------------------------------------------------
 
   private static final Path PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/exception");
+      .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/exception");
 
   @SuppressWarnings("static-method")
   @Test
@@ -99,7 +99,7 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   }
 
   private static final Path PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
-      .resolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/success");
+      .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/success");
 
   @SuppressWarnings("static-method")
   @Test

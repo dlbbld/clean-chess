@@ -2,7 +2,6 @@ package com.dlb.chess.common;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.EnumMap;
@@ -191,8 +190,8 @@ public class NonNullWrapperCommon {
   }
 
   @SuppressWarnings("null")
-  public static Path get(final String filePath) {
-    return Paths.get(filePath); // not null by API
+  public static Path pathOf(final String filePath) {
+    return Path.of(filePath); // not null by API
   }
 
   @NonNull
@@ -265,8 +264,13 @@ public class NonNullWrapperCommon {
   }
 
   @SuppressWarnings("null")
-  public static Path resolve(final Path directoryPath, final String filePath) {
+  public static Path pathResolve(final Path directoryPath, final String filePath) {
     return directoryPath.resolve(filePath);
+  }
+
+  @SuppressWarnings("null")
+  public static Path pathRelativize(final Path directoryPath, final Path other) {
+    return directoryPath.relativize(other);
   }
 
   public static Path getFileName(Path path) {

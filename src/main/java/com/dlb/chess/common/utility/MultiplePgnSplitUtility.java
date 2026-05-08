@@ -27,8 +27,8 @@ import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 
 public abstract class MultiplePgnSplitUtility {
   private static final Path MULTIPLE_PGN_FILE_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, "otherdb/mb-3.45/mb-3.45.pgn");
-  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "otherdb/mb-3.45/mb-3.45.pgn");
+  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "otherdb/mb-3.45/split");
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(MultiplePgnSplitUtility.class);

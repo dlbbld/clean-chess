@@ -3,7 +3,7 @@ package com.dlb.chess.pgn.parser.model;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 
 /**
- * Value object for PGN commentary content. Construction validates the contract — see SPECIFICATION.md
+ * Value object for PGN commentary content. Construction validates the contract — see specification.md
  * (Commentary contract).
  */
 public record PgnCommentary(String value) {

@@ -3,9 +3,6 @@ package com.dlb.chess.common.utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.analysis.Analyzer;
-import com.dlb.chess.analysis.model.YawnHalfMove;
-import com.dlb.chess.analysis.model.YawnIndex;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
@@ -13,6 +10,9 @@ import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
+import com.dlb.chess.report.Reporter;
+import com.dlb.chess.report.model.YawnHalfMove;
+import com.dlb.chess.report.model.YawnIndex;
 
 public abstract class YawnMoveUtility {
 
@@ -230,7 +230,7 @@ public abstract class YawnMoveUtility {
     }
     for (var j = index + 1; j <= maxIndex; j++) {
       final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, j);
-      if (Analyzer.calculateIsHalfMoveTerminatesYawnSequence(halfMove)) {
+      if (Reporter.calculateIsHalfMoveTerminatesYawnSequence(halfMove)) {
         return j - 1;
       }
     }

@@ -43,7 +43,7 @@ class TestLibraryCarlosFenValidationPass {
     try {
       board.loadFromFen(fen);
       return true;
-    } catch (final Exception e) {
+    } catch (@SuppressWarnings("unused") final Exception e) {
       return false;
     }
   }

@@ -22,10 +22,10 @@ public class TestPgnExportUtf8 {
   private static final String FILE_NAME = "utf8.pgn";
 
   private static final Path TEST_SOURCE_FILE_PATH = NonNullWrapperCommon
-      .resolve(PgnTestConstants.PGN_EXPORT_UTF8_TEST_ROOT_FOLDER_PATH, FILE_NAME);
+      .pathResolve(PgnTestConstants.PGN_EXPORT_UTF8_TEST_ROOT_FOLDER_PATH, FILE_NAME);
 
   private static final Path TEST_DESTINATION_FILE_PATH = NonNullWrapperCommon
-      .resolve(ConfigurationConstants.TEMP_FOLDER_PATH, FILE_NAME);
+      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, FILE_NAME);
 
   @SuppressWarnings("static-method")
   @Test

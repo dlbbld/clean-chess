@@ -24,6 +24,7 @@ import com.dlb.chess.pgn.parser.model.PgnCommentary;
  * Everything else is permitted — letters, marks, numbers, punctuation, symbols, separators, format characters
  * (zero-width joiner etc.), and supplementary characters above U+FFFF (emoji, rare scripts).
  */
+@SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestPgnCommentary {
 
   // -------------------------------------------------------------------------------------------------
@@ -213,8 +214,8 @@ class TestPgnCommentary {
   @SuppressWarnings("static-method")
   @Test
   void loneHighSurrogateIsRejected() {
-    final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("a\uD800b"));
+    final var commentary = "a" + Character.toString(Character.MIN_HIGH_SURROGATE) + "b";
+    final var thrown = assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary(commentary));
     org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("surrogate"),
         "Message should name the offending category: " + thrown.getMessage());
   }
@@ -222,7 +223,8 @@ class TestPgnCommentary {
   @SuppressWarnings("static-method")
   @Test
   void loneLowSurrogateIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a\uDC00b"));
+    final var commentary = "a" + Character.toString(Character.MIN_LOW_SURROGATE) + "b";
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary(commentary));
   }
 
   @SuppressWarnings("static-method")

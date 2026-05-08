@@ -1,14 +1,18 @@
 package com.dlb.chess.pgn.parser.model;
 
-import java.util.List;
-
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
+import com.google.common.collect.ImmutableList;
 
 @SuppressWarnings("null")
-public record PgnFile(@NonNull List<@NonNull Tag> tagList, @NonNull Fen startFen,
-    @NonNull PgnCommentary pregameCommentary, @NonNull List<@NonNull PgnHalfMove> halfMoveList) {
+public record PgnFile(@NonNull ImmutableList<@NonNull Tag> tagList, @NonNull Fen startFen,
+    @NonNull PgnCommentary pregameCommentary, @NonNull ImmutableList<@NonNull PgnHalfMove> halfMoveList) {
 
+  public PgnFile {
+    tagList = NonNullWrapperCommon.copyOfList(tagList);
+    halfMoveList = NonNullWrapperCommon.copyOfList(halfMoveList);
+  }
 }

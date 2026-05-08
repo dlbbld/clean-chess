@@ -1,4 +1,4 @@
-package com.dlb.chess.analysis.print.model;
+package com.dlb.chess.report.print.model;
 
 import com.dlb.chess.common.model.HalfMove;
 

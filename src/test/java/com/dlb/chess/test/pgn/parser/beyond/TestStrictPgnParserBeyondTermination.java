@@ -18,9 +18,10 @@ import com.dlb.chess.san.enums.SanValidationProblem;
  * Strict-parser counterpart of {@link TestLenientPgnParserBeyondTermination}. Each fixture
  * has its own {@code @Test} method with the expected {@link GameStatus} pinned literally.
  */
+@SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestStrictPgnParserBeyondTermination {
 
-  private static final Path BEYOND_FOLDER = NonNullWrapperCommon.resolve(
+  private static final Path BEYOND_FOLDER = NonNullWrapperCommon.pathResolve(
       com.dlb.chess.common.constants.ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH,
       "src/test/resources/pgnParser/common/beyond");
 

@@ -38,14 +38,14 @@ public class UnwinnableFullAnalyzer {
     var isCanUseMobilitySolution = true;
     var isForcedMove = board.getLegalMoveSet().size() == 1;
     // to avoid endless loops in positions with each side having one repeating forced move
-    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
+    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
     var totalForcedMoves = 0;
     while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
       isCanUseMobilitySolution = false;
       final LegalMove onlyLegalMove = NonNullWrapperCommon.getFirst(new ArrayList<>(board.getLegalMoveSet()));
       board.performMove(onlyLegalMove.moveSpecification());
       isForcedMove = board.getLegalMoveSet().size() == 1;
-      isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiftyMove();
+      isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
       totalForcedMoves++;
     }
 

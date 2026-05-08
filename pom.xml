@@ -4,14 +4,14 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.github.dlbbld.clean-chess</groupId>
+	<groupId>com.github.dlbbld</groupId>
 	<artifactId>clean-chess</artifactId>
-	<version>3.1</version>
+	<version>3.2</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.release>26</maven.compiler.release>
+		<maven.compiler.release>17</maven.compiler.release>
 	</properties>
 
 	<repositories>
@@ -36,6 +36,7 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-core</artifactId>
 			<version>2.25.3</version>
+			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -97,5 +98,30 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!--
+			Heavy regression suite. Default test runs use a restricted subset (see
+			RestrictTestConstants) so iteration is fast; this profile flips the
+			master `clean-chess.full` system property and switches every restriction
+			off. Required before tagging a release.
+		-->
+		<profile>
+			<id>full</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemPropertyVariables>
+								<clean-chess.full>true</clean-chess.full>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

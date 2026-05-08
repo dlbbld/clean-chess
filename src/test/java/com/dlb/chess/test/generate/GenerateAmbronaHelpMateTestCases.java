@@ -9,8 +9,6 @@ import java.util.TreeMap;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.analysis.Analyzer;
-import com.dlb.chess.analysis.model.Analysis;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
@@ -27,6 +25,8 @@ import com.dlb.chess.pgn.parser.enums.StandardTag;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.pgn.writer.PgnWriter;
+import com.dlb.chess.report.Reporter;
+import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
@@ -40,7 +40,7 @@ public class GenerateAmbronaHelpMateTestCases {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateAmbronaHelpMateTestCases.class);
 
   private static final String OUTPUT_FOLDER_NAME = "lichessHelpmate";
-  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.resolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       OUTPUT_FOLDER_NAME);
 
   public static void main(String[] args) throws Exception {
@@ -56,7 +56,7 @@ public class GenerateAmbronaHelpMateTestCases {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
-      final var analysis = Analyzer.calculateAnalysis(folderPath, testCase.pgnFileName());
+      final var analysis = Reporter.calculateAnalysis(folderPath, testCase.pgnFileName());
       if (IS_CREATE_UCI_REQUIRED) {
         printMovesAsUci(testCase.pgnFileName(), analysis);
       }
@@ -87,7 +87,7 @@ public class GenerateAmbronaHelpMateTestCases {
   }
 
   private static void writeGameAsContinued(Map<String, String> havingHelpMate, Path folderExisting, String pgnFileName,
-      Analysis analysis) {
+      Report analysis) {
 
     if (havingHelpMate.containsKey(pgnFileName)) {
 
@@ -133,7 +133,7 @@ public class GenerateAmbronaHelpMateTestCases {
   }
 
   // we print out the below and add it to the map below manually, so we can use it in the code
-  private static void printMovesAsUci(String game, Analysis analysis) {
+  private static void printMovesAsUci(String game, Report analysis) {
     final StringBuilder uciMoveList = new StringBuilder();
     for (final HalfMove halfMove : analysis.halfMoveList()) {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(halfMove.havingMove(), halfMove.moveSpecification())

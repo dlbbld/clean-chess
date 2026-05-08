@@ -14,8 +14,8 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.PgnTestHelper;
 
 /**
- * Commentary brace validation for {@link LenientPgnParser}. Lenient is strict-equivalent on the brace rules
- * (R1/R3/R4); continuing past malformed commentary would produce unreliable downstream results.
+ * Commentary brace validation for {@link LenientPgnParser}. Lenient is strict-equivalent on the brace rules (R1/R3/R4);
+ * continuing past malformed commentary would produce unreliable downstream results.
  *
  * @see TestCommentaryStrict
  */
@@ -131,8 +131,8 @@ class TestCommentaryLenient {
 
   /**
    * Per the commentary contract, the PGN spec allows newlines inside {@code {...}} commentary. Lenient (like strict)
-   * preserves source bytes verbatim. The previous lenient-side substitution of newline-to-space has been removed —
-   * tabs and line breaks are valid commentary content per spec, not whitespace to be normalised.
+   * preserves source bytes verbatim. The previous lenient-side substitution of newline-to-space has been removed — tabs
+   * and line breaks are valid commentary content per spec, not whitespace to be normalised.
    */
   @SuppressWarnings("static-method")
   @Test
@@ -190,16 +190,14 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void t003_openBraceInTrailingCommentaryIsContent() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {outer {inner} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {outer {inner} e5 *\n\n");
     assertEquals("outer {inner", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void t003_openBraceImmediatelyAtStartOfContent() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {{nested right away} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {{nested right away} e5 *\n\n");
     assertEquals("{nested right away", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -267,28 +265,28 @@ class TestCommentaryLenient {
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_wellFormedBraceIsRejected() {
+  void postTerminationWellFormedBraceIsRejected() {
     expectError(PgnTestHelper.header("*") + "1. e4 e5 * {after result}\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_strayCloseUsesSpecificCategory() {
+  void postTerminationStrayCloseUsesSpecificCategory() {
     expectError(PgnTestHelper.header("*") + "1. e4 e5 * }\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_unclosedBraceUsesSpecificCategory() {
+  void postTerminationUnclosedBraceUsesSpecificCategory() {
     expectError(PgnTestHelper.header("*") + "1. e4 e5 * {no closing\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void postTermination_randomSymbolIsRejected() {
+  void postTerminationRandomSymbolIsRejected() {
     expectError(PgnTestHelper.header("*") + "1. e4 e5 * garbage\n\n",
         LenientPgnParserValidationProblem.MOVETEXT_CONTENT_AFTER_TERMINATION);
   }
@@ -300,8 +298,7 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void tabInMoveCommentaryIsPreservedVerbatim() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {a\tb} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\tb} e5 *\n\n");
     assertEquals("a\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -309,40 +306,35 @@ class TestCommentaryLenient {
   @Test
   void carriageReturnInMoveCommentaryIsNormalisedToLf() {
     // T-005: lone CR → LF at parser input.
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
     assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void crlfInMoveCommentaryIsNormalisedToLf() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {a\r\nb} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\r\nb} e5 *\n\n");
     assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void consecutiveTabsArePreservedVerbatim() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {a\t\tb} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\t\tb} e5 *\n\n");
     assertEquals("a\t\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void tabInPreGameCommentaryIsPreservedVerbatim() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "{intro\tnote} 1. e4 e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "{intro\tnote} 1. e4 e5 *\n\n");
     assertEquals("intro\tnote", file.pregameCommentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void doubleSpacesInSourceArePreservedAsIs() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {a  b} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a  b} e5 *\n\n");
     assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
@@ -361,8 +353,7 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void t002_acceptCanonicalMoveNumberAfterCommentaryOnWhite() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {after-white} 1... e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {after-white} 1... e5 *\n\n");
     assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
   }
@@ -370,8 +361,7 @@ class TestCommentaryLenient {
   @SuppressWarnings("static-method")
   @Test
   void t002_acceptMissingMoveNumberAfterCommentaryOnWhite() {
-    final PgnFile file = LenientPgnParser
-        .parseText(PgnTestHelper.header("*") + "1. e4 {after-white} e5 *\n\n");
+    final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {after-white} e5 *\n\n");
     assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
   }

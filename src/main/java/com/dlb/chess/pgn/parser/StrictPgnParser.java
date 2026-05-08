@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
@@ -37,8 +38,8 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.utility.TagUtility;
 
 /**
- * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen
- * together. Structural violations throw {@link StrictPgnParserValidationException} with a fine-grained
+ * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen together.
+ * Structural violations throw {@link StrictPgnParserValidationException} with a fine-grained
  * {@link StrictPgnParserValidationProblem} category.
  */
 public final class StrictPgnParser {
@@ -69,11 +70,11 @@ public final class StrictPgnParser {
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+    return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static PgnFile parse(String pgnFilePath) {
-    return parse(NonNullWrapperCommon.get(pgnFilePath));
+    return parse(NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -90,7 +91,11 @@ public final class StrictPgnParser {
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+    return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
+  }
+
+  public static StrictPgnParserValidationResult validate(String pgnFilePath) {
+    return validate(NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
@@ -102,13 +107,15 @@ public final class StrictPgnParser {
       return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.UNKNOWN_ERROR, message);
     }
   }
 
-  /** Like {@link #parseText(String)} but returns a structured result instead of throwing. */
+  /**
+   * Like {@link #parseText(String)} but returns a structured result instead of throwing.
+   */
   public static StrictPgnParserValidationResult validateText(String pgn) {
     try {
       parseText(pgn);
@@ -118,10 +125,17 @@ public final class StrictPgnParser {
       return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.UNKNOWN_ERROR, message);
     }
+  }
+
+  @SuppressWarnings("null")
+  private static @NonNull String unexpectedValidationErrorMessage(RuntimeException e) {
+    final @Nullable String nullableReason = e.getMessage();
+    final String reason = nullableReason == null ? "" : nullableReason;
+    return "An unexpected error occurred during validation. Reason: " + reason;
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -148,7 +162,8 @@ public final class StrictPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
+    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+        NonNullWrapperCommon.copyOfList(movetext.halfMoveList()));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -332,9 +347,10 @@ public final class StrictPgnParser {
         try {
           FenParserAdvanced.parseFenAdvanced(fen);
         } catch (final com.dlb.chess.common.exceptions.FenAdvancedValidationException e) {
+          @SuppressWarnings("null") @NonNull final String fenErrorReason = e.getMessage();
           throw new StrictPgnParserValidationException(
               StrictPgnParserValidationProblem.TAG_SET_UP_REQUIRES_FEN_TAG_BUT_FEN_INVALID, SanValidationProblem.NONE,
-              "The required FEN tag was provided but is invalid. The error message when parsing was \"" + e.getMessage()
+              "The required FEN tag was provided but is invalid. The error message when parsing was \"" + fenErrorReason
                   + "\".");
         }
       }
@@ -433,7 +449,9 @@ public final class StrictPgnParser {
     }
   }
 
-  /** Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category. */
+  /**
+   * Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category.
+   */
   private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
@@ -442,8 +460,9 @@ public final class StrictPgnParser {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
           // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          @SuppressWarnings("null") @NonNull final String message = pcve.getMessage();
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
-              pcve.getMessage());
+              message);
         }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
@@ -490,7 +509,9 @@ public final class StrictPgnParser {
     }
   }
 
-  /** Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise. */
+  /**
+   * Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise.
+   */
   private static void throwIfBrokenBrace(PgnToken token) {
     switch (token.type()) {
       case BRACE_COMMENT_UNCLOSED:
@@ -633,7 +654,8 @@ public final class StrictPgnParser {
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
-        // Propagate GameStatus so callers can distinguish FIDE-automatic termination causes without parsing the message.
+        // Propagate GameStatus so callers can distinguish FIDE-automatic termination causes without parsing the
+        // message.
         throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
             message, e.getGameStatus());
       }

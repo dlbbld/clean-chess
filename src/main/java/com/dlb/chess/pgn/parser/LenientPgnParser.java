@@ -68,11 +68,11 @@ public final class LenientPgnParser {
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+    return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static PgnFile parse(String pgnFilePath) {
-    return parse(NonNullWrapperCommon.get(pgnFilePath));
+    return parse(NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -89,7 +89,11 @@ public final class LenientPgnParser {
   }
 
   public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+    return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
+  }
+
+  public static LenientPgnParserValidationResult validate(String pgnFilePath) {
+    return validate(NonNullWrapperCommon.pathOf(pgnFilePath));
   }
 
   public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
@@ -102,13 +106,15 @@ public final class LenientPgnParser {
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, message);
     }
   }
 
-  /** Like {@link #parseText(String)} but returns a structured result instead of throwing. */
+  /**
+   * Like {@link #parseText(String)} but returns a structured result instead of throwing.
+   */
   public static LenientPgnParserValidationResult validateText(String pgn) {
     try {
       parseText(pgn);
@@ -119,10 +125,17 @@ public final class LenientPgnParser {
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, message);
     }
+  }
+
+  @SuppressWarnings("null")
+  private static @NonNull String unexpectedValidationErrorMessage(RuntimeException e) {
+    final @Nullable String nullableReason = e.getMessage();
+    final String reason = nullableReason == null ? "" : nullableReason;
+    return "An unexpected error occurred during validation. Reason: " + reason;
   }
 
   private static String stripUtf8Bom(String source) {
@@ -165,7 +178,8 @@ public final class LenientPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(tagList, startFen, movetext.pregameCommentary(), movetext.halfMoveList());
+    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+        NonNullWrapperCommon.copyOfList(movetext.halfMoveList()));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -189,7 +203,9 @@ public final class LenientPgnParser {
     }
   }
 
-  /** Returns true if line {@code lineNumber} (1-based) contains {@code [} or {@code ]}. */
+  /**
+   * Returns true if line {@code lineNumber} (1-based) contains {@code [} or {@code ]}.
+   */
   private boolean currentLineContainsTagBracket(int lineNumber) {
     var index = 0;
     var currentLine = 1;
@@ -384,8 +400,8 @@ public final class LenientPgnParser {
   }
 
   /**
-   * Detects and consumes a spaced move-number indicator (`N . ` or `N ... `) where digits and dots arrive as
-   * separate symbols because whitespace split them. Returns true on consumption.
+   * Detects and consumes a spaced move-number indicator (`N . ` or `N ... `) where digits and dots arrive as separate
+   * symbols because whitespace split them. Returns true on consumption.
    */
   private boolean consumedSpacedMoveNumber(PgnToken digitsPeek) {
     if (!isPurelyDigits(digitsPeek.text())) {
@@ -470,7 +486,9 @@ public final class LenientPgnParser {
     return "+".equals(text) || "#".equals(text);
   }
 
-  /** Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category. */
+  /**
+   * Returns the {@link PgnCommentary} for a well-formed brace token, or throws the matching error category.
+   */
   private PgnCommentary consumeCommentaryOrThrow() {
     final PgnToken token = tokenizer.next();
     switch (token.type()) {
@@ -479,8 +497,9 @@ public final class LenientPgnParser {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
           // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          @SuppressWarnings("null") @NonNull final String message = pcve.getMessage();
           throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
-              pcve.getMessage());
+              message);
         }
       case BRACE_COMMENT_UNCLOSED:
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_START_BRACE_NOT_FOLLOWED_BY_END_BRACE,
@@ -519,7 +538,9 @@ public final class LenientPgnParser {
     }
   }
 
-  /** Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise. */
+  /**
+   * Throws the broken-brace-specific error if {@code token} is one; returns normally otherwise.
+   */
   private static void throwIfBrokenBrace(PgnToken token) {
     switch (token.type()) {
       case BRACE_COMMENT_UNCLOSED:

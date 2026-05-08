@@ -1,7 +1,7 @@
 package com.dlb.chess.common.interfaces;
 
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
@@ -10,18 +10,25 @@ import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
-public interface ChessBoard {
+public interface ChessBoard extends EnumConstants {
 
   boolean performMove(MoveSpecification moveSpecification);
 
@@ -55,7 +62,17 @@ public interface ChessBoard {
 
   int getInitialFenFullMoveNumber();
 
-  int getFullMoveNumberForNextHalfMove();
+  default int getFullMoveNumberForNextHalfMove() {
+    if (isFirstMove()) {
+      return getInitialFenFullMoveNumber();
+    }
+    return switch (getHavingMove()) {
+      case BLACK -> getFullMoveNumber();
+      case WHITE -> getFullMoveNumber() + 1;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
 
   int getRepetitionCount();
 
@@ -63,29 +80,93 @@ public interface ChessBoard {
 
   boolean canClaimFiftyMoveRuleWithOwnMove();
 
-  boolean canClaimFiftyMoveRule();
+  default boolean canClaimFiftyMoveRule() {
+    if (isFiftyMove()) {
+      return true;
+    }
+    return canClaimFiftyMoveRuleWithOwnMove();
+  }
 
-  boolean isSeventyFiftyMove();
+  boolean isSeventyFiveMove();
 
   boolean isThreefoldRepetition();
 
   boolean canClaimThreefoldRepetitionRuleWithOwnMove();
 
-  boolean canClaimThreefoldRepetitionRule();
+  default boolean canClaimThreefoldRepetitionRule() {
+    if (isThreefoldRepetition()) {
+      return true;
+    }
+    return canClaimThreefoldRepetitionRuleWithOwnMove();
+  }
 
   boolean isFivefoldRepetition();
 
-  InsufficientMaterial calculateInsufficientMaterial();
+  default InsufficientMaterial calculateInsufficientMaterial() {
+    if (isInsufficientMaterial()) {
+      return InsufficientMaterial.BOTH;
+    }
+    if (isInsufficientMaterial(Side.WHITE)) {
+      return InsufficientMaterial.WHITE_ONLY;
+    }
+    if (isInsufficientMaterial(Side.BLACK)) {
+      return InsufficientMaterial.BLACK_ONLY;
+    }
+    return InsufficientMaterial.NONE;
+  }
 
-  DeadPositionQuick isDeadPositionQuick();
+  default DeadPositionQuick isDeadPositionQuick() {
+    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
+    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
 
-  DeadPositionFull isDeadPositionFull();
+    if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
+      return DeadPositionQuick.DEAD_POSITION;
+    }
 
-  UnwinnableQuick isUnwinnableQuick(Side side);
+    if (unwinnableWhite == UnwinnableQuick.WINNABLE && unwinnableBlack == UnwinnableQuick.WINNABLE) {
+      return DeadPositionQuick.NON_DEAD_POSITION;
+    }
 
-  UnwinnableFull isUnwinnableFull(Side side);
+    return DeadPositionQuick.POSSIBLY_NON_DEAD_POSITION;
+  }
 
-  boolean isGameEnd();
+  default DeadPositionFull isDeadPositionFull() {
+    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
+    if (unwinnableWhite == UnwinnableFull.WINNABLE) {
+      return DeadPositionFull.NON_DEAD_POSITION;
+    }
+
+    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).unwinnableFull();
+    if (unwinnableBlack == UnwinnableFull.WINNABLE) {
+      return DeadPositionFull.NON_DEAD_POSITION;
+    }
+
+    if (unwinnableWhite == UnwinnableFull.UNWINNABLE && unwinnableBlack == UnwinnableFull.UNWINNABLE) {
+      return DeadPositionFull.DEAD_POSITION;
+    }
+
+    return DeadPositionFull.UNDETERMINED;
+  }
+
+  default UnwinnableQuick isUnwinnableQuick(Side side) {
+    return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
+  }
+
+  default UnwinnableFull isUnwinnableFull(Side side) {
+    return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
+  }
+
+  default boolean isGameEnd() {
+    if (isCheckmate()) {
+      return true;
+    }
+    return isGameDraw();
+  }
+
+  private boolean isGameDraw() {
+    return isStalemate() || isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION || isFivefoldRepetition()
+        || isSeventyFiveMove();
+  }
 
   // name collision with API Carlos's method which must be adapted for warnings
   String getFen();
@@ -120,27 +201,50 @@ public interface ChessBoard {
 
   CastlingRight getCastlingRightBlack();
 
-  CastlingRight getCastlingRight(Side havingMove);
+  default CastlingRight getCastlingRight(Side havingMove) {
+    return switch (havingMove) {
+      case WHITE -> getDynamicPosition().castlingRightWhite();
+      case BLACK -> getDynamicPosition().castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
 
   int getPerformedHalfMoveCount();
 
-  List<DynamicPosition> getDynamicPositionList();
+  ImmutableList<DynamicPosition> getDynamicPositionList();
 
   DynamicPosition getDynamicPosition();
 
-  List<HalfMove> getHalfMoveList();
+  ImmutableList<HalfMove> getHalfMoveList();
 
-  Set<MoveSpecification> getPossibleMoveSpecificationSet();
+  ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet();
 
-  Set<LegalMove> getLegalMoveSet();
+  ImmutableSet<LegalMove> getLegalMoveSet();
 
-  List<MoveSpecification> getPerformedMoveSpecificationList();
+  ImmutableList<MoveSpecification> getPerformedMoveSpecificationList();
 
-  List<LegalMove> getPerformedLegalMoveList();
+  ImmutableList<LegalMove> getPerformedLegalMoveList();
 
-  Set<String> getLegalMovesSan();
+  default ImmutableSet<String> getLegalMovesSan() {
+    final Set<String> result = new TreeSet<>();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+      this.performMove(moveSpecification);
+      result.add(getSan());
+      this.unperformMove();
+    }
+    return NonNullWrapperCommon.copyOfSet(result);
+  }
 
-  Set<String> getLegalMovesUci();
+  default ImmutableSet<String> getLegalMovesUci() {
+    final Set<String> result = new TreeSet<>();
+    final Side havingMove = getHavingMove();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+      final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
+      result.add(uci);
+    }
+    return NonNullWrapperCommon.copyOfSet(result);
+  }
 
   LegalMove getLastMove();
 
