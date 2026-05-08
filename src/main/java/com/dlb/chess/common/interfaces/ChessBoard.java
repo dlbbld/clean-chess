@@ -18,6 +18,7 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
 import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
 
@@ -132,7 +133,7 @@ public interface ChessBoard {
 
   Set<MoveSpecification> getPossibleMoveSpecificationSet();
 
-  Set<LegalMove> getLegalMoveSet();
+  ImmutableSet<LegalMove> getLegalMoveSet();
 
   List<MoveSpecification> getPerformedMoveSpecificationList();
 

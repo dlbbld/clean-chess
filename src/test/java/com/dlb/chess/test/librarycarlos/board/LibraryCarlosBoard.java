@@ -33,6 +33,7 @@ import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
+import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.Board;
@@ -512,8 +513,8 @@ public class LibraryCarlosBoard extends AbstractBoard {
   }
 
   @Override
-  public Set<LegalMove> getLegalMoveSet() {
-    return generateLegalMoveSet(this.board);
+  public ImmutableSet<LegalMove> getLegalMoveSet() {
+    return NonNullWrapperCommon.copyOfSet(generateLegalMoveSet(this.board));
   }
 
   private static boolean calculateIsPawnMove(MoveBackup moveBackup) {

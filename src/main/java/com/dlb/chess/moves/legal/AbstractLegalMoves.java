@@ -10,6 +10,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
@@ -23,6 +24,7 @@ import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
 import com.dlb.chess.moves.legal.pieces.KnightLegalMoves;
 import com.dlb.chess.moves.legal.pieces.QueenLegalMoves;
 import com.dlb.chess.moves.legal.pieces.RookLegalMoves;
+import com.google.common.collect.ImmutableSet;
 
 public abstract class AbstractLegalMoves implements EnumConstants {
 
@@ -35,9 +37,10 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     }
   }
 
-  public static Set<LegalMove> calculateLegalMoves(StaticPosition staticPosition, Side havingMove,
+  public static ImmutableSet<LegalMove> calculateLegalMoves(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight, final Square enPassantCaptureTargetSquare) {
-    return calculateLegalMovesBottomUp(staticPosition, havingMove, castlingRight, enPassantCaptureTargetSquare);
+    return NonNullWrapperCommon.copyOfSet(
+        calculateLegalMovesBottomUp(staticPosition, havingMove, castlingRight, enPassantCaptureTargetSquare));
   }
 
   public static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition,

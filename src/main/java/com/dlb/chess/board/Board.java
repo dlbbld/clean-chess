@@ -49,12 +49,13 @@ import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.validate.SanValidation;
 import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.google.common.collect.ImmutableSet;
 
 public class Board extends AbstractBoard {
 
   private final Fen initialFen;
   private final List<LegalMove> performedLegalMoveList;
-  private final List<Set<LegalMove>> legalMoveSetList;
+  private final List<ImmutableSet<LegalMove>> legalMoveSetList;
   private final List<Boolean> isCheckList;
   private final List<Boolean> isCheckmateList;
   private final List<Boolean> isStalemateList;
@@ -91,8 +92,8 @@ public class Board extends AbstractBoard {
 
     this.performedLegalMoveList = new ArrayList<>();
     this.legalMoveSetList = new ArrayList<>();
-    final Set<LegalMove> legalMoveSet = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition, initialHavingMove,
-        initialCastlingRight, initialEnPassantCaptureTargetSquare);
+    final ImmutableSet<LegalMove> legalMoveSet = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition,
+        initialHavingMove, initialCastlingRight, initialEnPassantCaptureTargetSquare);
     this.legalMoveSetList.add(legalMoveSet);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(initialStaticPosition,
@@ -231,7 +232,7 @@ public class Board extends AbstractBoard {
     this.performedLegalMoveList.add(moveToPerform);
 
     // now we have a depencency on instruction execution: the move must be performed before calling the legal moves
-    final Set<LegalMove> legalMoveSetAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
+    final ImmutableSet<LegalMove> legalMoveSetAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
         afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
     this.legalMoveSetList.add(legalMoveSetAfterMove);
 
@@ -263,7 +264,7 @@ public class Board extends AbstractBoard {
         dynamicPositionList, newDynamicPosition, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
     this.repetitionCountList.add(newRepetitionCount);
 
-    final Set<LegalMove> legalMoveSetBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveSetList,
+    final ImmutableSet<LegalMove> legalMoveSetBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveSetList,
         legalMoveSetList.size() - 2);
 
     final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck, isCheckmate);
@@ -369,7 +370,7 @@ public class Board extends AbstractBoard {
   }
 
   @Override
-  public Set<LegalMove> getLegalMoveSet() {
+  public ImmutableSet<LegalMove> getLegalMoveSet() {
     return NonNullWrapperCommon.getLast(legalMoveSetList);
   }
 
