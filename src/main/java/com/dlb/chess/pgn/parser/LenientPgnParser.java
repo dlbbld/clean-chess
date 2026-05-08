@@ -67,7 +67,7 @@ public final class LenientPgnParser {
     return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
+  public static PgnFile parse(Path pgnFolderPath, @NonNull String pgnFileName) {
     return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
@@ -88,7 +88,7 @@ public final class LenientPgnParser {
     return NonNullWrapperCommon.toString(builder);
   }
 
-  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
+  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, @NonNull String pgnFileName) {
     return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 

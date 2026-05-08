@@ -29,7 +29,7 @@ public abstract class FileUtility {
    * disk. Complements {@link #readFileLines(Path)} — use this when the parser needs to see the raw source (for example
    * to detect a missing trailing newline).
    */
-  public static String readFileAsString(Path filePath) {
+  public static @NonNull String readFileAsString(Path filePath) {
     final var file = filePath.toFile();
     if (!file.exists()) {
       throw new FileSystemAccessException("File \"" + filePath + "\" was not found.");

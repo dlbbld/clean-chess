@@ -213,8 +213,8 @@ class TestPgnCommentary {
   @SuppressWarnings("static-method")
   @Test
   void loneHighSurrogateIsRejected() {
-    final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("a\uD800b"));
+    final var commentary = "a" + Character.toString(Character.MIN_HIGH_SURROGATE) + "b";
+    final var thrown = assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary(commentary));
     org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("surrogate"),
         "Message should name the offending category: " + thrown.getMessage());
   }
@@ -222,7 +222,8 @@ class TestPgnCommentary {
   @SuppressWarnings("static-method")
   @Test
   void loneLowSurrogateIsRejected() {
-    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a\uDC00b"));
+    final var commentary = "a" + Character.toString(Character.MIN_LOW_SURROGATE) + "b";
+    assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary(commentary));
   }
 
   @SuppressWarnings("static-method")

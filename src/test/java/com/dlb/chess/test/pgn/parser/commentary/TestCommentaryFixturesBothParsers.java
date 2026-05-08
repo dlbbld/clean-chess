@@ -2,7 +2,6 @@ package com.dlb.chess.test.pgn.parser.commentary;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
@@ -211,10 +210,15 @@ class TestCommentaryFixturesBothParsers {
 
   private static void assertStrictRejects(Path folder, String pgnFileName,
       StrictPgnParserValidationProblem expected) {
-    final StrictPgnParserValidationException exception = assertThrows(StrictPgnParserValidationException.class,
-        () -> StrictPgnParser.parse(folder, pgnFileName));
-    assertEquals(expected, exception.getStrictPgnParserValidationProblem());
-    assertEquals(SanValidationProblem.NONE, exception.getSanValidationProblem());
+    var isException = false;
+    try {
+      StrictPgnParser.parse(folder, pgnFileName);
+    } catch (final StrictPgnParserValidationException e) {
+      isException = true;
+      assertEquals(expected, e.getStrictPgnParserValidationProblem());
+      assertEquals(SanValidationProblem.NONE, e.getSanValidationProblem());
+    }
+    assertTrue(isException, "Expected " + expected + " but strict parser accepted " + pgnFileName);
 
     final StrictPgnParserValidationResult result = StrictPgnParser.validate(folder, pgnFileName);
     assertFalse(result.isValid());
@@ -224,10 +228,15 @@ class TestCommentaryFixturesBothParsers {
 
   private static void assertLenientRejects(Path folder, String pgnFileName,
       LenientPgnParserValidationProblem expected) {
-    final LenientPgnParserValidationException exception = assertThrows(LenientPgnParserValidationException.class,
-        () -> LenientPgnParser.parse(folder, pgnFileName));
-    assertEquals(expected, exception.getLenientPgnParserValidationProblem());
-    assertEquals(SanValidationProblem.NONE, exception.getSanValidationProblem());
+    var isException = false;
+    try {
+      LenientPgnParser.parse(folder, pgnFileName);
+    } catch (final LenientPgnParserValidationException e) {
+      isException = true;
+      assertEquals(expected, e.getLenientPgnParserValidationProblem());
+      assertEquals(SanValidationProblem.NONE, e.getSanValidationProblem());
+    }
+    assertTrue(isException, "Expected " + expected + " but lenient parser accepted " + pgnFileName);
 
     final LenientPgnParserValidationResult result = LenientPgnParser.validate(folder, pgnFileName);
     assertFalse(result.isValid());

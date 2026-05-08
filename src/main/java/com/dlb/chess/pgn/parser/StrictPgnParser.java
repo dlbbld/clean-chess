@@ -68,7 +68,7 @@ public final class StrictPgnParser {
     return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
+  public static PgnFile parse(Path pgnFolderPath, @NonNull String pgnFileName) {
     return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
@@ -89,7 +89,7 @@ public final class StrictPgnParser {
     return NonNullWrapperCommon.toString(builder);
   }
 
-  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
+  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, @NonNull String pgnFileName) {
     return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
