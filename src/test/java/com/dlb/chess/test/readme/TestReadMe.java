@@ -13,6 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.pgn.create.PgnCreate;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
@@ -106,14 +107,14 @@ class TestReadMe {
   void unwinnabilityExamplesReturnExpectedResults() {
     assertUnwinnability("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50", Side.BLACK, UnwinnableQuick.UNWINNABLE,
         UnwinnableFull.UNWINNABLE);
-    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK,
-        UnwinnableQuick.UNWINNABLE, UnwinnableFull.UNWINNABLE);
+    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK, UnwinnableQuick.UNWINNABLE,
+        UnwinnableFull.UNWINNABLE);
     assertUnwinnability("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51", Side.WHITE, UnwinnableQuick.UNWINNABLE,
         UnwinnableFull.UNWINNABLE);
     assertUnwinnability("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29", Side.WHITE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableFull.WINNABLE);
-    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableFull.UNWINNABLE);
+    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE, UnwinnableQuick.POSSIBLY_WINNABLE,
+        UnwinnableFull.UNWINNABLE);
   }
 
   @Test
@@ -121,8 +122,8 @@ class TestReadMe {
   void deadPositionExamplesReturnExpectedResults() {
     assertDeadPosition("8/8/3kn3/8/2K5/8/8/8 w - - 0 50", DeadPositionQuick.DEAD_POSITION,
         DeadPositionFull.DEAD_POSITION);
-    assertDeadPosition("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61",
-        DeadPositionQuick.DEAD_POSITION, DeadPositionFull.DEAD_POSITION);
+    assertDeadPosition("8/6b1/1p3k2/1Pp1p1p1/2P1PpP1/5P2/8/5K2 b - - 11 61", DeadPositionQuick.DEAD_POSITION,
+        DeadPositionFull.DEAD_POSITION);
     assertDeadPosition("k7/P1K5/8/8/8/8/8/8 b - - 2 58", DeadPositionQuick.DEAD_POSITION,
         DeadPositionFull.DEAD_POSITION);
   }
@@ -150,7 +151,7 @@ class TestReadMe {
   void pgnFileCanBeWrittenAndParsed(@TempDir Path tempDir) {
     final Board sourceBoard = createOpeningExampleBoard();
     final PgnFile pgnFile = PgnCreate.createPgnFile(sourceBoard);
-    final Path filePath = tempDir.resolve("myFile.pgn");
+    final Path filePath = NonNullWrapperCommon.pathResolve(tempDir, "myFile.pgn");
 
     PgnWriter.writePgnFile(pgnFile, filePath);
 
