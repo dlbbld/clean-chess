@@ -59,6 +59,51 @@ Deferred from Task 3. Do **after** the lenient-SAN release lands so files don't 
 - [ ] Drop non-API types to package-private
 - [ ] Decide stable public-API boundary
 
+### 16. Replace AbstractBoard with default methods on ChessBoard interface
+
+`AbstractBoard` was originally introduced to share logic between `Board` and a second implementation (`LibraryCarlosBoard`, test-only). Every method on it is a stateless derivation expressible in terms of the `ChessBoard` interface — `getLegalMovesSan/Uci`, `getCastlingRight(Side)`, `isDeadPositionQuick/Full`, `isUnwinnableQuick/Full`, `calculateInsufficientMaterial`, `isGameEnd`, `canClaimFiftyMoveRule`, `canClaimThreefoldRepetitionRule`, `getFullMoveNumberForNextHalfMove`. None has any state.
+
+That's the textbook case for `default` methods on the interface. The right move is:
+
+- [ ] Move all methods from `AbstractBoard` to `ChessBoard` as `default` methods (qualifying enum references with `Side.WHITE` / `Side.BLACK` rather than going through `EnumConstants`)
+- [ ] `Board` and `LibraryCarlosBoard` both `implements ChessBoard` directly; remove `extends AbstractBoard`
+- [ ] Delete `AbstractBoard`
+- [ ] Verify CHA methods (`isUnwinnableQuick/Full`, `isDeadPositionQuick/Full`) now show up directly on `ChessBoard` and `Board` IDE completion — supersedes the related sub-bullet in Task 5
+
+**Supersedes:** the "Pull CHA methods down from AbstractBoard to Board" sub-bullet of Task 5. Default methods make those methods directly visible on the interface, no inheritance walk needed.
+
+This is a cleaner, more impactful refactor than the several sub-bullets it replaces — single mechanical move with the discoverability fix as a free side-effect.
+
+### 17. python-chess as primary cross-validation reference (discussion + design)
+
+This is **discussion + design first**, implementation later. The project currently uses Carlos's `chesslib` (`LibraryCarlosBoard`) as a cross-validation reference, with limitations: cannot import PGN from a non-initial position, smaller test surface, less actively maintained. python-chess is the de-facto reference in chess software, actively maintained, and handles arbitrary positions.
+
+#### Pattern recommendation — generation-based, not live invocation
+
+- A Python script using python-chess generates expected outputs (legal moves, FEN, SAN, LAN, repetition counts, halfmove clock, dead-position verdicts) for a battery of fixtures, writes to a fixed file path.
+- Java tests read the file and compare to clean-chess output.
+- The Python script runs only when fixtures are added or regenerated, **not** during `mvn test`.
+- Chess outputs are deterministic per input; cached reference data doesn't go stale.
+
+`GeneratePythonTestCases.java` already exists — that's the foundation. Audit it and extend.
+
+#### Discussion items to settle before coding
+
+- [ ] Inventory exactly what python-chess will be used as reference for: legal-move generation, SAN/LAN, FEN, repetition counts, fifty-move clock, threefold/fivefold, dead-position (does python-chess support this directly or via heuristic?), CHA-style unwinnability (it doesn't — that stays unique to clean-chess).
+- [ ] Decide: gradual migration (both chesslib and python-chess as references during transition) or hard cutover (drop chesslib at the same time).
+- [ ] Decide: drop `LibraryCarlosBoard` entirely once python-chess covers its usage, or keep it for rule-engine-style cross-checks.
+- [ ] Document the toolchain requirement: contributors need Python 3 + `pip install chess` (the package). Goes in `setup.md` (Task 12).
+- [ ] Plan the regeneration workflow: how is "I added a fixture; now regenerate the python-chess-expected outputs" triggered cleanly? Maven goal? Script? Make target?
+
+#### Implementation tasks (after the discussion)
+
+- [ ] Decide and document the file format for stored expected outputs (JSON? line-based?)
+- [ ] Refactor `GeneratePythonTestCases` (or replace) to produce the agreed format
+- [ ] Migrate at least one cross-validation test from chesslib to python-chess as a proof-of-concept
+- [ ] Phase out chesslib usage if the discussion lands there
+
+**Release placement:** This is post-4.0. Possibly bundled with the lenient-SAN release if the lenient-SAN test data benefits from python-chess reference (overspecified disambiguation tolerance is something python-chess also handles, so cross-checks would be valuable). Otherwise, its own release-or-no-release pass.
+
 ---
 
 ## Next release — Lenient SAN
