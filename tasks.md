@@ -17,8 +17,8 @@ Theme: documentation, obvious issues, major bugs. No new features.
 ### 5. Public API discoverability & naming
 - [x] `isSeventyFiftyMove()` → `isSeventyFiveMove()` (commit `eee221e`)
 - [x] ~~Pull CHA methods down from `AbstractBoard` to `Board`~~ — superseded by Task 16 (default methods on `ChessBoard`); CHA methods now appear directly on the interface
-- [ ] Rename one of `analyze` / `analysis` so they don't differ by one letter
-- [ ] Collapse `Analyzer extends AnalyzerPrint` into one `final` class
+- [x] Rename `analysis` → `report` (commit `7ac91e4`): `Analyzer` → `Reporter`, `AnalyzerPrint` → `ReportPrint`, `Analysis` (record) → `Report`. The remaining `analyze` package now differs by more than one letter.
+- [ ] Collapse `Reporter extends ReportPrint` into one `final` class — renamed but the inheritance is still there (`Reporter.java:22`); the `printAnalysis(...)` static methods are pure delegations to `ReportPrint`'s package-private statics
 - [ ] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
 
 ### 6. Release-gate test runs
