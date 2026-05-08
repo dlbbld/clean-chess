@@ -601,7 +601,7 @@ Checks whether a PGN can be parsed using the PGN lenient parser.
 #### File validation
 
 ```java
-    final LenientPgnParserValidationResult result = LenientPgnParser.validate(Path.of("C:\\temp\\myFile.pgn"));
+    final LenientPgnParserValidationResult result = LenientPgnParser.validate("C:\\temp\\myFile.pgn");
     System.out.println(result.isValid());
 ```
 
@@ -650,6 +650,6 @@ Checks whether a PGN adheres to the export format per the PGN specification.
 #### File validation
 
 ```java
-    final StrictPgnParserValidationResult result = StrictPgnParser.validate(Path.of("C:\\temp\\myFile.pgn"));
+    final StrictPgnParserValidationResult result = StrictPgnParser.validate("C:\\temp\\myFile.pgn");
     System.out.println(result.isValid());
 ```
