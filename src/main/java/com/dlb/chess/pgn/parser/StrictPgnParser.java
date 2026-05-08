@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
@@ -68,7 +69,7 @@ public final class StrictPgnParser {
     return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, @NonNull String pgnFileName) {
+  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
     return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
@@ -89,7 +90,7 @@ public final class StrictPgnParser {
     return NonNullWrapperCommon.toString(builder);
   }
 
-  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, @NonNull String pgnFileName) {
+  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
     return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
@@ -106,7 +107,7 @@ public final class StrictPgnParser {
       return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.UNKNOWN_ERROR, message);
     }
@@ -124,10 +125,16 @@ public final class StrictPgnParser {
       return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.UNKNOWN_ERROR, message);
     }
+  }
+
+  private static String unexpectedValidationErrorMessage(RuntimeException e) {
+    final @Nullable String nullableReason = e.getMessage();
+    final String reason = nullableReason == null ? "" : nullableReason;
+    return "An unexpected error occurred during validation. Reason: " + reason;
   }
 
   // -------------------------------------------------------------------------------------------------

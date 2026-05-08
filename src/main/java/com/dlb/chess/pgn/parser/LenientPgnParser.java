@@ -67,7 +67,7 @@ public final class LenientPgnParser {
     return parseText(FileUtility.readFileAsString(pgnFilePath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, @NonNull String pgnFileName) {
+  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
     return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
@@ -88,7 +88,7 @@ public final class LenientPgnParser {
     return NonNullWrapperCommon.toString(builder);
   }
 
-  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, @NonNull String pgnFileName) {
+  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
     return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
   }
 
@@ -106,7 +106,7 @@ public final class LenientPgnParser {
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, message);
     }
@@ -125,10 +125,16 @@ public final class LenientPgnParser {
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
-      final var message = "An unexpected error occurred during validation. Reason: " + e.getMessage();
+      final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, message);
     }
+  }
+
+  private static String unexpectedValidationErrorMessage(RuntimeException e) {
+    final @Nullable String nullableReason = e.getMessage();
+    final String reason = nullableReason == null ? "" : nullableReason;
+    return "An unexpected error occurred during validation. Reason: " + reason;
   }
 
   private static String stripUtf8Bom(String source) {
