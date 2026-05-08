@@ -37,8 +37,8 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.utility.TagUtility;
 
 /**
- * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen
- * together. Structural violations throw {@link StrictPgnParserValidationException} with a fine-grained
+ * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen together.
+ * Structural violations throw {@link StrictPgnParserValidationException} with a fine-grained
  * {@link StrictPgnParserValidationProblem} category.
  */
 public final class StrictPgnParser {
@@ -91,6 +91,10 @@ public final class StrictPgnParser {
 
   public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
     return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
+  }
+
+  public static StrictPgnParserValidationResult validate(String pgnFilePath) {
+    return validate(FileUtility.calculateFilePath(pgnFilePath));
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
@@ -633,7 +637,8 @@ public final class StrictPgnParser {
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
-        // Propagate GameStatus so callers can distinguish FIDE-automatic termination causes without parsing the message.
+        // Propagate GameStatus so callers can distinguish FIDE-automatic termination causes without parsing the
+        // message.
         throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.SAN, e.getSanValidationProblem(),
             message, e.getGameStatus());
       }

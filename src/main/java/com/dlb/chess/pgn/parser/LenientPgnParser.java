@@ -92,6 +92,10 @@ public final class LenientPgnParser {
     return validate(FileUtility.calculateFilePath(pgnFolderPath, pgnFileName));
   }
 
+  public static LenientPgnParserValidationResult validate(String pgnFilePath) {
+    return validate(FileUtility.calculateFilePath(pgnFilePath));
+  }
+
   public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
     try {
       parse(pgnFilePath);
@@ -384,8 +388,8 @@ public final class LenientPgnParser {
   }
 
   /**
-   * Detects and consumes a spaced move-number indicator (`N . ` or `N ... `) where digits and dots arrive as
-   * separate symbols because whitespace split them. Returns true on consumption.
+   * Detects and consumes a spaced move-number indicator (`N . ` or `N ... `) where digits and dots arrive as separate
+   * symbols because whitespace split them. Returns true on consumption.
    */
   private boolean consumedSpacedMoveNumber(PgnToken digitsPeek) {
     if (!isPurelyDigits(digitsPeek.text())) {
