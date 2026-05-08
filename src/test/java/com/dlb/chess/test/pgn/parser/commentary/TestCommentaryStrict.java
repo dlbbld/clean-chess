@@ -20,7 +20,8 @@ import com.dlb.chess.pgn.parser.model.PgnFile;
  * <li>R4 — a commentary delimiter where a SAN half-move is expected is rejected.
  * </ul>
  *
- * <p>(R2 — nesting — was retired by T-003; an inner opening delimiter is now content per PGN spec §8.2.5.)
+ * <p>
+ * (R2 — nesting — was retired by T-003; an inner opening delimiter is now content per PGN spec §8.2.5.)
  */
 class TestCommentaryStrict {
 
@@ -30,7 +31,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v1_pregameCommentaryOnly() {
+  void v01_pregameCommentaryOnly() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{opening remark} 1. e4 e5 *\n\n");
     assertEquals("opening remark", file.pregameCommentary().value());
     assertEquals(2, file.halfMoveList().size());
@@ -40,7 +41,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v2_trailingCommentaryAfterWhiteMove() {
+  void v02_trailingCommentaryAfterWhiteMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {good opening} 1... e5 *\n\n");
     assertEquals("", file.pregameCommentary().value());
     assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -49,7 +50,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v3_trailingCommentaryAfterBlackMove() {
+  void v03_trailingCommentaryAfterBlackMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 e5 {symmetric} 2. Nf3 Nc6 *\n\n");
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -59,7 +60,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v4_commentaryAfterEveryHalfMove() {
+  void v04_commentaryAfterEveryHalfMove() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {a} 1... e5 {b} 2. Nf3 {c} 2... Nc6 {d} *\n\n");
     assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -69,7 +70,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v5_leadingAndTrailingCommentary() {
+  void v05_leadingAndTrailingCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "{intro} 1. e4 {after-1-white} 1... e5 *\n\n");
     assertEquals("intro", file.pregameCommentary().value());
     assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
@@ -78,7 +79,7 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v6_emptyCommentary() {
+  void v06_emptyCommentary() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {} 1... e5 *\n\n");
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
@@ -86,21 +87,21 @@ class TestCommentaryStrict {
 
   @SuppressWarnings("static-method")
   @Test
-  void v7_commentaryWithPunctuationButNoBraces() {
+  void v07_commentaryWithPunctuationButNoBraces() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {special chars !? + # - / .} 1... e5 *\n\n");
     assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void v8_multilineCommentaryPreservedVerbatim() {
+  void v08_multilineCommentaryPreservedVerbatim() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4 {line one\nline two} 1... e5 *\n\n");
     assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void v9_commentaryAfterSuffixAnnotation() {
+  void v09_commentaryAfterSuffixAnnotation() {
     final PgnFile file = StrictPgnParser.parseText(header("*") + "1. e4!? {spicy} 1... e5 *\n\n");
     assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
