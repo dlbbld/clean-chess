@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 
 public final class KnightDistance {
 
@@ -41,7 +42,7 @@ public final class KnightDistance {
     queue.add(fromSquare);
 
     while (!queue.isEmpty()) {
-      final Square current = queue.remove();
+      final Square current = NonNullWrapperCommon.remove(queue);
       final var nextDistance = distances[toIndex(current)] + 1;
       for (var i = 0; i < FILE_OFFSETS.length; i++) {
         final int fileNumber = current.getFile().getNumber() + FILE_OFFSETS[i];

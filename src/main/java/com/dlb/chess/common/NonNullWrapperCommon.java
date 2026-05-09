@@ -9,6 +9,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -50,6 +51,13 @@ public class NonNullWrapperCommon {
 
   public static String nextLine(Scanner myReader) {
     return checkResult(myReader.nextLine());
+  }
+
+  // Queue<E> in the JDK is not annotated with @NonNull/@Nullable, so JDT can't statically prove the head element
+  // is non-null even when E is. The runtime contract guarantees a non-null result on a non-empty queue (Queue.remove
+  // throws NoSuchElementException when empty); checkResult enforces that contract for the type system.
+  public static <E> E remove(Queue<E> queue) {
+    return checkResult(queue.remove());
   }
 
   public static String toString(StringBuilder stringBuilder) {
