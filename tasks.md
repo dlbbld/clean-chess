@@ -149,7 +149,8 @@ The package is named `internationalization` but ships only `messages.properties`
 
 ### Smaller items
 - [ ] `tasks.md` references commit hashes (`ef8de9c`, `7ac91e4`, `c104100`, …) in the **Done** section that won't survive a squash-merge into `main`. Either strip the hashes when an item moves to Done (it's the *fact* that's load-bearing, not the SHA), or note that tasks.md is dev scaffolding and not a permanent record
-- [ ] `groupId = com.github.dlbbld` is the JitPack convention. Forward-look: if you ever publish to Maven Central, this needs a real reverse-DNS group you own (e.g. `io.github.dlbbld`). Not wrong today; flag for the day it matters
+
+The Maven Central / `groupId` migration has its own dedicated release at the bottom of this file — see *Future release — publish to Maven Central*.
 
 ---
 
@@ -254,6 +255,53 @@ This is **discussion + design first**, implementation later. The project current
 - [ ] Refactor `GeneratePythonTestCases` (or replace) to produce the agreed format
 - [ ] Migrate at least one cross-validation test from chesslib to python-chess as a proof-of-concept
 - [ ] Phase out chesslib usage if the discussion lands there
+
+---
+
+## Future release — publish to Maven Central
+
+The capstone release. Publish to Central only when the library has stabilised — every prior release done, identity questions settled, and any tasks that surface during the prerequisite work itself addressed first. Maven Central artifacts are immutable: once published, an artifactId+version pair lives forever in the public record. The bar for moving from JitPack to Central is therefore "we are confident this artifact represents the project well, indefinitely."
+
+### Prerequisites — must be true before any Central work begins
+- [ ] All earlier releases completed (cleanup follow-through, lenient SAN, API-surface audit, auto-CHA, python-chess cross-validation)
+- [ ] Rename decision resolved — clean-chess → DeepSquare or final name. Once published, the artifactId is permanent
+- [ ] Every task that surfaces during the prerequisite releases has been addressed (re-evaluate this list at the moment of starting; the bar is "library is mature")
+
+### Sonatype Central Portal setup
+- [ ] Create Sonatype Central account at https://central.sonatype.com, sign in via GitHub
+- [ ] Verify the `io.github.dlbbld` namespace (auto-verified for GitHub-signed-in users — no domain needed)
+- [ ] Generate a GPG key, publish it to a public keyserver (e.g. `keyserver.ubuntu.com`), record the keyID
+- [ ] Configure `~/.m2/settings.xml` with Sonatype Portal credentials and GPG passphrase
+
+### `pom.xml` — Central-required metadata
+- [ ] `<groupId>` → `io.github.dlbbld` (currently `com.github.dlbbld`, the JitPack convention)
+- [ ] `<version>` → strict semver (`4.x` → `4.x.0`)
+- [ ] Add `<name>`, `<description>`, `<url>` (link to GitHub repo)
+- [ ] Add `<licenses>` block (GPL v3, with full URL)
+- [ ] Add `<developers>` block
+- [ ] Add `<scm>` block (`connection`, `developerConnection`, `url`)
+
+### `pom.xml` — required plugins
+- [ ] `central-publishing-maven-plugin` (the new Sonatype Portal plugin — *not* the deprecated `nexus-staging-maven-plugin` / OSSRH that older tutorials still document)
+- [ ] `maven-gpg-plugin` for artifact signing
+- [ ] `maven-javadoc-plugin` to produce a javadoc jar (`maven-source-plugin` is already present)
+
+### JAR-content cleanup (issues that publishing would make permanent)
+Things which currently leak into the published JAR with no production consumer. These should be cleaned up before the first Central publish, since whatever ships in v1.0.0 on Central is in the public record forever.
+
+- [ ] **Test-fixture message keys.** The 12 `test*` / `test.message.*` keys at the bottom of `messages.properties` are referenced exclusively by [`TestMessage.java`](src/test/java/com/dlb/chess/test/internationalization/TestMessage.java) (verifying `Message.getString` whitespace + placeholder behavior). They ship in the production JAR with no runtime caller. Move to a test-only bundle: e.g. `src/test/resources/com/dlb/chess/test/internationalization/messages-test.properties`, with `TestMessage` loading it directly via `ResourceBundle.getBundle("...messages-test")`. (Note: simply duplicating the path under `src/test/resources` would shadow the production bundle on the test classpath — a different bundle name is required)
+- [ ] Re-audit `src/main/resources` end-to-end at publish time: anything that's developer-facing, test-only, or environment-specific should not ship
+
+### First publish + workflow
+- [ ] Update README: drop the JitPack `<repositories>` block, leave only the plain Maven dependency snippet (no extra repository declarations needed for Central)
+- [ ] Drop the JitPack URL and any related framing from README and other docs
+- [ ] First publish via the Central Portal — staged release, manual approval the first time
+- [ ] Verify the artifact appears at https://central.sonatype.com/artifact/io.github.dlbbld/...
+- [ ] Document the per-release workflow (version bump → tag → `mvn deploy` → Portal release) in `setup.md` under a new "Releasing" section, or in a dedicated `release.md`
+
+### Post-publish
+- [ ] Decide whether JitPack stays available in parallel (free, harmless) or should be deprecated by removing the JitPack publish hook
+- [ ] (Optional) Add a Maven Central status badge to the README
 
 ---
 
