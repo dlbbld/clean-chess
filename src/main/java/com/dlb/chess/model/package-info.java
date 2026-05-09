@@ -1,5 +1,5 @@
 /**
- * Cross-cutting model types — small immutable value objects (records) used across the rule pipelines:
+ * Cross-cutting model types — small immutable value objects (records) used across the rule pipelines.
  *
  * <ul>
  * <li>{@link com.dlb.chess.model.LegalMove} — a {@link com.dlb.chess.common.model.MoveSpecification} plus the moving

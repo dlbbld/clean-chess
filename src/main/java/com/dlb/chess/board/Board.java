@@ -16,11 +16,11 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -53,8 +53,8 @@ import com.google.common.collect.ImmutableSet;
 /**
  * The library's central type — a chess <em>game</em>, not merely a position. A {@code Board} carries the position
  * <strong>plus</strong> the move history from its initial FEN: every halfmove ever performed, the legal-move set after
- * each, the halfmove clock, repetition counts, castling-right loss reasons, derived SAN/LAN strings — everything
- * needed to answer rule-level questions about the game so far.
+ * each, the halfmove clock, repetition counts, castling-right loss reasons, derived SAN/LAN strings — everything needed
+ * to answer rule-level questions about the game so far.
  *
  * <h2>Construction</h2>
  *
@@ -98,9 +98,9 @@ import com.google.common.collect.ImmutableSet;
  *
  * <p>
  * {@code Board} is mutable and <strong>not thread-safe</strong>. Use one {@code Board} per thread, or synchronize
- * externally. {@link #equals(Object)} and {@link #hashCode()} reflect the current game state, so a {@code Board}
- * placed in a {@link java.util.HashMap} or {@link java.util.HashSet} and then mutated will violate the collection's
- * invariants — don't do that.
+ * externally. {@link #equals(Object)} and {@link #hashCode()} reflect the current game state, so a {@code Board} placed
+ * in a {@link java.util.HashMap} or {@link java.util.HashSet} and then mutated will violate the collection's invariants
+ * — don't do that.
  */
 public class Board implements ChessBoard {
 
@@ -121,7 +121,9 @@ public class Board implements ChessBoard {
   private final List<CastlingRightLoss> blackKingSideLossList;
   private final List<CastlingRightLoss> blackQueenSideLossList;
 
-  /** Constructs a {@code Board} at the position carried by the given pre-parsed {@link Fen}. */
+  /**
+   * Constructs a {@code Board} at the position carried by the given pre-parsed {@link Fen}.
+   */
   public Board(Fen initialFen) {
 
     // using the static fen in case saves a bit of memory
@@ -207,15 +209,17 @@ public class Board implements ChessBoard {
 
   }
 
-  /** Constructs a {@code Board} at the standard initial position. */
+  /**
+   * Constructs a {@code Board} at the standard initial position.
+   */
   public Board() {
     this(FenConstants.FEN_INITIAL);
   }
 
   /**
    * Constructs a {@code Board} from a FEN string, validated by the advanced FEN parser. Rejects positions no real game
-   * could reach (impossible double-checks, halfmove clock above the 75-move-rule threshold, castling rights inconsistent
-   * with rooks-and-king positions, etc.).
+   * could reach (impossible double-checks, halfmove clock above the 75-move-rule threshold, castling rights
+   * inconsistent with rooks-and-king positions, etc.).
    */
   public Board(String fen) {
     this(FenParserAdvanced.parseFenAdvanced(fen));
@@ -245,7 +249,9 @@ public class Board implements ChessBoard {
     return performMoves(san);
   }
 
-  /** Plays the given sequence of SAN moves on this board, in order. Equivalent to repeated {@link #performMove(String)}. */
+  /**
+   * Plays the given sequence of SAN moves on this board, in order. Equivalent to repeated {@link #performMove(String)}.
+   */
   @Override
   public boolean performMoves(String... sanArray) {
     for (final String san : sanArray) {
