@@ -2,7 +2,7 @@
 
 ## Java style
 
-We follow the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced with Checkstyle, with a small number of project-specific tightenings.
+We follow the [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html), enforced with Checkstyle and auto-formatting on save within Eclipse, with a small number of project-specific tightenings.
 
 The active Checkstyle configuration is named *Google checks adapted* (referenced from [`.checkstyle`](.checkstyle)). It's the *Google Checks* preset that ships with the Eclipse Checkstyle plugin, with project-local edits.
 
@@ -19,6 +19,16 @@ Enforced by:
 ```
 
 **JUnit method references.** Avoid hardcoded method names as string arguments in JUnit annotations (e.g. `@MethodSource("supplierName")`). Prefer the no-argument `@MethodSource` (which picks up a static method with the same name as the test) or `@ArgumentsSource(Provider.class)` — both are compiler-checked. The string form silently drifts from the method name under refactor and is only caught at test runtime. Allow only where the alternatives are materially worse.
+
+## JavaDoc and comments
+
+JavaDoc should document contracts that are not obvious from the declaration: public API semantics, invariants, rule decisions, edge cases, and non-obvious test intent.
+
+Do not write JavaDoc that merely restates names, call chains, package structure, filesystem location, or implementation facts that IDE navigation already provides. In particular, avoid comments whose content would become stale after a routine rename or refactor.
+
+For tests, prefer descriptive test names and assertions over class-level JavaDoc. Add test JavaDoc only when the test protects a non-obvious rule, regression, or design decision that cannot be inferred from the test body.
+
+Rule of thumb: if an AI or IDE could regenerate the comment from the code, the comment is a maintenance liability.
 
 ## Eclipse compiler warnings
 

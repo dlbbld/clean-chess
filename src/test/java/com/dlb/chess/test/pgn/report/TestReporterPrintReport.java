@@ -4,11 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.report.Reporter;
 
-/**
- * Smoke test for {@link Reporter#printReport(String)}. Ensures the message-bundle keys consumed by the print path
- * exist in {@code messages.properties}. Without this coverage a key drift would only surface at runtime when a user
- * actually called {@code printReport} (e.g. the README example).
- */
 class TestReporterPrintReport {
 
   @SuppressWarnings("static-method")
