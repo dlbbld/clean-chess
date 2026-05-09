@@ -57,9 +57,9 @@ public class PgnExpectedValue {
       case BASIC_FIFTY -> createTestCasesBasicFifty();
       case BASIC_FIVEFOLD -> createTestCasesBasicFivefold();
       case BASIC_FORCED -> createTestCasesBasicForced();
-      case BASIC_REPORT_YAWN_SEQUENCES_WHITE -> createTestCasesBasicYawnSequencesWhite();
-      case BASIC_REPORT_YAWN_SEQUENCES_BLACK -> createTestCasesBasicYawnSequencesBlack();
-      case BASIC_REPORT_MAX_YAWN -> createTestCasesBasicMaxYawn();
+      case BASIC_REPORT_NO_PROGRESS_SEQUENCES_WHITE -> createTestCasesBasicNoProgressSequencesWhite();
+      case BASIC_REPORT_NO_PROGRESS_SEQUENCES_BLACK -> createTestCasesBasicNoProgressSequencesBlack();
+      case BASIC_REPORT_MAX_NO_PROGRESS -> createTestCasesBasicMaxNoProgress();
 
       case PARSER_FROM_FEN -> createTestCasesParserFromFen();
       case BASIC_INSUFFICIENT_MATERIAL_BOTH -> createTestCasesBasicInsufficientMaterial(InsufficientMaterial.BOTH,
@@ -2479,68 +2479,68 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.PARSER_FROM_FEN, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicYawnSequencesWhite() {
+  private static PgnFileTestCaseList createTestCasesBasicNoProgressSequencesWhite() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_white_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("01_white_from_fen_no_progress_fifty_reoccuring_fifty.pgn", "", "",
         "50.NA (1) 99...NA (100); 100...Qb6 (1) 150.Qd4+ (100)", -1, 100, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/3p4/1kp1p3/8/2qQ3P/5PPK/8/8 b - - 100 150"));
-    list.add(new PgnFileTestCase("02_white_from_fen_yawn_fifty_reoccuring_seventy_five.pgn", "", "",
+    list.add(new PgnFileTestCase("02_white_from_fen_no_progress_fifty_reoccuring_seventy_five.pgn", "", "",
         "50.NA (1) 99...NA (100); 100...Qb6 (1) 150.Qd4+ (100) 175.Qc8 (150)", -1, 150, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "2Q5/3p1q2/2pkp3/8/7P/5PPK/8/8 b - - 150 175"));
-    list.add(new PgnFileTestCase("03_white_from_fen_yawn_fifty_reoccuring_above_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("03_white_from_fen_no_progress_fifty_reoccuring_above_fifty.pgn", "", "",
         "50.NA (1) 99...NA (100); 100...Qb6 (1) 150.Qd4+ (100) 174...Qf7 (149)", -1, 149, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "Q7/3p1q2/2pkp3/8/7P/5PPK/8/8 w - - 149 175"));
-    list.add(new PgnFileTestCase("09_white_from_fen_yawn_above_fifty_reoccuring_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("09_white_from_fen_no_progress_above_fifty_reoccuring_fifty.pgn", "", "",
         "45.NA (1) 94...NA (100) 99...NA (110); 100...Qb6 (1) 150.Qd4+ (100)", -1, 110, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/3p4/1kp1p3/8/2qQ3P/5PPK/8/8 b - - 100 150"));
-    list.add(new PgnFileTestCase("10_white_from_fen_yawn_above_fifty_reoccuring_seventy_five.pgn", "", "",
+    list.add(new PgnFileTestCase("10_white_from_fen_no_progress_above_fifty_reoccuring_seventy_five.pgn", "", "",
         "44...NA (1) 94.NA (100) 99...NA (111); 100...Qb6 (1) 150.Qd4+ (100) 175.Qc8 (150)", -1, 150,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "2Q5/3p1q2/2pkp3/8/7P/5PPK/8/8 b - - 150 175"));
-    list.add(new PgnFileTestCase("11_white_from_fen_yawn_above_fifty_reoccuring_above_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("11_white_from_fen_no_progress_above_fifty_reoccuring_above_fifty.pgn", "", "",
         "44.NA (1) 93...NA (100) 99...NA (112); 100...Qb6 (1) 150.Qd4+ (100) 174...Qf7 (149)", -1, 149,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "Q7/3p1q2/2pkp3/8/7P/5PPK/8/8 w - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_REPORT_YAWN_SEQUENCES_WHITE, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_REPORT_NO_PROGRESS_SEQUENCES_WHITE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicYawnSequencesBlack() {
+  private static PgnFileTestCaseList createTestCasesBasicNoProgressSequencesBlack() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(new PgnFileTestCase("01_black_from_fen_yawn_fifty_reoccuring_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("01_black_from_fen_no_progress_fifty_reoccuring_fifty.pgn", "", "",
         "50...NA (1) 100.NA (100); 101.Qd3 (1) 150...Qe3 (100)", 1, 100, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/6p1/7k/6n1/2NQ4/4q3/2P1P3/1K6 w - - 100 151"));
-    list.add(new PgnFileTestCase("02_black_from_fen_yawn_fifty_reoccuring_seventy_five.pgn", "", "",
+    list.add(new PgnFileTestCase("02_black_from_fen_no_progress_fifty_reoccuring_seventy_five.pgn", "", "",
         "50...NA (1) 100.NA (100); 101.Qd3 (1) 150...Qe3 (100) 175...Qe3 (150)", 1, 150, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/6pk/8/6n1/2NQ4/4q3/1KP1P3/8 w - - 150 176"));
-    list.add(new PgnFileTestCase("03_black_from_fen_yawn_fifty_reoccuring_above_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("03_black_from_fen_no_progress_fifty_reoccuring_above_fifty.pgn", "", "",
         "50...NA (1) 100.NA (100); 101.Qd3 (1) 150...Qe3 (100) 175.Qd4 (149)", 1, 149, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/6pk/8/4q1n1/2NQ4/8/1KP1P3/8 b - - 149 175"));
-    list.add(new PgnFileTestCase("09_black_from_fen_yawn_above_fifty_reoccuring_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("09_black_from_fen_no_progress_above_fifty_reoccuring_fifty.pgn", "", "",
         "45...NA (1) 95.NA (100) 100.NA (110); 101.Qd3 (1) 150...Qe3 (100)", 1, 110, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/6p1/7k/6n1/2NQ4/4q3/2P1P3/1K6 w - - 100 151"));
-    list.add(new PgnFileTestCase("10_black_from_fen_yawn_above_fifty_reoccuring_seventy_five.pgn", "", "",
+    list.add(new PgnFileTestCase("10_black_from_fen_no_progress_above_fifty_reoccuring_seventy_five.pgn", "", "",
         "45.NA (1) 94...NA (100) 100.NA (111); 101.Qd3 (1) 150...Qe3 (100) 175...Qe3 (150)", 1, 150,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/6pk/8/6n1/2NQ4/4q3/1KP1P3/8 w - - 150 176"));
-    list.add(new PgnFileTestCase("11_black_from_fen_yawn_above_fifty_reoccuring_above_fifty.pgn", "", "",
+    list.add(new PgnFileTestCase("11_black_from_fen_no_progress_above_fifty_reoccuring_above_fifty.pgn", "", "",
         "44...NA (1) 94.NA (100) 100.NA (112); 101.Qd3 (1) 150...Qe3 (100) 175.Qd4 (149)", 1, 149,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/6pk/8/4q1n1/2NQ4/8/1KP1P3/8 b - - 149 175"));
 
-    return new PgnFileTestCaseList(PgnTest.BASIC_REPORT_YAWN_SEQUENCES_BLACK, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_REPORT_NO_PROGRESS_SEQUENCES_BLACK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLongestPossible() {
@@ -3362,26 +3362,26 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.BASIC_CAPTURE_LAST_MOVE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesBasicMaxYawn() {
+  private static PgnFileTestCaseList createTestCasesBasicMaxNoProgress() {
     final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("05_capture_last_move_piece_more_moves_max_yawn_unchanged.pgn", "", "", "", 21, 4,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("05_capture_last_move_piece_more_moves_max_no_progress_unchanged.pgn", "", "", "", 21,
+        4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r1b1r2k/1ppq1p2/pbnp1N1p/4p1p1/1PB1P1PP/P2P1N2/2P2P2/R1BQK2R b KQ - 4 14"));
-    list.add(new PgnFileTestCase("06_capture_last_move_en_passant_capture_more_moves_max_yawn_unchanged.pgn", "", "",
-        "", 25, 4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+    list.add(new PgnFileTestCase("06_capture_last_move_en_passant_capture_more_moves_max_no_progress_unchanged.pgn", "",
+        "", "", 25, 4, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
         UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "Q1b2r2/2b2pk1/p2p1nNp/n3p1p1/4P1P1/PB1P1N1P/2Q2P2/R1B1K2R b KQ - 4 18"));
-    list.add(new PgnFileTestCase("07_capture_last_move_piece_more_moves_max_yawn_changed.pgn",
+    list.add(new PgnFileTestCase("07_capture_last_move_piece_more_moves_max_no_progress_changed.pgn",
         "repPos=3: 11...Kg7 13...Kg7 15...Kg7", "", "", 21, 9, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
         UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE,
         "r1bq1r2/1pp2pk1/pbnp1N1p/4p1p1/1PB1P1P1/P2P1N1P/2P2P2/R1BQK2R w KQ - 9 16"));
-    list.add(new PgnFileTestCase("08_capture_last_move_en_passant_capture_more_moves_max_yawn_changed.pgn", "", "", "",
-        25, 9, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+    list.add(new PgnFileTestCase("08_capture_last_move_en_passant_capture_more_moves_max_no_progress_changed.pgn", "",
+        "", "", 25, 9, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE,
+        UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "r1bq1rk1/1p3p2/1bPp3p/p2Np1pn/B2NP1P1/P2Pn2P/2PQKP2/R1B3R1 b - - 9 19"));
-    return new PgnFileTestCaseList(PgnTest.BASIC_REPORT_MAX_YAWN, list);
+    return new PgnFileTestCaseList(PgnTest.BASIC_REPORT_MAX_NO_PROGRESS, list);
   }
 
   private static PgnFileTestCaseList createTestCasesSpecial() {
@@ -3623,10 +3623,9 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("lichess_8sompKsV.pgn", "", "", "", 8, 6, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/4R3/5p1k/5Pp1/6Pp/8/6KP/7B b - - 3 60"));
-    list.add(new PgnFileTestCase("lichess_8TigzhbJ.pgn", "repPos=3: 22...Bd7 24...Rac8 26...Rac8", "",
-        "", 22, 90, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        "8/2k4p/1p2p1pP/1P1pPpP1/3P1P2/8/8/K7 b - - 90 94"));
+    list.add(new PgnFileTestCase("lichess_8TigzhbJ.pgn", "repPos=3: 22...Bd7 24...Rac8 26...Rac8", "", "", 22, 90,
+        CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/2k4p/1p2p1pP/1P1pPpP1/3P1P2/8/8/K7 b - - 90 94"));
     list.add(new PgnFileTestCase("lichess_8uFm7Zvw.pgn", "", "", "", 9, 6, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "3R4/5p1k/1N3Q2/7q/5P1K/1P4P1/7P/8 w - - 5 45"));
@@ -4021,8 +4020,8 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("lichess_Mm4HIjDh.pgn", "", "", "", 18, 5, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/8/2p1k1p1/1pP1p1P1/1P2P3/7K/8/8 b - - 5 43"));
-    list.add(new PgnFileTestCase("lichess_MOyPDylu.pgn", "repPos=3: 46.Bc2 56.Bc2 60.Ke2", "", "", 14,
-        56, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
+    list.add(new PgnFileTestCase("lichess_MOyPDylu.pgn", "repPos=3: 46.Bc2 56.Bc2 60.Ke2", "", "", 14, 56,
+        CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/k1p1p1p1/1pPpP1Pp/1P1PbK1P/2B5/8 b - - 12 80"));
     list.add(new PgnFileTestCase("lichess_MvEif0NV.pgn", "", "", "", 19, 27, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
@@ -4445,534 +4444,402 @@ public class PgnExpectedValue {
   private static PgnFileTestCaseList createTestCasesChaLichessQuickNotDepthThreeHelpmate() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    list.add(
-        new PgnFileTestCase("lichess_03VIxJUJ_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/1p6/2p5/8/6k1/8/1r4K1 w - - 8 70"));
-    list.add(
-        new PgnFileTestCase("lichess_0dKUIfwq_helpmate.pgn", "", "", "", 6, 24, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 24 89"));
-    list.add(
-        new PgnFileTestCase("lichess_0ehvDno9_helpmate.pgn", "", "", "", 6, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "5Q2/P6k/8/8/4Q3/8/1B6/4R1K1 b - - 2 61"));
-    list.add(
-        new PgnFileTestCase("lichess_0u6eh8ZP_helpmate.pgn", "", "", "", 9, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 10 61"));
-    list.add(
-        new PgnFileTestCase("lichess_0xMzcUDT_helpmate.pgn", "", "", "", 21, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/5Q2/8/8/Q3Q3 b - - 18 88"));
-    list.add(
-        new PgnFileTestCase("lichess_16myWOwv_helpmate.pgn", "", "", "", 15, 20, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/5k1K w - - 5 78"));
-    list.add(
-        new PgnFileTestCase("lichess_1rcB0Tru_helpmate.pgn", "", "", "", 10, 6, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/4K1k1/2b2q2/1p6/8/8/8/2q5 w - - 3 52"));
-    list.add(
-        new PgnFileTestCase("lichess_29moHRC8_helpmate.pgn", "", "", "", 10, 6, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/6p1/8/8/8/7k/5K2/4q2q w - - 4 65"));
-    list.add(
-        new PgnFileTestCase("lichess_2gCvxApk_helpmate.pgn", "", "", "", 16, 21, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "Q7/8/1k6/Q7/8/8/8/5K2 b - - 4 69"));
-    list.add(
-        new PgnFileTestCase("lichess_2k5piUl6_helpmate.pgn", "", "", "", 14, 8, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k1Q5/8/K7/8/8/8/8/8 b - - 0 72"));
-    list.add(
-        new PgnFileTestCase("lichess_2mgjVvcC_helpmate.pgn", "", "", "", 10, 5, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, "8/2p4p/p6k/5pQ1/3b3K/6P1/PP5P/5q2 b - - 0 32"));
-    list.add(
-        new PgnFileTestCase("lichess_2pwjX9B1_helpmate.pgn", "", "", "", 5, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/p7/6k1/8/5r1K/1q2q3 w - - 9 60"));
-    list.add(
-        new PgnFileTestCase("lichess_2sFHWmg3_helpmate.pgn", "", "", "", 3, 20, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 20 70"));
-    list.add(
-        new PgnFileTestCase("lichess_2wVTK5vV_helpmate.pgn", "", "", "", 11, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/k1K5/8/8/8/Q7 b - - 18 72"));
-    list.add(
-        new PgnFileTestCase("lichess_3bKyjTHM_helpmate.pgn", "", "", "", 18, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/7q/8/7K/8/p7/k7/5qq1 w - - 2 65"));
-    list.add(
-        new PgnFileTestCase("lichess_3cYOGNS6_helpmate.pgn", "", "", "", 11, 8, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "Q4Q2/8/8/8/8/1k1K3Q/7P/1Q6 b - - 8 57"));
-    list.add(
-        new PgnFileTestCase("lichess_3jesiit8_helpmate.pgn", "", "", "", 11, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "Q7/8/1k1Q4/8/2P2P2/6P1/4K3/8 b - - 2 69"));
-    list.add(
-        new PgnFileTestCase("lichess_3xFc21eB_helpmate.pgn", "", "", "", 15, 48, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k1R5/8/K7/8/8/8/8/8 b - - 9 82"));
-    list.add(
-        new PgnFileTestCase("lichess_49QwULSR_helpmate.pgn", "", "", "", 10, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/3q3K w - - 3 76"));
-    list.add(
-        new PgnFileTestCase("lichess_55wBEu8Z_helpmate.pgn", "", "", "", 11, 9, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, "8/p1r5/5R1p/Pp1p2Pk/3PpK2/4Pp1Q/5P2/8 b - - 0 43"));
-    list.add(
-        new PgnFileTestCase("lichess_6kfJPvsA_helpmate.pgn", "", "", "", 6, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/5K2/4q2q w - - 12 73"));
-    list.add(
-        new PgnFileTestCase("lichess_78XhRaIr_helpmate.pgn", "", "", "", 32, 26, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 26 87"));
-    list.add(
-        new PgnFileTestCase("lichess_7alMRe6y_helpmate.pgn", "", "", "", 3, 7, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/2p5/r3qk2/8/8/7K/1b3q2 w - - 2 68"));
-    list.add(
-        new PgnFileTestCase("lichess_7fWsFh0J_helpmate.pgn", "", "", "", 6, 9, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/3q1K1k/7q/8 w - - 6 66"));
-    list.add(
-        new PgnFileTestCase("lichess_8cTl7SrQ_helpmate.pgn", "", "", "", 15, 32, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/k1b5/b7/K7 w - - 32 70"));
-    list.add(
-        new PgnFileTestCase("lichess_APEww4mD_helpmate.pgn", "", "", "", 5, 31, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/2r5/6K1/6q1/6k1 w - - 6 89"));
-    list.add(
-        new PgnFileTestCase("lichess_B8bpMZ71_helpmate.pgn", "", "", "", 11, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "2Q5/8/8/6B1/3QkPK1/PP2P1P1/8/5R2 b - - 2 61"));
-    list.add(
-        new PgnFileTestCase("lichess_bfJbt6GP_helpmate.pgn", "", "", "", 7, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/7p/8/6p1/8/2Kq3k/8/1q5n w - - 2 73"));
-    list.add(
-        new PgnFileTestCase("lichess_bQ0EXLal_helpmate.pgn", "", "", "", 10, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "1b6/1p4pp/8/8/8/k7/8/K6r w - - 11 59"));
-    list.add(
-        new PgnFileTestCase("lichess_cZ8QxYP8_helpmate.pgn", "", "", "", 7, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "7k/7Q/7K/8/2PP3P/4P1P1/8/2BQ1B1R b - - 10 52"));
-    list.add(
-        new PgnFileTestCase("lichess_D4vIOthl_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/6k1/8/8/8/8/5K2/4q2q w - - 10 76"));
-    list.add(
-        new PgnFileTestCase("lichess_dBergEkt_helpmate.pgn", "", "", "", 17, 26, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/6k1/8/q5K1/1q6 w - - 26 74"));
-    list.add(
-        new PgnFileTestCase("lichess_DiKq9jcy_helpmate.pgn", "", "", "", 9, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "4Q2Q/8/5k2/3Q4/1BK5/2P5/8/8 b - - 0 70"));
-    list.add(
-        new PgnFileTestCase("lichess_E9P918aj_helpmate.pgn", "", "", "", 18, 30, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 30 70"));
-    list.add(
-        new PgnFileTestCase("lichess_eExHpNDf_helpmate.pgn", "", "", "", 11, 34, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "6Q1/k7/8/8/Q7/3K4/8/1R6 b - - 8 99"));
-    list.add(
-        new PgnFileTestCase("lichess_eKwKl6Y9_helpmate.pgn", "", "", "", 17, 30, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/1Q6/K7/8/8/8/8/8 b - - 30 88"));
-    list.add(
-        new PgnFileTestCase("lichess_EQCMW0jB_helpmate.pgn", "", "", "", 6, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/r7/q4K1k/7q/8 w - - 8 66"));
-    list.add(
-        new PgnFileTestCase("lichess_EsFX1Urt_helpmate.pgn", "", "", "", 7, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 14 67"));
-    list.add(
-        new PgnFileTestCase("lichess_EstAIWqd_helpmate.pgn", "", "", "", 15, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/5K1k/8/4rq2 w - - 10 76"));
-    list.add(
-        new PgnFileTestCase("lichess_Ew7uTqu0_helpmate.pgn", "", "", "", 13, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/5pp1/8/8/p7/3b3k/8/r6K w - - 12 59"));
-    list.add(
-        new PgnFileTestCase("lichess_f7x3bSzh_helpmate.pgn", "", "", "", 12, 9, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, "k6r/p4p1p/2B3p1/8/8/N3b1P1/P4p1P/1R5K b - - 0 34"));
-    list.add(
-        new PgnFileTestCase("lichess_FMDN8gJ7_helpmate.pgn", "", "", "", 5, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/1k2b3/2p5/2K5 w - - 2 73"));
-    list.add(
-        new PgnFileTestCase("lichess_fN4vRqp0_helpmate.pgn", "", "", "", 5, 9, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/5KQk/5R2 b - - 2 74"));
-    list.add(
-        new PgnFileTestCase("lichess_fPnoYQtW_helpmate.pgn", "", "", "", 11, 9, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/5K2/4q2q w - - 8 66"));
-    list.add(
-        new PgnFileTestCase("lichess_FYTeO80q_helpmate.pgn", "", "", "", 7, 9, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, "8/6Qp/p5p1/7k/P4PB1/7K/1P3R1P/8 b - - 0 38"));
-    list.add(
-        new PgnFileTestCase("lichess_G0xDBYwE_helpmate.pgn", "", "", "", 6, 20, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/k1Q5/1N6/K7/8/8/8/8 b - - 20 72"));
-    list.add(
-        new PgnFileTestCase("lichess_G8i5Bn7F_helpmate.pgn", "", "", "", 11, 28, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 28 73"));
-    list.add(
-        new PgnFileTestCase("lichess_GCuwJ5bP_helpmate.pgn", "", "", "", 6, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 18 64"));
-    list.add(
-        new PgnFileTestCase("lichess_GIwBNz5S_helpmate.pgn", "", "", "", 14, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/7q/8/8/8/8/8/5k1K w - - 12 80"));
-    list.add(
-        new PgnFileTestCase("lichess_gtzPUYWo_helpmate.pgn", "", "", "", 13, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/4kp2/4rp2/3q1K2 w - - 0 71"));
-    list.add(
-        new PgnFileTestCase("lichess_GzoCTk46_helpmate.pgn", "", "", "", 9, 9, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/7p/4qK1k/8/6q1 w - - 6 74"));
-    list.add(
-        new PgnFileTestCase("lichess_hdott1S4_helpmate.pgn", "", "", "", 25, 30, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "7N/5Q2/5k1K/8/8/8/7B/8 b - - 1 78"));
-    list.add(
-        new PgnFileTestCase("lichess_hkiG96je_helpmate.pgn", "", "", "", 10, 24, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 24 73"));
-    list.add(
-        new PgnFileTestCase("lichess_IcjtzT9i_helpmate.pgn", "", "", "", 25, 28, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/8/6Q1/8/Q7 b - - 28 100"));
-    list.add(
-        new PgnFileTestCase("lichess_if6AKvpb_helpmate.pgn", "", "", "", 5, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k3R3/8/K7/P7/1P3P2/8/8/8 b - - 2 60"));
-    list.add(
-        new PgnFileTestCase("lichess_ig7fudY7_helpmate.pgn", "", "", "", 8, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/5K1k/8/4rq2 w - - 8 59"));
-    list.add(
-        new PgnFileTestCase("lichess_Iy1VEUMC_helpmate.pgn", "", "", "", 9, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "4K3/8/Q7/8/8/k7/8/1Q6 b - - 6 67"));
-    list.add(
-        new PgnFileTestCase("lichess_j17qnxd0_helpmate.pgn", "", "", "", 16, 38, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 24 85"));
-    list.add(
-        new PgnFileTestCase("lichess_j4phmaNj_helpmate.pgn", "", "", "", 11, 20, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 20 81"));
-    list.add(
-        new PgnFileTestCase("lichess_jehHS0Jj_helpmate.pgn", "", "", "", 10, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 10 75"));
-    list.add(
-        new PgnFileTestCase("lichess_JfHZLRvD_helpmate.pgn", "", "", "", 6, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, "r7/pp6/3p1p2/2p1k3/4q2P/5KP1/5P2/3R3R w - - 0 34"));
-    list.add(
-        new PgnFileTestCase("lichess_jK46bYGo_helpmate.pgn", "", "", "", 12, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/6pk/8/q5K1 w - - 2 68"));
-    list.add(
-        new PgnFileTestCase("lichess_jnox9kxK_helpmate.pgn", "", "", "", 36, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/7q/8/8/8/8/8/5k1K w - - 12 100"));
-    list.add(
-        new PgnFileTestCase("lichess_jnvJUlDw_helpmate.pgn", "", "", "", 11, 8, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/2p5/8/8/8/7k/4K3/3q2qn w - - 2 69"));
-    list.add(
-        new PgnFileTestCase("lichess_KbEG3yK3_helpmate.pgn", "", "", "", 20, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/b7/3q3K w - - 18 76"));
-    list.add(
-        new PgnFileTestCase("lichess_kbutR5IJ_helpmate.pgn", "", "", "", 8, 7, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, "2k1q3/2p5/2K5/2N5/2q5/8/8/8 w - - 0 54"));
-    list.add(
-        new PgnFileTestCase("lichess_Kdf0f1OE_helpmate.pgn", "", "", "", 21, 16, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 16 80"));
-    list.add(
-        new PgnFileTestCase("lichess_KE47c49r_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/6p1/6b1/8/8/7k/8/3q3K w - - 13 66"));
-    list.add(
-        new PgnFileTestCase("lichess_knQsF7R8_helpmate.pgn", "", "", "", 7, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/4K3/8/8/8/8/1Q6/Q7 b - - 12 60"));
-    list.add(
-        new PgnFileTestCase("lichess_KP23RUWa_helpmate.pgn", "", "", "", 11, 17, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/8/8/8/2K5/Q7/8/1Q6 b - - 6 75"));
-    list.add(
-        new PgnFileTestCase("lichess_KPvcgsfS_helpmate.pgn", "", "", "", 11, 6, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k5Q1/8/K7/8/8/8/P7/8 b - - 0 58"));
-    list.add(
-        new PgnFileTestCase("lichess_Ks0yR98N_helpmate.pgn", "", "", "", 4, 32, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/8/6Q1/8/Q7 b - - 32 78"));
-    list.add(
-        new PgnFileTestCase("lichess_LC76ur18_helpmate.pgn", "", "", "", 3, 15, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/3b4/3Kq3/8/8/2qk4 w - - 2 75"));
-    list.add(
-        new PgnFileTestCase("lichess_lHtqM0fz_helpmate.pgn", "", "", "", 22, 19, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 12 82"));
-    list.add(
-        new PgnFileTestCase("lichess_lk42iihk_helpmate.pgn", "", "", "", 5, 29, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k6Q/8/K7/8/8/8/R7/8 b - - 29 58"));
-    list.add(
-        new PgnFileTestCase("lichess_LqTNOgyT_helpmate.pgn", "", "", "", 23, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "4Q2Q/5k2/8/8/8/3K4/8/3Q4 b - - 2 64"));
-    list.add(
-        new PgnFileTestCase("lichess_lYf34Uiq_helpmate.pgn", "", "", "", 14, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 22 82"));
-    list.add(
-        new PgnFileTestCase("lichess_m5WDCW16_helpmate.pgn", "", "", "", 17, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "5Q2/2k4R/K7/8/6PP/8/8/7B b - - 14 58"));
-    list.add(
-        new PgnFileTestCase("lichess_McLow5Hz_helpmate.pgn", "", "", "", 5, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "5Q1Q/2k3R1/8/1K6/8/8/B5P1/8 b - - 22 60"));
-    list.add(
-        new PgnFileTestCase("lichess_MvEif0NV_helpmate.pgn", "", "", "", 19, 27, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/8/8/7Q/Q7 b - - 24 88"));
-    list.add(
-        new PgnFileTestCase("lichess_N6AYM22R_helpmate.pgn", "", "", "", 4, 16, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/6p1/7p/8/8/7k/q7/5q1K w - - 0 73"));
-    list.add(
-        new PgnFileTestCase("lichess_nvxFBquo_helpmate.pgn", "", "", "", 10, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "2QQ4/5k1K/8/8/8/5R2/8/8 b - - 2 68"));
-    list.add(
-        new PgnFileTestCase("lichess_om0bCR5w_helpmate.pgn", "", "", "", 15, 8, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "q7/8/8/5k2/8/8/5K2/1r2q3 w - - 8 61"));
-    list.add(
-        new PgnFileTestCase("lichess_Omq6Fdhm_helpmate.pgn", "", "", "", 12, 9, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/1q3k1K w - - 2 83"));
-    list.add(
-        new PgnFileTestCase("lichess_ooSZuhhE_helpmate.pgn", "", "", "", 5, 26, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 26 59"));
-    list.add(
-        new PgnFileTestCase("lichess_p4CeCK3J_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k7/1Q6/K7/8/8/8/8/6Q1 b - - 13 76"));
-    list.add(
-        new PgnFileTestCase("lichess_PAjZeTkN_helpmate.pgn", "", "", "", 6, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1Q6/k7/N7/8/R7/K7/8/8 b - - 0 69"));
-    list.add(
-        new PgnFileTestCase("lichess_pFsUTatm_helpmate.pgn", "", "", "", 22, 27, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "2QQ4/k4K2/8/8/4P3/8/8/Q7 b - - 2 66"));
-    list.add(
-        new PgnFileTestCase("lichess_PIL4PUtT_helpmate.pgn", "", "", "", 19, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "Q1Q5/8/7Q/8/1PB4k/8/5P2/R4RK1 b - - 2 54"));
-    list.add(
-        new PgnFileTestCase("lichess_PkZ6qiA6_helpmate.pgn", "", "", "", 7, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/3p4/4k3/8/6K1/8/6qq w - - 2 65"));
-    list.add(new PgnFileTestCase("lichess_QirOKYTP_helpmate.pgn", "", "", "", 11, 10,
-        CheckmateOrStalemate.CHECKMATE, 1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE,
-        UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE,
-        "r1b5/ppppn2p/5Qp1/8/1P2q3/N1Pk4/P2b1P1P/3RKR2 w - - 2 21"));
-    list.add(
-        new PgnFileTestCase("lichess_QnFE4Znl_helpmate.pgn", "", "", "", 3, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "6QQ/2k1Q3/8/1K6/8/8/8/8 b - - 12 69"));
-    list.add(
-        new PgnFileTestCase("lichess_RF0MOp86_helpmate.pgn", "", "", "", 7, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/1kp5/3p4/8/p7/r7/2rK4/1q6 w - - 2 66"));
-    list.add(
-        new PgnFileTestCase("lichess_RSqLhejA_helpmate.pgn", "", "", "", 12, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/4p3/8/5Knk/2p1q3/2r5 w - - 14 73"));
-    list.add(
-        new PgnFileTestCase("lichess_RvN1zpCB_helpmate.pgn", "", "", "", 3, 3, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, "6nr/6pp/4pp2/8/1PP5/P4P1k/7q/3B1RK1 w - - 0 26"));
-    list.add(
-        new PgnFileTestCase("lichess_rVN4T4Tz_helpmate.pgn", "", "", "", 7, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 18 81"));
-    list.add(
-        new PgnFileTestCase("lichess_SDy9Y3D0_helpmate.pgn", "", "", "", 20, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/4q2K w - - 0 66"));
-    list.add(
-        new PgnFileTestCase("lichess_Sdz1yTzS_helpmate.pgn", "", "", "", 6, 26, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 26 80"));
-    list.add(
-        new PgnFileTestCase("lichess_sMv8Hh43_helpmate.pgn", "", "", "", 11, 8, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/6p1/5kP1/2r4K/5q2/8/8/8 w - - 2 53"));
-    list.add(
-        new PgnFileTestCase("lichess_sp0oSyY2_helpmate.pgn", "", "", "", 4, 8, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/1p6/8/8/7k/b7/q6K w - - 2 57"));
-    list.add(
-        new PgnFileTestCase("lichess_SwCSdv8K_helpmate.pgn", "", "", "", 17, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 22 75"));
-    list.add(
-        new PgnFileTestCase("lichess_SX3iSehH_helpmate.pgn", "", "", "", 16, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "Q4K2/8/1k6/Q7/8/8/8/8 b - - 10 63"));
-    list.add(
-        new PgnFileTestCase("lichess_Szu1FAr2_helpmate.pgn", "", "", "", 3, 13, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/pp4p1/6p1/8/8/7k/8/q6K w - - 13 60"));
-    list.add(
-        new PgnFileTestCase("lichess_U5uv4wPs_helpmate.pgn", "", "", "", 10, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/6p1/8/7k/8/r6K w - - 5 90"));
-    list.add(
-        new PgnFileTestCase("lichess_uBSFb2kx_helpmate.pgn", "", "", "", 16, 41, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "5B1k/8/8/8/8/7R/Q5K1/8 b - - 10 100"));
-    list.add(
-        new PgnFileTestCase("lichess_UdUE6AvZ_helpmate.pgn", "", "", "", 16, 16, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 16 59"));
-    list.add(
-        new PgnFileTestCase("lichess_UuNO3dGf_helpmate.pgn", "", "", "", 5, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "kQ6/8/8/8/8/8/7Q/5K2 b - - 12 85"));
-    list.add(
-        new PgnFileTestCase("lichess_uwwUPCFw_helpmate.pgn", "", "", "", 5, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 14 71"));
-    list.add(
-        new PgnFileTestCase("lichess_ux9sCCZ8_helpmate.pgn", "", "", "", 5, 5, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, "5r1k/p5p1/6P1/2pp1K2/1p1b2P1/4q3/P1P5/8 w - - 0 35"));
-    list.add(
-        new PgnFileTestCase("lichess_v4xJHVln_helpmate.pgn", "", "", "", 3, 15, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/4Kn2/4q2q w - - 4 76"));
-    list.add(
-        new PgnFileTestCase("lichess_VdYuP1l4_helpmate.pgn", "", "", "", 20, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/5k1K w - - 14 74"));
-    list.add(
-        new PgnFileTestCase("lichess_VeCbG5uw_helpmate.pgn", "", "", "", 12, 26, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 26 77"));
-    list.add(
-        new PgnFileTestCase("lichess_VIdrelSz_helpmate.pgn", "", "", "", 4, 5, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, "7r/2PR4/6pk/6P1/7K/r7/8/8 b - - 0 40"));
-    list.add(
-        new PgnFileTestCase("lichess_Vnqfiwd6_helpmate.pgn", "", "", "", 5, 17, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/6p1/5p2/8/6k1/8/q5K1/1q6 w - - 8 67"));
-    list.add(
-        new PgnFileTestCase("lichess_vS3VdvtP_helpmate.pgn", "", "", "", 3, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/6k1/8/5K2/4q2q w - - 12 68"));
-    list.add(
-        new PgnFileTestCase("lichess_vytUGbcM_helpmate.pgn", "", "", "", 19, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 22 86"));
-    list.add(
-        new PgnFileTestCase("lichess_W5huoA6x_helpmate.pgn", "", "", "", 6, 26, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 26 89"));
-    list.add(
-        new PgnFileTestCase("lichess_wCL9HARO_helpmate.pgn", "", "", "", 6, 15, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 14 75"));
-    list.add(
-        new PgnFileTestCase("lichess_WdedP6nc_helpmate.pgn", "", "", "", 6, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/5k1K w - - 22 73"));
-    list.add(
-        new PgnFileTestCase("lichess_wUCLya3K_helpmate.pgn", "", "", "", 12, 7, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/4qK1k/8/6q1 w - - 6 86"));
-    list.add(
-        new PgnFileTestCase("lichess_wuHnMP2q_helpmate.pgn", "", "", "", 4, 7, CheckmateOrStalemate.CHECKMATE, 1,
-            InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, "7R/7p/p5p1/8/2p4P/5P1k/P6q/5RK1 w - - 0 34"));
-    list.add(
-        new PgnFileTestCase("lichess_xD85FRxa_helpmate.pgn", "", "", "", 9, 30, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 30 81"));
-    list.add(
-        new PgnFileTestCase("lichess_xfvaW7PK_helpmate.pgn", "", "", "", 12, 22, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 22 62"));
-    list.add(
-        new PgnFileTestCase("lichess_xmpqlKFo_helpmate.pgn", "", "", "", 9, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 18 69"));
-    list.add(
-        new PgnFileTestCase("lichess_XtJJQxwF_helpmate.pgn", "", "", "", 10, 18, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 10 69"));
-    list.add(
-        new PgnFileTestCase("lichess_XtvgUXHD_helpmate.pgn", "", "", "", 16, 15, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/6k1/8/q7/1q5K w - - 14 93"));
-    list.add(
-        new PgnFileTestCase("lichess_YGj1C2WB_helpmate.pgn", "", "", "", 13, 16, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 16 79"));
-    list.add(
-        new PgnFileTestCase("lichess_YictG6WZ_helpmate.pgn", "", "", "", 10, 37, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "k1K5/8/8/8/8/8/8/R7 b - - 37 73"));
-    list.add(
-        new PgnFileTestCase("lichess_yjfLthhQ_helpmate.pgn", "", "", "", 6, 12, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/8/8/8/8/5K1k/6q1/2q5 w - - 12 70"));
-    list.add(
-        new PgnFileTestCase("lichess_YRvWOIpy_helpmate.pgn", "", "", "", 3, 10, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-            UnwinnableQuick.WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/KQk5/8/8/8/8/3R4 b - - 10 64"));
-    list.add(
-        new PgnFileTestCase("lichess_z3xkCyBY_helpmate.pgn", "", "", "", 14, 11, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, "7k/7Q/7K/2p3P1/2P5/8/8/8 b - - 0 59"));
-    list.add(
-        new PgnFileTestCase("lichess_zmelXKvA_helpmate.pgn", "", "", "", 23, 14, CheckmateOrStalemate.CHECKMATE,
-            1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
-            UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/q7/8/8/8/8/K1k5/4b3 w - - 14 80"));
+    list.add(new PgnFileTestCase("lichess_03VIxJUJ_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/1p6/2p5/8/6k1/8/1r4K1 w - - 8 70"));
+    list.add(new PgnFileTestCase("lichess_0dKUIfwq_helpmate.pgn", "", "", "", 6, 24, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 24 89"));
+    list.add(new PgnFileTestCase("lichess_0ehvDno9_helpmate.pgn", "", "", "", 6, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "5Q2/P6k/8/8/4Q3/8/1B6/4R1K1 b - - 2 61"));
+    list.add(new PgnFileTestCase("lichess_0u6eh8ZP_helpmate.pgn", "", "", "", 9, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 10 61"));
+    list.add(new PgnFileTestCase("lichess_0xMzcUDT_helpmate.pgn", "", "", "", 21, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/5Q2/8/8/Q3Q3 b - - 18 88"));
+    list.add(new PgnFileTestCase("lichess_16myWOwv_helpmate.pgn", "", "", "", 15, 20, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/5k1K w - - 5 78"));
+    list.add(new PgnFileTestCase("lichess_1rcB0Tru_helpmate.pgn", "", "", "", 10, 6, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/4K1k1/2b2q2/1p6/8/8/8/2q5 w - - 3 52"));
+    list.add(new PgnFileTestCase("lichess_29moHRC8_helpmate.pgn", "", "", "", 10, 6, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/6p1/8/8/8/7k/5K2/4q2q w - - 4 65"));
+    list.add(new PgnFileTestCase("lichess_2gCvxApk_helpmate.pgn", "", "", "", 16, 21, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "Q7/8/1k6/Q7/8/8/8/5K2 b - - 4 69"));
+    list.add(new PgnFileTestCase("lichess_2k5piUl6_helpmate.pgn", "", "", "", 14, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k1Q5/8/K7/8/8/8/8/8 b - - 0 72"));
+    list.add(new PgnFileTestCase("lichess_2mgjVvcC_helpmate.pgn", "", "", "", 10, 5, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/2p4p/p6k/5pQ1/3b3K/6P1/PP5P/5q2 b - - 0 32"));
+    list.add(new PgnFileTestCase("lichess_2pwjX9B1_helpmate.pgn", "", "", "", 5, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/p7/6k1/8/5r1K/1q2q3 w - - 9 60"));
+    list.add(new PgnFileTestCase("lichess_2sFHWmg3_helpmate.pgn", "", "", "", 3, 20, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 20 70"));
+    list.add(new PgnFileTestCase("lichess_2wVTK5vV_helpmate.pgn", "", "", "", 11, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/k1K5/8/8/8/Q7 b - - 18 72"));
+    list.add(new PgnFileTestCase("lichess_3bKyjTHM_helpmate.pgn", "", "", "", 18, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/7q/8/7K/8/p7/k7/5qq1 w - - 2 65"));
+    list.add(new PgnFileTestCase("lichess_3cYOGNS6_helpmate.pgn", "", "", "", 11, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "Q4Q2/8/8/8/8/1k1K3Q/7P/1Q6 b - - 8 57"));
+    list.add(new PgnFileTestCase("lichess_3jesiit8_helpmate.pgn", "", "", "", 11, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "Q7/8/1k1Q4/8/2P2P2/6P1/4K3/8 b - - 2 69"));
+    list.add(new PgnFileTestCase("lichess_3xFc21eB_helpmate.pgn", "", "", "", 15, 48, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k1R5/8/K7/8/8/8/8/8 b - - 9 82"));
+    list.add(new PgnFileTestCase("lichess_49QwULSR_helpmate.pgn", "", "", "", 10, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/3q3K w - - 3 76"));
+    list.add(new PgnFileTestCase("lichess_55wBEu8Z_helpmate.pgn", "", "", "", 11, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/p1r5/5R1p/Pp1p2Pk/3PpK2/4Pp1Q/5P2/8 b - - 0 43"));
+    list.add(new PgnFileTestCase("lichess_6kfJPvsA_helpmate.pgn", "", "", "", 6, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/5K2/4q2q w - - 12 73"));
+    list.add(new PgnFileTestCase("lichess_78XhRaIr_helpmate.pgn", "", "", "", 32, 26, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 26 87"));
+    list.add(new PgnFileTestCase("lichess_7alMRe6y_helpmate.pgn", "", "", "", 3, 7, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/2p5/r3qk2/8/8/7K/1b3q2 w - - 2 68"));
+    list.add(new PgnFileTestCase("lichess_7fWsFh0J_helpmate.pgn", "", "", "", 6, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/3q1K1k/7q/8 w - - 6 66"));
+    list.add(new PgnFileTestCase("lichess_8cTl7SrQ_helpmate.pgn", "", "", "", 15, 32, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/k1b5/b7/K7 w - - 32 70"));
+    list.add(new PgnFileTestCase("lichess_APEww4mD_helpmate.pgn", "", "", "", 5, 31, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/2r5/6K1/6q1/6k1 w - - 6 89"));
+    list.add(new PgnFileTestCase("lichess_B8bpMZ71_helpmate.pgn", "", "", "", 11, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "2Q5/8/8/6B1/3QkPK1/PP2P1P1/8/5R2 b - - 2 61"));
+    list.add(new PgnFileTestCase("lichess_bfJbt6GP_helpmate.pgn", "", "", "", 7, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/7p/8/6p1/8/2Kq3k/8/1q5n w - - 2 73"));
+    list.add(new PgnFileTestCase("lichess_bQ0EXLal_helpmate.pgn", "", "", "", 10, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "1b6/1p4pp/8/8/8/k7/8/K6r w - - 11 59"));
+    list.add(new PgnFileTestCase("lichess_cZ8QxYP8_helpmate.pgn", "", "", "", 7, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "7k/7Q/7K/8/2PP3P/4P1P1/8/2BQ1B1R b - - 10 52"));
+    list.add(new PgnFileTestCase("lichess_D4vIOthl_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/6k1/8/8/8/8/5K2/4q2q w - - 10 76"));
+    list.add(new PgnFileTestCase("lichess_dBergEkt_helpmate.pgn", "", "", "", 17, 26, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/6k1/8/q5K1/1q6 w - - 26 74"));
+    list.add(new PgnFileTestCase("lichess_DiKq9jcy_helpmate.pgn", "", "", "", 9, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4Q2Q/8/5k2/3Q4/1BK5/2P5/8/8 b - - 0 70"));
+    list.add(new PgnFileTestCase("lichess_E9P918aj_helpmate.pgn", "", "", "", 18, 30, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 30 70"));
+    list.add(new PgnFileTestCase("lichess_eExHpNDf_helpmate.pgn", "", "", "", 11, 34, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "6Q1/k7/8/8/Q7/3K4/8/1R6 b - - 8 99"));
+    list.add(new PgnFileTestCase("lichess_eKwKl6Y9_helpmate.pgn", "", "", "", 17, 30, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/1Q6/K7/8/8/8/8/8 b - - 30 88"));
+    list.add(new PgnFileTestCase("lichess_EQCMW0jB_helpmate.pgn", "", "", "", 6, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/r7/q4K1k/7q/8 w - - 8 66"));
+    list.add(new PgnFileTestCase("lichess_EsFX1Urt_helpmate.pgn", "", "", "", 7, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 14 67"));
+    list.add(new PgnFileTestCase("lichess_EstAIWqd_helpmate.pgn", "", "", "", 15, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/5K1k/8/4rq2 w - - 10 76"));
+    list.add(new PgnFileTestCase("lichess_Ew7uTqu0_helpmate.pgn", "", "", "", 13, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/5pp1/8/8/p7/3b3k/8/r6K w - - 12 59"));
+    list.add(new PgnFileTestCase("lichess_f7x3bSzh_helpmate.pgn", "", "", "", 12, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k6r/p4p1p/2B3p1/8/8/N3b1P1/P4p1P/1R5K b - - 0 34"));
+    list.add(new PgnFileTestCase("lichess_FMDN8gJ7_helpmate.pgn", "", "", "", 5, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/1k2b3/2p5/2K5 w - - 2 73"));
+    list.add(new PgnFileTestCase("lichess_fN4vRqp0_helpmate.pgn", "", "", "", 5, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/5KQk/5R2 b - - 2 74"));
+    list.add(new PgnFileTestCase("lichess_fPnoYQtW_helpmate.pgn", "", "", "", 11, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/5K2/4q2q w - - 8 66"));
+    list.add(new PgnFileTestCase("lichess_FYTeO80q_helpmate.pgn", "", "", "", 7, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/6Qp/p5p1/7k/P4PB1/7K/1P3R1P/8 b - - 0 38"));
+    list.add(new PgnFileTestCase("lichess_G0xDBYwE_helpmate.pgn", "", "", "", 6, 20, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/k1Q5/1N6/K7/8/8/8/8 b - - 20 72"));
+    list.add(new PgnFileTestCase("lichess_G8i5Bn7F_helpmate.pgn", "", "", "", 11, 28, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 28 73"));
+    list.add(new PgnFileTestCase("lichess_GCuwJ5bP_helpmate.pgn", "", "", "", 6, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 18 64"));
+    list.add(new PgnFileTestCase("lichess_GIwBNz5S_helpmate.pgn", "", "", "", 14, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/7q/8/8/8/8/8/5k1K w - - 12 80"));
+    list.add(new PgnFileTestCase("lichess_gtzPUYWo_helpmate.pgn", "", "", "", 13, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/4kp2/4rp2/3q1K2 w - - 0 71"));
+    list.add(new PgnFileTestCase("lichess_GzoCTk46_helpmate.pgn", "", "", "", 9, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/7p/4qK1k/8/6q1 w - - 6 74"));
+    list.add(new PgnFileTestCase("lichess_hdott1S4_helpmate.pgn", "", "", "", 25, 30, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "7N/5Q2/5k1K/8/8/8/7B/8 b - - 1 78"));
+    list.add(new PgnFileTestCase("lichess_hkiG96je_helpmate.pgn", "", "", "", 10, 24, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 24 73"));
+    list.add(new PgnFileTestCase("lichess_IcjtzT9i_helpmate.pgn", "", "", "", 25, 28, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/8/6Q1/8/Q7 b - - 28 100"));
+    list.add(new PgnFileTestCase("lichess_if6AKvpb_helpmate.pgn", "", "", "", 5, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k3R3/8/K7/P7/1P3P2/8/8/8 b - - 2 60"));
+    list.add(new PgnFileTestCase("lichess_ig7fudY7_helpmate.pgn", "", "", "", 8, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/5K1k/8/4rq2 w - - 8 59"));
+    list.add(new PgnFileTestCase("lichess_Iy1VEUMC_helpmate.pgn", "", "", "", 9, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4K3/8/Q7/8/8/k7/8/1Q6 b - - 6 67"));
+    list.add(new PgnFileTestCase("lichess_j17qnxd0_helpmate.pgn", "", "", "", 16, 38, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 24 85"));
+    list.add(new PgnFileTestCase("lichess_j4phmaNj_helpmate.pgn", "", "", "", 11, 20, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/k1K5/8/8/Q7 b - - 20 81"));
+    list.add(new PgnFileTestCase("lichess_jehHS0Jj_helpmate.pgn", "", "", "", 10, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 10 75"));
+    list.add(new PgnFileTestCase("lichess_JfHZLRvD_helpmate.pgn", "", "", "", 6, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "r7/pp6/3p1p2/2p1k3/4q2P/5KP1/5P2/3R3R w - - 0 34"));
+    list.add(new PgnFileTestCase("lichess_jK46bYGo_helpmate.pgn", "", "", "", 12, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/6pk/8/q5K1 w - - 2 68"));
+    list.add(new PgnFileTestCase("lichess_jnox9kxK_helpmate.pgn", "", "", "", 36, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/7q/8/8/8/8/8/5k1K w - - 12 100"));
+    list.add(new PgnFileTestCase("lichess_jnvJUlDw_helpmate.pgn", "", "", "", 11, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/2p5/8/8/8/7k/4K3/3q2qn w - - 2 69"));
+    list.add(new PgnFileTestCase("lichess_KbEG3yK3_helpmate.pgn", "", "", "", 20, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/b7/3q3K w - - 18 76"));
+    list.add(new PgnFileTestCase("lichess_kbutR5IJ_helpmate.pgn", "", "", "", 8, 7, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "2k1q3/2p5/2K5/2N5/2q5/8/8/8 w - - 0 54"));
+    list.add(new PgnFileTestCase("lichess_Kdf0f1OE_helpmate.pgn", "", "", "", 21, 16, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 16 80"));
+    list.add(new PgnFileTestCase("lichess_KE47c49r_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/6p1/6b1/8/8/7k/8/3q3K w - - 13 66"));
+    list.add(new PgnFileTestCase("lichess_knQsF7R8_helpmate.pgn", "", "", "", 7, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/4K3/8/8/8/8/1Q6/Q7 b - - 12 60"));
+    list.add(new PgnFileTestCase("lichess_KP23RUWa_helpmate.pgn", "", "", "", 11, 17, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/8/8/8/2K5/Q7/8/1Q6 b - - 6 75"));
+    list.add(new PgnFileTestCase("lichess_KPvcgsfS_helpmate.pgn", "", "", "", 11, 6, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k5Q1/8/K7/8/8/8/P7/8 b - - 0 58"));
+    list.add(new PgnFileTestCase("lichess_Ks0yR98N_helpmate.pgn", "", "", "", 4, 32, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/8/6Q1/8/Q7 b - - 32 78"));
+    list.add(new PgnFileTestCase("lichess_LC76ur18_helpmate.pgn", "", "", "", 3, 15, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/3b4/3Kq3/8/8/2qk4 w - - 2 75"));
+    list.add(new PgnFileTestCase("lichess_lHtqM0fz_helpmate.pgn", "", "", "", 22, 19, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 12 82"));
+    list.add(new PgnFileTestCase("lichess_lk42iihk_helpmate.pgn", "", "", "", 5, 29, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k6Q/8/K7/8/8/8/R7/8 b - - 29 58"));
+    list.add(new PgnFileTestCase("lichess_LqTNOgyT_helpmate.pgn", "", "", "", 23, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4Q2Q/5k2/8/8/8/3K4/8/3Q4 b - - 2 64"));
+    list.add(new PgnFileTestCase("lichess_lYf34Uiq_helpmate.pgn", "", "", "", 14, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 22 82"));
+    list.add(new PgnFileTestCase("lichess_m5WDCW16_helpmate.pgn", "", "", "", 17, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "5Q2/2k4R/K7/8/6PP/8/8/7B b - - 14 58"));
+    list.add(new PgnFileTestCase("lichess_McLow5Hz_helpmate.pgn", "", "", "", 5, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "5Q1Q/2k3R1/8/1K6/8/8/B5P1/8 b - - 22 60"));
+    list.add(new PgnFileTestCase("lichess_MvEif0NV_helpmate.pgn", "", "", "", 19, 27, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/8/1K6/8/8/8/7Q/Q7 b - - 24 88"));
+    list.add(new PgnFileTestCase("lichess_N6AYM22R_helpmate.pgn", "", "", "", 4, 16, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/6p1/7p/8/8/7k/q7/5q1K w - - 0 73"));
+    list.add(new PgnFileTestCase("lichess_nvxFBquo_helpmate.pgn", "", "", "", 10, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "2QQ4/5k1K/8/8/8/5R2/8/8 b - - 2 68"));
+    list.add(new PgnFileTestCase("lichess_om0bCR5w_helpmate.pgn", "", "", "", 15, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "q7/8/8/5k2/8/8/5K2/1r2q3 w - - 8 61"));
+    list.add(new PgnFileTestCase("lichess_Omq6Fdhm_helpmate.pgn", "", "", "", 12, 9, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/1q3k1K w - - 2 83"));
+    list.add(new PgnFileTestCase("lichess_ooSZuhhE_helpmate.pgn", "", "", "", 5, 26, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 26 59"));
+    list.add(new PgnFileTestCase("lichess_p4CeCK3J_helpmate.pgn", "", "", "", 6, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k7/1Q6/K7/8/8/8/8/6Q1 b - - 13 76"));
+    list.add(new PgnFileTestCase("lichess_PAjZeTkN_helpmate.pgn", "", "", "", 6, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1Q6/k7/N7/8/R7/K7/8/8 b - - 0 69"));
+    list.add(new PgnFileTestCase("lichess_pFsUTatm_helpmate.pgn", "", "", "", 22, 27, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "2QQ4/k4K2/8/8/4P3/8/8/Q7 b - - 2 66"));
+    list.add(new PgnFileTestCase("lichess_PIL4PUtT_helpmate.pgn", "", "", "", 19, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "Q1Q5/8/7Q/8/1PB4k/8/5P2/R4RK1 b - - 2 54"));
+    list.add(new PgnFileTestCase("lichess_PkZ6qiA6_helpmate.pgn", "", "", "", 7, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/3p4/4k3/8/6K1/8/6qq w - - 2 65"));
+    list.add(new PgnFileTestCase("lichess_QirOKYTP_helpmate.pgn", "", "", "", 11, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "r1b5/ppppn2p/5Qp1/8/1P2q3/N1Pk4/P2b1P1P/3RKR2 w - - 2 21"));
+    list.add(new PgnFileTestCase("lichess_QnFE4Znl_helpmate.pgn", "", "", "", 3, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "6QQ/2k1Q3/8/1K6/8/8/8/8 b - - 12 69"));
+    list.add(new PgnFileTestCase("lichess_RF0MOp86_helpmate.pgn", "", "", "", 7, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/1kp5/3p4/8/p7/r7/2rK4/1q6 w - - 2 66"));
+    list.add(new PgnFileTestCase("lichess_RSqLhejA_helpmate.pgn", "", "", "", 12, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/4p3/8/5Knk/2p1q3/2r5 w - - 14 73"));
+    list.add(new PgnFileTestCase("lichess_RvN1zpCB_helpmate.pgn", "", "", "", 3, 3, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "6nr/6pp/4pp2/8/1PP5/P4P1k/7q/3B1RK1 w - - 0 26"));
+    list.add(new PgnFileTestCase("lichess_rVN4T4Tz_helpmate.pgn", "", "", "", 7, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 18 81"));
+    list.add(new PgnFileTestCase("lichess_SDy9Y3D0_helpmate.pgn", "", "", "", 20, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/4q2K w - - 0 66"));
+    list.add(new PgnFileTestCase("lichess_Sdz1yTzS_helpmate.pgn", "", "", "", 6, 26, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 26 80"));
+    list.add(new PgnFileTestCase("lichess_sMv8Hh43_helpmate.pgn", "", "", "", 11, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/6p1/5kP1/2r4K/5q2/8/8/8 w - - 2 53"));
+    list.add(new PgnFileTestCase("lichess_sp0oSyY2_helpmate.pgn", "", "", "", 4, 8, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/1p6/8/8/7k/b7/q6K w - - 2 57"));
+    list.add(new PgnFileTestCase("lichess_SwCSdv8K_helpmate.pgn", "", "", "", 17, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 22 75"));
+    list.add(new PgnFileTestCase("lichess_SX3iSehH_helpmate.pgn", "", "", "", 16, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "Q4K2/8/1k6/Q7/8/8/8/8 b - - 10 63"));
+    list.add(new PgnFileTestCase("lichess_Szu1FAr2_helpmate.pgn", "", "", "", 3, 13, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/pp4p1/6p1/8/8/7k/8/q6K w - - 13 60"));
+    list.add(new PgnFileTestCase("lichess_U5uv4wPs_helpmate.pgn", "", "", "", 10, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/6p1/8/7k/8/r6K w - - 5 90"));
+    list.add(new PgnFileTestCase("lichess_uBSFb2kx_helpmate.pgn", "", "", "", 16, 41, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "5B1k/8/8/8/8/7R/Q5K1/8 b - - 10 100"));
+    list.add(new PgnFileTestCase("lichess_UdUE6AvZ_helpmate.pgn", "", "", "", 16, 16, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 16 59"));
+    list.add(new PgnFileTestCase("lichess_UuNO3dGf_helpmate.pgn", "", "", "", 5, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "kQ6/8/8/8/8/8/7Q/5K2 b - - 12 85"));
+    list.add(new PgnFileTestCase("lichess_uwwUPCFw_helpmate.pgn", "", "", "", 5, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 14 71"));
+    list.add(new PgnFileTestCase("lichess_ux9sCCZ8_helpmate.pgn", "", "", "", 5, 5, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "5r1k/p5p1/6P1/2pp1K2/1p1b2P1/4q3/P1P5/8 w - - 0 35"));
+    list.add(new PgnFileTestCase("lichess_v4xJHVln_helpmate.pgn", "", "", "", 3, 15, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/4Kn2/4q2q w - - 4 76"));
+    list.add(new PgnFileTestCase("lichess_VdYuP1l4_helpmate.pgn", "", "", "", 20, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/5k1K w - - 14 74"));
+    list.add(new PgnFileTestCase("lichess_VeCbG5uw_helpmate.pgn", "", "", "", 12, 26, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 26 77"));
+    list.add(new PgnFileTestCase("lichess_VIdrelSz_helpmate.pgn", "", "", "", 4, 5, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "7r/2PR4/6pk/6P1/7K/r7/8/8 b - - 0 40"));
+    list.add(new PgnFileTestCase("lichess_Vnqfiwd6_helpmate.pgn", "", "", "", 5, 17, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/6p1/5p2/8/6k1/8/q5K1/1q6 w - - 8 67"));
+    list.add(new PgnFileTestCase("lichess_vS3VdvtP_helpmate.pgn", "", "", "", 3, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/6k1/8/5K2/4q2q w - - 12 68"));
+    list.add(new PgnFileTestCase("lichess_vytUGbcM_helpmate.pgn", "", "", "", 19, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 22 86"));
+    list.add(new PgnFileTestCase("lichess_W5huoA6x_helpmate.pgn", "", "", "", 6, 26, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 26 89"));
+    list.add(new PgnFileTestCase("lichess_wCL9HARO_helpmate.pgn", "", "", "", 6, 15, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 14 75"));
+    list.add(new PgnFileTestCase("lichess_WdedP6nc_helpmate.pgn", "", "", "", 6, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "7q/8/8/8/8/8/8/5k1K w - - 22 73"));
+    list.add(new PgnFileTestCase("lichess_wUCLya3K_helpmate.pgn", "", "", "", 12, 7, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/4qK1k/8/6q1 w - - 6 86"));
+    list.add(new PgnFileTestCase("lichess_wuHnMP2q_helpmate.pgn", "", "", "", 4, 7, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "7R/7p/p5p1/8/2p4P/5P1k/P6q/5RK1 w - - 0 34"));
+    list.add(new PgnFileTestCase("lichess_xD85FRxa_helpmate.pgn", "", "", "", 9, 30, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 30 81"));
+    list.add(new PgnFileTestCase("lichess_xfvaW7PK_helpmate.pgn", "", "", "", 12, 22, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/8/8/2K5/k7/8/Q7 b - - 22 62"));
+    list.add(new PgnFileTestCase("lichess_xmpqlKFo_helpmate.pgn", "", "", "", 9, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k1Q4/8/K7/8/8/8/8/8 b - - 18 69"));
+    list.add(new PgnFileTestCase("lichess_XtJJQxwF_helpmate.pgn", "", "", "", 10, 18, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 10 69"));
+    list.add(new PgnFileTestCase("lichess_XtvgUXHD_helpmate.pgn", "", "", "", 16, 15, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/6k1/8/q7/1q5K w - - 14 93"));
+    list.add(new PgnFileTestCase("lichess_YGj1C2WB_helpmate.pgn", "", "", "", 13, 16, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/7k/6q1/6K1 w - - 16 79"));
+    list.add(new PgnFileTestCase("lichess_YictG6WZ_helpmate.pgn", "", "", "", 10, 37, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "k1K5/8/8/8/8/8/8/R7 b - - 37 73"));
+    list.add(new PgnFileTestCase("lichess_yjfLthhQ_helpmate.pgn", "", "", "", 6, 12, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/8/8/8/8/5K1k/6q1/2q5 w - - 12 70"));
+    list.add(new PgnFileTestCase("lichess_YRvWOIpy_helpmate.pgn", "", "", "", 3, 10, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "8/8/KQk5/8/8/8/8/3R4 b - - 10 64"));
+    list.add(new PgnFileTestCase("lichess_z3xkCyBY_helpmate.pgn", "", "", "", 14, 11, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.WINNABLE,
+        UnwinnableQuick.UNWINNABLE, "7k/7Q/7K/2p3P1/2P5/8/8/8 b - - 0 59"));
+    list.add(new PgnFileTestCase("lichess_zmelXKvA_helpmate.pgn", "", "", "", 23, 14, CheckmateOrStalemate.CHECKMATE, 1,
+        InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.WINNABLE, "8/q7/8/8/8/8/K1k5/4b3 w - - 14 80"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE, list);
   }
@@ -5018,32 +4885,32 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("ambrona_02.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/1p4p1/1Pp3p1/k1P3p1/1pP3Pb/1P4p1/6P1/7K w - - 10 100"));
-    list.add(new PgnFileTestCase("ambrona_03.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 10 100"));
-    list.add(new PgnFileTestCase("ambrona_04.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N7 b - - 10 100"));
+    list.add(
+        new PgnFileTestCase("ambrona_03.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+            UnwinnableQuick.POSSIBLY_WINNABLE, "8/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N3b3 b - - 10 100"));
+    list.add(
+        new PgnFileTestCase("ambrona_04.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+            UnwinnableQuick.POSSIBLY_WINNABLE, "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P3K1/N7 b - - 10 100"));
     list.add(new PgnFileTestCase("ambrona_04_proof_game.pgn", "", "", "", 4, 10, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "7b/1k5B/7b/8/1p1p1p1p/1PpP1P1P/2P1P1K1/N7 b - - 6 56"));
-    list.add(new PgnFileTestCase("ambrona_05.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "4K3/8/8/8/8/p1p2p1p/P1pppp1P/bnrqkrnb b - - 10 100"));
+    list.add(
+        new PgnFileTestCase("ambrona_05.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+            UnwinnableQuick.POSSIBLY_WINNABLE, "4K3/8/8/8/8/p1p2p1p/P1pppp1P/bnrqkrnb b - - 10 100"));
     list.add(new PgnFileTestCase("ambrona_06.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "k1bK4/1p1p4/1PpPp3/2P1Pp2/2p1pP2/2p1P3/2P5/8 w - - 10 100"));
-    list.add(new PgnFileTestCase("ambrona_07.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "Bb2kb2/bKp1p1p1/1pP1P1P1/pP6/6P1/P7/8/8 b - - 10 100"));
-    list.add(new PgnFileTestCase("ambrona_08.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "Bb2kb2/bKp1p1p1/1pP1P1P1/1P6/p5P1/P7/8/8 b - - 10 100"));
+    list.add(
+        new PgnFileTestCase("ambrona_07.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+            UnwinnableQuick.POSSIBLY_WINNABLE, "Bb2kb2/bKp1p1p1/1pP1P1P1/pP6/6P1/P7/8/8 b - - 10 100"));
+    list.add(
+        new PgnFileTestCase("ambrona_08.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
+            UnwinnableQuick.POSSIBLY_WINNABLE, "Bb2kb2/bKp1p1p1/1pP1P1P1/1P6/p5P1/P7/8/8 b - - 10 100"));
 
     // cannot use as position illegal (too many white light-squared bishops)
     // nineth example from Ambrona, file name would become as below, but no such file as not used
@@ -5074,10 +4941,10 @@ public class PgnExpectedValue {
     list.add(new PgnFileTestCase("ambrona_16.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNDETERMINED, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 10 100"));
-    list.add(new PgnFileTestCase("ambrona_17.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.UNDETERMINED,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        "rnb1b3/pk1p4/p1pPp1p1/P1P1P1P1/RBP5/P7/5B2/7K w - - 10 100"));
+    list.add(
+        new PgnFileTestCase("ambrona_17.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE,
+            UnwinnableFull.WINNABLE, UnwinnableFull.UNDETERMINED, UnwinnableQuick.POSSIBLY_WINNABLE,
+            UnwinnableQuick.POSSIBLY_WINNABLE, "rnb1b3/pk1p4/p1pPp1p1/P1P1P1P1/RBP5/P7/5B2/7K w - - 10 100"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_AMBRONA, list);
   }

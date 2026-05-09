@@ -11,39 +11,39 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.YawnHalfMove;
-import com.dlb.chess.report.model.YawnIndex;
+import com.dlb.chess.report.model.NoProgressHalfMove;
+import com.dlb.chess.report.model.NoProgressIndex;
 
-public abstract class YawnMoveUtility {
+public abstract class NoProgressMoveUtility {
 
-  public static List<List<YawnHalfMove>> calculateYawnMoveRule(ChessBoard board, int numberOfHalfMovesThreshold) {
+  public static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(ChessBoard board, int numberOfHalfMovesThreshold) {
 
-    final List<YawnIndex> indexList = YawnMoveUtility.calculateYawnMoveIndex(board, numberOfHalfMovesThreshold);
+    final List<NoProgressIndex> indexList = NoProgressMoveUtility.calculateNoProgressMoveIndex(board, numberOfHalfMovesThreshold);
 
-    return YawnMoveUtility.calculateYawnMoveRule(board.getInitialFen().havingMove(),
+    return NoProgressMoveUtility.calculateNoProgressMoveRule(board.getInitialFen().havingMove(),
         board.getInitialFen().fullMoveNumber(), board.getHalfMoveList(), indexList, numberOfHalfMovesThreshold);
   }
 
-  private static List<List<YawnHalfMove>> calculateYawnMoveRule(Side havingMoveInitial, int fullMoveNumberInitial,
-      final List<HalfMove> halfMoveList, List<YawnIndex> indexList, int numberOfHalfMovesThreshold) {
+  private static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(Side havingMoveInitial, int fullMoveNumberInitial,
+      final List<HalfMove> halfMoveList, List<NoProgressIndex> indexList, int numberOfHalfMovesThreshold) {
 
     if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
       throw new IllegalArgumentException("The threshold cannot be below fifty moves");
     }
 
-    final List<List<YawnHalfMove>> resultList = new ArrayList<>();
+    final List<List<NoProgressHalfMove>> resultList = new ArrayList<>();
 
-    for (final YawnIndex sequence : indexList) {
+    for (final NoProgressIndex sequence : indexList) {
 
       int performedIndex;
       int sequenceLength;
-      YawnHalfMove entry;
+      NoProgressHalfMove entry;
 
-      final List<YawnHalfMove> result = new ArrayList<>();
+      final List<NoProgressHalfMove> result = new ArrayList<>();
       // we add the initial entry
       performedIndex = sequence.beginPerformedIndex();
       sequenceLength = 1;
-      entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+      entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
           performedIndex, sequenceLength);
       result.add(entry);
 
@@ -69,7 +69,7 @@ public abstract class YawnMoveUtility {
         // we add the half move when the fifty-move rule becomes effective
         performedIndex = sequence.beginPerformedIndex() + ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
         sequenceLength = ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-        entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+        entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
             performedIndex, sequenceLength);
         result.add(entry);
 
@@ -90,7 +90,7 @@ public abstract class YawnMoveUtility {
           performedIndex = sequence.beginPerformedIndex()
               + ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
           sequenceLength = ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-          entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+          entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
               performedIndex, sequenceLength);
           result.add(entry);
 
@@ -100,7 +100,7 @@ public abstract class YawnMoveUtility {
           sequenceLength = halfMoveClockEnd;
         }
       }
-      entry = YawnMoveUtility.calculateYawnHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
+      entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
           performedIndex, sequenceLength);
       result.add(entry);
       resultList.add(result);
@@ -109,19 +109,19 @@ public abstract class YawnMoveUtility {
     return resultList;
   }
 
-  private static YawnHalfMove calculateYawnHalfMove(Side havingMoveInitial, int fullMoveNumberInitial,
+  private static NoProgressHalfMove calculateNoProgressHalfMove(Side havingMoveInitial, int fullMoveNumberInitial,
       List<HalfMove> halfMoveList, int performedIndex, int sequenceLength) {
 
     if (performedIndex < 0) {
-      return YawnMoveUtility.calculateYawnHalfMoveNotPerformed(havingMoveInitial, fullMoveNumberInitial, performedIndex,
+      return NoProgressMoveUtility.calculateNoProgressHalfMoveNotPerformed(havingMoveInitial, fullMoveNumberInitial, performedIndex,
           sequenceLength);
     }
 
-    return YawnMoveUtility.calculateYawnHalfMovePerformed(havingMoveInitial, halfMoveList, performedIndex,
+    return NoProgressMoveUtility.calculateNoProgressHalfMovePerformed(havingMoveInitial, halfMoveList, performedIndex,
         sequenceLength);
   }
 
-  private static YawnHalfMove calculateYawnHalfMoveNotPerformed(Side havingMoveInitial, int fullMoveNumberInitial,
+  private static NoProgressHalfMove calculateNoProgressHalfMoveNotPerformed(Side havingMoveInitial, int fullMoveNumberInitial,
       int performedIndex, int sequenceLength) {
 
     final var performedHalfMoveCount = performedIndex + 1;
@@ -131,10 +131,10 @@ public abstract class YawnMoveUtility {
     final String san = BasicConstants.NA;
     final Side sideMoved = BasicChessUtility.calculateSideMoved(havingMoveInitial, performedHalfMoveCount);
 
-    return new YawnHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
+    return new NoProgressHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
   }
 
-  private static YawnHalfMove calculateYawnHalfMovePerformed(Side havingMoveInitial, List<HalfMove> halfMoveList,
+  private static NoProgressHalfMove calculateNoProgressHalfMovePerformed(Side havingMoveInitial, List<HalfMove> halfMoveList,
       int performedIndex, int sequenceLength) {
 
     final HalfMove firstHalfMove = NonNullWrapperCommon.get(halfMoveList, performedIndex);
@@ -144,10 +144,10 @@ public abstract class YawnMoveUtility {
     final String san = firstHalfMove.san();
     final Side sideMoved = BasicChessUtility.calculateSideMoved(havingMoveInitial, performedHalfMoveCount);
 
-    return new YawnHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
+    return new NoProgressHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
   }
 
-  private static List<YawnIndex> calculateYawnMoveIndex(ChessBoard board, int numberOfHalfMovesThreshold) {
+  private static List<NoProgressIndex> calculateNoProgressMoveIndex(ChessBoard board, int numberOfHalfMovesThreshold) {
 
     if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
       throw new IllegalArgumentException("The threshold cannot be below fifty moves");
@@ -155,7 +155,7 @@ public abstract class YawnMoveUtility {
 
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
-    final List<YawnIndex> result = new ArrayList<>();
+    final List<NoProgressIndex> result = new ArrayList<>();
 
     // if the game starts from a FEN where the half-move clock meets the limit,
     // and begins with a pawn move or catpure, we add the initial sequence here
@@ -173,7 +173,7 @@ public abstract class YawnMoveUtility {
         final var beginPerformedIndex = beginPerformedHalfMoveNumber - 1;
         final var endPerformedIndex = endPerformedHalfMoveNumber - 1;
 
-        final YawnIndex sequence = new YawnIndex(beginPerformedIndex, endPerformedIndex, halfMoveClockEnd);
+        final NoProgressIndex sequence = new NoProgressIndex(beginPerformedIndex, endPerformedIndex, halfMoveClockEnd);
 
         result.add(sequence);
         // NO EARLY RETURN HERE
@@ -215,7 +215,7 @@ public abstract class YawnMoveUtility {
         endPerformedIndex = calculateEndIndexSequence(halfMoveList, i);
         final HalfMove endHalfMove = NonNullWrapperCommon.get(halfMoveList, endPerformedIndex);
         final var halfMoveClockEnd = endHalfMove.halfMoveClock();
-        final YawnIndex sequence = new YawnIndex(beginPerformedIndex, endPerformedIndex, halfMoveClockEnd);
+        final NoProgressIndex sequence = new NoProgressIndex(beginPerformedIndex, endPerformedIndex, halfMoveClockEnd);
 
         result.add(sequence);
       }
@@ -230,7 +230,7 @@ public abstract class YawnMoveUtility {
     }
     for (var j = index + 1; j <= maxIndex; j++) {
       final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, j);
-      if (Reporter.calculateIsHalfMoveTerminatesYawnSequence(halfMove)) {
+      if (Reporter.calculateIsHalfMoveTerminatesNoProgressSequence(halfMove)) {
         return j - 1;
       }
     }

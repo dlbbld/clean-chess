@@ -9,7 +9,7 @@ import com.dlb.chess.test.librarycomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
-import com.dlb.chess.test.report.representation.YawnRepresentation;
+import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 
 public abstract class AbstractPgnTest {
 
@@ -28,9 +28,9 @@ public abstract class AbstractPgnTest {
     testFen(testCase.fen(), report.fen());
     testRepetition(report, testCase);
     testRepetitionInitialEnPassantCapture(report, testCase);
-    testYawnMoveRule(report, testCase);
+    testNoProgressMoveRule(report, testCase);
     testFirstCapture(report, testCase);
-    testMaxYawnSequence(report, testCase);
+    testMaxNoProgressSequence(report, testCase);
     testCheckmateOrStalemate(report, testCase);
     testRepetitionCountFinalPosition(report, testCase);
     testInsufficientMaterial(report, testCase);
@@ -48,17 +48,17 @@ public abstract class AbstractPgnTest {
     RepetitionTestUtility.testRepetition(report, testCase, EnPassantCaptureRuleThreefold.DO_IGNORE);
   }
 
-  private static void testYawnMoveRule(Report report, PgnFileTestCase testCase) {
-    assertEquals(testCase.expectedYawnMoveRule(),
-        YawnRepresentation.calculateRepresentationYawnMoveListList(report.yawnMoveListList()));
+  private static void testNoProgressMoveRule(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.expectedNoProgressMoveRule(),
+        NoProgressRepresentation.calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList()));
   }
 
   private static void testFirstCapture(Report report, PgnFileTestCase testCase) {
     assertEquals(testCase.firstCapture(), report.firstCapture());
   }
 
-  private static void testMaxYawnSequence(Report report, PgnFileTestCase testCase) {
-    assertEquals(testCase.maxYawnSequence(), report.maxYawnSequence());
+  private static void testMaxNoProgressSequence(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.maxNoProgressSequence(), report.maxNoProgressSequence());
   }
 
   private static void testCheckmateOrStalemate(Report report, PgnFileTestCase testCase) {

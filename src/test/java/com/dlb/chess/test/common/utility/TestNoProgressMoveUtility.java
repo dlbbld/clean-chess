@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.ChessConstants;
-import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.report.model.YawnHalfMove;
+import com.dlb.chess.common.utility.NoProgressMoveUtility;
+import com.dlb.chess.report.model.NoProgressHalfMove;
 
-class TestYawnMoveUtility {
+class TestNoProgressMoveUtility {
 
   @SuppressWarnings("static-method")
   @Test
@@ -30,17 +30,17 @@ class TestYawnMoveUtility {
         "Rh5", "Kc6", "Rh4", "Kd6", "Rh3", "Kc6", "Rh2", "Kd6", "Rh1", "Kc6", "Kf2", "Kd6", "Rh2", "Kc6", "Rh3", "Kd6",
         "Rh4", "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6");
 
-    final List<List<YawnHalfMove>> actualListList = YawnMoveUtility.calculateYawnMoveRule(board,
+    final List<List<NoProgressHalfMove>> actualListList = NoProgressMoveUtility.calculateNoProgressMoveRule(board,
         ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
 
-    final List<List<YawnHalfMove>> expectedListList = new ArrayList<>();
+    final List<List<NoProgressHalfMove>> expectedListList = new ArrayList<>();
 
     final Board boardPlayAlong = new Board(fenRookEndGame);
     boardPlayAlong.performMoves("Kxf6", "Rh2");
 
-    final List<YawnHalfMove> yawnHalfMoveList = new ArrayList<>();
-    final YawnHalfMove firstYawnHalfMove = calculateYawnHalfMoveForLastMove(boardPlayAlong);
-    yawnHalfMoveList.add(firstYawnHalfMove);
+    final List<NoProgressHalfMove> noProgressHalfMoveList = new ArrayList<>();
+    final NoProgressHalfMove firstNoProgressHalfMove = calculateNoProgressHalfMoveForLastMove(boardPlayAlong);
+    noProgressHalfMoveList.add(firstNoProgressHalfMove);
 
     boardPlayAlong.performMoves("Ke7", "Rh3", "Kd6", "Rh4", "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6", "Rh8",
         "Kc6", "Rg8", "Kd6", "Rg7", "Kc6", "Rg6", "Kd6", "Rg5", "Kc6", "Rg4", "Kd6", "Rg3", "Kc6", "Rg2", "Kd6", "Rf2",
@@ -50,20 +50,20 @@ class TestYawnMoveUtility {
         "Kc6", "Rh4", "Kd6", "Rh3", "Kc6", "Rh2", "Kd6", "Rh1", "Kc6", "Kf2", "Kd6", "Rh2", "Kc6", "Rh3", "Kd6", "Rh4",
         "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6");
 
-    final YawnHalfMove lastYawnHalfMove = calculateYawnHalfMoveForLastMove(boardPlayAlong);
-    yawnHalfMoveList.add(lastYawnHalfMove);
+    final NoProgressHalfMove lastNoProgressHalfMove = calculateNoProgressHalfMoveForLastMove(boardPlayAlong);
+    noProgressHalfMoveList.add(lastNoProgressHalfMove);
 
-    expectedListList.add(yawnHalfMoveList);
+    expectedListList.add(noProgressHalfMoveList);
 
     assertEquals(expectedListList, actualListList);
   }
 
-  private static YawnHalfMove calculateYawnHalfMoveForLastMove(Board board) {
+  private static NoProgressHalfMove calculateNoProgressHalfMoveForLastMove(Board board) {
     final var performedHalfMoveCount = board.getPerformedHalfMoveCount();
     final var fullMoveNumber = board.getFullMoveNumber();
     final String san = board.getSan();
     final Side sideMoved = board.getHavingMove().getOppositeSide();
     final var halfMoveClock = board.getHalfMoveClock();
-    return new YawnHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, halfMoveClock);
+    return new NoProgressHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, halfMoveClock);
   }
 }

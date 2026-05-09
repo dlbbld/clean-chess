@@ -19,11 +19,11 @@ public class BasicRepresentation {
 
   private static final String ATTRIBUTE_FIVEFOLD_YES_NO = "Fivefold";
 
-  private static final String ATTRIBUTE_YAWN_MOVE_RULE_YES_NO = "Yawn-move rule";
-  private static final String ATTRIBUTE_YAWN_MOVE_RULE_SEQUENCE = "Sequence";
+  private static final String ATTRIBUTE_NO_PROGRESS_MOVE_RULE_YES_NO = "No progress rule";
+  private static final String ATTRIBUTE_NO_PROGRESS_MOVE_RULE_SEQUENCE = "Sequence";
 
   private static final String ATTRIBUTE_FIRST_CAPTURE = "First capture";
-  private static final String ATTRIBUTE_MAX_YAWN_SEQUENCE = "Max yawn sequence";
+  private static final String ATTRIBUTE_MAX_NO_PROGRESS_SEQUENCE = "Max no progress sequence";
   private static final String ATTRIBUTE_BOARD_RESULT_NAME = "Board result";
   private static final String ATTRIBUTE_INSUFFICIENT_MATERIAL = "Insufficient material";
 
@@ -51,14 +51,14 @@ public class BasicRepresentation {
       }
     }
 
-    list.add(calculateOutputYawnMoveRule(report));
+    list.add(calculateOutputNoProgressMoveRule(report));
 
     if (report.hasFiftyMoveRule()) {
-      list.add(calculateOutputYawnMoveRuleSequence(report));
+      list.add(calculateOutputNoProgressMoveRuleSequence(report));
     }
 
     list.add(calculateOutputFirstCapture(report));
-    list.add(calculateOutputMaxYawnSequence(report));
+    list.add(calculateOutputMaxNoProgressSequence(report));
 
     list.add(calculateOutputLastPositionEvaluation(report));
     list.add(calculateOutputInsufficientMaterial(report));
@@ -66,8 +66,8 @@ public class BasicRepresentation {
     return list;
   }
 
-  private static String calculateOutputMaxYawnSequence(Report report) {
-    return calculateOutput(ATTRIBUTE_MAX_YAWN_SEQUENCE, report.maxYawnSequence());
+  private static String calculateOutputMaxNoProgressSequence(Report report) {
+    return calculateOutput(ATTRIBUTE_MAX_NO_PROGRESS_SEQUENCE, report.maxNoProgressSequence());
   }
 
   private static String calculateOutputLastPositionEvaluation(Report report) {
@@ -107,22 +107,22 @@ public class BasicRepresentation {
     return calculateOutputRepetitionType(report, EnPassantCaptureRuleThreefold.DO_IGNORE);
   }
 
-  private static String calculateOutputYawnMoveRule(Report report) {
-    return calculateOutput(ATTRIBUTE_YAWN_MOVE_RULE_YES_NO, report.hasFiftyMoveRule());
+  private static String calculateOutputNoProgressMoveRule(Report report) {
+    return calculateOutput(ATTRIBUTE_NO_PROGRESS_MOVE_RULE_YES_NO, report.hasFiftyMoveRule());
   }
 
-  private static String calculateOutputYawnMoveRuleSequence(Report report) {
-    final String attribute = ATTRIBUTE_YAWN_MOVE_RULE_SEQUENCE;
+  private static String calculateOutputNoProgressMoveRuleSequence(Report report) {
+    final String attribute = ATTRIBUTE_NO_PROGRESS_MOVE_RULE_SEQUENCE;
     if (!report.hasFiftyMoveRule()) {
       return calculateOutput(attribute, ATTRIBUTE_VALUE_NA);
     }
-    final String repetition = YawnRepresentation.calculateRepresentationYawnMoveListList(report.yawnMoveListList());
+    final String repetition = NoProgressRepresentation
+        .calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
     return calculateOutput(attribute, repetition);
   }
 
   private static String calculateOutputThreefoldRepetition(Report report) {
-    return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
-        report.hasThreefoldRepetition());
+    return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO, report.hasThreefoldRepetition());
   }
 
   private static String calculateOutputRepetitionType(Report report,

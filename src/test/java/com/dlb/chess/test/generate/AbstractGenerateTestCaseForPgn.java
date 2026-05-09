@@ -12,7 +12,7 @@ import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.report.representation.RepetitionRepresentation;
-import com.dlb.chess.test.report.representation.YawnRepresentation;
+import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
@@ -47,9 +47,9 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    final String yawnMove = YawnRepresentation.calculateRepresentationYawnMoveListList(report.yawnMoveListList());
+    final String noProgressMove = NoProgressRepresentation.calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
     result.append("\"");
-    result.append(yawnMove);
+    result.append(noProgressMove);
     result.append("\"");
     result.append(", ");
 
@@ -57,8 +57,8 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(firstCapture);
     result.append(", ");
 
-    final var maxYawnSequence = report.maxYawnSequence();
-    result.append(maxYawnSequence);
+    final var maxNoProgressSequence = report.maxNoProgressSequence();
+    result.append(maxNoProgressSequence);
     result.append(", ");
 
     final CheckmateOrStalemate lastPositionEvaluation = report.checkmateOrStalemate();

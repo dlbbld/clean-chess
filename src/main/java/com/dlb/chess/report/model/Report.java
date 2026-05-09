@@ -16,10 +16,10 @@ import com.dlb.chess.report.enums.CheckmateOrStalemate;
  * sequences for corpus-mining use cases.
  */
 public record Report(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
-    List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<List<YawnHalfMove>> yawnMoveListList,
+    List<List<HalfMove>> repetitionListListInitialEnPassantCapture, List<List<NoProgressHalfMove>> noProgressMoveListList,
     boolean hasThreefoldRepetition, boolean hasThreefoldRepetitionInitialEnPassantCapture,
     boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule, int firstCapture,
-    boolean hasCapture, int maxYawnSequence, CheckmateOrStalemate checkmateOrStalemate,
+    boolean hasCapture, int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate,
     InsufficientMaterial insufficientMaterial, String fen, ChessBoard board) {
 
 }

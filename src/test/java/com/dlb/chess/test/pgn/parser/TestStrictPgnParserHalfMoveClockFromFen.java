@@ -7,13 +7,14 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
 
 /**
- * Verifies that the strict PGN parser correctly initializes board state from a
- * {@code [FEN]} tag and updates the halfmove clock and move number through every recorded
- * halfmove. Iterates {@code parserMechanics/fromFen} and {@code parserMechanics/fromFenYawn},
- * asserting the parsed-and-replayed final FEN matches the registered expected FEN.
+ * Verifies that the strict PGN parser correctly initializes board state from a {@code [FEN]} tag and updates the
+ * halfmove clock and move number through every recorded halfmove. Iterates {@code parserMechanics/fromFen} and
+ * {@code parserMechanics/fromFenNoProgress}, asserting the parsed-and-replayed final FEN matches the registered
+ * expected FEN.
  *
- * <p>See {@link AbstractTestPgnParserHalfMoveClockFromFen} for the iteration body and the
- * exact assertion shape. Runs every cycle (no gate) — this is core parser coverage.
+ * <p>
+ * See {@link AbstractTestPgnParserHalfMoveClockFromFen} for the iteration body and the exact assertion shape. Runs
+ * every cycle (no gate) — this is core parser coverage.
  */
 class TestStrictPgnParserHalfMoveClockFromFen extends AbstractTestPgnParserHalfMoveClockFromFen {
 

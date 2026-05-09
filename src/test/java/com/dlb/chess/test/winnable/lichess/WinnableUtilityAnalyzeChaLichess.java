@@ -24,7 +24,7 @@ import com.dlb.chess.test.winnable.model.GameMultipleAnalysis;
 import com.dlb.chess.test.winnable.model.WinnableAnalysis;
 import com.google.common.collect.ImmutableSet;
 
-public class WinnableUtilityAnalzyeChaLichess {
+public class WinnableUtilityAnalyzeChaLichess {
 
   // Examples
   // Black on the move has only two moves, both stalemating
@@ -36,7 +36,7 @@ public class WinnableUtilityAnalzyeChaLichess {
 
   private static final boolean IS_DEBUG = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableUtilityAnalzyeChaLichess.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableUtilityAnalyzeChaLichess.class);
 
   private static final ImmutableSet<GameStatusAnalysis> GAME_DRAW_SET;
   private static final ImmutableSet<GameStatusAnalysis> GAME_WHITE_UNWINNABLE_SET;

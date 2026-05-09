@@ -16,22 +16,22 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.common.utility.NoProgressMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
-import com.dlb.chess.common.utility.YawnMoveUtility;
 import com.dlb.chess.internationalization.Message;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.report.model.NoProgressHalfMove;
 import com.dlb.chess.report.model.Report;
-import com.dlb.chess.report.model.YawnHalfMove;
+import com.dlb.chess.report.print.NoProgressPrint;
 import com.dlb.chess.report.print.RepetitionPrint;
 import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
-import com.dlb.chess.report.print.YawnPrint;
 
 public final class Reporter {
 
   private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
-  private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;
+  private static final int NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD = 25;
 
   private Reporter() {
   }
@@ -71,24 +71,24 @@ public final class Reporter {
       output.add(listChronic);
     }
 
-    // yawn move
-    final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
-        2 * YAWN_FULL_MOVE_COUNT_THRESHOLD);
-    addMainSection(output, "report.yawnmove.sequence.title",
-        NonNullWrapperCommon.valueOf(YAWN_FULL_MOVE_COUNT_THRESHOLD));
-    if (yawnMoveListList.isEmpty()) {
-      output.add(Message.getString("report.yawnmove.sequence.none"));
+    // no progress move
+    final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility
+        .calculateNoProgressMoveRule(board, 2 * NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD);
+    addMainSection(output, "report.noProgressMove.sequence.title",
+        NonNullWrapperCommon.valueOf(NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD));
+    if (noProgressMoveListList.isEmpty()) {
+      output.add(Message.getString("report.noProgressMove.sequence.none"));
     } else {
-      final var list = YawnPrint.calculateOutputYawnMoveListList(yawnMoveListList);
+      final var list = NoProgressPrint.calculateOutputNoProgressMoveListList(noProgressMoveListList);
       output.addAll(list);
     }
 
-    addMainSection(output, "report.yawnmove.fiftyMoves.title");
-    final var hasFiftyMoveRule = calculateHasFiftyMoveRule(yawnMoveListList);
+    addMainSection(output, "report.noProgressMove.fiftyMoves.title");
+    final var hasFiftyMoveRule = calculateHasFiftyMoveRule(noProgressMoveListList);
     if (hasFiftyMoveRule) {
-      output.add(Message.getString("report.yawnmove.fiftyMoves.yes"));
+      output.add(Message.getString("report.noProgressMove.fiftyMoves.yes"));
     } else {
-      output.add(Message.getString("report.yawnmove.fiftyMoves.no"));
+      output.add(Message.getString("report.noProgressMove.fiftyMoves.no"));
     }
 
     printList(output);
@@ -113,19 +113,19 @@ public final class Reporter {
     final List<List<HalfMove>> repetitionListListInitialEnPassantCapture = calculateRepetitionListListInitialEnPassantCapture(
         halfMoveList);
 
-    final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
+    final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility.calculateNoProgressMoveRule(board,
         ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
 
     final var hasThreefoldRepetition = !repetitionListList.isEmpty();
     final var hasThreefoldRepetitionInitialEnPassantCapture = !repetitionListListInitialEnPassantCapture.isEmpty();
     final var hasFivefoldRepetition = calculateHasFivefoldRepetition(repetitionListList);
-    final var hasFiftyMoveRule = !yawnMoveListList.isEmpty();
-    final var hasSeventyFiveMoveRule = calculateHasSeventyFiveMoveRule(yawnMoveListList);
+    final var hasFiftyMoveRule = !noProgressMoveListList.isEmpty();
+    final var hasSeventyFiveMoveRule = calculateHasSeventyFiveMoveRule(noProgressMoveListList);
 
     final var firstCapture = calculateFirstCapture(halfMoveList);
     final var hasCapture = calculateHasCapture(halfMoveList);
 
-    final var maxYawnSequence = calculateMaxYawnSequence(board);
+    final var maxNoProgressSequence = calculateMaxNoProgressSequence(board);
 
     final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
@@ -137,12 +137,12 @@ public final class Reporter {
     }
 
     return new Report(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
-        yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
-        hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
+        noProgressMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
+        hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxNoProgressSequence, checkmateOrStalemate,
         insufficientMaterial, fen, board);
   }
 
-  public static boolean calculateIsHalfMoveTerminatesYawnSequence(HalfMove halfMove) {
+  public static boolean calculateIsHalfMoveTerminatesNoProgressSequence(HalfMove halfMove) {
     return halfMove.halfMoveClock() == 0;
   }
 
@@ -159,21 +159,21 @@ public final class Reporter {
     return false;
   }
 
-  private static boolean calculateHasSeventyFiveMoveRule(List<List<YawnHalfMove>> yawnMoveListList) {
-    for (final List<YawnHalfMove> list : yawnMoveListList) {
-      final YawnHalfMove lastYawnHalfMove = NonNullWrapperCommon.getLast(list);
+  private static boolean calculateHasSeventyFiveMoveRule(List<List<NoProgressHalfMove>> noProgressMoveListList) {
+    for (final List<NoProgressHalfMove> list : noProgressMoveListList) {
+      final NoProgressHalfMove lastNoProgressHalfMove = NonNullWrapperCommon.getLast(list);
 
-      if (lastYawnHalfMove.sequenceLength() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      if (lastNoProgressHalfMove.sequenceLength() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
         return true;
       }
     }
     return false;
   }
 
-  private static boolean calculateHasFiftyMoveRule(List<List<YawnHalfMove>> yawnMoveListList) {
-    for (final List<YawnHalfMove> yawnMoveList : yawnMoveListList) {
-      for (final YawnHalfMove yawnHalfMove : yawnMoveList) {
-        if (yawnHalfMove.sequenceLength() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+  private static boolean calculateHasFiftyMoveRule(List<List<NoProgressHalfMove>> noProgressMoveListList) {
+    for (final List<NoProgressHalfMove> noProgressMoveList : noProgressMoveListList) {
+      for (final NoProgressHalfMove noProgressHalfMove : noProgressMoveList) {
+        if (noProgressHalfMove.sequenceLength() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
           return true;
         }
       }
@@ -215,7 +215,7 @@ public final class Reporter {
     return false;
   }
 
-  private static int calculateMaxYawnSequence(ChessBoard board) {
+  private static int calculateMaxNoProgressSequence(ChessBoard board) {
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
     if (board.getHalfMoveList().isEmpty()) {

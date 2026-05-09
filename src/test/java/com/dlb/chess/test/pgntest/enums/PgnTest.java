@@ -47,10 +47,10 @@ public enum PgnTest {
   BASIC_CASTLING_SPECIAL_WHITE(true, "basic/castling/special/white"),
   BASIC_CASTLING_SPECIAL_BLACK(true, "basic/castling/special/black"),
   BASIC_FORCED(true, "basic/forced"),
-  BASIC_REPORT_YAWN_SEQUENCES_WHITE(true, "basic/report/yawn/white"),
-  BASIC_REPORT_YAWN_SEQUENCES_BLACK(true, "basic/report/yawn/black"),
+  BASIC_REPORT_NO_PROGRESS_SEQUENCES_WHITE(true, "basic/report/noProgress/white"),
+  BASIC_REPORT_NO_PROGRESS_SEQUENCES_BLACK(true, "basic/report/noProgress/black"),
   BASIC_REPORT_REPETITION(false, "basic/report/repetition"),
-  BASIC_REPORT_MAX_YAWN(false, "basic/report/maxYawn"),
+  BASIC_REPORT_MAX_NO_PROGRESS(false, "basic/report/maxNoProgress"),
 
   PARSER_FROM_FEN(false, "parserFenMechanics/"),
 

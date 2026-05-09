@@ -150,45 +150,52 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       }
     }
 
-    // ====== basic/fromFenYawn (20 files) ======
+    // ====== basic/fromFenNoProgress (20 files) ======
     // White — 04, 05, 06, 07, 08, 12 cross 75-move via move past; 13-16 are FEN-rejected
-    m.put("basic/fromFenYawn/white/04_white_from_fen_yawn_fifty_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/04_white_from_fen_no_progress_fifty_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/05_white_from_fen_yawn_seventy_five_reoccuring_fifty.pgn",
+    m.put("basic/fromFenNoProgress/white/05_white_from_fen_no_progress_seventy_five_reoccuring_fifty.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/06_white_from_fen_yawn_seventy_five_reoccuring_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/06_white_from_fen_no_progress_seventy_five_reoccuring_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/07_white_from_fen_yawn_seventy_five_reoccuring_above_fifty.pgn",
+    m.put("basic/fromFenNoProgress/white/07_white_from_fen_no_progress_seventy_five_reoccuring_above_fifty.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/08_white_from_fen_yawn_seventy_five_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/08_white_from_fen_no_progress_seventy_five_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/12_white_from_fen_yawn_above_fifty_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/12_white_from_fen_no_progress_above_fifty_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/13_white_from_fen_yawn_above_seventy_five_reoccuring_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/white/14_white_from_fen_yawn_above_seventy_five_reoccuring_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/13_white_from_fen_no_progress_above_seventy_five_reoccuring_fifty.pgn",
         fenInvalid());
-    m.put("basic/fromFenYawn/white/15_white_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/white/16_white_from_fen_yawn_above_seventy_five_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/14_white_from_fen_no_progress_above_seventy_five_reoccuring_seventy_five.pgn",
+        fenInvalid());
+    m.put("basic/fromFenNoProgress/white/15_white_from_fen_no_progress_above_seventy_five_reoccuring_above_fifty.pgn",
+        fenInvalid());
+    m.put(
+        "basic/fromFenNoProgress/white/16_white_from_fen_no_progress_above_seventy_five_reoccuring_above_seventy_five.pgn",
         fenInvalid());
 
     // Black — 04, 06, 07, 08, 12 cross 75-move via move past; 05 is FEN-rejected (clock 175);
     // 13-16 also FEN-rejected.
-    m.put("basic/fromFenYawn/black/04_black_from_fen_yawn_fifty_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/black/04_black_from_fen_no_progress_fifty_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/05_black_from_fen_yawn_seventy_five_reoccuring_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/black/06_black_from_fen_yawn_seventy_five_reoccuring_seventy_five.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/07_black_from_fen_yawn_seventy_five_reoccuring_above_fifty.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/08_black_from_fen_yawn_seventy_five_reoccuring_above_seventy_five.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/12_black_from_fen_yawn_above_fifty_reoccuring_above_seventy_five.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/13_black_from_fen_yawn_above_seventy_five_reoccuring_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/black/14_black_from_fen_yawn_above_seventy_five_reoccuring_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/black/05_black_from_fen_no_progress_seventy_five_reoccuring_fifty.pgn",
         fenInvalid());
-    m.put("basic/fromFenYawn/black/15_black_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/black/16_black_from_fen_yawn_above_seventy_five_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/black/06_black_from_fen_no_progress_seventy_five_reoccuring_seventy_five.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/07_black_from_fen_no_progress_seventy_five_reoccuring_above_fifty.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/08_black_from_fen_no_progress_seventy_five_reoccuring_above_seventy_five.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/12_black_from_fen_no_progress_above_fifty_reoccuring_above_seventy_five.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/13_black_from_fen_no_progress_above_seventy_five_reoccuring_fifty.pgn",
+        fenInvalid());
+    m.put("basic/fromFenNoProgress/black/14_black_from_fen_no_progress_above_seventy_five_reoccuring_seventy_five.pgn",
+        fenInvalid());
+    m.put("basic/fromFenNoProgress/black/15_black_from_fen_no_progress_above_seventy_five_reoccuring_above_fifty.pgn",
+        fenInvalid());
+    m.put(
+        "basic/fromFenNoProgress/black/16_black_from_fen_no_progress_above_seventy_five_reoccuring_above_seventy_five.pgn",
         fenInvalid());
 
     // ====== basic/intervening (4) — outer/inner 5-fold + 3-fold interactions, all play past 5-fold ======
