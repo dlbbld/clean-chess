@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgn.analysis;
+package com.dlb.chess.test.pgn.report;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
@@ -19,9 +19,9 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  * To widen scope locally, flip {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} to {@code false} (or the
  * master gate {@code IS_RESTRICT_PGN}) and the full restricted corpus runs.
  */
-class TestPgnAnalysisAgainstTestCase extends AbstractPgnTest {
+class TestPgnReportAgainstTestCase extends AbstractPgnTest {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnAnalysisAgainstTestCase.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnReportAgainstTestCase.class);
 
   /** Cap on files tested per category when the smoke restriction is active. */
   private static final int MAX_FILES_PER_FOLDER = 2;
@@ -40,7 +40,7 @@ class TestPgnAnalysisAgainstTestCase extends AbstractPgnTest {
           break;
         }
         logger.info(testCase.pgnFileName());
-        testAnalysisAgainstTestCase(testCaseList, testCase);
+        testReportAgainstTestCase(testCaseList, testCase);
         processedFilesInFolder++;
       }
     }

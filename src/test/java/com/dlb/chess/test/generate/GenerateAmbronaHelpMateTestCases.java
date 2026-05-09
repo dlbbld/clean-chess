@@ -56,11 +56,11 @@ public class GenerateAmbronaHelpMateTestCases {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
-      final var analysis = Reporter.calculateReport(folderPath, testCase.pgnFileName());
+      final var report = Reporter.calculateReport(folderPath, testCase.pgnFileName());
       if (IS_CREATE_UCI_REQUIRED) {
-        printMovesAsUci(testCase.pgnFileName(), analysis);
+        printMovesAsUci(testCase.pgnFileName(), report);
       }
-      writeGameAsContinued(havingHelpMate, folderPath, testCase.pgnFileName(), analysis);
+      writeGameAsContinued(havingHelpMate, folderPath, testCase.pgnFileName(), report);
     }
   }
 

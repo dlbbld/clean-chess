@@ -13,18 +13,18 @@ import com.dlb.chess.test.report.representation.YawnRepresentation;
 
 public abstract class AbstractPgnTest {
 
-  public static void testAnalysisAgainstTestCase(String pgnFileName, Report report) throws Exception {
+  public static void testReportAgainstTestCase(String pgnFileName, Report report) throws Exception {
     final PgnFileTestCase testCase = PgnExpectedValue.findTestCase(pgnFileName);
-    testAnalysisAgainstTestCase(testCase, report);
+    testReportAgainstTestCase(testCase, report);
   }
 
-  public static void testAnalysisAgainstTestCase(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase)
+  public static void testReportAgainstTestCase(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase)
       throws Exception {
-    final var analysis = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
-    testAnalysisAgainstTestCase(testCase, analysis);
+    final var report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    testReportAgainstTestCase(testCase, report);
   }
 
-  public static void testAnalysisAgainstTestCase(PgnFileTestCase testCase, Report report) throws Exception {
+  public static void testReportAgainstTestCase(PgnFileTestCase testCase, Report report) throws Exception {
     testFen(testCase.fen(), report.fen());
     testRepetition(report, testCase);
     testRepetitionInitialEnPassantCapture(report, testCase);
