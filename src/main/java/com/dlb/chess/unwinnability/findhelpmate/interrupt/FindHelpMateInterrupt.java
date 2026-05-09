@@ -18,7 +18,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
   // Our quick algorithm is extremely light, requiring only a few microseconds on average per
   // position. It is also sound, but not complete. However, as we detail in Section 5, with an
-  // (empirically chosen) depth bound of D = 9, all unfairly classified games from the Lichess
+  // (empirically chosen) depth bound of D = 9, all incorrectly classified games from the Lichess
   // Database except three were correctly identified by Unwinnablequick.
   private static final int D = 9;
 
