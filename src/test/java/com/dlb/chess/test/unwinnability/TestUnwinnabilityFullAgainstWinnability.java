@@ -21,7 +21,7 @@ class TestUnwinnabilityFullAgainstWinnability {
 
   @SuppressWarnings("static-method")
   // TODO test cases
-  // known unfair_ambrona_10.pgn not working
+  // known ambrona_10.pgn not working
   // but lichess examples also not working
   // @Test
   void test() throws Exception {

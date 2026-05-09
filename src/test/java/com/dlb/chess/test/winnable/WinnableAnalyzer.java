@@ -20,7 +20,7 @@ public class WinnableAnalyzer {
   private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableAnalyzer.class);
 
   // TODO test cases
-  // unfair_ambrona_10.pgn
+  // ambrona_10.pgn
   // we return unwinnable but is winnable. that is a bug.
 
   // unfair_lichess_examples_a2l4gphm.pgn

@@ -49,7 +49,7 @@ class TestUnwinnabilityFull {
   @Test
   void testPgnFileExpected() {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST);
-    final var pgnFileName = "unfair_ambrona_10.pgn";
+    final var pgnFileName = "ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase(pgnFileName);
     final ChessBoard board = new Board(pgnFileTestCase.fen());
