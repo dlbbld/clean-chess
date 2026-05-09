@@ -45,6 +45,8 @@ import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.san.lenient.LenientSanParser;
+import com.dlb.chess.san.model.LenientSanParserValidationResult;
 import com.dlb.chess.san.validate.SanValidation;
 import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
@@ -247,6 +249,26 @@ public class Board implements ChessBoard {
   @Override
   public boolean performMove(String san) {
     return performMoves(san);
+  }
+
+  /**
+   * Plays the given move on this board, specified in lenient SAN. Accepts inputs the strict pipeline rejects when
+   * those inputs uniquely identify a legal move and the deviation matches a supported tolerance category (case
+   * variation, long-algebraic / UCI form, castling with digit zero, missing or wrong check / checkmate suffix,
+   * over-specification, missing or spurious capture marker, missing promotion equals, explicit pawn letter). The
+   * returned {@link LenientSanParserValidationResult} carries the resolved {@code MoveSpecification} together with
+   * one {@code ForgivenItem} per deviation that was forgiven; on canonical input the forgiven-items list is empty.
+   *
+   * @throws com.dlb.chess.san.exceptions.LenientSanParserValidationException if the input cannot be resolved to a
+   *         legal move even after applying every supported tolerance
+   */
+  public LenientSanParserValidationResult performMoveLenient(String san) {
+    if (san == null) {
+      throw new IllegalArgumentException("The SAN cannot be null");
+    }
+    final LenientSanParserValidationResult result = LenientSanParser.parseText(san, this);
+    this.performMoveWithoutValidation(result.moveSpecification());
+    return result;
   }
 
   /**
