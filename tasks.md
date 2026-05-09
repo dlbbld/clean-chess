@@ -61,9 +61,9 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 - [x] `internationalization.Message` is a `class` with only static methods and no instances — add a private constructor (matches `BasicUtility`, `Reporter`, etc.)
 
 ### Library packaging hygiene (do not pollute consumer classpaths)
-- [ ] Move `src/main/resources/log4j2.xml` and `log4j-config-2.xsd` to `src/test/resources`. Today they ship in the published JAR and log4j2 picks them up on consuming applications' classpaths
-- [ ] Drop `log4j-core` from runtime dependencies in `pom.xml` — keep only `log4j-api` for the library, let consumers pick the backend. `log4j-core` can stay at `<scope>test</scope>` for the test suite
-- [ ] Verify with a fresh consumer project that no `log4j2.xml` or `log4j-core` arrives transitively
+- [x] Move `src/main/resources/log4j2.xml` and `log4j-config-2.xsd` to `src/test/resources`. Today they ship in the published JAR and log4j2 picks them up on consuming applications' classpaths
+- [x] Drop `log4j-core` from runtime dependencies in `pom.xml` — keep only `log4j-api` for the library, let consumers pick the backend. `log4j-core` can stay at `<scope>test</scope>` for the test suite
+- [x] Verify with a fresh consumer project that no `log4j2.xml` or `log4j-core` arrives transitively
 
 ### isGameEnd vs CHA opt-in design (P1 from review)
 [`specification.md:84`](specification.md:84) states CHA is opt-in and not part of the per-move status path, but `ChessBoard.isGameEnd()` was calling `isDeadPositionQuick()`. Meanwhile [`BasicChessUtility.calculateGameStatus()`](src/main/java/com/dlb/chess/common/utility/BasicChessUtility.java:107) — which move validation and PGN export consult — does *not* include quick CHA. So a caller could see "game ended" from one public API while validation/export said "ongoing".
