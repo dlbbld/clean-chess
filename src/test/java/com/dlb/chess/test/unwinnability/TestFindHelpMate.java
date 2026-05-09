@@ -36,7 +36,7 @@ class TestFindHelpMate {
     final PgnFileTestCaseList testCaseHavingHelpmateList = PgnExpectedValue
         .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE);
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       if (!hasFound) {
         if (IS_START_FROM_PGN_FILE) {
