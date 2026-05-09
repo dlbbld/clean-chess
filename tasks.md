@@ -4,61 +4,128 @@ Order within each section is the source of truth. Completed tasks move to **Done
 
 ---
 
-## Current release — project organization & big-picture cleanup
+## Current release — cleanup follow-through
 
-Theme: documentation, obvious issues, major bugs. No new features.
+Theme: doc correctness, dead/personal code purge, library packaging hygiene, naming follow-through from the rename in the previous release, and one design-consistency fix (`isGameEnd` vs CHA opt-in). No new features.
 
-### pom.xml / build configuration
-- [x] Drop `maven.compiler.release` 26 → 17
-- [x] Reconcile `groupId` between `pom.xml` and `README.md` (commit `ef8de9c`: pom now `com.github.dlbbld`, matches what README documented all along)
-- [x] Move `log4j-core` to `<scope>runtime</scope>` (commit `ef8de9c`); compile-time deps narrowed to `log4j-api`
-- [x] Remove file appender from `src/main/resources/log4j2.xml` — library no longer writes to a temp file at runtime (commit `612a93b`; dangling `AppenderRef` references cleaned up afterwards). Console-only config retained as a safe default.
+### README correctness
+- [x] Fix the three headline code samples that no longer compile: `Analyzer.printAnalysis(pgn)` → `Reporter.printReport(pgn)` (`README.md:126`, `:160`, `:205`)
+- [x] Fix the "Create PGN for game" example: `System.out.println(pgnFile)` does not produce the formatted PGN shown in the comment (`PgnFile` is a record with no `toString()` override). Replace with `System.out.println(PgnCreate.createPgnFileString(pgnFile))`
+- [x] Update "Not supported" section: PGN move suffix annotations *are* parsed and exported (see `StrictPgnParser`, `LenientPgnParser`, `PgnCreate`), and UTF-8 BOM *is* stripped by the lenient parser. Both bullets need to either go or be re-stated as the actual current limits
+- [x] Split audiences explicitly under "Building/Installing": one paragraph for *using clean-chess as a dependency* (no Eclipse, just Maven/Gradle coords), one for *contributing* (link to `setup.md`). Today the section reads as if every consumer needs Eclipse
 
-### Public API discoverability & naming
-- [x] `isSeventyFiftyMove()` → `isSeventyFiveMove()` (commit `eee221e`)
-- [x] ~~Pull CHA methods down from `AbstractBoard` to `Board`~~ — superseded by the AbstractBoard collapse (default methods on `ChessBoard`); CHA methods now appear directly on the interface
-- [x] Rename `analysis` → `report` (commit `7ac91e4`): `Analyzer` → `Reporter`, `AnalyzerPrint` → `ReportPrint`, `Analysis` (record) → `Report`. The remaining `analyze` package now differs by more than one letter.
-- [x] Collapse `Reporter extends ReportPrint` into one `final` class — `ReportPrint.java` deleted, all its content merged into `Reporter`; `Reporter` now `final` with private constructor; `printAnalysis(...)` renamed to `printReport(...)` end-to-end
-- [x] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
+### specification.md correctness
+- [x] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
+- [x] §4 architecture table is missing 6 top-level packages: `distance`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`; plus 2 pgn subpackages: `pgn.diagnostic` and `pgn.writer`. Add rows or explicitly note them as utility/internal
+- [x] If `isGameEnd` semantics change (next subsection), update the relevant termination wording — N/A: `isGameEnd` was deleted entirely; spec §3.1 was already framed at the abstract FIDE level, not method-level, so no doc update needed
 
-### Release-gate test runs
-- [x] Maven profile `-Pfull` enabling the heavy excluded suites (commit `ef8de9c`). Default `mvn test` runs the restricted fast suite; `mvn test -Pfull` flips `RestrictTestConstants` (via the `clean-chess.full` system property) and runs every gated audit, plus switches `PgnTestInclusion` to `ALL`.
-- [x] Documented the release-time requirement in `specification.md` §6.1 — release-tagger must run `mvn test -Pfull` and confirm green. CI workflow is a separate optional follow-up.
+### messages.properties cleanup
+The buggy `analysis.board.score.blackWin=0-0` is gone — the entire `analysis.board.*` block was DGT/trainer-only and unused; removal verified clean by audit.
 
-### specification.md polish
-- [x] Soften "no nulls" claim (§2.2) — replaced with a more honest framing about Java's compromises
-- [x] Soften "the only published algorithm" about CHA (§1, §3.2) — qualified with "to the author's knowledge"
-- [x] Bonus: updated §4 architecture table to reflect `analysis` → `report` rename (and the corrected description of `analyze`)
-- [x] Bonus: added §6.1 documenting the restricted vs full suite and the release-tagging requirement
+- [x] Rename remaining `analysis.*` keys to `report.*` to follow through on the package rename from the previous release. The Java side is renamed; the surviving `analysis.repetition.*` and `analysis.yawnmove.*` keys still say `analysis`; subsequent `report.yawnmove.*` → `report.noProgressMove.*` follow-through done
+- [x] Fix the comment typo `##analzyer` → `##analyzer` at line 251 — comment removed entirely; cleanest resolution since the section header was no longer load-bearing
 
-### Eclipse / Checkstyle configuration in repo
-- [x] Export Checkstyle XML rule file to repo (`394f97e`: `checkstyle.xml` at root, `.checkstyle` switched to `type="project"`)
-- [x] Bring suppression files into repo (`121255d`/`77ea4c3`: `checkstyle-suppressions.xml`, `checkstyle-xpath-suppressions.xml`, references switched to `${samedir}/`)
-- [x] Check in `.settings/org.eclipse.jdt.core.prefs` (`fdb23a9`: compiler warnings + formatter rules)
-- [x] Check in `.settings/org.eclipse.jdt.ui.prefs` (`fdb23a9`: cleanup, save actions, profile names)
-- [x] Align Manual Clean Up with Cleanup on Save (`dc149fb`: four divergent rules flipped)
-- [x] Update `coding-conventions.md` — replaced "known gap" section with a setup.md pointer
-- [x] Verify on a fresh checkout that the rule sets activate without manual file copies — confirmed: Eclipse import → Checkstyle, compiler warnings, cleanup-on-save all work from the start
+### TestMessage fixture cleanup
+The 12 `test*` / `test.message.*` keys at the bottom of `messages.properties` plus `TestMessage.java` itself are mostly testing JDK behavior (`ResourceBundle.getString`, `MessageFormat.format`) rather than library code. The one custom layer worth covering is `Message.normalizeSpace(...)`. The current shape is "I was getting comfortable with the API" code that mature projects clean up.
 
-### Create setup.md
-- [x] Document project setup
-- [x] Cover: required JDK, required Eclipse plugins, project import steps, manual workspace cosmetics
-- [x] Cross-link from `README.md` and `coding-conventions.md`
+- [x] Drop the basic key-lookup tests (`testBasic`) — they exercise `ResourceBundle.getString`, which the JDK has tested
+- [x] Drop the placeholder substitution tests (`testWithoutPlaceholder`, `testWithOnePlaceholder`, `testWithTwoPlaceholders`) — they exercise `MessageFormat.format`, also JDK-tested
+- [x] Keep one or two whitespace tests covering `NonNullWrapperCommon.normalizeSpace` (the genuinely custom behavior), but drive them with synthetic strings — no property-file fixtures needed (relocated to `TestNonNullWrapperCommon` as `testNormalizeSpace`)
+- [x] Delete the 12 `test*` / `test.message.*` keys + the `#testing` block from `messages.properties` once the tests no longer need them
+- [x] Net effect: the production JAR no longer ships test fixture data; `TestMessage.java` deleted entirely (along with its empty `internationalization/` test package); whitespace coverage now lives next to the helper it covers
 
-### Standardize markdown filename casing
-- [x] Rename `SPECIFICATION.md` → `specification.md`
-- [x] Rename `Agents.md` → `agents.md`
-- [x] Update all cross-references (README, Javadocs)
-- [x] Verify no lingering uppercase references (grep clean after `05a8a04`)
+### Remove all DGT-derived material (paid-work content)
+The DGT/trainer code originates from paid work and should not ship in this open-source library. The constants in `src/main` are already on the dead-code list above; the test material below is the larger part.
 
-### License hygiene
-- [x] Add copyright/preamble header to `LICENSE` before the GPL v3 text
-- [x] Add License section to `README.md` with CHA-derivation note
-- Source-file GPL headers moved to the GPL v3 source-file headers task in the future release
+- [x] Remove `DGT_MY_BLUETOOTH_BOARD_ID = 23944`, `DGT_MY_USB_BOARD_ID = 43462`, `DGT_ACTIVE_BOARD_ID`, and the Google text-to-speech credentials comment from `ConfigurationConstants.java`
+- [x] Drop `DGT_LIVE_CHESS` and `DGT_CENTAUR` from [`PgnTest.java:89-90`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java:89)
+- [x] Drop `createTestCasesDgtCentaur()` and `createTestCasesDgtLiveChess()` plus their dispatch entries from [`PgnExpectedValue.java`](src/test/java/com/dlb/chess/test/pgntest/PgnExpectedValue.java) (8 + 1 fixture entries, ~50 lines around 3472–3515)
+- [x] Drop the `dgt/liveChess` block in [`TestLegacyPgnParsePlaysBeyondAudit.java:227`](src/test/java/com/dlb/chess/test/pgn/parser/beyond/TestLegacyPgnParsePlaysBeyondAudit.java:227)
+- [x] Delete fixture directories `src/test/resources/pgn/review/dgt/` (centaur + liveChess subdirs, ~9 PGNs) and `src/test/resources/pgnParser/legacy/common/beyond/dgt/liveChess/` (~1 PGN)
+- [x] Verify `git grep -i dgt` returns zero hits afterwards
+
+### Rename `pgn/cua` → `pgn/cha` (correct CHA abbreviation)
+The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (matches the repo name `D3-Chess`, the binary, and all code identifiers in his project). The test fixture tree under `src/test/resources/pgn/cua/` used the wrong abbreviation. Scope expanded substantially during the work — full reorganization of the lichess subtree (drop redundant `unfair/` wrapper, hierarchical layout under `lichess/quick/{depth,notDepth}Three`), filename normalization (`lichess_<id>.pgn` canonical, `lichess_<id>_helpmate.pgn` derived), basename-uniqueness preservation, and prose comment cleanup.
+
+- [x] Rename `src/test/resources/pgn/cua/` → `src/test/resources/pgn/cha/`
+- [x] Update path strings in [`PgnTest.java`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java) to `cha/...`
+- [x] Verify `git grep -i "cua"` is clean (no other code or doc references)
+- [x] Use `git mv` so history is preserved on the directory rename
+- [x] Bonus: full enum/method/comment rename pass (`UNFAIR_*` → `CHA_*`, `unfair_lichess_examples_*.pgn` → `lichess_<id>.pgn`, "unfair" prose → "incorrectly", helpmate suffix decoration)
+
+### Dead-code & personal-data purge
+- [x] Delete `MultiplePgnSplitUtility.java` (or relocate to `src/test/java`). It has a `main()`, a hardcoded path component `otherdb/mb-3.45/mb-3.45.pgn`, and an 8-step ChessBase-recipe in comments. No call sites — slipped through the previous "strip demo/dev code" pass
+- [x] `KnightDistance.java` — the `// This code contributed by Rajput-Ji` attribution is opaque (looks like GeeksforGeeks origin). Either cite the source URL + verify GPL-v3 compatibility, or rewrite in project style. Drop the `public static void main()` regardless
+- [x] Remove the four `private static final boolean IS_DEBUG = false;` dead branches in `unwinnability/findhelpmate/*` (`AbstractFindHelpmate`, `FindHelpmateExhaust`, `FindHelpMateInterrupt`, `mobility/Mobility`). They write `fenListMine.txt` to `TEMP_FOLDER_PATH` when toggled — either delete or replace with proper logger calls
+- [x] Move `ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH` and `BasicUtility.readProjectFolderPath()` to a test-only utility. They are used exclusively by tests but currently execute on every consumer's first class-load of `ConfigurationConstants`
+- [x] `internationalization.Message` is a `class` with only static methods and no instances — add a private constructor (matches `BasicUtility`, `Reporter`, etc.)
+
+### Library packaging hygiene (do not pollute consumer classpaths)
+- [x] Move `src/main/resources/log4j2.xml` and `log4j-config-2.xsd` to `src/test/resources`. Today they ship in the published JAR and log4j2 picks them up on consuming applications' classpaths
+- [x] Drop `log4j-core` from runtime dependencies in `pom.xml` — keep only `log4j-api` for the library, let consumers pick the backend. `log4j-core` can stay at `<scope>test</scope>` for the test suite
+- [x] Verify with a fresh consumer project that no `log4j2.xml` or `log4j-core` arrives transitively
+
+### isGameEnd vs CHA opt-in design (P1 from review)
+[`specification.md:84`](specification.md:84) states CHA is opt-in and not part of the per-move status path, but `ChessBoard.isGameEnd()` was calling `isDeadPositionQuick()`. Meanwhile [`BasicChessUtility.calculateGameStatus()`](src/main/java/com/dlb/chess/common/utility/BasicChessUtility.java:107) — which move validation and PGN export consult — does *not* include quick CHA. So a caller could see "game ended" from one public API while validation/export said "ongoing".
+
+- [x] Decide the canonical policy: either (a) remove `isDeadPositionQuick()` from `isGameEnd()` so all paths agree CHA is opt-in, or (b) make `BasicChessUtility.calculateGameStatus()` include it too — chose **option (d)**: delete `isGameEnd` and its private helper `isGameDraw` entirely, since both were unused. Avoids picking a contested semantic for an API nobody calls.
+- [x] If the surface changes meaningfully, update specification.md §3.1 and any package-info.java that describes termination — N/A; both already framed in terms of FIDE-level termination categories and `BasicChessUtility.calculateGameStatus`, not the deleted `isGameEnd`
+
+### FileUtility error handling (P2 from review)
+[`FileUtility.writeFile`](src/main/java/com/dlb/chess/common/utility/FileUtility.java:98) catches `IOException` and only prints the stack trace at line 107. [`PgnWriter.writePgnFile`](src/main/java/com/dlb/chess/pgn/writer/PgnWriter.java:24) returns `void`, so callers can believe a PGN was written when it was not.
+
+- [x] `FileUtility.writeFile` must throw `FileSystemAccessException` on `IOException`, matching the read/append/delete methods
+- [x] Audit every method in `FileUtility` for the same pattern; align all error paths
+- [x] Confirm `PgnWriter.writePgnFile` propagates the failure to its caller
+
+### "Yawn move" → standard chess terminology
+The codebase uses `YawnMoveUtility`, `YawnHalfMove`, `YawnPrint`, `YawnRepresentation`, `analysis.yawnmove.*` keys. Neither FIDE, the chess community, the README, nor `specification.md` use this term. The user-facing output already says "Sequences without capture and pawn move…", so the term exists purely as private vocabulary.
+
+- [x] Decide canonical name: `HalfmoveClock*` (matches FIDE), `NoProgress*`, or `FiftyMove*` — chose `NoProgress` (more self-explanatory than `Reversible`/`HalfmoveClock` for general Java audience; matches `messages.properties` user-facing prose "without capture and pawn move")
+- [x] Rename Java identifiers across `src/main` and `src/test` — 59-file pass: `YawnHalfMove` → `NoProgressHalfMove`, `YawnIndex` → `NoProgressIndex`, `YawnPrint` → `NoProgressPrint`, `YawnMoveUtility` → `NoProgressMoveUtility`, `calculateYawnMoveRule` → `calculateNoProgressMoveRule`, plus all variables, parameters, and test fixture filenames/folders
+- [x] Rename matching keys in `messages.properties` (rolls into the `analysis.*` → `report.*` rename above) — `report.yawnmove.*` → `report.noProgressMove.*`, surfaced by new `TestReporterPrintReport` smoke test
+- [x] Update specification.md if it ever uses the term — N/A: specification.md doesn't reference the term
+
+### Eclipse fresh-checkout fidelity
+The previous release set the theme "fresh checkout works without manual setup steps". These two contradicted it.
+
+- [x] `.classpath` line 29 still references `JavaSE-26`. Update to `JavaSE-17` to match `pom.xml` and `setup.md`. Without this, fresh Eclipse checkout shows "JavaSE-26 not available" until the user runs Maven > Update Project
+- [x] `.project` declares the `ch.acanda.eclipse.pmd.builder.PMDBuilder` builder and a PMD nature, plus `.eclipse-pmd` exists at the repo root. `setup.md` does not mention installing eclipse-pmd. Recommend: remove the PMD builder/nature from `.project` and delete `.eclipse-pmd` (Checkstyle is sufficient). Alternative: document the PMD plug-in install in `setup.md` — chose removal; `.eclipse-pmd` deleted, PMDBuilder removed from `.project`. Bonus: missing `forbiddenReference=warning` JDT compiler setting added
+
+### Javadoc on the public API
+- [x] Class-level Javadoc on `Board` and `Reporter` (the two headline classes; today both have none)
+- [x] Method-level Javadoc on `Board`'s public methods at minimum: the three constructors, `performMove(String)`, `performMove(MoveSpecification)`, `performMoves(String...)`, `unperformMove`, `isCheckmate`, `isStalemate`, `isThreefoldRepetition`, `isFiftyMoveRule`, `isUnwinnableQuick`, `isUnwinnableFull`, `isDeadPositionQuick`, `isDeadPositionFull`. One sentence each is enough — `isFiftyMove`/`isThreefoldRepetition`/`isSeventyFiveMove`/`isFivefoldRepetition` documented on `Board`; the four CHA default methods (`isUnwinnableQuick`/`isUnwinnableFull`/`isDeadPositionQuick`/`isDeadPositionFull`) documented on `ChessBoard` where they're defined
+- [x] Package-level Javadoc on the public-facing packages (`pgn.parser`, `pgn.create`, `unwinnability`, `report`, `san`, `fen`, `model`, `enums`). Model after [`board/package-info.java`](src/main/java/com/dlb/chess/board/package-info.java) — that one is excellent
+- [x] Configure `maven-javadoc-plugin` in `pom.xml` so JitPack ships a `-javadoc.jar` — verified `mvn javadoc:jar` produces `target/clean-chess-3.3.0-javadoc.jar` (~1.9 MB). `<doclint>none</doclint>` for now to avoid breaking the build on legacy missing tags; turning doclint strict is a future tightening
+
+### Externalized-messages package — narrow fixes (not a redesign)
+The `messages.properties` mechanism itself is good engineering — externalization buys terminology-consistency review and translation-readiness independent of whether translation ever happens. Two narrow fixes, neither requiring a redesign:
+
+- [x] **Package name.** `internationalization` overstates what ships. The package contains externalized messages; it does not contain locales. Rename to `messages` (or `i18n`). The future-translation argument fits a `messages` package fine — translators just add `messages_de.properties` regardless of what the package is called — chose `messages` (most honest, no abbreviation). Java package + resource path + 16 import statements + 2 javadoc refs + spec §4 row all updated
+- [x] **`ConfigurationConstants.LOCALE = Locale.US` is a trap** for the day someone adds a locale. Switch to `Locale.ROOT` (semantically "the default bundle") or `Locale.getDefault()` (respects JVM/user environment). Today the choice is invisible because no message uses locale-sensitive `MessageFormat` constructs (no `{0,number}`, no `{1,date}`); the hardcoding becomes load-bearing the moment any message does — chose `Locale.ROOT` (predictable for library consumers; locale-neutral); added a comment explaining why
+
+### Smaller items
+- [x] `tasks.md` references commit hashes in the **Done** section that won't survive a squash-merge into `main`. Either strip the hashes when an item moves to Done (it's the *fact* that's load-bearing, not the SHA), or note that tasks.md is dev scaffolding and not a permanent record — stripped
+
+The Maven Central / `groupId` migration has its own dedicated release at the bottom of this file — see *Future release — publish to Maven Central*.
+
+### Second-pass review follow-ups (pre-release polish)
+After all 14 cleanup-follow-through subsections closed, a fresh-eyes review surfaced a remaining set of items. Treating them as the final pre-release polish.
+
+- [x] **`Board.calculateLegalMove` made package-private.** Was `public static` — exposed a way for outside code to construct a `LegalMove` value object that lies about its contract (the type carries derived data — moving piece, captured piece, en-passant role — that's only correct when the input was actually validated as legal, an invariant only the rule pipeline can guarantee). The only caller (`TestLegalMovesAgainstCreatedUsingValidation`) was refactored to compare `MoveSpecification` sets directly, which is the meaningful chess-correctness invariant; the `LegalMove`-set comparison was internal-consistency only.
+- [x] **`Board.createPositionAfterMove` moved to `StaticPositionUtility`.** Was `public static` on `Board` — but the function is a pure transformation of an immutable `StaticPosition`; doesn't depend on any `Board` state and shouldn't live on the game class. New home was already the only external caller.
+- [x] **`coding-conventions.md`: documented "Records carry data, not behavior".** The MVC-style separation: records are the M; computational and business logic operating on them lives in dedicated utility/service classes. Compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals`/`hashCode`/`toString` remain explicitly allowed; domain-operation methods do not.
+- [x] **README version mismatch fixed.** The Gradle snippet said `compile 'com.github.dlbbld:clean-chess:3.2'` while the Maven snippet correctly said `3.3.0`. Updated to `implementation 'com.github.dlbbld:clean-chess:3.3.0'` — version bumped, plus the deprecated `compile` configuration (removed in Gradle 7) replaced with the modern `implementation`.
+- [x] **`Reporter` decoupled from stdout.** Added `calculateReportText(...)` — three overloads matching `printReport(...)`, returning the same human-readable report as a single `\n`-joined string. Lets non-CLI consumers (web responses, file writes, GUIs) use the report data without capturing stdout. Implementation refactored to share line-building logic between print and text variants. New smoke test covers both methods.
+- [x] **`InvalidMoveException` brought into the project's exception hierarchy.** Was `extends RuntimeException` directly — bypassed both `ChessApiRuntimeException` and `UsageException`. Now `extends UsageException`, so consumers can `catch (UsageException e)` to handle all caller-fault cases uniformly (alongside the SAN/FEN/PGN validation exceptions).
+- [x] **Thread-safety statement added.** Class-level Javadoc on `Board` says it's mutable and not thread-safe; warns about putting a `Board` in a hash-based collection. New §2.4 in `specification.md` covers the project-wide contract: records are immutable + thread-safe; static utility classes are stateless + thread-safe; parsers expose stateless static entry points.
+- [x] **`CHANGELOG.md` created.** Starts with the upcoming release as `Unreleased`. Follows the [Keep a Changelog](https://keepachangelog.com/) convention. Pre-3.3 history remains in the git tag list; the changelog tracks releases going forward.
+- [x] **`CONTRIBUTING.md` created.** Central "how to contribute" entry point linking `setup.md`, `coding-conventions.md`, `agents.md`, and `tasks.md`. Closes the "I want to help" affordance gap on the GitHub repo view.
+- [x] **JAR `MANIFEST.MF` carries Implementation-Title/Version/Vendor.** Configured in `maven-jar-plugin`. Consumers can now call `Package.getImplementationVersion()` to discover the runtime version of clean-chess — useful for logging, error messages, version-awareness in downstream apps.
 
 ---
 
-## Next release — Lenient SAN
+## Future release — Lenient SAN
 
 Single feature, headline release.
 
@@ -162,15 +229,63 @@ This is **discussion + design first**, implementation later. The project current
 
 ---
 
+## Future release — publish to Maven Central
+
+The capstone release. Publish to Central only when the library has stabilised — every prior release done, identity questions settled, and any tasks that surface during the prerequisite work itself addressed first. Maven Central artifacts are immutable: once published, an artifactId+version pair lives forever in the public record. The bar for moving from JitPack to Central is therefore "we are confident this artifact represents the project well, indefinitely."
+
+### Prerequisites — must be true before any Central work begins
+- [ ] All earlier releases completed (cleanup follow-through, lenient SAN, API-surface audit, auto-CHA, python-chess cross-validation)
+- [ ] Rename decision resolved — clean-chess → DeepSquare or final name. Once published, the artifactId is permanent
+- [ ] Every task that surfaces during the prerequisite releases has been addressed (re-evaluate this list at the moment of starting; the bar is "library is mature")
+
+### Sonatype Central Portal setup
+- [ ] Create Sonatype Central account at https://central.sonatype.com, sign in via GitHub
+- [ ] Verify the `io.github.dlbbld` namespace (auto-verified for GitHub-signed-in users — no domain needed)
+- [ ] Generate a GPG key, publish it to a public keyserver (e.g. `keyserver.ubuntu.com`), record the keyID
+- [ ] Configure `~/.m2/settings.xml` with Sonatype Portal credentials and GPG passphrase
+
+### `pom.xml` — Central-required metadata
+- [ ] `<groupId>` → `io.github.dlbbld` (currently `com.github.dlbbld`, the JitPack convention)
+- [ ] `<version>` → strict semver (`4.x` → `4.x.0`)
+- [ ] Add `<name>`, `<description>`, `<url>` (link to GitHub repo)
+- [ ] Add `<licenses>` block (GPL v3, with full URL)
+- [ ] Add `<developers>` block
+- [ ] Add `<scm>` block (`connection`, `developerConnection`, `url`)
+
+### `pom.xml` — required plugins
+- [ ] `central-publishing-maven-plugin` (the new Sonatype Portal plugin — *not* the deprecated `nexus-staging-maven-plugin` / OSSRH that older tutorials still document)
+- [ ] `maven-gpg-plugin` for artifact signing
+- [ ] `maven-javadoc-plugin` to produce a javadoc jar (`maven-source-plugin` is already present)
+
+### JAR-content audit at publish time
+Whatever ships in the first Central artifact is in the public record forever. Re-audit at publish time.
+
+- [ ] Re-audit `src/main/resources` end-to-end: anything developer-facing, test-only, or environment-specific should not ship
+- [ ] Re-audit `src/main/java` for any utility classes that should have been package-private rather than public (folds the residual API-surface work in if not already done by the API-surface release)
+- [ ] (The test-fixture message keys are handled in the cleanup follow-through release; this audit is the safety net for anything similar that surfaces between now and publish)
+
+### First publish + workflow
+- [ ] Update README: drop the JitPack `<repositories>` block, leave only the plain Maven dependency snippet (no extra repository declarations needed for Central)
+- [ ] Drop the JitPack URL and any related framing from README and other docs
+- [ ] First publish via the Central Portal — staged release, manual approval the first time
+- [ ] Verify the artifact appears at https://central.sonatype.com/artifact/io.github.dlbbld/...
+- [ ] Document the per-release workflow (version bump → tag → `mvn deploy` → Portal release) in `setup.md` under a new "Releasing" section, or in a dedicated `release.md`
+
+### Post-publish
+- [ ] Decide whether JitPack stays available in parallel (free, harmless) or should be deprecated by removing the JitPack publish hook
+- [ ] (Optional) Add a Maven Central status badge to the README
+
+---
+
 ## Done
 
-- [x] **README.md cleanup pass** (`c104100`, `21499ff` Java 17)
-- [x] **Strip demo/dev code from src/main** (`aa0225e`)
+- [x] **README.md cleanup pass** (Java 17)
+- [x] **Strip demo/dev code from src/main**
   - `readme/ReadMeForRepository` deleted
   - `trainer/SanTrainerServer` deleted
   - `Message.main()` removed
   - Broader 248-public-types audit deferred (see *Audit broader public API surface*, above)
-- [x] **Public API immutability — done deeper than originally scoped** (`55ee163`, `7707c75`, `f867357`)
+- [x] **Public API immutability — done deeper than originally scoped**
   - Originally just "defensive copies"; ended up making the immutability visible at the type level via Guava `ImmutableList<X>` / `ImmutableSet<X>`.
   - `ChessBoard` interface: all 8 list/set accessors return `ImmutableList<X>` or `ImmutableSet<X>`.
   - `Board.legalMoveSetList: List<ImmutableSet<LegalMove>>` — inner sets sealed at write time via `AbstractLegalMoves.calculateLegalMoves` boundary.
@@ -186,6 +301,6 @@ This is **discussion + design first**, implementation later. The project current
   - `Board` and `LibraryCarlosBoard` now `implements ChessBoard` directly.
   - `AbstractBoard.java` deleted.
   - Net effect: no public abstract class on the API surface; CHA methods appear directly in IDE completion on `Board`; cross-validation contract is the interface (the right level for it).
-- [x] **Eclipse compiler warnings & infos cleanup (out-of-band)** (`997f51c`, `142e19f`, `305bff5`, `7e85eb6`, `06ca493`, `498b300`)
+- [x] **Eclipse compiler warnings & infos cleanup (out-of-band)**
   - Project now compiles warning-free under JDT settings.
   - Includes: `unexpectedValidationErrorMessage` `@NonNull` annotation, three `pcve.getMessage()` / `e.getMessage()` `@SuppressWarnings("null")` extractions, `boxing` no-op suppression removed, log4j2.xml schema declaration + DTD download fix, class-level `@SuppressWarnings("null")` for JUnit Assertions / JDK BiFunction in 4 test classes.

@@ -13,6 +13,7 @@ import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.test.ConfigurationTestConstants;
 
 /**
  * Verifies that the lenient PGN parser rejects every fixture under
@@ -34,8 +35,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 class TestLenientPgnParserBeyondTermination {
 
   private static final Path BEYOND_FOLDER = NonNullWrapperCommon.pathResolve(
-      com.dlb.chess.common.constants.ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH,
-      "src/test/resources/pgnParser/common/beyond");
+      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
 
   @SuppressWarnings("static-method")
   @Test

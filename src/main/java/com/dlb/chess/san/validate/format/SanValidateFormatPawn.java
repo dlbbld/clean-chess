@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanFormat;

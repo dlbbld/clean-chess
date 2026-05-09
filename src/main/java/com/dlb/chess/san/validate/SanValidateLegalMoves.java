@@ -24,7 +24,7 @@ import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MovementCheck;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;

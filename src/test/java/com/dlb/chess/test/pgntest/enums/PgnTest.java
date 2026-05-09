@@ -47,10 +47,10 @@ public enum PgnTest {
   BASIC_CASTLING_SPECIAL_WHITE(true, "basic/castling/special/white"),
   BASIC_CASTLING_SPECIAL_BLACK(true, "basic/castling/special/black"),
   BASIC_FORCED(true, "basic/forced"),
-  BASIC_ANALYSIS_YAWN_SEQUENCES_WHITE(true, "basic/analysis/yawn/white"),
-  BASIC_ANALYSIS_YAWN_SEQUENCES_BLACK(true, "basic/analysis/yawn/black"),
-  BASIC_ANALYSIS_REPETITION(false, "basic/analysis/repetition"),
-  BASIC_ANALYSIS_MAX_YAWN(false, "basic/analysis/maxYawn"),
+  BASIC_REPORT_NO_PROGRESS_SEQUENCES_WHITE(true, "basic/report/noProgress/white"),
+  BASIC_REPORT_NO_PROGRESS_SEQUENCES_BLACK(true, "basic/report/noProgress/black"),
+  BASIC_REPORT_REPETITION(false, "basic/report/repetition"),
+  BASIC_REPORT_MAX_NO_PROGRESS(false, "basic/report/maxNoProgress"),
 
   PARSER_FROM_FEN(false, "parserFenMechanics/"),
 
@@ -86,16 +86,13 @@ public enum PgnTest {
   EARLY_DRAW(false, "realGames/earlyDraw"),
   WIKIPEDIA_THREEFOLD(false, "review/wikipedia/threefold"),
   WIKIPEDIA_FIFTY_MOVE(false, "review/wikipedia/fiftyMove"),
-  DGT_LIVE_CHESS(false, "review/dgt/liveChess"),
-  DGT_CENTAUR(false, "review/dgt/centaur"),
 
-  UNFAIR_LICHESS_EXAMPLES(false, "cua/unfair/lichess/examples"),
-  UNFAIR_LICHESS_HELPMATE(false, "cua/unfair/lichess/helpmate"),
-  UNFAIR_DEPTH_THREE(false, "cua/unfair/depthThree"),
-  UNFAIR_NOT_QUICK(false, "cua/unfair/notQuick"),
-  UNFAIR_AMBRONA(false, "cua/unfair/ambrona"),
-
-  PAWN_WALL(false, "cua/pawnWall"),
+  CHA_LICHESS_QUICK_NOT_DEPTH_THREE(false, "cha/lichess/quick/notDepthThree"),
+  CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE(false, "cha/lichess/quick/notDepthThree/helpmate"),
+  CHA_LICHESS_QUICK_DEPTH_THREE(false, "cha/lichess/quick/depthThree"),
+  CHA_LICHESS_NOT_QUICK(false, "cha/lichess/notQuick"),
+  CHA_AMBRONA(false, "cha/ambrona"),
+  CHA_PAWN_WALL(false, "cha/pawnWall"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
 

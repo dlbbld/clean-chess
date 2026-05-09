@@ -1,16 +1,21 @@
 package com.dlb.chess.common.utility;
 
+import java.util.List;
 import java.util.Set;
 
-import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.moves.utility.PromotionUtility;
+import com.dlb.chess.moves.utility.StandardMoveUtility;
 import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 
 public abstract class StaticPositionUtility implements EnumConstants {
@@ -76,9 +81,31 @@ public abstract class StaticPositionUtility implements EnumConstants {
 
   public static boolean calculateIsKingAttackedAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
-    final StaticPosition staticPositionEvaluateAfterMove = Board.createPositionAfterMove(staticPosition, havingMove,
+    final StaticPosition staticPositionEvaluateAfterMove = createPositionAfterMove(staticPosition, havingMove,
         moveSpecification);
     return calculateIsCheck(staticPositionEvaluateAfterMove, havingMove);
+  }
+
+  public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
+      MoveSpecification moveSpecification) {
+
+    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove, moveSpecification);
+    return staticPosition.createChangedPosition(updateSquareList);
+  }
+
+  private static List<UpdateSquare> calculateUpdateSquareList(StaticPosition staticPosition, Side havingMove,
+      MoveSpecification moveSpecification) {
+
+    if (EnPassantCaptureUtility.calculateIsEnPassantCaptureNewMove(staticPosition, moveSpecification)) {
+      return EnPassantCaptureUtility.performEnPassantCaptureMovements(staticPosition, havingMove, moveSpecification);
+    }
+    if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
+      return CastlingUtility.performCastlingMovements(havingMove, moveSpecification);
+    }
+    if (PromotionUtility.calculateIsPromotionNewMove(moveSpecification)) {
+      return PromotionUtility.performPromotionMovements(havingMove, moveSpecification);
+    }
+    return StandardMoveUtility.performStandardMovements(staticPosition, moveSpecification);
   }
 
 }

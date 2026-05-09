@@ -12,30 +12,6 @@ public class FenParserRaw {
   private FenParserRaw() {
   }
 
-  public static String parsePiecePlacement(String piecePlacement) {
-    return parseFenRaw(piecePlacement).piecePlacement();
-  }
-
-  public static String parseHavingMove(String fen) {
-    return parseFenRaw(fen).havingMove();
-  }
-
-  public static String parseCastlingRight(String fen) {
-    return parseFenRaw(fen).castlingRightBothStr();
-  }
-
-  public static String parseEnPassantCaptureTargetSquare(String fen) {
-    return parseFenRaw(fen).enPassantCaptureTargetSquare();
-  }
-
-  public static String parseHalfMoveClock(String fen) {
-    return parseFenRaw(fen).halfMoveClock();
-  }
-
-  public static String parseFullMoveNumber(String fen) {
-    return parseFenRaw(fen).fullMoveNumber();
-  }
-
   public static FenRaw parseFenRaw(String fen) throws FenRawValidationException {
     final var regExp = "^([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)$";
     final var pattern = Pattern.compile(regExp);

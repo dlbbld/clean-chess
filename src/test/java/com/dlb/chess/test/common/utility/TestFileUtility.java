@@ -1,22 +1,27 @@
 package com.dlb.chess.test.common.utility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
+import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.FileComparison;
 
 public class TestFileUtility {
 
   private static final Path TEST_FOLDER_PATH = NonNullWrapperCommon
-      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/fileUtility/utf8");
+      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/fileUtility/utf8");
 
   private static final String TEST_FILE_NAME = "utf8.txt";
 
@@ -50,5 +55,15 @@ public class TestFileUtility {
     final List<String> lines = NonNullWrapperCommon.asList(NonNullWrapperCommon.split(TEST_CONTENT, "\\n"));
     FileUtility.writeFile(TEST_DESTINATION_FILE_PATH, lines);
     assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testWriteFileThrowsWhenParentFolderDoesNotExist(@TempDir Path tempFolder) {
+    final Path filePath = NonNullWrapperCommon.pathResolve(tempFolder, "missing/output.txt");
+
+    final var exception = assertThrows(FileSystemAccessException.class, () -> FileUtility.writeFile(filePath, "text"));
+
+    assertTrue(exception.getCause() instanceof IOException);
   }
 }

@@ -10,9 +10,9 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.report.model.Report;
-import com.dlb.chess.test.analysis.representation.RepetitionRepresentation;
-import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.report.representation.RepetitionRepresentation;
+import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
 import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
@@ -22,7 +22,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
 
   static String generate(Path pgnFolderPath, String pgnFileName) throws Exception {
 
-    final Report analysis = Reporter.calculateAnalysis(pgnFolderPath, pgnFileName);
+    final Report report = Reporter.calculateReport(pgnFolderPath, pgnFileName);
 
     final StringBuilder result = new StringBuilder();
     result.append("list.add(new ").append(PgnFileTestCase.class.getSimpleName()).append("(");
@@ -33,50 +33,50 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    final String repetition = RepetitionRepresentation.calculateRepresentationRepetitionAnalysis(analysis,
+    final String repetition = RepetitionRepresentation.calculateRepresentationRepetitionReport(report,
         EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
     result.append("\"");
     result.append(repetition);
     result.append("\"");
     result.append(", ");
 
-    final String repetitionInitialEnPassantCapture = RepetitionRepresentation.calculateRepresentationRepetitionAnalysis(analysis,
+    final String repetitionInitialEnPassantCapture = RepetitionRepresentation.calculateRepresentationRepetitionReport(report,
         EnPassantCaptureRuleThreefold.DO_IGNORE);
     result.append("\"");
     result.append(repetitionInitialEnPassantCapture);
     result.append("\"");
     result.append(", ");
 
-    final String yawnMove = YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList());
+    final String noProgressMove = NoProgressRepresentation.calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
     result.append("\"");
-    result.append(yawnMove);
+    result.append(noProgressMove);
     result.append("\"");
     result.append(", ");
 
-    final var firstCapture = analysis.firstCapture();
+    final var firstCapture = report.firstCapture();
     result.append(firstCapture);
     result.append(", ");
 
-    final var maxYawnSequence = analysis.maxYawnSequence();
-    result.append(maxYawnSequence);
+    final var maxNoProgressSequence = report.maxNoProgressSequence();
+    result.append(maxNoProgressSequence);
     result.append(", ");
 
-    final CheckmateOrStalemate lastPositionEvaluation = analysis.checkmateOrStalemate();
+    final CheckmateOrStalemate lastPositionEvaluation = report.checkmateOrStalemate();
     result.append(CheckmateOrStalemate.class.getSimpleName());
     result.append(".");
     result.append(lastPositionEvaluation.name());
     result.append(", ");
 
-    result.append(analysis.board().getRepetitionCount());
+    result.append(report.board().getRepetitionCount());
     result.append(", ");
 
-    final InsufficientMaterial insufficientMaterial = analysis.insufficientMaterial();
+    final InsufficientMaterial insufficientMaterial = report.insufficientMaterial();
     result.append(InsufficientMaterial.class.getSimpleName());
     result.append(".");
     result.append(insufficientMaterial.name());
     result.append(", ");
 
-    final ChessBoard finalBoard = analysis.board();
+    final ChessBoard finalBoard = report.board();
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
         .unwinnableFull();
     final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)
@@ -89,7 +89,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(UnwinnableQuick.class.getSimpleName()).append(".").append(unwinnableQuickWhite.name()).append(", ");
     result.append(UnwinnableQuick.class.getSimpleName()).append(".").append(unwinnableQuickBlack.name()).append(", ");
 
-    final var fen = analysis.fen();
+    final var fen = report.fen();
 
     result.append("\"");
     result.append(fen);

@@ -16,27 +16,15 @@ For the design philosophy, architecture, and rule-level decisions, see [specific
 
 - PGN move variations
 - PGN Numeric Annotation Glyphs (NAGs, e.g. `$1`, `$10`)
-- PGN move suffix annotations (`!`, `?`, `!!`, `??`, `!?`, `?!`)
 - Multi-game PGN files (one game per file)
-- Byte order marks (BOM) in input
 
-# Building/Installing
+UTF-8 byte-order marks (BOM) are accepted by the lenient parser (stripped on input) and rejected by the strict parser. PGN move suffix annotations (`!`, `?`, `!!`, `??`, `!?`, `?!`) are fully parsed, modeled, and round-tripped on export by both parsers.
 
-Requires JDK 17 or later. For full Eclipse setup instructions including project import, see [setup.md](setup.md).
+# Using clean-chess as a dependency
 
-## From source
+Requires JDK 17 or later at runtime. Available via the [JitPack](https://jitpack.io) repository.
 
-```
-$ git clone git@github.com:dlbbld/clean-chess.git
-$ cd clean-chess/
-$ mvn clean compile package install
-```
-
-## From repository
-
-clean-chess dependency can be added via the jitpack repository.
-
-### Maven
+## Maven
 
 ```xml
 <repositories>
@@ -52,11 +40,11 @@ clean-chess dependency can be added via the jitpack repository.
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>3.2</version>
+  <version>3.3.0</version>
 </dependency>
 ```
 
-### Gradle
+## Gradle
 
 ```groovy
 repositories {
@@ -68,10 +56,20 @@ repositories {
 ```groovy
 dependencies {
     ...
-    compile 'com.github.dlbbld:clean-chess:3.2'
+    implementation 'com.github.dlbbld:clean-chess:3.3.0'
     ...
 }
 ```
+
+# Building from source
+
+```
+$ git clone git@github.com:dlbbld/clean-chess.git
+$ cd clean-chess/
+$ mvn clean compile package install
+```
+
+For the full Eclipse contributor workflow (project import, Checkstyle, formatter, save actions), see [setup.md](setup.md).
 
 # Basic usage example
 ```java
@@ -123,7 +121,7 @@ The following game ended with a threefold repetition claim ahead according to [W
       fxe5 16. Bxe5 b6 17. Bg2 Nxe5 18. Bxa8 Nf7 19. Bg2 bxc5 20. Nxc5 Qb6 21. Qf2
       Qb5 22. Bf1 Qc6 23. Bg2 Qb5 24. Bf1 Qc6 25. Bg2""";
 
-  Analyzer.printAnalysis(pgn);
+  Reporter.printReport(pgn);
 ```
 
 The report mentions the possible claim ahead:
@@ -157,7 +155,7 @@ The following game contains a threefold repetition according to [Wikipedia](http
       40. Qf4 Qd1+ 41. Qf1 Qd7 42. Rxh5 Nxe3 43. Qf3 Qd4 44. Qa8+ Ke7 45. Qb7+ Kf8 46.
       Qb8+ *""";
 
-  Analyzer.printAnalysis(pgn);
+  Reporter.printReport(pgn);
 ```
 
 Output:
@@ -202,7 +200,7 @@ According to [Wikipedia](https://en.wikipedia.org/wiki/Fifty-move_rule#Karpov_vs
       109. Bf5 Rf1 110. Ndf4 Ra1 111. Ng6+ Kg8 112. Ne7+ Kh8 113. Ng5 Ra6+ 114. Kf7
       Rf6+""";
 
-  Analyzer.printAnalysis(pgn);
+  Reporter.printReport(pgn);
 ```
 
 Output:
@@ -523,7 +521,7 @@ You can create the PGN for a game played in the library or export an imported PG
     board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-	 System.out.println(pgnFile);
+    System.out.println(PgnCreate.createPgnFileString(pgnFile));
     // [Event "?"]
     // [Site "?"]
     // [Date "<today>"]

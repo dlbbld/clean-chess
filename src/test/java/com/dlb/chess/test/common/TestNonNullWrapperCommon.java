@@ -1,6 +1,7 @@
 package com.dlb.chess.test.common;
 
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +23,19 @@ class TestNonNullWrapperCommon {
     final String[] actual = NonNullWrapperCommon.split(pgn, "\\n");
 
     assertArrayEquals(expected, actual);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testNormalizeSpace() {
+
+    final var expected = "The knight is good in the attack.";
+
+    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("  The knight is good in the attack."));
+    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("The knight is good in the attack.  "));
+    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("  The knight is good in the attack.    "));
+    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("The knight is   good    in  the attack."));
+    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("   The   knight  is good in   the  attack.   "));
   }
 
 }

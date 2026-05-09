@@ -124,7 +124,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
         logger.info("Processing game " + testCase.pgnFileName());
 
-        final Report analysis = Reporter.calculateAnalysis(testCaseList.pgnTest().getFolderPath(),
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(),
             testCase.pgnFileName());
         processScalaChessCodeLine("", counterList, codeLineList);
         processScalaChessCodeLine("  println(\"Declaring test case for " + testCase.pgnFileName() + "\")", counterList,
@@ -137,7 +137,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
             codeLineList);
 
         final ChessBoard boardPlayAlong = new Board();
-        final List<HalfMove> halfMoveList = analysis.halfMoveList();
+        final List<HalfMove> halfMoveList = report.halfMoveList();
         for (var i = 0; i < halfMoveList.size(); i++) {
           final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
 

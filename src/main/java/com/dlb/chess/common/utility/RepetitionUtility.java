@@ -151,11 +151,11 @@ public abstract class RepetitionUtility {
     return false;
   }
 
-  public static List<List<HalfMove>> getRepetitionListListType(Report analysis,
+  public static List<List<HalfMove>> getRepetitionListListType(Report report,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     return switch (enPassantCaptureRule) {
-      case DO_IGNORE -> analysis.repetitionListListInitialEnPassantCapture();
-      case DO_NOT_IGNORE -> analysis.repetitionListList();
+      case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
+      case DO_NOT_IGNORE -> report.repetitionListList();
       default -> throw new IllegalArgumentException();
     };
   }

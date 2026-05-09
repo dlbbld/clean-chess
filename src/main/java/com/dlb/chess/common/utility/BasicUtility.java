@@ -1,7 +1,5 @@
 package com.dlb.chess.common.utility;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -24,14 +22,6 @@ public abstract class BasicUtility {
   private static final String DATE_PATTERN = "yyyy.MM.dd";
 
   private BasicUtility() {
-  }
-
-  public static Path readProjectFolderPath() {
-    final var projectRootFolderPath = Paths.get(System.getProperty("user.dir"));
-    if (projectRootFolderPath == null) {
-      throw new RuntimeException("Project root folder path is not set as property");
-    }
-    return projectRootFolderPath;
   }
 
   public static void removeLastChar(StringBuilder stringBuilder) {

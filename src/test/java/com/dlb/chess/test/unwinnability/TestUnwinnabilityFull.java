@@ -49,7 +49,7 @@ class TestUnwinnabilityFull {
   @Test
   void testPgnFileExpected() {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST);
-    final var pgnFileName = "unfair_ambrona_10.pgn";
+    final var pgnFileName = "ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase(pgnFileName);
     final ChessBoard board = new Board(pgnFileTestCase.fen());
@@ -67,8 +67,9 @@ class TestUnwinnabilityFull {
 
   @SuppressWarnings("static-method")
   @Test
-  void testUnfairLichessExamples() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
+  void testChaLichessExamples() throws Exception {
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue
+        .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ChessBoard board = new Board(testCase.fen());
 
@@ -87,7 +88,6 @@ class TestUnwinnabilityFull {
   }
 
   static void testFolderPerformance(PgnTest pgnTest) throws Exception {
-    // pgnTest = PgnTest.UNFAIR_AMBRONA;
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {

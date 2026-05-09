@@ -21,12 +21,13 @@ class TestUnwinnabilityFullAgainstWinnability {
 
   @SuppressWarnings("static-method")
   // TODO test cases
-  // known unfair_ambrona_10.pgn not working
-  // but UNFAIR_LICHESS_EXAMPLES also not working
+  // known ambrona_10.pgn not working
+  // but lichess examples also not working
   // @Test
   void test() throws Exception {
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue
+        .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       test(testCase);
     }

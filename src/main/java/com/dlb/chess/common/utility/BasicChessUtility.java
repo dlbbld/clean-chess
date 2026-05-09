@@ -3,16 +3,12 @@ package com.dlb.chess.common.utility;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.model.LegalMove;
 
 public abstract class BasicChessUtility {
@@ -23,48 +19,6 @@ public abstract class BasicChessUtility {
       sanList.add(halfMove.san());
     }
     return BasicUtility.calculateCommaSeparatedList(sanList);
-  }
-
-  public static String calculatePiecePlacementList(List<HalfMove> halfMoveList) {
-    final List<String> piecePlacementList = new ArrayList<>();
-    for (final HalfMove halfMove : halfMoveList) {
-      final String fen = halfMove.fen();
-      final String piecePlacement = FenParserRaw.parsePiecePlacement(fen);
-      piecePlacementList.add(piecePlacement);
-    }
-    return BasicUtility.calculateCommaSeparatedList(piecePlacementList);
-  }
-
-  public static String calculateDynamicPositionIdentifierList(List<HalfMove> halfMoveList) {
-    final List<String> piecePlacementList = new ArrayList<>();
-    for (final HalfMove halfMove : halfMoveList) {
-      final String dynamicPositionIdentifier = calculateDynamicPositionIdentifier(halfMove);
-      piecePlacementList.add(dynamicPositionIdentifier);
-    }
-    return BasicUtility.calculateCommaSeparatedList(piecePlacementList);
-  }
-
-  public static String calculateDynamicPositionIdentifier(HalfMove halfMove) {
-    final StringBuilder result = new StringBuilder();
-
-    final DynamicPosition dynamicPosition = halfMove.dynamicPosition();
-    result.append(dynamicPosition.havingMove()).append("-");
-
-    final String fen = halfMove.fen();
-    final String piecePlacement = FenParserRaw.parsePiecePlacement(fen);
-    result.append(piecePlacement).append("-");
-
-    result.append(dynamicPosition.isEnPassantCapturePossible()).append("-");
-
-    final CastlingRight whiteCastlingRight = dynamicPosition.castlingRightWhite();
-    result.append(whiteCastlingRight.getHasKingSide()).append("-");
-    result.append(whiteCastlingRight.getHasQueenSide()).append("-");
-
-    final CastlingRight blackCastlingRight = dynamicPosition.castlingRightBlack();
-    result.append(blackCastlingRight.getHasKingSide()).append("-");
-    result.append(blackCastlingRight.getHasQueenSide());
-
-    return NonNullWrapperCommon.toString(result);
   }
 
   public static Side calculateSideHavingMoveForSide(String side) {

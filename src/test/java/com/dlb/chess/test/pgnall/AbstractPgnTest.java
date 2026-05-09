@@ -5,72 +5,72 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.model.Report;
-import com.dlb.chess.test.analysis.representation.YawnRepresentation;
 import com.dlb.chess.test.librarycomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 
 public abstract class AbstractPgnTest {
 
-  public static void testAnalysisAgainstTestCase(String pgnFileName, Report analysis) throws Exception {
+  public static void testReportAgainstTestCase(String pgnFileName, Report report) throws Exception {
     final PgnFileTestCase testCase = PgnExpectedValue.findTestCase(pgnFileName);
-    testAnalysisAgainstTestCase(testCase, analysis);
+    testReportAgainstTestCase(testCase, report);
   }
 
-  public static void testAnalysisAgainstTestCase(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase)
+  public static void testReportAgainstTestCase(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase)
       throws Exception {
-    final var analysis = Reporter.calculateAnalysis(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
-    testAnalysisAgainstTestCase(testCase, analysis);
+    final var report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    testReportAgainstTestCase(testCase, report);
   }
 
-  public static void testAnalysisAgainstTestCase(PgnFileTestCase testCase, Report analysis) throws Exception {
-    testFen(testCase.fen(), analysis.fen());
-    testRepetition(analysis, testCase);
-    testRepetitionInitialEnPassantCapture(analysis, testCase);
-    testYawnMoveRule(analysis, testCase);
-    testFirstCapture(analysis, testCase);
-    testMaxYawnSequence(analysis, testCase);
-    testCheckmateOrStalemate(analysis, testCase);
-    testRepetitionCountFinalPosition(analysis, testCase);
-    testInsufficientMaterial(analysis, testCase);
+  public static void testReportAgainstTestCase(PgnFileTestCase testCase, Report report) throws Exception {
+    testFen(testCase.fen(), report.fen());
+    testRepetition(report, testCase);
+    testRepetitionInitialEnPassantCapture(report, testCase);
+    testNoProgressMoveRule(report, testCase);
+    testFirstCapture(report, testCase);
+    testMaxNoProgressSequence(report, testCase);
+    testCheckmateOrStalemate(report, testCase);
+    testRepetitionCountFinalPosition(report, testCase);
+    testInsufficientMaterial(report, testCase);
   }
 
   private static void testFen(String expectedFen, String actualFen) {
     assertEquals(expectedFen, actualFen);
   }
 
-  private static void testRepetition(Report analysis, PgnFileTestCase testCase) {
-    RepetitionTestUtility.testRepetition(analysis, testCase, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+  private static void testRepetition(Report report, PgnFileTestCase testCase) {
+    RepetitionTestUtility.testRepetition(report, testCase, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
   }
 
-  private static void testRepetitionInitialEnPassantCapture(Report analysis, PgnFileTestCase testCase) {
-    RepetitionTestUtility.testRepetition(analysis, testCase, EnPassantCaptureRuleThreefold.DO_IGNORE);
+  private static void testRepetitionInitialEnPassantCapture(Report report, PgnFileTestCase testCase) {
+    RepetitionTestUtility.testRepetition(report, testCase, EnPassantCaptureRuleThreefold.DO_IGNORE);
   }
 
-  private static void testYawnMoveRule(Report analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.expectedYawnMoveRule(),
-        YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList()));
+  private static void testNoProgressMoveRule(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.expectedNoProgressMoveRule(),
+        NoProgressRepresentation.calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList()));
   }
 
-  private static void testFirstCapture(Report analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.firstCapture(), analysis.firstCapture());
+  private static void testFirstCapture(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.firstCapture(), report.firstCapture());
   }
 
-  private static void testMaxYawnSequence(Report analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.maxYawnSequence(), analysis.maxYawnSequence());
+  private static void testMaxNoProgressSequence(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.maxNoProgressSequence(), report.maxNoProgressSequence());
   }
 
-  private static void testCheckmateOrStalemate(Report analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.checkmateOrStalemate(), analysis.checkmateOrStalemate());
+  private static void testCheckmateOrStalemate(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.checkmateOrStalemate(), report.checkmateOrStalemate());
   }
 
-  private static void testRepetitionCountFinalPosition(Report analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.repetitionCountFinalPosition(), analysis.board().getRepetitionCount());
+  private static void testRepetitionCountFinalPosition(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.repetitionCountFinalPosition(), report.board().getRepetitionCount());
   }
 
-  private static void testInsufficientMaterial(Report analysis, PgnFileTestCase testCase) {
-    assertEquals(testCase.insufficientMaterial(), analysis.insufficientMaterial());
+  private static void testInsufficientMaterial(Report report, PgnFileTestCase testCase) {
+    assertEquals(testCase.insufficientMaterial(), report.insufficientMaterial());
   }
 
 }

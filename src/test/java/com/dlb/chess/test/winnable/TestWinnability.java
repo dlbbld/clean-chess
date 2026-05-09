@@ -60,7 +60,7 @@ class TestWinnability {
   // TODO not workin
   // @Test
   void testFolder() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_AMBRONA);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ChessBoard board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());

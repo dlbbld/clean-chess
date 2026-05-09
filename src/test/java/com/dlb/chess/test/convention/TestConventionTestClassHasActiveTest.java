@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.ConfigurationTestConstants;
 
 /**
  * Convention test: every Java class under {@code src/test/java} whose simple name starts with {@code Test} must contain
@@ -41,7 +41,7 @@ import com.dlb.chess.common.utility.FileUtility;
 class TestConventionTestClassHasActiveTest {
 
   private static final Path TEST_JAVA_ROOT = NonNullWrapperCommon
-      .pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
+      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
 
   private static final String REQUIRED_NAME_PREFIX = "Test";
 

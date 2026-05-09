@@ -30,11 +30,11 @@ class TestUnwinnabilityQuickAgainstWinnability {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (RestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST) {
           switch (testCaseList.pgnTest()) {
-            case UNFAIR_LICHESS_EXAMPLES:
-            case UNFAIR_LICHESS_HELPMATE:
-            case UNFAIR_DEPTH_THREE:
-            case UNFAIR_NOT_QUICK:
-            case UNFAIR_AMBRONA:
+            case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
+            case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE:
+            case CHA_LICHESS_QUICK_DEPTH_THREE:
+            case CHA_LICHESS_NOT_QUICK:
+            case CHA_AMBRONA:
               break;
             // $CASES-OMITTED$
             default:
@@ -44,8 +44,8 @@ class TestUnwinnabilityQuickAgainstWinnability {
 
         switch (testCase.pgnFileName()) {
           // here my tool sees unwinnability but not the quick analysis
-          case "unfair_ambrona_10.pgn":
-          case "unfair_ambrona_16.pgn":
+          case "ambrona_10.pgn":
+          case "ambrona_16.pgn":
           case "pawn_wall_norgaard_example_2.pgn":
             continue;
           default:

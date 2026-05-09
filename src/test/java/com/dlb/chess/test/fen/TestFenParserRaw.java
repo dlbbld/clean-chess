@@ -26,47 +26,47 @@ class TestFenParserRaw {
     final var halfMove4 = "rnbqkb1r/pp1ppppp/2p2n2/8/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3";
     final var halfMove5 = "rnbqkb1r/pp1ppppp/2p2n2/8/4P3/5N2/PPPP1PPP/RNBQKBR1 b Qkq - 3 3";
 
-    assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", FenParserRaw.parsePiecePlacement(halfMove0));
-    assertEquals("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR", FenParserRaw.parsePiecePlacement(halfMove1));
-    assertEquals("rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR", FenParserRaw.parsePiecePlacement(halfMove2));
-    assertEquals("rnbqkbnr/pp1ppppp/2p5/8/4P3/5N2/PPPP1PPP/RNBQKB1R", FenParserRaw.parsePiecePlacement(halfMove3));
-    assertEquals("rnbqkb1r/pp1ppppp/2p2n2/8/4P3/5N2/PPPP1PPP/RNBQKB1R", FenParserRaw.parsePiecePlacement(halfMove4));
-    assertEquals("rnbqkb1r/pp1ppppp/2p2n2/8/4P3/5N2/PPPP1PPP/RNBQKBR1", FenParserRaw.parsePiecePlacement(halfMove5));
+    assertEquals("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR", parsePiecePlacement(halfMove0));
+    assertEquals("rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR", parsePiecePlacement(halfMove1));
+    assertEquals("rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR", parsePiecePlacement(halfMove2));
+    assertEquals("rnbqkbnr/pp1ppppp/2p5/8/4P3/5N2/PPPP1PPP/RNBQKB1R", parsePiecePlacement(halfMove3));
+    assertEquals("rnbqkb1r/pp1ppppp/2p2n2/8/4P3/5N2/PPPP1PPP/RNBQKB1R", parsePiecePlacement(halfMove4));
+    assertEquals("rnbqkb1r/pp1ppppp/2p2n2/8/4P3/5N2/PPPP1PPP/RNBQKBR1", parsePiecePlacement(halfMove5));
 
-    assertEquals("w", FenParserRaw.parseHavingMove(halfMove0));
-    assertEquals("b", FenParserRaw.parseHavingMove(halfMove1));
-    assertEquals("w", FenParserRaw.parseHavingMove(halfMove2));
-    assertEquals("b", FenParserRaw.parseHavingMove(halfMove3));
-    assertEquals("w", FenParserRaw.parseHavingMove(halfMove4));
-    assertEquals("b", FenParserRaw.parseHavingMove(halfMove5));
+    assertEquals("w", parseHavingMove(halfMove0));
+    assertEquals("b", parseHavingMove(halfMove1));
+    assertEquals("w", parseHavingMove(halfMove2));
+    assertEquals("b", parseHavingMove(halfMove3));
+    assertEquals("w", parseHavingMove(halfMove4));
+    assertEquals("b", parseHavingMove(halfMove5));
 
-    assertEquals("KQkq", FenParserRaw.parseCastlingRight(halfMove0));
-    assertEquals("KQkq", FenParserRaw.parseCastlingRight(halfMove1));
-    assertEquals("KQkq", FenParserRaw.parseCastlingRight(halfMove2));
-    assertEquals("KQkq", FenParserRaw.parseCastlingRight(halfMove3));
-    assertEquals("KQkq", FenParserRaw.parseCastlingRight(halfMove4));
-    assertEquals("Qkq", FenParserRaw.parseCastlingRight(halfMove5));
+    assertEquals("KQkq", parseCastlingRight(halfMove0));
+    assertEquals("KQkq", parseCastlingRight(halfMove1));
+    assertEquals("KQkq", parseCastlingRight(halfMove2));
+    assertEquals("KQkq", parseCastlingRight(halfMove3));
+    assertEquals("KQkq", parseCastlingRight(halfMove4));
+    assertEquals("Qkq", parseCastlingRight(halfMove5));
 
-    assertEquals("-", FenParserRaw.parseEnPassantCaptureTargetSquare(halfMove0));
-    assertEquals("e3", FenParserRaw.parseEnPassantCaptureTargetSquare(halfMove1));
-    assertEquals("-", FenParserRaw.parseEnPassantCaptureTargetSquare(halfMove2));
-    assertEquals("-", FenParserRaw.parseEnPassantCaptureTargetSquare(halfMove3));
-    assertEquals("-", FenParserRaw.parseEnPassantCaptureTargetSquare(halfMove4));
-    assertEquals("-", FenParserRaw.parseEnPassantCaptureTargetSquare(halfMove5));
+    assertEquals("-", parseEnPassantCaptureTargetSquare(halfMove0));
+    assertEquals("e3", parseEnPassantCaptureTargetSquare(halfMove1));
+    assertEquals("-", parseEnPassantCaptureTargetSquare(halfMove2));
+    assertEquals("-", parseEnPassantCaptureTargetSquare(halfMove3));
+    assertEquals("-", parseEnPassantCaptureTargetSquare(halfMove4));
+    assertEquals("-", parseEnPassantCaptureTargetSquare(halfMove5));
 
-    assertEquals("0", FenParserRaw.parseHalfMoveClock(halfMove0));
-    assertEquals("0", FenParserRaw.parseHalfMoveClock(halfMove1));
-    assertEquals("0", FenParserRaw.parseHalfMoveClock(halfMove2));
-    assertEquals("1", FenParserRaw.parseHalfMoveClock(halfMove3));
-    assertEquals("2", FenParserRaw.parseHalfMoveClock(halfMove4));
-    assertEquals("3", FenParserRaw.parseHalfMoveClock(halfMove5));
+    assertEquals("0", parseHalfMoveClock(halfMove0));
+    assertEquals("0", parseHalfMoveClock(halfMove1));
+    assertEquals("0", parseHalfMoveClock(halfMove2));
+    assertEquals("1", parseHalfMoveClock(halfMove3));
+    assertEquals("2", parseHalfMoveClock(halfMove4));
+    assertEquals("3", parseHalfMoveClock(halfMove5));
 
-    assertEquals("1", FenParserRaw.parseFullMoveNumber(halfMove0));
-    assertEquals("1", FenParserRaw.parseFullMoveNumber(halfMove1));
-    assertEquals("2", FenParserRaw.parseFullMoveNumber(halfMove2));
-    assertEquals("2", FenParserRaw.parseFullMoveNumber(halfMove3));
-    assertEquals("3", FenParserRaw.parseFullMoveNumber(halfMove4));
-    assertEquals("3", FenParserRaw.parseFullMoveNumber(halfMove5));
+    assertEquals("1", parseFullMoveNumber(halfMove0));
+    assertEquals("1", parseFullMoveNumber(halfMove1));
+    assertEquals("2", parseFullMoveNumber(halfMove2));
+    assertEquals("2", parseFullMoveNumber(halfMove3));
+    assertEquals("3", parseFullMoveNumber(halfMove4));
+    assertEquals("3", parseFullMoveNumber(halfMove5));
   }
 
   @SuppressWarnings("static-method")
@@ -97,4 +97,29 @@ class TestFenParserRaw {
     assertTrue(isException);
 
   }
+
+  private static String parsePiecePlacement(String piecePlacement) {
+    return FenParserRaw.parseFenRaw(piecePlacement).piecePlacement();
+  }
+
+  private static String parseHavingMove(String fen) {
+    return FenParserRaw.parseFenRaw(fen).havingMove();
+  }
+
+  private static String parseCastlingRight(String fen) {
+    return FenParserRaw.parseFenRaw(fen).castlingRightBothStr();
+  }
+
+  private static String parseEnPassantCaptureTargetSquare(String fen) {
+    return FenParserRaw.parseFenRaw(fen).enPassantCaptureTargetSquare();
+  }
+
+  private static String parseHalfMoveClock(String fen) {
+    return FenParserRaw.parseFenRaw(fen).halfMoveClock();
+  }
+
+  private static String parseFullMoveNumber(String fen) {
+    return FenParserRaw.parseFenRaw(fen).fullMoveNumber();
+  }
+
 }

@@ -13,6 +13,7 @@ import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.test.ConfigurationTestConstants;
 
 /**
  * Strict-parser counterpart of {@link TestLenientPgnParserBeyondTermination}. Each fixture
@@ -22,8 +23,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 class TestStrictPgnParserBeyondTermination {
 
   private static final Path BEYOND_FOLDER = NonNullWrapperCommon.pathResolve(
-      com.dlb.chess.common.constants.ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH,
-      "src/test/resources/pgnParser/common/beyond");
+      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
 
   @SuppressWarnings("static-method")
   @Test

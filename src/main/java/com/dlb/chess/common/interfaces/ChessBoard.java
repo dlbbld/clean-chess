@@ -115,6 +115,11 @@ public interface ChessBoard extends EnumConstants {
     return InsufficientMaterial.NONE;
   }
 
+  /**
+   * Quick (microsecond-scale, structural) CHA-based check whether the current position is dead — unwinnable for both
+   * sides. Three-valued: {@code DEAD_POSITION}, {@code NON_DEAD_POSITION}, {@code POSSIBLY_NON_DEAD_POSITION} (the third
+   * is a deliberate honesty signal — the quick algorithm is sound but not complete).
+   */
   default DeadPositionQuick isDeadPositionQuick() {
     final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
     final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
@@ -130,6 +135,11 @@ public interface ChessBoard extends EnumConstants {
     return DeadPositionQuick.POSSIBLY_NON_DEAD_POSITION;
   }
 
+  /**
+   * Full (deep-search) CHA-based check whether the current position is dead — unwinnable for both sides. Three-valued:
+   * {@code DEAD_POSITION}, {@code NON_DEAD_POSITION}, {@code UNDETERMINED} (the third when the search hits the
+   * 500&nbsp;000-position bound; most positions resolve well below it).
+   */
   default DeadPositionFull isDeadPositionFull() {
     final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
     if (unwinnableWhite == UnwinnableFull.WINNABLE) {
@@ -148,24 +158,22 @@ public interface ChessBoard extends EnumConstants {
     return DeadPositionFull.UNDETERMINED;
   }
 
+  /**
+   * Quick (microsecond-scale, structural) CHA-based check whether the given side has a theoretical mating sequence in
+   * the current position. Three-valued: {@code WINNABLE}, {@code UNWINNABLE}, {@code POSSIBLY_WINNABLE} (the third when
+   * the structural test cannot decide — sound but not complete).
+   */
   default UnwinnableQuick isUnwinnableQuick(Side side) {
     return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
   }
 
+  /**
+   * Full (deep-search) CHA-based check whether the given side has a theoretical mating sequence in the current
+   * position. Three-valued: {@code WINNABLE}, {@code UNWINNABLE}, {@code UNDETERMINED} (the third when the search hits
+   * the 500&nbsp;000-position bound; most positions resolve well below it).
+   */
   default UnwinnableFull isUnwinnableFull(Side side) {
     return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
-  }
-
-  default boolean isGameEnd() {
-    if (isCheckmate()) {
-      return true;
-    }
-    return isGameDraw();
-  }
-
-  private boolean isGameDraw() {
-    return isStalemate() || isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION || isFivefoldRepetition()
-        || isSeventyFiveMove();
   }
 
   // name collision with API Carlos's method which must be adapted for warnings

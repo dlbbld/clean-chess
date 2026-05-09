@@ -12,8 +12,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
@@ -75,8 +73,10 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     if (IS_DEBUG) {
-      final var filePath = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "fenListMine.txt");
-      FileUtility.writeFile(filePath, evalFenList);
+      logger.printf(Level.DEBUG, "Evaluated %d FEN positions", evalFenList.size());
+      for (final String fen : evalFenList) {
+        logger.debug(fen);
+      }
     }
 
     switch (findHelpmate) {
@@ -181,18 +181,16 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
         final String uciMoveStr = UciMoveUtility
             .convertMoveSpecificationToUci(legalMove.havingMove(), legalMove.moveSpecification()).text();
         final var out = uciMoveStr + " " + newDepth;
-        System.out.println(out);
+        logger.debug(out);
         evalCounter++;
         final String evaluateStockfishFen = calculateStockfishFen(board);
 
         if (evaluateStockfishFen.startsWith("r1bqkb1r/pppppppp/8/8/5P2/8/2n3P1/n1K5 w kq")) {
-          final var debug = 100;
-          System.out.println(debug);
+          logger.debug("Reached debug FEN marker");
         }
 
         if (evalCounter == 3527) {
-          final var debug = 100;
-          System.out.println(debug);
+          logger.debug("Reached debug evaluation counter marker");
         }
 
         evalFenList.add(evaluateStockfishFen);

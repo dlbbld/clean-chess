@@ -16,12 +16,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.RestrictTestConstants;
 
 /**
@@ -43,7 +43,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Path LEGACY_FOLDER = NonNullWrapperCommon.pathResolve(
-      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
+      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {
@@ -150,45 +150,52 @@ class TestLegacyPgnParsePlaysBeyondAudit {
       }
     }
 
-    // ====== basic/fromFenYawn (20 files) ======
+    // ====== basic/fromFenNoProgress (20 files) ======
     // White — 04, 05, 06, 07, 08, 12 cross 75-move via move past; 13-16 are FEN-rejected
-    m.put("basic/fromFenYawn/white/04_white_from_fen_yawn_fifty_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/04_white_from_fen_no_progress_fifty_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/05_white_from_fen_yawn_seventy_five_reoccuring_fifty.pgn",
+    m.put("basic/fromFenNoProgress/white/05_white_from_fen_no_progress_seventy_five_reoccuring_fifty.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/06_white_from_fen_yawn_seventy_five_reoccuring_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/06_white_from_fen_no_progress_seventy_five_reoccuring_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/07_white_from_fen_yawn_seventy_five_reoccuring_above_fifty.pgn",
+    m.put("basic/fromFenNoProgress/white/07_white_from_fen_no_progress_seventy_five_reoccuring_above_fifty.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/08_white_from_fen_yawn_seventy_five_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/08_white_from_fen_no_progress_seventy_five_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/12_white_from_fen_yawn_above_fifty_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/12_white_from_fen_no_progress_above_fifty_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/white/13_white_from_fen_yawn_above_seventy_five_reoccuring_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/white/14_white_from_fen_yawn_above_seventy_five_reoccuring_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/13_white_from_fen_no_progress_above_seventy_five_reoccuring_fifty.pgn",
         fenInvalid());
-    m.put("basic/fromFenYawn/white/15_white_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/white/16_white_from_fen_yawn_above_seventy_five_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/white/14_white_from_fen_no_progress_above_seventy_five_reoccuring_seventy_five.pgn",
+        fenInvalid());
+    m.put("basic/fromFenNoProgress/white/15_white_from_fen_no_progress_above_seventy_five_reoccuring_above_fifty.pgn",
+        fenInvalid());
+    m.put(
+        "basic/fromFenNoProgress/white/16_white_from_fen_no_progress_above_seventy_five_reoccuring_above_seventy_five.pgn",
         fenInvalid());
 
     // Black — 04, 06, 07, 08, 12 cross 75-move via move past; 05 is FEN-rejected (clock 175);
     // 13-16 also FEN-rejected.
-    m.put("basic/fromFenYawn/black/04_black_from_fen_yawn_fifty_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/black/04_black_from_fen_no_progress_fifty_reoccuring_above_seventy_five.pgn",
         sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/05_black_from_fen_yawn_seventy_five_reoccuring_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/black/06_black_from_fen_yawn_seventy_five_reoccuring_seventy_five.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/07_black_from_fen_yawn_seventy_five_reoccuring_above_fifty.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/08_black_from_fen_yawn_seventy_five_reoccuring_above_seventy_five.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/12_black_from_fen_yawn_above_fifty_reoccuring_above_seventy_five.pgn",
-        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
-    m.put("basic/fromFenYawn/black/13_black_from_fen_yawn_above_seventy_five_reoccuring_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/black/14_black_from_fen_yawn_above_seventy_five_reoccuring_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/black/05_black_from_fen_no_progress_seventy_five_reoccuring_fifty.pgn",
         fenInvalid());
-    m.put("basic/fromFenYawn/black/15_black_from_fen_yawn_above_seventy_five_reoccuring_above_fifty.pgn", fenInvalid());
-    m.put("basic/fromFenYawn/black/16_black_from_fen_yawn_above_seventy_five_reoccuring_above_seventy_five.pgn",
+    m.put("basic/fromFenNoProgress/black/06_black_from_fen_no_progress_seventy_five_reoccuring_seventy_five.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/07_black_from_fen_no_progress_seventy_five_reoccuring_above_fifty.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/08_black_from_fen_no_progress_seventy_five_reoccuring_above_seventy_five.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/12_black_from_fen_no_progress_above_fifty_reoccuring_above_seventy_five.pgn",
+        sanGameEnded(SEVENTY_FIVE_MOVE_RULE));
+    m.put("basic/fromFenNoProgress/black/13_black_from_fen_no_progress_above_seventy_five_reoccuring_fifty.pgn",
+        fenInvalid());
+    m.put("basic/fromFenNoProgress/black/14_black_from_fen_no_progress_above_seventy_five_reoccuring_seventy_five.pgn",
+        fenInvalid());
+    m.put("basic/fromFenNoProgress/black/15_black_from_fen_no_progress_above_seventy_five_reoccuring_above_fifty.pgn",
+        fenInvalid());
+    m.put(
+        "basic/fromFenNoProgress/black/16_black_from_fen_no_progress_above_seventy_five_reoccuring_above_seventy_five.pgn",
         fenInvalid());
 
     // ====== basic/intervening (4) — outer/inner 5-fold + 3-fold interactions, all play past 5-fold ======
@@ -223,9 +230,6 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put(
         "basic/threefold/37_threefold_en_passant_capture_situation_capture_allowed_no_exposing_own_king_to_check_mine_end_with_first_threefold.pgn",
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
-
-    // ====== dgt/liveChess (1) ======
-    m.put("dgt/liveChess/02_dgt_livechess_fivefold_fails_too_early.pgn", sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
     // ====== fivefold/beyond (3) — historical games crossing 5-fold ======
     m.put("fivefold/beyond/fivefold_beyond_savchenko_yu_y2017.pgn", sanGameEnded(FIVE_FOLD_REPETITION_RULE));

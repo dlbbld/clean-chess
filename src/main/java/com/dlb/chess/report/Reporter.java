@@ -16,22 +16,46 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.common.utility.NoProgressMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
-import com.dlb.chess.common.utility.YawnMoveUtility;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.report.model.NoProgressHalfMove;
 import com.dlb.chess.report.model.Report;
-import com.dlb.chess.report.model.YawnHalfMove;
+import com.dlb.chess.report.print.NoProgressPrint;
 import com.dlb.chess.report.print.RepetitionPrint;
 import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
-import com.dlb.chess.report.print.YawnPrint;
 
+/**
+ * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities), no-progress
+ * (50/75-move-rule) sequences, and a printable summary — from a {@link ChessBoard} or a parsed PGN.
+ *
+ * <p>
+ * Two surfaces:
+ *
+ * <ul>
+ * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.model.Report} record carrying all the
+ * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
+ * inspection.</li>
+ * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
+ * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README
+ * examples.</li>
+ * </ul>
+ *
+ * <p>
+ * The report distinguishes the on-board predicates ("threefold has occurred") from the with-move predicates ("some
+ * legal move would create a threefold position the side could claim before playing it"). The latter surfaces missed
+ * claim opportunities other libraries don't.
+ *
+ * <p>
+ * Final class with a private constructor — all entry points are static.
+ */
 public final class Reporter {
 
   private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
-  private static final int YAWN_FULL_MOVE_COUNT_THRESHOLD = 25;
+  private static final int NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD = 25;
 
   private Reporter() {
   }
@@ -48,14 +72,39 @@ public final class Reporter {
   }
 
   public static void printReport(ChessBoard board) {
+    printList(calculateReportLines(board));
+  }
+
+  /** Returns the same human-readable report as {@link #printReport(String)} but as a single string, lines joined by
+   *  {@code "\n"}. Use this when the consumer is not stdout — web responses, file writes, GUI displays, etc. */
+  public static String calculateReportText(String pgnString) {
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
+    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    return calculateReportText(board);
+  }
+
+  /** Returns the same human-readable report as {@link #printReport(Path, String)} but as a single string, lines
+   *  joined by {@code "\n"}. */
+  public static String calculateReportText(Path folderPath, String pgnFileName) {
+    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    return calculateReportText(board);
+  }
+
+  /** Returns the same human-readable report as {@link #printReport(ChessBoard)} but as a single string, lines joined
+   *  by {@code "\n"}. */
+  public static String calculateReportText(ChessBoard board) {
+    return String.join("\n", calculateReportLines(board));
+  }
+
+  private static @NonNull List<String> calculateReportLines(ChessBoard board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
-    addFirstMainSection(output, "analysis.repetition.threefold.ahead.title");
+    addFirstMainSection(output, "report.repetition.threefold.ahead.title");
     final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility
         .calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
     if (claimAheadListList.isEmpty()) {
-      output.add(Message.getString("analysis.repetition.threefold.ahead.none"));
+      output.add(Message.getString("report.repetition.threefold.ahead.none"));
     } else {
       final var claimAheadList = ThreefoldClaimAheadPrint.calculateClaimAheadList(claimAheadListList);
       output.addAll(claimAheadList);
@@ -63,44 +112,44 @@ public final class Reporter {
 
     final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(
         board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
-    addMainSection(output, "analysis.repetition.threefold.list.title");
+    addMainSection(output, "report.repetition.threefold.list.title");
     if (repetitionListList.isEmpty()) {
-      output.add(Message.getString("analysis.repetition.threefold.list.none"));
+      output.add(Message.getString("report.repetition.threefold.list.none"));
     } else {
       final var listChronic = RepetitionPrint.calculateOutputRepetitionChronlogically(repetitionListList);
       output.add(listChronic);
     }
 
-    // yawn move
-    final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
-        2 * YAWN_FULL_MOVE_COUNT_THRESHOLD);
-    addMainSection(output, "analysis.yawnmove.sequence.title",
-        NonNullWrapperCommon.valueOf(YAWN_FULL_MOVE_COUNT_THRESHOLD));
-    if (yawnMoveListList.isEmpty()) {
-      output.add(Message.getString("analysis.yawnmove.sequence.none"));
+    // no progress move
+    final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility
+        .calculateNoProgressMoveRule(board, 2 * NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD);
+    addMainSection(output, "report.noProgressMove.sequence.title",
+        NonNullWrapperCommon.valueOf(NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD));
+    if (noProgressMoveListList.isEmpty()) {
+      output.add(Message.getString("report.noProgressMove.sequence.none"));
     } else {
-      final var list = YawnPrint.calculateOutputYawnMoveListList(yawnMoveListList);
+      final var list = NoProgressPrint.calculateOutputNoProgressMoveListList(noProgressMoveListList);
       output.addAll(list);
     }
 
-    addMainSection(output, "analysis.yawnmove.fiftyMoves.title");
-    final var hasFiftyMoveRule = calculateHasFiftyMoveRule(yawnMoveListList);
+    addMainSection(output, "report.noProgressMove.fiftyMoves.title");
+    final var hasFiftyMoveRule = calculateHasFiftyMoveRule(noProgressMoveListList);
     if (hasFiftyMoveRule) {
-      output.add(Message.getString("analysis.yawnmove.fiftyMoves.yes"));
+      output.add(Message.getString("report.noProgressMove.fiftyMoves.yes"));
     } else {
-      output.add(Message.getString("analysis.yawnmove.fiftyMoves.no"));
+      output.add(Message.getString("report.noProgressMove.fiftyMoves.no"));
     }
 
-    printList(output);
+    return output;
   }
 
-  public static Report calculateAnalysis(Path folderPath, String pgnFileName) throws Exception {
+  public static Report calculateReport(Path folderPath, String pgnFileName) throws Exception {
 
     final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
-    return calculateAnalysis(board);
+    return calculateReport(board);
   }
 
-  public static Report calculateAnalysis(ChessBoard board) {
+  public static Report calculateReport(ChessBoard board) {
 
     final String invariant = board.getFen();
 
@@ -113,19 +162,19 @@ public final class Reporter {
     final List<List<HalfMove>> repetitionListListInitialEnPassantCapture = calculateRepetitionListListInitialEnPassantCapture(
         halfMoveList);
 
-    final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
+    final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility.calculateNoProgressMoveRule(board,
         ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
 
     final var hasThreefoldRepetition = !repetitionListList.isEmpty();
     final var hasThreefoldRepetitionInitialEnPassantCapture = !repetitionListListInitialEnPassantCapture.isEmpty();
     final var hasFivefoldRepetition = calculateHasFivefoldRepetition(repetitionListList);
-    final var hasFiftyMoveRule = !yawnMoveListList.isEmpty();
-    final var hasSeventyFiveMoveRule = calculateHasSeventyFiveMoveRule(yawnMoveListList);
+    final var hasFiftyMoveRule = !noProgressMoveListList.isEmpty();
+    final var hasSeventyFiveMoveRule = calculateHasSeventyFiveMoveRule(noProgressMoveListList);
 
     final var firstCapture = calculateFirstCapture(halfMoveList);
     final var hasCapture = calculateHasCapture(halfMoveList);
 
-    final var maxYawnSequence = calculateMaxYawnSequence(board);
+    final var maxNoProgressSequence = calculateMaxNoProgressSequence(board);
 
     final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
@@ -137,12 +186,12 @@ public final class Reporter {
     }
 
     return new Report(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
-        yawnMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
-        hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxYawnSequence, checkmateOrStalemate,
+        noProgressMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
+        hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxNoProgressSequence, checkmateOrStalemate,
         insufficientMaterial, fen, board);
   }
 
-  public static boolean calculateIsHalfMoveTerminatesYawnSequence(HalfMove halfMove) {
+  public static boolean calculateIsHalfMoveTerminatesNoProgressSequence(HalfMove halfMove) {
     return halfMove.halfMoveClock() == 0;
   }
 
@@ -159,21 +208,21 @@ public final class Reporter {
     return false;
   }
 
-  private static boolean calculateHasSeventyFiveMoveRule(List<List<YawnHalfMove>> yawnMoveListList) {
-    for (final List<YawnHalfMove> list : yawnMoveListList) {
-      final YawnHalfMove lastYawnHalfMove = NonNullWrapperCommon.getLast(list);
+  private static boolean calculateHasSeventyFiveMoveRule(List<List<NoProgressHalfMove>> noProgressMoveListList) {
+    for (final List<NoProgressHalfMove> list : noProgressMoveListList) {
+      final NoProgressHalfMove lastNoProgressHalfMove = NonNullWrapperCommon.getLast(list);
 
-      if (lastYawnHalfMove.sequenceLength() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+      if (lastNoProgressHalfMove.sequenceLength() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
         return true;
       }
     }
     return false;
   }
 
-  private static boolean calculateHasFiftyMoveRule(List<List<YawnHalfMove>> yawnMoveListList) {
-    for (final List<YawnHalfMove> yawnMoveList : yawnMoveListList) {
-      for (final YawnHalfMove yawnHalfMove : yawnMoveList) {
-        if (yawnHalfMove.sequenceLength() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
+  private static boolean calculateHasFiftyMoveRule(List<List<NoProgressHalfMove>> noProgressMoveListList) {
+    for (final List<NoProgressHalfMove> noProgressMoveList : noProgressMoveListList) {
+      for (final NoProgressHalfMove noProgressHalfMove : noProgressMoveList) {
+        if (noProgressHalfMove.sequenceLength() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
           return true;
         }
       }
@@ -215,7 +264,7 @@ public final class Reporter {
     return false;
   }
 
-  private static int calculateMaxYawnSequence(ChessBoard board) {
+  private static int calculateMaxNoProgressSequence(ChessBoard board) {
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
     if (board.getHalfMoveList().isEmpty()) {

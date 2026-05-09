@@ -2,7 +2,7 @@ package com.dlb.chess.san.validate;
 
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanValidationProblem;
