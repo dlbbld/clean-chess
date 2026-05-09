@@ -37,7 +37,7 @@ The codebase is written in as functional a style as Java reasonably permits: rec
 
 Concretely:
 
-- **Records as value objects** (`PgnCommentary`, `Fen`, `Tag`, `PgnHalfMove`, `PgnFile`, `MoveSpecification`). The compact constructor validates the contract; once an instance exists, downstream code does not re-validate. Errors are pushed to the construction boundary.
+- **Records as value objects** (`PgnCommentary`, `Fen`, `Tag`, `PgnHalfMove`, `PgnFile`, `MoveSpecification`). Where a record carries a non-trivial textual or grammatical contract — `PgnCommentary` is the load-bearing example — the compact constructor enforces it, and downstream code does not re-validate. For records whose invariants are field-level (`Fen`, `Tag`, `PgnHalfMove`), validation lives one layer out, at the parser/factory boundary (`FenParserAdvanced`, `LenientPgnParser`, `StrictPgnParser`); a record never holds something that came in from outside the library without first passing through one of those entry points. `PgnFile`'s compact constructor performs defensive copies of its list components so the immutability claim holds end-to-end. The end result is the same — errors at construction time — but the boundary is occasionally one method out from the record itself.
 - **Heavy enum use** for closed domains (`Side`, `Piece`, `Square`, `File`, `Rank`, `MoveSuffixAnnotation`, `ResultTagValue`, etc.) — the compiler enforces exhaustive `switch` handling.
 - **Eclipse JDT null annotations** (`@NonNull` / `@Nullable`) used pervasively, with the build configured so violations are errors. Null is a typed concern, not a runtime accident.
 - **No reflection in the rule core.** What the type system says is what runs.
@@ -99,16 +99,24 @@ The top-level package `com.dlb.chess` is organised by concern:
 |---|---|
 | `board` | `Board`, position state, move execution, game-status queries |
 | `model` | Cross-cutting model types |
-| `enums` | Domain enums shared across the codebase |
+| `enums` | Pipeline-level domain enums (`MoveCheck`, `MoveSuffixAnnotation`, etc.) shared across SAN and movement validation |
 | `fen` | FEN parsing (basic and advanced) and validation |
 | `san` | SAN parsing, validation, generation |
 | `moves` | Legal move enumeration and execution helpers |
 | `pgn.parser` | Strict and lenient PGN parsers; shared tokenizer in `pgn.parser.sequential` |
 | `pgn.create` | PGN export |
+| `pgn.writer` | File-system PGN writing |
+| `pgn.diagnostic` | Standalone PGN diagnostics outside the strict pipeline (e.g. `GameContinuationScanner`) |
 | `unwinnability` | CHA implementation, quick and full |
 | `report` | Game-level reports: threefold-claim-ahead, repetition, 50-move sequences |
 | `analyze` | Stateless chess-rule analysis used by SAN and movement validation pipelines |
-| `common` | Generic utilities and exceptions |
+| `utility` | PGN- and tag-level helpers used by the parsers and exporter (separate from `common.utility`) |
+| `internationalization` | Validation-message bundle (`Message`, `messages.properties`) for SAN/FEN/PGN diagnostics |
+| `distance` | Square-to-square distance metrics (king, knight) |
+| `range` | Orthogonal and diagonal direction ranges for piece movement |
+| `squares` | Precomputed square-to-square reachability and attack lookup tables (`emptyboard`, `pawn`, `to.attacked`, `to.potential`, `to.range`) |
+| `exceptions` | Top-level move-pipeline exception (`InvalidMoveException`); other exceptions live in `common.exceptions` |
+| `common` | Generic utilities, constants, and exceptions |
 
 Packages depend in roughly that order (top to bottom).
 
