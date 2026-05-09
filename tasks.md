@@ -4,61 +4,7 @@ Order within each section is the source of truth. Completed tasks move to **Done
 
 ---
 
-## Current release — project organization & big-picture cleanup
-
-Theme: documentation, obvious issues, major bugs. No new features.
-
-### pom.xml / build configuration
-- [x] Drop `maven.compiler.release` 26 → 17
-- [x] Reconcile `groupId` between `pom.xml` and `README.md` (commit `ef8de9c`: pom now `com.github.dlbbld`, matches what README documented all along)
-- [x] Move `log4j-core` to `<scope>runtime</scope>` (commit `ef8de9c`); compile-time deps narrowed to `log4j-api`
-- [x] Remove file appender from `src/main/resources/log4j2.xml` — library no longer writes to a temp file at runtime (commit `612a93b`; dangling `AppenderRef` references cleaned up afterwards). Console-only config retained as a safe default.
-
-### Public API discoverability & naming
-- [x] `isSeventyFiftyMove()` → `isSeventyFiveMove()` (commit `eee221e`)
-- [x] ~~Pull CHA methods down from `AbstractBoard` to `Board`~~ — superseded by the AbstractBoard collapse (default methods on `ChessBoard`); CHA methods now appear directly on the interface
-- [x] Rename `analysis` → `report` (commit `7ac91e4`): `Analyzer` → `Reporter`, `AnalyzerPrint` → `ReportPrint`, `Analysis` (record) → `Report`. The remaining `analyze` package now differs by more than one letter.
-- [x] Collapse `Reporter extends ReportPrint` into one `final` class — `ReportPrint.java` deleted, all its content merged into `Reporter`; `Reporter` now `final` with private constructor; `printAnalysis(...)` renamed to `printReport(...)` end-to-end
-- [x] `ChessRuleAnalyzer` — drop `abstract`, make `final` with private constructor
-
-### Release-gate test runs
-- [x] Maven profile `-Pfull` enabling the heavy excluded suites (commit `ef8de9c`). Default `mvn test` runs the restricted fast suite; `mvn test -Pfull` flips `RestrictTestConstants` (via the `clean-chess.full` system property) and runs every gated audit, plus switches `PgnTestInclusion` to `ALL`.
-- [x] Documented the release-time requirement in `specification.md` §6.1 — release-tagger must run `mvn test -Pfull` and confirm green. CI workflow is a separate optional follow-up.
-
-### specification.md polish
-- [x] Soften "no nulls" claim (§2.2) — replaced with a more honest framing about Java's compromises
-- [x] Soften "the only published algorithm" about CHA (§1, §3.2) — qualified with "to the author's knowledge"
-- [x] Bonus: updated §4 architecture table to reflect `analysis` → `report` rename (and the corrected description of `analyze`)
-- [x] Bonus: added §6.1 documenting the restricted vs full suite and the release-tagging requirement
-
-### Eclipse / Checkstyle configuration in repo
-- [x] Export Checkstyle XML rule file to repo (`394f97e`: `checkstyle.xml` at root, `.checkstyle` switched to `type="project"`)
-- [x] Bring suppression files into repo (`121255d`/`77ea4c3`: `checkstyle-suppressions.xml`, `checkstyle-xpath-suppressions.xml`, references switched to `${samedir}/`)
-- [x] Check in `.settings/org.eclipse.jdt.core.prefs` (`fdb23a9`: compiler warnings + formatter rules)
-- [x] Check in `.settings/org.eclipse.jdt.ui.prefs` (`fdb23a9`: cleanup, save actions, profile names)
-- [x] Align Manual Clean Up with Cleanup on Save (`dc149fb`: four divergent rules flipped)
-- [x] Update `coding-conventions.md` — replaced "known gap" section with a setup.md pointer
-- [x] Verify on a fresh checkout that the rule sets activate without manual file copies — confirmed: Eclipse import → Checkstyle, compiler warnings, cleanup-on-save all work from the start
-
-### Create setup.md
-- [x] Document project setup
-- [x] Cover: required JDK, required Eclipse plugins, project import steps, manual workspace cosmetics
-- [x] Cross-link from `README.md` and `coding-conventions.md`
-
-### Standardize markdown filename casing
-- [x] Rename `SPECIFICATION.md` → `specification.md`
-- [x] Rename `Agents.md` → `agents.md`
-- [x] Update all cross-references (README, Javadocs)
-- [x] Verify no lingering uppercase references (grep clean after `05a8a04`)
-
-### License hygiene
-- [x] Add copyright/preamble header to `LICENSE` before the GPL v3 text
-- [x] Add License section to `README.md` with CHA-derivation note
-- Source-file GPL headers moved to the GPL v3 source-file headers task in the future release
-
----
-
-## Next release — cleanup follow-through
+## Current release — cleanup follow-through
 
 Theme: doc correctness, dead/personal code purge, library packaging hygiene, naming follow-through from the rename in the previous release, and one design-consistency fix (`isGameEnd` vs CHA opt-in). No new features.
 
