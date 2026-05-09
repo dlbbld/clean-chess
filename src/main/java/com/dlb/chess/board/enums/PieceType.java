@@ -1,7 +1,7 @@
 package com.dlb.chess.board.enums;
 
 import com.dlb.chess.common.exceptions.NonePointerException;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 
 public enum PieceType {
   PAWN('P', 1, Message.getString("pieceType.pawn.name")),

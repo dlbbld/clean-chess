@@ -19,7 +19,7 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.NoProgressMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.report.model.NoProgressHalfMove;
@@ -40,7 +40,7 @@ import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
  * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
  * inspection.</li>
  * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
- * {@link com.dlb.chess.internationalization.Message}. Use this for the kind of CLI-style output shown in the README
+ * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README
  * examples.</li>
  * </ul>
  *

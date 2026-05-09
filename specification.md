@@ -111,7 +111,7 @@ The top-level package `com.dlb.chess` is organised by concern:
 | `report` | Game-level reports: threefold-claim-ahead, repetition, 50-move sequences |
 | `analyze` | Stateless chess-rule analysis used by SAN and movement validation pipelines |
 | `utility` | PGN- and tag-level helpers used by the parsers and exporter (separate from `common.utility`) |
-| `internationalization` | Validation-message bundle (`Message`, `messages.properties`) for SAN/FEN/PGN diagnostics |
+| `messages` | Validation-message bundle (`Message`, `messages.properties`) for SAN/FEN/PGN diagnostics |
 | `distance` | Square-to-square distance metrics (king, knight) |
 | `range` | Orthogonal and diagonal direction ranges for piece movement |
 | `squares` | Precomputed square-to-square reachability and attack lookup tables (`emptyboard`, `pawn`, `to.attacked`, `to.potential`, `to.range`) |

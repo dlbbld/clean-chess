@@ -9,7 +9,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
-import com.dlb.chess.internationalization.Message;
+import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanValidationProblem;

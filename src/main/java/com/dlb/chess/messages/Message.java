@@ -1,4 +1,4 @@
-package com.dlb.chess.internationalization;
+package com.dlb.chess.messages;
 
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
