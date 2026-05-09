@@ -3,9 +3,10 @@ package com.dlb.chess.exceptions;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.enums.GameStatus;
+import com.dlb.chess.common.exceptions.UsageException;
 import com.dlb.chess.enums.MoveCheck;
 
-public class InvalidMoveException extends RuntimeException {
+public class InvalidMoveException extends UsageException {
 
   private final MoveCheck moveCheck;
   private final @Nullable GameStatus gameStatus;

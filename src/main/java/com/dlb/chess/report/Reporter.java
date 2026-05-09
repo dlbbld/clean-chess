@@ -72,6 +72,31 @@ public final class Reporter {
   }
 
   public static void printReport(ChessBoard board) {
+    printList(calculateReportLines(board));
+  }
+
+  /** Returns the same human-readable report as {@link #printReport(String)} but as a single string, lines joined by
+   *  {@code "\n"}. Use this when the consumer is not stdout — web responses, file writes, GUI displays, etc. */
+  public static String calculateReportText(String pgnString) {
+    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
+    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    return calculateReportText(board);
+  }
+
+  /** Returns the same human-readable report as {@link #printReport(Path, String)} but as a single string, lines
+   *  joined by {@code "\n"}. */
+  public static String calculateReportText(Path folderPath, String pgnFileName) {
+    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    return calculateReportText(board);
+  }
+
+  /** Returns the same human-readable report as {@link #printReport(ChessBoard)} but as a single string, lines joined
+   *  by {@code "\n"}. */
+  public static String calculateReportText(ChessBoard board) {
+    return String.join("\n", calculateReportLines(board));
+  }
+
+  private static @NonNull List<String> calculateReportLines(ChessBoard board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
@@ -115,7 +140,7 @@ public final class Reporter {
       output.add(Message.getString("report.noProgressMove.fiftyMoves.no"));
     }
 
-    printList(output);
+    return output;
   }
 
   public static Report calculateReport(Path folderPath, String pgnFileName) throws Exception {

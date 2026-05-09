@@ -109,6 +109,20 @@ The `messages.properties` mechanism itself is good engineering — externalizati
 
 The Maven Central / `groupId` migration has its own dedicated release at the bottom of this file — see *Future release — publish to Maven Central*.
 
+### Second-pass review follow-ups (pre-release polish)
+After all 14 cleanup-follow-through subsections closed, a fresh-eyes review surfaced a remaining set of items. Treating them as the final pre-release polish.
+
+- [x] **`Board.calculateLegalMove` made package-private.** Was `public static` — exposed a way for outside code to construct a `LegalMove` value object that lies about its contract (the type carries derived data — moving piece, captured piece, en-passant role — that's only correct when the input was actually validated as legal, an invariant only the rule pipeline can guarantee). The only caller (`TestLegalMovesAgainstCreatedUsingValidation`) was refactored to compare `MoveSpecification` sets directly, which is the meaningful chess-correctness invariant; the `LegalMove`-set comparison was internal-consistency only.
+- [x] **`Board.createPositionAfterMove` moved to `StaticPositionUtility`.** Was `public static` on `Board` — but the function is a pure transformation of an immutable `StaticPosition`; doesn't depend on any `Board` state and shouldn't live on the game class. New home was already the only external caller.
+- [x] **`coding-conventions.md`: documented "Records carry data, not behavior".** The MVC-style separation: records are the M; computational and business logic operating on them lives in dedicated utility/service classes. Compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals`/`hashCode`/`toString` remain explicitly allowed; domain-operation methods do not.
+- [x] **README version mismatch fixed.** The Gradle snippet said `compile 'com.github.dlbbld:clean-chess:3.2'` while the Maven snippet correctly said `3.3.0`. Updated to `implementation 'com.github.dlbbld:clean-chess:3.3.0'` — version bumped, plus the deprecated `compile` configuration (removed in Gradle 7) replaced with the modern `implementation`.
+- [x] **`Reporter` decoupled from stdout.** Added `calculateReportText(...)` — three overloads matching `printReport(...)`, returning the same human-readable report as a single `\n`-joined string. Lets non-CLI consumers (web responses, file writes, GUIs) use the report data without capturing stdout. Implementation refactored to share line-building logic between print and text variants. New smoke test covers both methods.
+- [x] **`InvalidMoveException` brought into the project's exception hierarchy.** Was `extends RuntimeException` directly — bypassed both `ChessApiRuntimeException` and `UsageException`. Now `extends UsageException`, so consumers can `catch (UsageException e)` to handle all caller-fault cases uniformly (alongside the SAN/FEN/PGN validation exceptions).
+- [x] **Thread-safety statement added.** Class-level Javadoc on `Board` says it's mutable and not thread-safe; warns about putting a `Board` in a hash-based collection. New §2.4 in `specification.md` covers the project-wide contract: records are immutable + thread-safe; static utility classes are stateless + thread-safe; parsers expose stateless static entry points.
+- [x] **`CHANGELOG.md` created.** Starts with the upcoming release as `Unreleased`. Follows the [Keep a Changelog](https://keepachangelog.com/) convention. Pre-3.3 history remains in the git tag list; the changelog tracks releases going forward.
+- [x] **`CONTRIBUTING.md` created.** Central "how to contribute" entry point linking `setup.md`, `coding-conventions.md`, `agents.md`, and `tasks.md`. Closes the "I want to help" affordance gap on the GitHub repo view.
+- [x] **JAR `MANIFEST.MF` carries Implementation-Title/Version/Vendor.** Configured in `maven-jar-plugin`. Consumers can now call `Package.getImplementationVersion()` to discover the runtime version of clean-chess — useful for logging, error messages, version-awareness in downstream apps.
+
 ---
 
 ## Future release — Lenient SAN

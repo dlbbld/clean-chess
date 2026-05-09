@@ -56,7 +56,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    compile 'com.github.dlbbld:clean-chess:3.2'
+    implementation 'com.github.dlbbld:clean-chess:3.3.0'
     ...
 }
 ```

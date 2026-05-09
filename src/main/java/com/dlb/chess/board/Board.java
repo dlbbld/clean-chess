@@ -93,6 +93,14 @@ import com.google.common.collect.ImmutableSet;
  * <p>
  * For game-level reports (threefold-claim-ahead, repetition listings, no-progress sequences), use
  * {@link com.dlb.chess.report.Reporter}.
+ *
+ * <h2>Thread-safety</h2>
+ *
+ * <p>
+ * {@code Board} is mutable and <strong>not thread-safe</strong>. Use one {@code Board} per thread, or synchronize
+ * externally. {@link #equals(Object)} and {@link #hashCode()} reflect the current game state, so a {@code Board}
+ * placed in a {@link java.util.HashMap} or {@link java.util.HashSet} and then mutated will violate the collection's
+ * invariants — don't do that.
  */
 public class Board implements ChessBoard {
 
