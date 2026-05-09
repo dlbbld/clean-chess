@@ -359,6 +359,8 @@ Positions can also often be dead due to forced moves.
 ### Lenient PGN parser
 The common PGN parser — reads the file with best effort. For example, the space after `[` below is ignored. See the [Not supported](#not-supported) section above for what neither parser accepts.
 
+In addition to structural tolerances (whitespace, missing tags, optional termination markers), the lenient parser accepts a defined set of SAN deviations from canonical — see [PGN SAN tolerances](#pgn-san-tolerances) below.
+
 #### PGN valid
 
 ```java
@@ -404,6 +406,41 @@ The parser does a bit more than a standard parser should do. It converts the imp
     // 1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
     // 
 ```
+
+#### PGN SAN tolerances
+
+The lenient PGN parser accepts SAN moves that deviate from canonical SAN in any of the following ways. Each accepted deviation is surfaced as a typed `ForgivenItem` via `LenientPgnParserValidationResult.sanForgivenItems()`, so consumers can either silently accept or warn the user. The full taxonomy (21 codes) is documented in `specification.md` §3.3.1.
+
+- **Castling**: `0-0` / `0-0-0` (zero instead of letter O)
+- **Notation form**: long algebraic (`e2-e4`, `Nb1-d7`), UCI (`e2e4`, `e7e8q`, `e1g1` for castling), explicit pawn letter (`Pe4`)
+- **Disambiguation**: redundant file/rank/square (e.g. `Nbd7` when `Nd7` would suffice), non-canonical rank-instead-of-file (`R1d4` where canonical is `Rad4`)
+- **Capture marker**: missing (`Be5` when actually a capture) or spurious (`Bxe5` to an empty square)
+- **Check / mate suffix**: missing, spurious, or wrong (`Nd7+` when actually mate, `Nd7#` when only check, `Nd7` when actually check, etc.)
+- **Promotion**: missing `=` (`e8Q`)
+- **Case**: lowercase piece letter (`nf3`), uppercase file letter (`NF3`), uppercase capture marker (`BXe5`), lowercase promotion piece (`e8=q`)
+
+```java
+    final var pgn = """
+        [Event "?"]
+        [Site "?"]
+        [Date "?"]
+        [Round "?"]
+        [White "?"]
+        [Black "?"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. 0-0 nf6 *
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
+    System.out.println(result.isValid()); // true
+    for (final ForgivenItem item : result.sanForgivenItems()) {
+      System.out.println(item.code() + ": " + item.originalToken() + " -> " + item.canonicalSan());
+    }
+    // ZERO_INSTEAD_OF_O_CASTLING: 0-0 -> O-O
+    // LOWERCASE_PIECE_LETTER: nf6 -> Nf6
+```
+
+The strict pipeline that performs the actual chess validation is reused unchanged; the lenient layer only translates input shape and recovers from a defined set of strict rejections. A move that's not a legal chess move (regardless of how it was written) is still rejected.
 
 #### PGN invalid
 
@@ -588,12 +625,12 @@ Checks whether a PGN can be parsed using the PGN lenient parser.
 
         1. e4 e5   2. Nf3
         Nf6
-          3. Bc4 Bc5 4. X1
+          3. Bc4 Bc5 4. Y1
                 """;
     final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     System.out.println(result.isValid()); // false
     System.out.println(result.message());
-    // The movetext is invalid because a SAN contains an invalid character of "X".
+    // The movetext is invalid because a SAN contains an invalid character of "Y".
 ```
 
 #### File validation

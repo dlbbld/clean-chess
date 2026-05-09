@@ -1,10 +1,29 @@
 package com.dlb.chess.pgn.parser.model;
 
+import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.model.ForgivenItem;
+import com.google.common.collect.ImmutableList;
 
-public record LenientPgnParserValidationResult(LenientPgnParserValidationProblem problemParser,
-    SanValidationProblem problemSan, String message) {
+/**
+ * Outcome of a lenient PGN parse-with-validation. On success, {@link #pgnFile} carries the parsed model and
+ * {@link #sanForgivenItems} lists every SAN deviation the lenient layer forgave during movetext replay (empty when the
+ * input was already canonical). On failure, {@link #pgnFile} is {@code null} and {@link #sanForgivenItems} contains
+ * whatever was accumulated up to the failure point.
+ */
+@SuppressWarnings("null")
+public record LenientPgnParserValidationResult(@NonNull LenientPgnParserValidationProblem problemParser,
+    @NonNull SanValidationProblem problemSan, @NonNull String message, @Nullable PgnFile pgnFile,
+    @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItems) {
+
+  public LenientPgnParserValidationResult {
+    sanForgivenItems = NonNullWrapperCommon.copyOfList(sanForgivenItems);
+  }
+
   public boolean isValid() {
     return problemParser == LenientPgnParserValidationProblem.OK;
   }

@@ -33,9 +33,12 @@ import com.dlb.chess.pgn.parser.sequential.PgnToken;
 import com.dlb.chess.pgn.parser.sequential.PgnTokenType;
 import com.dlb.chess.pgn.parser.sequential.PgnTokenizer;
 import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.san.exceptions.LenientSanParserValidationException;
+import com.dlb.chess.san.model.ForgivenItem;
+import com.dlb.chess.san.model.LenientSanParserValidationResult;
 import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
+import com.google.common.collect.ImmutableList;
 
 /**
  * Lenient PGN parser. Permissive inter-token rules: any whitespace separates tokens, move-number indicators are
@@ -45,10 +48,13 @@ import com.dlb.chess.utility.TagUtility;
 public final class LenientPgnParser {
 
   private static final int SAN_MIN_LENGTH = 2;
-  private static final int SAN_MAX_LENGTH = 7;
+  // Bumped from 7 to 9 to admit the longest lenient SAN forms — e.g. pawn LAN promotion with hyphen and check
+  // ("e7-e8=Q+" is 8 chars).
+  private static final int SAN_MAX_LENGTH = 9;
 
   private final String source;
   private final PgnTokenizer tokenizer;
+  private final List<ForgivenItem> sanForgivenItemsAccumulator = new ArrayList<>();
 
   private LenientPgnParser(String source) {
     this.source = NewlineNormalization.toLf(stripUtf8Bom(source));
@@ -97,37 +103,38 @@ public final class LenientPgnParser {
   }
 
   public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
+    final LenientPgnParser parser;
     try {
-      parse(pgnFilePath);
-      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE,
-          "OK");
-    } catch (final LenientPgnParserValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
-          message);
+      parser = new LenientPgnParser(FileUtility.readFileAsString(pgnFilePath));
     } catch (final RuntimeException e) {
-      final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, message);
+          SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ImmutableList.of());
     }
+    return runValidation(parser);
   }
 
   /**
-   * Like {@link #parseText(String)} but returns a structured result instead of throwing.
+   * Like {@link #parseText(String)} but returns a structured result instead of throwing. The result also carries the
+   * parsed {@link PgnFile} (on success) and the list of SAN-level deviations the lenient layer forgave during
+   * movetext replay.
    */
   public static LenientPgnParserValidationResult validateText(String pgn) {
+    return runValidation(new LenientPgnParser(pgn));
+  }
+
+  private static LenientPgnParserValidationResult runValidation(LenientPgnParser parser) {
     try {
-      parseText(pgn);
+      final PgnFile pgnFile = parser.parseInternal();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE,
-          "OK");
+          "OK", pgnFile, ImmutableList.copyOf(parser.sanForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
-          message);
+      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(),
+          e.getSanValidationProblem(), message, null, e.getSanForgivenItemsAccumulated());
     } catch (final RuntimeException e) {
       final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, message);
+          SanValidationProblem.NONE, message, null, ImmutableList.of());
     }
   }
 
@@ -171,7 +178,7 @@ public final class LenientPgnParser {
 
     final Fen startFen = calculateStartFen(tagList, isStartFromPosition);
 
-    validateBoardPerLastMove(startFen, movetext.halfMoveList());
+    final List<PgnHalfMove> canonicalHalfMoveList = replayBoardCanonicalizing(startFen, movetext.halfMoveList());
 
     fixTagListForMissingSevenTagRosterTags(tagList);
 
@@ -179,7 +186,7 @@ public final class LenientPgnParser {
     Collections.sort(tagList);
 
     return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), startFen, movetext.pregameCommentary(),
-        NonNullWrapperCommon.copyOfList(movetext.halfMoveList()));
+        NonNullWrapperCommon.copyOfList(canonicalHalfMoveList));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -570,13 +577,23 @@ public final class LenientPgnParser {
   private static void validateSanCharacters(String san) {
     for (var i = 0; i < san.length(); i++) {
       final var c = san.charAt(i);
-      if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
-          && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.enums.SanSymbol.exists(c)) {
-        throw new LenientPgnParserValidationException(
-            LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION, SanValidationProblem.NONE,
-            "The movetext is invalid because a SAN contains an invalid character of \"" + c + "\".");
+      if (isAllowedLenientSanCharacter(c)) {
+        continue;
       }
+      throw new LenientPgnParserValidationException(
+          LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION, SanValidationProblem.NONE,
+          "The movetext is invalid because a SAN contains an invalid character of \"" + c + "\".");
     }
+  }
+
+  private static boolean isAllowedLenientSanCharacter(char c) {
+    if (com.dlb.chess.board.enums.Piece.exists(c) || com.dlb.chess.board.enums.File.exists(c)
+        || com.dlb.chess.board.enums.Rank.exists(c) || com.dlb.chess.san.enums.SanSymbol.exists(c)) {
+      return true;
+    }
+    // Lenient additions: uppercase file letter (UPPERCASE_FILE_LETTER), uppercase capture marker
+    // (UPPERCASE_CAPTURE_MARKER), digit zero (ZERO_INSTEAD_OF_O_CASTLING).
+    return c >= 'A' && c <= 'H' || c == 'X' || c == '0';
   }
 
   private static void validateSanLength(String san) {
@@ -661,26 +678,41 @@ public final class LenientPgnParser {
   // Board replay & post-processing
   // -------------------------------------------------------------------------------------------------
 
-  private static void validateBoardPerLastMove(Fen startFen, List<PgnHalfMove> halfMoveList) {
+  /**
+   * Replays each half-move on a fresh board via {@link Board#performMoveLenient}, accumulates SAN-level forgiven items
+   * into the parser-instance accumulator, and returns a copy of the half-move list with the canonical SAN substituted
+   * (so the resulting {@link PgnFile} compares equal to a strict-parsed file built from the same canonical moves).
+   * Move-suffix annotations and commentaries are carried through unchanged.
+   *
+   * <p>
+   * On a SAN-level failure the partial accumulator is included on the thrown
+   * {@link LenientPgnParserValidationException} so callers see how many deviations were forgiven before the failure.
+   * The {@link com.dlb.chess.common.enums.GameStatus} from a {@code GAME_ALREADY_ENDED} reject is propagated unchanged.
+   */
+  private List<PgnHalfMove> replayBoardCanonicalizing(Fen startFen, List<PgnHalfMove> halfMoveList) {
     final Board board = new Board(startFen);
+    final List<PgnHalfMove> canonicalList = new ArrayList<>(halfMoveList.size());
     for (final PgnHalfMove halfMove : halfMoveList) {
       final Side side = board.getHavingMove();
       final var fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
       try {
-        board.performMove(halfMove.san());
-      } catch (final SanValidationException e) {
+        final LenientSanParserValidationResult result = board.performMoveLenient(halfMove.san());
+        sanForgivenItemsAccumulator.addAll(result.forgivenItems());
+        final String canonicalSan = board.getSan();
+        canonicalList.add(new PgnHalfMove(canonicalSan, halfMove.moveSuffixAnnotation(), halfMove.commentary()));
+      } catch (final LenientSanParserValidationException e) {
         final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
             halfMove.san());
         @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
-        // Propagate the GameStatus from the SanValidationException for the GAME_ALREADY_ENDED
-        // case so callers can react to the specific termination cause without parsing the
-        // human-readable message. For any other SAN problem the GameStatus is null.
+        final SanValidationProblem underlying = e.getUnderlyingSanValidationProblem();
         throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.SAN,
-            e.getSanValidationProblem(), message, e.getGameStatus());
+            underlying == null ? SanValidationProblem.UNKNOWN_ERROR : underlying, message, e.getGameStatus(),
+            ImmutableList.copyOf(sanForgivenItemsAccumulator));
       }
     }
+    return canonicalList;
   }
 
   private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {

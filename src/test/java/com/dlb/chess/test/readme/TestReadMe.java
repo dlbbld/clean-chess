@@ -315,13 +315,40 @@ class TestReadMe {
 
         1. e4 e5   2. Nf3
         Nf6
-          3. Bc4 Bc5 4. X1
+          3. Bc4 Bc5 4. Y1
                 """;
     final LenientPgnParserValidationResult invalidResult = LenientPgnParser.validateText(invalidPgn);
     assertFalse(invalidResult.isValid());
     assertEquals(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
         invalidResult.problemParser());
     assertEquals(SanValidationProblem.NONE, invalidResult.problemSan());
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void lenientPgnSanTolerancesExampleReturnsExpectedForgivenItems() {
+    final var pgn = """
+        [Event "?"]
+        [Site "?"]
+        [Date "?"]
+        [Round "?"]
+        [White "?"]
+        [Black "?"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. 0-0 nf6 *
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
+    assertTrue(result.isValid());
+    assertEquals(2, result.sanForgivenItems().size());
+    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
+        result.sanForgivenItems().get(0).code());
+    assertEquals("0-0", result.sanForgivenItems().get(0).originalToken());
+    assertEquals("O-O", result.sanForgivenItems().get(0).canonicalSan());
+    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
+        result.sanForgivenItems().get(1).code());
+    assertEquals("nf6", result.sanForgivenItems().get(1).originalToken());
+    assertEquals("Nf6", result.sanForgivenItems().get(1).canonicalSan());
   }
 
   @Test
