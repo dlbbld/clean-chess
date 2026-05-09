@@ -53,7 +53,7 @@ public class GenerateAmbronaHelpMateTestCases {
     final Map<String, String> havingHelpMate = new TreeMap<>();
     populateHelpMateUci(havingHelpMate);
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
       final var analysis = Reporter.calculateAnalysis(folderPath, testCase.pgnFileName());

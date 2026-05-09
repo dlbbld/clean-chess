@@ -82,16 +82,16 @@ public class PgnExpectedValue {
       case VARIOUS -> createTestCasesVarious();
       case WCC2021 -> createTestCasesWcc201();
       case LAST_MOVE_ADDED_ACCIDENTALLY -> createTestCasesLastMoveAddedAccidentally();
-      case UNFAIR_LICHESS_EXAMPLES -> createTestCasesUnfairLichessExamples();
-      case UNFAIR_LICHESS_HELPMATE -> createTestCasesUnfairLichessHelpmate();
-      case UNFAIR_DEPTH_THREE -> createTestCasesUnfairDepthThree();
-      case UNFAIR_NOT_QUICK -> createTestCasesUnfairNotQuick();
-      case UNFAIR_AMBRONA -> createTestCasesUnfairAmbrona();
+      case CHA_LICHESS_EXAMPLES -> createTestCasesUnfairLichessExamples();
+      case CHA_LICHESS_HELPMATE -> createTestCasesUnfairLichessHelpmate();
+      case CHA_DEPTH_THREE -> createTestCasesUnfairDepthThree();
+      case CHA_NOT_QUICK -> createTestCasesUnfairNotQuick();
+      case CHA_AMBRONA -> createTestCasesUnfairAmbrona();
       case MAX_MOVES -> createTestCasesLongestPossible();
       case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
       case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
       case MAX_SAME_PIECE_PROMOTION_COMBINED -> createTestCasesMaxSamePiecePromotionByCombined();
-      case PAWN_WALL -> createTestCasesPawnWall();
+      case CHA_PAWN_WALL -> createTestCasesPawnWall();
       case RANDOM_CHECKMATE -> createTestCasesRandomCheckmate();
       case RANDOM_FIFTY -> createTestCasesRandomFifty();
       case RANDOM_FIVEFOLD -> createTestCasesRandomFivefold();
@@ -4439,7 +4439,7 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "7R/6pk/8/6K1/2n1r3/8/8/8 b - - 9 61"));
 
-    return new PgnFileTestCaseList(PgnTest.UNFAIR_LICHESS_EXAMPLES, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_EXAMPLES, list);
   }
 
   private static PgnFileTestCaseList createTestCasesUnfairLichessHelpmate() {
@@ -4974,7 +4974,7 @@ public class PgnExpectedValue {
             1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
             UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/q7/8/8/8/8/K1k5/4b3 w - - 14 80"));
 
-    return new PgnFileTestCaseList(PgnTest.UNFAIR_LICHESS_HELPMATE, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_HELPMATE, list);
   }
 
   private static PgnFileTestCaseList createTestCasesUnfairDepthThree() {
@@ -4995,7 +4995,7 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1k6/2P5/K7/2q5/8/8/8/8 b - - 0 56"));
 
-    return new PgnFileTestCaseList(PgnTest.UNFAIR_DEPTH_THREE, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_DEPTH_THREE, list);
   }
 
   private static PgnFileTestCaseList createTestCasesUnfairNotQuick() {
@@ -5006,7 +5006,7 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83"));
 
-    return new PgnFileTestCaseList(PgnTest.UNFAIR_NOT_QUICK, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_NOT_QUICK, list);
   }
 
   private static PgnFileTestCaseList createTestCasesUnfairAmbrona() {
@@ -5079,7 +5079,7 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "rnb1b3/pk1p4/p1pPp1p1/P1P1P1P1/RBP5/P7/5B2/7K w - - 10 100"));
 
-    return new PgnFileTestCaseList(PgnTest.UNFAIR_AMBRONA, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_AMBRONA, list);
   }
 
   private static PgnFileTestCaseList createTestCasesPawnWall() {
@@ -5208,7 +5208,7 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
 
-    return new PgnFileTestCaseList(PgnTest.PAWN_WALL, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_PAWN_WALL, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLastMoveAddedAccidentally() {

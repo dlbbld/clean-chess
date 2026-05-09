@@ -26,7 +26,7 @@ class TestUnwinnabilityFullAgainstWinnability {
   // @Test
   void test() throws Exception {
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.UNFAIR_LICHESS_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       test(testCase);
     }
