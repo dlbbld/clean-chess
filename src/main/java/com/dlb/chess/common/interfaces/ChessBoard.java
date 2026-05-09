@@ -156,18 +156,6 @@ public interface ChessBoard extends EnumConstants {
     return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
   }
 
-  default boolean isGameEnd() {
-    if (isCheckmate()) {
-      return true;
-    }
-    return isGameDraw();
-  }
-
-  private boolean isGameDraw() {
-    return isStalemate() || isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION || isFivefoldRepetition()
-        || isSeventyFiveMove();
-  }
-
   // name collision with API Carlos's method which must be adapted for warnings
   String getFen();
 
