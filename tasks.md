@@ -74,9 +74,9 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 ### FileUtility error handling (P2 from review)
 [`FileUtility.writeFile`](src/main/java/com/dlb/chess/common/utility/FileUtility.java:98) catches `IOException` and only prints the stack trace at line 107. [`PgnWriter.writePgnFile`](src/main/java/com/dlb/chess/pgn/writer/PgnWriter.java:24) returns `void`, so callers can believe a PGN was written when it was not.
 
-- [ ] `FileUtility.writeFile` must throw `FileSystemAccessException` on `IOException`, matching the read/append/delete methods
-- [ ] Audit every method in `FileUtility` for the same pattern; align all error paths
-- [ ] Confirm `PgnWriter.writePgnFile` propagates the failure to its caller
+- [x] `FileUtility.writeFile` must throw `FileSystemAccessException` on `IOException`, matching the read/append/delete methods
+- [x] Audit every method in `FileUtility` for the same pattern; align all error paths
+- [x] Confirm `PgnWriter.writePgnFile` propagates the failure to its caller
 
 ### "Yawn move" → standard chess terminology
 The codebase uses `YawnMoveUtility`, `YawnHalfMove`, `YawnPrint`, `YawnRepresentation`, `analysis.yawnmove.*` keys. Neither FIDE, the chess community, the README, nor `specification.md` use this term. The user-facing output already says "Sequences without capture and pawn move…", so the term exists purely as private vocabulary.

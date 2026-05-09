@@ -1,16 +1,13 @@
 package com.dlb.chess.common.utility;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.Writer;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.DirectoryNotEmptyException;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -103,8 +100,8 @@ public abstract class FileUtility {
         writer.write("\n");
       }
 
-    } catch (final IOException ex) {
-      ex.printStackTrace();
+    } catch (final IOException ioe) {
+      throw new FileSystemAccessException("Writing file \"" + filePath + "\" failed", ioe);
     }
   }
 
@@ -126,10 +123,10 @@ public abstract class FileUtility {
       if (!file.isFile()) {
         throw new IllegalArgumentException("\"" + filePath + "\" is not a file");
       }
-      try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
-          PrintWriter pw = new PrintWriter(w)) {
+      try (var writer = Files.newBufferedWriter(filePath, StandardCharsets.UTF_8, StandardOpenOption.APPEND)) {
         for (final String line : lineList) {
-          pw.println(line);
+          writer.write(line);
+          writer.write("\n");
         }
       } catch (final IOException ioe) {
         throw new FileSystemAccessException("File appending to \"" + filePath + "\" failed", ioe);
