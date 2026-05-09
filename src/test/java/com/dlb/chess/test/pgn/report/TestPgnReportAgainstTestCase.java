@@ -12,11 +12,11 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 
 /**
  * Analyzes PGN test cases and validates expected values. Default scope (when
- * {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} is {@code true}) is restricted to a fast smoke subset
+ * {@link RestrictTestConstants#IS_RESTRICT_PGN_REPORT_TEST} is {@code true}) is restricted to a fast smoke subset
  * suitable for routine CI runs:
  *
  * <p>
- * To widen scope locally, flip {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} to {@code false} (or the
+ * To widen scope locally, flip {@link RestrictTestConstants#IS_RESTRICT_PGN_REPORT_TEST} to {@code false} (or the
  * master gate {@code IS_RESTRICT_PGN}) and the full restricted corpus runs.
  */
 class TestPgnReportAgainstTestCase extends AbstractPgnTest {
@@ -30,13 +30,13 @@ class TestPgnReportAgainstTestCase extends AbstractPgnTest {
   @Test
   void test() throws Exception {
     for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
-      if (RestrictTestConstants.IS_RESTRICT_PGN_EXPECTED_ANALYSIS && !testCaseList.pgnTest().getIsBasicTest()) {
+      if (RestrictTestConstants.IS_RESTRICT_PGN_REPORT_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
         continue;
       }
 
       var processedFilesInFolder = 0;
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (RestrictTestConstants.IS_RESTRICT_PGN_EXPECTED_ANALYSIS && processedFilesInFolder >= MAX_FILES_PER_FOLDER) {
+        if (RestrictTestConstants.IS_RESTRICT_PGN_REPORT_TEST && processedFilesInFolder >= MAX_FILES_PER_FOLDER) {
           break;
         }
         logger.info(testCase.pgnFileName());
