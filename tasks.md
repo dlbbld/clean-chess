@@ -70,7 +70,7 @@ Theme: doc correctness, dead/personal code purge, library packaging hygiene, nam
 
 ### specification.md correctness
 - [ ] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
-- [ ] §4 architecture table is missing 6 packages: `distance`, `enums`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`. Add rows or explicitly note them as utility/internal
+- [ ] §4 architecture table is missing 6 top-level packages: `distance`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`; plus 2 pgn subpackages: `pgn.diagnostic` and `pgn.writer`. Add rows or explicitly note them as utility/internal
 - [ ] If `isGameEnd` semantics change (next subsection), update the relevant termination wording
 
 ### messages.properties cleanup
