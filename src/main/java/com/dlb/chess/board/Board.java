@@ -15,7 +15,6 @@ import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
@@ -42,7 +41,6 @@ import com.dlb.chess.moves.legal.AbstractLegalMoves;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.moves.utility.StandardMoveUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
@@ -267,8 +265,8 @@ public class Board implements ChessBoard {
     final LegalMove moveToPerform = calculateLegalMove(this.getStaticPosition(), havingMove, moveSpecification);
 
     // values used in the following not to be get from board methods!!!
-    final StaticPosition afterStaticPosition = createPositionAfterMove(this.getStaticPosition(), havingMove,
-        moveSpecification);
+    final StaticPosition afterStaticPosition = StaticPositionUtility.createPositionAfterMove(this.getStaticPosition(),
+        havingMove, moveSpecification);
     final Side afterHavingMove = havingMove.getOppositeSide();
     final CastlingRightBoth afterCastlingRightBoth = CastlingUtility
         .calculateCastlingRightBoth(beforeCastlingRightWhite, beforeCastlingRightBlack, moveToPerform);
@@ -369,30 +367,6 @@ public class Board implements ChessBoard {
     final var enPassantRole = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece,
         moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE : EnPassantRole.NONE;
     return new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
-  }
-
-  public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
-      MoveSpecification moveSpecification) {
-
-    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove,
-        moveSpecification);
-    return staticPosition.createChangedPosition(updateSquareList);
-
-  }
-
-  private static List<UpdateSquare> calculateUpdateSquareList(StaticPosition staticPosition, Side havingMove,
-      MoveSpecification moveSpecification) {
-
-    if (EnPassantCaptureUtility.calculateIsEnPassantCaptureNewMove(staticPosition, moveSpecification)) {
-      return EnPassantCaptureUtility.performEnPassantCaptureMovements(staticPosition, havingMove, moveSpecification);
-    }
-    if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
-      return CastlingUtility.performCastlingMovements(havingMove, moveSpecification);
-    }
-    if (PromotionUtility.calculateIsPromotionNewMove(moveSpecification)) {
-      return PromotionUtility.performPromotionMovements(havingMove, moveSpecification);
-    }
-    return StandardMoveUtility.performStandardMovements(staticPosition, moveSpecification);
   }
 
   /**
