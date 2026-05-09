@@ -277,7 +277,7 @@ class TestPawnWallUtility extends PawnWall {
 
   @SuppressWarnings("static-method")
   @Test
-  void testUnfairLichess() {
+  void testChaLichess() {
     // testing the 321 unfair rated lichess games from Ambrona
     testHelperLichess("8/8/4k3/2p4p/p1Pp1p1P/P2P1P2/8/6K1 w - - 32 58", true); // blocked pawns
     testHelperLichess("8/5k2/1p2p3/1P2Pp1p/3K1P1P/8/8/8 w - - 1 56", true); // blocked pawns

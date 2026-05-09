@@ -15,9 +15,9 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
 
-public class GenerateLichessUnfairReport {
+public class GenerateChaLichessReport {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateLichessUnfairReport.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateChaLichessReport.class);
 
   public static void main(String[] args) throws Exception {
     generate(PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES));
