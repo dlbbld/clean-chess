@@ -341,9 +341,11 @@ public class Board implements ChessBoard {
 
   }
 
-  // Here we rely on that moveSpecification was validated as legal move. If this does not hold the below method will
-  // just pass through this moves, there is no checking, so the error will be go through.
-  public static LegalMove calculateLegalMove(StaticPosition staticPosition, Side havingMove,
+  // Package-private — a LegalMove can only be safely constructed when the caller has already validated the
+  // moveSpecification as legal, and that's an invariant only the rule pipeline can guarantee. If a non-pipeline
+  // caller passed an unvalidated MoveSpecification here, the result would silently carry incorrect derived data
+  // (wrong moving piece, wrong captured piece, wrong en-passant role).
+  static LegalMove calculateLegalMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
