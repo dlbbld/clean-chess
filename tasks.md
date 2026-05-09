@@ -17,7 +17,7 @@ Theme: doc correctness, dead/personal code purge, library packaging hygiene, nam
 ### specification.md correctness
 - [x] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
 - [x] §4 architecture table is missing 6 top-level packages: `distance`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`; plus 2 pgn subpackages: `pgn.diagnostic` and `pgn.writer`. Add rows or explicitly note them as utility/internal
-- [ ] If `isGameEnd` semantics change (next subsection), update the relevant termination wording
+- [x] If `isGameEnd` semantics change (next subsection), update the relevant termination wording — N/A: `isGameEnd` was deleted entirely (commit `f330419a`); spec §3.1 was already framed at the abstract FIDE level, not method-level, so no doc update needed
 
 ### messages.properties cleanup
 The buggy `analysis.board.score.blackWin=0-0` is gone (commit `3097c89c` — the entire `analysis.board.*` block was DGT/trainer-only and unused; removal verified clean by audit).
@@ -66,11 +66,10 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 - [ ] Verify with a fresh consumer project that no `log4j2.xml` or `log4j-core` arrives transitively
 
 ### isGameEnd vs CHA opt-in design (P1 from review)
-[`specification.md:84`](specification.md:84) states CHA is opt-in and not part of the per-move status path, but [`ChessBoard.isGameEnd()`](src/main/java/com/dlb/chess/common/interfaces/ChessBoard.java:159) calls `isDeadPositionQuick()`. Meanwhile [`BasicChessUtility.calculateGameStatus()`](src/main/java/com/dlb/chess/common/utility/BasicChessUtility.java:107) — which move validation and PGN export consult — does *not* include quick CHA. So a caller can see "game ended" from one public API while validation/export says "ongoing".
+[`specification.md:84`](specification.md:84) states CHA is opt-in and not part of the per-move status path, but `ChessBoard.isGameEnd()` was calling `isDeadPositionQuick()`. Meanwhile [`BasicChessUtility.calculateGameStatus()`](src/main/java/com/dlb/chess/common/utility/BasicChessUtility.java:107) — which move validation and PGN export consult — does *not* include quick CHA. So a caller could see "game ended" from one public API while validation/export said "ongoing".
 
-- [ ] Decide the canonical policy: either (a) remove `isDeadPositionQuick()` from `isGameEnd()` so all paths agree CHA is opt-in, or (b) make `BasicChessUtility.calculateGameStatus()` include it too — but then validation/export would auto-terminate on quick CHA, which contradicts the spec rationale
-- [ ] (Recommended: option a — keeps the per-move surface CHA-free, defers auto-CHA to the dedicated future release)
-- [ ] If the surface changes meaningfully, update specification.md §3.1 and any package-info.java that describes termination
+- [x] Decide the canonical policy: either (a) remove `isDeadPositionQuick()` from `isGameEnd()` so all paths agree CHA is opt-in, or (b) make `BasicChessUtility.calculateGameStatus()` include it too — chose **option (d)**: delete `isGameEnd` and its private helper `isGameDraw` entirely, since both were unused (commit `f330419a`). Avoids picking a contested semantic for an API nobody calls.
+- [x] If the surface changes meaningfully, update specification.md §3.1 and any package-info.java that describes termination — N/A; both already framed in terms of FIDE-level termination categories and `BasicChessUtility.calculateGameStatus`, not the deleted `isGameEnd`
 
 ### FileUtility error handling (P2 from review)
 [`FileUtility.writeFile`](src/main/java/com/dlb/chess/common/utility/FileUtility.java:98) catches `IOException` and only prints the stack trace at line 107. [`PgnWriter.writePgnFile`](src/main/java/com/dlb/chess/pgn/writer/PgnWriter.java:24) returns `void`, so callers can believe a PGN was written when it was not.
