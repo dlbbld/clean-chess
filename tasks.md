@@ -9,14 +9,14 @@ Order within each section is the source of truth. Completed tasks move to **Done
 Theme: doc correctness, dead/personal code purge, library packaging hygiene, naming follow-through from the rename in the previous release, and one design-consistency fix (`isGameEnd` vs CHA opt-in). No new features.
 
 ### README correctness
-- [ ] Fix the three headline code samples that no longer compile: `Analyzer.printAnalysis(pgn)` → `Reporter.printReport(pgn)` (`README.md:126`, `:160`, `:205`)
-- [ ] Fix the "Create PGN for game" example: `System.out.println(pgnFile)` does not produce the formatted PGN shown in the comment (`PgnFile` is a record with no `toString()` override). Replace with `System.out.println(PgnCreate.createPgnFileString(pgnFile))`
-- [ ] Update "Not supported" section: PGN move suffix annotations *are* parsed and exported (see `StrictPgnParser`, `LenientPgnParser`, `PgnCreate`), and UTF-8 BOM *is* stripped by the lenient parser. Both bullets need to either go or be re-stated as the actual current limits
-- [ ] Split audiences explicitly under "Building/Installing": one paragraph for *using clean-chess as a dependency* (no Eclipse, just Maven/Gradle coords), one for *contributing* (link to `setup.md`). Today the section reads as if every consumer needs Eclipse
+- [x] Fix the three headline code samples that no longer compile: `Analyzer.printAnalysis(pgn)` → `Reporter.printReport(pgn)` (`README.md:126`, `:160`, `:205`)
+- [x] Fix the "Create PGN for game" example: `System.out.println(pgnFile)` does not produce the formatted PGN shown in the comment (`PgnFile` is a record with no `toString()` override). Replace with `System.out.println(PgnCreate.createPgnFileString(pgnFile))`
+- [x] Update "Not supported" section: PGN move suffix annotations *are* parsed and exported (see `StrictPgnParser`, `LenientPgnParser`, `PgnCreate`), and UTF-8 BOM *is* stripped by the lenient parser. Both bullets need to either go or be re-stated as the actual current limits
+- [x] Split audiences explicitly under "Building/Installing": one paragraph for *using clean-chess as a dependency* (no Eclipse, just Maven/Gradle coords), one for *contributing* (link to `setup.md`). Today the section reads as if every consumer needs Eclipse
 
 ### specification.md correctness
-- [ ] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
-- [ ] §4 architecture table is missing 6 top-level packages: `distance`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`; plus 2 pgn subpackages: `pgn.diagnostic` and `pgn.writer`. Add rows or explicitly note them as utility/internal
+- [x] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
+- [x] §4 architecture table is missing 6 top-level packages: `distance`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`; plus 2 pgn subpackages: `pgn.diagnostic` and `pgn.writer`. Add rows or explicitly note them as utility/internal
 - [ ] If `isGameEnd` semantics change (next subsection), update the relevant termination wording
 
 ### messages.properties cleanup
@@ -28,29 +28,30 @@ The buggy `analysis.board.score.blackWin=0-0` is gone (commit `3097c89c` — the
 ### TestMessage fixture cleanup
 The 12 `test*` / `test.message.*` keys at the bottom of `messages.properties` plus `TestMessage.java` itself are mostly testing JDK behavior (`ResourceBundle.getString`, `MessageFormat.format`) rather than library code. The one custom layer worth covering is `Message.normalizeSpace(...)`. The current shape is "I was getting comfortable with the API" code that mature projects clean up.
 
-- [ ] Drop the basic key-lookup tests (`testBasic`) — they exercise `ResourceBundle.getString`, which the JDK has tested
-- [ ] Drop the placeholder substitution tests (`testWithoutPlaceholder`, `testWithOnePlaceholder`, `testWithTwoPlaceholders`) — they exercise `MessageFormat.format`, also JDK-tested
-- [ ] Keep one or two whitespace tests covering `NonNullWrapperCommon.normalizeSpace` (the genuinely custom behavior), but drive them with synthetic strings — no property-file fixtures needed
-- [ ] Delete the 12 `test*` / `test.message.*` keys + the `#testing` block from `messages.properties` once the tests no longer need them
-- [ ] Net effect: the production JAR no longer ships test fixture data; `TestMessage.java` exists only to cover code we actually wrote
+- [x] Drop the basic key-lookup tests (`testBasic`) — they exercise `ResourceBundle.getString`, which the JDK has tested
+- [x] Drop the placeholder substitution tests (`testWithoutPlaceholder`, `testWithOnePlaceholder`, `testWithTwoPlaceholders`) — they exercise `MessageFormat.format`, also JDK-tested
+- [x] Keep one or two whitespace tests covering `NonNullWrapperCommon.normalizeSpace` (the genuinely custom behavior), but drive them with synthetic strings — no property-file fixtures needed (relocated to `TestNonNullWrapperCommon` as `testNormalizeSpace`)
+- [x] Delete the 12 `test*` / `test.message.*` keys + the `#testing` block from `messages.properties` once the tests no longer need them
+- [x] Net effect: the production JAR no longer ships test fixture data; `TestMessage.java` deleted entirely (along with its empty `internationalization/` test package); whitespace coverage now lives next to the helper it covers
 
 ### Remove all DGT-derived material (paid-work content)
 The DGT/trainer code originates from paid work and should not ship in this open-source library. The constants in `src/main` are already on the dead-code list above; the test material below is the larger part.
 
-- [ ] Remove `DGT_MY_BLUETOOTH_BOARD_ID = 23944`, `DGT_MY_USB_BOARD_ID = 43462`, `DGT_ACTIVE_BOARD_ID`, and the Google text-to-speech credentials comment from `ConfigurationConstants.java`
-- [ ] Drop `DGT_LIVE_CHESS` and `DGT_CENTAUR` from [`PgnTest.java:89-90`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java:89)
-- [ ] Drop `createTestCasesDgtCentaur()` and `createTestCasesDgtLiveChess()` plus their dispatch entries from [`PgnExpectedValue.java`](src/test/java/com/dlb/chess/test/pgntest/PgnExpectedValue.java) (8 + 1 fixture entries, ~50 lines around 3472–3515)
-- [ ] Drop the `dgt/liveChess` block in [`TestLegacyPgnParsePlaysBeyondAudit.java:227`](src/test/java/com/dlb/chess/test/pgn/parser/beyond/TestLegacyPgnParsePlaysBeyondAudit.java:227)
-- [ ] Delete fixture directories `src/test/resources/pgn/review/dgt/` (centaur + liveChess subdirs, ~9 PGNs) and `src/test/resources/pgnParser/legacy/common/beyond/dgt/liveChess/` (~1 PGN)
-- [ ] Verify `git grep -i dgt` returns zero hits afterwards
+- [x] Remove `DGT_MY_BLUETOOTH_BOARD_ID = 23944`, `DGT_MY_USB_BOARD_ID = 43462`, `DGT_ACTIVE_BOARD_ID`, and the Google text-to-speech credentials comment from `ConfigurationConstants.java`
+- [x] Drop `DGT_LIVE_CHESS` and `DGT_CENTAUR` from [`PgnTest.java:89-90`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java:89)
+- [x] Drop `createTestCasesDgtCentaur()` and `createTestCasesDgtLiveChess()` plus their dispatch entries from [`PgnExpectedValue.java`](src/test/java/com/dlb/chess/test/pgntest/PgnExpectedValue.java) (8 + 1 fixture entries, ~50 lines around 3472–3515)
+- [x] Drop the `dgt/liveChess` block in [`TestLegacyPgnParsePlaysBeyondAudit.java:227`](src/test/java/com/dlb/chess/test/pgn/parser/beyond/TestLegacyPgnParsePlaysBeyondAudit.java:227)
+- [x] Delete fixture directories `src/test/resources/pgn/review/dgt/` (centaur + liveChess subdirs, ~9 PGNs) and `src/test/resources/pgnParser/legacy/common/beyond/dgt/liveChess/` (~1 PGN)
+- [x] Verify `git grep -i dgt` returns zero hits afterwards
 
 ### Rename `pgn/cua` → `pgn/cha` (correct CHA abbreviation)
-The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (matches the repo name `D3-Chess`, the binary, and all code identifiers in his project). The test fixture tree under [`src/test/resources/pgn/cua/`](src/test/resources/pgn/cua) uses the wrong abbreviation; the folder name has been a long-standing source of confusion when navigating between this project and CHA's source.
+The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (matches the repo name `D3-Chess`, the binary, and all code identifiers in his project). The test fixture tree under `src/test/resources/pgn/cua/` used the wrong abbreviation. Scope expanded substantially during the work — full reorganization of the lichess subtree (drop redundant `unfair/` wrapper, hierarchical layout under `lichess/quick/{depth,notDepth}Three`), filename normalization (`lichess_<id>.pgn` canonical, `lichess_<id>_helpmate.pgn` derived), basename-uniqueness preservation, and prose comment cleanup. Final structure documented in commit `f4027158`.
 
-- [ ] Rename `src/test/resources/pgn/cua/` → `src/test/resources/pgn/cha/` (preserve all subdirs: `pawnWall`, `unfair/ambrona`, `unfair/depthThree`, `unfair/lichess/examples`, `unfair/lichess/helpmate`, `unfair/notQuick`)
-- [ ] Update the six `cua/...` path strings in [`PgnTest.java:92-98`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java:92) to `cha/...`
-- [ ] Verify `git grep -i "cua"` is clean (no other code or doc references)
-- [ ] Use `git mv` so history is preserved on the directory rename
+- [x] Rename `src/test/resources/pgn/cua/` → `src/test/resources/pgn/cha/`
+- [x] Update path strings in [`PgnTest.java`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java) to `cha/...`
+- [x] Verify `git grep -i "cua"` is clean (no other code or doc references)
+- [x] Use `git mv` so history is preserved on the directory rename
+- [x] Bonus: full enum/method/comment rename pass (`UNFAIR_*` → `CHA_*`, `unfair_lichess_examples_*.pgn` → `lichess_<id>.pgn`, "unfair" prose → "incorrectly", helpmate suffix decoration)
 
 ### Dead-code & personal-data purge
 - [ ] Delete `MultiplePgnSplitUtility.java` (or relocate to `src/test/java`). It has a `main()`, a hardcoded path component `otherdb/mb-3.45/mb-3.45.pgn`, and an 8-step ChessBase-recipe in comments. No call sites — slipped through the previous "strip demo/dev code" pass
