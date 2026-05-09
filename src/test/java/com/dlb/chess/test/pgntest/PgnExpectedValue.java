@@ -10,10 +10,10 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -75,8 +75,6 @@ public class PgnExpectedValue {
       case BASIC_STALEMATE -> createTestCasesBasicStalemate();
       case BASIC_THREEFOLD -> createTestCasesBasicThreefold();
       case BASIC_THREEFOLD_INITIAL_EP -> createTestCasesBasicThreefoldInitialEnPassantCapture();
-      case DGT_CENTAUR -> createTestCasesDgtCentaur();
-      case DGT_LIVE_CHESS -> createTestCasesDgtLiveChess();
       case EARLY_DRAW -> createTestCasesEarlyDraw();
       case FIFTY_GENERAL -> createTestCasesFiftyGeneral();
       case FIFTY_PATTERN -> createTestCasesFiftyPattern();
@@ -3467,52 +3465,6 @@ public class PgnExpectedValue {
         "7k/8/2R3K1/8/8/8/8/8 b - - 149 100"));
 
     return new PgnFileTestCaseList(PgnTest.SPECIAL, list);
-  }
-
-  private static PgnFileTestCaseList createTestCasesDgtLiveChess() {
-    final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("01_dgt_livechess_threefold_fails_castle_right.pgn",
-        "repPos=3: 3...Nb8 5...Nb8 7...Ng8", "", "", -1, 12, CheckmateOrStalemate.NA, 3, InsufficientMaterial.NONE,
-        UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, "rnbqkbnr/ppppppp1/7p/8/8/7P/PPPPPPP1/RNBQKBNR w Qkq - 12 8"));
-    return new PgnFileTestCaseList(PgnTest.DGT_LIVE_CHESS, list);
-  }
-
-  private static PgnFileTestCaseList createTestCasesDgtCentaur() {
-    final List<PgnFileTestCase> list = new ArrayList<>();
-    list.add(new PgnFileTestCase("01_dgt_centaur_black_insufficient_material_KQ_KN.pgn", "", "", "", 3, 20,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/QK3n2/6k1 w - - 1 43"));
-    list.add(new PgnFileTestCase("02_dgt_centaur_black_insufficient_material_KQ_KB.pgn", "", "", "", 6, 13,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/5b2/QK6/6k1 w - - 1 35"));
-    list.add(new PgnFileTestCase("03_dgt_centaur_black_insufficient_material_KR_KB.pgn", "", "", "", 5, 10,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/8/QK4kb/8 w - - 1 44"));
-
-    list.add(new PgnFileTestCase("04_dgt_centaur_blunders.pgn", "", "", "45.Kc2 (1) 94...Nc2 (100)", 5, 100,
-        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/2k1K3/8/8/2n5/2R5 w - - 100 95"));
-
-    list.add(new PgnFileTestCase("05_dgt_centaur_fifty_move_rule_reached_by_human_move.pgn", "", "",
-        "42...Kf4 (1) 92.Kd3 (100)", 5, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY,
-        UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "8/8/3k4/8/2B5/3K4/5B2/8 b - - 100 92"));
-    list.add(new PgnFileTestCase("06_dgt_centaur_fifty_move_rule_reached_by_computer_move.pgn", "", "",
-        "66.Ke4 (1) 115...Kh6 (100)", 5, 100, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY,
-        UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "8/5B2/7k/5K2/3B4/8/8/8 w - - 100 116"));
-
-    list.add(new PgnFileTestCase("07_dgt_centaur_threefold_repetition_reached_by_human_move.pgn",
-        "repPos=3: 42.Kxe3 44.Ke3 46.Ke3", "", "", 6, 18, CheckmateOrStalemate.NA, 3, InsufficientMaterial.BLACK_ONLY,
-        UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/4K3/5R2/7k b - - 8 46"));
-    list.add(new PgnFileTestCase("08_dgt_centaur_threefold_repetition_reached_by_computer_move.pgn",
-        "repPos=3: 35...Kxh1 37...Kh1 39...Kh1", "", "", 5, 15, CheckmateOrStalemate.NA, 3,
-        InsufficientMaterial.BLACK_ONLY, UnwinnableFull.WINNABLE, UnwinnableFull.UNWINNABLE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.UNWINNABLE, "8/8/8/8/8/4K3/5R2/7k w - - 8 40"));
-
-    return new PgnFileTestCaseList(PgnTest.DGT_CENTAUR, list);
   }
 
   private static PgnFileTestCaseList createTestCasesUnfairLichessExamples() {

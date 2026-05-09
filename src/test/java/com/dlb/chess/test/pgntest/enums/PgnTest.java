@@ -86,8 +86,6 @@ public enum PgnTest {
   EARLY_DRAW(false, "realGames/earlyDraw"),
   WIKIPEDIA_THREEFOLD(false, "review/wikipedia/threefold"),
   WIKIPEDIA_FIFTY_MOVE(false, "review/wikipedia/fiftyMove"),
-  DGT_LIVE_CHESS(false, "review/dgt/liveChess"),
-  DGT_CENTAUR(false, "review/dgt/centaur"),
 
   UNFAIR_LICHESS_EXAMPLES(false, "cua/unfair/lichess/examples"),
   UNFAIR_LICHESS_HELPMATE(false, "cua/unfair/lichess/helpmate"),

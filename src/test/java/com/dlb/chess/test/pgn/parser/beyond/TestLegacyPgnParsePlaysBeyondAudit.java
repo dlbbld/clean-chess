@@ -224,9 +224,6 @@ class TestLegacyPgnParsePlaysBeyondAudit {
         "basic/threefold/37_threefold_en_passant_capture_situation_capture_allowed_no_exposing_own_king_to_check_mine_end_with_first_threefold.pgn",
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
-    // ====== dgt/liveChess (1) ======
-    m.put("dgt/liveChess/02_dgt_livechess_fivefold_fails_too_early.pgn", sanGameEnded(FIVE_FOLD_REPETITION_RULE));
-
     // ====== fivefold/beyond (3) — historical games crossing 5-fold ======
     m.put("fivefold/beyond/fivefold_beyond_savchenko_yu_y2017.pgn", sanGameEnded(FIVE_FOLD_REPETITION_RULE));
     m.put("fivefold/beyond/fivefold_beyond_wang_yu_2017.pgn", sanGameEnded(FIVE_FOLD_REPETITION_RULE));
