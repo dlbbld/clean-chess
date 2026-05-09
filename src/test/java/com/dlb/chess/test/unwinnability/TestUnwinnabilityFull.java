@@ -67,7 +67,7 @@ class TestUnwinnabilityFull {
 
   @SuppressWarnings("static-method")
   @Test
-  void testUnfairLichessExamples() throws Exception {
+  void testChaLichessExamples() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue
         .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {

@@ -83,7 +83,7 @@ public class PgnExpectedValue {
       case WCC2021 -> createTestCasesWcc201();
       case LAST_MOVE_ADDED_ACCIDENTALLY -> createTestCasesLastMoveAddedAccidentally();
       case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES -> createTestCasesChaLichessQuickNotDepthThreeExamples();
-      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE -> createTestCasesChaLichessQuickNotDepthThreeLichessHelpmate();
+      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE -> createTestCasesChaLichessQuickNotDepthThreeHelpmate();
       case CHA_LICHESS_QUICK_DEPTH_THREE -> createTestCasesChaLichessQuickDepthThree();
       case CHA_LICHESS_NOT_QUICK -> createTestCasesChaLichessNotQuick();
       case CHA_AMBRONA -> createTestCasesChaAmbrona();
@@ -4442,7 +4442,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesChaLichessQuickNotDepthThreeLichessHelpmate() {
+  private static PgnFileTestCaseList createTestCasesChaLichessQuickNotDepthThreeHelpmate() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(
