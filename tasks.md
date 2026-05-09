@@ -17,13 +17,13 @@ Theme: doc correctness, dead/personal code purge, library packaging hygiene, nam
 ### specification.md correctness
 - [x] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
 - [x] §4 architecture table is missing 6 top-level packages: `distance`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`; plus 2 pgn subpackages: `pgn.diagnostic` and `pgn.writer`. Add rows or explicitly note them as utility/internal
-- [x] If `isGameEnd` semantics change (next subsection), update the relevant termination wording — N/A: `isGameEnd` was deleted entirely (commit `f330419a`); spec §3.1 was already framed at the abstract FIDE level, not method-level, so no doc update needed
+- [x] If `isGameEnd` semantics change (next subsection), update the relevant termination wording — N/A: `isGameEnd` was deleted entirely; spec §3.1 was already framed at the abstract FIDE level, not method-level, so no doc update needed
 
 ### messages.properties cleanup
-The buggy `analysis.board.score.blackWin=0-0` is gone (commit `3097c89c` — the entire `analysis.board.*` block was DGT/trainer-only and unused; removal verified clean by audit).
+The buggy `analysis.board.score.blackWin=0-0` is gone — the entire `analysis.board.*` block was DGT/trainer-only and unused; removal verified clean by audit.
 
-- [x] Rename remaining `analysis.*` keys to `report.*` to follow through on the package rename from the previous release. The Java side is renamed; the surviving `analysis.repetition.*` and `analysis.yawnmove.*` keys still say `analysis` (commit `171dd2de`; subsequent `report.yawnmove.*` → `report.noProgressMove.*` follow-through in commit `cb4ab335`)
-- [x] Fix the comment typo `##analzyer` → `##analyzer` at line 251 — comment removed entirely (commit `06e5b85d`); cleanest resolution since the section header was no longer load-bearing
+- [x] Rename remaining `analysis.*` keys to `report.*` to follow through on the package rename from the previous release. The Java side is renamed; the surviving `analysis.repetition.*` and `analysis.yawnmove.*` keys still say `analysis`; subsequent `report.yawnmove.*` → `report.noProgressMove.*` follow-through done
+- [x] Fix the comment typo `##analzyer` → `##analyzer` at line 251 — comment removed entirely; cleanest resolution since the section header was no longer load-bearing
 
 ### TestMessage fixture cleanup
 The 12 `test*` / `test.message.*` keys at the bottom of `messages.properties` plus `TestMessage.java` itself are mostly testing JDK behavior (`ResourceBundle.getString`, `MessageFormat.format`) rather than library code. The one custom layer worth covering is `Message.normalizeSpace(...)`. The current shape is "I was getting comfortable with the API" code that mature projects clean up.
@@ -45,7 +45,7 @@ The DGT/trainer code originates from paid work and should not ship in this open-
 - [x] Verify `git grep -i dgt` returns zero hits afterwards
 
 ### Rename `pgn/cua` → `pgn/cha` (correct CHA abbreviation)
-The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (matches the repo name `D3-Chess`, the binary, and all code identifiers in his project). The test fixture tree under `src/test/resources/pgn/cua/` used the wrong abbreviation. Scope expanded substantially during the work — full reorganization of the lichess subtree (drop redundant `unfair/` wrapper, hierarchical layout under `lichess/quick/{depth,notDepth}Three`), filename normalization (`lichess_<id>.pgn` canonical, `lichess_<id>_helpmate.pgn` derived), basename-uniqueness preservation, and prose comment cleanup. Final structure documented in commit `f4027158`.
+The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (matches the repo name `D3-Chess`, the binary, and all code identifiers in his project). The test fixture tree under `src/test/resources/pgn/cua/` used the wrong abbreviation. Scope expanded substantially during the work — full reorganization of the lichess subtree (drop redundant `unfair/` wrapper, hierarchical layout under `lichess/quick/{depth,notDepth}Three`), filename normalization (`lichess_<id>.pgn` canonical, `lichess_<id>_helpmate.pgn` derived), basename-uniqueness preservation, and prose comment cleanup.
 
 - [x] Rename `src/test/resources/pgn/cua/` → `src/test/resources/pgn/cha/`
 - [x] Update path strings in [`PgnTest.java`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java) to `cha/...`
@@ -68,7 +68,7 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 ### isGameEnd vs CHA opt-in design (P1 from review)
 [`specification.md:84`](specification.md:84) states CHA is opt-in and not part of the per-move status path, but `ChessBoard.isGameEnd()` was calling `isDeadPositionQuick()`. Meanwhile [`BasicChessUtility.calculateGameStatus()`](src/main/java/com/dlb/chess/common/utility/BasicChessUtility.java:107) — which move validation and PGN export consult — does *not* include quick CHA. So a caller could see "game ended" from one public API while validation/export said "ongoing".
 
-- [x] Decide the canonical policy: either (a) remove `isDeadPositionQuick()` from `isGameEnd()` so all paths agree CHA is opt-in, or (b) make `BasicChessUtility.calculateGameStatus()` include it too — chose **option (d)**: delete `isGameEnd` and its private helper `isGameDraw` entirely, since both were unused (commit `f330419a`). Avoids picking a contested semantic for an API nobody calls.
+- [x] Decide the canonical policy: either (a) remove `isDeadPositionQuick()` from `isGameEnd()` so all paths agree CHA is opt-in, or (b) make `BasicChessUtility.calculateGameStatus()` include it too — chose **option (d)**: delete `isGameEnd` and its private helper `isGameDraw` entirely, since both were unused. Avoids picking a contested semantic for an API nobody calls.
 - [x] If the surface changes meaningfully, update specification.md §3.1 and any package-info.java that describes termination — N/A; both already framed in terms of FIDE-level termination categories and `BasicChessUtility.calculateGameStatus`, not the deleted `isGameEnd`
 
 ### FileUtility error handling (P2 from review)
@@ -82,15 +82,15 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 The codebase uses `YawnMoveUtility`, `YawnHalfMove`, `YawnPrint`, `YawnRepresentation`, `analysis.yawnmove.*` keys. Neither FIDE, the chess community, the README, nor `specification.md` use this term. The user-facing output already says "Sequences without capture and pawn move…", so the term exists purely as private vocabulary.
 
 - [x] Decide canonical name: `HalfmoveClock*` (matches FIDE), `NoProgress*`, or `FiftyMove*` — chose `NoProgress` (more self-explanatory than `Reversible`/`HalfmoveClock` for general Java audience; matches `messages.properties` user-facing prose "without capture and pawn move")
-- [x] Rename Java identifiers across `src/main` and `src/test` (commit `f7495fdb`: 59-file pass — `YawnHalfMove` → `NoProgressHalfMove`, `YawnIndex` → `NoProgressIndex`, `YawnPrint` → `NoProgressPrint`, `YawnMoveUtility` → `NoProgressMoveUtility`, `calculateYawnMoveRule` → `calculateNoProgressMoveRule`, plus all variables, parameters, and test fixture filenames/folders)
-- [x] Rename matching keys in `messages.properties` (rolls into the `analysis.*` → `report.*` rename above) — `report.yawnmove.*` → `report.noProgressMove.*` (commit `cb4ab335`, surfaced by new `TestReporterPrintReport` smoke test)
+- [x] Rename Java identifiers across `src/main` and `src/test` — 59-file pass: `YawnHalfMove` → `NoProgressHalfMove`, `YawnIndex` → `NoProgressIndex`, `YawnPrint` → `NoProgressPrint`, `YawnMoveUtility` → `NoProgressMoveUtility`, `calculateYawnMoveRule` → `calculateNoProgressMoveRule`, plus all variables, parameters, and test fixture filenames/folders
+- [x] Rename matching keys in `messages.properties` (rolls into the `analysis.*` → `report.*` rename above) — `report.yawnmove.*` → `report.noProgressMove.*`, surfaced by new `TestReporterPrintReport` smoke test
 - [x] Update specification.md if it ever uses the term — N/A: specification.md doesn't reference the term
 
 ### Eclipse fresh-checkout fidelity
 The previous release set the theme "fresh checkout works without manual setup steps". These two contradicted it.
 
-- [x] `.classpath` line 29 still references `JavaSE-26`. Update to `JavaSE-17` to match `pom.xml` and `setup.md`. Without this, fresh Eclipse checkout shows "JavaSE-26 not available" until the user runs Maven > Update Project (commit `b0d3a79d`)
-- [x] `.project` declares the `ch.acanda.eclipse.pmd.builder.PMDBuilder` builder and a PMD nature, plus `.eclipse-pmd` exists at the repo root. `setup.md` does not mention installing eclipse-pmd. Recommend: remove the PMD builder/nature from `.project` and delete `.eclipse-pmd` (Checkstyle is sufficient). Alternative: document the PMD plug-in install in `setup.md` — chose removal (commit `961da699`); `.eclipse-pmd` deleted, PMDBuilder removed from `.project`. Bonus: missing `forbiddenReference=warning` JDT compiler setting added in `d9627e80`
+- [x] `.classpath` line 29 still references `JavaSE-26`. Update to `JavaSE-17` to match `pom.xml` and `setup.md`. Without this, fresh Eclipse checkout shows "JavaSE-26 not available" until the user runs Maven > Update Project
+- [x] `.project` declares the `ch.acanda.eclipse.pmd.builder.PMDBuilder` builder and a PMD nature, plus `.eclipse-pmd` exists at the repo root. `setup.md` does not mention installing eclipse-pmd. Recommend: remove the PMD builder/nature from `.project` and delete `.eclipse-pmd` (Checkstyle is sufficient). Alternative: document the PMD plug-in install in `setup.md` — chose removal; `.eclipse-pmd` deleted, PMDBuilder removed from `.project`. Bonus: missing `forbiddenReference=warning` JDT compiler setting added
 
 ### Javadoc on the public API
 - [x] Class-level Javadoc on `Board` and `Reporter` (the two headline classes; today both have none)
@@ -105,7 +105,7 @@ The `messages.properties` mechanism itself is good engineering — externalizati
 - [ ] **`ConfigurationConstants.LOCALE = Locale.US` is a trap** for the day someone adds a locale. Switch to `Locale.ROOT` (semantically "the default bundle") or `Locale.getDefault()` (respects JVM/user environment). Today the choice is invisible because no message uses locale-sensitive `MessageFormat` constructs (no `{0,number}`, no `{1,date}`); the hardcoding becomes load-bearing the moment any message does
 
 ### Smaller items
-- [ ] `tasks.md` references commit hashes (`ef8de9c`, `7ac91e4`, `c104100`, …) in the **Done** section that won't survive a squash-merge into `main`. Either strip the hashes when an item moves to Done (it's the *fact* that's load-bearing, not the SHA), or note that tasks.md is dev scaffolding and not a permanent record
+- [x] `tasks.md` references commit hashes in the **Done** section that won't survive a squash-merge into `main`. Either strip the hashes when an item moves to Done (it's the *fact* that's load-bearing, not the SHA), or note that tasks.md is dev scaffolding and not a permanent record — stripped
 
 The Maven Central / `groupId` migration has its own dedicated release at the bottom of this file — see *Future release — publish to Maven Central*.
 
@@ -265,13 +265,13 @@ Whatever ships in the first Central artifact is in the public record forever. Re
 
 ## Done
 
-- [x] **README.md cleanup pass** (`c104100`, `21499ff` Java 17)
-- [x] **Strip demo/dev code from src/main** (`aa0225e`)
+- [x] **README.md cleanup pass** (Java 17)
+- [x] **Strip demo/dev code from src/main**
   - `readme/ReadMeForRepository` deleted
   - `trainer/SanTrainerServer` deleted
   - `Message.main()` removed
   - Broader 248-public-types audit deferred (see *Audit broader public API surface*, above)
-- [x] **Public API immutability — done deeper than originally scoped** (`55ee163`, `7707c75`, `f867357`)
+- [x] **Public API immutability — done deeper than originally scoped**
   - Originally just "defensive copies"; ended up making the immutability visible at the type level via Guava `ImmutableList<X>` / `ImmutableSet<X>`.
   - `ChessBoard` interface: all 8 list/set accessors return `ImmutableList<X>` or `ImmutableSet<X>`.
   - `Board.legalMoveSetList: List<ImmutableSet<LegalMove>>` — inner sets sealed at write time via `AbstractLegalMoves.calculateLegalMoves` boundary.
@@ -287,6 +287,6 @@ Whatever ships in the first Central artifact is in the public record forever. Re
   - `Board` and `LibraryCarlosBoard` now `implements ChessBoard` directly.
   - `AbstractBoard.java` deleted.
   - Net effect: no public abstract class on the API surface; CHA methods appear directly in IDE completion on `Board`; cross-validation contract is the interface (the right level for it).
-- [x] **Eclipse compiler warnings & infos cleanup (out-of-band)** (`997f51c`, `142e19f`, `305bff5`, `7e85eb6`, `06ca493`, `498b300`)
+- [x] **Eclipse compiler warnings & infos cleanup (out-of-band)**
   - Project now compiles warning-free under JDT settings.
   - Includes: `unexpectedValidationErrorMessage` `@NonNull` annotation, three `pcve.getMessage()` / `e.getMessage()` `@SuppressWarnings("null")` extractions, `boxing` no-op suppression removed, log4j2.xml schema declaration + DTD download fix, class-level `@SuppressWarnings("null")` for JUnit Assertions / JDK BiFunction in 4 test classes.
