@@ -58,7 +58,102 @@ Theme: documentation, obvious issues, major bugs. No new features.
 
 ---
 
-## Next release — Lenient SAN
+## Next release — cleanup follow-through
+
+Theme: doc correctness, dead/personal code purge, library packaging hygiene, naming follow-through from the rename in the previous release, and one design-consistency fix (`isGameEnd` vs CHA opt-in). No new features.
+
+### README correctness
+- [ ] Fix the three headline code samples that no longer compile: `Analyzer.printAnalysis(pgn)` → `Reporter.printReport(pgn)` (`README.md:126`, `:160`, `:205`)
+- [ ] Fix the "Create PGN for game" example: `System.out.println(pgnFile)` does not produce the formatted PGN shown in the comment (`PgnFile` is a record with no `toString()` override). Replace with `System.out.println(PgnCreate.createPgnFileString(pgnFile))`
+- [ ] Update "Not supported" section: PGN move suffix annotations *are* parsed and exported (see `StrictPgnParser`, `LenientPgnParser`, `PgnCreate`), and UTF-8 BOM *is* stripped by the lenient parser. Both bullets need to either go or be re-stated as the actual current limits
+- [ ] Split audiences explicitly under "Building/Installing": one paragraph for *using clean-chess as a dependency* (no Eclipse, just Maven/Gradle coords), one for *contributing* (link to `setup.md`). Today the section reads as if every consumer needs Eclipse
+
+### specification.md correctness
+- [ ] §2.2 overclaims compact-constructor validation — `Fen`, `Tag`, `PgnHalfMove` have no validation; `PgnFile` only copies lists. Either soften the claim, or add real boundary validation to those records (preferable: validate, since "errors at the construction boundary" is a load-bearing project value)
+- [ ] §4 architecture table is missing 6 packages: `distance`, `enums`, `exceptions`, `internationalization` (or its successor — see below), `range`, `squares`, `utility`. Add rows or explicitly note them as utility/internal
+- [ ] If `isGameEnd` semantics change (next subsection), update the relevant termination wording
+
+### messages.properties cleanup
+- [ ] **Bug**: `analysis.board.score.blackWin=0-0` → `0-1` (line 278). Black-wins is `0-1`, not `0-0`
+- [ ] Rename `analysis.*` keys to `report.*` to follow through on the package rename from the previous release. The Java side is renamed; the keys still say `analysis`
+- [ ] Fix the comment typo `##analzyer` → `##analyzer` at line 251
+
+### Remove all DGT-derived material (paid-work content)
+The DGT/trainer code originates from paid work and should not ship in this open-source library. The constants in `src/main` are already on the dead-code list above; the test material below is the larger part.
+
+- [ ] Remove `DGT_MY_BLUETOOTH_BOARD_ID = 23944`, `DGT_MY_USB_BOARD_ID = 43462`, `DGT_ACTIVE_BOARD_ID`, and the Google text-to-speech credentials comment from `ConfigurationConstants.java`
+- [ ] Drop `DGT_LIVE_CHESS` and `DGT_CENTAUR` from [`PgnTest.java:89-90`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java:89)
+- [ ] Drop `createTestCasesDgtCentaur()` and `createTestCasesDgtLiveChess()` plus their dispatch entries from [`PgnExpectedValue.java`](src/test/java/com/dlb/chess/test/pgntest/PgnExpectedValue.java) (8 + 1 fixture entries, ~50 lines around 3472–3515)
+- [ ] Drop the `dgt/liveChess` block in [`TestLegacyPgnParsePlaysBeyondAudit.java:227`](src/test/java/com/dlb/chess/test/pgn/parser/beyond/TestLegacyPgnParsePlaysBeyondAudit.java:227)
+- [ ] Delete fixture directories `src/test/resources/pgn/review/dgt/` (centaur + liveChess subdirs, ~9 PGNs) and `src/test/resources/pgnParser/legacy/common/beyond/dgt/liveChess/` (~1 PGN)
+- [ ] Verify `git grep -i dgt` returns zero hits afterwards
+
+### Rename `pgn/cua` → `pgn/cha` (correct CHA abbreviation)
+The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (matches the repo name `D3-Chess`, the binary, and all code identifiers in his project). The test fixture tree under [`src/test/resources/pgn/cua/`](src/test/resources/pgn/cua) uses the wrong abbreviation; the folder name has been a long-standing source of confusion when navigating between this project and CHA's source.
+
+- [ ] Rename `src/test/resources/pgn/cua/` → `src/test/resources/pgn/cha/` (preserve all subdirs: `pawnWall`, `unfair/ambrona`, `unfair/depthThree`, `unfair/lichess/examples`, `unfair/lichess/helpmate`, `unfair/notQuick`)
+- [ ] Update the six `cua/...` path strings in [`PgnTest.java:92-98`](src/test/java/com/dlb/chess/test/pgntest/enums/PgnTest.java:92) to `cha/...`
+- [ ] Verify `git grep -i "cua"` is clean (no other code or doc references)
+- [ ] Use `git mv` so history is preserved on the directory rename
+
+### Dead-code & personal-data purge
+- [ ] Delete `MultiplePgnSplitUtility.java` (or relocate to `src/test/java`). It has a `main()`, a hardcoded path component `otherdb/mb-3.45/mb-3.45.pgn`, and an 8-step ChessBase-recipe in comments. No call sites — slipped through the previous "strip demo/dev code" pass
+- [ ] `KnightDistance.java` — the `// This code contributed by Rajput-Ji` attribution is opaque (looks like GeeksforGeeks origin). Either cite the source URL + verify GPL-v3 compatibility, or rewrite in project style. Drop the `public static void main()` regardless
+- [ ] Remove the four `private static final boolean IS_DEBUG = false;` dead branches in `unwinnability/findhelpmate/*` (`AbstractFindHelpmate`, `FindHelpmateExhaust`, `FindHelpMateInterrupt`, `mobility/Mobility`). They write `fenListMine.txt` to `TEMP_FOLDER_PATH` when toggled — either delete or replace with proper logger calls
+- [ ] Move `ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH` and `BasicUtility.readProjectFolderPath()` to a test-only utility. They are used exclusively by tests but currently execute on every consumer's first class-load of `ConfigurationConstants`
+- [ ] `internationalization.Message` is a `class` with only static methods and no instances — add a private constructor (matches `BasicUtility`, `Reporter`, etc.)
+
+### Library packaging hygiene (do not pollute consumer classpaths)
+- [ ] Move `src/main/resources/log4j2.xml` and `log4j-config-2.xsd` to `src/test/resources`. Today they ship in the published JAR and log4j2 picks them up on consuming applications' classpaths
+- [ ] Drop `log4j-core` from runtime dependencies in `pom.xml` — keep only `log4j-api` for the library, let consumers pick the backend. `log4j-core` can stay at `<scope>test</scope>` for the test suite
+- [ ] Verify with a fresh consumer project that no `log4j2.xml` or `log4j-core` arrives transitively
+
+### isGameEnd vs CHA opt-in design (P1 from review)
+[`specification.md:84`](specification.md:84) states CHA is opt-in and not part of the per-move status path, but [`ChessBoard.isGameEnd()`](src/main/java/com/dlb/chess/common/interfaces/ChessBoard.java:159) calls `isDeadPositionQuick()`. Meanwhile [`BasicChessUtility.calculateGameStatus()`](src/main/java/com/dlb/chess/common/utility/BasicChessUtility.java:107) — which move validation and PGN export consult — does *not* include quick CHA. So a caller can see "game ended" from one public API while validation/export says "ongoing".
+
+- [ ] Decide the canonical policy: either (a) remove `isDeadPositionQuick()` from `isGameEnd()` so all paths agree CHA is opt-in, or (b) make `BasicChessUtility.calculateGameStatus()` include it too — but then validation/export would auto-terminate on quick CHA, which contradicts the spec rationale
+- [ ] (Recommended: option a — keeps the per-move surface CHA-free, defers auto-CHA to the dedicated future release)
+- [ ] If the surface changes meaningfully, update specification.md §3.1 and any package-info.java that describes termination
+
+### FileUtility error handling (P2 from review)
+[`FileUtility.writeFile`](src/main/java/com/dlb/chess/common/utility/FileUtility.java:98) catches `IOException` and only prints the stack trace at line 107. [`PgnWriter.writePgnFile`](src/main/java/com/dlb/chess/pgn/writer/PgnWriter.java:24) returns `void`, so callers can believe a PGN was written when it was not.
+
+- [ ] `FileUtility.writeFile` must throw `FileSystemAccessException` on `IOException`, matching the read/append/delete methods
+- [ ] Audit every method in `FileUtility` for the same pattern; align all error paths
+- [ ] Confirm `PgnWriter.writePgnFile` propagates the failure to its caller
+
+### "Yawn move" → standard chess terminology
+The codebase uses `YawnMoveUtility`, `YawnHalfMove`, `YawnPrint`, `YawnRepresentation`, `analysis.yawnmove.*` keys. Neither FIDE, the chess community, the README, nor `specification.md` use this term. The user-facing output already says "Sequences without capture and pawn move…", so the term exists purely as private vocabulary.
+
+- [ ] Decide canonical name: `HalfmoveClock*` (matches FIDE), `NoProgress*`, or `FiftyMove*`
+- [ ] Rename Java identifiers across `src/main` and `src/test`
+- [ ] Rename matching keys in `messages.properties` (rolls into the `analysis.*` → `report.*` rename above)
+- [ ] Update specification.md if it ever uses the term
+
+### Eclipse fresh-checkout fidelity
+The previous release set the theme "fresh checkout works without manual setup steps". These two contradict it.
+
+- [ ] `.classpath` line 29 still references `JavaSE-26`. Update to `JavaSE-17` to match `pom.xml` and `setup.md`. Without this, fresh Eclipse checkout shows "JavaSE-26 not available" until the user runs Maven > Update Project
+- [ ] `.project` declares the `ch.acanda.eclipse.pmd.builder.PMDBuilder` builder and a PMD nature, plus `.eclipse-pmd` exists at the repo root. `setup.md` does not mention installing eclipse-pmd. Recommend: remove the PMD builder/nature from `.project` and delete `.eclipse-pmd` (Checkstyle is sufficient). Alternative: document the PMD plug-in install in `setup.md`
+
+### Javadoc on the public API
+- [ ] Class-level Javadoc on `Board` and `Reporter` (the two headline classes; today both have none)
+- [ ] Method-level Javadoc on `Board`'s public methods at minimum: the three constructors, `performMove(String)`, `performMove(MoveSpecification)`, `performMoves(String...)`, `unperformMove`, `isCheckmate`, `isStalemate`, `isThreefoldRepetition`, `isFiftyMoveRule`, `isUnwinnableQuick`, `isUnwinnableFull`, `isDeadPositionQuick`, `isDeadPositionFull`. One sentence each is enough
+- [ ] Package-level Javadoc on the public-facing packages (`pgn.parser`, `pgn.create`, `unwinnability`, `report`, `san`, `fen`, `model`, `enums`). Model after [`board/package-info.java`](src/main/java/com/dlb/chess/board/package-info.java) — that one is excellent
+- [ ] Configure `maven-javadoc-plugin` in `pom.xml` so JitPack ships a `-javadoc.jar`
+
+### internationalization-package decision
+The package is named `internationalization` but ships only `messages.properties` (no localized variants), and `ConfigurationConstants.LOCALE` is hardcoded to `Locale.US`. The name promises a feature that does not exist.
+
+- [ ] Decide: rename to `messages` / `i18n` and accept it's an i18n-shaped indirection without actual locales (low effort), OR add a real second locale (German would be on-brand) — pick one and document it in specification.md
+
+### Smaller items
+- [ ] `tasks.md` references commit hashes (`ef8de9c`, `7ac91e4`, `c104100`, …) in the **Done** section that won't survive a squash-merge into `main`. Either strip the hashes when an item moves to Done (it's the *fact* that's load-bearing, not the SHA), or note that tasks.md is dev scaffolding and not a permanent record
+- [ ] `groupId = com.github.dlbbld` is the JitPack convention. Forward-look: if you ever publish to Maven Central, this needs a real reverse-DNS group you own (e.g. `io.github.dlbbld`). Not wrong today; flag for the day it matters
+
+---
+
+## Future release — Lenient SAN
 
 Single feature, headline release.
 
