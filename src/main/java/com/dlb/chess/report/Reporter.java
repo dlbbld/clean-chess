@@ -28,6 +28,30 @@ import com.dlb.chess.report.print.NoProgressPrint;
 import com.dlb.chess.report.print.RepetitionPrint;
 import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
 
+/**
+ * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities), no-progress
+ * (50/75-move-rule) sequences, and a printable summary — from a {@link ChessBoard} or a parsed PGN.
+ *
+ * <p>
+ * Two surfaces:
+ *
+ * <ul>
+ * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.model.Report} record carrying all the
+ * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
+ * inspection.</li>
+ * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
+ * {@link com.dlb.chess.internationalization.Message}. Use this for the kind of CLI-style output shown in the README
+ * examples.</li>
+ * </ul>
+ *
+ * <p>
+ * The report distinguishes the on-board predicates ("threefold has occurred") from the with-move predicates ("some
+ * legal move would create a threefold position the side could claim before playing it"). The latter surfaces missed
+ * claim opportunities other libraries don't.
+ *
+ * <p>
+ * Final class with a private constructor — all entry points are static.
+ */
 public final class Reporter {
 
   private static final int REPETITION_COUNT_THRESHOLD = ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;

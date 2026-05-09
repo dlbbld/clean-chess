@@ -1,3 +1,20 @@
+/**
+ * Cross-cutting model types — small immutable value objects (records) used across the rule pipelines:
+ *
+ * <ul>
+ * <li>{@link com.dlb.chess.model.LegalMove} — a {@link com.dlb.chess.common.model.MoveSpecification} plus the moving
+ * piece, captured piece (if any), and en-passant role. Returned by the legal-move generator.</li>
+ * <li>{@link com.dlb.chess.model.PgnHalfMove} — a SAN string plus its move-suffix-annotation and
+ * {@link com.dlb.chess.pgn.parser.model.PgnCommentary}. The unit of PGN movetext.</li>
+ * <li>{@link com.dlb.chess.model.UciMove} — a UCI move string with the convenience accessors.</li>
+ * <li>{@link com.dlb.chess.model.CastlingRightBoth}, {@link com.dlb.chess.model.EnPassantRole} — small enums and
+ * records used in move execution.</li>
+ * </ul>
+ *
+ * <p>
+ * Records are constructed by parsers, generators, and the legal-move pipeline; once constructed, instances are
+ * immutable. See {@code specification.md} §2.2 for the records-as-value-objects design.
+ */
 @NonNullByDefault
 package com.dlb.chess.model;
 
