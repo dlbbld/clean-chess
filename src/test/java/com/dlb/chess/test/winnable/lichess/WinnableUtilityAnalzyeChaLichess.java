@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.enums.GameStatusAnalysis;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
@@ -18,6 +17,7 @@ import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.winnable.PawnWall;
+import com.dlb.chess.test.winnable.enums.GameStatusAnalysis;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.GameForcedAnalysis;
 import com.dlb.chess.test.winnable.model.GameMultipleAnalysis;
