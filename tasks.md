@@ -277,6 +277,41 @@ Whatever ships in the first Central artifact is in the public record forever. Re
 
 ---
 
+## Backlog — captured but unscheduled
+
+Items here are not assigned to any release. Captured so they don't get lost; revisit if/when scope or motivation aligns.
+
+### FEN parser tier audit and rename
+Three FEN parsers exist: `FenParserRaw`, `FenParserAdvanced`, `FenParserAdvancedFurther`. The third is largely unused. Boundaries between the three are unclear and the docs overclaim what each tier proves (see "FEN-validation documentation overclaims" below).
+- [ ] Audit each tier — what each parser actually validates vs what its docs claim
+- [ ] Document each tier's contract precisely in `specification.md`
+- [ ] Decide: keep three tiers, collapse `AdvancedFurther` into `Advanced`, or drop it
+
+### Replace `UciValidateHelper` enum with computed lookup
+Auto-generated 1984-line enum, ~111 KB class file (~50% of the JAR's bytecode mass). Used as a list-of-strings rather than as an enum. A generation loop in the static init of its only caller would replace 1984 lines of source with ~12.
+- [ ] Replace the enum with a `Set<String>` (or similar) computed via a constructor loop
+- [ ] Verify JAR shrinks by ~50%
+
+### FEN-validation documentation overclaims
+`fen/package-info.java` and `Board.java` (class-level + constructor docs) say advanced FEN rejects positions "no real game could reach." The code does strong structural and rule-consistency checks but does not prove full game reachability. Also: package text says halfmove clock "at or above 150" while code accepts exactly 150.
+- [ ] Soften prose to "advanced structural and rule-consistency validation"
+- [ ] List exactly what is enforced; drop the unsubstantiated reachability claim
+- [ ] Fix the "at or above" off-by-one
+
+### Broken Javadoc link in `fen/package-info.java`
+Links to `com.dlb.chess.fen.FenParser` which does not exist. `mvn javadoc:jar` succeeds only because `<doclint>none</doclint>` in pom.xml; the warning is still emitted. Real target is `FenParserRaw` + `FenParserAdvanced`.
+- [ ] Fix the link
+
+### CHA / unwinnability wording teaches the wrong mental model
+README and `unwinnability/package-info.java` use "worst play / worst-case play by the opponent." In game-theory English, "worst-case opponent" reads like *best defensive play*, but CHA / winnability is the opposite: whether any legal continuation can lead to mate (cooperative / helpmate-style existence). Worth fixing because it is the flagship concept.
+- [ ] Rewrite around "no legal sequence exists, even with the opponent's cooperation" or "no theoretical mating sequence exists under any legal continuation"
+
+### README inconsistency — CHA full "100% accurate" vs `UNDETERMINED`
+README says CHA full is "slower but 100% accurate," then a few lines down documents the `UNDETERMINED` outcome (and again later in the doc).
+- [ ] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
+
+---
+
 ## Done
 
 - [x] **README.md cleanup pass** (Java 17)
