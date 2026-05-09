@@ -56,7 +56,7 @@ public class GenerateAmbronaHelpMateTestCases {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
-      final var analysis = Reporter.calculateAnalysis(folderPath, testCase.pgnFileName());
+      final var analysis = Reporter.calculateReport(folderPath, testCase.pgnFileName());
       if (IS_CREATE_UCI_REQUIRED) {
         printMovesAsUci(testCase.pgnFileName(), analysis);
       }
@@ -87,13 +87,13 @@ public class GenerateAmbronaHelpMateTestCases {
   }
 
   private static void writeGameAsContinued(Map<String, String> havingHelpMate, Path folderExisting, String pgnFileName,
-      Report analysis) {
+      Report report) {
 
     if (havingHelpMate.containsKey(pgnFileName)) {
 
       final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderExisting, pgnFileName);
 
-      final Side helpMatingSide = analysis.havingMove();
+      final Side helpMatingSide = report.havingMove();
       final var newResultTagValue = switch (helpMatingSide) {
         case BLACK -> ResultTagValue.BLACK_WON;
         case WHITE -> ResultTagValue.WHITE_WON;
@@ -107,7 +107,7 @@ public class GenerateAmbronaHelpMateTestCases {
 
       // play the existing moves
       final Board board = new Board();
-      for (final HalfMove halfMove : analysis.halfMoveList()) {
+      for (final HalfMove halfMove : report.halfMoveList()) {
         board.performMove(halfMove.moveSpecification());
       }
 
@@ -133,15 +133,15 @@ public class GenerateAmbronaHelpMateTestCases {
   }
 
   // we print out the below and add it to the map below manually, so we can use it in the code
-  private static void printMovesAsUci(String game, Report analysis) {
+  private static void printMovesAsUci(String game, Report report) {
     final StringBuilder uciMoveList = new StringBuilder();
-    for (final HalfMove halfMove : analysis.halfMoveList()) {
+    for (final HalfMove halfMove : report.halfMoveList()) {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(halfMove.havingMove(), halfMove.moveSpecification())
           .text();
       uciMoveList.append(uci);
       uciMoveList.append(" ");
     }
-    System.out.println(game + ";" + analysis.havingMove().getName() + ";" + uciMoveList.toString());
+    System.out.println(game + ";" + report.havingMove().getName() + ";" + uciMoveList.toString());
   }
 
   private static void populateHelpMateUci(Map<String, String> havingHelpMate) {

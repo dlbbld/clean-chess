@@ -7,10 +7,10 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.analysis.representation.BasicRepresentation;
 import com.dlb.chess.test.pgnall.AbstractPgnTest;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.report.representation.BasicRepresentation;
 
 public class PrintSinglePgnAnalysisRepresentation extends AbstractPgnTest {
 
@@ -21,7 +21,7 @@ public class PrintSinglePgnAnalysisRepresentation extends AbstractPgnTest {
   public static void main(String[] args) throws Exception {
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(PGN_FILE_NAME);
-    final var analysis = Reporter.calculateAnalysis(pgnTest.getFolderPath(), PGN_FILE_NAME);
+    final var analysis = Reporter.calculateReport(pgnTest.getFolderPath(), PGN_FILE_NAME);
     final List<String> representation = BasicRepresentation.calculateRepresentation(analysis, PGN_FILE_NAME);
 
     GeneralUtility.logLines(logger, representation);

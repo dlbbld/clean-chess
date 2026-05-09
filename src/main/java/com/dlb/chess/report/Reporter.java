@@ -51,11 +51,11 @@ public final class Reporter {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
-    addFirstMainSection(output, "analysis.repetition.threefold.ahead.title");
+    addFirstMainSection(output, "report.repetition.threefold.ahead.title");
     final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility
         .calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
     if (claimAheadListList.isEmpty()) {
-      output.add(Message.getString("analysis.repetition.threefold.ahead.none"));
+      output.add(Message.getString("report.repetition.threefold.ahead.none"));
     } else {
       final var claimAheadList = ThreefoldClaimAheadPrint.calculateClaimAheadList(claimAheadListList);
       output.addAll(claimAheadList);
@@ -63,9 +63,9 @@ public final class Reporter {
 
     final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(
         board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
-    addMainSection(output, "analysis.repetition.threefold.list.title");
+    addMainSection(output, "report.repetition.threefold.list.title");
     if (repetitionListList.isEmpty()) {
-      output.add(Message.getString("analysis.repetition.threefold.list.none"));
+      output.add(Message.getString("report.repetition.threefold.list.none"));
     } else {
       final var listChronic = RepetitionPrint.calculateOutputRepetitionChronlogically(repetitionListList);
       output.add(listChronic);
@@ -74,33 +74,33 @@ public final class Reporter {
     // yawn move
     final List<List<YawnHalfMove>> yawnMoveListList = YawnMoveUtility.calculateYawnMoveRule(board,
         2 * YAWN_FULL_MOVE_COUNT_THRESHOLD);
-    addMainSection(output, "analysis.yawnmove.sequence.title",
+    addMainSection(output, "report.yawnmove.sequence.title",
         NonNullWrapperCommon.valueOf(YAWN_FULL_MOVE_COUNT_THRESHOLD));
     if (yawnMoveListList.isEmpty()) {
-      output.add(Message.getString("analysis.yawnmove.sequence.none"));
+      output.add(Message.getString("report.yawnmove.sequence.none"));
     } else {
       final var list = YawnPrint.calculateOutputYawnMoveListList(yawnMoveListList);
       output.addAll(list);
     }
 
-    addMainSection(output, "analysis.yawnmove.fiftyMoves.title");
+    addMainSection(output, "report.yawnmove.fiftyMoves.title");
     final var hasFiftyMoveRule = calculateHasFiftyMoveRule(yawnMoveListList);
     if (hasFiftyMoveRule) {
-      output.add(Message.getString("analysis.yawnmove.fiftyMoves.yes"));
+      output.add(Message.getString("report.yawnmove.fiftyMoves.yes"));
     } else {
-      output.add(Message.getString("analysis.yawnmove.fiftyMoves.no"));
+      output.add(Message.getString("report.yawnmove.fiftyMoves.no"));
     }
 
     printList(output);
   }
 
-  public static Report calculateAnalysis(Path folderPath, String pgnFileName) throws Exception {
+  public static Report calculateReport(Path folderPath, String pgnFileName) throws Exception {
 
     final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
-    return calculateAnalysis(board);
+    return calculateReport(board);
   }
 
-  public static Report calculateAnalysis(ChessBoard board) {
+  public static Report calculateReport(ChessBoard board) {
 
     final String invariant = board.getFen();
 

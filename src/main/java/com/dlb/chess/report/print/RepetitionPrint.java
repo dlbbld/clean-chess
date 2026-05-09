@@ -18,7 +18,7 @@ public class RepetitionPrint {
     final List<String> resultList = new ArrayList<>();
     for (final List<HalfMove> list : repetitionList) {
       final var fold = list.size();
-      final String foldStr = Message.getString("analysis.repetition.fold", fold);
+      final String foldStr = Message.getString("report.repetition.fold", fold);
 
       final String repetition = BasicUtility.calculateSpaceSeparatedList(calculateMoveNumberAndSanList(list));
 

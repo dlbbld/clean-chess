@@ -1,4 +1,4 @@
-package com.dlb.chess.test.analysis.representation;
+package com.dlb.chess.test.report.representation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,107 +29,107 @@ public class BasicRepresentation {
 
   private static final String ATTRIBUTE_VALUE_NA = "Na";
 
-  public static List<String> calculateRepresentation(Report analysis, String pgnName) throws Exception {
+  public static List<String> calculateRepresentation(Report report, String pgnName) throws Exception {
     final List<String> list = new ArrayList<>();
 
     list.add("-----------------------------------------");
     list.add(pgnName);
     list.add("-----------------------------------------");
 
-    list.add(calculateOutputFen(analysis));
+    list.add(calculateOutputFen(report));
 
-    list.add(calculateOutputThreefoldRepetitionInitialEnPassantCapture(analysis));
-    list.add(calculateOutputRepetitionInitialEnPassantCapture(analysis));
+    list.add(calculateOutputThreefoldRepetitionInitialEnPassantCapture(report));
+    list.add(calculateOutputRepetitionInitialEnPassantCapture(report));
 
-    list.add(calculateOutputThreefoldRepetition(analysis));
+    list.add(calculateOutputThreefoldRepetition(report));
 
-    if (analysis.hasThreefoldRepetition()) {
-      list.add(calculateOutputRepetition(analysis));
-      list.add(calculateOutputFivefoldRepetition(analysis));
-      if (analysis.hasFivefoldRepetition()) {
-        list.add(calculateOutputFivefoldRepetition(analysis));
+    if (report.hasThreefoldRepetition()) {
+      list.add(calculateOutputRepetition(report));
+      list.add(calculateOutputFivefoldRepetition(report));
+      if (report.hasFivefoldRepetition()) {
+        list.add(calculateOutputFivefoldRepetition(report));
       }
     }
 
-    list.add(calculateOutputYawnMoveRule(analysis));
+    list.add(calculateOutputYawnMoveRule(report));
 
-    if (analysis.hasFiftyMoveRule()) {
-      list.add(calculateOutputYawnMoveRuleSequence(analysis));
+    if (report.hasFiftyMoveRule()) {
+      list.add(calculateOutputYawnMoveRuleSequence(report));
     }
 
-    list.add(calculateOutputFirstCapture(analysis));
-    list.add(calculateOutputMaxYawnSequence(analysis));
+    list.add(calculateOutputFirstCapture(report));
+    list.add(calculateOutputMaxYawnSequence(report));
 
-    list.add(calculateOutputLastPositionEvaluation(analysis));
-    list.add(calculateOutputInsufficientMaterial(analysis));
+    list.add(calculateOutputLastPositionEvaluation(report));
+    list.add(calculateOutputInsufficientMaterial(report));
 
     return list;
   }
 
-  private static String calculateOutputMaxYawnSequence(Report analysis) {
-    return calculateOutput(ATTRIBUTE_MAX_YAWN_SEQUENCE, analysis.maxYawnSequence());
+  private static String calculateOutputMaxYawnSequence(Report report) {
+    return calculateOutput(ATTRIBUTE_MAX_YAWN_SEQUENCE, report.maxYawnSequence());
   }
 
-  private static String calculateOutputLastPositionEvaluation(Report analysis) {
-    return calculateOutput(ATTRIBUTE_BOARD_RESULT_NAME, analysis.checkmateOrStalemate().getDescription());
+  private static String calculateOutputLastPositionEvaluation(Report report) {
+    return calculateOutput(ATTRIBUTE_BOARD_RESULT_NAME, report.checkmateOrStalemate().getDescription());
   }
 
-  private static String calculateOutputInsufficientMaterial(Report analysis) {
-    return calculateOutput(ATTRIBUTE_INSUFFICIENT_MATERIAL, analysis.insufficientMaterial().getDescription());
+  private static String calculateOutputInsufficientMaterial(Report report) {
+    return calculateOutput(ATTRIBUTE_INSUFFICIENT_MATERIAL, report.insufficientMaterial().getDescription());
   }
 
-  private static String calculateOutputFirstCapture(Report analysis) {
+  private static String calculateOutputFirstCapture(Report report) {
     final String attribute = ATTRIBUTE_FIRST_CAPTURE;
-    if (analysis.firstCapture() == 0) {
+    if (report.firstCapture() == 0) {
       return calculateOutput(attribute, " none");
     }
-    return calculateOutput(attribute, analysis.firstCapture());
+    return calculateOutput(attribute, report.firstCapture());
   }
 
-  private static String calculateOutputFen(Report analysis) {
-    return calculateOutput(ATTRIBUTE_FEN, analysis.fen());
+  private static String calculateOutputFen(Report report) {
+    return calculateOutput(ATTRIBUTE_FEN, report.fen());
   }
 
-  private static String calculateOutputThreefoldRepetitionInitialEnPassantCapture(Report analysis) {
+  private static String calculateOutputThreefoldRepetitionInitialEnPassantCapture(Report report) {
     return calculateOutput(ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
-        analysis.hasThreefoldRepetitionInitialEnPassantCapture());
+        report.hasThreefoldRepetitionInitialEnPassantCapture());
   }
 
-  private static String calculateOutputFivefoldRepetition(Report analysis) {
-    return calculateOutput(ATTRIBUTE_FIVEFOLD_YES_NO, analysis.hasFivefoldRepetition());
+  private static String calculateOutputFivefoldRepetition(Report report) {
+    return calculateOutput(ATTRIBUTE_FIVEFOLD_YES_NO, report.hasFivefoldRepetition());
   }
 
-  private static String calculateOutputRepetition(Report analysis) {
-    return calculateOutputRepetitionType(analysis, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+  private static String calculateOutputRepetition(Report report) {
+    return calculateOutputRepetitionType(report, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
   }
 
-  private static String calculateOutputRepetitionInitialEnPassantCapture(Report analysis) {
-    return calculateOutputRepetitionType(analysis, EnPassantCaptureRuleThreefold.DO_IGNORE);
+  private static String calculateOutputRepetitionInitialEnPassantCapture(Report report) {
+    return calculateOutputRepetitionType(report, EnPassantCaptureRuleThreefold.DO_IGNORE);
   }
 
-  private static String calculateOutputYawnMoveRule(Report analysis) {
-    return calculateOutput(ATTRIBUTE_YAWN_MOVE_RULE_YES_NO, analysis.hasFiftyMoveRule());
+  private static String calculateOutputYawnMoveRule(Report report) {
+    return calculateOutput(ATTRIBUTE_YAWN_MOVE_RULE_YES_NO, report.hasFiftyMoveRule());
   }
 
-  private static String calculateOutputYawnMoveRuleSequence(Report analysis) {
+  private static String calculateOutputYawnMoveRuleSequence(Report report) {
     final String attribute = ATTRIBUTE_YAWN_MOVE_RULE_SEQUENCE;
-    if (!analysis.hasFiftyMoveRule()) {
+    if (!report.hasFiftyMoveRule()) {
       return calculateOutput(attribute, ATTRIBUTE_VALUE_NA);
     }
-    final String repetition = YawnRepresentation.calculateRepresentationYawnMoveListList(analysis.yawnMoveListList());
+    final String repetition = YawnRepresentation.calculateRepresentationYawnMoveListList(report.yawnMoveListList());
     return calculateOutput(attribute, repetition);
   }
 
-  private static String calculateOutputThreefoldRepetition(Report analysis) {
+  private static String calculateOutputThreefoldRepetition(Report report) {
     return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
-        analysis.hasThreefoldRepetition());
+        report.hasThreefoldRepetition());
   }
 
-  private static String calculateOutputRepetitionType(Report analysis,
+  private static String calculateOutputRepetitionType(Report report,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     final String attributeName = calculateRepetitionAttributeSequence(enPassantCaptureRule);
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,
+    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(report,
         enPassantCaptureRule);
     if (repetitionList.isEmpty()) {
       return calculateOutput(attributeName, BasicRepresentation.ATTRIBUTE_VALUE_NA);

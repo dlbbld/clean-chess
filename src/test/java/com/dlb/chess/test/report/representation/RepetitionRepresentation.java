@@ -1,4 +1,4 @@
-package com.dlb.chess.test.analysis.representation;
+package com.dlb.chess.test.report.representation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,10 +33,10 @@ public class RepetitionRepresentation {
     return NonNullWrapperCommon.toString(result);
   }
 
-  public static String calculateRepresentationRepetitionAnalysis(Report analysis,
+  public static String calculateRepresentationRepetitionReport(Report report,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(analysis,
+    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(report,
         enPassantCaptureRule);
     return calculateRepresentationRepetitionListList(repetitionList, enPassantCaptureRule);
   }

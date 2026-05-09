@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.analysis.representation.BasicRepresentation;
 import com.dlb.chess.test.pgnall.AbstractPgnTest;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.report.representation.BasicRepresentation;
 
 class TestSinglePgnAnalysisAgainstTestCase extends AbstractPgnTest {
 
@@ -26,7 +26,7 @@ class TestSinglePgnAnalysisAgainstTestCase extends AbstractPgnTest {
     logger.info(PGN_FILE_NAME);
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(PGN_FILE_NAME);
-    final var expectedAnalysis = Reporter.calculateAnalysis(pgnTest.getFolderPath(), PGN_FILE_NAME);
+    final var expectedAnalysis = Reporter.calculateReport(pgnTest.getFolderPath(), PGN_FILE_NAME);
     final List<String> visualIndication = BasicRepresentation.calculateRepresentation(expectedAnalysis, PGN_FILE_NAME);
 
     GeneralUtility.logLines(logger, visualIndication);

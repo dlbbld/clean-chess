@@ -72,7 +72,7 @@ public class GeneratePythonTestCases implements EnumConstants {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         logger.info("Processing game " + testCase.pgnFileName());
 
-        final Report analysis = Reporter.calculateAnalysis(folderPath, testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(folderPath, testCase.pgnFileName());
         processPythonCodeLine("", counterList, codeLineList);
         processPythonCodeLine("    #" + testCase.pgnFileName(), counterList, codeLineList);
         processPythonCodeLine("    print(\"  Processing game " + testCase.pgnFileName() + "\")", counterList,
@@ -80,7 +80,7 @@ public class GeneratePythonTestCases implements EnumConstants {
         processPythonCodeLine("    board = chess.Board()", counterList, codeLineList);
 
         final ChessBoard boardPlayAlong = new Board();
-        for (final HalfMove halfMove : analysis.halfMoveList()) {
+        for (final HalfMove halfMove : report.halfMoveList()) {
           boardPlayAlong.performMove(halfMove.moveSpecification());
           processPythonCodeLine("    board.push_san(\"" + halfMove.san() + "\")", counterList, codeLineList);
           final var isMadeByWhite = halfMove.havingMove().getIsWhite();
