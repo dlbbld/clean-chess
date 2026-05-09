@@ -40,7 +40,7 @@ Requires JDK 17 or later at runtime. Available via the [JitPack](https://jitpack
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>3.2</version>
+  <version>3.3</version>
 </dependency>
 ```
 
