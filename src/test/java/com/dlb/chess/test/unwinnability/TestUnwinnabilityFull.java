@@ -68,7 +68,8 @@ class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testUnfairLichessExamples() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_EXAMPLES);
+    final PgnFileTestCaseList testCaseList = PgnExpectedValue
+        .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final ChessBoard board = new Board(testCase.fen());
 
@@ -87,7 +88,6 @@ class TestUnwinnabilityFull {
   }
 
   static void testFolderPerformance(PgnTest pgnTest) throws Exception {
-    // pgnTest = PgnTest.UNFAIR_AMBRONA;
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {

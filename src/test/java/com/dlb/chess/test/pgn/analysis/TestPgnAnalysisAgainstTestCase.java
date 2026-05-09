@@ -12,19 +12,12 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 
 /**
  * Analyzes PGN test cases and validates expected values. Default scope (when
- * {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} is {@code true}) is restricted
- * to a fast smoke subset suitable for routine CI runs:
- *
- * <ul>
- * <li>only basic {@link com.dlb.chess.test.pgntest.enums.PgnTest} categories (skips SPECIAL,
- *     UNFAIR_*, etc. — non-basic categories are slower and only useful for full release
- *     validation);</li>
- * <li>at most {@link #MAX_FILES_PER_FOLDER} files per category.</li>
- * </ul>
+ * {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} is {@code true}) is restricted to a fast smoke subset
+ * suitable for routine CI runs:
  *
  * <p>
- * To widen scope locally, flip {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} to
- * {@code false} (or the master gate {@code IS_RESTRICT_PGN}) and the full restricted corpus runs.
+ * To widen scope locally, flip {@link RestrictTestConstants#IS_RESTRICT_PGN_EXPECTED_ANALYSIS} to {@code false} (or the
+ * master gate {@code IS_RESTRICT_PGN}) and the full restricted corpus runs.
  */
 class TestPgnAnalysisAgainstTestCase extends AbstractPgnTest {
 

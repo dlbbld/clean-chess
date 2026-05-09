@@ -30,10 +30,10 @@ class TestUnwinnabilityQuickAgainstWinnability {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (RestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST) {
           switch (testCaseList.pgnTest()) {
-            case CHA_LICHESS_EXAMPLES:
-            case CHA_LICHESS_HELPMATE:
-            case CHA_DEPTH_THREE:
-            case CHA_NOT_QUICK:
+            case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES:
+            case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE:
+            case CHA_LICHESS_QUICK_DEPTH_THREE:
+            case CHA_LICHESS_NOT_QUICK:
             case CHA_AMBRONA:
               break;
             // $CASES-OMITTED$

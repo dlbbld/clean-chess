@@ -82,11 +82,11 @@ public class PgnExpectedValue {
       case VARIOUS -> createTestCasesVarious();
       case WCC2021 -> createTestCasesWcc201();
       case LAST_MOVE_ADDED_ACCIDENTALLY -> createTestCasesLastMoveAddedAccidentally();
-      case CHA_LICHESS_EXAMPLES -> createTestCasesUnfairLichessExamples();
-      case CHA_LICHESS_HELPMATE -> createTestCasesUnfairLichessHelpmate();
-      case CHA_DEPTH_THREE -> createTestCasesUnfairDepthThree();
-      case CHA_NOT_QUICK -> createTestCasesUnfairNotQuick();
-      case CHA_AMBRONA -> createTestCasesUnfairAmbrona();
+      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES -> createTestCasesChaLichessQuickNotDepthThreeExamples();
+      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE -> createTestCasesChaLichessQuickNotDepthThreeLichessHelpmate();
+      case CHA_LICHESS_QUICK_DEPTH_THREE -> createTestCasesChaLichessQuickDepthThree();
+      case CHA_LICHESS_NOT_QUICK -> createTestCasesChaLichessNotQuick();
+      case CHA_AMBRONA -> createTestCasesChaAmbrona();
       case MAX_MOVES -> createTestCasesLongestPossible();
       case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
       case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
@@ -3467,7 +3467,7 @@ public class PgnExpectedValue {
     return new PgnFileTestCaseList(PgnTest.SPECIAL, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesUnfairLichessExamples() {
+  private static PgnFileTestCaseList createTestCasesChaLichessQuickNotDepthThreeExamples() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("unfair_lichess_examples_02dMeCVV.pgn", "", "", "", 19, 32, CheckmateOrStalemate.NA, 1,
@@ -4439,10 +4439,10 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "7R/6pk/8/6K1/2n1r3/8/8/8 b - - 9 61"));
 
-    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_EXAMPLES, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_EXAMPLES, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesUnfairLichessHelpmate() {
+  private static PgnFileTestCaseList createTestCasesChaLichessQuickNotDepthThreeLichessHelpmate() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(
@@ -4974,10 +4974,10 @@ public class PgnExpectedValue {
             1, InsufficientMaterial.WHITE_ONLY, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE,
             UnwinnableQuick.UNWINNABLE, UnwinnableQuick.WINNABLE, "8/q7/8/8/8/8/K1k5/4b3 w - - 14 80"));
 
-    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_HELPMATE, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesUnfairDepthThree() {
+  private static PgnFileTestCaseList createTestCasesChaLichessQuickDepthThree() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     // four half-moves depth!!!
@@ -4995,10 +4995,10 @@ public class PgnExpectedValue {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1k6/2P5/K7/2q5/8/8/8/8 b - - 0 56"));
 
-    return new PgnFileTestCaseList(PgnTest.CHA_DEPTH_THREE, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesUnfairNotQuick() {
+  private static PgnFileTestCaseList createTestCasesChaLichessNotQuick() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("unfair_not_quick_f6c1lu7R.pgn", "", "", "", 13, 70, CheckmateOrStalemate.NA, 1,
@@ -5006,10 +5006,10 @@ public class PgnExpectedValue {
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "8/8/7p/5p1P/5p1K/5Pp1/6P1/1k6 w - - 70 83"));
 
-    return new PgnFileTestCaseList(PgnTest.CHA_NOT_QUICK, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_NOT_QUICK, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesUnfairAmbrona() {
+  private static PgnFileTestCaseList createTestCasesChaAmbrona() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("unfair_ambrona_01.pgn", "", "", "", -1, 10, CheckmateOrStalemate.NA, 1,
