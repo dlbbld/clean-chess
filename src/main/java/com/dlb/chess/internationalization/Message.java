@@ -13,6 +13,9 @@ public class Message {
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
       .getBundle(Message.class.getPackageName() + ".messages");
 
+  private Message() {
+  }
+
   @SuppressWarnings("null")
   public static String getString(String key) {
     return NonNullWrapperCommon.normalizeSpace(RESOURCE_BUNDLE.getString(key));

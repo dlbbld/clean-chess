@@ -3,7 +3,11 @@ package com.dlb.chess.unwinnability.findhelpmate.interrupt;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.Logger;
+
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
@@ -15,6 +19,8 @@ import com.dlb.chess.unwinnability.findhelpmate.interrupt.enums.FindHelpMateInte
 public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
   private static final boolean IS_DEBUG = false;
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(FindHelpMateInterrupt.class);
 
   // Our quick algorithm is extremely light, requiring only a few microseconds on average per
   // position. It is also sound, but not complete. However, as we detail in Section 5, with an
@@ -52,7 +58,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
         if (IS_DEBUG) {
           final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(),
               legalMove.moveSpecification());
-          System.out.println(uciMove.text() + " - " + (currentDepth + 1));
+          logger.printf(Level.DEBUG, "%s - %d", uciMove.text(), currentDepth + 1);
         }
 
         mateList.add(legalMove);

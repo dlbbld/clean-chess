@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.apache.logging.log4j.Logger;
+
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
@@ -25,6 +28,8 @@ import com.dlb.chess.unwinnability.model.PiecePlacement;
 public class Mobility {
 
   private static final boolean IS_DEBUG = false;
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(Mobility.class);
 
   // Inputs: a position
   // Output: mobility solution {MP!s}P in pos,s in S
@@ -208,9 +213,9 @@ public class Mobility {
   }
 
   private static void debug(Clearability clearability, Reachability reachability, MobilitySolution mobility) {
-    System.out.println(clearability.print());
-    System.out.println(reachability.print());
-    System.out.println(mobility.print());
+    logger.info(clearability.print());
+    logger.info(reachability.print());
+    logger.info(mobility.print());
   }
 
   private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearability cp, Reachability rcs) {

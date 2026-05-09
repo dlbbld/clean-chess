@@ -16,12 +16,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.RestrictTestConstants;
 
 /**
@@ -43,7 +43,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 class TestLegacyPgnParsePlaysBeyondAudit {
 
   private static final Path LEGACY_FOLDER = NonNullWrapperCommon.pathResolve(
-      ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
+      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
       @Nullable GameStatus gameStatus) {

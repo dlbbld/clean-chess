@@ -54,11 +54,11 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 - [x] Bonus: full enum/method/comment rename pass (`UNFAIR_*` → `CHA_*`, `unfair_lichess_examples_*.pgn` → `lichess_<id>.pgn`, "unfair" prose → "incorrectly", helpmate suffix decoration)
 
 ### Dead-code & personal-data purge
-- [ ] Delete `MultiplePgnSplitUtility.java` (or relocate to `src/test/java`). It has a `main()`, a hardcoded path component `otherdb/mb-3.45/mb-3.45.pgn`, and an 8-step ChessBase-recipe in comments. No call sites — slipped through the previous "strip demo/dev code" pass
-- [ ] `KnightDistance.java` — the `// This code contributed by Rajput-Ji` attribution is opaque (looks like GeeksforGeeks origin). Either cite the source URL + verify GPL-v3 compatibility, or rewrite in project style. Drop the `public static void main()` regardless
-- [ ] Remove the four `private static final boolean IS_DEBUG = false;` dead branches in `unwinnability/findhelpmate/*` (`AbstractFindHelpmate`, `FindHelpmateExhaust`, `FindHelpMateInterrupt`, `mobility/Mobility`). They write `fenListMine.txt` to `TEMP_FOLDER_PATH` when toggled — either delete or replace with proper logger calls
-- [ ] Move `ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH` and `BasicUtility.readProjectFolderPath()` to a test-only utility. They are used exclusively by tests but currently execute on every consumer's first class-load of `ConfigurationConstants`
-- [ ] `internationalization.Message` is a `class` with only static methods and no instances — add a private constructor (matches `BasicUtility`, `Reporter`, etc.)
+- [x] Delete `MultiplePgnSplitUtility.java` (or relocate to `src/test/java`). It has a `main()`, a hardcoded path component `otherdb/mb-3.45/mb-3.45.pgn`, and an 8-step ChessBase-recipe in comments. No call sites — slipped through the previous "strip demo/dev code" pass
+- [x] `KnightDistance.java` — the `// This code contributed by Rajput-Ji` attribution is opaque (looks like GeeksforGeeks origin). Either cite the source URL + verify GPL-v3 compatibility, or rewrite in project style. Drop the `public static void main()` regardless
+- [x] Remove the four `private static final boolean IS_DEBUG = false;` dead branches in `unwinnability/findhelpmate/*` (`AbstractFindHelpmate`, `FindHelpmateExhaust`, `FindHelpMateInterrupt`, `mobility/Mobility`). They write `fenListMine.txt` to `TEMP_FOLDER_PATH` when toggled — either delete or replace with proper logger calls
+- [x] Move `ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH` and `BasicUtility.readProjectFolderPath()` to a test-only utility. They are used exclusively by tests but currently execute on every consumer's first class-load of `ConfigurationConstants`
+- [x] `internationalization.Message` is a `class` with only static methods and no instances — add a private constructor (matches `BasicUtility`, `Reporter`, etc.)
 
 ### Library packaging hygiene (do not pollute consumer classpaths)
 - [ ] Move `src/main/resources/log4j2.xml` and `log4j-config-2.xsd` to `src/test/resources`. Today they ship in the published JAR and log4j2 picks them up on consuming applications' classpaths

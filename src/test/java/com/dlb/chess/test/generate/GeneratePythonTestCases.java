@@ -10,7 +10,6 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.interfaces.ChessBoard;
@@ -19,6 +18,7 @@ import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.model.Report;
+import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -33,7 +33,7 @@ public class GeneratePythonTestCases implements EnumConstants {
 
   private static final int WRITE_LINE_INTERVAL = 100000;
   private static final Path PYTHON_SCRIPT = NonNullWrapperCommon.pathResolve(
-      NonNullWrapperCommon.pathResolve(ConfigurationConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
+      NonNullWrapperCommon.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
       "test_play_game.py");
 
   public static void main(String[] args) throws Exception {

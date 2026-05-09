@@ -51,7 +51,7 @@ public abstract class AbstractFindHelpmate {
 
       final var numberOfMovesForCheckmate = (int) Math.ceil(moveProgressList.size() / 2.0);
       logger.printf(Level.INFO, "Checkmate in %d moves", numberOfMovesForCheckmate);
-      System.out.println(PgnCreate.createPgnFileString(boardCheck));
+      logger.info(PgnCreate.createPgnFileString(boardCheck));
     }
 
     return boardCheck;
@@ -72,7 +72,7 @@ public abstract class AbstractFindHelpmate {
       final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
       logger.printf(Level.INFO, "Classical checkmate position found in %d moves",
           numberOfMovesForClassicalCheckmatePosition);
-      System.out.println(PgnCreate.createPgnFileString(boardCheck));
+      logger.info(PgnCreate.createPgnFileString(boardCheck));
     }
 
     return boardCheck;
