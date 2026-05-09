@@ -22,8 +22,8 @@ Theme: doc correctness, dead/personal code purge, library packaging hygiene, nam
 ### messages.properties cleanup
 The buggy `analysis.board.score.blackWin=0-0` is gone (commit `3097c89c` — the entire `analysis.board.*` block was DGT/trainer-only and unused; removal verified clean by audit).
 
-- [ ] Rename remaining `analysis.*` keys to `report.*` to follow through on the package rename from the previous release. The Java side is renamed; the surviving `analysis.repetition.*` and `analysis.yawnmove.*` keys still say `analysis`
-- [ ] Fix the comment typo `##analzyer` → `##analyzer` at line 251
+- [x] Rename remaining `analysis.*` keys to `report.*` to follow through on the package rename from the previous release. The Java side is renamed; the surviving `analysis.repetition.*` and `analysis.yawnmove.*` keys still say `analysis` (commit `171dd2de`; subsequent `report.yawnmove.*` → `report.noProgressMove.*` follow-through in commit `cb4ab335`)
+- [x] Fix the comment typo `##analzyer` → `##analyzer` at line 251 — comment removed entirely (commit `06e5b85d`); cleanest resolution since the section header was no longer load-bearing
 
 ### TestMessage fixture cleanup
 The 12 `test*` / `test.message.*` keys at the bottom of `messages.properties` plus `TestMessage.java` itself are mostly testing JDK behavior (`ResourceBundle.getString`, `MessageFormat.format`) rather than library code. The one custom layer worth covering is `Message.normalizeSpace(...)`. The current shape is "I was getting comfortable with the API" code that mature projects clean up.
@@ -81,16 +81,16 @@ The Chess Unwinnability Analyzer is abbreviated **CHA** by Miguel Ambrona (match
 ### "Yawn move" → standard chess terminology
 The codebase uses `YawnMoveUtility`, `YawnHalfMove`, `YawnPrint`, `YawnRepresentation`, `analysis.yawnmove.*` keys. Neither FIDE, the chess community, the README, nor `specification.md` use this term. The user-facing output already says "Sequences without capture and pawn move…", so the term exists purely as private vocabulary.
 
-- [ ] Decide canonical name: `HalfmoveClock*` (matches FIDE), `NoProgress*`, or `FiftyMove*`
-- [ ] Rename Java identifiers across `src/main` and `src/test`
-- [ ] Rename matching keys in `messages.properties` (rolls into the `analysis.*` → `report.*` rename above)
-- [ ] Update specification.md if it ever uses the term
+- [x] Decide canonical name: `HalfmoveClock*` (matches FIDE), `NoProgress*`, or `FiftyMove*` — chose `NoProgress` (more self-explanatory than `Reversible`/`HalfmoveClock` for general Java audience; matches `messages.properties` user-facing prose "without capture and pawn move")
+- [x] Rename Java identifiers across `src/main` and `src/test` (commit `f7495fdb`: 59-file pass — `YawnHalfMove` → `NoProgressHalfMove`, `YawnIndex` → `NoProgressIndex`, `YawnPrint` → `NoProgressPrint`, `YawnMoveUtility` → `NoProgressMoveUtility`, `calculateYawnMoveRule` → `calculateNoProgressMoveRule`, plus all variables, parameters, and test fixture filenames/folders)
+- [x] Rename matching keys in `messages.properties` (rolls into the `analysis.*` → `report.*` rename above) — `report.yawnmove.*` → `report.noProgressMove.*` (commit `cb4ab335`, surfaced by new `TestReporterPrintReport` smoke test)
+- [x] Update specification.md if it ever uses the term — N/A: specification.md doesn't reference the term
 
 ### Eclipse fresh-checkout fidelity
-The previous release set the theme "fresh checkout works without manual setup steps". These two contradict it.
+The previous release set the theme "fresh checkout works without manual setup steps". These two contradicted it.
 
-- [ ] `.classpath` line 29 still references `JavaSE-26`. Update to `JavaSE-17` to match `pom.xml` and `setup.md`. Without this, fresh Eclipse checkout shows "JavaSE-26 not available" until the user runs Maven > Update Project
-- [ ] `.project` declares the `ch.acanda.eclipse.pmd.builder.PMDBuilder` builder and a PMD nature, plus `.eclipse-pmd` exists at the repo root. `setup.md` does not mention installing eclipse-pmd. Recommend: remove the PMD builder/nature from `.project` and delete `.eclipse-pmd` (Checkstyle is sufficient). Alternative: document the PMD plug-in install in `setup.md`
+- [x] `.classpath` line 29 still references `JavaSE-26`. Update to `JavaSE-17` to match `pom.xml` and `setup.md`. Without this, fresh Eclipse checkout shows "JavaSE-26 not available" until the user runs Maven > Update Project (commit `b0d3a79d`)
+- [x] `.project` declares the `ch.acanda.eclipse.pmd.builder.PMDBuilder` builder and a PMD nature, plus `.eclipse-pmd` exists at the repo root. `setup.md` does not mention installing eclipse-pmd. Recommend: remove the PMD builder/nature from `.project` and delete `.eclipse-pmd` (Checkstyle is sufficient). Alternative: document the PMD plug-in install in `setup.md` — chose removal (commit `961da699`); `.eclipse-pmd` deleted, PMDBuilder removed from `.project`. Bonus: missing `forbiddenReference=warning` JDT compiler setting added in `d9627e80`
 
 ### Javadoc on the public API
 - [ ] Class-level Javadoc on `Board` and `Reporter` (the two headline classes; today both have none)
