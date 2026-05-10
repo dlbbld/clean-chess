@@ -310,6 +310,11 @@ README and `unwinnability/package-info.java` use "worst play / worst-case play b
 README says CHA full is "slower but 100% accurate," then a few lines down documents the `UNDETERMINED` outcome (and again later in the doc).
 - [ ] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
 
+### Rename `NonNullWrapperCommon` to `Nulls`
+The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes through it), and `NonNullWrapperCommon` is too long for something so frequent. `Nulls` is short, pronounceable, says the domain (this utility exists because of nullness handling), and discoverable in the IDE. Rejected alternatives: `NNVC` (cryptic codeword), `Safe` / `Checked` (vague), `NonNulls` (awkward plural).
+- [ ] Rename class `NonNullWrapperCommon` → `Nulls`; update all call sites (uses appear in most files in the project — bulk rename)
+- [ ] Verify the methods are still all about nullness handling; if any aren't, reconsider the name
+
 ---
 
 ## Done
