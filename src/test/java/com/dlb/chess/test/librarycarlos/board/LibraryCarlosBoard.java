@@ -87,8 +87,7 @@ public class LibraryCarlosBoard implements ChessBoard {
     // shape with empty forgiven items. Cross-validation tests only need the move to land on the board.
     final com.dlb.chess.san.model.StrictSanParserValidationResult strict = moveStrict(san);
     return new com.dlb.chess.san.model.LenientSanParserValidationResult(strict.moveSpecification(),
-        com.dlb.chess.common.NonNullWrapperCommon
-            .copyOfList(java.util.List.<com.dlb.chess.san.model.ForgivenItem>of()));
+        com.dlb.chess.san.model.ForgivenItem.EMPTY_LIST);
   }
 
   private MoveSpecification calculateLastMoveSpecification() {

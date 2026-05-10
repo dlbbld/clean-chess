@@ -1,6 +1,9 @@
 package com.dlb.chess.san.model;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.san.enums.LenientSanValidationProblem;
+import com.google.common.collect.ImmutableList;
 
 /**
  * One forgiven deviation surfaced by the lenient SAN parser.
@@ -10,6 +13,14 @@ import com.dlb.chess.san.enums.LenientSanValidationProblem;
  * @param canonicalSan the canonical SAN equivalent the parser resolved the input to
  */
 public record ForgivenItem(LenientSanValidationProblem code, String originalToken, String canonicalSan) {
+
+  /**
+   * Shared empty list for the "no deviations forgiven" case. Centralised here so the {@code @NonNull} suppression on
+   * Guava's {@code ImmutableList.of()} (which JDT can't statically prove is non-null with non-null elements) lives in
+   * one place rather than at every caller.
+   */
+  @SuppressWarnings("null")
+  public static final @NonNull ImmutableList<@NonNull ForgivenItem> EMPTY_LIST = ImmutableList.of();
 
   public ForgivenItem {
     if (originalToken.isBlank()) {

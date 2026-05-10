@@ -53,7 +53,7 @@ public final class LenientPgnParser {
 
   private final String source;
   private final PgnTokenizer tokenizer;
-  private final List<ForgivenItem> sanForgivenItemsAccumulator = new ArrayList<>();
+  private final List<@NonNull ForgivenItem> sanForgivenItemsAccumulator = new ArrayList<>();
 
   private LenientPgnParser(String source) {
     this.source = NewlineNormalization.toLf(stripUtf8Bom(source));
@@ -108,7 +108,7 @@ public final class LenientPgnParser {
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null,
-          NonNullWrapperCommon.copyOfList(java.util.List.<ForgivenItem>of()));
+          ForgivenItem.EMPTY_LIST);
     }
     return runValidation(parser);
   }
@@ -134,7 +134,7 @@ public final class LenientPgnParser {
     } catch (final RuntimeException e) {
       final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, message, null, NonNullWrapperCommon.copyOfList(java.util.List.<ForgivenItem>of()));
+          SanValidationProblem.NONE, message, null, ForgivenItem.EMPTY_LIST);
     }
   }
 
