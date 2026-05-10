@@ -35,8 +35,11 @@ public class RepetitionRepresentation {
   public static String calculateRepresentationRepetitionReport(Report report,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(report,
-        enPassantCaptureRule);
+    final List<List<HalfMove>> repetitionList = switch (enPassantCaptureRule) {
+      case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
+      case DO_NOT_IGNORE -> report.repetitionListList();
+      default -> throw new IllegalArgumentException();
+    };
     return calculateRepresentationRepetitionListList(repetitionList, enPassantCaptureRule);
   }
 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.report.model.Report;
 
 public class BasicRepresentation {
@@ -129,8 +128,11 @@ public class BasicRepresentation {
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     final String attributeName = calculateRepetitionAttributeSequence(enPassantCaptureRule);
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(report,
-        enPassantCaptureRule);
+    final List<List<HalfMove>> repetitionList = switch (enPassantCaptureRule) {
+      case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
+      case DO_NOT_IGNORE -> report.repetitionListList();
+      default -> throw new IllegalArgumentException();
+    };
     if (repetitionList.isEmpty()) {
       return calculateOutput(attributeName, BasicRepresentation.ATTRIBUTE_VALUE_NA);
     }
