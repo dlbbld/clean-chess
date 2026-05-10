@@ -5,10 +5,10 @@ import com.dlb.chess.test.pgntest.enums.PgnTestInclusion;
 public abstract class RestrictTestConstants {
 
   /**
-  * Master switch driven by the {@code clean-chess.full} system property. Set to {@code true} via Maven profile
-  * {@code -Pfull} to run the full heavy test suite. Default: {@code false} — restricted, fast suite for normal
-  * iteration. Required to be {@code true} before tagging a release (see {@code specification.md} §6).
-  */
+   * Master switch driven by the {@code clean-chess.full} system property. Set to {@code true} via Maven profile
+   * {@code -Pfull} to run the full heavy test suite. Default: {@code false} — restricted, fast suite for normal
+   * iteration. Required to be {@code true} before tagging a release (see {@code specification.md} §6).
+   */
   private static final boolean IS_FULL = Boolean.getBoolean("clean-chess.full");
 
   /**
