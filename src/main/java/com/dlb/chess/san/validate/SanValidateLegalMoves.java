@@ -20,6 +20,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
@@ -175,7 +176,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       throw new ProgrammingMistakeException(
           "At this point it is expected that filtering the legal moves against the SAN result in exactly one legal move");
     }
-    return calculateOnlyElement(filtered3);
+    return BasicUtility.calculateOnlyElement(filtered3);
   }
 
   public static void validateAgainstLegalMoves(ChessBoard board, Side havingMove, Set<LegalMove> legalMovesCandidates,
@@ -907,13 +908,6 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       }
     }
     return legalMovesForCastling;
-  }
-
-  private static LegalMove calculateOnlyElement(Set<LegalMove> moveSet) {
-    if (moveSet.size() != 1) {
-      throw new IllegalArgumentException("The set must contain exactly one element");
-    }
-    return NonNullWrapperCommon.getFirst(new ArrayList<>(moveSet));
   }
 
   private static File calculateOnlyPossibleFile(Set<LegalMove> legalMovesForSanValidation,

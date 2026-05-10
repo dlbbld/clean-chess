@@ -83,9 +83,9 @@ public abstract class BasicUtility {
     return new SimpleDateFormat(DATE_PATTERN).format(new Date());
   }
 
-  public static <E> E getFirstElement(Set<E> set) {
-    if (set.isEmpty()) {
-      throw new IllegalArgumentException();
+  public static <E> E calculateOnlyElement(Set<E> set) {
+    if (set.size() != 1) {
+      throw new IllegalArgumentException("The set must contain exactly one element");
     }
     return NonNullWrapperCommon.getFirst(new ArrayList<>(set));
   }

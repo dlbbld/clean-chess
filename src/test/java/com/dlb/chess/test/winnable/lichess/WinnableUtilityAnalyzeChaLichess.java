@@ -205,7 +205,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     final Set<GameStatusAnalysis> gameStatusSet = evaluation.gameStatusSet();
 
     if (gameStatusSet.size() == 1) {
-      final GameStatusAnalysis singleGameStatus = BasicUtility.getFirstElement(gameStatusSet);
+      final GameStatusAnalysis singleGameStatus = BasicUtility.calculateOnlyElement(gameStatusSet);
 
       switch (singleGameStatus) {
         case WHITE_DELIVERS_CHECKMATE:
