@@ -171,7 +171,7 @@ public final class PgnTokenizer {
     final StringBuilder text = new StringBuilder();
     while (true) {
       final var c = stream.peek();
-      if ((c != '!') && (c != '?')) {
+      if (c != '!' && c != '?') {
         break;
       }
       text.append((char) stream.read());

@@ -11,9 +11,9 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.test.common.utility.FenUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.FenParserAdvanced;
+import com.dlb.chess.test.common.utility.FenUtility;
 
 public class GeneratePiecePositions {
 

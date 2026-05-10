@@ -26,7 +26,7 @@ public final class PgnCharStream {
   }
 
   public int peek(int offset) {
-    final int position = index + offset;
+    final var position = index + offset;
     if (position >= source.length()) {
       return EOF;
     }
@@ -37,7 +37,7 @@ public final class PgnCharStream {
     if (index >= source.length()) {
       return EOF;
     }
-    final char c = source.charAt(index);
+    final var c = source.charAt(index);
     index++;
     if (c == LINE_FEED) {
       line++;

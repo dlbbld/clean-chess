@@ -26,7 +26,7 @@ class TestPgnImportAgainstExport {
   void test() {
     // true (default) → curated export-roundtrip smoke subset (~20 files).
     // false → full ALL_EXCEPT_LONGEST_POSSIBLE corpus for a pre-release / regression sweep.
-    final List<PgnFileTestCaseList> source = RestrictTestConstants.IS_RESTRICT_PGN_WRITER_TEST
+    final var source = RestrictTestConstants.IS_RESTRICT_PGN_WRITER_TEST
         ? PgnExpectedValue.getExportRoundtripSmokeList()
         : PgnExpectedValue.getRestrictedTestListList();
     for (final PgnFileTestCaseList testCaseList : source) {

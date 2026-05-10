@@ -1,6 +1,7 @@
 package com.dlb.chess.distance;
 
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Queue;
 
 import com.dlb.chess.board.enums.Square;
@@ -33,9 +34,7 @@ public final class KnightDistance {
 
   private static int[] calculateDistancesFrom(Square fromSquare) {
     final var distances = new int[SQUARE_COUNT];
-    for (var i = 0; i < distances.length; i++) {
-      distances[i] = -1;
-    }
+    Arrays.fill(distances, -1);
 
     final Queue<Square> queue = new ArrayDeque<>();
     distances[toIndex(fromSquare)] = 0;
@@ -45,13 +44,13 @@ public final class KnightDistance {
       final Square current = NonNullWrapperCommon.remove(queue);
       final var nextDistance = distances[toIndex(current)] + 1;
       for (var i = 0; i < FILE_OFFSETS.length; i++) {
-        final int fileNumber = current.getFile().getNumber() + FILE_OFFSETS[i];
-        final int rankNumber = current.getRank().getNumber() + RANK_OFFSETS[i];
+        final var fileNumber = current.getFile().getNumber() + FILE_OFFSETS[i];
+        final var rankNumber = current.getRank().getNumber() + RANK_OFFSETS[i];
         if (!isBoardSquare(fileNumber, rankNumber)) {
           continue;
         }
         final Square next = Square.calculate(fileNumber, rankNumber);
-        final int nextIndex = toIndex(next);
+        final var nextIndex = toIndex(next);
         if (distances[nextIndex] != -1) {
           continue;
         }

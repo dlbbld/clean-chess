@@ -84,7 +84,7 @@ public final class ChessRuleAnalyzer implements EnumConstants {
     // King moves: their king-safety is fully covered by analyzeMovement (KING_CAPTURES_GUARDED_PIECE
     // / KING_MOVES_TO_ATTACKED_EMPTY_SQUARE). The was-in-check distinction has no analog for the
     // king itself, so this method only handles non-king moves.
-    if ((movingPiece.getPieceType() == KING)
+    if (movingPiece.getPieceType() == KING
         || !StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove, moveSpecification)) {
       return KingSafetyCheck.SUCCESS;
     }

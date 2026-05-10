@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
@@ -25,7 +23,7 @@ class TestStrictPgnParserAgainstLenientPgnParser {
   void test() {
     // true (default) → curated parser-integration smoke subset (~45 files).
     // false → full ALL_EXCEPT_LONGEST_POSSIBLE corpus for a pre-release / regression sweep.
-    final List<PgnFileTestCaseList> source = RestrictTestConstants.IS_RESTRICT_PGN_STRICT_AGAINST_LENIENT_TEST
+    final var source = RestrictTestConstants.IS_RESTRICT_PGN_STRICT_AGAINST_LENIENT_TEST
         ? PgnExpectedValue.getParserIntegrationSmokeList()
         : PgnExpectedValue.getRestrictedTestListList();
     for (final PgnFileTestCaseList testCaseList : source) {

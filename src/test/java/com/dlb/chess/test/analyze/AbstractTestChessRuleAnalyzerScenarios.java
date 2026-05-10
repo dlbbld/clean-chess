@@ -35,14 +35,14 @@ import com.dlb.chess.exceptions.InvalidMoveException;
 public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumConstants {
 
   static void check(ChessBoard board, MoveSpecification move, MoveCheck expectedMoveCheck) {
-    final @Nullable MovementCheck expectedMc = toMovementCheck(expectedMoveCheck);
+    final var expectedMc = toMovementCheck(expectedMoveCheck);
     if (expectedMc != null) {
       final MovementCheck actual = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
           board.getEnPassantCaptureTargetSquare(), move);
       assertEquals(expectedMc, actual);
       return;
     }
-    final @Nullable KingSafetyCheck expectedKs = toKingSafetyCheck(expectedMoveCheck);
+    final var expectedKs = toKingSafetyCheck(expectedMoveCheck);
     if (expectedKs != null) {
       // king-safety presupposes movement passes
       final MovementCheck actualMc = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),

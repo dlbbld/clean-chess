@@ -49,13 +49,10 @@ final class LenientSanRecover {
     for (var i = 0; i < MAX_ITERATIONS; i++) {
       try {
         return StrictSanParser.parseText(current, board).moveSpecification();
-      } catch (SanValidationException e) {
+      } catch (final SanValidationException e) {
         final SanValidationProblem strictCode = e.getSanValidationProblem();
-        final @Nullable LenientSanValidationProblem lenientCode = mapToLenientCode(strictCode);
-        if (lenientCode == null) {
-          throw e;
-        }
-        if (emitted.contains(lenientCode)) {
+        final var lenientCode = mapToLenientCode(strictCode);
+        if (lenientCode == null || emitted.contains(lenientCode)) {
           // Same code would fire twice — defensive bail-out; shouldn't happen because each mutation
           // strictly reduces the set of applicable strict codes.
           throw e;
@@ -125,7 +122,7 @@ final class LenientSanRecover {
     if (s.isEmpty()) {
       return s;
     }
-    final char last = s.charAt(s.length() - 1);
+    final var last = s.charAt(s.length() - 1);
     if (last == '+' || last == '#') {
       return NonNullWrapperCommon.substring(s, 0, s.length() - 1);
     }
@@ -133,7 +130,7 @@ final class LenientSanRecover {
   }
 
   private static String stripCaptureMarker(String s) {
-    final int x = s.indexOf('x');
+    final var x = s.indexOf('x');
     if (x < 0) {
       throw new ProgrammingMistakeException("stripCaptureMarker called with no 'x' in input: " + s);
     }
@@ -154,7 +151,7 @@ final class LenientSanRecover {
       throw new ProgrammingMistakeException("insertCaptureMarker called with body too short: " + s);
     }
     // Insert 'x' immediately before the destination square (last 2 chars of body).
-    final int destStart = body.length() - 2;
+    final var destStart = body.length() - 2;
     return NonNullWrapperCommon.substring(body, 0, destStart) + "x" + NonNullWrapperCommon.substring(body, destStart)
         + marker;
   }
@@ -199,8 +196,8 @@ final class LenientSanRecover {
     if (body.length() < 4) {
       throw new ProgrammingMistakeException("rewriteRankAsFile body too short: " + s);
     }
-    final char pieceLetter = body.charAt(0);
-    final char rankDigit = body.charAt(1);
+    final var pieceLetter = body.charAt(0);
+    final var rankDigit = body.charAt(1);
     final PieceType pieceType = NotationMovingPiece.calculate(pieceLetter).getPieceType();
     final Rank fromRank = Rank.calculateRank(rankDigit);
     final Square toSquare = Square.calculate(File.calculateFile(body.charAt(body.length() - 2)),
@@ -230,7 +227,7 @@ final class LenientSanRecover {
 
   private static BodyAndMarker splitMarker(String s) {
     if (!s.isEmpty()) {
-      final char last = s.charAt(s.length() - 1);
+      final var last = s.charAt(s.length() - 1);
       if (last == '+' || last == '#') {
         return new BodyAndMarker(NonNullWrapperCommon.substring(s, 0, s.length() - 1),
             NonNullWrapperCommon.valueOf(last));

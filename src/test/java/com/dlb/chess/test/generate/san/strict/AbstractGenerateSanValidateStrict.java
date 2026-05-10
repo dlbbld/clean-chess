@@ -13,8 +13,8 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.test.common.utility.DiagonalLineUtility;
 import com.dlb.chess.model.EmptyBoardMove;
+import com.dlb.chess.test.common.utility.DiagonalLineUtility;
 import com.google.common.collect.ImmutableList;
 
 public abstract class AbstractGenerateSanValidateStrict implements EnumConstants {

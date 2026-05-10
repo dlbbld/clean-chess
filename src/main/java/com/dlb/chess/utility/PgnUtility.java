@@ -54,10 +54,10 @@ public abstract class PgnUtility {
    */
   private static List<String> splitIntoAtoms(String line) {
     final List<String> atoms = new ArrayList<>();
-    final int len = line.length();
+    final var len = line.length();
     var i = 0;
     while (i < len) {
-      final char c = line.charAt(i);
+      final var c = line.charAt(i);
       if (c == ' ') {
         i++;
         continue;

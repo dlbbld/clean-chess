@@ -89,7 +89,7 @@ public class ValidateNewMove implements EnumConstants {
           board.getCastlingRight(havingMove));
       case NONE -> throw new IllegalArgumentException();
     };
-    final CastlingRightLoss castlingRightLoss = castlingCheck == CastlingCheck.FINAL_NO_RIGHT
+    final var castlingRightLoss = castlingCheck == CastlingCheck.FINAL_NO_RIGHT
         ? board.getCastlingRightLoss(havingMove, castlingMove)
         : CastlingRightLoss.NOT_LOST;
     switch (castlingCheck) {

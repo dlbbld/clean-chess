@@ -30,8 +30,8 @@ class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
   void allOrderedPairsAgreeWithAmbronaReference() {
     for (final Square fromSquare : Square.REAL) {
       for (final Square toSquare : Square.REAL) {
-        final int actual = KnightDistance.distance(fromSquare, toSquare);
-        final int expected = ambronaKnightDistance(fromSquare, toSquare);
+        final var actual = KnightDistance.distance(fromSquare, toSquare);
+        final var expected = ambronaKnightDistance(fromSquare, toSquare);
         assertEquals(expected, actual, () -> "knight distance mismatch for " + fromSquare + " -> " + toSquare + " (BFS="
             + actual + ", Ambrona=" + expected + ")");
       }
@@ -44,10 +44,10 @@ class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
    * corner-exception case.
    */
   private static int ambronaKnightDistance(Square x, Square y) {
-    final int fileDist = Math.abs(x.getFile().getNumber() - y.getFile().getNumber());
-    final int rankDist = Math.abs(x.getRank().getNumber() - y.getRank().getNumber());
-    final int idxFirst = Math.min(fileDist, rankDist);
-    final int idxSecond = Math.max(fileDist, rankDist);
+    final var fileDist = Math.abs(x.getFile().getNumber() - y.getFile().getNumber());
+    final var rankDist = Math.abs(x.getRank().getNumber() - y.getRank().getNumber());
+    final var idxFirst = Math.min(fileDist, rankDist);
+    final var idxSecond = Math.max(fileDist, rankDist);
 
     // Corner exception: a knight needs 4 moves to reach the diagonally adjacent square of a corner (a8 ↔ b7 etc.).
     // The table lookup would say 2; override.
@@ -60,10 +60,7 @@ class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
       if (idxFirst == 0 && idxSecond == 0) {
         return 0;
       }
-      if (idxFirst == 0 && idxSecond == 2) {
-        return 2;
-      }
-      if (idxFirst == 0 && idxSecond == 4) {
+      if ((idxFirst == 0 && idxSecond == 2) || (idxFirst == 0 && idxSecond == 4)) {
         return 2;
       }
       if (idxFirst == 2 && idxSecond == 4) {
