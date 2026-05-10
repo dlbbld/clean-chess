@@ -9,10 +9,10 @@ import java.util.Scanner;
 
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
-import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.FileUtility;
 
 public final class MultiplePgnSplitUtility {
@@ -77,7 +77,7 @@ public final class MultiplePgnSplitUtility {
         currentFileLines.add(line);
       }
     } catch (final IOException ioe) {
-      @SuppressWarnings("null") @NonNull final String message = ioe.getMessage();
+      final String message = BasicUtility.getMessage(ioe);
       throw new ChessApiRuntimeException(message);
     }
 

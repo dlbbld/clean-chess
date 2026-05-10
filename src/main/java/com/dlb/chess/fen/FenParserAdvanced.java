@@ -24,6 +24,7 @@ import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.FenRawValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
@@ -54,7 +55,7 @@ public class FenParserAdvanced implements EnumConstants {
     try {
       fenRaw = FenParserRaw.parseFenRaw(fen);
     } catch (final FenRawValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      final String message = BasicUtility.getMessage(e);
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FORMAT, message);
     }
 

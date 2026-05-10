@@ -12,6 +12,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
@@ -127,7 +128,7 @@ public final class LenientPgnParser {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK",
           pgnFile, NonNullWrapperCommon.copyOfList(parser.sanForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      final String message = BasicUtility.getMessage(e);
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
           message, null, e.getSanForgivenItemsAccumulated());
     } catch (final RuntimeException e) {
@@ -503,7 +504,7 @@ public final class LenientPgnParser {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
           // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
-          @SuppressWarnings("null") @NonNull final String message = pcve.getMessage();
+          final String message = BasicUtility.getMessage(pcve);
           throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               message);
         }
@@ -702,7 +703,7 @@ public final class LenientPgnParser {
       } catch (final LenientSanParserValidationException e) {
         final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
             halfMove.san());
-        @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
+        final String messageSanValidationFailure = BasicUtility.getMessage(e);
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
         final SanValidationProblem underlying = e.getUnderlyingSanValidationProblem();

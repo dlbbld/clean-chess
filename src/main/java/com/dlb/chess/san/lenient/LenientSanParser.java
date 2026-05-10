@@ -3,13 +3,13 @@ package com.dlb.chess.san.lenient;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.AbstractSan;
@@ -69,7 +69,7 @@ public final class LenientSanParser {
     try {
       moveSpecification = LenientSanRecover.parseWithRecovery(normalized, board, codes);
     } catch (final SanValidationException finalReject) {
-      @SuppressWarnings("null") @NonNull final String reason = finalReject.getMessage();
+      final String reason = BasicUtility.getMessage(finalReject);
       throw new LenientSanParserValidationException(
           Message.getString("validation.san.lenient.parseFailed", text, reason), text,
           finalReject.getSanValidationProblem(), finalReject.getGameStatus(), itemsWithoutCanonical(text, codes));

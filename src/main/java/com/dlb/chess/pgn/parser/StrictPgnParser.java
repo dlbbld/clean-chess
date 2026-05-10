@@ -13,6 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
@@ -103,7 +104,7 @@ public final class StrictPgnParser {
       parse(pgnFilePath);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
     } catch (final StrictPgnParserValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      final String message = BasicUtility.getMessage(e);
       return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
@@ -121,7 +122,7 @@ public final class StrictPgnParser {
       parseText(pgn);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
     } catch (final StrictPgnParserValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      final String message = BasicUtility.getMessage(e);
       return new StrictPgnParserValidationResult(e.getStrictPgnParserValidationProblem(), e.getSanValidationProblem(),
           message);
     } catch (final RuntimeException e) {
@@ -347,7 +348,7 @@ public final class StrictPgnParser {
         try {
           FenParserAdvanced.parseFenAdvanced(fen);
         } catch (final com.dlb.chess.common.exceptions.FenAdvancedValidationException e) {
-          @SuppressWarnings("null") @NonNull final String fenErrorReason = e.getMessage();
+          final String fenErrorReason = BasicUtility.getMessage(e);
           throw new StrictPgnParserValidationException(
               StrictPgnParserValidationProblem.TAG_SET_UP_REQUIRES_FEN_TAG_BUT_FEN_INVALID, SanValidationProblem.NONE,
               "The required FEN tag was provided but is invalid. The error message when parsing was \"" + fenErrorReason
@@ -460,7 +461,7 @@ public final class StrictPgnParser {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
           // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
-          @SuppressWarnings("null") @NonNull final String message = pcve.getMessage();
+          final String message = BasicUtility.getMessage(pcve);
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               message);
         }
@@ -651,7 +652,7 @@ public final class StrictPgnParser {
       } catch (final SanValidationException e) {
         final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
             halfMove.san());
-        @SuppressWarnings("null") @NonNull final String messageSanValidationFailure = e.getMessage();
+        final String messageSanValidationFailure = BasicUtility.getMessage(e);
         final var message = "The validation for " + moveNumberAndSan + " failed. Reason: "
             + messageSanValidationFailure;
         // Propagate GameStatus so callers can distinguish FIDE-automatic termination causes without parsing the
