@@ -1,12 +1,17 @@
 package com.dlb.chess.pgn.parser.exceptions;
 
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
 import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
 import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.model.ForgivenItem;
+import com.google.common.collect.ImmutableList;
 
+@SuppressWarnings("null")
 public class LenientPgnParserValidationException extends UsageException {
 
   private final LenientPgnParserValidationProblem lenientPgnParserValidationProblem;
@@ -22,9 +27,16 @@ public class LenientPgnParserValidationException extends UsageException {
    */
   private final @Nullable GameStatus gameStatus;
 
+  /**
+   * SAN-level forgiven items accumulated during movetext replay before the failure point. Empty if the failure
+   * occurred outside the movetext path (tag validation, structural error) or if no SAN deviation had been forgiven
+   * yet.
+   */
+  private final @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated;
+
   public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message) {
-    this(lenientPgnParserValidationProblem, sanValidationProblem, message, null);
+    this(lenientPgnParserValidationProblem, sanValidationProblem, message, null, ImmutableList.of());
   }
 
   /**
@@ -34,10 +46,21 @@ public class LenientPgnParserValidationException extends UsageException {
    */
   public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message, @Nullable GameStatus gameStatus) {
+    this(lenientPgnParserValidationProblem, sanValidationProblem, message, gameStatus, ImmutableList.of());
+  }
+
+  /**
+   * Constructor used when the failure occurs during movetext replay and SAN-level forgiven items have already been
+   * accumulated for earlier moves. Carries those items so callers can see partial diagnostic data on failure.
+   */
+  public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
+      SanValidationProblem sanValidationProblem, String message, @Nullable GameStatus gameStatus,
+      @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated) {
     super(message);
     this.lenientPgnParserValidationProblem = lenientPgnParserValidationProblem;
     this.sanValidationProblem = sanValidationProblem;
     this.gameStatus = gameStatus;
+    this.sanForgivenItemsAccumulated = NonNullWrapperCommon.copyOfList(sanForgivenItemsAccumulated);
   }
 
   public LenientPgnParserValidationProblem getLenientPgnParserValidationProblem() {
@@ -54,6 +77,10 @@ public class LenientPgnParserValidationException extends UsageException {
    */
   public @Nullable GameStatus getGameStatus() {
     return gameStatus;
+  }
+
+  public @NonNull ImmutableList<@NonNull ForgivenItem> getSanForgivenItemsAccumulated() {
+    return sanForgivenItemsAccumulated;
   }
 
 }

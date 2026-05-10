@@ -55,7 +55,7 @@ class TestFenParserAll extends AbstractTestFenParser {
 
     final ChessBoard board = new Board(pgnFile.startFen());
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-      board.performMove(halfMove.san());
+      board.moveStrict(halfMove.san());
     }
     final List<MoveSpecification> moveList = board.getPerformedMoveSpecificationList();
     checkGames(pgnFile.startFen().fen(), moveList, false);

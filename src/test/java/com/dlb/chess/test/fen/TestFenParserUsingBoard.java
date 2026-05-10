@@ -30,7 +30,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   void testAlongMovesExcludingHistory() {
     final ChessBoard boardMakeMoves = new Board();
 
-    boardMakeMoves.performMoves("d4", "d5", "Nc3", "Nf6", "Bf4", "a6", "e3", "b5", "Bd3", "e6", "Nf3", "c5", "O-O",
+    boardMakeMoves.movesStrict("d4", "d5", "Nc3", "Nf6", "Bf4", "a6", "e3", "b5", "Bd3", "e6", "Nf3", "c5", "O-O",
         "Bb7", "Ne5", "Nbd7", "a3", "Nxe5", "Bxe5", "Bd6", "f4", "O-O", "Qf3", "c4", "Be2", "Ne4", "Nxe4", "dxe4",
         "Qg4", "g6", "h4", "f5", "Qg3", "Bxe5", "fxe5", "Bd5", "c3", "a5", "Qh3", "h5", "Qg3", "Kh7", "Qg5", "Qxg5",
         "hxg5", "Rfb8", "Rfc1", "Ra7", "g3", "Kg7", "Kf2", "Kf7", "Ke1", "Ke7", "Kd2", "Rb6", "Ra2", "Rab7", "Raa1",
@@ -57,7 +57,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   @Test
   void testAlongMovesIncludingHistory() {
     final ChessBoard boardMakeMoves = new Board();
-    boardMakeMoves.performMoves("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "d6", "d4", "exd4", "cxd4", "Bxd4",
+    boardMakeMoves.movesStrict("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "d6", "d4", "exd4", "cxd4", "Bxd4",
         "Nxd4", "Nxd4", "O-O", "Nf6", "Re1", "Nxe4", "Nc3", "O-O");
 
     final List<MoveSpecification> moveList = boardMakeMoves.getPerformedMoveSpecificationList();

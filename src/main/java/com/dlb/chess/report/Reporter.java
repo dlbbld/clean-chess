@@ -29,8 +29,8 @@ import com.dlb.chess.report.print.RepetitionPrint;
 import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
 
 /**
- * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities), no-progress
- * (50/75-move-rule) sequences, and a printable summary — from a {@link ChessBoard} or a parsed PGN.
+ * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities),
+ * no-progress (50/75-move-rule) sequences, and a printable summary — from a {@link ChessBoard} or a parsed PGN.
  *
  * <p>
  * Two surfaces:
@@ -40,8 +40,7 @@ import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
  * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
  * inspection.</li>
  * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
- * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README
- * examples.</li>
+ * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README examples.</li>
  * </ul>
  *
  * <p>
@@ -75,28 +74,34 @@ public final class Reporter {
     printList(calculateReportLines(board));
   }
 
-  /** Returns the same human-readable report as {@link #printReport(String)} but as a single string, lines joined by
-   *  {@code "\n"}. Use this when the consumer is not stdout — web responses, file writes, GUI displays, etc. */
+  /**
+   * Returns the same human-readable report as {@link #printReport(String)} but as a single string, lines joined by
+   * {@code "\n"}. Use this when the consumer is not stdout — web responses, file writes, GUI displays, etc.
+   */
   public static String calculateReportText(String pgnString) {
     final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
     final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
     return calculateReportText(board);
   }
 
-  /** Returns the same human-readable report as {@link #printReport(Path, String)} but as a single string, lines
-   *  joined by {@code "\n"}. */
+  /**
+   * Returns the same human-readable report as {@link #printReport(Path, String)} but as a single string, lines joined
+   * by {@code "\n"}.
+   */
   public static String calculateReportText(Path folderPath, String pgnFileName) {
     final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateReportText(board);
   }
 
-  /** Returns the same human-readable report as {@link #printReport(ChessBoard)} but as a single string, lines joined
-   *  by {@code "\n"}. */
+  /**
+   * Returns the same human-readable report as {@link #printReport(ChessBoard)} but as a single string, lines joined by
+   * {@code "\n"}.
+   */
   public static String calculateReportText(ChessBoard board) {
-    return String.join("\n", calculateReportLines(board));
+    return NonNullWrapperCommon.join("\n", calculateReportLines(board));
   }
 
-  private static @NonNull List<String> calculateReportLines(ChessBoard board) {
+  private static List<String> calculateReportLines(ChessBoard board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
@@ -162,8 +167,8 @@ public final class Reporter {
     final List<List<HalfMove>> repetitionListListInitialEnPassantCapture = calculateRepetitionListListInitialEnPassantCapture(
         halfMoveList);
 
-    final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility.calculateNoProgressMoveRule(board,
-        ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
+    final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility
+        .calculateNoProgressMoveRule(board, ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
 
     final var hasThreefoldRepetition = !repetitionListList.isEmpty();
     final var hasThreefoldRepetitionInitialEnPassantCapture = !repetitionListListInitialEnPassantCapture.isEmpty();
@@ -186,9 +191,9 @@ public final class Reporter {
     }
 
     return new Report(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
-        noProgressMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture, hasFivefoldRepetition,
-        hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture, maxNoProgressSequence, checkmateOrStalemate,
-        insufficientMaterial, fen, board);
+        noProgressMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture,
+        hasFivefoldRepetition, hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture,
+        maxNoProgressSequence, checkmateOrStalemate, insufficientMaterial, fen, board);
   }
 
   public static boolean calculateIsHalfMoveTerminatesNoProgressSequence(HalfMove halfMove) {

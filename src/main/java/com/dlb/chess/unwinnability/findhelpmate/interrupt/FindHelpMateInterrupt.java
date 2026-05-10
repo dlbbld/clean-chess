@@ -54,7 +54,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
         && !board.isSeventyFiveMove()) {
 
       for (final LegalMove legalMove : board.getLegalMoveSet()) {
-        board.performMove(legalMove.moveSpecification());
+        board.move(legalMove.moveSpecification());
         if (IS_DEBUG) {
           final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(),
               legalMove.moveSpecification());
@@ -63,7 +63,7 @@ public class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
         mateList.add(legalMove);
         final var hasCheckmate = calculateHelpmate(board, c, currentDepth + 1, mateList);
-        board.unperformMove();
+        board.unmove();
         switch (hasCheckmate) {
           case TRUE -> {
             return FindHelpMateInterruptResult.TRUE;

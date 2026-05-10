@@ -36,7 +36,7 @@ class TestPgnExportBoard {
     final Board boardExpected = new Board();
     for (final String san : sanArray) {
       @SuppressWarnings("null") @NonNull final String sanIsNotNull = san;
-      boardExpected.performMove(sanIsNotNull);
+      boardExpected.moveStrict(sanIsNotNull);
     }
 
     final PgnFile boardExpectedPgnFile = PgnCreate.createPgnFile(boardExpected);

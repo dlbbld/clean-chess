@@ -138,9 +138,9 @@ class TestPawnWallUtility extends PawnWall {
       final ChessBoard board = new Board("4k3/8/8/8/p7/8/1P6/4K3 w - - 0 50");
 
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
-      board.performMove("b4");
+      board.moveStrict("b4");
       assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
-      board.performMove("Ke7");
+      board.moveStrict("Ke7");
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
     }
 
@@ -148,9 +148,9 @@ class TestPawnWallUtility extends PawnWall {
       final ChessBoard board = new Board("8/5p2/3k4/6P1/8/8/8/4K3 b - - 0 50");
 
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
-      board.performMove("f5");
+      board.moveStrict("f5");
       assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
-      board.performMove("Ke2");
+      board.moveStrict("Ke2");
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
     }
 

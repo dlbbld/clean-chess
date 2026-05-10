@@ -10,7 +10,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.CastlingCheckMapper;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidateCastling {
 
@@ -20,7 +20,7 @@ class TestSanValidateCastling {
   @Test
   void testNoRightKingMoved() {
     final ChessBoard board = new Board();
-    board.performMoves("e4", "e5", "Ke2", "d6", "Ke1", "d5");
+    board.movesStrict("e4", "e5", "Ke2", "d6", "Ke1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.KING_MOVED);
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT,
@@ -33,7 +33,7 @@ class TestSanValidateCastling {
   @Test
   void testNoRightKingSideRookMoved() {
     final ChessBoard board = new Board();
-    board.performMoves("h4", "e5", "Rh3", "d6", "Rh1", "d5");
+    board.movesStrict("h4", "e5", "Rh3", "d6", "Rh1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.ROOK_MOVED);
   }
@@ -42,8 +42,8 @@ class TestSanValidateCastling {
   @Test
   void testNoRightQueenSideRookMoved() {
     final ChessBoard board = new Board();
-    board.performMoves("a4", "e5", "Ra3", "d6", "Ra1", "d5");
-    board.performMoves("b3", "Nc6", "Bb2", "Be7", "Nc3", "Nf6", "Qc1", "a6");
+    board.movesStrict("a4", "e5", "Ra3", "d6", "Ra1", "d5");
+    board.movesStrict("b3", "Nc6", "Bb2", "Be7", "Nc3", "Nf6", "Qc1", "a6");
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.ROOK_MOVED);
   }
@@ -66,7 +66,7 @@ class TestSanValidateCastling {
   @Test
   void testSquaresNotEmpty() {
     final ChessBoard board = new Board();
-    board.performMoves("e4");
+    board.movesStrict("e4");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
         CastlingRightLoss.NOT_LOST);
     checkCastlingException("O-O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
@@ -105,7 +105,7 @@ class TestSanValidateCastling {
   private static void checkCastlingException(String san, ChessBoard board, CastlingCheck expectedCastlingCheck,
       CastlingRightLoss expectedLoss) {
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       throw new AssertionError("Expected SanValidationException");
     } catch (final SanValidationException e) {
       assertEquals(CastlingCheckMapper.map(expectedCastlingCheck, expectedLoss), e.getSanValidationProblem());

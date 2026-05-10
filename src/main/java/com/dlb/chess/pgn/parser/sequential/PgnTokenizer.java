@@ -216,7 +216,13 @@ public final class PgnTokenizer {
       }
       text.append((char) stream.read());
     }
-    return new PgnToken(PgnTokenType.TERMINATION_MARKER, NonNullWrapperCommon.toString(text), line, column);
+    final String result = NonNullWrapperCommon.toString(text);
+    // Lenient castling with digit zero ("0-0", "0-0-0") matches the digits-and-hyphens shape but is a SAN move,
+    // not a termination marker. The lenient SAN layer translates these to "O-O" / "O-O-O".
+    if ("0-0".equals(result) || "0-0-0".equals(result)) {
+      return new PgnToken(PgnTokenType.SYMBOL, result, line, column);
+    }
+    return new PgnToken(PgnTokenType.TERMINATION_MARKER, result, line, column);
   }
 
   private PgnToken readSymbol(int line, int column) {

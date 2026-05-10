@@ -22,7 +22,7 @@ class TestNoProgressMoveUtility {
     final var fenRookEndGame = "8/5k2/4rP2/8/8/8/8/6KR b - - 0 100";
     final Board board = new Board(fenRookEndGame);
 
-    board.performMoves("Kxf6", "Rh2", "Ke7", "Rh3", "Kd6", "Rh4", "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6",
+    board.movesStrict("Kxf6", "Rh2", "Ke7", "Rh3", "Kd6", "Rh4", "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6",
         "Rh8", "Kc6", "Rg8", "Kd6", "Rg7", "Kc6", "Rg6", "Kd6", "Rg5", "Kc6", "Rg4", "Kd6", "Rg3", "Kc6", "Rg2", "Kd6",
         "Rf2", "Kc6", "Rf3", "Kd6", "Rf4", "Kc6", "Rf5", "Kd6", "Rf6", "Kc6", "Rf7", "Kd6", "Rf8", "Kc6", "Kf1", "Kd6",
         "Rf7", "Kc6", "Rf6", "Kd6", "Rf5", "Kc6", "Rf4", "Kd6", "Rf3", "Kc6", "Rf2", "Kd6", "Rg2", "Kc6", "Rg3", "Kd6",
@@ -36,13 +36,13 @@ class TestNoProgressMoveUtility {
     final List<List<NoProgressHalfMove>> expectedListList = new ArrayList<>();
 
     final Board boardPlayAlong = new Board(fenRookEndGame);
-    boardPlayAlong.performMoves("Kxf6", "Rh2");
+    boardPlayAlong.movesStrict("Kxf6", "Rh2");
 
     final List<NoProgressHalfMove> noProgressHalfMoveList = new ArrayList<>();
     final NoProgressHalfMove firstNoProgressHalfMove = calculateNoProgressHalfMoveForLastMove(boardPlayAlong);
     noProgressHalfMoveList.add(firstNoProgressHalfMove);
 
-    boardPlayAlong.performMoves("Ke7", "Rh3", "Kd6", "Rh4", "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6", "Rh8",
+    boardPlayAlong.movesStrict("Ke7", "Rh3", "Kd6", "Rh4", "Kc6", "Rh5", "Kd6", "Rh6", "Kc6", "Rh7", "Kd6", "Rh8",
         "Kc6", "Rg8", "Kd6", "Rg7", "Kc6", "Rg6", "Kd6", "Rg5", "Kc6", "Rg4", "Kd6", "Rg3", "Kc6", "Rg2", "Kd6", "Rf2",
         "Kc6", "Rf3", "Kd6", "Rf4", "Kc6", "Rf5", "Kd6", "Rf6", "Kc6", "Rf7", "Kd6", "Rf8", "Kc6", "Kf1", "Kd6", "Rf7",
         "Kc6", "Rf6", "Kd6", "Rf5", "Kc6", "Rf4", "Kd6", "Rf3", "Kc6", "Rf2", "Kd6", "Rg2", "Kc6", "Rg3", "Kd6", "Rg4",

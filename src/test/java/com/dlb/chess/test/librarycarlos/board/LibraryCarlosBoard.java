@@ -16,10 +16,10 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -33,8 +33,6 @@ import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.Board;
@@ -45,6 +43,8 @@ import com.github.bhlangonijr.chesslib.move.MoveConversionException;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.github.bhlangonijr.chesslib.move.MoveList;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 public class LibraryCarlosBoard implements ChessBoard {
 
@@ -66,7 +66,7 @@ public class LibraryCarlosBoard implements ChessBoard {
   }
 
   @Override
-  public boolean performMove(MoveSpecification moveSpecification) {
+  public boolean move(MoveSpecification moveSpecification) {
     final Side havingMove = getHavingMove();
     final var result = board.doMove(MoveConversionUtility.convertMoveSpecification(havingMove, moveSpecification));
     populateMoveHistory(moveSpecification);
@@ -74,12 +74,20 @@ public class LibraryCarlosBoard implements ChessBoard {
   }
 
   @Override
-  public boolean performMove(String san) {
-
-    final var result = board.doMove(san);
+  public com.dlb.chess.san.model.StrictSanParserValidationResult moveStrict(String san) {
+    board.doMove(san);
     final MoveSpecification lastMoveSpecification = calculateLastMoveSpecification();
     populateMoveHistory(lastMoveSpecification);
-    return result;
+    return new com.dlb.chess.san.model.StrictSanParserValidationResult(lastMoveSpecification);
+  }
+
+  @Override
+  public com.dlb.chess.san.model.LenientSanParserValidationResult moveLenient(String san) {
+    // Carlos's chesslib doesn't have a lenient SAN concept; delegate to strict, then wrap into the lenient result
+    // shape with empty forgiven items. Cross-validation tests only need the move to land on the board.
+    final com.dlb.chess.san.model.StrictSanParserValidationResult strict = moveStrict(san);
+    return new com.dlb.chess.san.model.LenientSanParserValidationResult(strict.moveSpecification(),
+        com.dlb.chess.san.model.ForgivenItem.EMPTY_LIST);
   }
 
   private MoveSpecification calculateLastMoveSpecification() {
@@ -115,7 +123,7 @@ public class LibraryCarlosBoard implements ChessBoard {
   }
 
   @Override
-  public void unperformMove() {
+  public void unmove() {
     board.undoMove();
 
     performedHalfMoveCount--;
@@ -146,12 +154,12 @@ public class LibraryCarlosBoard implements ChessBoard {
   @Override
   public boolean canClaimThreefoldRepetitionRuleWithOwnMove() {
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      performMove(moveSpecification);
+      move(moveSpecification);
       if (isThreefoldRepetition()) {
-        unperformMove();
+        unmove();
         return true;
       }
-      unperformMove();
+      unmove();
     }
     return false;
   }
@@ -468,7 +476,8 @@ public class LibraryCarlosBoard implements ChessBoard {
     for (final MoveBackup moveBackup : moveBackupList) {
       final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
       final MoveSpecification moveSpecification = convertMove(board, move);
-      final Piece movingPiece = EnumConversionUtility.convertPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
+      final Piece movingPiece = EnumConversionUtility
+          .convertPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
       final Piece pieceCaptured = EnumConversionUtility
           .convertPiece(NonNullWrapperLibraryCarlos.getCapturedPiece(moveBackup));
       final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
@@ -564,12 +573,23 @@ public class LibraryCarlosBoard implements ChessBoard {
   }
 
   @Override
-  public boolean performMoves(String... sanArray) {
+  public boolean movesStrict(String... sanArray) {
     for (final String san : sanArray) {
       if (san == null) {
         throw new IllegalArgumentException();
       }
-      this.performMove(san);
+      this.moveStrict(san);
+    }
+    return true;
+  }
+
+  @Override
+  public boolean movesLenient(String... sanArray) {
+    for (final String san : sanArray) {
+      if (san == null) {
+        throw new IllegalArgumentException();
+      }
+      this.moveLenient(san);
     }
     return true;
   }

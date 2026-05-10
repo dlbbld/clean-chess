@@ -81,7 +81,7 @@ public class GeneratePythonTestCases implements EnumConstants {
 
         final ChessBoard boardPlayAlong = new Board();
         for (final HalfMove halfMove : report.halfMoveList()) {
-          boardPlayAlong.performMove(halfMove.moveSpecification());
+          boardPlayAlong.move(halfMove.moveSpecification());
           processPythonCodeLine("    board.push_san(\"" + halfMove.san() + "\")", counterList, codeLineList);
           final var isMadeByWhite = halfMove.havingMove().getIsWhite();
           if (isMadeByWhite && halfMove.fullMoveNumber() % PRINT_MOVES_INTERVAL == 0) {

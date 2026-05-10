@@ -52,7 +52,7 @@ public abstract class GeneralUtility {
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       final String san = halfMove.san();
-      board.performMove(san);
+      board.moveStrict(san);
     }
 
     return board;
@@ -70,7 +70,7 @@ public abstract class GeneralUtility {
     final var board = new Board();
 
     for (final HalfMove halfMove : halfMoveList) {
-      board.performMove(halfMove.moveSpecification());
+      board.move(halfMove.moveSpecification());
     }
 
     return board;

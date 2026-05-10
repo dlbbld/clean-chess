@@ -10,7 +10,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidatePawnFromSquare {
 
@@ -96,16 +96,16 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingTwoSquareWhiteAlreadyAdvanced() {
     {
       final ChessBoard board = new Board(FEN_BASE);
-      board.performMove("d4");
-      board.performMove("f5");
+      board.moveStrict("d4");
+      board.moveStrict("f5");
       checkException("d4", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE);
     }
     {
       final ChessBoard board = new Board(FEN_BASE);
-      board.performMove("d4");
-      board.performMove("f5");
-      board.performMove("d5");
-      board.performMove("f4");
+      board.moveStrict("d4");
+      board.moveStrict("f5");
+      board.moveStrict("d5");
+      board.moveStrict("f4");
       checkException("d4", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
     }
   }
@@ -131,19 +131,19 @@ class TestSanValidatePawnFromSquare {
   void testNonCapturingTwoSquareBlackAlreadyAdvanced() {
     {
       final ChessBoard board = new Board(FEN_BASE);
-      board.performMove("d4");
-      board.performMove("f5");
-      board.performMove("d5");
+      board.moveStrict("d4");
+      board.moveStrict("f5");
+      board.moveStrict("d5");
       checkException("f5", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE);
     }
 
     {
       final ChessBoard board = new Board(FEN_BASE);
-      board.performMove("d4");
-      board.performMove("f5");
-      board.performMove("d5");
-      board.performMove("f4");
-      board.performMove("d6");
+      board.moveStrict("d4");
+      board.moveStrict("f5");
+      board.moveStrict("d5");
+      board.moveStrict("f4");
+      board.moveStrict("d6");
       checkException("f5", board, SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
     }
 
@@ -194,7 +194,7 @@ class TestSanValidatePawnFromSquare {
   private static void checkValid(String san, ChessBoard board) {
     var isException = false;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isException = true;
     }
@@ -204,7 +204,7 @@ class TestSanValidatePawnFromSquare {
   private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

@@ -23,7 +23,7 @@ class TestSanValidateNonMovement extends AbstractTestSanValidate {
     checkExceptionNonMovement("Qd1d1", board);
     checkExceptionFormat("Ke1e1", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH, board);
 
-    board.performMove("e4");
+    board.moveStrict("e4");
 
     checkExceptionNonMovement("Ra8a8", board);
     checkExceptionNonMovement("Nb8b8", board);
@@ -31,51 +31,51 @@ class TestSanValidateNonMovement extends AbstractTestSanValidate {
     checkExceptionNonMovement("Qd8d8", board);
     checkExceptionFormat("Ke8e8", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH, board);
 
-    board.performMove("e5");
+    board.moveStrict("e5");
 
     // rooks after moved
-    board.performMove("a4");
-    board.performMove("h5");
-    board.performMove("Ra2");
-    board.performMove("Rh7");
+    board.moveStrict("a4");
+    board.moveStrict("h5");
+    board.moveStrict("Ra2");
+    board.moveStrict("Rh7");
     checkExceptionNonMovement("Ra2a2", board);
-    board.performMove("Ra3");
+    board.moveStrict("Ra3");
     checkExceptionNonMovement("Rh7h7", board);
-    board.performMove("Rh6");
+    board.moveStrict("Rh6");
 
     // knights after moved
-    board.performMove("Nc3");
-    board.performMove("Nf6");
+    board.moveStrict("Nc3");
+    board.moveStrict("Nf6");
     checkExceptionNonMovement("Nc3c3", board);
-    board.performMove("Nd5");
+    board.moveStrict("Nd5");
     checkExceptionNonMovement("Nf6f6", board);
-    board.performMove("Nxe4");
+    board.moveStrict("Nxe4");
 
     // bishops after moved
-    board.performMove("Bc4");
-    board.performMove("d6");
+    board.moveStrict("Bc4");
+    board.moveStrict("d6");
     checkExceptionNonMovement("Bc4c4", board);
-    board.performMove("Bf1");
-    board.performMove("Bd7");
-    board.performMove("Bc4");
+    board.moveStrict("Bf1");
+    board.moveStrict("Bd7");
+    board.moveStrict("Bc4");
     checkExceptionNonMovement("Bd7d7", board);
-    board.performMove("Bg4");
+    board.moveStrict("Bg4");
 
     // queens after moved
-    board.performMove("Qxg4");
-    board.performMove("Qd7");
+    board.moveStrict("Qxg4");
+    board.moveStrict("Qd7");
     checkExceptionNonMovement("Qg4g4", board);
-    board.performMove("Qh3");
+    board.moveStrict("Qh3");
     checkExceptionNonMovement("Qd7d7", board);
-    board.performMove("Qc6");
+    board.moveStrict("Qc6");
 
     // kings after moved
-    board.performMove("Kd1");
-    board.performMove("Kd8");
+    board.moveStrict("Kd1");
+    board.moveStrict("Kd8");
     checkExceptionFormat("Kd1d1", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH, board);
-    board.performMove("Ke2");
+    board.moveStrict("Ke2");
     checkExceptionFormat("Kd8d8", SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH, board);
-    board.performMove("Ke8");
+    board.moveStrict("Ke8");
 
   }
 

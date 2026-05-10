@@ -15,64 +15,64 @@ class TestSanCalculation implements EnumConstants {
   void test() {
     final ChessBoard board = new Board();
 
-    board.performMove("e4");
+    board.moveStrict("e4");
     assertEquals("e4", board.getSan());
 
-    board.performMove("d5");
+    board.moveStrict("d5");
     assertEquals("d5", board.getSan());
 
-    board.performMove("exd5");
+    board.moveStrict("exd5");
     assertEquals("exd5", board.getSan());
 
-    board.performMove("e5");
+    board.moveStrict("e5");
     assertEquals("e5", board.getSan());
 
-    board.performMove("dxe6");
+    board.moveStrict("dxe6");
     assertEquals("dxe6", board.getSan());
 
-    board.performMove("h6");
+    board.moveStrict("h6");
     assertEquals("h6", board.getSan());
 
-    board.performMove("exf7+");
+    board.moveStrict("exf7+");
     assertEquals("exf7+", board.getSan());
 
-    board.performMove("Ke7");
+    board.moveStrict("Ke7");
     assertEquals("Ke7", board.getSan());
 
-    board.performMove("fxg8=Q");
+    board.moveStrict("fxg8=Q");
     assertEquals("fxg8=Q", board.getSan());
 
-    board.performMove("h5");
+    board.moveStrict("h5");
     assertEquals("h5", board.getSan());
 
-    board.performMove("Qxh8");
+    board.moveStrict("Qxh8");
     assertEquals("Qxh8", board.getSan());
 
-    board.performMove("h4");
+    board.moveStrict("h4");
     assertEquals("h4", board.getSan());
 
-    board.performMove("g4");
+    board.moveStrict("g4");
     assertEquals("g4", board.getSan());
 
-    board.performMove("hxg3");
+    board.moveStrict("hxg3");
     assertEquals("hxg3", board.getSan());
 
-    board.performMove("a4");
+    board.moveStrict("a4");
     assertEquals("a4", board.getSan());
 
-    board.performMove("gxh2");
+    board.moveStrict("gxh2");
     assertEquals("gxh2", board.getSan());
 
-    board.performMove("a5");
+    board.moveStrict("a5");
     assertEquals("a5", board.getSan());
 
-    board.performMove("hxg1=Q");
+    board.moveStrict("hxg1=Q");
     assertEquals("hxg1=Q", board.getSan());
 
-    board.performMove("a6");
+    board.moveStrict("a6");
     assertEquals("a6", board.getSan());
 
-    board.performMove("Qxh1");
+    board.moveStrict("Qxh1");
     assertEquals("Qxh1", board.getSan());
 
   }

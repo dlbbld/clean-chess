@@ -133,15 +133,15 @@ class TestReadMe {
   void boardExampleEndsInCheckmate() {
     final Board board = new Board();
 
-    board.performMove("e4");
-    board.performMoves("e5", "Bc4");
+    board.moveStrict("e4");
+    board.movesStrict("e5", "Bc4");
 
     final var newMove = new MoveSpecification(Square.F8, Square.C5);
-    board.performMove(newMove);
+    board.move(newMove);
 
-    board.unperformMove();
+    board.unmove();
 
-    board.performMoves("Bc5", "Qf3", "h6", "Qxf7#");
+    board.movesStrict("Bc5", "Qf3", "h6", "Qxf7#");
 
     assertTrue(board.isCheckmate());
   }
@@ -177,7 +177,7 @@ class TestReadMe {
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
     final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
-    board.performMove("a3");
+    board.moveStrict("a3");
 
     assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
     assertEquals(6, pgnFile.halfMoveList().size());
@@ -244,7 +244,7 @@ class TestReadMe {
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
     final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
-    board.performMove("a3");
+    board.moveStrict("a3");
 
     assertEquals(6, pgnFile.halfMoveList().size());
   }
@@ -315,13 +315,40 @@ class TestReadMe {
 
         1. e4 e5   2. Nf3
         Nf6
-          3. Bc4 Bc5 4. X1
+          3. Bc4 Bc5 4. Y1
                 """;
     final LenientPgnParserValidationResult invalidResult = LenientPgnParser.validateText(invalidPgn);
     assertFalse(invalidResult.isValid());
     assertEquals(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
         invalidResult.problemParser());
     assertEquals(SanValidationProblem.NONE, invalidResult.problemSan());
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void lenientPgnSanTolerancesExampleReturnsExpectedForgivenItems() {
+    final var pgn = """
+        [Event "?"]
+        [Site "?"]
+        [Date "?"]
+        [Round "?"]
+        [White "?"]
+        [Black "?"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nc6 3. Bc4 Bc5 4. 0-0 nf6 *
+                """;
+    final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
+    assertTrue(result.isValid());
+    assertEquals(2, result.sanForgivenItems().size());
+    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
+        NonNullWrapperCommon.get(result.sanForgivenItems(), 0).code());
+    assertEquals("0-0", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).originalToken());
+    assertEquals("O-O", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).canonicalSan());
+    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
+        NonNullWrapperCommon.get(result.sanForgivenItems(), 1).code());
+    assertEquals("nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).originalToken());
+    assertEquals("Nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).canonicalSan());
   }
 
   @Test
@@ -367,7 +394,7 @@ class TestReadMe {
 
   private static Board createOpeningExampleBoard() {
     final Board board = new Board();
-    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+    board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
     return board;
   }
 

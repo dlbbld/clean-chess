@@ -62,7 +62,8 @@ public class TestFileUtility {
   void testWriteFileThrowsWhenParentFolderDoesNotExist(@TempDir Path tempFolder) {
     final Path filePath = NonNullWrapperCommon.pathResolve(tempFolder, "missing/output.txt");
 
-    final var exception = assertThrows(FileSystemAccessException.class, () -> FileUtility.writeFile(filePath, "text"));
+    @SuppressWarnings("null") final var exception = assertThrows(FileSystemAccessException.class,
+        () -> FileUtility.writeFile(filePath, "text"));
 
     assertTrue(exception.getCause() instanceof IOException);
   }

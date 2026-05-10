@@ -19,6 +19,8 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.san.model.LenientSanParserValidationResult;
+import com.dlb.chess.san.model.StrictSanParserValidationResult;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -30,13 +32,17 @@ import com.google.common.collect.ImmutableSet;
 
 public interface ChessBoard extends EnumConstants {
 
-  boolean performMove(MoveSpecification moveSpecification);
+  boolean move(MoveSpecification moveSpecification);
 
-  boolean performMove(String san);
+  StrictSanParserValidationResult moveStrict(String san);
 
-  boolean performMoves(String... sanArray);
+  LenientSanParserValidationResult moveLenient(String san);
 
-  void unperformMove();
+  boolean movesStrict(String... sanArray);
+
+  boolean movesLenient(String... sanArray);
+
+  void unmove();
 
   boolean isCheck();
 
@@ -117,8 +123,8 @@ public interface ChessBoard extends EnumConstants {
 
   /**
    * Quick (microsecond-scale, structural) CHA-based check whether the current position is dead — unwinnable for both
-   * sides. Three-valued: {@code DEAD_POSITION}, {@code NON_DEAD_POSITION}, {@code POSSIBLY_NON_DEAD_POSITION} (the third
-   * is a deliberate honesty signal — the quick algorithm is sound but not complete).
+   * sides. Three-valued: {@code DEAD_POSITION}, {@code NON_DEAD_POSITION}, {@code POSSIBLY_NON_DEAD_POSITION} (the
+   * third is a deliberate honesty signal — the quick algorithm is sound but not complete).
    */
   default DeadPositionQuick isDeadPositionQuick() {
     final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
@@ -237,9 +243,9 @@ public interface ChessBoard extends EnumConstants {
   default ImmutableSet<String> getLegalMovesSan() {
     final Set<String> result = new TreeSet<>();
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      this.performMove(moveSpecification);
+      this.move(moveSpecification);
       result.add(getSan());
-      this.unperformMove();
+      this.unmove();
     }
     return NonNullWrapperCommon.copyOfSet(result);
   }

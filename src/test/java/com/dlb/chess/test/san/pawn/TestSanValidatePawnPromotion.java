@@ -10,7 +10,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidatePawnPromotion {
 
@@ -147,7 +147,7 @@ class TestSanValidatePawnPromotion {
   private static void checkValid(String san, ChessBoard board) {
     var isException = false;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
     } catch (@SuppressWarnings("unused") final SanValidationException e) {
       isException = true;
     }
@@ -157,7 +157,7 @@ class TestSanValidatePawnPromotion {
   private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

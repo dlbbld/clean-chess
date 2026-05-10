@@ -5,10 +5,14 @@
  * on — see {@link com.dlb.chess.san.enums.SanValidationProblem}).
  *
  * <p>
- * The strict pipeline is the main entry point: {@code SanValidation.validateSan(san, board)} converts a SAN string
- * into a {@link com.dlb.chess.common.model.MoveSpecification}, throwing {@code SanValidationException} on any failure.
- * The same pipeline is reached from both the programmatic {@link com.dlb.chess.board.Board#performMove(String)} and
- * the lenient PGN parser's movetext path — one validation surface, used twice.
+ * Two parser entry points sit on top of a shared validation core:
+ * <ul>
+ * <li>{@link com.dlb.chess.san.validate.StrictSanParser#parseText(String, com.dlb.chess.common.interfaces.ChessBoard)}
+ * — canonical SAN only. Reached from {@link com.dlb.chess.board.Board#moveStrict(String)}.
+ * <li>{@link com.dlb.chess.san.lenient.LenientSanParser#parseText(String, com.dlb.chess.common.interfaces.ChessBoard)}
+ * — accepts a defined set of forgivable deviations from canonical SAN. Reached from
+ * {@link com.dlb.chess.board.Board#moveLenient(String)}. See {@code specification.md} §3.3.1 for the taxonomy.
+ * </ul>
  *
  * <p>
  * Generation goes the other direction: {@link com.dlb.chess.san.MoveToSan} produces canonical SAN for a played move
@@ -17,9 +21,7 @@
  *
  * <p>
  * Format-level checks live in {@link com.dlb.chess.san.validate.format}; movement-level (legal-move, king-safety)
- * checks live in {@link com.dlb.chess.san.validate.movement}. A future lenient-SAN release (see {@code tasks.md})
- * will add tolerance for things the strict pipeline rejects today: long algebraic input, zero-instead-of-O castling,
- * over-specified disambiguation, missing/wrong check suffixes, etc.
+ * checks live in {@link com.dlb.chess.san.validate.movement}.
  */
 @NonNullByDefault
 package com.dlb.chess.san;

@@ -90,7 +90,7 @@ class TestUciMoveUtility {
     final ChessBoard board = new Board();
 
     for (final UciMoveTest test : list) {
-      board.performMove(test.san());
+      board.moveStrict(test.san());
       final LegalMove lastMove = board.getLastMove();
       final MoveSpecification moveSpecification = lastMove.moveSpecification();
 
@@ -116,7 +116,7 @@ class TestUciMoveUtility {
       final UciMove moveModel = UciMoveValidationUtility.lookup(test.uciMoveStr());
       final MoveSpecification moveSpecificationActual = UciMoveUtility.convertUciMoveToMoveSpecification(board,
           moveModel);
-      board.performMove(test.san());
+      board.moveStrict(test.san());
 
       final MoveSpecification moveSpecificationExpected = board.getLastMove().moveSpecification();
       assertEquals(moveSpecificationExpected, moveSpecificationActual);
@@ -130,7 +130,7 @@ class TestUciMoveUtility {
       final UciMove uciMove = UciMoveValidationUtility.lookup(test.uciMoveStr());
       final String san = UciMoveUtility.convertUciMoveToSan(board, uciMove);
       assertEquals(test.san(), san);
-      board.performMove(test.san());
+      board.moveStrict(test.san());
     }
   }
 

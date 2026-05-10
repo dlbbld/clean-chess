@@ -93,13 +93,13 @@ class TestBoardUnperformMove {
       final String san = halfMove.san();
 
       // Test: perform then unperform on actual; it must return to the pre-move state.
-      actual.performMove(san);
-      actual.unperformMove();
+      actual.moveStrict(san);
+      actual.unmove();
       assertBoardsEqual(expected, actual, testCase.pgnFileName(), halfMoveIndex, san);
 
       // Advance both boards by the (now-unperformed) move so the next iteration starts in lockstep.
-      expected.performMove(san);
-      actual.performMove(san);
+      expected.moveStrict(san);
+      actual.moveStrict(san);
     }
     return halfMoveIndex;
   }

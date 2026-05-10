@@ -2,9 +2,45 @@
 
 Releases from 3.3 onward. Earlier history is in git tags only.
 
-The project is pre-major — releases are intermediate stabilization steps until the library reaches feature-maturity. Detail level here is deliberately modest; once the library hits major, this file will be more complete.
-
 ## [Unreleased]
+
+## [4.0.0] - 2026-05-10
+
+Lenient SAN release. New parser pipeline accepts a defined set of forgivable deviations from canonical SAN; the move-execution and parser API is renamed across the board to make the strict / lenient axis explicit at every call site.
+
+### Breaking — move execution
+- `Board.performMove(String)` → `Board.moveStrict(String)`; now returns `StrictSanParserValidationResult` (the resolved `MoveSpecification` is on the result) rather than `boolean`.
+- `Board.performMove(MoveSpecification)` → `Board.move(MoveSpecification)`; still returns `boolean`.
+- `Board.performMoves(String...)` → `Board.movesStrict(String...)`; still returns `boolean`.
+- `Board.unperformMove()` → `Board.unmove()`.
+- New `Board.moveLenient(String)` returns `LenientSanParserValidationResult` carrying the resolved `MoveSpecification` together with the list of forgiven SAN deviations.
+- `ChessBoard` interface methods renamed to match (`move`, `moveStrict`, `moveLenient`, `movesStrict`, `unmove`).
+
+### Breaking — SAN parser
+- `SanValidation` renamed to `StrictSanParser`. Entry-point method `validateSan(String, ChessBoard)` renamed to `parseText(String, ChessBoard)`. Return type changed from `MoveSpecification` to `StrictSanParserValidationResult` (one-field record); to keep the prior shape, append `.moveSpecification()`.
+
+### Migration
+For most callers, the change is mechanical:
+| Before | After |
+|---|---|
+| `board.performMove("e4")` | `board.moveStrict("e4")` |
+| `board.performMove(moveSpec)` | `board.move(moveSpec)` |
+| `board.performMoves("e4", "e5")` | `board.movesStrict("e4", "e5")` |
+| `board.performMoveLenient("nf3")` | `board.moveLenient("nf3")` |
+| `board.unperformMove()` | `board.unmove()` |
+| `SanValidation.validateSan(san, board)` | `StrictSanParser.parseText(san, board).moveSpecification()` |
+
+### Notable
+- New lenient SAN pipeline (`com.dlb.chess.san.lenient.LenientSanParser`) with a 21-code forgiven-item taxonomy: castling-with-zero, UCI / long-algebraic notation, explicit pawn letter, missing promotion equals, missing / spurious capture marker, six check / checkmate suffix mismatches, three over-specification cases, non-standard rank disambiguation, and four case-variation codes. Every accepted deviation surfaces as a typed `ForgivenItem` with the original token and the canonical-SAN equivalent — consumers can silently accept or warn. See `specification.md` §3.3.1.
+- `LenientPgnParser` now wires the lenient SAN pipeline into the movetext path. `LenientPgnParserValidationResult` gains `pgnFile` and `sanForgivenItems` fields; `validateText` is now the rich entry point that returns the parsed file alongside the validation status.
+- `LenientSanParserValidationException` carries `GameStatus` so the `GAME_ALREADY_ENDED` propagation works end-to-end through the PGN layer.
+- PGN tokenizer recognises `0-0` / `0-0-0` as castling SAN tokens rather than (invalid) termination markers.
+- README "Lenient PGN parser" section documents the SAN tolerances with a worked example.
+
+### Internal
+- Strict SAN pipeline reused unchanged for chess validation; the lenient layer is a thin input-shape transformer plus a strict-replay-with-recovery loop. Deliberately not recovered: mixed `0-O` castling, pawn `SPURIOUS_CAPTURE_MARKER` (no clean string mutation; recovery would silently swap the user's intended pawn), and game-already-ended (top-of-pipeline guard, identical to strict).
+
+## [3.3.0] - 2026-05-09
 
 Cleanup follow-through release. Documentation, naming, packaging, and design-consistency polish across the library.
 

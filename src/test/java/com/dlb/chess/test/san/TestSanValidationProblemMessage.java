@@ -15,7 +15,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 /**
  * Per-entry coverage for {@link SanValidationProblem}. For each enum constant that can be triggered from a SAN input,
@@ -387,7 +387,7 @@ class TestSanValidationProblemMessage {
   @Test
   void testExistsPawn() {
     final Board board = new Board();
-    board.performMoves("a4", "h6", "a5", "h5", "a6", "h4", "axb7", "h3");
+    board.movesStrict("a4", "h6", "a5", "h5", "a6", "h4", "axb7", "h3");
     checkException("a4", board, SanValidationProblem.EXISTS_PAWN, "There is no pawn on file a.");
   }
 
@@ -395,7 +395,7 @@ class TestSanValidationProblemMessage {
   @Test
   void testExistsRnbq() {
     final Board board = new Board();
-    board.performMoves("b3", "g6", "g3", "Bg7", "Na3", "Bxa1", "Nb1", "b6", "Na3", "Bb7", "Nb1", "Bxh1");
+    board.movesStrict("b3", "g6", "g3", "Bg7", "Na3", "Bxa1", "Nb1", "b6", "Na3", "Bb7", "Nb1", "Bxh1");
     checkException("Ra2", board, SanValidationProblem.EXISTS_RNBQ_NEITHER, "There is no rook on the board.");
     checkException("Nac3", SanValidationProblem.EXISTS_RNBQ_FILE, "There is no knight on file a.");
     checkException("Q3d4", SanValidationProblem.EXISTS_RNBQ_RANK, "There is no queen on rank 3.");
@@ -408,7 +408,7 @@ class TestSanValidationProblemMessage {
     // DESTINATION_PAWN_FORWARD_OWN_PIECE: after Nf3 Nf6, white's f-pawn tries to advance to f3 blocked by own knight
     {
       final Board board = new Board();
-      board.performMoves("Nf3", "Nf6");
+      board.movesStrict("Nf3", "Nf6");
       checkException("f3", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE,
           "The pawn cannot move forward to square f3 because it is occupied by an own piece.");
     }
@@ -423,7 +423,7 @@ class TestSanValidationProblemMessage {
     // DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_NOT_KING: after d4 d5, white's d-pawn tries d5 blocked by black pawn
     {
       final Board board = new Board();
-      board.performMoves("d4", "d5");
+      board.movesStrict("d4", "d5");
       checkException("d5", board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_NOT_KING,
           "The pawn cannot move forward to square d5 because it is occupied by an opponent piece; pawns cannot capture by moving forward.");
     }
@@ -431,7 +431,7 @@ class TestSanValidationProblemMessage {
     // DESTINATION_PAWN_CAPTURE_OWN_PIECE: after Nc3 a6, white's b-pawn tries bxc3 onto own knight
     {
       final Board board = new Board();
-      board.performMoves("Nc3", "a6");
+      board.movesStrict("Nc3", "a6");
       checkException("bxc3", board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_OWN_PIECE,
           "The pawn cannot capture on square c3 because it is occupied by an own piece.");
     }
@@ -478,7 +478,7 @@ class TestSanValidationProblemMessage {
 
     {
       final Board board = new Board();
-      board.performMoves("Nc3", "e6", "Nb5", "e5");
+      board.movesStrict("Nc3", "e6", "Nb5", "e5");
 
       checkException("Na7", board, SanValidationProblem.DESTINATION_RNBQK_OPPONENT_NON_KING_NO_CAPTURE_SYMBOL,
           "The move captures an opponent piece on square a7 but has not capture symbol.");
@@ -495,7 +495,7 @@ class TestSanValidationProblemMessage {
     // KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED: white king moved to e2 and back; O-O fails.
     {
       final Board board = new Board();
-      board.performMoves("e4", "e5", "Ke2", "d6", "Ke1", "d5");
+      board.movesStrict("e4", "e5", "Ke2", "d6", "Ke1", "d5");
       checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED,
           "King-side castling is not possible anymore because the king has moved.");
     }
@@ -503,7 +503,7 @@ class TestSanValidationProblemMessage {
     // KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED: white king-side rook moved to h3 and back; O-O fails.
     {
       final Board board = new Board();
-      board.performMoves("h4", "e5", "Rh3", "d6", "Rh1", "d5");
+      board.movesStrict("h4", "e5", "Rh3", "d6", "Rh1", "d5");
       checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED,
           "King-side castling is not possible anymore because the king-side rook has moved.");
     }
@@ -512,7 +512,7 @@ class TestSanValidationProblemMessage {
     // Bxg2-Bxh1. White then attempts O-O — king-side rook has been captured.
     {
       final Board board = new Board();
-      board.performMoves("a3", "b6", "a4", "Bb7", "a5", "Bxg2", "a6", "Bxh1");
+      board.movesStrict("a3", "b6", "a4", "Bb7", "a5", "Bxg2", "a6", "Bxh1");
       checkException("O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_CAPTURED,
           "King-side castling is not possible anymore because the king-side rook has been captured.");
     }
@@ -521,7 +521,7 @@ class TestSanValidationProblemMessage {
     // tries O-O-O — all castling rights are lost via having already castled.
     {
       final Board board = new Board();
-      board.performMoves("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6");
+      board.movesStrict("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6");
       checkException("O-O-O", board, SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_CASTLED,
           "Queen-side castling is not possible anymore because the king has already castled.");
     }
@@ -987,7 +987,7 @@ class TestSanValidationProblemMessage {
       String expectedMessage) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

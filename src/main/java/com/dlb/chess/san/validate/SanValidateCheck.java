@@ -63,7 +63,7 @@ public abstract class SanValidateCheck extends AbstractSan {
 
   private static SanTerminalMarker calculateBoardSanTerminalMarker(ChessBoard board,
       MoveSpecification moveSpecification) {
-    board.performMove(moveSpecification);
+    board.move(moveSpecification);
 
     SanTerminalMarker sanTerminalMarker;
     if (board.isCheckmate()) {
@@ -73,7 +73,7 @@ public abstract class SanValidateCheck extends AbstractSan {
     } else {
       sanTerminalMarker = SanTerminalMarker.NONE;
     }
-    board.unperformMove();
+    board.unmove();
 
     return sanTerminalMarker;
   }

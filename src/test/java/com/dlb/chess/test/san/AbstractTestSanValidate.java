@@ -7,7 +7,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 public abstract class AbstractTestSanValidate implements EnumConstants {
 
@@ -38,7 +38,7 @@ public abstract class AbstractTestSanValidate implements EnumConstants {
   private static void checkException(String san, ChessBoard board, SanValidationProblem problem) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

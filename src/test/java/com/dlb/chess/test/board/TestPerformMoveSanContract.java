@@ -11,7 +11,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
@@ -19,7 +19,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 
 /**
  * Verifies the SAN ↔ MoveSpecification consistency that {@link com.dlb.chess.board.Board#performMove(String)
- * Board.performMove(String)} relies on: once {@link SanValidation#validateSan SanValidation.validateSan} has produced a
+ * Board.moveStrict(String)} relies on: once {@link SanValidation#validateSan SanValidation.validateSan} has produced a
  * MoveSpecification from a SAN, that MoveSpec is the canonical representation of the move and round-trips both ways.
  * The board therefore performs the move with no further re-validation of the spec.
  *
@@ -27,7 +27,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  *
  * <p>
  * For each halfmove of each PGN: derive the MoveSpec via {@code validateSan(san, board)} <em>before</em> performing,
- * then perform via {@code board.performMove(san)} and assert:
+ * then perform via {@code board.moveStrict(san)} and assert:
  *
  * <ol>
  * <li>the derived MoveSpec equals the legal move that was actually played
@@ -91,10 +91,10 @@ class TestPerformMoveSanContract {
       final var hmi = halfMoveIndex;
       final String expectedProvidedSan = halfMove.san();
 
-      final MoveSpecification expectedCalculatedMoveSpecification = SanValidation.validateSan(expectedProvidedSan,
-          board);
+      final MoveSpecification expectedCalculatedMoveSpecification = StrictSanParser
+          .parseText(expectedProvidedSan, board).moveSpecification();
 
-      board.performMove(expectedProvidedSan);
+      board.moveStrict(expectedProvidedSan);
 
       final MoveSpecification actualStoredMoveSpecification = board.getLastMove().moveSpecification();
       assertEquals(expectedCalculatedMoveSpecification, actualStoredMoveSpecification,
@@ -118,13 +118,13 @@ class TestPerformMoveSanContract {
     final ChessBoard board = new Board(pgnFile.startFen());
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-      board.performMove(halfMove.san());
+      board.moveStrict(halfMove.san());
       final MoveSpecification expectedStoredMoveSpecification = board.getLastMove().moveSpecification();
       final String calculatedSan = board.getSan();
-      board.unperformMove();
-      final MoveSpecification actualCalculatedMoveSpecification = SanValidation.validateSan(calculatedSan, board);
+      board.unmove();
+      final MoveSpecification actualCalculatedMoveSpecification = StrictSanParser.parseText(calculatedSan, board).moveSpecification();
       assertEquals(expectedStoredMoveSpecification, actualCalculatedMoveSpecification);
-      board.performMove(halfMove.san());
+      board.moveStrict(halfMove.san());
     }
   }
 

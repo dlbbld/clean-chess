@@ -68,13 +68,13 @@ class TestStrictPgnParserFromCustomPosition {
     final ChessBoard boardFromFen = new Board(pgnFile.startFen());
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-      boardFromFen.performMove(halfMove.san());
+      boardFromFen.moveStrict(halfMove.san());
     }
 
     final ChessBoard boardFromFirstMove = new Board();
     for (final String san : hardCodedCompleteSanList) {
       @SuppressWarnings("null") @NonNull final String nonNullSan = san;
-      boardFromFirstMove.performMove(nonNullSan);
+      boardFromFirstMove.moveStrict(nonNullSan);
     }
 
     CommonTestUtility.checkBoardsAgainstEachOtherExcludeHistory(boardFromFirstMove, boardFromFen);

@@ -34,7 +34,7 @@ class TestStaticPosition {
 
     final Board board = new Board();
 
-    board.performMoves("e4", "e5", "Bc4", "Bc5", "Nf3", "Nc6");
+    board.movesStrict("e4", "e5", "Bc4", "Bc5", "Nf3", "Nc6");
 
     final var expected = """
         r.bqk.nr

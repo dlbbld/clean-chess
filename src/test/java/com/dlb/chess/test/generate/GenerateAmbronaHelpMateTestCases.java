@@ -108,7 +108,7 @@ public class GenerateAmbronaHelpMateTestCases {
       // play the existing moves
       final Board board = new Board();
       for (final HalfMove halfMove : report.halfMoveList()) {
-        board.performMove(halfMove.moveSpecification());
+        board.move(halfMove.moveSpecification());
       }
 
       // play the helpmating moves
@@ -117,7 +117,7 @@ public class GenerateAmbronaHelpMateTestCases {
       for (@NonNull final String uciMoveStr : uciMoveStrList) {
         final UciMove uciMove = UciMoveValidationUtility.lookup(uciMoveStr);
         final MoveSpecification moveSpecification = UciMoveUtility.convertUciMoveToMoveSpecification(board, uciMove);
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
       }
 
       // write the file

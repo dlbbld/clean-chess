@@ -14,7 +14,7 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
     final ChessBoard board = new Board("8/3k4/3r4/R7/4K3/8/8/R7 b - - 0 1");
 
     checkExceptionRnbqkMovingOntoOwnPiece("Rd6", board);
-    board.performMoves("Rc6");
+    board.movesStrict("Rc6");
     // rook
     checkExceptionRnbqkMovingOntoOwnPiece("Ra1", board);
   }
@@ -40,8 +40,8 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
     // king
     checkExceptionRnbqkCapturingOwnPiece("Kxf1", board);
 
-    board.performMoves("Nc3");
-    board.performMoves("a6");
+    board.movesStrict("Nc3");
+    board.movesStrict("a6");
 
     // pawn
     checkExceptionPawnCaptureOwnPiece("bxc3", board);
@@ -52,7 +52,7 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
   void testBlack() {
 
     final ChessBoard board = new Board();
-    board.performMoves("e4");
+    board.movesStrict("e4");
 
     // rook
     checkExceptionRnbqkCapturingOwnPiece("Rxa7", board);
@@ -69,8 +69,8 @@ class TestSanValidateMovingOntoOwnPiece extends AbstractTestSanValidate {
     // king
     checkExceptionRnbqkCapturingOwnPiece("Kxf7", board);
 
-    board.performMoves("Nc6");
-    board.performMoves("d4");
+    board.movesStrict("Nc6");
+    board.movesStrict("d4");
 
     // pawn
     checkExceptionPawnCaptureOwnPiece("bxc6", board);

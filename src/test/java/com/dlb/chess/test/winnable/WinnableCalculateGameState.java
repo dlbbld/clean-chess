@@ -21,14 +21,14 @@ public class WinnableCalculateGameState {
 
     for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
-      board.performMove(firstHalfMove.moveSpecification());
+      board.move(firstHalfMove.moveSpecification());
       final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
       if (addMoveEvaluationMadeTheMove(moveEvaluation, gameStatusSet)) {
         // early return for found other, only interested in game ended or insufficient material oppponent
-        board.unperformMove();
+        board.unmove();
         return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
       }
-      board.unperformMove();
+      board.unmove();
     }
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
@@ -40,14 +40,14 @@ public class WinnableCalculateGameState {
 
     for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
-      board.performMove(firstHalfMove.moveSpecification());
+      board.move(firstHalfMove.moveSpecification());
       final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
       if (addMoveEvaluationNotMadeTheMove(moveEvaluation, gameStatusSet)) {
         // early return for found other, only interested in game ended or insufficient material oppponent
-        board.unperformMove();
+        board.unmove();
         return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
       }
-      board.unperformMove();
+      board.unmove();
     }
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
   }
@@ -59,27 +59,27 @@ public class WinnableCalculateGameState {
 
     for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
-      board.performMove(firstHalfMove.moveSpecification());
+      board.move(firstHalfMove.moveSpecification());
       // If the first move creates a FIDE-automatic termination, the strict pipeline rejects
       // any further move from this position. The terminal status is already informative for
       // the analyzer; skip deeper exploration from this branch.
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
-        board.unperformMove();
+        board.unmove();
         continue;
       }
       for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
         countEvaluatedPositions++;
-        board.performMove(secondHalfMove.moveSpecification());
+        board.move(secondHalfMove.moveSpecification());
         final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
         if (addMoveEvaluationMadeTheMove(moveEvaluation, gameStatusSet)) {
           // early return for found other, only interested in game ended or insufficient material oppponent
-          board.unperformMove();
-          board.unperformMove();
+          board.unmove();
+          board.unmove();
           return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
         }
-        board.unperformMove();
+        board.unmove();
       }
-      board.unperformMove();
+      board.unmove();
     }
 
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
@@ -92,25 +92,25 @@ public class WinnableCalculateGameState {
 
     for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
-      board.performMove(firstHalfMove.moveSpecification());
+      board.move(firstHalfMove.moveSpecification());
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
-        board.unperformMove();
+        board.unmove();
         continue;
       }
       for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
 
         countEvaluatedPositions++;
-        board.performMove(secondHalfMove.moveSpecification());
+        board.move(secondHalfMove.moveSpecification());
         final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
         if (addMoveEvaluationNotMadeTheMove(moveEvaluation, gameStatusSet)) {
           // early return for found other, only interested in game ended or insufficient material oppponent
-          board.unperformMove();
-          board.unperformMove();
+          board.unmove();
+          board.unmove();
           return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
         }
-        board.unperformMove();
+        board.unmove();
       }
-      board.unperformMove();
+      board.unmove();
     }
 
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
@@ -123,35 +123,35 @@ public class WinnableCalculateGameState {
 
     for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
-      board.performMove(firstHalfMove.moveSpecification());
+      board.move(firstHalfMove.moveSpecification());
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
-        board.unperformMove();
+        board.unmove();
         continue;
       }
       for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
         countEvaluatedPositions++;
-        board.performMove(secondHalfMove.moveSpecification());
+        board.move(secondHalfMove.moveSpecification());
         if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
-          board.unperformMove();
+          board.unmove();
           continue;
         }
         for (final LegalMove thirdHalfMove : board.getLegalMoveSet()) {
 
           countEvaluatedPositions++;
-          board.performMove(thirdHalfMove.moveSpecification());
+          board.move(thirdHalfMove.moveSpecification());
           final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
           if (addMoveEvaluationMadeTheMove(moveEvaluation, gameStatusSet)) {
             // early return for found other, only interested in game ended or insufficient material oppponent
-            board.unperformMove();
-            board.unperformMove();
-            board.unperformMove();
+            board.unmove();
+            board.unmove();
+            board.unmove();
             return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
           }
-          board.unperformMove();
+          board.unmove();
         }
-        board.unperformMove();
+        board.unmove();
       }
-      board.unperformMove();
+      board.unmove();
     }
 
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
@@ -164,35 +164,35 @@ public class WinnableCalculateGameState {
 
     for (final LegalMove firstHalfMove : board.getLegalMoveSet()) {
       countEvaluatedPositions++;
-      board.performMove(firstHalfMove.moveSpecification());
+      board.move(firstHalfMove.moveSpecification());
       if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
-        board.unperformMove();
+        board.unmove();
         continue;
       }
       for (final LegalMove secondHalfMove : board.getLegalMoveSet()) {
         countEvaluatedPositions++;
-        board.performMove(secondHalfMove.moveSpecification());
+        board.move(secondHalfMove.moveSpecification());
         if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
-          board.unperformMove();
+          board.unmove();
           continue;
         }
         for (final LegalMove thirdHalfMove : board.getLegalMoveSet()) {
 
           countEvaluatedPositions++;
-          board.performMove(thirdHalfMove.moveSpecification());
+          board.move(thirdHalfMove.moveSpecification());
           final GameStatus moveEvaluation = BasicChessUtility.calculateGameStatus(board);
           if (addMoveEvaluationNotMadeTheMove(moveEvaluation, gameStatusSet)) {
             // early return for found other, only interested in game ended or insufficient material oppponent
-            board.unperformMove();
-            board.unperformMove();
-            board.unperformMove();
+            board.unmove();
+            board.unmove();
+            board.unmove();
             return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
           }
-          board.unperformMove();
+          board.unmove();
         }
-        board.unperformMove();
+        board.unmove();
       }
-      board.unperformMove();
+      board.unmove();
     }
 
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
@@ -205,7 +205,7 @@ public class WinnableCalculateGameState {
     while (board.getLegalMoveSet().size() == 1) {
       countForcedHalfMoves++;
       final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
-      board.performMove(legalMove.moveSpecification());
+      board.move(legalMove.moveSpecification());
       final GameStatus evaluation = BasicChessUtility.calculateGameStatus(board);
       switch (BasicChessUtility.calculateGameStatus(board)) {
         case CHECKMATE:
@@ -217,7 +217,7 @@ public class WinnableCalculateGameState {
         case STALEMATE:
           final Side sideMadeLastMove = board.getHavingMove().getOppositeSide();
           for (var i = 1; i <= countForcedHalfMoves; i++) {
-            board.unperformMove();
+            board.unmove();
           }
           return new GameForced(evaluation, countForcedHalfMoves, sideMadeLastMove);
         case ONGOING:
@@ -229,7 +229,7 @@ public class WinnableCalculateGameState {
 
     final Side sideMadeLastMove = board.getHavingMove().getOppositeSide();
     for (var i = 1; i <= countForcedHalfMoves; i++) {
-      board.unperformMove();
+      board.unmove();
     }
     return new GameForced(GameStatus.ONGOING, countForcedHalfMoves, sideMadeLastMove);
   }
