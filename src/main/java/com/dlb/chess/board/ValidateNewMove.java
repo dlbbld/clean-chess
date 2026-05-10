@@ -1,8 +1,5 @@
 package com.dlb.chess.board;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
@@ -23,7 +20,6 @@ import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
-import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
 public class ValidateNewMove implements EnumConstants {
@@ -219,14 +215,6 @@ public class ValidateNewMove implements EnumConstants {
       case NON_KING_EXPOSED_TO_CHECK -> "it would expose the own king to check";
       case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS has no message");
     };
-  }
-
-  public static Set<MoveSpecification> calculateMoveSpecifications(Set<LegalMove> legalMoveSet) {
-    final Set<MoveSpecification> result = new TreeSet<>();
-    for (final LegalMove legalMove : legalMoveSet) {
-      result.add(legalMove.moveSpecification());
-    }
-    return result;
   }
 
 }

@@ -92,8 +92,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
     final Set<LegalMove> legalMovesActual = board.getLegalMoveSet();
 
-    final Set<MoveSpecification> moveSpecificationsBottomUp = ValidateNewMove
-        .calculateMoveSpecifications(legalMovesActual);
+    final Set<MoveSpecification> moveSpecificationsBottomUp = toMoveSpecifications(legalMovesActual);
 
     final Set<MoveSpecification> moveSpecificationsFromValidation = calculateMoveSpecificationsFromValidation(board);
 
@@ -176,6 +175,14 @@ class TestLegalMovesAgainstCreatedUsingValidation {
       }
     }
     return listForSquare;
+  }
+
+  private static Set<MoveSpecification> toMoveSpecifications(Set<LegalMove> legalMoveSet) {
+    final Set<MoveSpecification> result = new TreeSet<>();
+    for (final LegalMove legalMove : legalMoveSet) {
+      result.add(legalMove.moveSpecification());
+    }
+    return result;
   }
 
 }

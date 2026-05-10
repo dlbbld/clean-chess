@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
-import com.dlb.chess.board.ValidateNewMove;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -4934,8 +4933,16 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
   }
 
   private static void check(Set<MoveSpecification> expected, Set<LegalMove> calculatedLegalMoveSet) {
-    final Set<MoveSpecification> actual = ValidateNewMove.calculateMoveSpecifications(calculatedLegalMoveSet);
+    final Set<MoveSpecification> actual = toMoveSpecifications(calculatedLegalMoveSet);
     assertEquals(expected, actual);
+  }
+
+  private static Set<MoveSpecification> toMoveSpecifications(Set<LegalMove> legalMoveSet) {
+    final Set<MoveSpecification> result = new TreeSet<>();
+    for (final LegalMove legalMove : legalMoveSet) {
+      result.add(legalMove.moveSpecification());
+    }
+    return result;
   }
 
   private static void checkExceptionRook(StaticPosition staticPosition, Side havingMove, Square fromSquare) {
