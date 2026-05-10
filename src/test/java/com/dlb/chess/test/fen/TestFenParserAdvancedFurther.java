@@ -7,9 +7,8 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.FenAdvancedFurtherValidationProblem;
 import com.dlb.chess.fen.FenParserAdvanced;
-import com.dlb.chess.test.fen.FenParserAdvancedFurther;
-import com.dlb.chess.test.fen.exception.FenAdvancedFurtherValidationException;
 import com.dlb.chess.fen.model.Fen;
+import com.dlb.chess.test.fen.exception.FenAdvancedFurtherValidationException;
 
 class TestFenParserAdvancedFurther implements EnumConstants {
 

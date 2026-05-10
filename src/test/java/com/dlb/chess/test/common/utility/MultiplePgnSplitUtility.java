@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 
 public final class MultiplePgnSplitUtility {
 
