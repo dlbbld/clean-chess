@@ -3,8 +3,8 @@ package com.dlb.chess.pgn.parser.model;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 
 /**
- * Value object for PGN commentary content. Construction validates the contract — see specification.md
- * (Commentary contract).
+ * Value object for PGN commentary content. Construction validates the contract — see specification.md (Commentary
+ * contract).
  */
 public record PgnCommentary(String value) {
 
@@ -27,9 +27,7 @@ public record PgnCommentary(String value) {
       // LF at the parser input, so the model invariant is "no CR ever".
       if (cp != '\t' && cp != '\n') {
         final int type = Character.getType(cp);
-        if (type == Character.CONTROL
-            || type == Character.SURROGATE
-            || type == Character.UNASSIGNED
+        if (type == Character.CONTROL || type == Character.SURROGATE || type == Character.UNASSIGNED
             || type == Character.PRIVATE_USE) {
           throw new PgnCommentaryValidationException(formatTypeProblem(value, i, cp, type));
         }
@@ -40,8 +38,8 @@ public record PgnCommentary(String value) {
   }
 
   private static String formatBraceProblem(String value, int index) {
-    return "PGN commentary must not contain closing brace (at index " + index + " of: \""
-        + summarizeForError(value) + "\").";
+    return "PGN commentary must not contain closing brace (at index " + index + " of: \"" + summarizeForError(value)
+        + "\").";
   }
 
   private static String formatTypeProblem(String value, int index, int cp, int type) {
@@ -52,9 +50,8 @@ public record PgnCommentary(String value) {
       case Character.PRIVATE_USE -> "a private-use code point";
       default -> "an invalid character";
     };
-    return "PGN commentary must not contain " + typeLabel
-        + " (U+" + String.format("%04X", cp) + " at index " + index + " of: \""
-        + summarizeForError(value) + "\").";
+    return "PGN commentary must not contain " + typeLabel + " (U+" + String.format("%04X", cp) + " at index " + index
+        + " of: \"" + summarizeForError(value) + "\").";
   }
 
   private static String summarizeForError(String value) {

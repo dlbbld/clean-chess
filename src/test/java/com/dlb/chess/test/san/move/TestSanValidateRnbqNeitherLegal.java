@@ -51,53 +51,63 @@ class TestSanValidateRnbqNeitherLegal {
     // white
     // white rook
     board.movesStrict("a4", "a5", "h4", "h5", "Ra3", "Ra6");
-    checkException(board, "Rh3", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Rh3",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Rah3");
     // black rook
-    checkException(board, "Rh6", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Rh6",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Rah6");
 
     // white knight
     board.movesStrict("Nc3", "Nc6", "Nf3", "Nf6", "Nd4", "Nd5");
-    checkException(board, "Nb5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Nb5",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Ncb5");
     // black knight
-    checkException(board, "Nb4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Nb4",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Ncb4");
 
     // white bishop
     board.movesStrict("f4", "c5", "f5", "c4", "f6", "c3", "fxg7", "cxb2", "gxh8=B", "e6", "d3", "Bd6", "Bd2", "Ke7",
         "Qa1", "bxa1=B", "Bxh6", "Bxd4");
-    checkException(board, "Bg7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Bg7",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("B6g7");
     // black bishop
-    checkException(board, "Be5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Be5",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("B4e5");
 
     // white queen
     board.movesStrict("c4", "f5", "cxd5", "f4", "dxe6", "f3", "exd7", "fxg2", "dxc8=Q", "gxh1=Q", "d4", "Qe4", "dxe5",
         "Kf7", "exd6");
-    checkException(board, "Qxh4+", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Qxh4+",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Qdxh4+");
     board.movesStrict("Kd1", "Na2", "d7", "Nb4", "d8=Q", "Nc2", "Na7", "Kg6", "Nb5", "Kh7", "Qdc7");
     // black queen
-    checkException(board, "Qf4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Qf4",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Qhf4");
     // white queen
-    checkException(board, "Qd7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Qd7",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Q8d7");
     board.movesStrict("Qfe3", "Qf7");
     // black queen
-    checkException(board, "Qf4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
+    checkException(board, "Qf4",
+        SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
     board.moveStrict("Q4f4");
   }

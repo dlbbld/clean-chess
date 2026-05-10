@@ -85,7 +85,8 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertFalse(board.isStalemate());
   }
 
-  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, ChessBoard board) {
+  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece,
+      ChessBoard board) {
     assertTrue(board.isCapture());
     assertFalse(board.isCheckmate());
     assertFalse(board.isStalemate());

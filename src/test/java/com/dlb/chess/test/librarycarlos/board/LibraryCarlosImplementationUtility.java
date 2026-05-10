@@ -102,7 +102,8 @@ public abstract class LibraryCarlosImplementationUtility {
       final Square enPassantCaptureDestination = LibraryCarlosImplementationUtility
           .calculateEnPassantCaptureDestination(moveTwoSquareAdvanceTo);
 
-      return LibraryCarlosImplementationUtility.calculateIsLegalMoveEnPassantCapture(board, enPassantCaptureDestination);
+      return LibraryCarlosImplementationUtility.calculateIsLegalMoveEnPassantCapture(board,
+          enPassantCaptureDestination);
     }
     return false;
   }

@@ -35,7 +35,8 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
     final var fenFilePathAmbronaResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH,
         FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
-    final var fenFilePathMineResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT_QUICK);
+    final var fenFilePathMineResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH,
+        FEN_FILE_NAME_MINE_RESULT_QUICK);
 
     final var fenFilePathCompareQuick = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_COMPARE_QUICK);
 

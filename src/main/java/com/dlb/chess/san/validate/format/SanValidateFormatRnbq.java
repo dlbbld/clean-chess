@@ -35,9 +35,9 @@ import com.dlb.chess.san.model.SanParse;
  *
  * <p>
  * The parser does a character-by-character walk and branches at each point where the grammar is ambiguous. It never
- * commits to a disambiguation form until the next character makes the branch unambiguous, or until the SAN ends and
- * the shorter valid form is complete. Each failure is reported with the most specific
- * {@link SanValidationProblem} describing which character is missing or wrong.
+ * commits to a disambiguation form until the next character makes the branch unambiguous, or until the SAN ends and the
+ * shorter valid form is complete. Each failure is reported with the most specific {@link SanValidationProblem}
+ * describing which character is missing or wrong.
  */
 abstract class SanValidateFormatRnbq extends AbstractSan {
 
@@ -78,9 +78,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
     final var c2 = core.charAt(2);
     if (!SanValidateFormat.isFileLetter(c2)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_FILE,
-          Message.getString("validation.san.format.rnbq.capture.wrongDestinationFile",
-              NonNullWrapperCommon.toString(c2)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_FILE, Message
+          .getString("validation.san.format.rnbq.capture.wrongDestinationFile", NonNullWrapperCommon.toString(c2)));
     }
 
     // pos 3: destination rank
@@ -90,9 +89,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     }
     final var c3 = core.charAt(3);
     if (!SanValidateFormat.isRankDigit(c3)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_RANK,
-          Message.getString("validation.san.format.rnbq.capture.wrongDestinationRank",
-              NonNullWrapperCommon.toString(c3)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_CAPTURE_WRONG_DESTINATION_RANK, Message
+          .getString("validation.san.format.rnbq.capture.wrongDestinationRank", NonNullWrapperCommon.toString(c3)));
     }
 
     // Length 4 is the exact valid form; anything longer is overlength.
@@ -298,7 +296,8 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
       return parseCaptureSquare(core, sanTerminalMarker, piece, firstFile, firstRank);
     }
     if (SanValidateFormat.isFileLetter(c3)) {
-      return parseNonCaptureSquare(core, sanTerminalMarker, piece, firstFile, firstRank, SanValidateFormat.parseFile(c3));
+      return parseNonCaptureSquare(core, sanTerminalMarker, piece, firstFile, firstRank,
+          SanValidateFormat.parseFile(c3));
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_SQUARE_WRONG_THIRD_CHARACTER,
         Message.getString("validation.san.format.rnbq.square.wrongThirdCharacter", NonNullWrapperCommon.toString(c3)));

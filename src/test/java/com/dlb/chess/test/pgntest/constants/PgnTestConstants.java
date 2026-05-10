@@ -19,8 +19,8 @@ public abstract class PgnTestConstants {
   public static final Path STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/strict");
 
-  public static final Path LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
-      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient/lineBreaks");
+  public static final Path LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon.pathResolve(
+      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient/lineBreaks");
 
   public static final Path LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH = NonNullWrapperCommon
       .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/lenient/utf8");

@@ -437,8 +437,8 @@ class TestSanValidateFormat {
     }
     // (3a) rookNonCapturingMoves Re5, Rae5, R2e5
     {
-      checkValid(SanFormat.RNBQ_NON_CAPTURING_NEITHER, new SanConversion(PieceType.ROOK, File.NONE, Rank.NONE, Square.E5,
-          PromotionPieceType.NONE, SanTerminalMarker.NONE), "Re5");
+      checkValid(SanFormat.RNBQ_NON_CAPTURING_NEITHER, new SanConversion(PieceType.ROOK, File.NONE, Rank.NONE,
+          Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Re5");
     }
     {
       checkValid(SanFormat.RNBQ_NON_CAPTURING_FILE, new SanConversion(PieceType.ROOK, File.FILE_A, Rank.NONE, Square.E5,

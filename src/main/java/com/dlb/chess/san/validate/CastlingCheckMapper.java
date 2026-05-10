@@ -6,8 +6,7 @@ import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.san.enums.SanValidationProblem;
 
 /**
- * Maps {@link CastlingCheck} + {@link CastlingRightLoss} to their counterparts in
- * {@link SanValidationProblem}.
+ * Maps {@link CastlingCheck} + {@link CastlingRightLoss} to their counterparts in {@link SanValidationProblem}.
  *
  * <p>
  * The two input enums form orthogonal dimensions of the castling-failure space:
@@ -15,14 +14,14 @@ import com.dlb.chess.san.enums.SanValidationProblem;
  * <li>{@code CastlingCheck} = which chess-rule check failed;</li>
  * <li>{@code CastlingRightLoss} = why the castling right was lost (6 values + {@code NOT_LOST}).</li>
  * </ul>
- * {@code SanValidationProblem} flattens these dimensions into a single user-facing enum: the
- * FINAL_NO_RIGHT case is expanded across the 6 provenance values, while the 4 TEMPORARY cases stay
- * flat (they have no provenance sub-dimension). Consumers switching on {@code SanValidationProblem}
- * get the whole story without drilling into side-fields.
+ * {@code SanValidationProblem} flattens these dimensions into a single user-facing enum: the FINAL_NO_RIGHT case is
+ * expanded across the 6 provenance values, while the 4 TEMPORARY cases stay flat (they have no provenance
+ * sub-dimension). Consumers switching on {@code SanValidationProblem} get the whole story without drilling into
+ * side-fields.
  *
  * <p>
- * Both inner switches are exhaustive (no {@code default:}) so any new value added to
- * {@code CastlingCheck} or {@code CastlingRightLoss} causes a compile error here.
+ * Both inner switches are exhaustive (no {@code default:}) so any new value added to {@code CastlingCheck} or
+ * {@code CastlingRightLoss} causes a compile error here.
  */
 public abstract class CastlingCheckMapper {
 
@@ -33,8 +32,7 @@ public abstract class CastlingCheckMapper {
       case TEMPORARY_KING_IN_CHECK -> SanValidationProblem.KING_CASTLING_TEMPORARY_KING_IN_CHECK;
       case TEMPORARY_KING_TRAVELS_THROUGH_CHECK -> SanValidationProblem.KING_CASTLING_TEMPORARY_KING_TRAVELS_THROUGH_CHECK;
       case TEMPORARY_KING_ENDS_IN_CHECK -> SanValidationProblem.KING_CASTLING_TEMPORARY_KING_ENDS_IN_CHECK;
-      case SUCCESS -> throw new ProgrammingMistakeException(
-          "SUCCESS is not a castling-refusal reason");
+      case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS is not a castling-refusal reason");
     };
   }
 

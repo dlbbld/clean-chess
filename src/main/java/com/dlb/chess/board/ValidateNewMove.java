@@ -55,21 +55,21 @@ public class ValidateNewMove implements EnumConstants {
   }
 
   /**
-   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic
-   * termination has been reached the game has ended permanently — no further moves are accepted.
+   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic termination has been
+   * reached the game has ended permanently — no further moves are accepted.
    *
-   * <p>The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE
-   * 5.2.2 dead position), fivefold repetition, and the 75-move rule. Single-side
-   * insufficient-material diagnostics, the claimable draws (3-fold repetition, 50-move rule),
-   * and ongoing positions are deliberately NOT rejected here.
+   * <p>
+   * The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE 5.2.2 dead position),
+   * fivefold repetition, and the 75-move rule. Single-side insufficient-material diagnostics, the claimable draws
+   * (3-fold repetition, 50-move rule), and ongoing positions are deliberately NOT rejected here.
    */
   private static void validateGameNotEnded(ChessBoard board) throws InvalidMoveException {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
     if (!gameStatus.isAutomaticTermination()) {
       return;
     }
-    throw new InvalidMoveException("the game has already ended by " + gameStatus,
-        MoveCheck.GAME_ALREADY_ENDED, gameStatus);
+    throw new InvalidMoveException("the game has already ended by " + gameStatus, MoveCheck.GAME_ALREADY_ENDED,
+        gameStatus);
   }
 
   private static void validateCastling(ChessBoard board, MoveSpecification moveSpecification)
@@ -186,16 +186,13 @@ public class ValidateNewMove implements EnumConstants {
           + "destination square must be empty, but the destination square is occcupied";
       case PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY -> "when moving two squares both the passing and "
           + "destination square must be empty, but both squares are occcupied";
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE ->
-          "when moving a pawn one square forwards, the destination square must be empty, but the destination "
-              + "square is occupied by an own piece";
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE ->
-          "when moving a pawn one square forwards, the destination square must be empty, but the destination "
-              + "square is occupied by an opponent pieces";
+      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE -> "when moving a pawn one square forwards, the destination square must be empty, but the destination "
+          + "square is occupied by an own piece";
+      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE -> "when moving a pawn one square forwards, the destination square must be empty, but the destination "
+          + "square is occupied by an opponent pieces";
       case PAWN_DIAGONAL_OWN_PIECE -> "the pawn you cannot diagonally capture an own piece";
-      case PAWN_EN_PASSANT_WRONG_RANK ->
-          "the pawn cannot move diagonally to an empty field, except when en passant capture is possible, "
-              + "which is not the case";
+      case PAWN_EN_PASSANT_WRONG_RANK -> "the pawn cannot move diagonally to an empty field, except when en passant capture is possible, "
+          + "which is not the case";
       case PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE -> "the en passant capture requires that the pawn "
           + "move " + Square.calculateBehindSquare(board.getHavingMove(), moveSpecification.toSquare()).getName()
           + " was immediately played before, which is not the case";

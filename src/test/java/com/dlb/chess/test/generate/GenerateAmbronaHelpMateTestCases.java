@@ -40,8 +40,8 @@ public class GenerateAmbronaHelpMateTestCases {
   private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateAmbronaHelpMateTestCases.class);
 
   private static final String OUTPUT_FOLDER_NAME = "lichessHelpmate";
-  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
-      OUTPUT_FOLDER_NAME);
+  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon
+      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, OUTPUT_FOLDER_NAME);
 
   public static void main(String[] args) throws Exception {
 
@@ -136,8 +136,8 @@ public class GenerateAmbronaHelpMateTestCases {
   private static void printMovesAsUci(String game, Report report) {
     final StringBuilder uciMoveList = new StringBuilder();
     for (final HalfMove halfMove : report.halfMoveList()) {
-      final String uci = UciMoveUtility.convertMoveSpecificationToUci(halfMove.havingMove(), halfMove.moveSpecification())
-          .text();
+      final String uci = UciMoveUtility
+          .convertMoveSpecificationToUci(halfMove.havingMove(), halfMove.moveSpecification()).text();
       uciMoveList.append(uci);
       uciMoveList.append(" ");
     }
@@ -211,7 +211,8 @@ public class GenerateAmbronaHelpMateTestCases {
         "g1g2 e4d3 g3g4 d3c4 g4g5 c4b5 g5g6 b5a4 g6g7 a4a3 g7g8q a3b4 d8c6 b4c5 c6b4 c5b4 g2f1 b4a3 f1e2 a3b4 e8a8 b4c5 e7e8q c5b4 e2d3 b4c5 a8a1 c5b6 a1b1 b6a7 e8a4");
     havingHelpMate.put("lichess_eKwKl6Y9.pgn",
         "h3g3 c1b1 h5h6 b1a1 h6h7 a1b1 h7h8q b1c2 h8a1 c2d3 a1b1 d3d2 g3f2 d2c3 b1a1 c3b4 a1b1 b4a5 b1a1 a5b6 a1b1 b6a7 b1c1 a7a8 f2e2 a8a7 e2d3 a7a6 d3c4 a6b7 c1b1 b7a8 c4b5 a8b8 b5a6 b8a8 b1b7");
-    havingHelpMate.put("lichess_EQCMW0jB.pgn", "g1h2 f4e3 a4a3 e3e4 a3a2 e4d3 a2a1q d3e4 h5a5 e4d3 h4h3 d3e4 a5a4 e4f3 a1a3");
+    havingHelpMate.put("lichess_EQCMW0jB.pgn",
+        "g1h2 f4e3 a4a3 e3e4 a3a2 e4d3 a2a1q d3e4 h5a5 e4d3 h4h3 d3e4 a5a4 e4f3 a1a3");
     havingHelpMate.put("lichess_EsFX1Urt.pgn",
         "h5g4 e5d4 h6h5 d4e3 h5h4 e3f2 h4h3 f2e1 h3h2 e1d1 h2h1q d1c2 g4h3 c2d3 h1a1 d3e2 a1b1 e2f3 h3h4 f3g2 b1a2 g2h1 h4h3 h1g1 a2g2");
     havingHelpMate.put("lichess_EstAIWqd.pgn",
@@ -276,7 +277,8 @@ public class GenerateAmbronaHelpMateTestCases {
         "h8h4 f3e2 g7g8q e2d1 h4e1 d1c2 e1a1 c2d3 a1b1 d3d4 b1a1 d4c5 a1b1 c5c6 b1a1 c6b7 h3g2 b7c7 g2f1 c7b6 f1e2 b6c7 e2d3 c7b6 d3c4 b6c7 c4b5 c7d7 b5a6 d7c6 a6a5 c6b7 g8g3 b7a8 a5b6");
     havingHelpMate.put("lichess_LC76ur18.pgn",
         "a1a2 c3d4 c6c5 d4e5 a2b2 e5f6 b2c1 f6e5 c5c4 e5f4 c4c3 f4e3 c3c2 e3f4 c1d1 f4e3 c2c1q e3d4 b1e4");
-    havingHelpMate.put("lichess_lHtqM0fz.pgn", "h1g1 g4f3 h2h1q f3e2 h1h4 e2f3 g1h2 f3e2 h2h3 e2f1 h4a4 f1g1 a4a2 g1h1 a2a1");
+    havingHelpMate.put("lichess_lHtqM0fz.pgn",
+        "h1g1 g4f3 h2h1q f3e2 h1h4 e2f3 g1h2 f3e2 h2h3 e2f1 h4a4 f1g1 a4a2 g1h1 a2a1");
     havingHelpMate.put("lichess_lk42iihk.pgn",
         "h2h1 g4h5 g3g4 h5g4 f2e1 g4f3 e1a1 f3e4 a7a2 e4d5 a2b2 d5c6 b2a2 c6b7 h1g1 b7c8 g1f1 c8b7 f1e2 b7c8 e2d3 c8b7 d3c4 b7c8 c4b5 c8b7 b5a4 b7a8 a4a5 a8b8 a5a6 b8a8 a1h8");
     havingHelpMate.put("lichess_LqTNOgyT.pgn",
@@ -378,7 +380,8 @@ public class GenerateAmbronaHelpMateTestCases {
         "h5h4 g7h8 g5g6 h8g7 f5f1 g7h8 g6g7 h8g7 f1a1 g7f6 a1b1 f6e5 b1a1 e5d5 a1b1 d5c6 b1a1 c6b7 a1b1 b7a8 h4g3 a8a7 g3f2 a7a6 f2e2 a6a5 e2d3 a5a4 d3c4 a4a3 c4b5 a3a2 b5a6 a2a3 b1a1 a3b4 a6b7 b4c5 b7c8 c5b6 a1b1 b6a7 b1c1 a7a8 c1a1");
     havingHelpMate.put("lichess_yjfLthhQ.pgn",
         "e3f3 b8a7 d4d3 a7a6 d2d1q a6a5 d3d2 a5b6 d1a1 b6c7 d2d1q c7b6 f3g2 b6c7 g2h3 c7c6 d1b1 c6d5 b1c1 d5e4 a1a2 e4f3 a2g2");
-    havingHelpMate.put("lichess_YRvWOIpy.pgn", "a5b6 h5g4 b6b7 g4f3 b7b8q f3e2 a7b7 e2d3 b7b1 d3c4 b1a1 c4d5 a1d1 d5c6 b8b6");
+    havingHelpMate.put("lichess_YRvWOIpy.pgn",
+        "a5b6 h5g4 b6b7 g4f3 b7b8q f3e2 a7b7 e2d3 b7b1 d3c4 b1a1 c4d5 a1d1 d5c6 b8b6");
     havingHelpMate.put("lichess_z3xkCyBY.pgn", "c7h7");
     havingHelpMate.put("lichess_zmelXKvA.pgn",
         "h3h2 d2c1 g7g6 c1d1 g6g5 d1e1 g3g1 e1f2 g4g3 f2f3 g3g2 f3e2 h2h3 e2f2 h3h4 f2g1 h4h3 g1f2 g2g1b f2e1 g5g4 e1d1 g4g3 d1c1 g3g2 c1b1 g1f2 b1a1 g2g1q a1a2 h3g2 a2b3 g2f1 b3a2 f2e1 a2a1 f1e2 a1b1 e2d1 b1a1 d1c2 a1a2 g1a7");

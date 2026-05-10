@@ -35,7 +35,8 @@ public class NoProgressRepresentation {
         noProgressHalfMove.sideMoved()) + noProgressHalfMove.san();
   }
 
-  private static String calculateRepresentationNoProgressMoveIncludingSequenceLength(NoProgressHalfMove noProgressHalfMove) {
+  private static String calculateRepresentationNoProgressMoveIncludingSequenceLength(
+      NoProgressHalfMove noProgressHalfMove) {
     return calculateRepresentationNoProgressMove(noProgressHalfMove) + " (" + noProgressHalfMove.sequenceLength() + ")";
   }
 

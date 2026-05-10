@@ -86,9 +86,7 @@ final class LenientSanRecover {
       case OVERSPECIFIED_RNBQ_FILE_ONLY_ONE_LEGAL_MOVE -> LenientSanValidationProblem.OVERSPECIFIED_FILE_DISAMBIGUATION;
       case OVERSPECIFIED_RNBQ_RANK_ONLY_ONE_LEGAL_MOVE -> LenientSanValidationProblem.OVERSPECIFIED_RANK_DISAMBIGUATION;
       case NON_STANDARD_SPECIFIED_RNBQ_RANK_INSTEAD_OF_FILE -> LenientSanValidationProblem.NON_STANDARD_RANK_DISAMBIGUATION;
-      case OVERSPECIFIED_RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE,
-           OVERSPECIFIED_RNBQ_SQUARE_FILE_NOT_NECESSARY,
-           OVERSPECIFIED_RNBQ_SQUARE_RANK_NOT_NECESSARY -> LenientSanValidationProblem.OVERSPECIFIED_SQUARE_DISAMBIGUATION;
+      case OVERSPECIFIED_RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE, OVERSPECIFIED_RNBQ_SQUARE_FILE_NOT_NECESSARY, OVERSPECIFIED_RNBQ_SQUARE_RANK_NOT_NECESSARY -> LenientSanValidationProblem.OVERSPECIFIED_SQUARE_DISAMBIGUATION;
 
       default -> null;
     };
@@ -108,8 +106,8 @@ final class LenientSanRecover {
       case DESTINATION_RNBQK_OPPONENT_NON_KING_NO_CAPTURE_SYMBOL -> insertCaptureMarker(current);
 
       // Disambiguation strips
-      case OVERSPECIFIED_RNBQ_FILE_ONLY_ONE_LEGAL_MOVE,
-           OVERSPECIFIED_RNBQ_RANK_ONLY_ONE_LEGAL_MOVE -> stripFirstDisambigChar(current);
+      case OVERSPECIFIED_RNBQ_FILE_ONLY_ONE_LEGAL_MOVE, OVERSPECIFIED_RNBQ_RANK_ONLY_ONE_LEGAL_MOVE -> stripFirstDisambigChar(
+          current);
       case OVERSPECIFIED_RNBQ_SQUARE_ONLY_ONE_LEGAL_MOVE -> stripSquareDisambig(current);
       case OVERSPECIFIED_RNBQ_SQUARE_FILE_NOT_NECESSARY -> stripFirstDisambigChar(current);
       case OVERSPECIFIED_RNBQ_SQUARE_RANK_NOT_NECESSARY -> stripSecondDisambigChar(current);
@@ -192,8 +190,8 @@ final class LenientSanRecover {
   /**
    * Rewrites a rank-disambiguated SAN move to its canonical file-disambiguated form. Used when strict rejects with
    * {@link SanValidationProblem#NON_STANDARD_SPECIFIED_RNBQ_RANK_INSTEAD_OF_FILE} — the move is uniquely identified by
-   * the user's rank disambig, but canonical SAN prefers file disambig when both forms work. We look up the from-file
-   * of the unique matching legal move and substitute it for the rank character.
+   * the user's rank disambig, but canonical SAN prefers file disambig when both forms work. We look up the from-file of
+   * the unique matching legal move and substitute it for the rank character.
    */
   private static String rewriteRankAsFile(String s, ChessBoard board) {
     final BodyAndMarker split = splitMarker(s);
@@ -226,8 +224,8 @@ final class LenientSanRecover {
           "No legal move matches rank-disambig recovery; strict invariant violated: " + s);
     }
     final File fromFile = match.moveSpecification().fromSquare().getFile();
-    return body.charAt(0) + NonNullWrapperCommon.valueOf(fromFile.getLetter())
-        + NonNullWrapperCommon.substring(body, 2) + split.marker();
+    return body.charAt(0) + NonNullWrapperCommon.valueOf(fromFile.getLetter()) + NonNullWrapperCommon.substring(body, 2)
+        + split.marker();
   }
 
   private static BodyAndMarker splitMarker(String s) {

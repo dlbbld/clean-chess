@@ -122,7 +122,8 @@ class TestPerformMoveSanContract {
       final MoveSpecification expectedStoredMoveSpecification = board.getLastMove().moveSpecification();
       final String calculatedSan = board.getSan();
       board.unmove();
-      final MoveSpecification actualCalculatedMoveSpecification = StrictSanParser.parseText(calculatedSan, board).moveSpecification();
+      final MoveSpecification actualCalculatedMoveSpecification = StrictSanParser.parseText(calculatedSan, board)
+          .moveSpecification();
       assertEquals(expectedStoredMoveSpecification, actualCalculatedMoveSpecification);
       board.moveStrict(halfMove.san());
     }

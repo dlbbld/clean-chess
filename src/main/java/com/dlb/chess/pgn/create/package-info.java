@@ -1,7 +1,7 @@
 /**
  * PGN export. {@link com.dlb.chess.pgn.create.PgnCreate} produces a {@link com.dlb.chess.pgn.parser.model.PgnFile}
- * record from a {@link com.dlb.chess.board.Board} (or its serialized {@code String} form), in the unique
- * <em>export format</em> defined by the PGN specification.
+ * record from a {@link com.dlb.chess.board.Board} (or its serialized {@code String} form), in the unique <em>export
+ * format</em> defined by the PGN specification.
  *
  * <p>
  * The export format is byte-stable round-trip with the strict parser ({@link com.dlb.chess.pgn.parser.StrictPgnParser})

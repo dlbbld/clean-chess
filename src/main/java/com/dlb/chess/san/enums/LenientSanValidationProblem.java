@@ -6,8 +6,8 @@ package com.dlb.chess.san.enums;
  * <p>
  * Each code names a specific, individually-detectable deviation from canonical SAN. A single move can carry multiple
  * forgiven items (e.g. {@code nbxd7+} when actually mate triggers {@link #LOWERCASE_PIECE_LETTER},
- * {@link #OVERSPECIFIED_FILE_DISAMBIGUATION}, and {@link #WRONG_CHECK_SUFFIX_FOR_CHECKMATE} simultaneously). The lenient
- * parser surfaces every applicable code; consumers decide whether to silently accept or warn.
+ * {@link #OVERSPECIFIED_FILE_DISAMBIGUATION}, and {@link #WRONG_CHECK_SUFFIX_FOR_CHECKMATE} simultaneously). The
+ * lenient parser surfaces every applicable code; consumers decide whether to silently accept or warn.
  *
  * <p>
  * Codes are grouped by category. The grouping has no runtime meaning — it is for human readability only.
@@ -47,7 +47,8 @@ public enum LenientSanValidationProblem {
 
   // --- Case variation: SAN's case conventions are asymmetric (pieces uppercase, files lowercase, capture-marker
   // lowercase, promotion piece uppercase). These codes name each direction of deviation. Canonical-case interpretation
-  // always wins when ambiguous (e.g. "bxc6" stays a pawn capture even if a bishop on the b-file could also capture). ---
+  // always wins when ambiguous (e.g. "bxc6" stays a pawn capture even if a bishop on the b-file could also capture).
+  // ---
   LOWERCASE_PIECE_LETTER,
   UPPERCASE_FILE_LETTER,
   UPPERCASE_CAPTURE_MARKER,

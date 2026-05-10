@@ -124,8 +124,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
         logger.info("Processing game " + testCase.pgnFileName());
 
-        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(),
-            testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
         processScalaChessCodeLine("", counterList, codeLineList);
         processScalaChessCodeLine("  println(\"Declaring test case for " + testCase.pgnFileName() + "\")", counterList,
             codeLineList);

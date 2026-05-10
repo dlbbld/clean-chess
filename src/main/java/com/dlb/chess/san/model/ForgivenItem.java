@@ -8,9 +8,9 @@ import com.google.common.collect.ImmutableList;
 /**
  * One forgiven deviation surfaced by the lenient SAN parser.
  *
- * @param code the typed deviation classifier
+ * @param code          the typed deviation classifier
  * @param originalToken the original SAN token as the user wrote it (the entire move, not just the deviating fragment)
- * @param canonicalSan the canonical SAN equivalent the parser resolved the input to
+ * @param canonicalSan  the canonical SAN equivalent the parser resolved the input to
  */
 public record ForgivenItem(LenientSanValidationProblem code, String originalToken, String canonicalSan) {
 

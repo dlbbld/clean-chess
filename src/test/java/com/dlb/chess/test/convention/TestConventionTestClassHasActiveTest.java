@@ -56,7 +56,8 @@ class TestConventionTestClassHasActiveTest {
     final List<String> violations = new ArrayList<>();
 
     for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
-      if (!NonNullWrapperCommon.toString(p).endsWith(".java") || !NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".java")
+          || !NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
         continue;
       }
       final String contents = FileUtility.readFileAsString(p);

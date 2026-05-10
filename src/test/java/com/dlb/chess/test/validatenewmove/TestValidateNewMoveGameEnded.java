@@ -16,15 +16,14 @@ import com.dlb.chess.exceptions.InvalidMoveException;
 
 /**
  * Surface-level tests for the strict-pipeline game-end pre-check in
- * {@link com.dlb.chess.board.ValidateNewMove#validateNewMove}: one scenario per FIDE-automatic
- * termination ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE},
- * {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
- * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any move attempted on a
- * terminal-state board is rejected with {@link MoveCheck#GAME_ALREADY_ENDED} and that the
- * thrown {@link InvalidMoveException} carries the originating {@link GameStatus} as payload.
+ * {@link com.dlb.chess.board.ValidateNewMove#validateNewMove}: one scenario per FIDE-automatic termination
+ * ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE}, {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH},
+ * {@link GameStatus#FIVE_FOLD_REPETITION_RULE}, {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any move
+ * attempted on a terminal-state board is rejected with {@link MoveCheck#GAME_ALREADY_ENDED} and that the thrown
+ * {@link InvalidMoveException} carries the originating {@link GameStatus} as payload.
  *
- * <p>The companion {@code TestSanValidationGameEnded} mirrors this set against the SAN
- * pipeline.
+ * <p>
+ * The companion {@code TestSanValidationGameEnded} mirrors this set against the SAN pipeline.
  */
 class TestValidateNewMoveGameEnded implements EnumConstants {
 
@@ -81,8 +80,8 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
     final ChessBoard board = new Board();
     // Sequence: 1.Nf3 Nf6 2.Ng1 Ng8 3.Nf3 Nf6 4.Ng1 Ng8 5.Nf3 Nf6 6.Ng1 Ng8 7.Nf3 Nf6 8.Ng1 Ng8
     // After move 8...Ng8 the starting position has occurred 5 times (move 0, 2, 4, 6, 8).
-    board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3",
-        "Nf6", "Ng1", "Ng8");
+    board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6",
+        "Ng1", "Ng8");
     check(board, new MoveSpecification(E2, E4), GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
 

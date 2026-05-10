@@ -21,8 +21,8 @@ public class ThreefoldClaimAheadPrint {
       // we designed the list to be not empty
       final ClaimAhead claimAheadFirst = NonNullWrapperCommon.getFirst(claimAheadList);
       final LegalMove legalMoveFirst = claimAheadFirst.legalMove();
-      final String fullMoveNumber = HalfMoveUtility.calculateFullMoveNumberInitialWithSpace(
-          claimAheadFirst.fullMoveNumber(), legalMoveFirst.havingMove());
+      final String fullMoveNumber = HalfMoveUtility
+          .calculateFullMoveNumberInitialWithSpace(claimAheadFirst.fullMoveNumber(), legalMoveFirst.havingMove());
       line.append(fullMoveNumber);
 
       final List<String> claimAheadSanList = new ArrayList<>();

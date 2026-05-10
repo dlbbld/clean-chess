@@ -6,7 +6,8 @@ package com.dlb.chess.pgn.parser.sequential;
  * Structural tokens like {@link PgnTokenType#TAG_BRACKET_OPEN} or {@link PgnTokenType#NEWLINE} carry the literal text
  * of the character(s) consumed.
  *
- * <p>Line and column are one-based and refer to the first character of the token in the source.
+ * <p>
+ * Line and column are one-based and refer to the first character of the token in the source.
  */
 public record PgnToken(PgnTokenType type, String text, int line, int column) {
 }

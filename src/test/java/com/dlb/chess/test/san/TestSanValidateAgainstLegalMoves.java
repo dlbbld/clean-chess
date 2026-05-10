@@ -282,9 +282,9 @@ class TestSanValidateAgainstLegalMoves {
 
       board.moveStrict("Ba6c4");
 
-      board.movesStrict("b4", "g5", "Bh3", "g4", "b5", "g3", "b6", "g2", "b7", "Nc6", "Ne2", "Nb4", "Ng3", "Nd5",
-          "Nf1", "gxf1=B", "Bfg4", "Nb6", "Bf5", "Na8", "bxa8=B", "Bb5", "Baf3", "Bc6", "Ke1", "Bd3", "Kd1", "Bac4",
-          "Ke1", "Bde4");
+      board.movesStrict("b4", "g5", "Bh3", "g4", "b5", "g3", "b6", "g2", "b7", "Nc6", "Ne2", "Nb4", "Ng3", "Nd5", "Nf1",
+          "gxf1=B", "Bfg4", "Nb6", "Bf5", "Na8", "bxa8=B", "Bb5", "Baf3", "Bc6", "Ke1", "Bd3", "Kd1", "Bac4", "Ke1",
+          "Bde4");
       // four white bishops
 
       checkException(board, "Bfg4",
@@ -550,9 +550,9 @@ class TestSanValidateAgainstLegalMoves {
 
       board.moveStrict("Ba6c4");
 
-      board.movesStrict("b4", "g5", "Bh3", "g4", "b5", "g3", "b6", "g2", "b7", "Nc6", "Ne2", "Nb4", "Ng3", "Nd5",
-          "Nf1", "gxf1=B", "Bfg4", "Nb6", "Bf5", "Na8", "bxa8=B", "Bb5", "Baf3", "Bc6", "Ke1", "Bd3", "Kd1", "Bac4",
-          "Ke1", "Bde4");
+      board.movesStrict("b4", "g5", "Bh3", "g4", "b5", "g3", "b6", "g2", "b7", "Nc6", "Ne2", "Nb4", "Ng3", "Nd5", "Nf1",
+          "gxf1=B", "Bfg4", "Nb6", "Bf5", "Na8", "bxa8=B", "Bb5", "Baf3", "Bc6", "Ke1", "Bd3", "Kd1", "Bac4", "Ke1",
+          "Bde4");
       // four white bishops
 
       checkException(board, "B3g4",

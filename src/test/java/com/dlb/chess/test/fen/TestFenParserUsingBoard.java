@@ -57,8 +57,8 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
   @Test
   void testAlongMovesIncludingHistory() {
     final ChessBoard boardMakeMoves = new Board();
-    boardMakeMoves.movesStrict("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "d6", "d4", "exd4", "cxd4", "Bxd4",
-        "Nxd4", "Nxd4", "O-O", "Nf6", "Re1", "Nxe4", "Nc3", "O-O");
+    boardMakeMoves.movesStrict("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "d6", "d4", "exd4", "cxd4", "Bxd4", "Nxd4",
+        "Nxd4", "O-O", "Nf6", "Re1", "Nxe4", "Nc3", "O-O");
 
     final List<MoveSpecification> moveList = boardMakeMoves.getPerformedMoveSpecificationList();
 

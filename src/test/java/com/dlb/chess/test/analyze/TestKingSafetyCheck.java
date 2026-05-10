@@ -17,10 +17,9 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.KingSafetyCheck;
 
 /**
- * Per-{@link KingSafetyCheck}-value tests for {@link ChessRuleAnalyzer#analyzeKingSafety}.
- * Each enum value (including {@code SUCCESS}) has at least one test method exercising it. An
- * {@code @AfterAll} hook verifies the entire enum is covered — adding a new value without a test
- * fails the build.
+ * Per-{@link KingSafetyCheck}-value tests for {@link ChessRuleAnalyzer#analyzeKingSafety}. Each enum value (including
+ * {@code SUCCESS}) has at least one test method exercising it. An {@code @AfterAll} hook verifies the entire enum is
+ * covered — adding a new value without a test fails the build.
  */
 class TestKingSafetyCheck implements EnumConstants {
 
@@ -50,16 +49,14 @@ class TestKingSafetyCheck implements EnumConstants {
   @Test
   void testNonKingLeftInCheck() {
     // white king e1 in check from black rook e8; white knight c4 moves to d6 — doesn't escape check
-    check("4r2k/8/8/8/2N5/8/8/4K3 w - - 0 1", new MoveSpecification(C4, D6),
-        KingSafetyCheck.NON_KING_LEFT_IN_CHECK);
+    check("4r2k/8/8/8/2N5/8/8/4K3 w - - 0 1", new MoveSpecification(C4, D6), KingSafetyCheck.NON_KING_LEFT_IN_CHECK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testNonKingExposedToCheck() {
     // pinned white knight on e2 between own king e1 and black rook e8; moving it exposes the king
-    check("4r2k/8/8/8/8/8/4N3/4K3 w - - 0 1", new MoveSpecification(E2, C3),
-        KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK);
+    check("4r2k/8/8/8/8/8/4N3/4K3 w - - 0 1", new MoveSpecification(E2, C3), KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK);
   }
 
   @AfterAll

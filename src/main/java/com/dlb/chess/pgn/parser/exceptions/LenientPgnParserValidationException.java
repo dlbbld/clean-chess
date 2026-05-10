@@ -20,17 +20,15 @@ public class LenientPgnParserValidationException extends UsageException {
 
   /**
    * The {@link GameStatus} that ended the game when {@link #sanValidationProblem} is
-   * {@link SanValidationProblem#GAME_ALREADY_ENDED}; {@code null} otherwise. Carried so the
-   * caller can distinguish the five FIDE-automatic terminations (checkmate, stalemate,
-   * mutual insufficient material, fivefold repetition, 75-move rule) without having to parse
-   * the human-readable message.
+   * {@link SanValidationProblem#GAME_ALREADY_ENDED}; {@code null} otherwise. Carried so the caller can distinguish the
+   * five FIDE-automatic terminations (checkmate, stalemate, mutual insufficient material, fivefold repetition, 75-move
+   * rule) without having to parse the human-readable message.
    */
   private final @Nullable GameStatus gameStatus;
 
   /**
-   * SAN-level forgiven items accumulated during movetext replay before the failure point. Empty if the failure
-   * occurred outside the movetext path (tag validation, structural error) or if no SAN deviation had been forgiven
-   * yet.
+   * SAN-level forgiven items accumulated during movetext replay before the failure point. Empty if the failure occurred
+   * outside the movetext path (tag validation, structural error) or if no SAN deviation had been forgiven yet.
    */
   private final @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated;
 
@@ -40,9 +38,9 @@ public class LenientPgnParserValidationException extends UsageException {
   }
 
   /**
-   * Constructor used when a SAN validation failure carries a specific {@link GameStatus} (the
-   * GAME_ALREADY_ENDED case): the parser propagates the status so callers can react to the
-   * specific termination cause without parsing the message.
+   * Constructor used when a SAN validation failure carries a specific {@link GameStatus} (the GAME_ALREADY_ENDED case):
+   * the parser propagates the status so callers can react to the specific termination cause without parsing the
+   * message.
    */
   public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message, @Nullable GameStatus gameStatus) {

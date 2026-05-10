@@ -40,14 +40,15 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    final String repetitionInitialEnPassantCapture = RepetitionRepresentation.calculateRepresentationRepetitionReport(report,
-        EnPassantCaptureRuleThreefold.DO_IGNORE);
+    final String repetitionInitialEnPassantCapture = RepetitionRepresentation
+        .calculateRepresentationRepetitionReport(report, EnPassantCaptureRuleThreefold.DO_IGNORE);
     result.append("\"");
     result.append(repetitionInitialEnPassantCapture);
     result.append("\"");
     result.append(", ");
 
-    final String noProgressMove = NoProgressRepresentation.calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
+    final String noProgressMove = NoProgressRepresentation
+        .calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
     result.append("\"");
     result.append(noProgressMove);
     result.append("\"");

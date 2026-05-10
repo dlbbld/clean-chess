@@ -10,8 +10,8 @@ import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.enums.MovementCheck;
 
 /**
- * Lock-down test for {@link MovementCheck#toMoveCheck()}. Ensures the translator stays exhaustive
- * over all failure values and that SUCCESS is rejected as a refusal-reason translation.
+ * Lock-down test for {@link MovementCheck#toMoveCheck()}. Ensures the translator stays exhaustive over all failure
+ * values and that SUCCESS is rejected as a refusal-reason translation.
  */
 class TestMovementCheckTranslator {
 

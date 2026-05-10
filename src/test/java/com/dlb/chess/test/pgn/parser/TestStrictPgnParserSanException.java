@@ -24,8 +24,7 @@ class TestStrictPgnParserSanException extends AbstractTestStrictPgnParserExcepti
     checkException("01_initial_position.pgn", SanValidationProblem.NOT_REACHABLE_PAWN_NON_CAPTURING);
     checkException("02_initial_position.pgn", SanValidationProblem.NOT_REACHABLE_PAWN_CAPTURING);
 
-    checkException("03_custom_position_white_start.pgn",
-        SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL);
+    checkException("03_custom_position_white_start.pgn", SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL);
     checkException("04_custom_position_black_start.pgn", SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK);
 
   }

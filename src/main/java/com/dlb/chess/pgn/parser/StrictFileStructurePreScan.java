@@ -11,8 +11,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
  */
 final class StrictFileStructurePreScan {
 
-  private static final String BASIC_FORMAT_DESCRIPTION =
-      "The PGN must have exactly two empty lines, one after the last tag and one at the end.";
+  private static final String BASIC_FORMAT_DESCRIPTION = "The PGN must have exactly two empty lines, one after the last tag and one at the end.";
 
   private StrictFileStructurePreScan() {
   }

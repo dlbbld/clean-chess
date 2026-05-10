@@ -286,8 +286,9 @@ class TestFenParserAdvanced implements EnumConstants {
 
     // halfmove clock above the threshold represents a game continued past automatic termination
     // — rejected by FEN import under the strict-game invariant.
-    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - "
-        + (ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD + 1) + " 77",
+    checkParseFenException(
+        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - "
+            + (ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD + 1) + " 77",
         FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_BEYOND_SEVENTY_FIVE_MOVE_RULE);
   }
 

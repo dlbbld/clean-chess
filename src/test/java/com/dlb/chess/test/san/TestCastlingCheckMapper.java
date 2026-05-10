@@ -14,8 +14,8 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.validate.CastlingCheckMapper;
 
 /**
- * Lock-down tests for the bridge between {@link CastlingCheck} + {@link CastlingRightLoss} (internal pipeline vocabulary)
- * and {@link SanValidationProblem} (external error-code vocabulary) in the castling subset.
+ * Lock-down tests for the bridge between {@link CastlingCheck} + {@link CastlingRightLoss} (internal pipeline
+ * vocabulary) and {@link SanValidationProblem} (external error-code vocabulary) in the castling subset.
  *
  * <p>
  * The input enums form two orthogonal dimensions; {@code SanValidationProblem} flattens them: the FINAL_NO_RIGHT case
@@ -28,9 +28,8 @@ import com.dlb.chess.san.validate.CastlingCheckMapper;
 class TestCastlingCheckMapper {
 
   private static final List<CastlingCheck> EXPECTED_CASTLING_CHECKS = NonNullWrapperCommon.listOf(
-      CastlingCheck.FINAL_NO_RIGHT, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
-      CastlingCheck.TEMPORARY_KING_IN_CHECK, CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
-      CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK);
+      CastlingCheck.FINAL_NO_RIGHT, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingCheck.TEMPORARY_KING_IN_CHECK,
+      CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK, CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK);
 
   private static final List<SanValidationProblem> EXPECTED_KING_CASTLING_PROBLEMS = NonNullWrapperCommon.listOf(
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED,

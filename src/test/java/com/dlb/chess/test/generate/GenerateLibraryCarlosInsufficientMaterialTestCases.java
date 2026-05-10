@@ -23,8 +23,7 @@ public class GenerateLibraryCarlosInsufficientMaterialTestCases {
         PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
 
-        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(),
-            testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
 
         final InsufficientMaterial insufficientMaterial = report.insufficientMaterial();
         final String fen = report.fen();

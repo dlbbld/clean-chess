@@ -13,9 +13,9 @@ public abstract class RestrictTestConstants {
 
   /**
    * Master gate for all {@code IS_RESTRICT_PGN_*_TEST} flags below. Driven by {@link #IS_FULL}: in full mode the master
-   * is {@code false}, all restricted PGN tests run at full coverage. Individual flags that want to opt out of the master
-   * gate can be authored as a plain {@code true} instead of {@code true && IS_RESTRICT_PGN}; that keeps the restriction
-   * on regardless of the master.
+   * is {@code false}, all restricted PGN tests run at full coverage. Individual flags that want to opt out of the
+   * master gate can be authored as a plain {@code true} instead of {@code true && IS_RESTRICT_PGN}; that keeps the
+   * restriction on regardless of the master.
    */
   public static final boolean IS_RESTRICT_PGN = !IS_FULL;
 

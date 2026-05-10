@@ -16,14 +16,14 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.test.ConfigurationTestConstants;
 
 /**
- * Strict-parser counterpart of {@link TestLenientPgnParserBeyondTermination}. Each fixture
- * has its own {@code @Test} method with the expected {@link GameStatus} pinned literally.
+ * Strict-parser counterpart of {@link TestLenientPgnParserBeyondTermination}. Each fixture has its own {@code @Test}
+ * method with the expected {@link GameStatus} pinned literally.
  */
 @SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestStrictPgnParserBeyondTermination {
 
-  private static final Path BEYOND_FOLDER = NonNullWrapperCommon.pathResolve(
-      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
+  private static final Path BEYOND_FOLDER = NonNullWrapperCommon
+      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
 
   @SuppressWarnings("static-method")
   @Test
@@ -66,34 +66,29 @@ class TestStrictPgnParserBeyondTermination {
   @SuppressWarnings("static-method")
   @Test
   void test07PlayBeyondFivefoldRepetitionWithWhiteMove() {
-    assertRejectedWith("07_play_beyond_fivefold_repetition_with_white_move.pgn",
-        GameStatus.FIVE_FOLD_REPETITION_RULE);
+    assertRejectedWith("07_play_beyond_fivefold_repetition_with_white_move.pgn", GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test08PlayBeyondFivefoldRepetitionWithBlackMove() {
-    assertRejectedWith("08_play_beyond_fivefold_repetition_with_black_move.pgn",
-        GameStatus.FIVE_FOLD_REPETITION_RULE);
+    assertRejectedWith("08_play_beyond_fivefold_repetition_with_black_move.pgn", GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test09PlayBeyondSeventyFiveMoveRuleWithWhiteMove() {
-    assertRejectedWith("09_play_beyond_seventy_five_move_rule_with_white_move.pgn",
-        GameStatus.SEVENTY_FIVE_MOVE_RULE);
+    assertRejectedWith("09_play_beyond_seventy_five_move_rule_with_white_move.pgn", GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test10PlayBeyondSeventyFiveMoveRuleWithBlackMove() {
-    assertRejectedWith("10_play_beyond_seventy_five_move_rule_with_black_move.pgn",
-        GameStatus.SEVENTY_FIVE_MOVE_RULE);
+    assertRejectedWith("10_play_beyond_seventy_five_move_rule_with_black_move.pgn", GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
   private static void assertRejectedWith(String pgnFileName, GameStatus expectedStatus) {
-    final StrictPgnParserValidationException e = assertThrows(
-        StrictPgnParserValidationException.class,
+    final StrictPgnParserValidationException e = assertThrows(StrictPgnParserValidationException.class,
         () -> StrictPgnParser.parse(BEYOND_FOLDER, pgnFileName));
 
     assertEquals(StrictPgnParserValidationProblem.SAN, e.getStrictPgnParserValidationProblem());

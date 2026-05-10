@@ -20,8 +20,8 @@ public abstract class RepetitionTestUtility {
 
   public static void testRepetition(Report report, PgnFileTestCase testCase,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    final String calculatedRepetitionRepresentation = RepetitionRepresentation.calculateRepresentationRepetitionReport(report,
-        enPassantCaptureRule);
+    final String calculatedRepetitionRepresentation = RepetitionRepresentation
+        .calculateRepresentationRepetitionReport(report, enPassantCaptureRule);
     assertEquals(getExpectedRepetition(testCase, enPassantCaptureRule), calculatedRepetitionRepresentation);
   }
 

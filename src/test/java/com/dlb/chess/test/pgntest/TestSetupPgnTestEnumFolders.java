@@ -12,18 +12,18 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
- * Setup invariant: every {@link PgnTest} enum value's folder path resolves to an existing
- * directory under {@code src/test/resources/pgn}.
+ * Setup invariant: every {@link PgnTest} enum value's folder path resolves to an existing directory under
+ * {@code src/test/resources/pgn}.
  *
- * <p>Rationale: every {@code PgnTest} value declares a relative folder string that the
- * registry uses to locate fixtures. A typo, a moved/deleted folder, or an enum entry that
- * never had a backing folder turns into a runtime error or silent zero-iteration only when
- * a test that touches that bucket happens to run. Asserting the mapping at setup time
- * surfaces the breakage immediately and points at the specific enum value(s) to fix.
+ * <p>
+ * Rationale: every {@code PgnTest} value declares a relative folder string that the registry uses to locate fixtures. A
+ * typo, a moved/deleted folder, or an enum entry that never had a backing folder turns into a runtime error or silent
+ * zero-iteration only when a test that touches that bucket happens to run. Asserting the mapping at setup time surfaces
+ * the breakage immediately and points at the specific enum value(s) to fix.
  *
- * <p>The check is one-directional: every enum points to a real folder. The reverse
- * direction (every folder under {@code src/test/resources/pgn} maps to some enum) would
- * conflate this with the "no orphan files" invariant covered by
+ * <p>
+ * The check is one-directional: every enum points to a real folder. The reverse direction (every folder under
+ * {@code src/test/resources/pgn} maps to some enum) would conflate this with the "no orphan files" invariant covered by
  * {@link TestSetupPgnFileRegistration}.
  */
 class TestSetupPgnTestEnumFolders {

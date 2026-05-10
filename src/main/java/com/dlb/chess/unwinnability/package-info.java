@@ -6,9 +6,8 @@
  *
  * <p>
  * Insufficient material covers the trivial cases (king-vs-king, king + minor vs king); positions like blocked pawn
- * walls, certain wrong-bishop endgames, and many forced-only-moves continuations are dead but <em>not</em>
- * insufficient — and most chess libraries get them wrong. CHA decides them correctly across the full range of
- * positions.
+ * walls, certain wrong-bishop endgames, and many forced-only-moves continuations are dead but <em>not</em> insufficient
+ * — and most chess libraries get them wrong. CHA decides them correctly across the full range of positions.
  *
  * <h2>Two variants</h2>
  *
@@ -32,9 +31,9 @@
  * Both variants are caller-invoked. CHA is <em>not</em> run automatically when a move is performed — the only deadness
  * check in the per-move game-status query is the structural insufficient-material test (see
  * {@link com.dlb.chess.board}). The motivating concern is bulk-PGN analysis, where a per-move CHA check would add
- * significant cumulative cost. The convenience entry points are on the {@link com.dlb.chess.common.interfaces.ChessBoard}
- * interface ({@code isUnwinnableQuick}, {@code isUnwinnableFull}, {@code isDeadPositionQuick},
- * {@code isDeadPositionFull}) and inherited by {@link com.dlb.chess.board.Board}.
+ * significant cumulative cost. The convenience entry points are on the
+ * {@link com.dlb.chess.common.interfaces.ChessBoard} interface ({@code isUnwinnableQuick}, {@code isUnwinnableFull},
+ * {@code isDeadPositionQuick}, {@code isDeadPositionFull}) and inherited by {@link com.dlb.chess.board.Board}.
  *
  * <p>
  * See {@code specification.md} §3.2 for the full design rationale.

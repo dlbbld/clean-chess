@@ -14,9 +14,9 @@ import com.dlb.chess.model.LegalMove;
  * Lock-down coverage for {@link EnPassantRole} as stored on {@link LegalMove}.
  *
  * <p>
- * Each of the three enum values must be producible by the legal-move generator for at least one
- * constructible position. These tests exercise representative board states and assert that the
- * expected move in each position carries the expected {@code EnPassantRole}.
+ * Each of the three enum values must be producible by the legal-move generator for at least one constructible position.
+ * These tests exercise representative board states and assert that the expected move in each position carries the
+ * expected {@code EnPassantRole}.
  */
 class TestEnPassantRole {
 
@@ -75,8 +75,7 @@ class TestEnPassantRole {
    */
   private static LegalMove findLegalMoveByFromTo(Board board, Square from, Square to) {
     for (final LegalMove legalMove : board.getLegalMoveSet()) {
-      if (legalMove.moveSpecification().fromSquare() == from
-          && legalMove.moveSpecification().toSquare() == to) {
+      if (legalMove.moveSpecification().fromSquare() == from && legalMove.moveSpecification().toSquare() == to) {
         return legalMove;
       }
     }

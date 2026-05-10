@@ -149,8 +149,8 @@ public abstract class SanValidateFormatReference {
     }
 
     // pawn promotion rank enforcement
-    if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION
-        || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION) && isAnyPromotionRank(toRank)) {
+    if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION)
+        && isAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
     if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION)
@@ -197,16 +197,15 @@ public abstract class SanValidateFormatReference {
   /**
    * Whether the given piece type can produce the given non-pawn, non-castling SAN format.
    * <ul>
-   *   <li>King formats accept only KING.</li>
-   *   <li>RNBQ formats accept ROOK, KNIGHT, BISHOP, QUEEN.</li>
+   * <li>King formats accept only KING.</li>
+   * <li>RNBQ formats accept ROOK, KNIGHT, BISHOP, QUEEN.</li>
    * </ul>
    */
   private static boolean isPieceTypeForSanFormat(PieceType pieceType, SanFormat sanFormat) {
     return switch (sanFormat) {
       case KING_NON_CASTLING_NON_CAPTURING, KING_NON_CASTLING_CAPTURING -> pieceType == PieceType.KING;
-      case RNBQ_NON_CAPTURING_NEITHER, RNBQ_NON_CAPTURING_FILE, RNBQ_NON_CAPTURING_RANK, RNBQ_NON_CAPTURING_SQUARE,
-          RNBQ_CAPTURING_NEITHER, RNBQ_CAPTURING_FILE, RNBQ_CAPTURING_RANK, RNBQ_CAPTURING_SQUARE -> pieceType == PieceType.ROOK
-              || pieceType == PieceType.KNIGHT || pieceType == PieceType.BISHOP || pieceType == PieceType.QUEEN;
+      case RNBQ_NON_CAPTURING_NEITHER, RNBQ_NON_CAPTURING_FILE, RNBQ_NON_CAPTURING_RANK, RNBQ_NON_CAPTURING_SQUARE, RNBQ_CAPTURING_NEITHER, RNBQ_CAPTURING_FILE, RNBQ_CAPTURING_RANK, RNBQ_CAPTURING_SQUARE -> pieceType == PieceType.ROOK
+          || pieceType == PieceType.KNIGHT || pieceType == PieceType.BISHOP || pieceType == PieceType.QUEEN;
       default -> false;
     };
   }

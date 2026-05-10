@@ -16,19 +16,20 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
- * Setup invariant: every PGN file under {@code src/test/resources/pgn} has a corresponding
- * test case registered in {@link PgnExpectedValue}, and every registered test case has a
- * matching PGN file on disk. The two sets must agree exactly.
+ * Setup invariant: every PGN file under {@code src/test/resources/pgn} has a corresponding test case registered in
+ * {@link PgnExpectedValue}, and every registered test case has a matching PGN file on disk. The two sets must agree
+ * exactly.
  *
- * <p>Rationale: the test corpus is driven by the registry — a PGN file with no expected-value
- * entry is invisible to every corpus-iterating test, and a registered entry without a disk
- * file would fail mid-run rather than at setup time. Comparing the two sets up front surfaces
- * either kind of drift with enough information to fix it (the set of orphan file names on
- * each side).
+ * <p>
+ * Rationale: the test corpus is driven by the registry — a PGN file with no expected-value entry is invisible to every
+ * corpus-iterating test, and a registered entry without a disk file would fail mid-run rather than at setup time.
+ * Comparing the two sets up front surfaces either kind of drift with enough information to fix it (the set of orphan
+ * file names on each side).
  *
- * <p>The check relies on the existing uniqueness invariant on registered file names enforced
- * by {@code PgnExpectedValue.checkUniqueFileNames}, which lets a single set of file names
- * stand in for the registry without losing information.
+ * <p>
+ * The check relies on the existing uniqueness invariant on registered file names enforced by
+ * {@code PgnExpectedValue.checkUniqueFileNames}, which lets a single set of file names stand in for the registry
+ * without losing information.
  */
 class TestSetupPgnFileRegistration {
 

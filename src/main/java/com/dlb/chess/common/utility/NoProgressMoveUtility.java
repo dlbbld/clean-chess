@@ -16,16 +16,19 @@ import com.dlb.chess.report.model.NoProgressIndex;
 
 public abstract class NoProgressMoveUtility {
 
-  public static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(ChessBoard board, int numberOfHalfMovesThreshold) {
+  public static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(ChessBoard board,
+      int numberOfHalfMovesThreshold) {
 
-    final List<NoProgressIndex> indexList = NoProgressMoveUtility.calculateNoProgressMoveIndex(board, numberOfHalfMovesThreshold);
+    final List<NoProgressIndex> indexList = NoProgressMoveUtility.calculateNoProgressMoveIndex(board,
+        numberOfHalfMovesThreshold);
 
     return NoProgressMoveUtility.calculateNoProgressMoveRule(board.getInitialFen().havingMove(),
         board.getInitialFen().fullMoveNumber(), board.getHalfMoveList(), indexList, numberOfHalfMovesThreshold);
   }
 
-  private static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(Side havingMoveInitial, int fullMoveNumberInitial,
-      final List<HalfMove> halfMoveList, List<NoProgressIndex> indexList, int numberOfHalfMovesThreshold) {
+  private static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(Side havingMoveInitial,
+      int fullMoveNumberInitial, final List<HalfMove> halfMoveList, List<NoProgressIndex> indexList,
+      int numberOfHalfMovesThreshold) {
 
     if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
       throw new IllegalArgumentException("The threshold cannot be below fifty moves");
@@ -69,8 +72,8 @@ public abstract class NoProgressMoveUtility {
         // we add the half move when the fifty-move rule becomes effective
         performedIndex = sequence.beginPerformedIndex() + ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
         sequenceLength = ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-        entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
-            performedIndex, sequenceLength);
+        entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial,
+            halfMoveList, performedIndex, sequenceLength);
         result.add(entry);
 
         if (halfMoveClockEnd < ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
@@ -90,8 +93,8 @@ public abstract class NoProgressMoveUtility {
           performedIndex = sequence.beginPerformedIndex()
               + ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD - 1;
           sequenceLength = ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
-          entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial, halfMoveList,
-              performedIndex, sequenceLength);
+          entry = NoProgressMoveUtility.calculateNoProgressHalfMove(havingMoveInitial, fullMoveNumberInitial,
+              halfMoveList, performedIndex, sequenceLength);
           result.add(entry);
 
           // we add the last half move of the sequence
@@ -113,16 +116,16 @@ public abstract class NoProgressMoveUtility {
       List<HalfMove> halfMoveList, int performedIndex, int sequenceLength) {
 
     if (performedIndex < 0) {
-      return NoProgressMoveUtility.calculateNoProgressHalfMoveNotPerformed(havingMoveInitial, fullMoveNumberInitial, performedIndex,
-          sequenceLength);
+      return NoProgressMoveUtility.calculateNoProgressHalfMoveNotPerformed(havingMoveInitial, fullMoveNumberInitial,
+          performedIndex, sequenceLength);
     }
 
     return NoProgressMoveUtility.calculateNoProgressHalfMovePerformed(havingMoveInitial, halfMoveList, performedIndex,
         sequenceLength);
   }
 
-  private static NoProgressHalfMove calculateNoProgressHalfMoveNotPerformed(Side havingMoveInitial, int fullMoveNumberInitial,
-      int performedIndex, int sequenceLength) {
+  private static NoProgressHalfMove calculateNoProgressHalfMoveNotPerformed(Side havingMoveInitial,
+      int fullMoveNumberInitial, int performedIndex, int sequenceLength) {
 
     final var performedHalfMoveCount = performedIndex + 1;
     final var fullMoveNumber = BasicChessUtility.calculateFullMoveNumber(havingMoveInitial, fullMoveNumberInitial,
@@ -134,8 +137,8 @@ public abstract class NoProgressMoveUtility {
     return new NoProgressHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
   }
 
-  private static NoProgressHalfMove calculateNoProgressHalfMovePerformed(Side havingMoveInitial, List<HalfMove> halfMoveList,
-      int performedIndex, int sequenceLength) {
+  private static NoProgressHalfMove calculateNoProgressHalfMovePerformed(Side havingMoveInitial,
+      List<HalfMove> halfMoveList, int performedIndex, int sequenceLength) {
 
     final HalfMove firstHalfMove = NonNullWrapperCommon.get(halfMoveList, performedIndex);
 

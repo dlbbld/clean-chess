@@ -68,8 +68,7 @@ class TestPgnUtility {
   @Test
   void testInnerSpacesNeverBecomeNewlines() {
     // The 30-char brace region has internal spaces, none of which may be turned into a wrap point.
-    checkWrappedLines("{a very spaced out comment here} 1. e4", 15,
-        "{a very spaced out comment here}", "1. e4");
+    checkWrappedLines("{a very spaced out comment here} 1. e4", 15, "{a very spaced out comment here}", "1. e4");
   }
 
   @SuppressWarnings("static-method")

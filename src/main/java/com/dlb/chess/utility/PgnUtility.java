@@ -20,10 +20,10 @@ public abstract class PgnUtility {
   }
 
   /**
-   * Wraps {@code line} into ≤ {@code lineLength}-char lines, splitting on spaces — except inside {@code {...}}
-   * brace comments, which are atomic. A brace region longer than {@code lineLength} is emitted on its own line
-   * rather than broken: spaces inside commentary are content, not wrap candidates. The 79-char export-format
-   * guideline is a soft target, matching python-chess.
+   * Wraps {@code line} into ≤ {@code lineLength}-char lines, splitting on spaces — except inside {@code {...}} brace
+   * comments, which are atomic. A brace region longer than {@code lineLength} is emitted on its own line rather than
+   * broken: spaces inside commentary are content, not wrap candidates. The 79-char export-format guideline is a soft
+   * target, matching python-chess.
    */
   public static List<String> calculateWrappedLines(String line, int lineLength) {
     final List<String> atoms = splitIntoAtoms(line);
@@ -48,8 +48,8 @@ public abstract class PgnUtility {
   }
 
   /**
-   * Splits {@code line} into space-separated atoms; each {@code {...}} region is one indivisible atom. Spaces and
-   * other characters inside a brace region are content, not separators. Per PGN spec §8.2.5 an inner {@code {} is
+   * Splits {@code line} into space-separated atoms; each {@code {...}} region is one indivisible atom. Spaces and other
+   * characters inside a brace region are content, not separators. Per PGN spec §8.2.5 an inner {@code {} is
    * content too, so only {@code }} ends a region.
    */
   private static List<String> splitIntoAtoms(String line) {

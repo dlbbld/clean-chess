@@ -19,7 +19,8 @@ public abstract class CommonTestUtility implements EnumConstants {
   // Must contain all methods in API interface which are not implemented in AbstractBoard
   // that is also crucial performance wise because in AbstractBoard there are methods taking very long,
   // and testing against makes no sense as always true as long board implentation match, what we test here.
-  private static void checkBoardsAgainstEachOther(ChessBoard boardFirst, ChessBoard boardSecond, boolean isIncludeHistory) {
+  private static void checkBoardsAgainstEachOther(ChessBoard boardFirst, ChessBoard boardSecond,
+      boolean isIncludeHistory) {
 
     assertEquals(boardFirst.isCheck(), boardSecond.isCheck());
     assertEquals(boardFirst.isCheckmate(), boardSecond.isCheckmate());

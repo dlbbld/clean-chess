@@ -11,14 +11,14 @@ import com.dlb.chess.distance.KnightDistance;
 /**
  * Cross-validates the BFS-based {@link KnightDistance} against an independent reference port of the closed-form
  * rank/file-distance algorithm from Miguel Ambrona's <em>D3-Chess</em> ({@code src/util.cpp},
- * {@code KnightDistance::knight_distance}). The two implementations use entirely different approaches — graph
- * search vs. table lookup with corner exception — so agreement on every one of the 64×64 = 4096 ordered square pairs
- * is strong evidence that both are correct.
+ * {@code KnightDistance::knight_distance}). The two implementations use entirely different approaches — graph search
+ * vs. table lookup with corner exception — so agreement on every one of the 64×64 = 4096 ordered square pairs is strong
+ * evidence that both are correct.
  *
  * <p>
- * The reference algorithm: for two squares, take the minimum and maximum of the file-distance and rank-distance.
- * Three small lookup tables map the (min, max) pair to the knight distance, partitioned by parity. One exceptional
- * case (corner adjacent-diagonal, e.g. {@code a8 ↔ b7}) cannot be derived from the tables and returns 4 explicitly.
+ * The reference algorithm: for two squares, take the minimum and maximum of the file-distance and rank-distance. Three
+ * small lookup tables map the (min, max) pair to the knight distance, partitioned by parity. One exceptional case
+ * (corner adjacent-diagonal, e.g. {@code a8 ↔ b7}) cannot be derived from the tables and returns 4 explicitly.
  *
  * <p>
  * Source: <a href="https://github.com/miguel-ambrona/D3-Chess">D3-Chess</a> (GPL v3).
@@ -32,9 +32,8 @@ class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
       for (final Square toSquare : Square.REAL) {
         final int actual = KnightDistance.distance(fromSquare, toSquare);
         final int expected = ambronaKnightDistance(fromSquare, toSquare);
-        assertEquals(expected, actual,
-            () -> "knight distance mismatch for " + fromSquare + " -> " + toSquare
-                + " (BFS=" + actual + ", Ambrona=" + expected + ")");
+        assertEquals(expected, actual, () -> "knight distance mismatch for " + fromSquare + " -> " + toSquare + " (BFS="
+            + actual + ", Ambrona=" + expected + ")");
       }
     }
   }
