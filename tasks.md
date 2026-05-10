@@ -310,6 +310,19 @@ README and `unwinnability/package-info.java` use "worst play / worst-case play b
 README says CHA full is "slower but 100% accurate," then a few lines down documents the `UNDETERMINED` outcome (and again later in the doc).
 - [ ] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
 
+### Replace `EnumConstants` constant interface
+`com.dlb.chess.common.constants.EnumConstants` is a `public interface` whose only purpose is to expose ~90 `public static final` aliases for `Square.*`, `Side.*`, `Piece.*`, `PieceType.*`, `Rank.*`, `File.*` so implementing classes inherit them unqualified. This is the classic "constant interface" anti-pattern (Effective Java item 22): interfaces should describe a contract/behavior, not be a convenience-inheritance vehicle for constants. The mechanism reads as beginner Java and leaks an internal vocabulary choice into the public type surface — `ChessBoard extends EnumConstants` is the clearest symptom (the chess contract has nothing to do with how implementers prefer to spell `Square.E4`). Used by 43 files under `src/main` plus tests.
+
+Replacement strategy options, depending on intended audience:
+- public-API constants: `public final class EnumConstants` with `public static final` fields and a private constructor (callers `import static`)
+- internal-only: make package-private and split closer to where they belong (domain-grouped, e.g. `BoardSquares`, `PieceLetters`)
+- derived enum collections: prefer local `EnumSet` / `ImmutableSet` factories in the utility that needs them, or dedicated package-private constants classes by domain
+
+- [ ] Pick a replacement strategy (default lean: package-private utility class with `import static`, since the constants are internal vocabulary and the audit reduces public surface anyway)
+- [ ] Drop `extends EnumConstants` from `ChessBoard` regardless of strategy — the interface should not carry constants
+- [ ] Convert the 43 src/main call sites + tests to static imports
+- [ ] Folds naturally into the API-surface reduction release; treat as a cleanup target there
+
 ### Rename `NonNullWrapperCommon` to `Nulls`
 The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes through it), and `NonNullWrapperCommon` is too long for something so frequent. `Nulls` is short, pronounceable, says the domain (this utility exists because of nullness handling), and discoverable in the IDE. Rejected alternatives: `NNVC` (cryptic codeword), `Safe` / `Checked` (vague), `NonNulls` (awkward plural).
 - [ ] Rename class `NonNullWrapperCommon` → `Nulls`; update all call sites (uses appear in most files in the project — bulk rename)
