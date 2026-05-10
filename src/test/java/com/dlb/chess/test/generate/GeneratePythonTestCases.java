@@ -14,7 +14,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.model.Report;

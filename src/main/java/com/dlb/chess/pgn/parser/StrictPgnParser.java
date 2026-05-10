@@ -14,7 +14,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
@@ -67,7 +66,7 @@ public final class StrictPgnParser {
 
   public static PgnFile parse(Path pgnFilePath) {
     // Read raw bytes — line-based reconstruction would hide whether the source's trailing newline is actually present.
-    return parseText(FileUtility.readFileAsString(pgnFilePath));
+    return parseText(PgnFileReader.readPgnFile(pgnFilePath));
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {

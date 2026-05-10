@@ -12,7 +12,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.report.enums.CheckmateOrStalemate;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;

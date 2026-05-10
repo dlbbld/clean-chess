@@ -13,7 +13,6 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.FileUtility;
 
 public final class MultiplePgnSplitUtility {
 

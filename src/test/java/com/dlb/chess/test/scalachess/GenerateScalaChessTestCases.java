@@ -19,7 +19,7 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.moves.utility.CastlingUtility;

@@ -16,7 +16,7 @@ import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;

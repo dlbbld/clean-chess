@@ -13,7 +13,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
@@ -70,7 +69,7 @@ public final class LenientPgnParser {
   }
 
   public static PgnFile parse(Path pgnFilePath) {
-    return parseText(FileUtility.readFileAsString(pgnFilePath));
+    return parseText(PgnFileReader.readPgnFile(pgnFilePath));
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
@@ -105,7 +104,7 @@ public final class LenientPgnParser {
   public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
     final LenientPgnParser parser;
     try {
-      parser = new LenientPgnParser(FileUtility.readFileAsString(pgnFilePath));
+      parser = new LenientPgnParser(PgnFileReader.readPgnFile(pgnFilePath));
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ForgivenItem.EMPTY_LIST);

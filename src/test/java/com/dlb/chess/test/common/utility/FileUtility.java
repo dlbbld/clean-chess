@@ -1,4 +1,4 @@
-package com.dlb.chess.common.utility;
+package com.dlb.chess.test.common.utility;
 
 import java.io.File;
 import java.io.IOException;

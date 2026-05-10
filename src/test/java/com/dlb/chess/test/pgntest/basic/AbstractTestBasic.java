@@ -16,7 +16,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.TestSetupException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.FileUtility;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.model.PgnFileTestCase;
