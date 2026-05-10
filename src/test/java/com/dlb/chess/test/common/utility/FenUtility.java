@@ -1,4 +1,4 @@
-package com.dlb.chess.common.utility;
+package com.dlb.chess.test.common.utility;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;

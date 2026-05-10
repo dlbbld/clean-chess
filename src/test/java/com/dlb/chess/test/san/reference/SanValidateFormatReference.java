@@ -14,7 +14,7 @@ import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.model.SanConversionCheck;
+import com.dlb.chess.test.san.model.SanConversionCheck;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
 

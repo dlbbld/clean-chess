@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.TestSetupException;
-import com.dlb.chess.common.utility.DiagonalLineUtility;
+import com.dlb.chess.test.common.utility.DiagonalLineUtility;
 
 class TestDiagonalUtility implements EnumConstants {
 

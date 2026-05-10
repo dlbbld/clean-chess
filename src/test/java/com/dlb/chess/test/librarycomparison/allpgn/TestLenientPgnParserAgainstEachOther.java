@@ -13,7 +13,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.parser.model.PgnSan;
+import com.dlb.chess.test.pgn.parser.model.PgnSan;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.librarycarlos.pgn.parser.PgnParserLibraryCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;

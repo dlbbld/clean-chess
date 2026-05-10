@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.model;
+package com.dlb.chess.test.pgn.parser.model;
 
 import java.util.List;
 

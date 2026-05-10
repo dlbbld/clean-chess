@@ -18,7 +18,7 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
-import com.dlb.chess.common.utility.PgnExtensionUtility;
+import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.parser.enums.ResultTagValue;
 import com.dlb.chess.pgn.parser.enums.StandardTag;

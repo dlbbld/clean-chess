@@ -1,4 +1,4 @@
-package com.dlb.chess.san.model;
+package com.dlb.chess.test.san.model;
 
 import com.dlb.chess.model.SanConversion;
 

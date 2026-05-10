@@ -1,4 +1,4 @@
-package com.dlb.chess.fen;
+package com.dlb.chess.test.fen;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;

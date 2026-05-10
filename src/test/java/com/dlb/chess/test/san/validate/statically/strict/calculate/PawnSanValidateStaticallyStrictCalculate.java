@@ -12,7 +12,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.model.SanValidationFromTo;
+import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.enums.PawnBlackSanValidateStaticallyStrict;
 import com.dlb.chess.test.san.validate.statically.strict.enums.PawnWhiteSanValidateStaticallyStrict;
 import com.google.common.collect.ImmutableMap;

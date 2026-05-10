@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.utility.PgnExtensionUtility;
+import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
