@@ -14,7 +14,7 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 
 //Figure 13 Going-to-corner routine used in Figure 12.
-public class GoingToCorner implements EnumConstants {
+class GoingToCorner implements EnumConstants {
 
   // Inputs: position, legal move in the position, objective (Win or Lose)
   // Output: bool (indicating whether or not m is leading to a corner mating position)

@@ -17,7 +17,7 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
 
-public abstract class SanValidateMovementRnbq extends AbstractSan implements EnumConstants {
+abstract class SanValidateMovementRnbq extends AbstractSan implements EnumConstants {
 
   public static void validateRnbqMovement(SanParse sanParse) {
     final SanConversion sanConversion = sanParse.sanConversion();
@@ -76,14 +76,14 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     }
 
     switch (movingPieceType) {
-      case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
-          Message.getString("validation.san.movement.rnbq.from.file.rook", fromFile.getLetterString(), toSquare.getName()));
-      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
-          Message.getString("validation.san.movement.rnbq.from.file.knight", fromFile.getLetterString(), toSquare.getName()));
-      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
-          Message.getString("validation.san.movement.rnbq.from.file.bishop", fromFile.getLetterString(), toSquare.getName()));
-      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE,
-          Message.getString("validation.san.movement.rnbq.from.file.queen", fromFile.getLetterString(), toSquare.getName()));
+      case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE, Message
+          .getString("validation.san.movement.rnbq.from.file.rook", fromFile.getLetterString(), toSquare.getName()));
+      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE, Message
+          .getString("validation.san.movement.rnbq.from.file.knight", fromFile.getLetterString(), toSquare.getName()));
+      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE, Message
+          .getString("validation.san.movement.rnbq.from.file.bishop", fromFile.getLetterString(), toSquare.getName()));
+      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_FILE, Message
+          .getString("validation.san.movement.rnbq.from.file.queen", fromFile.getLetterString(), toSquare.getName()));
       default -> throw new IllegalArgumentException();
     }
   }
@@ -134,12 +134,12 @@ public abstract class SanValidateMovementRnbq extends AbstractSan implements Enu
     switch (movingPieceType) {
       case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
           Message.getString("validation.san.movement.rnbq.from.square.rook", fromSquare.getName(), toSquare.getName()));
-      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
-          Message.getString("validation.san.movement.rnbq.from.square.knight", fromSquare.getName(), toSquare.getName()));
-      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
-          Message.getString("validation.san.movement.rnbq.from.square.bishop", fromSquare.getName(), toSquare.getName()));
-      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE,
-          Message.getString("validation.san.movement.rnbq.from.square.queen", fromSquare.getName(), toSquare.getName()));
+      case KNIGHT -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE, Message
+          .getString("validation.san.movement.rnbq.from.square.knight", fromSquare.getName(), toSquare.getName()));
+      case BISHOP -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE, Message
+          .getString("validation.san.movement.rnbq.from.square.bishop", fromSquare.getName(), toSquare.getName()));
+      case QUEEN -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_SQUARE, Message
+          .getString("validation.san.movement.rnbq.from.square.queen", fromSquare.getName(), toSquare.getName()));
       default -> throw new IllegalArgumentException();
     }
   }

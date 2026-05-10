@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.squares.to.potential.KingNonCastlingPotentialToSquares;
 
-public class KingNonCastlingLegalMoves extends KingLegalMoves {
+class KingNonCastlingLegalMoves extends KingLegalMoves {
   public static Set<LegalMove> calculateKingNonCastlingLegalMoves(StaticPosition staticPosition, Side havingMove,
       Square fromSquare) {
 

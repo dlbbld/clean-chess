@@ -9,7 +9,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 
-public abstract class SanValidateNonMovement extends AbstractSan {
+abstract class SanValidateNonMovement extends AbstractSan {
 
   public static void validateNonMovement(SanParse sanParse) {
     final SanFormat sanFormat = sanParse.sanFormat();
@@ -22,7 +22,8 @@ public abstract class SanValidateNonMovement extends AbstractSan {
         if (fromSquare == toSquare) {
           throw new SanValidationException(
               SanValidationProblem.NON_MOVEMENT_RNBQ_SOURCE_SQUARE_EQUALS_DESTINATION_SQUARE,
-              Message.getString("validation.san.nonMovement.rnbq.sourceSquareEqualsDestinationSquare", fromSquare.getName(), toSquare.getName()));
+              Message.getString("validation.san.nonMovement.rnbq.sourceSquareEqualsDestinationSquare",
+                  fromSquare.getName(), toSquare.getName()));
         }
         break;
       }

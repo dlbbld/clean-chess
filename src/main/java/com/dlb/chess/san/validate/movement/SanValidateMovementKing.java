@@ -11,7 +11,7 @@ import com.dlb.chess.san.model.SanParse;
  * moving into check, moving next to the opponent king, or castling restrictions is validated later against the actual
  * board state.
  */
-public abstract class SanValidateMovementKing extends AbstractSan {
+abstract class SanValidateMovementKing extends AbstractSan {
 
   public static void validateKingMovement(@SuppressWarnings("unused") SanParse sanParse) {
     // intentional no-op

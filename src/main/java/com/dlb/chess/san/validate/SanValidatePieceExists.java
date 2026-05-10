@@ -15,7 +15,7 @@ import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
-public abstract class SanValidatePieceExists extends AbstractSan {
+abstract class SanValidatePieceExists extends AbstractSan {
 
   public static void validatePieceExists(Side havingMove, SanFormat sanFormat, SanConversion sanConversion,
       PieceType movingPieceType, StaticPosition staticPosition) {
@@ -77,8 +77,7 @@ public abstract class SanValidatePieceExists extends AbstractSan {
         if (pieceOnFromSquare == Piece.NONE || pieceOnFromSquare.getSide() != havingMove
             || pieceOnFromSquare.getPieceType() != movingPieceType) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_SQUARE,
-              Message.getString("validation.san.exists.rnbq.square", movingPieceType.getName(),
-                  fromSquare.getName()));
+              Message.getString("validation.san.exists.rnbq.square", movingPieceType.getName(), fromSquare.getName()));
         }
         break;
       default:

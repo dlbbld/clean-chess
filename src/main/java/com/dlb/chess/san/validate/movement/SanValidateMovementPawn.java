@@ -11,7 +11,7 @@ import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
-public abstract class SanValidateMovementPawn extends AbstractSan implements EnumConstants {
+abstract class SanValidateMovementPawn extends AbstractSan implements EnumConstants {
 
   public static void validatePawnMovement(Side havingMove, SanFormat sanFormat, SanConversion sanConversion) {
 

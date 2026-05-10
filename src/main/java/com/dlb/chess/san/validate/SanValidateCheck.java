@@ -8,7 +8,7 @@ import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
-public abstract class SanValidateCheck extends AbstractSan {
+abstract class SanValidateCheck extends AbstractSan {
 
   public static void validateSanTerminalMarker(ChessBoard board, SanTerminalMarker sanSanTerminalMarker,
       MoveSpecification moveSpecification) {

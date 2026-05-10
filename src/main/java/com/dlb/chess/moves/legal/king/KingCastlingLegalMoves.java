@@ -11,7 +11,7 @@ import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
-public class KingCastlingLegalMoves extends KingLegalMoves {
+class KingCastlingLegalMoves extends KingLegalMoves {
   public static Set<LegalMove> calculateKingCastlingLegalMoves(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight) {
 

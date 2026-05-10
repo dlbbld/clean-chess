@@ -39,10 +39,10 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
 import com.dlb.chess.squares.to.potential.AbstractPotentialToSquares;
 
-public abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstants {
+abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstants {
 
-  public static MoveSpecification calculateMoveSpecificationForSan(ChessBoard board, Side havingMove, SanFormat sanFormat,
-      SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
+  public static MoveSpecification calculateMoveSpecificationForSan(ChessBoard board, Side havingMove,
+      SanFormat sanFormat, SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
 
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       return new MoveSpecification(CastlingMove.QUEEN_SIDE);

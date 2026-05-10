@@ -17,7 +17,7 @@ import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 
-public abstract class SanValidateDestination extends AbstractSan implements EnumConstants {
+abstract class SanValidateDestination extends AbstractSan implements EnumConstants {
 
   public static void validateDestinationSquareSemantics(ChessBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion) {
@@ -39,7 +39,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
 
   private static void validatePawnDestination(ChessBoard board, Side havingMove, SanFormat sanFormat,
       SanConversion sanConversion, Square toSquare, Piece pieceOnToSquare) {
-    final boolean isCapture = sanFormat.isCapture();
+    final var isCapture = sanFormat.isCapture();
 
     if (pieceOnToSquare != Piece.NONE) {
       // own piece on destination
@@ -84,7 +84,7 @@ public abstract class SanValidateDestination extends AbstractSan implements Enum
 
   private static void validateRnbqkDestination(Side havingMove, SanFormat sanFormat, Square toSquare,
       Piece pieceOnToSquare) {
-    final boolean isCapture = sanFormat.isCapture();
+    final var isCapture = sanFormat.isCapture();
 
     if (pieceOnToSquare != Piece.NONE) {
       // own piece on destination

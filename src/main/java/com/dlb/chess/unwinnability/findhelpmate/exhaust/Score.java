@@ -17,15 +17,15 @@ import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
 
 // Figure 12 Score routine used in Figure 5. Algorithm Going-to-corner is defined in Figure 13.
-public class Score {
+class Score {
 
   public static ScoreResult scoreClassicalCheckmate(Side havingMove, StaticPosition staticPosition,
       LegalMove legalMove) {
     if (legalMove.pieceCaptured() != Piece.NONE) {
       return ScoreResult.REWARD;
     }
-    final Set<Square> squaresAttackedByNotHavingMove = AbstractAttackedSquares
-        .calculateAttackedSquares(staticPosition, havingMove.getOppositeSide());
+    final Set<Square> squaresAttackedByNotHavingMove = AbstractAttackedSquares.calculateAttackedSquares(staticPosition,
+        havingMove.getOppositeSide());
 
     if (squaresAttackedByNotHavingMove.contains(legalMove.moveSpecification().toSquare())) {
       return ScoreResult.REWARD;
