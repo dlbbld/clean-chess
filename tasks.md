@@ -321,6 +321,18 @@ README and `unwinnability/package-info.java` use "worst play / worst-case play b
 README says CHA full is "slower but 100% accurate," then a few lines down documents the `UNDETERMINED` outcome (and again later in the doc).
 - [ ] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
 
+### Remove the `EnPassantCaptureRuleThreefold` dual-path
+The `EnPassantCaptureRuleThreefold` enum (`DO_IGNORE` / `DO_NOT_IGNORE`) drives a second, parallel repetition-tracking code path that ignores en passant availability when comparing dynamic positions. It was added as a research tool: in FIDE rules, two positions with the same piece arrangement but different en-passant availability are *not* the same position for threefold-repetition purposes — but chess.com (and other platforms) implemented the lazy "visual repetition" rule and don't check en-passant availability. The dual path made it easy to find PGN games where the two interpretations diverge, producing examples to demonstrate the platform-side bug.
+
+That research goal is no longer load-bearing for the library. The dual code path costs ongoing complexity (two flavours of `equals`-like comparison, two parallel data structures on `Report`, two flavours of every repetition test fixture) for a feature whose audience was one researcher. As clean-chess matures, the library should implement the FIDE rule cleanly and only.
+
+- [ ] Drop the `EnPassantCaptureRuleThreefold` enum
+- [ ] Remove `Report.repetitionListListInitialEnPassantCapture()` and any other dual-path fields/methods on `Report`
+- [ ] Collapse `RepetitionUtility.getCountRepetition` and the surrounding repetition-tracking machinery to the single FIDE-correct path
+- [ ] Drop the dual-path test fixtures, reports, and representation code in `com.dlb.chess.test.report.representation.*`
+- [ ] Strip the explanatory paragraph in `RepetitionUtility`'s class-level Javadoc about "two different ways" of counting repetition
+- [ ] Verify `git grep -i "ignoring en passant"` (or similar phrasing) returns zero hits afterwards
+
 ### Replace `EnumConstants` constant interface
 `com.dlb.chess.common.constants.EnumConstants` is a `public interface` whose only purpose is to expose ~90 `public static final` aliases for `Square.*`, `Side.*`, `Piece.*`, `PieceType.*`, `Rank.*`, `File.*` so implementing classes inherit them unqualified. This is the classic "constant interface" anti-pattern (Effective Java item 22): interfaces should describe a contract/behavior, not be a convenience-inheritance vehicle for constants. The mechanism reads as beginner Java and leaks an internal vocabulary choice into the public type surface — `ChessBoard extends EnumConstants` is the clearest symptom (the chess contract has nothing to do with how implementers prefer to spell `Square.E4`). Used by 43 files under `src/main` plus tests.
 
