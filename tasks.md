@@ -323,6 +323,16 @@ Replacement strategy options, depending on intended audience:
 - [ ] Convert the 43 src/main call sites + tests to static imports
 - [ ] Folds naturally into the API-surface reduction release; treat as a cleanup target there
 
+### Records carry data, not behavior — sweep for violations
+The project rule (documented in `coding-conventions.md`): records carry data; domain logic that operates on them lives in dedicated utility / service classes. Permitted on a record: compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals` / `hashCode` / `toString`. Domain-operation methods are not.
+
+Surfaced by the unused-code-detector pass on `StaticPosition`: the record carries multiple non-data methods — `createChangedPosition` (three overloads), `isPawn`, `isOwnPawn`, `isOpponentPawn`, `isOwnKing`, `isOpponentKing`, almost certainly more. Some have only test callers (suggesting test scaffolding), some have production callers, one (`isOwnKing`) has zero callers anywhere.
+
+- [ ] Catalog every non-permitted member on `StaticPosition` and assign a disposition per member: delete (no callers anywhere), move to a test-side helper that **takes** a `StaticPosition` rather than duplicating it (test-only callers), or move to a `StaticPositionUtility` (production callers).
+- [ ] Sweep every record under `src/main/java` for the same pattern. Records to check include at least `Fen`, `Tag`, `PgnFile`, `LegalMove`, `MoveSpecification`, `StaticPosition`, plus any other top-level `record` declarations under `src/main`.
+- [ ] Apply the dispositions; verify only the permitted member shapes remain on each record.
+- [ ] Naturally folds into the API-surface reduction release, since most "move to utility" relocations open the door to making the utility itself package-private.
+
 ### Rename `NonNullWrapperCommon` to `Nulls`
 The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes through it), and `NonNullWrapperCommon` is too long for something so frequent. `Nulls` is short, pronounceable, says the domain (this utility exists because of nullness handling), and discoverable in the IDE. Rejected alternatives: `NNVC` (cryptic codeword), `Safe` / `Checked` (vague), `NonNulls` (awkward plural).
 - [ ] Rename class `NonNullWrapperCommon` → `Nulls`; update all call sites (uses appear in most files in the project — bulk rename)
