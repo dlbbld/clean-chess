@@ -23,10 +23,6 @@ public abstract class BasicUtility {
   private BasicUtility() {
   }
 
-  public static String calculateCommaSeparatedList(Set<String> set) {
-    return calculateCommaSeparatedList(new ArrayList<>(set));
-  }
-
   public static String calculateCommaSeparatedList(List<String> list) {
     return NonNullWrapperCommon.join(COMMA_SEPARATOR_LIST, list);
   }
