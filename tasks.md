@@ -287,6 +287,17 @@ Three FEN parsers exist: `FenParserRaw`, `FenParserAdvanced`, `FenParserAdvanced
 - [ ] Document each tier's contract precisely in `specification.md`
 - [ ] Decide: keep three tiers, collapse `AdvancedFurther` into `Advanced`, or drop it
 
+### Move FEN-letter parsing off `Side` and `BasicChessUtility` onto the FEN parser
+Layering violation surfaced by the API-surface audit. `Side.calculate(String)` parses the FEN single-letter side indicator (`"w"` / `"b"`) into a `Side` enum value — but FEN-syntax knowledge does not belong on the chess-rules `Side` enum. The same parsing also appears, redundantly, on `BasicChessUtility.calculateSideHavingMoveForSide(String)`. Both should be deleted; their logic belongs in `FenParserRaw` / `FenParserAdvanced` (wherever the rest of FEN field parsing lives).
+
+While in `FenParserAdvanced`, `validateHavingMove` currently checks for `w` or `b` via a regular expression — overkill for a two-character alphabet. A direct equality check that throws the advanced FEN validation exception on mismatch is the natural shape.
+
+- [ ] Move FEN-letter → `Side` parsing into the FEN parser layer; pick the right home (likely `FenParserRaw` since this is purely lexical)
+- [ ] Delete `Side.calculate(String)` from the `Side` enum
+- [ ] Delete `BasicChessUtility.calculateSideHavingMoveForSide(String)` (duplicate of the above)
+- [ ] Replace the regex in `FenParserAdvanced.validateHavingMove` with a direct equality check + advanced-FEN-validation throw
+- [ ] Update any test callers of the removed methods to go through the FEN parser instead
+
 ### Replace `UciValidateHelper` enum with computed lookup
 Auto-generated 1984-line enum, ~111 KB class file (~50% of the JAR's bytecode mass). Used as a list-of-strings rather than as an enum. A generation loop in the static init of its only caller would replace 1984 lines of source with ~12.
 - [ ] Replace the enum with a `Set<String>` (or similar) computed via a constructor loop
@@ -322,6 +333,21 @@ Replacement strategy options, depending on intended audience:
 - [ ] Drop `extends EnumConstants` from `ChessBoard` regardless of strategy — the interface should not carry constants
 - [ ] Convert the 43 src/main call sites + tests to static imports
 - [ ] Folds naturally into the API-surface reduction release; treat as a cleanup target there
+
+### Profound-level square geometry — promote single-step calculations to lookup tables
+The codebase already uses lookup tables for the geometry that matters — `OrthogonalRange`, `DiagonalRange`, `KnightEmptyBoardSquares`, `BishopEmptyBoardSquares`, `RookEmptyBoardSquares`, `DiagonalLineUtility`. Single-step instance-style methods on `Square` (`calculateLeftSquare`, `calculateLeftDiagonalSquare`, `calculateAheadSquare`, etc.) and `File` / `Rank` are the calculate-on-demand holdouts in an otherwise table-based codebase. The "calculate" form has a deeper testing problem: any independent test implementation faces a definitional regress ("left of E4 from White is D4 — but what does *left* mean if not what `calculateLeft` returns?"), which is how `Square.calculateIsLeftDiagonalSquare` ended up as a tautological method that tested itself against itself.
+
+The fix is to promote these single-step relationships to data:
+- `Map<Square, Map<Side, Square>>` (or `EnumMap<Square, EnumMap<Side, Square>>`) constants for left, right, ahead, behind, left-diagonal, right-diagonal
+- The "has" predicates collapse to `map.containsKey(...)` or `value != NONE`
+- The map is built once at class load; tests verify the table by inspection or via python-chess cross-reference (folds into the existing python-chess backlog)
+- The bug surface shrinks to one place: the table-builder
+
+- [ ] Inventory single-step `calculate*` methods on `Square` / `File` / `Rank` that are pure square→square (or square+side→square) lookups
+- [ ] Replace each with a precomputed `EnumMap` constant + a thin accessor
+- [ ] Generate the expected tables either by hand-curation or by python-chess cross-reference (latter is preferred once the python-chess infrastructure lands)
+- [ ] Drop the algorithm-vs-algorithm test patterns; tests become "look up in production table, compare to reference table"
+- [ ] Folds naturally into the DeepSquare rename moment — this kind of foundational rigor is exactly what the rename signals
 
 ### Records carry data, not behavior — sweep for violations
 The project rule (documented in `coding-conventions.md`): records carry data; domain logic that operates on them lives in dedicated utility / service classes. Permitted on a record: compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals` / `hashCode` / `toString`. Domain-operation methods are not.
