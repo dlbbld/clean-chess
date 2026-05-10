@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 
 public abstract class ThreefoldClaimAheadUtility {
-  public static List<List<ClaimAhead>> calculateThreefoldClaimAhead(Board board) {
+  public static List<List<ClaimAhead>> calculateThreefoldClaimAhead(ChessBoard board) {
     return calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
   }
 
-  public static List<List<ClaimAhead>> calculateThreefoldClaimAhead(List<LegalMove> legalMoveList, Fen initialFen) {
+  private static List<List<ClaimAhead>> calculateThreefoldClaimAhead(List<LegalMove> legalMoveList, Fen initialFen) {
 
     final List<List<ClaimAhead>> resultListList = new ArrayList<>();
     final Board board = new Board(initialFen);

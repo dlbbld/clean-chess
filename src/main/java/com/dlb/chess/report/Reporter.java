@@ -106,8 +106,7 @@ public final class Reporter {
 
     // repetition
     addFirstMainSection(output, "report.repetition.threefold.ahead.title");
-    final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility
-        .calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
+    final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
     if (claimAheadListList.isEmpty()) {
       output.add(Message.getString("report.repetition.threefold.ahead.none"));
     } else {
