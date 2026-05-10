@@ -362,6 +362,26 @@ The fix is to promote these single-step relationships to data:
 - [ ] Folds naturally into the DeepSquare rename moment — this kind of foundational rigor is exactly what the rename signals
 - [ ] **Companion concern — bloated lookup-table implementations.** `PawnDiagonalSquares` is 826 lines of generated code (per-square `addWhiteA1`, `addWhiteA2`, … methods) to express what is conceptually "for each pawn from-square, the 0–2 diagonal capture squares." The same shape recurs across the `com.dlb.chess.squares.emptyboard.*` family (`Knight`, `Bishop`, `Rook`, `Queen`, `King`, `PawnOneAdvance`, `PawnTwoAdvance`, `PawnAnyAdvance`). These tables are correctly precomputed, but their implementation should be a single `static {}` initializer that loops over `Square.REAL` and computes each entry via simple file/rank arithmetic — not hundreds of method-per-square stubs. Replacing them collapses ~thousand-line files to dozens of lines while preserving the precomputed-table API. Same theme as the main bullet: keep the lookup, sane the implementation.
 
+### PGN round-trip fidelity — stop auto-completing tags on import
+The lenient PGN parser currently "fixes" user input on import by auto-completing missing Seven-Tag-Roster tags with placeholder values (`TagPlaceHolderUtility`) and synthesising a Result tag from the movetext termination marker (or `*` if neither is present). This means the parser silently rewrites the user's PGN, and a lenient `parse → write` round-trip does not return the original input.
+
+The principle the lenient parser/writer pair should adopt: **whatever the lenient parser was willing to accept, the writer should be willing to emit unchanged.** Strict parsing can enforce STR completeness; lenient parsing should preserve what the user gave. Today the two have evolved independently — the lenient parser grew more forgiving while the writer continued to "normalise."
+
+Three concrete inconsistencies that need a single coherent decision (not three independent fixes):
+
+1. **Missing STR tags.** A PGN without some subset of `Event / Site / Date / Round / White / Black / Result` is rewritten on import to include placeholders. If the user didn't write the tags, the export shouldn't either. Drop the placeholder fill on the lenient path, or make it explicitly opt-in.
+
+2. **Result tag vs termination marker.** PGN encodes the game result twice — once as a `Result` tag, once as the movetext termination marker. When both are missing, the parser/writer currently assumes `*` (ongoing). But "user didn't say what the result is" and "the result is ongoing" are different statements. Under the round-trip principle, if neither is present in the input the writer should omit `Result` from the output, rather than synthesising `*`.
+
+3. **`FEN` tag without `SetUp` tag.** Per PGN spec, presence of a `FEN` tag requires `SetUp 1`. The lenient parser accepts a lone `FEN`. On export the writer must either add the missing `SetUp` (falsifies input but produces spec-compliant output) or omit `SetUp` to match input (round-trip honest, but the output won't pass a strict parser).
+
+- [ ] Decide canonical policy. Recommended starting point: on the lenient path, drop placeholder STR fill; preserve `Result` presence/absence; preserve `SetUp` presence/absence. Strict path keeps current normalisation if needed.
+- [ ] Remove `TagPlaceHolderUtility` (or restrict it to the strict path) once policy is settled.
+- [ ] Document the round-trip contract in `specification.md`: lenient parser + writer round-trip exactly; strict parser may reject what lenient accepted, but does not silently rewrite input.
+- [ ] Add a fixture that takes a "deficient" PGN (missing STR tags, no Result tag, FEN without SetUp), parses leniently, writes, and asserts textual equality with the input (or a documented normalised-but-faithful form).
+
+Connects to TagUtility's role: even though the user-facing `TagUtility` API stays consumer-facing, the question of *what the parser fabricates* is separable from *what utilities consumers can call on a parsed tag list*.
+
 ### Introduce `LegalMoveKind` on `LegalMove`; absorb `EnPassantRole`
 A legal move has a category — normal, castling, en passant capture, pawn two-square advance, promotion — that the move pipeline already knows when it constructs the `LegalMove`. Today consumers (and tests) recover that category by re-reading `MoveSpecification` fields one at a time (e.g. `move.moveSpecification().promotionPieceType() != PromotionPieceType.NONE` to ask "was this a promotion?"). That is a smell: the move pipeline knew the answer, then threw it away.
 
