@@ -3,7 +3,6 @@ package com.dlb.chess.test.common.utility;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -12,46 +11,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
 
 class TestBasicUtility {
-
-  @SuppressWarnings("static-method")
-  @Test
-  void test() {
-
-    check("dfdujh", "[1-9]+", "dfdujh");
-
-    check("1dfdujh", "[1-9]+", "1dfdujh");
-
-    check("dfdujh2", "[1-9]+", "dfdujh", "2");
-
-    check("5ab1c2d", "[1-9]+", "5ab", "1c", "2d");
-
-    check("5ab1c2d3", "[1-9]+", "5ab", "1c", "2d", "3");
-
-    check("gt5ab1c2d", "[1-9]+", "gt", "5ab", "1c", "2d");
-
-    check("gt5ab1c2d9", "[1-9]+", "gt", "5ab", "1c", "2d", "9");
-
-    final var regExpMoveNumber = "[1-9]{1}[0-9]*\\. ";
-
-    check("1. e2", regExpMoveNumber, "1. e2");
-    check("1. e2 ", regExpMoveNumber, "1. e2 ");
-    check("1. e2 e4", regExpMoveNumber, "1. e2 e4");
-    check("1. e2 e4 ", regExpMoveNumber, "1. e2 e4 ");
-    check("1. e2 e4 2. d4", regExpMoveNumber, "1. e2 e4 ", "2. d4");
-    check("1. e2 e4 2. d4 ", regExpMoveNumber, "1. e2 e4 ", "2. d4 ");
-    check("1. e2 e4 2. d4 d5", regExpMoveNumber, "1. e2 e4 ", "2. d4 d5");
-    check("1. e2 e4 2. d4 d5 ", regExpMoveNumber, "1. e2 e4 ", "2. d4 d5 ");
-
-    check("1. e2 e4 2. d4 d5 3. Sc3", regExpMoveNumber, "1. e2 e4 ", "2. d4 d5 ", "3. Sc3");
-    check("1. e2 e4 2. d4 d5 3. Sc3 Sc6", regExpMoveNumber, "1. e2 e4 ", "2. d4 d5 ", "3. Sc3 Sc6");
-
-  }
-
-  private static void check(String string, String regExp, String... expectedListArray) {
-    @SuppressWarnings("null") final List<String> expectedList = Arrays.asList(expectedListArray);
-    final List<String> actualList = BasicUtility.splitStringRetainingDelimiter(string, regExp);
-    assertEquals(expectedList, actualList);
-  }
 
   @SuppressWarnings("static-method")
   @Test

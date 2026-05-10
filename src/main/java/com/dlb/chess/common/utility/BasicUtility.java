@@ -5,10 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Pattern;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 public abstract class BasicUtility {
 
@@ -27,54 +25,6 @@ public abstract class BasicUtility {
 
   public static String calculateSpaceSeparatedList(List<String> list) {
     return NonNullWrapperCommon.join(SPACE_SEPARATOR_LIST, list);
-  }
-
-  // for "1. a4", "1. a4 a5", "1. a4 a5 2. e3", "1. a4 a5 2. e3 e6 3. b4 Nfg" etc.
-  public static List<String> splitStringRetainingDelimiter(String string, String regExp) {
-    final List<String> result = new ArrayList<>();
-
-    final var pattern = Pattern.compile(regExp);
-    final var matcher = pattern.matcher(string);
-    final List<Integer> startIndexList = new ArrayList<>();
-    while (matcher.find()) {
-      startIndexList.add(matcher.start());
-    }
-
-    // no matches
-    if (startIndexList.isEmpty()) {
-      result.add(string);
-      return result;
-    }
-
-    int startIndexCurrentMatch = NonNullWrapperCommon.getFirst(startIndexList);
-    if (startIndexCurrentMatch > 0) {
-      result.add(NonNullWrapperCommon.substring(string, 0, startIndexCurrentMatch));
-    }
-    int endIndexCurrentMatch;
-    for (var i = 0; i < startIndexList.size() - 1; i++) {
-      startIndexCurrentMatch = NonNullWrapperCommon.get(startIndexList, i);
-      final int regionStartIndexNextMatch = NonNullWrapperCommon.get(startIndexList, i + 1);
-      endIndexCurrentMatch = regionStartIndexNextMatch - 1;
-      result.add(NonNullWrapperCommon.substring(string, startIndexCurrentMatch, endIndexCurrentMatch + 1));
-    }
-    startIndexCurrentMatch = NonNullWrapperCommon.getLast(startIndexList);
-    endIndexCurrentMatch = string.length() - 1;
-    result.add(NonNullWrapperCommon.substring(string, startIndexCurrentMatch, endIndexCurrentMatch + 1));
-
-    // the split string sequence must composed by exactly the original string
-    if (string.length() != calculateTotalLength(result)) {
-      throw new ProgrammingMistakeException("The split string method contains a programming mistake");
-    }
-
-    return result;
-  }
-
-  private static int calculateTotalLength(List<String> stringList) {
-    var counter = 0;
-    for (final String string : stringList) {
-      counter += string.length();
-    }
-    return counter;
   }
 
   @SuppressWarnings("null")
