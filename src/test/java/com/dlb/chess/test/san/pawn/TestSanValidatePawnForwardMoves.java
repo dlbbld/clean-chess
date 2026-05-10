@@ -9,7 +9,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidatePawnForwardMoves {
 
@@ -20,20 +20,20 @@ class TestSanValidatePawnForwardMoves {
     {
       final ChessBoard board = new Board();
 
-      board.performMove("d4");
-      board.performMove("d5");
+      board.moveStrict("d4");
+      board.moveStrict("d5");
       checkExceptionOpponent("d5", board);
     }
 
     {
       final ChessBoard board = new Board();
 
-      board.performMove("d4");
-      board.performMove("e5");
-      board.performMove("dxe5");
-      board.performMove("a6");
-      board.performMove("e4");
-      board.performMove("a5");
+      board.moveStrict("d4");
+      board.moveStrict("e5");
+      board.moveStrict("dxe5");
+      board.moveStrict("a6");
+      board.moveStrict("e4");
+      board.moveStrict("a5");
       checkExceptionOwn("e5", board);
     }
   }
@@ -45,22 +45,22 @@ class TestSanValidatePawnForwardMoves {
     {
       final ChessBoard board = new Board();
 
-      board.performMove("d4");
-      board.performMove("d5");
-      board.performMove("a3");
+      board.moveStrict("d4");
+      board.moveStrict("d5");
+      board.moveStrict("a3");
       checkExceptionOpponent("d4", board);
     }
 
     {
       final ChessBoard board = new Board();
 
-      board.performMove("d4");
-      board.performMove("e5");
-      board.performMove("a3");
-      board.performMove("exd4");
-      board.performMove("a4");
-      board.performMove("d5");
-      board.performMove("a5");
+      board.moveStrict("d4");
+      board.moveStrict("e5");
+      board.moveStrict("a3");
+      board.moveStrict("exd4");
+      board.moveStrict("a4");
+      board.moveStrict("d5");
+      board.moveStrict("a5");
       checkExceptionOwn("d4", board);
     }
   }
@@ -76,7 +76,7 @@ class TestSanValidatePawnForwardMoves {
   private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

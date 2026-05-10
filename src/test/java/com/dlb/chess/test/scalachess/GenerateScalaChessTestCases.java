@@ -141,7 +141,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         for (var i = 0; i < halfMoveList.size(); i++) {
           final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
 
-          boardPlayAlong.performMove(halfMove.moveSpecification());
+          boardPlayAlong.move(halfMove.moveSpecification());
           final var isMadeByWhite = halfMove.havingMove().getIsWhite();
           if (isMadeByWhite && halfMove.fullMoveNumber() % PRINT_MOVES_INTERVAL == 0) {
             final var moveDescription = halfMove.fullMoveNumber() + "." + halfMove.san();
@@ -223,7 +223,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
     }
     final Board board = new Board();
     for (final PgnHalfMove move : pgnFile.halfMoveList()) {
-      board.performMove(move.san());
+      board.moveStrict(move.san());
       System.out.println(calculateScalaMove(board.getLastMove().havingMove(), board.getLastMove().moveSpecification()));
     }
   }

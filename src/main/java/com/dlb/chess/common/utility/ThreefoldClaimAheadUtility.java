@@ -20,13 +20,13 @@ public abstract class ThreefoldClaimAheadUtility {
 
     for (final LegalMove legalMove : legalMoveList) {
       final List<ClaimAhead> resultList = new ArrayList<>();
-      board.performMove(legalMove.moveSpecification());
+      board.move(legalMove.moveSpecification());
       for (final LegalMove legalMoveCheckAhead : board.getLegalMoveSet()) {
-        board.performMove(legalMoveCheckAhead.moveSpecification());
+        board.move(legalMoveCheckAhead.moveSpecification());
         if (board.isThreefoldRepetition()) {
           resultList.add(new ClaimAhead(legalMoveCheckAhead, board.getFullMoveNumber(), board.getSan()));
         }
-        board.unperformMove();
+        board.unmove();
       }
       if (!resultList.isEmpty()) {
         resultListList.add(resultList);

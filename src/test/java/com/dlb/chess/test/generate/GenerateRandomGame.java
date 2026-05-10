@@ -45,7 +45,7 @@ public class GenerateRandomGame {
       if (numberOfMoveOptions != 0) {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
         final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         numberOfHalfMovesPerformed++;
         if (numberOfHalfMovesPerformed == 1 || numberOfHalfMovesPerformed % 100 == 0) {
           System.out.println("Number of half-moves performed: " + numberOfHalfMovesPerformed);
@@ -55,7 +55,7 @@ public class GenerateRandomGame {
 
       moveOptionList = new ArrayList<>();
       for (final MoveSpecification moveSpecification : legalMoveSet) {
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         switch (findRandomGame) {
           case CHECKMATE:
             if (board.isCheckmate()) {
@@ -94,7 +94,7 @@ public class GenerateRandomGame {
             && !board.isFiftyMove()) {
           moveOptionList.add(moveSpecification);
         }
-        board.unperformMove();
+        board.unmove();
       }
       numberOfMoveOptions = moveOptionList.size();
     }
@@ -102,13 +102,13 @@ public class GenerateRandomGame {
     if (halfMoveNumberLastPossibleTermination != -1) {
       System.out.println("No more non terminating moves - we have a termination option");
       for (var i = numberOfHalfMovesPerformed; i >= halfMoveNumberLastPossibleTermination; i--) {
-        board.unperformMove();
+        board.unmove();
       }
       // now we should have at least one checkmate move
       // perform first found
       legalMoveSet = board.getPossibleMoveSpecificationSet();
       for (final MoveSpecification moveSpecification : legalMoveSet) {
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
 
         var isTerminationMoveFound = false;
         switch (findRandomGame) {
@@ -146,7 +146,7 @@ public class GenerateRandomGame {
           System.out.println(moveList);
           break;
         }
-        board.unperformMove();
+        board.unmove();
       }
     } else {
       System.out.println("No more non terminating moves - no termination option");
@@ -165,7 +165,7 @@ public class GenerateRandomGame {
       if (numberOfMoveOptions != 0) {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
         final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         numberOfHalfMovesPerformed++;
         if (numberOfHalfMovesPerformed == 1 || numberOfHalfMovesPerformed % 100 == 0) {
           System.out.println("Number of half-moves performed: " + numberOfHalfMovesPerformed);
@@ -175,12 +175,12 @@ public class GenerateRandomGame {
 
       moveOptionList = new ArrayList<>();
       for (final MoveSpecification moveSpecification : legalMoveSet) {
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         if (!board.isCheckmate() && !board.isStalemate()
             && board.isDeadPositionQuick() != DeadPositionQuick.DEAD_POSITION && board.getRepetitionCount() == 1) {
           moveOptionList.add(moveSpecification);
         }
-        board.unperformMove();
+        board.unmove();
       }
       numberOfMoveOptions = moveOptionList.size();
     }
@@ -205,7 +205,7 @@ public class GenerateRandomGame {
       if (numberOfMoveOptions != 0) {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
         final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         if (!isFiftyReached && board.isFiftyMove()) {
           isFiftyReached = true;
           System.out.println("Reached fifty move");
@@ -227,13 +227,13 @@ public class GenerateRandomGame {
 
       moveOptionList = new ArrayList<>();
       for (final MoveSpecification moveSpecification : legalMoveSet) {
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         if (!board.isCheckmate() && !board.isStalemate()
             && board.isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION && board.getRepetitionCount() == 1
             && (!isFiftyReached || board.isFiftyMove())) {
           moveOptionList.add(moveSpecification);
         }
-        board.unperformMove();
+        board.unmove();
       }
       numberOfMoveOptions = moveOptionList.size();
     }
@@ -275,7 +275,7 @@ public class GenerateRandomGame {
       {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
         final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         if (!isRepetitionReached && board.getRepetitionCount() == 2) {
           isRepetitionReached = true;
           repetitionPosition = board.getDynamicPosition();
@@ -301,21 +301,21 @@ public class GenerateRandomGame {
       // try to speed up
       // if we find continuation we use it, otherwise we never hit more than three using random moves
       for (final MoveSpecification moveSpecification : legalMoveSet) {
-        board.performMove(moveSpecification);
+        board.move(moveSpecification);
         if (repetitionPosition.equals(board.getDynamicPosition())) {
           moveOptionList.add(moveSpecification);
         }
-        board.unperformMove();
+        board.unmove();
       }
       if (moveOptionList.isEmpty()) {
         // means we have no continuation from 3 onwards found
         for (final MoveSpecification moveSpecification : legalMoveSet) {
-          board.performMove(moveSpecification);
+          board.move(moveSpecification);
           if (!board.isCheckmate() && !board.isStalemate()
               && board.isDeadPositionQuick() == DeadPositionQuick.DEAD_POSITION && !board.isFiftyMove()) {
             moveOptionList.add(moveSpecification);
           }
-          board.unperformMove();
+          board.unmove();
         }
       }
       numberOfMoveOptions = moveOptionList.size();

@@ -14,12 +14,30 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.san.model.StrictSanParserValidationResult;
 import com.dlb.chess.san.validate.format.SanValidateFormat;
 import com.dlb.chess.san.validate.movement.SanValidateMovement;
 
-public class SanValidation extends AbstractSan {
+/**
+ * Public entry point for the strict SAN pipeline. Accepts canonical SAN only; the result is symmetric in shape with
+ * {@link com.dlb.chess.san.lenient.LenientSanParser} so callers can switch between strict and lenient by changing
+ * one method call. Use {@link com.dlb.chess.san.lenient.LenientSanParser} when parsing real-world PGN that may
+ * contain forgivable deviations from canonical SAN.
+ */
+public class StrictSanParser extends AbstractSan {
 
-  public static MoveSpecification validateSan(String san, ChessBoard board) throws SanValidationException {
+  /**
+   * Parses {@code san} as canonical SAN against {@code board} and returns the resolved {@link MoveSpecification}.
+   *
+   * @throws SanValidationException if the input is not canonical SAN, or is canonical but does not represent a legal
+   *         move on the current position
+   */
+  public static StrictSanParserValidationResult parseText(String san, ChessBoard board) throws SanValidationException {
+    final MoveSpecification moveSpecification = parseTextInternal(san, board);
+    return new StrictSanParserValidationResult(moveSpecification);
+  }
+
+  private static MoveSpecification parseTextInternal(String san, ChessBoard board) throws SanValidationException {
     validateGameNotEnded(board);
 
     final var sanParse = SanValidateFormat.validateFormat(san);

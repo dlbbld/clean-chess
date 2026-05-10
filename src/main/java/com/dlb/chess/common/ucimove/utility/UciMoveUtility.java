@@ -64,9 +64,9 @@ public abstract class UciMoveUtility {
 
   public static String convertUciMoveToSan(ChessBoard board, UciMove uciMove) {
     final MoveSpecification moveSpecification = convertUciMoveToMoveSpecification(board, uciMove);
-    board.performMove(moveSpecification);
+    board.move(moveSpecification);
     final String san = board.getSan();
-    board.unperformMove();
+    board.unmove();
     return san;
   }
 

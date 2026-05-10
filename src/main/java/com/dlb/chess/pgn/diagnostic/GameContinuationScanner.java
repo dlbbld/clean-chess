@@ -19,7 +19,7 @@ import com.dlb.chess.report.model.NoProgressHalfMove;
  * FIDE rules. It operates on raw halfmove data and does not interact with the strict move-validation pipeline.
  *
  * <p>
- * The strict pipeline ({@code ValidateNewMove}, {@code SanValidation}) rejects further moves once a terminal status is
+ * The strict pipeline ({@code ValidateNewMove}, {@code StrictSanParser}) rejects further moves once a terminal status is
  * reached. As a result, a normally replayed {@code Board} will never carry halfmove data that satisfies these
  * predicates — they are only useful for offline scans of pre-existing halfmove sequences obtained outside the strict
  * pipeline.

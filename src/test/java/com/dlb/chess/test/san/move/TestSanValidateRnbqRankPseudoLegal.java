@@ -9,7 +9,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidateRnbqRankPseudoLegal {
 
@@ -114,7 +114,7 @@ class TestSanValidateRnbqRankPseudoLegal {
   private static void checkException(String san, ChessBoard board, SanValidationProblem expectedProblem) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

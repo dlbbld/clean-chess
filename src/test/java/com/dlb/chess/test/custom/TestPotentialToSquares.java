@@ -78,7 +78,7 @@ class TestPotentialToSquares implements EnumConstants {
     // black
     {
       final MoveSpecification move = new MoveSpecification(A2, A4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -96,7 +96,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H7, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -114,7 +114,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(A1, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -132,7 +132,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H5, H4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -150,7 +150,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(A3, D3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -168,7 +168,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H8, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -186,7 +186,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(D3, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -204,7 +204,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H5, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -222,7 +222,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(E2, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -240,7 +240,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -258,7 +258,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(D1, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -276,7 +276,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(C6, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -294,7 +294,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(F1, B5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -312,7 +312,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(D4, F5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -331,7 +331,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // waiting move
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -350,7 +350,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black checks
       final MoveSpecification move = new MoveSpecification(E5, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -369,7 +369,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white blocks check with knight
       final MoveSpecification move = new MoveSpecification(G1, E2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -425,7 +425,7 @@ class TestPotentialToSquares implements EnumConstants {
     // black
     {
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -443,7 +443,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(G8, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -461,7 +461,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(C3, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -479,7 +479,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H6, G4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -497,7 +497,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(C2, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -515,7 +515,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H7, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -533,7 +533,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H2, H4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -551,7 +551,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(E7, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -569,7 +569,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(H1, H2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -587,7 +587,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(D8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -606,7 +606,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white checks
       final MoveSpecification move = new MoveSpecification(D5, F6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -625,7 +625,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black moves out of check
       final MoveSpecification move = new MoveSpecification(E8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -643,7 +643,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -661,7 +661,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(E7, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -679,7 +679,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(F1, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -697,7 +697,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(D6, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -715,7 +715,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(E1, F1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -734,7 +734,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black checks
       final MoveSpecification move = new MoveSpecification(G4, H2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -753,7 +753,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white moves out of check
       final MoveSpecification move = new MoveSpecification(F1, E2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -821,7 +821,7 @@ class TestPotentialToSquares implements EnumConstants {
     // now we are making moves
     {
       final MoveSpecification move = new MoveSpecification(B2, B3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -839,7 +839,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(E7, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -857,7 +857,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(C1, B2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -875,7 +875,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(F8, C5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -893,7 +893,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(B2, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -911,7 +911,7 @@ class TestPotentialToSquares implements EnumConstants {
 
     {
       final MoveSpecification move = new MoveSpecification(G7, G6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -930,7 +930,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // capture the rook with white's bishop so black bishop can later check
       final MoveSpecification move = new MoveSpecification(D4, H8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -949,7 +949,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black retreats bishop as waiting move so can free a square for white king
       final MoveSpecification move = new MoveSpecification(C5, B6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -969,7 +969,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white prepares development of light square bishop so can check later
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -989,7 +989,7 @@ class TestPotentialToSquares implements EnumConstants {
       // we need another waiting move for black for prepare square so white king can
       // move out of check, we give retreat square
       final MoveSpecification move = new MoveSpecification(A7, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1008,7 +1008,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // free the square for white king
       final MoveSpecification move = new MoveSpecification(D1, C1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1027,7 +1027,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black checks
       final MoveSpecification move = new MoveSpecification(B6, F2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1046,7 +1046,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white moves out of check
       final MoveSpecification move = new MoveSpecification(E1, D1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = BishopPotentialToSquares
@@ -1064,7 +1064,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black takes the knight
       final MoveSpecification move = new MoveSpecification(F2, G1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = BishopPotentialToSquares
@@ -1082,7 +1082,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white takes out the bishop for later check
       final MoveSpecification move = new MoveSpecification(F1, C4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = BishopPotentialToSquares
@@ -1100,7 +1100,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black moves pawn so white bishop can check
       final MoveSpecification move = new MoveSpecification(E6, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = BishopPotentialToSquares
@@ -1118,7 +1118,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white checks
       final MoveSpecification move = new MoveSpecification(C4, F7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = BishopPotentialToSquares
@@ -1136,7 +1136,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black moves out of check
       final MoveSpecification move = new MoveSpecification(E8, F8);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = BishopPotentialToSquares
@@ -1190,7 +1190,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // e4
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1208,7 +1208,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // d5
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1226,7 +1226,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white queen enters the game
       final MoveSpecification move = new MoveSpecification(D1, H5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1245,7 +1245,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // take away one square from white queen by black piece
       final MoveSpecification move = new MoveSpecification(G8, H6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1264,7 +1264,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // take away one more square from white queen by white piece
       final MoveSpecification move = new MoveSpecification(G1, H3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1283,7 +1283,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // a black dummy move, not changing anything
       final MoveSpecification move = new MoveSpecification(H8, G8);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1302,7 +1302,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white queen goes for d5
       final MoveSpecification move = new MoveSpecification(H5, D5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1321,7 +1321,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black queen comes out
       final MoveSpecification move = new MoveSpecification(D8, D6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1341,7 +1341,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white checks
       final MoveSpecification move = new MoveSpecification(D5, F7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1361,7 +1361,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black moves out of check
       final MoveSpecification move = new MoveSpecification(E8, D8);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1381,7 +1381,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white moves out bishop to later take away a few squares from black queen
       final MoveSpecification move = new MoveSpecification(F1, B5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1401,7 +1401,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black makes a dummy move
       final MoveSpecification move = new MoveSpecification(G8, H8);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1421,7 +1421,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white takes away two squares from black queen
       final MoveSpecification move = new MoveSpecification(B5, C6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1441,7 +1441,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black checks
       final MoveSpecification move = new MoveSpecification(D6, D2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1461,7 +1461,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white moves out of check
       final MoveSpecification move = new MoveSpecification(E1, F1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1481,7 +1481,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // let black move queen one more time
       final MoveSpecification move = new MoveSpecification(D2, C2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1501,7 +1501,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // let white move queen one more time
       final MoveSpecification move = new MoveSpecification(F7, G7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = QueenPotentialToSquares
@@ -1556,7 +1556,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // e4
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1574,7 +1574,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // d5
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1592,7 +1592,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white king walks to e2
       final MoveSpecification move = new MoveSpecification(E1, E2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1610,7 +1610,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black king walks to d7
       final MoveSpecification move = new MoveSpecification(E8, D7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1628,7 +1628,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white king walks to e3
       final MoveSpecification move = new MoveSpecification(E2, E3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1646,7 +1646,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black king walks to d6
       final MoveSpecification move = new MoveSpecification(D7, D6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1664,7 +1664,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white king walks to f4
       final MoveSpecification move = new MoveSpecification(E3, F4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1682,7 +1682,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black moves a pawn next to king
       final MoveSpecification move = new MoveSpecification(C7, C6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1700,7 +1700,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white moves a pawn next to king
       final MoveSpecification move = new MoveSpecification(G2, G4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1720,7 +1720,7 @@ class TestPotentialToSquares implements EnumConstants {
       // more square
       // available
       final MoveSpecification move = new MoveSpecification(C8, G4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1740,7 +1740,7 @@ class TestPotentialToSquares implements EnumConstants {
       // more square
       // available, white king has also one more square available e4
       final MoveSpecification move = new MoveSpecification(E4, D5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1758,7 +1758,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black checks white king with pawn
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1776,7 +1776,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white moves king away
       final MoveSpecification move = new MoveSpecification(F4, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1794,7 +1794,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black brings knight out
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1812,53 +1812,53 @@ class TestPotentialToSquares implements EnumConstants {
     // begin intermediary moves
     {
       final MoveSpecification move = new MoveSpecification(E4, D3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(F6, E8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       final MoveSpecification move = new MoveSpecification(D3, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(A7, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       final MoveSpecification move = new MoveSpecification(D1, E2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(G4, H3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       final MoveSpecification move = new MoveSpecification(E2, H5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(H3, G4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       final MoveSpecification move = new MoveSpecification(H5, H4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(H8, G8);
-      board.performMove(move);
+      board.move(move);
     }
     // end intermediary moves
 
     {
       final MoveSpecification move = new MoveSpecification(H4, H5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1876,7 +1876,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black checks king again
       final MoveSpecification move = new MoveSpecification(G4, F3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1894,7 +1894,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white king captures the checking piece
       final MoveSpecification move = new MoveSpecification(E4, F3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1912,11 +1912,11 @@ class TestPotentialToSquares implements EnumConstants {
     // begin intermediary moves
     {
       final MoveSpecification move = new MoveSpecification(E8, F6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(A2, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     // end intermediary moves
@@ -1924,7 +1924,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black knight captures in the middle
       final MoveSpecification move = new MoveSpecification(F6, D5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1942,7 +1942,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white queen captures e5 and checks
       final MoveSpecification move = new MoveSpecification(H5, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -1960,7 +1960,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black king captures white queen
       final MoveSpecification move = new MoveSpecification(D6, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = KingNonCastlingPotentialToSquares
@@ -2013,7 +2013,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // c4
       final MoveSpecification move = new MoveSpecification(C2, C4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2031,7 +2031,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // f5
       final MoveSpecification move = new MoveSpecification(F7, F5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2049,7 +2049,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // giving black pawn a white pawn to feed
       final MoveSpecification move = new MoveSpecification(G2, G4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2067,7 +2067,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // giving white pawn a black pawn to feed
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2087,7 +2087,7 @@ class TestPotentialToSquares implements EnumConstants {
       // supported in potential to level
       // now looking at the a-pawn
       final MoveSpecification move = new MoveSpecification(A2, A4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2105,7 +2105,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black captures the offered pawn
       final MoveSpecification move = new MoveSpecification(F5, G4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2123,7 +2123,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white offers the en passant capture
       final MoveSpecification move = new MoveSpecification(H2, H4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2141,7 +2141,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black captures en passant
       final MoveSpecification move = new MoveSpecification(G4, H3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2159,7 +2159,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white further a-pawn advance
       final MoveSpecification move = new MoveSpecification(A4, A5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2177,7 +2177,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black allows en passant capture
       final MoveSpecification move = new MoveSpecification(B7, B5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2195,7 +2195,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white captures en passant
       final MoveSpecification move = new MoveSpecification(A5, B6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2213,7 +2213,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black pushes h-pawn
       final MoveSpecification move = new MoveSpecification(H3, H2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2231,7 +2231,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white captures zig-zag for promotion - zig
       final MoveSpecification move = new MoveSpecification(B6, A7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2249,7 +2249,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black promotes to queen by capturing
       final MoveSpecification move = new MoveSpecification(H2, G1, PromotionPieceType.QUEEN);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2268,7 +2268,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white promotes to queen by capturing - zag
       final MoveSpecification move = new MoveSpecification(A7, B8, PromotionPieceType.QUEEN);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // we check the queen
@@ -2287,7 +2287,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black prepares offering rook for capturing by pawn
       final MoveSpecification move = new MoveSpecification(A8, A5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // we check the queen
@@ -2307,7 +2307,7 @@ class TestPotentialToSquares implements EnumConstants {
       // white does the same with the knight
       // we start focusing the capturing pawns now
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2325,7 +2325,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black offers the rook
       final MoveSpecification move = new MoveSpecification(A5, B5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2343,7 +2343,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // the pawn takes it
       final MoveSpecification move = new MoveSpecification(C4, B5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2361,7 +2361,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black attacks the pawn with a pawn
       final MoveSpecification move = new MoveSpecification(C7, C6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2379,7 +2379,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white offers the knight to a pawn
       final MoveSpecification move = new MoveSpecification(C3, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2397,7 +2397,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black captures the knight
       final MoveSpecification move = new MoveSpecification(D5, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2415,7 +2415,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white offers en passant
       final MoveSpecification move = new MoveSpecification(D2, D4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2433,7 +2433,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black ignores en passant
       final MoveSpecification move = new MoveSpecification(E8, D7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2453,7 +2453,7 @@ class TestPotentialToSquares implements EnumConstants {
       // white starts to ignore en passant
       // we look at whites f-pawn now
       final MoveSpecification move = new MoveSpecification(F2, F4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2472,7 +2472,7 @@ class TestPotentialToSquares implements EnumConstants {
       // black ignores en passant capture possibility - but en passant not supported
       // in potential to level
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2491,7 +2491,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white f-pawn goes ahead
       final MoveSpecification move = new MoveSpecification(F4, F5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2509,7 +2509,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // black offers en passant capture
       final MoveSpecification move = new MoveSpecification(G7, G5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final Set<Square> potentialToSquareSet = PawnPotentialToSquares.calculatePawnPotentialToSquares(
@@ -2527,7 +2527,7 @@ class TestPotentialToSquares implements EnumConstants {
     {
       // white ignores en passant capture
       final MoveSpecification move = new MoveSpecification(B2, B3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // en passant capture right is gone

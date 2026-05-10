@@ -40,7 +40,7 @@ Requires JDK 17 or later at runtime. Available via the [JitPack](https://jitpack
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>3.3.0</version>
+  <version>4.0.0</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    implementation 'com.github.dlbbld:clean-chess:3.3.0'
+    implementation 'com.github.dlbbld:clean-chess:4.0.0'
     ...
 }
 ```
@@ -75,15 +75,15 @@ For the full Eclipse contributor workflow (project import, Checkstyle, formatter
 ```java
   final Board board = new Board();
 
-  board.performMove("e4"); // specifying the SAN
-  board.performMoves("e5", "Bc4"); // specifying multiple SAN's
+  board.moveStrict("e4"); // specifying the SAN
+  board.movesStrict("e5", "Bc4"); // specifying multiple SAN's
 
   final var newMove = new MoveSpecification(Square.F8, Square.C5);
-  board.performMove(newMove); // move specification without SAN
+  board.move(newMove); // move specification without SAN
 
-  board.unperformMove(); // undoes last move
+  board.unmove(); // undoes last move
 
-  board.performMoves("Bc5", "Qf3", "h6", "Qxf7#");
+  board.movesStrict("Bc5", "Qf3", "h6", "Qxf7#");
 
   System.out.println(board.isCheckmate()); // true
 ```
@@ -374,7 +374,7 @@ In addition to structural tolerances (whitespace, missing tags, optional termina
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
     final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
-    board.performMove("a3");
+    board.moveStrict("a3");
 
 ```
 
@@ -495,7 +495,7 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
     final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
-    board.performMove("a3");
+    board.moveStrict("a3");
 ```
     
 #### PGN invalid syntax
@@ -555,7 +555,7 @@ You can create the PGN for a game played in the library or export an imported PG
 
 ```java
     final Board board = new Board();
-    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+    board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
     System.out.println(PgnCreate.createPgnFileString(pgnFile));
@@ -577,7 +577,7 @@ The PGN is created in the unique export format as defined by the PGN specificati
 
 ```java
     final Board board = new Board();
-    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+    board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
 
@@ -592,7 +592,7 @@ A PGN can be written to the file system as below.
 
 ```java
     final Board board = new Board();
-    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+    board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnFile pgnFile = PgnCreate.createPgnFile(board);
     PgnWriter.writePgnFile(pgnFile, "C:\\temp\\myFile.pgn");

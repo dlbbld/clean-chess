@@ -53,7 +53,7 @@ class TestEnPassantRole {
   void testEnPassantCaptureAfterTwoSquareAdvance() {
     // Classic en-passant setup: 1.e4 Nf6 2.e5 d5 — now white's e5 pawn can capture d-pawn en passant.
     final Board board = new Board();
-    board.performMoves("e4", "Nf6", "e5", "d5");
+    board.movesStrict("e4", "Nf6", "e5", "d5");
     final LegalMove exd6 = findLegalMoveByFromTo(board, Square.E5, Square.D6);
     assertEquals(EnPassantRole.EN_PASSANT_CAPTURE, exd6.enPassantRole());
     assertTrue(exd6.enPassantRole().isEnPassantCapture());
@@ -64,7 +64,7 @@ class TestEnPassantRole {
   void testNoneForRegularPawnCapture() {
     // Plain diagonal pawn capture (not en passant).
     final Board board = new Board();
-    board.performMoves("e4", "d5");
+    board.movesStrict("e4", "d5");
     // Now 2.exd5 is a regular capture, not en passant.
     final LegalMove exd5 = findLegalMoveByFromTo(board, Square.E4, Square.D5);
     assertEquals(EnPassantRole.NONE, exd5.enPassantRole());

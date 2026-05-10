@@ -62,8 +62,8 @@ class TestBoardAgainstEachOther {
         for (final PgnHalfMove pgnFileHalfMove : pgnFile.halfMoveList()) {
 
           final String san = pgnFileHalfMove.san();
-          board.performMove(san);
-          carlosBoard.performMove(san);
+          board.moveStrict(san);
+          carlosBoard.moveStrict(san);
 
           CommonTestUtility.checkBoardsAgainstEachOtherAll(board, carlosBoard);
 

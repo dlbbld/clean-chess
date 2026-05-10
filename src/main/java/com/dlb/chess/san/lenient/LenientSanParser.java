@@ -19,7 +19,7 @@ import com.dlb.chess.san.exceptions.LenientSanParserValidationException;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.ForgivenItem;
 import com.dlb.chess.san.model.LenientSanParserValidationResult;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -51,7 +51,7 @@ public final class LenientSanParser {
   public static LenientSanParserValidationResult parseText(String text, ChessBoard board) {
     // Phase 0: try strict on the raw input first. Canonical SAN pays zero lenient overhead.
     try {
-      final MoveSpecification ms = SanValidation.validateSan(text, board);
+      final MoveSpecification ms = StrictSanParser.parseText(text, board).moveSpecification();
       return new LenientSanParserValidationResult(ms, NonNullWrapperCommon.copyOfList(List.<ForgivenItem>of()));
     } catch (SanValidationException ignored) {
       // Fall through to the lenient pipeline.
@@ -109,9 +109,9 @@ public final class LenientSanParser {
           "Resolved MoveSpecification not found in legal-move set; lenient parser invariant violated");
     }
 
-    board.performMove(moveSpecification);
+    board.move(moveSpecification);
     final SanTerminalMarker marker = AbstractSan.calculateSanTerminalMarker(board.isCheck(), board.isCheckmate());
-    board.unperformMove();
+    board.unmove();
 
     return MoveToSan.calculateSanLastMove(matching, legalMovesBefore, marker);
   }

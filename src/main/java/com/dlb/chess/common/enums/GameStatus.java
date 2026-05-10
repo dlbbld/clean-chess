@@ -4,7 +4,7 @@ package com.dlb.chess.common.enums;
  * Status of a game (board with history). The five FIDE-automatic terminations ({@link #CHECKMATE}, {@link #STALEMATE},
  * {@link #INSUFFICIENT_MATERIAL_BOTH}, {@link #FIVE_FOLD_REPETITION_RULE}, {@link #SEVENTY_FIVE_MOVE_RULE}) end the
  * game permanently — no further moves are accepted by the validation pipeline (see {@code ValidateNewMove} and
- * {@code SanValidation}).
+ * {@code StrictSanParser}).
  *
  * <p>
  * The two single-side insufficient-material variants ({@link #INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY},

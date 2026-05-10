@@ -61,7 +61,7 @@ class TestInsufficientMaterial implements EnumConstants {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
     final ChessBoard boardFromFen = new Board(pgnFile.startFen());
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-      boardFromFen.performMove(halfMove.san());
+      boardFromFen.moveStrict(halfMove.san());
     }
 
     final var isInsufficientMaterialDirectlyCalculated = calculateIsInsufficientMaterial(

@@ -96,15 +96,15 @@ Both variants are **opt-in**. clean-chess does not invoke CHA automatically when
 
 ### 3.3 SAN, FEN, PGN
 
-- **SAN** — two pipelines: **strict** (canonical SAN only; reached from `Board.performMove(String)` and from the PGN-driven path) and **lenient** (accepts a defined set of forgivable deviations from canonical; reached from `Board.performMoveLenient(String)`). See §3.3.1 for the lenient taxonomy and algorithm.
+- **SAN** — two pipelines: **strict** (canonical SAN only; reached from `Board.moveStrict(String)` and from the PGN-driven path) and **lenient** (accepts a defined set of forgivable deviations from canonical; reached from `Board.moveLenient(String)`). See §3.3.1 for the lenient taxonomy and algorithm.
 - **FEN** — basic parsing validates structure; *advanced* parsing additionally validates position legality (no impossible double-checks, achievable pawn structure, castling rights consistent with rooks-and-king positions, etc.). `Board(String fen)` uses the advanced variant, so a `Board` cannot be constructed from a position no real game could reach.
 - **PGN** — two parsers: **strict** (round-trip-canonical reference, enforces export-format invariants) and **lenient** (tolerates real-world PGN — spaced move-number indicators, missing seven-tag-roster entries, optional termination markers, extra whitespace). Both produce the same `PgnFile` model. The exporter (`PgnCreate`) aims for byte-stable round-trip with the strict parser. The two-parser split is deliberate: a single parser with a "strictness flag" inevitably grows conditional branches that obscure both rule sets — splitting keeps each parser readable and lets the two evolve independently.
 
 #### 3.3.1 Lenient SAN
 
-The strict SAN pipeline (`SanValidation`, reached via `Board.performMove(String)`) accepts only canonical SAN: file-preferred disambiguation, uppercase piece letter and lowercase file letter, the `=Q` promotion form, `O-O` / `O-O-O` castling, and an optional `+` / `#` suffix that must match the actual board state. Real-world PGN — ChessBase output, hand-edited files, engine traces — routinely deviates in forgivable ways.
+The strict SAN pipeline (`StrictSanParser`, reached via `Board.moveStrict(String)`) accepts only canonical SAN: file-preferred disambiguation, uppercase piece letter and lowercase file letter, the `=Q` promotion form, `O-O` / `O-O-O` castling, and an optional `+` / `#` suffix that must match the actual board state. Real-world PGN — ChessBase output, hand-edited files, engine traces — routinely deviates in forgivable ways.
 
-The lenient SAN pipeline (`LenientSanParser`, reached via `Board.performMoveLenient(String)`) accepts these deviations when they uniquely identify a legal move. Every accepted deviation surfaces as a typed `ForgivenItem` carrying the deviation code, the original token, and the canonical-SAN equivalent — so consumers can silently accept or warn.
+The lenient SAN pipeline (`LenientSanParser`, reached via `Board.moveLenient(String)`) accepts these deviations when they uniquely identify a legal move. Every accepted deviation surfaces as a typed `ForgivenItem` carrying the deviation code, the original token, and the canonical-SAN equivalent — so consumers can silently accept or warn.
 
 **Principle: canonical-first.** A string that already parses as canonical SAN never receives a different meaning under lenient — strict is tried first; only on rejection does the lenient layer engage. So `bxc6` always means pawn capture from the b-file, even if a bishop on the b-file could also capture on c6.
 
@@ -138,7 +138,7 @@ Codes are not collapsed: each distinguishable deviation has its own code, and a 
 
 **Algorithm — two-phase.** *Phase 1 (shape normalization)* performs pure-string transforms plus board-aware UCI translation (look up piece on from-square): castling-zero, mixed-castling rejection, `P`-stripping, hyphen-stripping (LAN), UCI form translation, missing-`=` insertion, all four case fixups. LAN and UCI are mutually exclusive at the input level — a hyphen means LAN (`LONG_ALGEBRAIC_NOTATION` only), no hyphen means UCI shape (`UCI_NOTATION` only). *Phase 2 (semantic recovery)* feeds the normalized candidate to the strict pipeline and, on a recoverable rejection (terminal-marker mismatch, capture-marker mismatch, over-specification, non-standard disambig), mutates the candidate and retries. Each lenient code can fire at most once per parse, bounding the loop.
 
-**API.** `LenientSanParser.parseText(String, ChessBoard)` returns a `LenientSanParserValidationResult` (move + forgiven items). `LenientSanParser.validateText(String, ChessBoard)` is the same call with the result discarded — convenience for yes/no checks. `Board.performMoveLenient(String)` returns the same result type so the convenience path also surfaces forgiven items.
+**API.** `LenientSanParser.parseText(String, ChessBoard)` returns a `LenientSanParserValidationResult` (move + forgiven items). `LenientSanParser.validateText(String, ChessBoard)` is the same call with the result discarded — convenience for yes/no checks. `Board.moveLenient(String)` returns the same result type so the convenience path also surfaces forgiven items.
 
 **Deliberate non-recoveries.** Three categories are rejected even by the lenient pipeline:
 - **Mixed castling** (`0-O`, `O-0`) — no real-world tool emits this; allowing it would add parser complexity for zero practical value.

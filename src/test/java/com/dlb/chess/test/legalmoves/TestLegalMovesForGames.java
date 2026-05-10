@@ -976,7 +976,7 @@ class TestLegalMovesForGames {
   }
 
   private static void checkLegalMoves(ChessBoard board, String san, String expected) {
-    board.performMove(san);
+    board.moveStrict(san);
     final String actual = BasicUtility.calculateCommaSeparatedList(board.getLegalMovesSan());
     assertEquals(expected, actual);
   }
@@ -989,7 +989,7 @@ class TestLegalMovesForGames {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
     final var board = new Board();
     for (final PgnHalfMove move : pgnFile.halfMoveList()) {
-      board.performMove(move.san());
+      board.moveStrict(move.san());
       final String san = board.getSan();
       final String legalMoveList = BasicUtility.calculateCommaSeparatedList(board.getLegalMovesSan());
       final var output = "checkLegalMoves(board, \"" + san + "\", \"" + legalMoveList + "\");";

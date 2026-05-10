@@ -11,7 +11,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.CastlingCheckMapper;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidateAgainstLegalMovesCastling {
 
@@ -21,7 +21,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   @Test
   void testNoRightKingMovedWhite() {
     final ChessBoard board = new Board();
-    board.performMoves("e4", "e5", "Ke2", "d6", "Ke1", "d5");
+    board.movesStrict("e4", "e5", "Ke2", "d6", "Ke1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.KING_MOVED);
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT,
@@ -32,7 +32,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   @Test
   void testNoRightKingMovedBlack() {
     final ChessBoard board = new Board();
-    board.performMoves("e4", "e5", "d4", "Ke7", "d5", "Ke8", "Nf3");
+    board.movesStrict("e4", "e5", "d4", "Ke7", "d5", "Ke8", "Nf3");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.KING_MOVED);
   }
@@ -43,7 +43,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   @Test
   void testNoRightKingSideRookMoved() {
     final ChessBoard board = new Board();
-    board.performMoves("h4", "e5", "Rh3", "d6", "Rh1", "d5");
+    board.movesStrict("h4", "e5", "Rh3", "d6", "Rh1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.ROOK_MOVED);
   }
@@ -52,8 +52,8 @@ class TestSanValidateAgainstLegalMovesCastling {
   @Test
   void testNoRightQueenSideRookMoved() {
     final ChessBoard board = new Board();
-    board.performMoves("a4", "e5", "Ra3", "d6", "Ra1", "d5");
-    board.performMoves("b3", "Nc6", "Bb2", "Be7", "Nc3", "Nf6", "Qc1", "a6");
+    board.movesStrict("a4", "e5", "Ra3", "d6", "Ra1", "d5");
+    board.movesStrict("b3", "Nc6", "Bb2", "Be7", "Nc3", "Nf6", "Qc1", "a6");
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT,
         CastlingRightLoss.ROOK_MOVED);
   }
@@ -77,7 +77,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   void testSquaresNotEmptyWhite() {
     // Initial position, white tries to castle
     final ChessBoard board = new Board();
-    board.performMoves("e4", "e5");
+    board.movesStrict("e4", "e5");
     // King-side: f1 and g1 occupied
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
         CastlingRightLoss.NOT_LOST);
@@ -90,7 +90,7 @@ class TestSanValidateAgainstLegalMovesCastling {
   @Test
   void testSquaresNotEmptyBlack() {
     final ChessBoard board = new Board();
-    board.performMoves("e4");
+    board.movesStrict("e4");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
         CastlingRightLoss.NOT_LOST);
     checkCastlingException("O-O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY,
@@ -153,7 +153,7 @@ class TestSanValidateAgainstLegalMovesCastling {
       CastlingRightLoss expectedLoss) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

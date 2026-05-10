@@ -43,7 +43,7 @@ public class UnwinnableFullAnalyzer {
     while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
       isCanUseMobilitySolution = false;
       final LegalMove onlyLegalMove = NonNullWrapperCommon.getFirst(new ArrayList<>(board.getLegalMoveSet()));
-      board.performMove(onlyLegalMove.moveSpecification());
+      board.move(onlyLegalMove.moveSpecification());
       isForcedMove = board.getLegalMoveSet().size() == 1;
       isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
       totalForcedMoves++;
@@ -101,7 +101,7 @@ public class UnwinnableFullAnalyzer {
 
   private static void undoForcedMoves(ChessBoard board, int totalForcedMoves) {
     for (var i = 1; i <= totalForcedMoves; i++) {
-      board.unperformMove();
+      board.unmove();
     }
   }
 }

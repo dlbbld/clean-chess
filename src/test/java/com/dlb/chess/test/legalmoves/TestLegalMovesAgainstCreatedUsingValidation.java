@@ -73,7 +73,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     checkLegalMoves(board);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-      board.performMove(halfMove.san());
+      board.moveStrict(halfMove.san());
       checkLegalMoves(board);
     }
 

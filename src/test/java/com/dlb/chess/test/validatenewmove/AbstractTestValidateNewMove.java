@@ -15,7 +15,7 @@ public abstract class AbstractTestValidateNewMove implements EnumConstants {
   static void check(ChessBoard board, MoveSpecification move, MoveCheck expectedMoveCheck) {
     var isException = false;
     try {
-      board.performMove(move);
+      board.move(move);
     } catch (final InvalidMoveException e) {
       isException = true;
       assertEquals(expectedMoveCheck, e.getMoveCheck());

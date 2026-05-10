@@ -1,5 +1,5 @@
 /**
- * Lenient SAN parser. Accepts inputs the strict {@link com.dlb.chess.san.validate.SanValidation} pipeline rejects, when
+ * Lenient SAN parser. Accepts inputs the strict {@link com.dlb.chess.san.validate.StrictSanParser} pipeline rejects, when
  * those inputs uniquely identify a legal move and the deviation matches one of the supported tolerance categories
  * enumerated in {@link com.dlb.chess.san.enums.LenientSanValidationProblem}.
  *

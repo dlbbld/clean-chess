@@ -647,7 +647,7 @@ public final class StrictPgnParser {
       final Side side = board.getHavingMove();
       final var fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
       try {
-        board.performMove(halfMove.san());
+        board.moveStrict(halfMove.san());
       } catch (final SanValidationException e) {
         final String moveNumberAndSan = HalfMoveUtility.calculateMoveNumberAndSanWithSpace(fullMoveNumber, side,
             halfMove.san());

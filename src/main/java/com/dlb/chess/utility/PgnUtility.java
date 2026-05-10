@@ -14,7 +14,7 @@ public abstract class PgnUtility {
   public static Board calculateBoardPerLastMove(PgnFile pgnFile) {
     final Board board = new Board(pgnFile.startFen());
     for (final PgnHalfMove pgnHalfMove : pgnFile.halfMoveList()) {
-      board.performMove(pgnHalfMove.san());
+      board.moveStrict(pgnHalfMove.san());
     }
     return board;
   }

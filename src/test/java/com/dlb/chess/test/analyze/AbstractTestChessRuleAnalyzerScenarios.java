@@ -27,7 +27,7 @@ import com.dlb.chess.exceptions.InvalidMoveException;
  *     {@link ChessRuleAnalyzer#analyzeKingSafety} directly and assert the translated
  *     KingSafetyCheck;</li>
  * <li>spec-coherence and castling MoveChecks ({@code MOVE_SPEC_*}, {@code KING_CASTLING_*}) — fall
- *     back to {@code Board.performMove} and assert the InvalidMoveException's MoveCheck. These are
+ *     back to {@code Board.move} and assert the InvalidMoveException's MoveCheck. These are
  *     not in analyzer territory.</li>
  * </ul>
  *
@@ -59,7 +59,7 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
     // fallback: spec-coherence or castling — exercise via the surface
     var isException = false;
     try {
-      board.performMove(move);
+      board.move(move);
     } catch (final InvalidMoveException e) {
       isException = true;
       assertEquals(expectedMoveCheck, e.getMoveCheck());

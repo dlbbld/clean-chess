@@ -61,7 +61,7 @@ public class UnwinnableQuickAnalyzer {
       if (isForcedMove) {
         final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
         final LegalMove legalMove = NonNullWrapperCommon.getFirst(legalMoveList);
-        board.performMove(legalMove.moveSpecification());
+        board.move(legalMove.moveSpecification());
         isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
         countHalfmoves++;
       }
@@ -132,7 +132,7 @@ public class UnwinnableQuickAnalyzer {
 
   private static void unperformHalfmoves(ChessBoard board, int countHalfmoves) {
     for (var i = 1; i <= countHalfmoves; i++) {
-      board.unperformMove();
+      board.unmove();
     }
   }
 }

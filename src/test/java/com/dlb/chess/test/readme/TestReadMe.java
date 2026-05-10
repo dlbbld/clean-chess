@@ -133,15 +133,15 @@ class TestReadMe {
   void boardExampleEndsInCheckmate() {
     final Board board = new Board();
 
-    board.performMove("e4");
-    board.performMoves("e5", "Bc4");
+    board.moveStrict("e4");
+    board.movesStrict("e5", "Bc4");
 
     final var newMove = new MoveSpecification(Square.F8, Square.C5);
-    board.performMove(newMove);
+    board.move(newMove);
 
-    board.unperformMove();
+    board.unmove();
 
-    board.performMoves("Bc5", "Qf3", "h6", "Qxf7#");
+    board.movesStrict("Bc5", "Qf3", "h6", "Qxf7#");
 
     assertTrue(board.isCheckmate());
   }
@@ -177,7 +177,7 @@ class TestReadMe {
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
     final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
-    board.performMove("a3");
+    board.moveStrict("a3");
 
     assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
     assertEquals(6, pgnFile.halfMoveList().size());
@@ -244,7 +244,7 @@ class TestReadMe {
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
     final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
-    board.performMove("a3");
+    board.moveStrict("a3");
 
     assertEquals(6, pgnFile.halfMoveList().size());
   }
@@ -394,7 +394,7 @@ class TestReadMe {
 
   private static Board createOpeningExampleBoard() {
     final Board board = new Board();
-    board.performMoves("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
+    board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
     return board;
   }
 

@@ -125,16 +125,16 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertFalse(board.isStalemate());
 
     final LegalMove lastMoveEnPassantCapture = board.getLastMove();
-    board.unperformMove();
+    board.unmove();
 
     final LegalMove secondLastMoveTwoSquareAdvance = board.getLastMove();
-    board.unperformMove();
+    board.unmove();
 
-    board.performMove(secondLastMoveTwoSquareAdvance.moveSpecification());
+    board.move(secondLastMoveTwoSquareAdvance.moveSpecification());
     assertFalse(calculateIsEnPassantCaptureLastMove(board));
     assertEquals(toSquare, board.getEnPassantCaptureTargetSquare());
 
-    board.performMove(lastMoveEnPassantCapture.moveSpecification());
+    board.move(lastMoveEnPassantCapture.moveSpecification());
     assertTrue(calculateIsEnPassantCaptureLastMove(board));
     assertEquals(Square.NONE, board.getEnPassantCaptureTargetSquare());
 

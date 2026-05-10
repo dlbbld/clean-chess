@@ -18,13 +18,13 @@ class TestSpecialPawnCapture implements EnumConstants {
     // caused a bug
     final ChessBoard board = new Board("rrrrrrrr/PPPPPPPP/8/8/8/8/8/2k1K3 w - - 0 100");
 
-    assertTrue(board.performMove("bxa8=Q"));
-    board.unperformMove();
-    assertTrue(board.performMove("bxc8=Q"));
-    board.unperformMove();
+    board.moveStrict("bxa8=Q");
+    board.unmove();
+    board.moveStrict("bxc8=Q");
+    board.unmove();
 
-    assertTrue(board.performMove("cxd8=Q"));
-    board.unperformMove();
+    board.moveStrict("cxd8=Q");
+    board.unmove();
 
     checkException(board, "exd8=Q");
   }
@@ -36,13 +36,13 @@ class TestSpecialPawnCapture implements EnumConstants {
     // caused a bug
     final ChessBoard board = new Board("3k1K2/8/8/8/8/8/pppppppp/QQQQQQQQ b - - 0 100");
 
-    assertTrue(board.performMove("bxa1=Q"));
-    board.unperformMove();
-    assertTrue(board.performMove("bxc1=Q"));
-    board.unperformMove();
+    board.moveStrict("bxa1=Q");
+    board.unmove();
+    board.moveStrict("bxc1=Q");
+    board.unmove();
 
-    assertTrue(board.performMove("fxe1=Q"));
-    board.unperformMove();
+    board.moveStrict("fxe1=Q");
+    board.unmove();
 
     checkException(board, "dxe1=Q");
 
@@ -51,7 +51,7 @@ class TestSpecialPawnCapture implements EnumConstants {
   private static void checkException(ChessBoard board, String san) {
     var isCorrectException = false;
     try {
-      board.performMove(san);
+      board.moveStrict(san);
     } catch (@SuppressWarnings("unused") final SanValidationException sve) {
       isCorrectException = true;
     }

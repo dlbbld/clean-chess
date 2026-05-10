@@ -19,8 +19,8 @@ class TestSpecialCastling implements EnumConstants {
       // try queen side castling
       final ChessBoard board = new Board("4k3/8/8/8/8/8/8/R3K2R w K - 0 100");
 
-      assertTrue(board.performMove("O-O"));
-      board.unperformMove();
+      board.moveStrict("O-O");
+      board.unmove();
 
       checkException(board, "O-O-O");
     }
@@ -29,8 +29,8 @@ class TestSpecialCastling implements EnumConstants {
       // try king side castling
       final ChessBoard board = new Board("4k3/8/8/8/8/8/8/R3K2R w Q - 0 100");
 
-      assertTrue(board.performMove("O-O-O"));
-      board.unperformMove();
+      board.moveStrict("O-O-O");
+      board.unmove();
 
       checkException(board, "O-O");
     }
@@ -44,8 +44,8 @@ class TestSpecialCastling implements EnumConstants {
       // try queen side castling
       final ChessBoard board = new Board("r3k2r/8/8/8/8/8/8/R3K2R b k - 0 100");
 
-      assertTrue(board.performMove("O-O"));
-      board.unperformMove();
+      board.moveStrict("O-O");
+      board.unmove();
 
       checkException(board, "O-O-O");
     }
@@ -54,8 +54,8 @@ class TestSpecialCastling implements EnumConstants {
       // try king side castling
       final ChessBoard board = new Board("r3k2r/8/8/8/8/8/8/R3K2R b q - 0 100");
 
-      assertTrue(board.performMove("O-O-O"));
-      board.unperformMove();
+      board.moveStrict("O-O-O");
+      board.unmove();
 
       checkException(board, "O-O");
     }
@@ -64,7 +64,7 @@ class TestSpecialCastling implements EnumConstants {
   private static void checkException(ChessBoard board, String san) {
     var isCorrectException = false;
     try {
-      board.performMove(san);
+      board.moveStrict(san);
     } catch (@SuppressWarnings("unused") final SanValidationException sve) {
       isCorrectException = true;
     }

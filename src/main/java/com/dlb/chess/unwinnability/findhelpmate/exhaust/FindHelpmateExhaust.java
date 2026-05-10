@@ -197,7 +197,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       }
 
       // 9: if Find-Helpmatec(pos.move(m), depth+1, maxDepth+inc) then return true
-      board.performMove(legalMove.moveSpecification());
+      board.move(legalMove.moveSpecification());
 
       moveEvaluationList.add(legalMove);
 
@@ -207,7 +207,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
       localNodeCount++;
 
       final var findHelpmate = findHelpmate(board, newDepth, maxDepth, actualDepth + 1, isProgress);
-      board.unperformMove();
+      board.unmove();
       switch (findHelpmate) {
         case TRUE:
           return findHelpmate;

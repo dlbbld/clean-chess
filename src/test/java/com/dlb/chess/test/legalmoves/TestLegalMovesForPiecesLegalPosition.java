@@ -64,7 +64,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(A2, A4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -79,7 +79,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(H7, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -96,7 +96,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move rook out
       final MoveSpecification move = new MoveSpecification(A1, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -113,7 +113,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black rook moves out
       final MoveSpecification move = new MoveSpecification(H8, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -137,7 +137,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - prepare pin
       final MoveSpecification move = new MoveSpecification(D2, D3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -161,7 +161,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - prepare pin
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -180,7 +180,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // move rook in diagonal with own king
       final MoveSpecification move = new MoveSpecification(A3, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -204,7 +204,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move queen out - to later put in diagonal with white king
       final MoveSpecification move = new MoveSpecification(D8, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -225,7 +225,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // move pawn to let white light square bishop out
       final MoveSpecification move = new MoveSpecification(E2, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -245,7 +245,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move queen in diagonal with white king
       final MoveSpecification move = new MoveSpecification(D6, B4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -260,7 +260,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // d-pawn advance to take bishop out
       final MoveSpecification move = new MoveSpecification(D3, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -284,7 +284,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black retreats queen
       final MoveSpecification move = new MoveSpecification(B4, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -299,7 +299,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // take bishop out
       final MoveSpecification move = new MoveSpecification(F1, B5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -315,7 +315,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black blocks check with rook
       final MoveSpecification move = new MoveSpecification(H6, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -330,7 +330,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // moves rook out of diagonal
       final MoveSpecification move = new MoveSpecification(E1, E2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -345,7 +345,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves king out of diagonal
       final MoveSpecification move = new MoveSpecification(E8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -366,7 +366,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // moves previously pinned rook to attack the queen
       final MoveSpecification move = new MoveSpecification(C3, B3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -392,7 +392,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black guards the queen :-)
       final MoveSpecification move = new MoveSpecification(C6, B6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -431,7 +431,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight out
       final MoveSpecification move = new MoveSpecification(B1, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -448,7 +448,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves knight out
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -466,7 +466,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white offers black knight a pawn
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -486,7 +486,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black knight captures the pawn
       final MoveSpecification move = new MoveSpecification(F6, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -504,7 +504,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight into center
       final MoveSpecification move = new MoveSpecification(A3, C4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -527,7 +527,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black knight captures the pawn
       final MoveSpecification move = new MoveSpecification(A7, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -548,7 +548,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white knight takes the pawn
       final MoveSpecification move = new MoveSpecification(C4, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -571,7 +571,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black put knight in king diagonal
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -590,7 +590,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight away so black can gift the rook
       final MoveSpecification move = new MoveSpecification(A5, B3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -613,7 +613,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves out rook so can be captured
       final MoveSpecification move = new MoveSpecification(A8, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -631,7 +631,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white knight captures the rook
       final MoveSpecification move = new MoveSpecification(B3, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -652,7 +652,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves pawn to open king diagonal
       final MoveSpecification move = new MoveSpecification(D7, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -671,7 +671,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves queen out to be captured
       final MoveSpecification move = new MoveSpecification(D1, G4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -693,7 +693,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black makes an "escape" square for king
       final MoveSpecification move = new MoveSpecification(E7, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -712,7 +712,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves bishop out
       final MoveSpecification move = new MoveSpecification(F1, B5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -727,7 +727,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves king out of diagonal
       final MoveSpecification move = new MoveSpecification(E8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -746,7 +746,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white offers queen to knight
       final MoveSpecification move = new MoveSpecification(G4, G3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -767,7 +767,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black knight takes the queen
       final MoveSpecification move = new MoveSpecification(E4, G3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -785,7 +785,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white knight on g1 to e2 for later ping
       final MoveSpecification move = new MoveSpecification(G1, E2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -806,7 +806,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king out of the way for black queen
       final MoveSpecification move = new MoveSpecification(E7, D7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -826,7 +826,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // let other white knight capture a pawn
       final MoveSpecification move = new MoveSpecification(A5, B7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -847,7 +847,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black queen to f6
       final MoveSpecification move = new MoveSpecification(D8, F6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -867,7 +867,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // let other white knight capture another pawn
       final MoveSpecification move = new MoveSpecification(B7, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -888,7 +888,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black queen into line with white queen
       final MoveSpecification move = new MoveSpecification(F6, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -903,7 +903,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white king moves out of file with black queen
       final MoveSpecification move = new MoveSpecification(E1, D1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -924,7 +924,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black knight captures white rook
       final MoveSpecification move = new MoveSpecification(G3, H1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -944,7 +944,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // king establishes pin again by moving back
       final MoveSpecification move = new MoveSpecification(D1, E1);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -981,7 +981,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white open square for white dark squares bishop
       final MoveSpecification move = new MoveSpecification(D2, D3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -996,7 +996,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black open square for black light squares bishop
       final MoveSpecification move = new MoveSpecification(D7, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1016,7 +1016,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move bishop out
       final MoveSpecification move = new MoveSpecification(C1, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1036,7 +1036,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves bishop out
       final MoveSpecification move = new MoveSpecification(C8, D7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1057,7 +1057,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move knight out
       final MoveSpecification move = new MoveSpecification(G1, F3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1079,7 +1079,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves knight out
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1100,7 +1100,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight towards own bishop
       final MoveSpecification move = new MoveSpecification(F3, H4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1119,7 +1119,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // opens square for black king
       final MoveSpecification move = new MoveSpecification(E7, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1140,7 +1140,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight next to bishop
       final MoveSpecification move = new MoveSpecification(H4, G6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1155,7 +1155,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black queen goes to the right
       final MoveSpecification move = new MoveSpecification(D8, C8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1176,7 +1176,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white knight now blocks a few bishop fields
       final MoveSpecification move = new MoveSpecification(G6, F4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1190,7 +1190,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king goes out
       final MoveSpecification move = new MoveSpecification(E8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1207,7 +1207,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white king goes for a walk
       final MoveSpecification move = new MoveSpecification(E1, D2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1222,7 +1222,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king continues walk
       final MoveSpecification move = new MoveSpecification(E7, F6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1239,7 +1239,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white king continues walk
       final MoveSpecification move = new MoveSpecification(D2, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1254,7 +1254,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // knight out of the way
       final MoveSpecification move = new MoveSpecification(C6, B8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1271,7 +1271,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white queen enters the game
       final MoveSpecification move = new MoveSpecification(D1, D2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1290,7 +1290,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black bishop in line with own king
       final MoveSpecification move = new MoveSpecification(D7, B5);
-      board.performMove(move);
+      board.move(move);
     }
 
     // two more
@@ -1307,7 +1307,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(E3, F3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1329,7 +1329,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves in line with queen
       final MoveSpecification move = new MoveSpecification(F6, F5);
-      board.performMove(move);
+      board.move(move);
     }
     // two more
 
@@ -1347,7 +1347,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white queen pins the black bishop
       final MoveSpecification move = new MoveSpecification(D2, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1362,7 +1362,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves out of line - breaks the pin
       final MoveSpecification move = new MoveSpecification(F5, F6);
-      board.performMove(move);
+      board.move(move);
     }
 
     // two more moves
@@ -1380,7 +1380,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white bishop checks black king
       final MoveSpecification move = new MoveSpecification(H6, G5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1395,7 +1395,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves to the side
       final MoveSpecification move = new MoveSpecification(F6, E5);
-      board.performMove(move);
+      board.move(move);
     }
     // two more moves
 
@@ -1416,7 +1416,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight out of the way of bishop
       final MoveSpecification move = new MoveSpecification(F4, H3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1430,7 +1430,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(C8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     // two more moves
@@ -1455,7 +1455,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves knight out of the way of bishop
       final MoveSpecification move = new MoveSpecification(H1, G1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black bishop possible moves - pinned
@@ -1469,7 +1469,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black queen enters the game and checks the white king
       final MoveSpecification move = new MoveSpecification(D8, F6);
-      board.performMove(move);
+      board.move(move);
     }
     // two more moves
 
@@ -1487,7 +1487,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white bishop moves before king for check
       final MoveSpecification move = new MoveSpecification(G5, F4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1502,7 +1502,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves out of check
       final MoveSpecification move = new MoveSpecification(E5, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1516,7 +1516,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(G1, H1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1531,7 +1531,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king breaks the pin
       final MoveSpecification move = new MoveSpecification(D5, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1546,7 +1546,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white king moves out of line with black queen - breaking the pin
       final MoveSpecification move = new MoveSpecification(F3, G3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1565,7 +1565,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black bishop goes to edge of the board
       final MoveSpecification move = new MoveSpecification(B5, A4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1587,7 +1587,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white bishop captures a pawn now
       final MoveSpecification move = new MoveSpecification(F4, D6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -1625,7 +1625,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves a central pawn
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1640,7 +1640,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves a central pawn
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1659,7 +1659,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves queen out
       final MoveSpecification move = new MoveSpecification(D1, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1676,7 +1676,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves queen out
       final MoveSpecification move = new MoveSpecification(D8, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1705,7 +1705,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white crashes queen in
       final MoveSpecification move = new MoveSpecification(H5, H7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1736,7 +1736,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves bishop out
       final MoveSpecification move = new MoveSpecification(C8, H3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1760,7 +1760,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white crashes queen in
       final MoveSpecification move = new MoveSpecification(F1, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1791,7 +1791,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves knight out
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1815,7 +1815,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white retreats queen a bit
       final MoveSpecification move = new MoveSpecification(H7, F5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1843,7 +1843,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black moves queeen to crush in on white king later...
       final MoveSpecification move = new MoveSpecification(D6, B4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1873,7 +1873,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white queen rushes in to black king
       final MoveSpecification move = new MoveSpecification(F5, F7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1889,7 +1889,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves out of check
       final MoveSpecification move = new MoveSpecification(E8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1917,7 +1917,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white queen captures a knight
       final MoveSpecification move = new MoveSpecification(F7, G8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1946,7 +1946,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black queen crushes in on white king
       final MoveSpecification move = new MoveSpecification(B4, D2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1962,7 +1962,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white king moves away
       final MoveSpecification move = new MoveSpecification(E1, F1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -1992,7 +1992,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black queen takes a pawn
       final MoveSpecification move = new MoveSpecification(D2, C2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2014,7 +2014,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white queen takes the rook, finally...
       final MoveSpecification move = new MoveSpecification(G8, H8);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -2053,7 +2053,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn one square advance
       final MoveSpecification move = new MoveSpecification(E2, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2070,7 +2070,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black pawn one square advance
       final MoveSpecification move = new MoveSpecification(D7, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2087,7 +2087,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn two squares advance
       final MoveSpecification move = new MoveSpecification(D2, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2104,7 +2104,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black pawn two squares advance
       final MoveSpecification move = new MoveSpecification(F7, F5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2120,7 +2120,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn one squares advance
       final MoveSpecification move = new MoveSpecification(D4, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2137,7 +2137,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black pawn two squares advance so white can capture en passant
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2153,7 +2153,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn - en passant capture
       final MoveSpecification move = new MoveSpecification(D5, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2169,7 +2169,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black pawn advance so can capture en passant later
       final MoveSpecification move = new MoveSpecification(F5, F4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2186,7 +2186,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn two square advance to allow black en passant capture
       final MoveSpecification move = new MoveSpecification(G2, G4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2204,7 +2204,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black en passant capture
       final MoveSpecification move = new MoveSpecification(F4, G3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2220,7 +2220,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn goes for promotion
       final MoveSpecification move = new MoveSpecification(E6, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2238,7 +2238,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black pawn goes for promotion
       final MoveSpecification move = new MoveSpecification(G3, G2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2261,7 +2261,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white pawn promotes to queen
       final MoveSpecification move = new MoveSpecification(E7, D8, PromotionPieceType.QUEEN);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2276,7 +2276,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black captures promoted pawn
       final MoveSpecification move = new MoveSpecification(E8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2293,7 +2293,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white moves another pawn
       final MoveSpecification move = new MoveSpecification(A2, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2316,7 +2316,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black now promotes the pawn
       final MoveSpecification move = new MoveSpecification(G2, F1, PromotionPieceType.KNIGHT);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2331,17 +2331,17 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white captures the promoted knight
       final MoveSpecification move = new MoveSpecification(E1, F1);
-      board.performMove(move);
+      board.move(move);
     }
 
     // we now create a position where a black pawn is pinned against moving forward
     {
       final MoveSpecification move = new MoveSpecification(D8, D7);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(D1, D4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black pawn can move forward
@@ -2355,11 +2355,11 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(D7, E6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(D4, B6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black pawn is pinned
@@ -2373,12 +2373,12 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves out of line with queen
       final MoveSpecification move = new MoveSpecification(E6, F7);
-      board.performMove(move);
+      board.move(move);
     }
     // white moves queen on same rank
     {
       final MoveSpecification move = new MoveSpecification(B6, A6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black pawn now unpinned
@@ -2393,36 +2393,36 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black king moves back to e8
       final MoveSpecification move = new MoveSpecification(F7, E8);
-      board.performMove(move);
+      board.move(move);
     }
 
     // we now create a position where white pawn cannot capture en passant for own
     // king would be in check
     {
       final MoveSpecification move = new MoveSpecification(F2, F4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(F8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       final MoveSpecification move = new MoveSpecification(F4, F5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(G8, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       final MoveSpecification move = new MoveSpecification(F1, F2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(H8, F8);
-      board.performMove(move);
+      board.move(move);
     }
 
     // white pawn can move forward
@@ -2437,11 +2437,11 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(F2, F3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(G7, G5);
-      board.performMove(move);
+      board.move(move);
     }
     // white pawn can move forward but not capture en passant for being pinned
     {
@@ -2455,11 +2455,11 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(F3, F2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       final MoveSpecification move = new MoveSpecification(F8, G8);
-      board.performMove(move);
+      board.move(move);
     }
     // white pawn can move forward but not capture en passant even it not pinned
     // anymore, as en passant capture right is gone
@@ -2474,7 +2474,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     }
     {
       final MoveSpecification move = new MoveSpecification(F5, F6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -2532,7 +2532,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2547,7 +2547,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2563,7 +2563,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E1, E2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2579,7 +2579,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2598,7 +2598,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2617,7 +2617,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2635,7 +2635,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E3, D3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2653,7 +2653,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E6, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2672,7 +2672,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D3, C4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2690,7 +2690,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D6, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2710,13 +2710,13 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
       final MoveSpecification move = new MoveSpecification(C4, C5);
       // check
       assertThrows(InvalidMoveException.class, () -> {
-        board.performMove(move);
+        board.move(move);
       });
     }
     {
       // white move valid
       final MoveSpecification move = new MoveSpecification(C4, B3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2736,13 +2736,13 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
       final MoveSpecification move = new MoveSpecification(C6, D5);
       // check
       assertThrows(InvalidMoveException.class, () -> {
-        board.performMove(move);
+        board.move(move);
       });
     }
     {
       // black move valid
       final MoveSpecification move = new MoveSpecification(C6, B6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2760,7 +2760,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // prepares check
       final MoveSpecification move = new MoveSpecification(D1, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2778,7 +2778,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // prepares check
       final MoveSpecification move = new MoveSpecification(D8, H4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2796,7 +2796,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // checks
       final MoveSpecification move = new MoveSpecification(H5, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2813,7 +2813,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // blocks check with pawn
       final MoveSpecification move = new MoveSpecification(C7, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2831,7 +2831,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // captures pawn
       final MoveSpecification move = new MoveSpecification(H6, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2848,7 +2848,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // king takes queen
       final MoveSpecification move = new MoveSpecification(B6, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2866,7 +2866,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // pawn towards queen
       final MoveSpecification move = new MoveSpecification(H2, H3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2885,7 +2885,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // king takes pawn and checks
       final MoveSpecification move = new MoveSpecification(H4, H3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2902,7 +2902,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // block with knight
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2921,7 +2921,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // queen takes knight
       final MoveSpecification move = new MoveSpecification(H3, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2938,7 +2938,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // king takes queen
       final MoveSpecification move = new MoveSpecification(B3, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2957,7 +2957,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // queen takes knight
       final MoveSpecification move = new MoveSpecification(C6, B6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2975,7 +2975,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // king takes queen
       final MoveSpecification move = new MoveSpecification(C3, B3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -2994,7 +2994,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // takes knight out
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3012,7 +3012,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // bishop to black king
       final MoveSpecification move = new MoveSpecification(F1, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3031,7 +3031,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // bishop to black king
       final MoveSpecification move = new MoveSpecification(F8, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3050,7 +3050,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // bishop to black king
       final MoveSpecification move = new MoveSpecification(C2, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3069,7 +3069,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // bishop takes a pawn
       final MoveSpecification move = new MoveSpecification(A3, B2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3088,7 +3088,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white king towards black king
       final MoveSpecification move = new MoveSpecification(B3, A4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3106,7 +3106,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // king takes the bishop
       final MoveSpecification move = new MoveSpecification(B6, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3122,7 +3122,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // bishop takes bishop
       final MoveSpecification move = new MoveSpecification(C1, B2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3138,7 +3138,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // a silly rook move for the end
       final MoveSpecification move = new MoveSpecification(A8, B8);
-      board.performMove(move);
+      board.move(move);
     }
 
   }
@@ -3157,7 +3157,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3172,7 +3172,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3188,7 +3188,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D2, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3204,7 +3204,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3221,7 +3221,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(F1, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3238,7 +3238,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(F8, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3256,7 +3256,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(G1, H3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3274,7 +3274,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(G8, H6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3293,7 +3293,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(A6, D3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3312,7 +3312,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(A3, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3331,7 +3331,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(F2, F4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3350,7 +3350,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(F7, F5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3370,7 +3370,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D1, H5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3388,7 +3388,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - blocks check with pawn
       final MoveSpecification move = new MoveSpecification(G7, G6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3409,7 +3409,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D3, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3429,7 +3429,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - blocks check with pawn
       final MoveSpecification move = new MoveSpecification(D8, H4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3448,7 +3448,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - blocks check with pawn
       final MoveSpecification move = new MoveSpecification(G2, G3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3469,7 +3469,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D6, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3490,7 +3490,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - blocks black castling with bishop - step 1
       final MoveSpecification move = new MoveSpecification(A6, C4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3511,7 +3511,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - blocks white castling with bishop - step 1
       final MoveSpecification move = new MoveSpecification(A3, C5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3532,7 +3532,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - blocks black castling with bishop - step 2
       final MoveSpecification move = new MoveSpecification(C4, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3551,7 +3551,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - blocks white castling with bishop - step 2
       final MoveSpecification move = new MoveSpecification(C5, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3570,7 +3570,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - bishop makes harakiri
       final MoveSpecification move = new MoveSpecification(D5, B7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3591,7 +3591,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - castling kingside
       final MoveSpecification move = new MoveSpecification(CastlingMove.KING_SIDE);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3610,7 +3610,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - bishop takes rook
       final MoveSpecification move = new MoveSpecification(B7, A8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3629,7 +3629,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - bishop makes harakiri
       final MoveSpecification move = new MoveSpecification(D4, B2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3650,7 +3650,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - castling kingside
       final MoveSpecification move = new MoveSpecification(CastlingMove.KING_SIDE);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3669,7 +3669,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - bishop takes the rook
       final MoveSpecification move = new MoveSpecification(B2, A1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3687,7 +3687,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - castling happened kingside
       final MoveSpecification move = new MoveSpecification(G1, H1);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -3705,7 +3705,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3720,7 +3720,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3736,7 +3736,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D2, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3752,7 +3752,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3769,7 +3769,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(B1, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3786,7 +3786,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(B8, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3803,7 +3803,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(C2, C4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3820,7 +3820,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(C7, C5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3837,7 +3837,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D1, B3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3854,7 +3854,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D8, B6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3872,7 +3872,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(C1, D2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3890,7 +3890,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(C8, D7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3908,7 +3908,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D2, E3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3926,7 +3926,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D7, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3945,7 +3945,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - check black king
       final MoveSpecification move = new MoveSpecification(B3, A4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3962,7 +3962,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - moves bishop into check
       final MoveSpecification move = new MoveSpecification(E6, D7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3981,7 +3981,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - queen "sacrifice"
       final MoveSpecification move = new MoveSpecification(A4, A6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -3999,7 +3999,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - checks
       final MoveSpecification move = new MoveSpecification(B6, A5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4016,7 +4016,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - bishop blocks check
       final MoveSpecification move = new MoveSpecification(E3, D2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4034,7 +4034,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - queen "sacrifice"
       final MoveSpecification move = new MoveSpecification(A5, A3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4052,7 +4052,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - bishop to block black castling
       final MoveSpecification move = new MoveSpecification(D2, G5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4067,7 +4067,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - bishop to block white castling
       final MoveSpecification move = new MoveSpecification(D7, G4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4083,7 +4083,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - bring out knight to allow castling
       final MoveSpecification move = new MoveSpecification(G1, E2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4099,7 +4099,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - bring out knight to allow castling
       final MoveSpecification move = new MoveSpecification(G8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4117,7 +4117,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - castling
       final MoveSpecification move = new MoveSpecification(CastlingMove.QUEEN_SIDE);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4135,7 +4135,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - castling
       final MoveSpecification move = new MoveSpecification(CastlingMove.QUEEN_SIDE);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -4144,32 +4144,32 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white move
       final MoveSpecification move = new MoveSpecification(G1, F3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white move
       final MoveSpecification move = new MoveSpecification(F1, C4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(F8, C5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white king possible moves - castling possible king side
@@ -4186,7 +4186,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - king side castling gone by rook move
       final MoveSpecification move = new MoveSpecification(H1, F1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black king possible moves - castling possible king side
@@ -4203,7 +4203,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - king side castling gone by rook move
       final MoveSpecification move = new MoveSpecification(H8, F8);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white king possible moves
@@ -4218,7 +4218,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - rook moves back
       final MoveSpecification move = new MoveSpecification(F1, H1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black king possible moves
@@ -4233,7 +4233,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - rook moves back
       final MoveSpecification move = new MoveSpecification(F8, H8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4250,7 +4250,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - knight out
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4267,7 +4267,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - knight out
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -4276,32 +4276,32 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white move
       final MoveSpecification move = new MoveSpecification(G1, F3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white move
       final MoveSpecification move = new MoveSpecification(F1, C4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(F8, C5);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white king possible moves - castling possible king side
@@ -4318,7 +4318,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - king side castling gone by king move
       final MoveSpecification move = new MoveSpecification(E1, F1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black king possible moves - castling possible king side
@@ -4335,7 +4335,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - king side castling gone by king move
       final MoveSpecification move = new MoveSpecification(E8, F8);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // white king possible moves
@@ -4352,7 +4352,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - king moves back
       final MoveSpecification move = new MoveSpecification(F1, E1);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black king possible moves
@@ -4369,7 +4369,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - king moves back
       final MoveSpecification move = new MoveSpecification(F8, E8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4386,7 +4386,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - knight out
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4403,7 +4403,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - knight out
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -4412,56 +4412,56 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(B2, B3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(B7, B6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(C1, B2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(C8, B7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D2, D3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D7, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D1, D2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D8, D7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4478,7 +4478,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - move queenside rook away
       final MoveSpecification move = new MoveSpecification(A1, D1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4495,7 +4495,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - move queenside rook away
       final MoveSpecification move = new MoveSpecification(A8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4510,7 +4510,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - move queenside rook back
       final MoveSpecification move = new MoveSpecification(D1, A1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4525,7 +4525,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - move queenside rook back
       final MoveSpecification move = new MoveSpecification(D8, A8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4541,7 +4541,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - move knight out
       final MoveSpecification move = new MoveSpecification(G1, F3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4557,7 +4557,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - move knight out
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -4566,45 +4566,45 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D2, D4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(C1, F4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(C8, F5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D1, D3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D8, D6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4622,7 +4622,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - move king away
       final MoveSpecification move = new MoveSpecification(E1, D1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4640,7 +4640,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - move king away
       final MoveSpecification move = new MoveSpecification(E8, D8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4658,7 +4658,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - move king back
       final MoveSpecification move = new MoveSpecification(D1, E1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4676,7 +4676,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - move king back
       final MoveSpecification move = new MoveSpecification(D8, E8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4693,7 +4693,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - develop knight
       final MoveSpecification move = new MoveSpecification(G1, F3);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4710,7 +4710,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - develop knight
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
   }
 
@@ -4719,34 +4719,34 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move
       final MoveSpecification move = new MoveSpecification(E2, E4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(E7, E5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(G1, F3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(G8, F6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(F1, C4);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(F8, C5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4764,7 +4764,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - prepare queen side castling
       final MoveSpecification move = new MoveSpecification(D2, D4);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4782,40 +4782,40 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - prepare queen side castling
       final MoveSpecification move = new MoveSpecification(D7, D5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(B1, C3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(B8, C6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(C1, E3);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(C8, E6);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
       // white move
       final MoveSpecification move = new MoveSpecification(D1, E2);
-      board.performMove(move);
+      board.move(move);
     }
     {
       // black move
       final MoveSpecification move = new MoveSpecification(D8, E7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4835,7 +4835,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - moves king away
       final MoveSpecification move = new MoveSpecification(E1, D2);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4855,7 +4855,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - moves king away
       final MoveSpecification move = new MoveSpecification(E8, D7);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4874,7 +4874,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - moves king back
       final MoveSpecification move = new MoveSpecification(D2, E1);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4893,7 +4893,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - moves king back
       final MoveSpecification move = new MoveSpecification(D7, E8);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4911,7 +4911,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // white move - moves knight
       final MoveSpecification move = new MoveSpecification(F3, G5);
-      board.performMove(move);
+      board.move(move);
     }
 
     {
@@ -4929,7 +4929,7 @@ class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
     {
       // black move - moves knight
       final MoveSpecification move = new MoveSpecification(F6, G4);
-      board.performMove(move);
+      board.move(move);
     }
   }
 

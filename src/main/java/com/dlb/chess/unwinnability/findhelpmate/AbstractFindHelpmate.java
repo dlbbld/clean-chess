@@ -27,7 +27,7 @@ public abstract class AbstractFindHelpmate {
     var isFoundFivefold = false;
     var isFoundSeventyFiveMoves = false;
     for (final LegalMove legalMove : moveProgressList) {
-      boardCheck.performMove(legalMove.moveSpecification());
+      boardCheck.move(legalMove.moveSpecification());
       if (!isFoundFivefold && boardCheck.isFivefoldRepetition()) {
         isFoundFivefold = true;
       }
@@ -62,7 +62,7 @@ public abstract class AbstractFindHelpmate {
     final var boardCheck = new Board(fen);
 
     for (final LegalMove legalMove : moveProgressList) {
-      boardCheck.performMove(legalMove.moveSpecification());
+      boardCheck.move(legalMove.moveSpecification());
     }
     if (!ClassicalCheckmate.isClassicalCheckmatePosition(color, boardCheck.getStaticPosition())) {
       throw new ProgrammingMistakeException("It is not a classical checkmate position");

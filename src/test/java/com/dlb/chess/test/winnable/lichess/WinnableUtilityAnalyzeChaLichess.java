@@ -134,7 +134,7 @@ public class WinnableUtilityAnalyzeChaLichess {
       var isKingOnlyFlagging = "na";
       if (numberOfFirstHalfMoves == 1) {
         final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
-        board.performMove(legalMove.moveSpecification());
+        board.move(legalMove.moveSpecification());
         if (MaterialUtility.calculateHasKingOnly(board.getHavingMove(), board.getStaticPosition())) {
           isKingOnlyNonFlagging = "yes";
         } else {
@@ -145,7 +145,7 @@ public class WinnableUtilityAnalyzeChaLichess {
         } else {
           isKingOnlyFlagging = "no";
         }
-        board.unperformMove();
+        board.unmove();
       }
 
       logResult(IS_DEBUG, "first;" + evaluationFirst.numberOfHalfMoves(), winnableFirst, board, sideToEvaluate,
@@ -158,10 +158,10 @@ public class WinnableUtilityAnalyzeChaLichess {
 
     // only one move, perform the move and see what's next, then unperform!
     final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
-    board.performMove(legalMove.moveSpecification());
+    board.move(legalMove.moveSpecification());
     final var numberOfSecondHalfMoves = board.getLegalMoveSet().size();
     final GameMultipleAnalysis evaluationSecond = evaluateOneMove(board);
-    board.unperformMove();
+    board.unmove();
     final WinnableAnalysis winnableSecond = calculateWinnableMultiple(evaluationSecond, sideToEvaluate);
     boolean isReturnSecond;
     if (numberOfSecondHalfMoves >= 2) {
@@ -310,7 +310,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     final Side sidePerformingTheMove = board.getHavingMove();
 
     for (final LegalMove legalMove : board.getLegalMoveSet()) {
-      board.performMove(legalMove.moveSpecification());
+      board.move(legalMove.moveSpecification());
       if (board.isCheckmate()) {
         switch (sidePerformingTheMove) {
           case WHITE -> gameTermination.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
@@ -333,7 +333,7 @@ public class WinnableUtilityAnalyzeChaLichess {
       } else {
         gameTermination.add(GameStatusAnalysis.OTHER);
       }
-      board.unperformMove();
+      board.unmove();
     }
 
     return new GameMultipleAnalysis(gameTermination, numberOfHalfMoves, board.getHavingMove());
@@ -347,7 +347,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     while (board.getLegalMoveSet().size() == 1) {
       countForcedHalfMoves++;
       final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
-      board.performMove(legalMove.moveSpecification());
+      board.move(legalMove.moveSpecification());
       evaluation = calculateGameStatusAnalysis(board, sideToEvaluate);
       if (evaluation != GameStatusAnalysis.OTHER) {
         break;
@@ -356,7 +356,7 @@ public class WinnableUtilityAnalyzeChaLichess {
 
     // undo moves
     for (var i = 1; i <= countForcedHalfMoves; i++) {
-      board.unperformMove();
+      board.unmove();
     }
 
     return new GameForcedAnalysis(evaluation, countForcedHalfMoves);

@@ -15,64 +15,64 @@ class TestLanCalculation implements EnumConstants {
   void test() {
     final ChessBoard board = new Board();
 
-    board.performMove("e4");
+    board.moveStrict("e4");
     assertEquals("e2e4", board.getLan());
 
-    board.performMove("d5");
+    board.moveStrict("d5");
     assertEquals("d7d5", board.getLan());
 
-    board.performMove("exd5");
+    board.moveStrict("exd5");
     assertEquals("e4xd5", board.getLan());
 
-    board.performMove("e5");
+    board.moveStrict("e5");
     assertEquals("e7e5", board.getLan());
 
-    board.performMove("dxe6");
+    board.moveStrict("dxe6");
     assertEquals("d5xe6", board.getLan());
 
-    board.performMove("h6");
+    board.moveStrict("h6");
     assertEquals("h7h6", board.getLan());
 
-    board.performMove("exf7+");
+    board.moveStrict("exf7+");
     assertEquals("e6xf7+", board.getLan());
 
-    board.performMove("Ke7");
+    board.moveStrict("Ke7");
     assertEquals("Ke8e7", board.getLan());
 
-    board.performMove("fxg8=Q");
+    board.moveStrict("fxg8=Q");
     assertEquals("f7xg8=Q", board.getLan());
 
-    board.performMove("h5");
+    board.moveStrict("h5");
     assertEquals("h6h5", board.getLan());
 
-    board.performMove("Qxh8");
+    board.moveStrict("Qxh8");
     assertEquals("Qg8xh8", board.getLan());
 
-    board.performMove("h4");
+    board.moveStrict("h4");
     assertEquals("h5h4", board.getLan());
 
-    board.performMove("g4");
+    board.moveStrict("g4");
     assertEquals("g2g4", board.getLan());
 
-    board.performMove("hxg3");
+    board.moveStrict("hxg3");
     assertEquals("h4xg3", board.getLan());
 
-    board.performMove("a4");
+    board.moveStrict("a4");
     assertEquals("a2a4", board.getLan());
 
-    board.performMove("gxh2");
+    board.moveStrict("gxh2");
     assertEquals("g3xh2", board.getLan());
 
-    board.performMove("a5");
+    board.moveStrict("a5");
     assertEquals("a4a5", board.getLan());
 
-    board.performMove("hxg1=Q");
+    board.moveStrict("hxg1=Q");
     assertEquals("h2xg1=Q", board.getLan());
 
-    board.performMove("a6");
+    board.moveStrict("a6");
     assertEquals("a5a6", board.getLan());
 
-    board.performMove("Qxh1");
+    board.moveStrict("Qxh1");
     assertEquals("Qg1xh1", board.getLan());
 
   }

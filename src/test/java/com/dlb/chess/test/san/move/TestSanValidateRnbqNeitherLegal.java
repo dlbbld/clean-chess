@@ -9,7 +9,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidateRnbqNeitherLegal {
 
@@ -30,7 +30,7 @@ class TestSanValidateRnbqNeitherLegal {
     checkException(board, "Qxd8", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_SINGLE);
 
     // black
-    board.performMoves("e4");
+    board.movesStrict("e4");
     checkException(board, "Ra6", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE);
     checkException(board, "Ne5", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE);
     checkException(board, "Bg4", SanValidationProblem.NOT_REACHABLE_RNBQ_NEITHER_MULTIPLE);
@@ -50,62 +50,62 @@ class TestSanValidateRnbqNeitherLegal {
 
     // white
     // white rook
-    board.performMoves("a4", "a5", "h4", "h5", "Ra3", "Ra6");
+    board.movesStrict("a4", "a5", "h4", "h5", "Ra3", "Ra6");
     checkException(board, "Rh3", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Rah3");
+    board.moveStrict("Rah3");
     // black rook
     checkException(board, "Rh6", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Rah6");
+    board.moveStrict("Rah6");
 
     // white knight
-    board.performMoves("Nc3", "Nc6", "Nf3", "Nf6", "Nd4", "Nd5");
+    board.movesStrict("Nc3", "Nc6", "Nf3", "Nf6", "Nd4", "Nd5");
     checkException(board, "Nb5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Ncb5");
+    board.moveStrict("Ncb5");
     // black knight
     checkException(board, "Nb4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Ncb4");
+    board.moveStrict("Ncb4");
 
     // white bishop
-    board.performMoves("f4", "c5", "f5", "c4", "f6", "c3", "fxg7", "cxb2", "gxh8=B", "e6", "d3", "Bd6", "Bd2", "Ke7",
+    board.movesStrict("f4", "c5", "f5", "c4", "f6", "c3", "fxg7", "cxb2", "gxh8=B", "e6", "d3", "Bd6", "Bd2", "Ke7",
         "Qa1", "bxa1=B", "Bxh6", "Bxd4");
     checkException(board, "Bg7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("B6g7");
+    board.moveStrict("B6g7");
     // black bishop
     checkException(board, "Be5", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("B4e5");
+    board.moveStrict("B4e5");
 
     // white queen
-    board.performMoves("c4", "f5", "cxd5", "f4", "dxe6", "f3", "exd7", "fxg2", "dxc8=Q", "gxh1=Q", "d4", "Qe4", "dxe5",
+    board.movesStrict("c4", "f5", "cxd5", "f4", "dxe6", "f3", "exd7", "fxg2", "dxc8=Q", "gxh1=Q", "d4", "Qe4", "dxe5",
         "Kf7", "exd6");
     checkException(board, "Qxh4+", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Qdxh4+");
-    board.performMoves("Kd1", "Na2", "d7", "Nb4", "d8=Q", "Nc2", "Na7", "Kg6", "Nb5", "Kh7", "Qdc7");
+    board.moveStrict("Qdxh4+");
+    board.movesStrict("Kd1", "Na2", "d7", "Nb4", "d8=Q", "Nc2", "Na7", "Kg6", "Nb5", "Kh7", "Qdc7");
     // black queen
     checkException(board, "Qf4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Qhf4");
+    board.moveStrict("Qhf4");
     // white queen
     checkException(board, "Qd7", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Q8d7");
-    board.performMoves("Qfe3", "Qf7");
+    board.moveStrict("Q8d7");
+    board.movesStrict("Qfe3", "Qf7");
     // black queen
     checkException(board, "Qf4", SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_NEITHER_EITHER_FILE_OR_RANK_OR_SQUARE_REQUIRED);
 
-    board.performMove("Q4f4");
+    board.moveStrict("Q4f4");
   }
 
   private static void checkException(ChessBoard board, String san, SanValidationProblem expectedValidation) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

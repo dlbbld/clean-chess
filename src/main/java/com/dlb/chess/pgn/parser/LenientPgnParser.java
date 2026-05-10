@@ -680,7 +680,7 @@ public final class LenientPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   /**
-   * Replays each half-move on a fresh board via {@link Board#performMoveLenient}, accumulates SAN-level forgiven items
+   * Replays each half-move on a fresh board via {@link Board#moveLenient}, accumulates SAN-level forgiven items
    * into the parser-instance accumulator, and returns a copy of the half-move list with the canonical SAN substituted
    * (so the resulting {@link PgnFile} compares equal to a strict-parsed file built from the same canonical moves).
    * Move-suffix annotations and commentaries are carried through unchanged.
@@ -697,7 +697,7 @@ public final class LenientPgnParser {
       final Side side = board.getHavingMove();
       final var fullMoveNumber = board.getFullMoveNumberForNextHalfMove();
       try {
-        final LenientSanParserValidationResult result = board.performMoveLenient(halfMove.san());
+        final LenientSanParserValidationResult result = board.moveLenient(halfMove.san());
         sanForgivenItemsAccumulator.addAll(result.forgivenItems());
         final String canonicalSan = board.getSan();
         canonicalList.add(new PgnHalfMove(canonicalSan, halfMove.moveSuffixAnnotation(), halfMove.commentary()));

@@ -30,13 +30,15 @@ import com.google.common.collect.ImmutableSet;
 
 public interface ChessBoard extends EnumConstants {
 
-  boolean performMove(MoveSpecification moveSpecification);
+  boolean move(MoveSpecification moveSpecification);
 
-  boolean performMove(String san);
+  com.dlb.chess.san.model.StrictSanParserValidationResult moveStrict(String san);
 
-  boolean performMoves(String... sanArray);
+  com.dlb.chess.san.model.LenientSanParserValidationResult moveLenient(String san);
 
-  void unperformMove();
+  boolean movesStrict(String... sanArray);
+
+  void unmove();
 
   boolean isCheck();
 
@@ -237,9 +239,9 @@ public interface ChessBoard extends EnumConstants {
   default ImmutableSet<String> getLegalMovesSan() {
     final Set<String> result = new TreeSet<>();
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
-      this.performMove(moveSpecification);
+      this.move(moveSpecification);
       result.add(getSan());
-      this.unperformMove();
+      this.unmove();
     }
     return NonNullWrapperCommon.copyOfSet(result);
   }

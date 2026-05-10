@@ -66,9 +66,9 @@ class TestThreefoldClaimAheadUtility {
 
       final List<ClaimAhead> claimAheadList = new ArrayList<>();
 
-      board.performMove("Nf3");
+      board.moveStrict("Nf3");
       addLastMove(board, claimAheadList);
-      board.unperformMove();
+      board.unmove();
 
       final List<List<ClaimAhead>> expectedListList = new ArrayList<>();
       expectedListList.add(claimAheadList);
@@ -85,9 +85,9 @@ class TestThreefoldClaimAheadUtility {
 
       final List<ClaimAhead> claimAheadList = new ArrayList<>();
 
-      board.performMove("Nb8");
+      board.moveStrict("Nb8");
       addLastMove(board, claimAheadList);
-      board.unperformMove();
+      board.unmove();
 
       final List<List<ClaimAhead>> expectedListList = new ArrayList<>();
       expectedListList.add(claimAheadList);
@@ -111,10 +111,10 @@ class TestThreefoldClaimAheadUtility {
       }
 
       {
-        board.performMove("Nf3");
+        board.moveStrict("Nf3");
         final List<ClaimAhead> claimAheadList = new ArrayList<>();
         addLastMove(board, claimAheadList);
-        board.unperformMove();
+        board.unmove();
 
         expectedListList.add(claimAheadList);
       }
@@ -138,10 +138,10 @@ class TestThreefoldClaimAheadUtility {
       }
 
       {
-        board.performMove("Nc6");
+        board.moveStrict("Nc6");
         final List<ClaimAhead> claimAheadList = new ArrayList<>();
         addLastMove(board, claimAheadList);
-        board.unperformMove();
+        board.unmove();
         expectedListList.add(claimAheadList);
       }
 

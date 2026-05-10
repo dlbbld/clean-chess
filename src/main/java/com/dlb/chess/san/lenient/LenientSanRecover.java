@@ -21,7 +21,7 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.enums.LenientSanValidationProblem;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 /**
  * Phase 2 of the lenient pipeline: try the strict pipeline on the Phase 1 candidate; if strict rejects with one of the
@@ -48,7 +48,7 @@ final class LenientSanRecover {
     String current = candidate;
     for (var i = 0; i < MAX_ITERATIONS; i++) {
       try {
-        return SanValidation.validateSan(current, board);
+        return StrictSanParser.parseText(current, board).moveSpecification();
       } catch (SanValidationException e) {
         final SanValidationProblem strictCode = e.getSanValidationProblem();
         final @Nullable LenientSanValidationProblem lenientCode = mapToLenientCode(strictCode);

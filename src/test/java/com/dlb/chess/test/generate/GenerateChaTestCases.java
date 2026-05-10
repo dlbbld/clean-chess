@@ -65,7 +65,7 @@ public class GenerateChaTestCases implements EnumConstants {
 
           for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
             halfMoveCounter++;
-            board.performMove(halfMove.san());
+            board.moveStrict(halfMove.san());
 
             pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
 

@@ -9,7 +9,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestSanValidateNonCapturingMovingOntoOpponentPiece {
 
@@ -21,52 +21,52 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     {
       final ChessBoard board = new Board();
 
-      board.performMove("a4");
-      board.performMove("d5");
-      board.performMove("Ra3");
-      board.performMove("Bh3");
+      board.moveStrict("a4");
+      board.moveStrict("d5");
+      board.moveStrict("Ra3");
+      board.moveStrict("Bh3");
       checkException("Rh3", board);
     }
     // knight
     {
       final ChessBoard board = new Board();
 
-      board.performMove("Nc3");
-      board.performMove("Nf6");
-      board.performMove("Ne4");
-      board.performMove("a6");
+      board.moveStrict("Nc3");
+      board.moveStrict("Nf6");
+      board.moveStrict("Ne4");
+      board.moveStrict("a6");
       checkException("Nf6", board);
     }
     // bishop
     {
       final ChessBoard board = new Board();
 
-      board.performMove("e4");
-      board.performMove("e5");
-      board.performMove("Bb5");
-      board.performMove("Nc6");
+      board.moveStrict("e4");
+      board.moveStrict("e5");
+      board.moveStrict("Bb5");
+      board.moveStrict("Nc6");
       checkException("Bc6", board);
     }
     // queen
     {
       final ChessBoard board = new Board();
 
-      board.performMove("e4");
-      board.performMove("e5");
-      board.performMove("Qf3");
-      board.performMove("d5");
+      board.moveStrict("e4");
+      board.moveStrict("e5");
+      board.moveStrict("Qf3");
+      board.moveStrict("d5");
       checkException("Qf7", board);
     }
     // king
     {
       final ChessBoard board = new Board();
 
-      board.performMove("e4");
-      board.performMove("e5");
-      board.performMove("d3");
-      board.performMove("Bc5");
-      board.performMove("f4");
-      board.performMove("Bf2+");
+      board.moveStrict("e4");
+      board.moveStrict("e5");
+      board.moveStrict("d3");
+      board.moveStrict("Bc5");
+      board.moveStrict("f4");
+      board.moveStrict("Bf2+");
       checkException("Kf2", board);
     }
     // pawn diagonal move must contain capture symbol by format specification
@@ -79,53 +79,53 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     {
       final ChessBoard board = new Board();
 
-      board.performMove("e4");
-      board.performMove("h5");
-      board.performMove("Ba6");
-      board.performMove("Rh6");
-      board.performMove("a3");
+      board.moveStrict("e4");
+      board.moveStrict("h5");
+      board.moveStrict("Ba6");
+      board.moveStrict("Rh6");
+      board.moveStrict("a3");
       checkException("Ra6", board);
     }
     // knight
     {
       final ChessBoard board = new Board();
 
-      board.performMove("Nc3");
-      board.performMove("Nf6");
-      board.performMove("Ne4");
+      board.moveStrict("Nc3");
+      board.moveStrict("Nf6");
+      board.moveStrict("Ne4");
       checkException("Ne4", board);
     }
     // bishop
     {
       final ChessBoard board = new Board();
 
-      board.performMove("Nf3");
-      board.performMove("d5");
-      board.performMove("e4");
-      board.performMove("Bg4");
-      board.performMove("d4");
+      board.moveStrict("Nf3");
+      board.moveStrict("d5");
+      board.moveStrict("e4");
+      board.moveStrict("Bg4");
+      board.moveStrict("d4");
       checkException("Bf3", board);
     }
     // queen
     {
       final ChessBoard board = new Board();
 
-      board.performMove("e4");
-      board.performMove("e5");
-      board.performMove("a3");
-      board.performMove("Qf6");
-      board.performMove("d4");
+      board.moveStrict("e4");
+      board.moveStrict("e5");
+      board.moveStrict("a3");
+      board.moveStrict("Qf6");
+      board.moveStrict("d4");
       checkException("Qf2", board);
     }
     // king
     {
       final ChessBoard board = new Board();
 
-      board.performMove("e4");
-      board.performMove("e5");
-      board.performMove("Bc4");
-      board.performMove("d6");
-      board.performMove("Bxf7+");
+      board.moveStrict("e4");
+      board.moveStrict("e5");
+      board.moveStrict("Bc4");
+      board.moveStrict("d6");
+      board.moveStrict("Bxf7+");
       checkException("Kf7", board);
     }
     // pawn diagonal move must contain capture symbol by format specification
@@ -134,7 +134,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
   private static void checkException(String san, ChessBoard board) {
     boolean isException;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
       isException = false;
     } catch (final SanValidationException e) {
       isException = true;

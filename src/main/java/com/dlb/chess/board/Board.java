@@ -47,7 +47,8 @@ import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.san.lenient.LenientSanParser;
 import com.dlb.chess.san.model.LenientSanParserValidationResult;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.model.StrictSanParserValidationResult;
+import com.dlb.chess.san.validate.StrictSanParser;
 import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -73,8 +74,9 @@ import com.google.common.collect.ImmutableSet;
  * <h2>Mutating the game</h2>
  *
  * <p>
- * Move execution happens through {@link #performMove(String)}, {@link #performMove(MoveSpecification)},
- * {@link #performMoves(String...)}, and is undone by {@link #unperformMove()}. Both move-pipelines validate the
+ * Move execution happens through {@link #moveStrict(String)}, {@link #moveLenient(String)},
+ * {@link #move(MoveSpecification)}, {@link #movesStrict(String...)}, and is undone by {@link #unmove()}. Both
+ * move-pipelines validate the
  * candidate against the current legal-move set; an invalid move throws (see
  * {@link com.dlb.chess.exceptions.InvalidMoveException} from the {@code MoveSpecification} pipeline,
  * {@code SanValidationException} from the SAN pipeline). Once the game has reached any FIDE-automatic termination
@@ -90,7 +92,7 @@ import com.google.common.collect.ImmutableSet;
  * {@link #isSeventyFiveMove()}, plus the unwinnability/dead-position pair from {@link ChessBoard}
  * ({@code isUnwinnableQuick}, {@code isUnwinnableFull}, {@code isDeadPositionQuick}, {@code isDeadPositionFull} — the
  * library's flagship CHA feature; see {@link com.dlb.chess.unwinnability}). Position-state accessors return Guava
- * {@code ImmutableList}/{@code ImmutableSet}; mutation is exclusively via {@code performMove}/{@code unperformMove}.
+ * {@code ImmutableList}/{@code ImmutableSet}; mutation is exclusively via {@code move}/{@code unmove}.
  *
  * <p>
  * For game-level reports (threefold-claim-ahead, repetition listings, no-progress sequences), use
@@ -237,18 +239,28 @@ public class Board implements ChessBoard {
    * an illegal move (or a move on a game already terminated) throws {@link InvalidMoveException}.
    */
   @Override
-  public boolean performMove(MoveSpecification moveSpecification) throws InvalidMoveException {
+  public boolean move(MoveSpecification moveSpecification) throws InvalidMoveException {
     ValidateNewMove.validateNewMove(this, moveSpecification);
     return performMoveWithoutValidation(moveSpecification);
   }
 
   /**
-   * Plays the given move on this board, specified in standard algebraic notation. SAN is validated against the current
-   * legal-move set and against the strict SAN format rules; an invalid SAN throws {@code SanValidationException}.
+   * Plays the given move on this board, specified in canonical SAN. The result carries the resolved
+   * {@link MoveSpecification}; for callers that only need success / fail, the absence of a thrown exception is the
+   * answer. Use {@link #moveLenient(String)} when parsing real-world PGN that may contain forgivable deviations.
+   *
+   * @throws com.dlb.chess.san.exceptions.SanValidationException if {@code san} is not canonical SAN, or is canonical
+   *         but does not represent a legal move
    */
   @Override
-  public boolean performMove(String san) {
-    return performMoves(san);
+  public StrictSanParserValidationResult moveStrict(String san) {
+    final StrictSanParserValidationResult result = StrictSanParser.parseText(san, this);
+    this.performMoveWithoutValidation(result.moveSpecification());
+    if (!san.equals(this.getSan())) {
+      throw new ProgrammingMistakeException(
+          "The provided SAN and generated SAN are different, this should not happen");
+    }
+    return result;
   }
 
   /**
@@ -262,27 +274,24 @@ public class Board implements ChessBoard {
    * @throws com.dlb.chess.san.exceptions.LenientSanParserValidationException if the input cannot be resolved to a
    *         legal move even after applying every supported tolerance
    */
-  public LenientSanParserValidationResult performMoveLenient(String san) {
+  @Override
+  public LenientSanParserValidationResult moveLenient(String san) {
     final LenientSanParserValidationResult result = LenientSanParser.parseText(san, this);
     this.performMoveWithoutValidation(result.moveSpecification());
     return result;
   }
 
   /**
-   * Plays the given sequence of SAN moves on this board, in order. Equivalent to repeated {@link #performMove(String)}.
+   * Plays the given sequence of canonical SAN moves on this board, in order. Convenience for batch play; the
+   * absence of a thrown exception means every move was canonical and legal.
    */
   @Override
-  public boolean performMoves(String... sanArray) {
+  public boolean movesStrict(String... sanArray) {
     for (final String san : sanArray) {
       if (san == null) {
         throw new IllegalArgumentException("The SAN cannot be null");
       }
-      final MoveSpecification moveSpecification = SanValidation.validateSan(san, this);
-      this.performMoveWithoutValidation(moveSpecification);
-      if (!san.equals(this.getSan())) {
-        throw new ProgrammingMistakeException(
-            "The provided SAN and generated SAN are different, this should not happen");
-      }
+      moveStrict(san);
     }
     return true;
   }
@@ -407,7 +416,7 @@ public class Board implements ChessBoard {
    * no move has been played from the initial FEN.
    */
   @Override
-  public void unperformMove() {
+  public void unmove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("Undo move requested but no move to undo");
     }
@@ -501,12 +510,12 @@ public class Board implements ChessBoard {
     for (final LegalMove legalMove : getLegalMoveSet()) {
       // we must not check moves creating a position that never occurred so far
       if (!BasicChessUtility.calculateIsResetHalfMoveClock(legalMove)) {
-        this.performMove(legalMove.moveSpecification());
+        this.move(legalMove.moveSpecification());
         if (isThreefoldRepetition()) {
-          this.unperformMove();
+          this.unmove();
           return true;
         }
-        this.unperformMove();
+        this.unmove();
       }
     }
     return false;

@@ -25,9 +25,9 @@ class TestFenConstants {
     final Set<String> calculatedFenSet = new TreeSet<>();
     final ChessBoard board = new Board();
     for (final MoveSpecification moveSpecification : board.getPossibleMoveSpecificationSet()) {
-      board.performMove(moveSpecification);
+      board.move(moveSpecification);
       calculatedFenSet.add(board.getFen());
-      board.unperformMove();
+      board.unmove();
     }
 
     // third we compare them and expect to be equal

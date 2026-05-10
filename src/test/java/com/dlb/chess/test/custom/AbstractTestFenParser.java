@@ -19,7 +19,7 @@ public abstract class AbstractTestFenParser implements EnumConstants {
 
     for (var i = 0; i < moveList.size(); i++) {
       final MoveSpecification move = NonNullWrapperCommon.get(moveList, i);
-      boardPlayMoves.performMove(move);
+      boardPlayMoves.move(move);
       final String boardFen = boardPlayMoves.getFen();
       final ChessBoard boardFromFen = new Board(boardFen);
 
@@ -32,7 +32,7 @@ public abstract class AbstractTestFenParser implements EnumConstants {
         for (var j = 0; j < boardCreatedFromFenList.size() - 1; j++) {
           @SuppressWarnings("null") final ChessBoard boardFromFenCurrent = boardCreatedFromFenList.get(j);
           final MoveSpecification moveReplay = NonNullWrapperCommon.get(moveList, i);
-          boardFromFenCurrent.performMove(moveReplay);
+          boardFromFenCurrent.move(moveReplay);
           CommonTestUtility.checkBoardsAgainstEachOtherExcludeHistory(boardPlayMoves, boardFromFenCurrent);
         }
       }

@@ -46,7 +46,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
       assertEquals(0, board.getHalfMoveClock());
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("e4", board.getSan());
@@ -88,7 +88,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("d5", board.getSan());
@@ -128,7 +128,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("exd5", board.getSan());
@@ -168,7 +168,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("Qxd5", board.getSan());
@@ -208,7 +208,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("g4", board.getSan());
@@ -248,7 +248,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("Bd7", board.getSan());
@@ -288,7 +288,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("g5", board.getSan());
@@ -328,7 +328,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("f5", board.getSan());
@@ -368,7 +368,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("gxf6", board.getSan());
@@ -408,7 +408,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("Nc6", board.getSan());
@@ -448,7 +448,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("Nf3", board.getSan());
@@ -488,7 +488,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("a5", board.getSan());
@@ -528,7 +528,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("Bc4", board.getSan());
@@ -568,7 +568,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingUtility
           .calculateKingSideCastlingCheck(board.getStaticPosition(), havingMove, board.getCastlingRightBlack()));
 
-      board.performMove(halfMoveBlack);
+      board.move(halfMoveBlack);
 
       // test after move
       assertEquals("a4", board.getSan());
@@ -608,7 +608,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(CastlingCheck.SUCCESS, CastlingUtility.calculateKingSideCastlingCheck(board.getStaticPosition(),
           havingMove, board.getCastlingRightWhite()));
 
-      board.performMove(halfMoveWhite);
+      board.move(halfMoveWhite);
 
       // test after move
       assertEquals("Nc3", board.getSan());

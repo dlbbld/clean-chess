@@ -64,7 +64,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
         final ChessBoard board = new Board(pgnFile.startFen());
         for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
-          board.performMove(halfMove.san());
+          board.moveStrict(halfMove.san());
         }
 
         try {

@@ -34,10 +34,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(B2, B3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, B6);
-    board.performMove(move);
+    board.move(move);
 
     // rook movement
     move = new MoveSpecification(A1, B2);
@@ -60,20 +60,20 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(C2, C4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C7, C5);
-    board.performMove(move);
+    board.move(move);
 
     // knight movement
     move = new MoveSpecification(B1, C2);
     check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     // bishop movement
     move = new MoveSpecification(C1, C2);
@@ -100,10 +100,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     // king movement
     move = new MoveSpecification(E1, E3);
@@ -158,10 +158,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(A2, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, A3);
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
@@ -171,16 +171,16 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D1, D2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C1, D2);
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
@@ -213,85 +213,85 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
 
     // pawn
     MoveSpecification move = new MoveSpecification(A3, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B2, B4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B4, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A4, A5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(D4, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E4, E5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(H2, H4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H4, H5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(A5, A6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, A6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A4, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A5, A6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(F2, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F3, E4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
 
     move = new MoveSpecification(C2, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F8, B4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C3, B4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B4, A5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
@@ -309,43 +309,43 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(F3, F4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F4, F5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F5, E6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(D2, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H6, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H5, H7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H4, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F5, E6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
@@ -366,67 +366,67 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E4, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D6, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E5, D6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(H2, H4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G7, G6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H4, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G6, G5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, E2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H5, G6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(A2, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, B6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A4, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B6, B5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A5, B6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(D1, E1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F7, F6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, D1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F6, F5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E5, F6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
@@ -435,43 +435,43 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(B2, B4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C7, C5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B4, B5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B5, C6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(B5, A6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, C7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H2, H4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C7, D8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H4, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G7, G5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H5, G6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
@@ -486,40 +486,40 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     final ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C2, C4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F1, C4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F8, C5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C3, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C6, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C2, C4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(A4, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A5, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C2, C4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
@@ -535,88 +535,88 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C6, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G8, F6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F6, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H5, F4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D4, E2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, E2);
     check(board, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
 
     move = new MoveSpecification(D2, D3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F4, H3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F8, C5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C5, F2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, F2);
     check(board, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
 
     move = new MoveSpecification(E1, D2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, H4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H4, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D4, G4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, E2);
     check(board, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
@@ -625,64 +625,64 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, E2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E8, E7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G1, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G8, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F3, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H6, G8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E3, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G8, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D4, D5);
     check(board, move, MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
 
     move = new MoveSpecification(E5, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H6, G8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D4, E5);
     check(board, move, MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
 
     move = new MoveSpecification(D4, C4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G8, E7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C4, C5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C5, D6);
     check(board, move, MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
@@ -698,22 +698,22 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     // rook
     move = new MoveSpecification(A1, A2, PromotionPieceType.QUEEN);
@@ -749,42 +749,42 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E4, D5, PromotionPieceType.KNIGHT);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E4, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C7, C5);
-    board.performMove(move);
+    board.move(move);
 
     // en passant capture
     move = new MoveSpecification(D5, C6, PromotionPieceType.BISHOP);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D5, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C6, B7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H6, H5);
-    board.performMove(move);
+    board.move(move);
 
     // promotion with capture
     move = new MoveSpecification(B7, A8);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
 
     move = new MoveSpecification(B7, A8, PromotionPieceType.ROOK);
-    board.performMove(move);
+    board.move(move);
 
     // pawn move - promotion piece checks with promotion without capture
     board = new Board();
@@ -796,41 +796,41 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D4, E5, PromotionPieceType.QUEEN);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(D4, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F7, F5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E5, F6, PromotionPieceType.ROOK);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E5, F6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G8, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F6, G7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A6);
-    board.performMove(move);
+    board.move(move);
 
     // promotion without capture
     move = new MoveSpecification(G7, G8);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
 
     move = new MoveSpecification(G7, G8, PromotionPieceType.QUEEN);
-    board.performMove(move);
+    board.move(move);
 
   }
 
@@ -839,7 +839,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testBlackMovingPieces() {
     final ChessBoard board = new Board();
 
-    board.performMove("e4");
+    board.moveStrict("e4");
 
     MoveSpecification move = new MoveSpecification(E6, E5);
     check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
@@ -860,10 +860,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
 
     move = new MoveSpecification(B7, B6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B2, B3);
-    board.performMove(move);
+    board.move(move);
 
     // rook movement
     move = new MoveSpecification(A8, B7);
@@ -886,20 +886,20 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(C7, C5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C2, C4);
-    board.performMove(move);
+    board.move(move);
 
     // knight movement
     move = new MoveSpecification(B8, C7);
     check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     // bishop movement
     move = new MoveSpecification(C8, C7);
@@ -926,10 +926,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_NOT_POSSIBLE);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     // king movement
     move = new MoveSpecification(E8, E6);
@@ -971,7 +971,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
 
     // capturing own pieces
     final ChessBoard board = new Board();
-    board.performMove("e4");
+    board.moveStrict("e4");
 
     // rook
     MoveSpecification move = new MoveSpecification(A8, A7);
@@ -985,10 +985,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(A7, A6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, A6);
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
@@ -998,16 +998,16 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D1, D2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C8, D7);
     check(board, move, MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
@@ -1040,34 +1040,34 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, B5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B5, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, A1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A5, A4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
 
     move = new MoveSpecification(G8, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE);
@@ -1075,28 +1075,28 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(A2, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A5, A4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
 
     move = new MoveSpecification(A8, A6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A3, G3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A6, A7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G3, G6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G7, G6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE);
@@ -1104,40 +1104,40 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, C6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G2, G4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G4, G5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G5, G6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, G6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, E2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F7, G6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_DIAGONAL_OWN_PIECE);
@@ -1145,7 +1145,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G7, F6);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
@@ -1154,19 +1154,19 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(F7, F5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E4, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F5, E4);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
 
     move = new MoveSpecification(B7, B6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G2, G4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B6, C5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK);
@@ -1177,19 +1177,19 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(A2, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, B5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C2, C4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B5, B4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B4, A3);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
@@ -1198,43 +1198,43 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(C8, B7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, A1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H5, H4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H4, G3);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
 
     move = new MoveSpecification(F7, F5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, A1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F5, F4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G2, G4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F4, G3);
     check(board, move, MoveCheck.MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE);
@@ -1248,64 +1248,64 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     final ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C7, C5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(C6, B8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B8, C6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A4, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C6, B8);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A5, A6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(G8, F6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A1, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F6, H5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, A1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY);
 
     move = new MoveSpecification(H5, F6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F2, F4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(H7, H6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F4, F5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F7, F5);
     check(board, move, MoveCheck.MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY);
@@ -1319,25 +1319,25 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C3, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E8, D7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C2, C4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G1, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D6, D5);
     check(board, move, MoveCheck.KING_CAPTURES_GUARDED_PIECE);
@@ -1346,25 +1346,25 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(F2, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F7, F6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E1, F2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E8, F7);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F2, E3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(F7, E6);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E3, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E6, E5);
     check(board, move, MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
@@ -1377,25 +1377,25 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     ChessBoard board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A7, A5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D1, D2);
-    board.performMove(move);
+    board.move(move);
 
     // rook
     move = new MoveSpecification(A8, A7, PromotionPieceType.QUEEN);
@@ -1425,7 +1425,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E7, E6, PromotionPieceType.QUEEN);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
@@ -1434,10 +1434,10 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
 
     move = new MoveSpecification(E7, E5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D2, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E5, D4, PromotionPieceType.KNIGHT);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
@@ -1446,19 +1446,19 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D5, D4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(E2, E4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D4, E3, PromotionPieceType.BISHOP);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
@@ -1467,31 +1467,31 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B7, B5);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B5, B4);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B1, C3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B4, B3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(C3, B1);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(B3, A2);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(G1, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(A2, B1);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_PROMOTION_NO_PROMOTION_PIECE);
@@ -1500,7 +1500,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
     board = new Board();
 
     move = new MoveSpecification(G1, F3);
-    board.performMove(move);
+    board.move(move);
 
     move = new MoveSpecification(D7, D6, PromotionPieceType.QUEEN);
     check(board, move, MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);

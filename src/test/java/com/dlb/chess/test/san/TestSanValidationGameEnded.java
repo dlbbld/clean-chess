@@ -11,11 +11,11 @@ import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 /**
  * Surface-level tests for the strict-pipeline game-end pre-check in
- * {@link SanValidation#validateSan}: one scenario per FIDE-automatic termination
+ * {@link StrictSanParser#parseText}: one scenario per FIDE-automatic termination
  * ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE},
  * {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
  * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any SAN attempted on a
@@ -61,7 +61,7 @@ class TestSanValidationGameEnded {
   @Test
   void testGameEndedByFivefoldRepetition() {
     final ChessBoard board = new Board();
-    board.performMoves("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3",
+    board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3",
         "Nf6", "Ng1", "Ng8");
     check("e4", board, GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
@@ -71,7 +71,7 @@ class TestSanValidationGameEnded {
   private static void check(String san, ChessBoard board, GameStatus expectedGameStatus) {
     var isException = false;
     try {
-      SanValidation.validateSan(san, board);
+      StrictSanParser.parseText(san, board);
     } catch (final SanValidationException e) {
       isException = true;
       assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem());

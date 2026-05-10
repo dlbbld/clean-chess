@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.san.validate.SanValidation;
+import com.dlb.chess.san.validate.StrictSanParser;
 
 class TestPerformMoveForSan implements EnumConstants {
 
@@ -25,43 +25,43 @@ class TestPerformMoveForSan implements EnumConstants {
 
       // we require checks in SAN to be real checks
       // we do not allow fake checks white
-      board.performMove("e4");
+      board.moveStrict("e4");
       // we do not allow fake checks black
-      board.performMove("e5");
-      board.performMove("Bc4");
-      board.performMove("Bc5");
+      board.moveStrict("e5");
+      board.moveStrict("Bc4");
+      board.moveStrict("Bc5");
       // real check white
-      board.performMove("Bxf7+");
-      board.performMove("Ke7");
-      board.performMove("a3");
+      board.moveStrict("Bxf7+");
+      board.moveStrict("Ke7");
+      board.moveStrict("a3");
       // real check black
-      board.performMove("Bxf2+");
-      board.performMove("Ke2");
+      board.moveStrict("Bxf2+");
+      board.moveStrict("Ke2");
 
       // we require checkmate in SAN to be real checkmate
       // we do not allow fake checkmate white
-      board.performMove("a6");
-      board.performMove("d3");
+      board.moveStrict("a6");
+      board.moveStrict("d3");
       // we do not allow fake checkmate black
-      board.performMove("Bc5");
-      board.performMove("Bc4");
-      board.performMove("Ke8");
-      board.performMove("Ke1");
-      board.performMove("a5");
-      board.performMove("Qf3");
-      board.performMove("a4");
+      board.moveStrict("Bc5");
+      board.moveStrict("Bc4");
+      board.moveStrict("Ke8");
+      board.moveStrict("Ke1");
+      board.moveStrict("a5");
+      board.moveStrict("Qf3");
+      board.moveStrict("a4");
       // real checkmate white
-      board.performMove("Qf7#");
+      board.moveStrict("Qf7#");
 
       // real checkmate black
       {
         final ChessBoard boardCheckmateBlack = new Board();
 
-        boardCheckmateBlack.performMove("f3");
-        boardCheckmateBlack.performMove("e5");
-        boardCheckmateBlack.performMove("g4");
+        boardCheckmateBlack.moveStrict("f3");
+        boardCheckmateBlack.moveStrict("e5");
+        boardCheckmateBlack.moveStrict("g4");
         // real checkmate black
-        boardCheckmateBlack.performMove("Qh4#");
+        boardCheckmateBlack.moveStrict("Qh4#");
       }
     } catch (@SuppressWarnings("unused") final Exception e) {
       isException = true;
@@ -117,33 +117,33 @@ class TestPerformMoveForSan implements EnumConstants {
       {
         final ChessBoard board = new Board();
 
-        board.performMoves("a4", "a5", "h4", "h5", "Ra3", "Ra6");
+        board.movesStrict("a4", "a5", "h4", "h5", "Ra3", "Ra6");
         // valid file specification white
-        board.performMoves("Rhh3");
+        board.movesStrict("Rhh3");
         // valid file specification black
-        board.performMoves("Rhh6");
+        board.movesStrict("Rhh6");
         // valid file specification white
-        board.performMoves("Rhe3");
+        board.movesStrict("Rhe3");
         // valid file specification black
-        board.performMoves("Rhe6");
+        board.movesStrict("Rhe6");
         // valid file specification white
-        board.performMoves("Rad3");
+        board.movesStrict("Rad3");
         // valid file specification black
-        board.performMoves("Rad6");
-        board.performMoves("Rd4");
-        board.performMoves("Rd5");
+        board.movesStrict("Rad6");
+        board.movesStrict("Rd4");
+        board.movesStrict("Rd5");
         // valid file specification white
-        board.performMoves("Rde4");
+        board.movesStrict("Rde4");
         // valid file specification black
-        board.performMoves("Red6");
-        board.performMoves("Re5");
-        board.performMoves("Rd4");
+        board.movesStrict("Red6");
+        board.movesStrict("Re5");
+        board.movesStrict("Rd4");
         // valid rank specification white
-        board.performMoves("R3e4");
-        board.performMoves("Rd3");
-        board.performMoves("Re6");
+        board.movesStrict("R3e4");
+        board.movesStrict("Rd3");
+        board.movesStrict("Re6");
         // valid rank specification white
-        board.performMoves("R6d5");
+        board.movesStrict("R6d5");
       }
 
       // knight
@@ -153,25 +153,25 @@ class TestPerformMoveForSan implements EnumConstants {
       {
         final ChessBoard board = new Board();
 
-        board.performMoves("Nc3", "Nc6", "Nh3", "Nh6", "Nf4", "Nf5");
+        board.movesStrict("Nc3", "Nc6", "Nh3", "Nh6", "Nf4", "Nf5");
         // valid file specification white
-        board.performMoves("Nfd5");
+        board.movesStrict("Nfd5");
         // valid file specification black
-        board.performMoves("Nfd4");
-        board.performMoves("Nb4", "Nb5", "Nd3", "Nd6", "Nc5", "Nc4");
+        board.movesStrict("Nfd4");
+        board.movesStrict("Nb4", "Nb5", "Nd3", "Nd6", "Nc5", "Nc4");
         // valid rank specification white
-        board.performMoves("N5e4");
+        board.movesStrict("N5e4");
         // valid rank specification black
-        board.performMoves("N4e5");
-        board.performMoves("h4", "a5", "h5", "a4", "h6", "a3", "hxg7", "axb2", "gxf8=N", "bxc1=N", "Ng5", "Ng4", "Nfe6",
+        board.movesStrict("N4e5");
+        board.movesStrict("h4", "a5", "h5", "a4", "h6", "a3", "hxg7", "axb2", "gxf8=N", "bxc1=N", "Ng5", "Ng4", "Nfe6",
             "Nb3");
-        board.performMoves("Nc5", "Nba5");
+        board.movesStrict("Nc5", "Nba5");
         // valid square specification white
-        board.performMoves("Nc5e4");
-        board.performMoves("Nc4");
-        board.performMoves("Nc5");
+        board.movesStrict("Nc5e4");
+        board.movesStrict("Nc4");
+        board.movesStrict("Nc5");
         // valid square specification black
-        board.performMoves("Nc4e5");
+        board.movesStrict("Nc4e5");
       }
 
       // bishop
@@ -184,26 +184,26 @@ class TestPerformMoveForSan implements EnumConstants {
       {
         final ChessBoard board = new Board();
 
-        board.performMoves("d4", "e5", "d5", "e4", "f3", "c6", "dxc6", "exf3", "cxb7", "fxg2", "bxa8=B", "gxh1=B", "e3",
+        board.movesStrict("d4", "e5", "d5", "e4", "f3", "c6", "dxc6", "exf3", "cxb7", "fxg2", "bxa8=B", "gxh1=B", "e3",
             "d6", "Bd5", "Bf3");
-        board.performMoves("Bb5+", "Ke7", "Bd2", "Bh3");
+        board.movesStrict("Bb5+", "Ke7", "Bd2", "Bh3");
         // valid file specification white
-        board.performMoves("Bbc6");
+        board.movesStrict("Bbc6");
         // valid file specification black
-        board.performMoves("Bfg4");
-        board.performMoves("Bc4", "Bg2");
+        board.movesStrict("Bfg4");
+        board.movesStrict("Bc4", "Bg2");
         // valid rank specification white
-        board.performMoves("B4d5");
+        board.movesStrict("B4d5");
         // valid rank specification black
-        board.performMoves("B2h3");
-        board.performMoves("e4", "a5", "e5", "a4", "e6", "a3");
-        board.performMoves("exf7", "axb2", "fxg8=B", "Qc8", "Na3", "b1=B", "Bc4", "Bxc2", "Bgd5", "Be4", "Be6", "Bf1");
+        board.movesStrict("B2h3");
+        board.movesStrict("e4", "a5", "e5", "a4", "e6", "a3");
+        board.movesStrict("exf7", "axb2", "fxg8=B", "Qc8", "Na3", "b1=B", "Bc4", "Bxc2", "Bgd5", "Be4", "Be6", "Bf1");
         // valid square specification white
-        board.performMoves("Bc6d5");
-        board.performMoves("Bfe2");
-        board.performMoves("Nb1");
+        board.movesStrict("Bc6d5");
+        board.movesStrict("Bfe2");
+        board.movesStrict("Nb1");
         // valid square specification black
-        board.performMoves("Be4f3");
+        board.movesStrict("Be4f3");
 
       }
 
@@ -214,27 +214,27 @@ class TestPerformMoveForSan implements EnumConstants {
       {
         final ChessBoard board = new Board();
 
-        board.performMoves("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=Q", "gxh1=Q", "Qb3", "e6");
+        board.movesStrict("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=Q", "gxh1=Q", "Qb3", "e6");
         // valid file specification white
-        board.performMoves("Qad5");
-        board.performMoves("Qg5");
-        board.performMoves("Qdc4");
-        board.performMoves("Qe4");
+        board.movesStrict("Qad5");
+        board.movesStrict("Qg5");
+        board.movesStrict("Qdc4");
+        board.movesStrict("Qe4");
         // valid file specification black
-        board.performMoves("Qcc3");
-        board.performMoves("Qgf4", "Qcb4", "Qfe5");
+        board.movesStrict("Qcc3");
+        board.movesStrict("Qgf4", "Qcb4", "Qfe5");
         // valid rank specification white
-        board.performMoves("Q3c4");
+        board.movesStrict("Q3c4");
         // valid rank specification black
-        board.performMoves("Q5f4");
-        board.performMoves("d4", "g5", "d5", "g4", "d6", "g3", "dxc7", "gxh2");
-        board.performMoves("cxb8=Q", "hxg1=Q", "Q8b5", "Qgg5");
+        board.movesStrict("Q5f4");
+        board.movesStrict("d4", "g5", "d5", "g4", "d6", "g3", "dxc7", "gxh2");
+        board.movesStrict("cxb8=Q", "hxg1=Q", "Q8b5", "Qgg5");
         // valid square specification white
-        board.performMoves("Qb4c5");
-        board.performMoves("Qef5");
-        board.performMoves("Qc5b4");
+        board.movesStrict("Qb4c5");
+        board.movesStrict("Qef5");
+        board.movesStrict("Qc5b4");
         // valid square specification black
-        board.performMoves("Qf5g4");
+        board.movesStrict("Qf5g4");
 
       }
     } catch (@SuppressWarnings("unused") final Exception e) {
@@ -245,10 +245,10 @@ class TestPerformMoveForSan implements EnumConstants {
   }
 
   private static void checkMoveSpecificationTest(ChessBoard board, String san, MoveSpecification expectedMove) {
-    final MoveSpecification parsedMoveAsIs = SanValidation.validateSan(san, board);
+    final MoveSpecification parsedMoveAsIs = StrictSanParser.parseText(san, board).moveSpecification();
     assertEquals(expectedMove, parsedMoveAsIs);
 
-    board.performMove(expectedMove);
+    board.move(expectedMove);
 
   }
 
