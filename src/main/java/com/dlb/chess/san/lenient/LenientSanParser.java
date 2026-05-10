@@ -77,7 +77,7 @@ public final class LenientSanParser {
 
     // Phase 3: compute the canonical-SAN equivalent and finalize the forgiven items.
     final String canonicalSan = computeCanonicalSan(moveSpecification, board);
-    final List<@NonNull ForgivenItem> items = new ArrayList<>(codes.size());
+    final List<ForgivenItem> items = new ArrayList<>(codes.size());
     for (final LenientSanValidationProblem code : codes) {
       items.add(new ForgivenItem(code, text, canonicalSan));
     }
@@ -126,7 +126,7 @@ public final class LenientSanParser {
     // Failure path: the canonical SAN is unknown (the parse never resolved a move), so we surface the codes
     // accumulated so far paired with the original token. Callers diagnosing a failed lenient parse care about
     // which deviations applied before the failure, not the (unknown) canonical equivalent.
-    final List<@NonNull ForgivenItem> items = new ArrayList<>(codes.size());
+    final List<ForgivenItem> items = new ArrayList<>(codes.size());
     for (final LenientSanValidationProblem code : codes) {
       items.add(new ForgivenItem(code, text, text));
     }
