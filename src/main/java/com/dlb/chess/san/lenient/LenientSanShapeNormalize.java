@@ -54,9 +54,12 @@ final class LenientSanShapeNormalize {
     String body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
 
     body = stripExplicitPawnLetter(body, codes);
-    body = handleLanOrUci(body, board, codes);
-    body = insertMissingPromotionEquals(body, codes);
+    // Case fixes run early so downstream steps (UCI/LAN translation, pawn-missing-x, promotion-equals)
+    // see lowercase-normalized files and can match shape unambiguously.
     body = applyCaseFixups(body, codes);
+    body = handleLanOrUci(body, board, codes);
+    body = insertMissingPawnCaptureMarker(body, codes);
+    body = insertMissingPromotionEquals(body, codes);
 
     return body + terminalMarker;
   }
@@ -290,11 +293,16 @@ final class LenientSanShapeNormalize {
       return Character.toUpperCase(first) + NonNullWrapperCommon.substring(body, 1);
     }
     if (first == 'b') {
-      // Ambiguous: 'b' is both a file letter (canonical pawn move) and a lowercase bishop letter.
-      // We get here only because Phase 0 (raw strict) already failed, so the input is not a valid pawn move.
-      // Treat as bishop and case-fold.
-      codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
-      return "B" + NonNullWrapperCommon.substring(body, 1);
+      // Lowercase 'b' is canonically a file letter (pawn move from b-file) or the file leader of a UCI / LAN
+      // form (e.g. "b1c3"). The only shape that points unambiguously to a lowercase bishop letter is
+      // <piece><file>... — i.e. position 1 is a file letter (e.g. "bf3" = bishop to f3, "bxc4" but with x at
+      // position 1 we treat as pawn capture, not bishop, since pawn capture is the canonical reading of
+      // "<file>x..."). Anything else (rank digit at position 1, length 2, etc.) we leave as pawn / file.
+      if (body.length() >= 2 && isFileLetterAnyCase(body.charAt(1))) {
+        codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
+        return "B" + NonNullWrapperCommon.substring(body, 1);
+      }
+      return body;
     }
     return body;
   }
@@ -304,8 +312,20 @@ final class LenientSanShapeNormalize {
     boolean changed = false;
     for (var i = 0; i < body.length(); i++) {
       final char c = body.charAt(i);
-      // First character: piece letter is canonically uppercase, never a file letter; skip case fix here.
       if (i == 0) {
+        // Position 0 may be a piece letter (P, R, N, B, Q, K) OR a file letter for pawn / UCI / LAN forms.
+        // A, C, D, E, F, G, H are unambiguously file letters (no piece uses these). B is ambiguous (file b
+        // vs bishop) — only fold to file when the body shape is pawn-compatible.
+        if (c >= 'A' && c <= 'H' && c != 'B') {
+          out.append(Character.toLowerCase(c));
+          changed = true;
+          continue;
+        }
+        if (c == 'B' && isUppercaseBPawnOnlyShape(body)) {
+          out.append('b');
+          changed = true;
+          continue;
+        }
         out.append(c);
         continue;
       }
@@ -319,6 +339,62 @@ final class LenientSanShapeNormalize {
     if (changed) {
       codes.add(LenientSanValidationProblem.UPPERCASE_FILE_LETTER);
       return NonNullWrapperCommon.toString(out);
+    }
+    return body;
+  }
+
+  /**
+   * Returns true when {@code body} starts with uppercase {@code B} but the rest of the shape is incompatible with
+   * any valid bishop SAN — i.e. only the b-file pawn interpretation makes sense. Used to decide whether an uppercase
+   * {@code B} at position 0 should be lowercased. The shapes that pass here are:
+   * <ul>
+   * <li>{@code B<rank>} (length 2) — bishop has no length-2 SAN form
+   * <li>{@code B<rank>=<piece>} (length 4 promotion) — bishops don't promote
+   * <li>{@code Bx<file><rank>=<piece>} (length 6 capture promotion) — bishops don't promote
+   * </ul>
+   * Capture and disambiguation forms (e.g. {@code Bxf7}, {@code B1d4}) are canonically bishop, even though they
+   * could lexically also be uppercase b-file pawn forms; the case carries the user's intent and we respect it.
+   */
+  private static boolean isUppercaseBPawnOnlyShape(String body) {
+    if (body.length() == 2) {
+      return isRankDigit(body.charAt(1));
+    }
+    if (body.length() == 4) {
+      return isRankDigit(body.charAt(1)) && body.charAt(2) == '='
+          && isPromotionPieceLetterAnyCase(body.charAt(3));
+    }
+    if (body.length() == 6) {
+      return body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2)) && isRankDigit(body.charAt(3))
+          && body.charAt(4) == '=' && isPromotionPieceLetterAnyCase(body.charAt(5));
+    }
+    return false;
+  }
+
+  private static boolean isFileLetterAnyCase(char c) {
+    return c >= 'a' && c <= 'h' || c >= 'A' && c <= 'H';
+  }
+
+  /**
+   * Detects pawn captures written without the {@code x} marker: {@code <file><file><rank>} (3 chars, e.g.
+   * {@code ed5}), {@code <file><file><rank>=<piece>} (5 chars, e.g. {@code ed8=Q}), or
+   * {@code <file><file><rank><piece>} (4 chars with rank 1/8, e.g. {@code ed8Q} — capture promotion missing both
+   * x and =). Inserts {@code x} at position 1 and emits {@link LenientSanValidationProblem#MISSING_CAPTURE_MARKER}.
+   */
+  private static String insertMissingPawnCaptureMarker(String body, List<LenientSanValidationProblem> codes) {
+    if (body.length() == 3 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
+        && isRankDigit(body.charAt(2))) {
+      codes.add(LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
+      return body.charAt(0) + "x" + NonNullWrapperCommon.substring(body, 1);
+    }
+    if (body.length() == 4 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
+        && (body.charAt(2) == '1' || body.charAt(2) == '8') && isPromotionPieceLetterAnyCase(body.charAt(3))) {
+      codes.add(LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
+      return body.charAt(0) + "x" + NonNullWrapperCommon.substring(body, 1);
+    }
+    if (body.length() == 5 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
+        && isRankDigit(body.charAt(2)) && body.charAt(3) == '=' && isPromotionPieceLetterAnyCase(body.charAt(4))) {
+      codes.add(LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
+      return body.charAt(0) + "x" + NonNullWrapperCommon.substring(body, 1);
     }
     return body;
   }

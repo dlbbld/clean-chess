@@ -118,7 +118,7 @@ The lenient SAN pipeline (`LenientSanParser`, reached via `Board.performMoveLeni
 | | `SPURIOUS_CHECKMATE_SUFFIX` | `Nd7#` when not mate |
 | | `WRONG_CHECK_SUFFIX_FOR_CHECKMATE` | `Nd7+` when actually mate |
 | | `WRONG_CHECKMATE_SUFFIX_FOR_CHECK` | `Nd7#` when only check |
-| **Capture marker** (2) | `MISSING_CAPTURE_MARKER` | `Be5` when actually a capture |
+| **Capture marker** (2) | `MISSING_CAPTURE_MARKER` | `Be5` (piece) or `ed5` (pawn) when actually a capture |
 | | `SPURIOUS_CAPTURE_MARKER` | `Bxe5` when destination empty |
 | **Disambiguation** (4) | `OVERSPECIFIED_FILE_DISAMBIGUATION` | `Nbd7` when `Nd7` would suffice |
 | | `OVERSPECIFIED_RANK_DISAMBIGUATION` | `N3d7` when `Nd7` would suffice |

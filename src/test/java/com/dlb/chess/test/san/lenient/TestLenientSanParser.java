@@ -301,6 +301,62 @@ class TestLenientSanParser implements EnumConstants {
   }
 
   // ---------------------------------------------------------------------------
+  // Regression tests — bugs surfaced post-merge.
+  // ---------------------------------------------------------------------------
+
+  @Test
+  void testBFilePawnWithSpuriousCheckSuffix() {
+    // Regression: lowercase b at position 0 was being case-folded to bishop ("b4+" -> "B4+") even when the
+    // body shape is pawn-compatible. Should resolve to canonical "b4" with SPURIOUS_CHECK_SUFFIX.
+    final Board board = new Board();
+    final LenientSanParserValidationResult result = board.performMoveLenient("b4+");
+    assertExactlyOneCode(result, LenientSanValidationProblem.SPURIOUS_CHECK_SUFFIX);
+    assertEquals("b4", canonical(result));
+  }
+
+  @Test
+  void testUppercaseFileLetterAtPositionZeroPawn() {
+    // Regression: caseFixUppercaseFileLetters skipped position 0, so "E4" was rejected. Should resolve to
+    // canonical "e4" with UPPERCASE_FILE_LETTER.
+    final Board board = new Board();
+    final LenientSanParserValidationResult result = board.performMoveLenient("E4");
+    assertExactlyOneCode(result, LenientSanValidationProblem.UPPERCASE_FILE_LETTER);
+    assertEquals("e4", canonical(result));
+  }
+
+  @Test
+  void testUppercaseFileLetterAtPositionZeroUci() {
+    // Regression: "E2E4" (UCI form with uppercase files) was rejected.
+    final Board board = new Board();
+    final LenientSanParserValidationResult result = board.performMoveLenient("E2E4");
+    assertContainsCode(result, LenientSanValidationProblem.UPPERCASE_FILE_LETTER);
+    assertContainsCode(result, LenientSanValidationProblem.UCI_NOTATION);
+    assertEquals("e4", canonical(result));
+  }
+
+  @Test
+  void testUppercaseFileLetterAtPositionZeroLan() {
+    // Regression: "E2-E4" (LAN form with uppercase files) was rejected.
+    final Board board = new Board();
+    final LenientSanParserValidationResult result = board.performMoveLenient("E2-E4");
+    assertContainsCode(result, LenientSanValidationProblem.UPPERCASE_FILE_LETTER);
+    assertContainsCode(result, LenientSanValidationProblem.LONG_ALGEBRAIC_NOTATION);
+    assertEquals("e4", canonical(result));
+  }
+
+  @Test
+  void testMissingCaptureMarkerPawn() {
+    // Regression: pawn captures missing the 'x' (e.g. "ed5" after 1.e4 d5) were rejected, despite the spec
+    // documenting MISSING_CAPTURE_MARKER without a piece-only caveat. Should resolve to canonical "exd5".
+    final Board board = new Board();
+    board.performMove("e4");
+    board.performMove("d5");
+    final LenientSanParserValidationResult result = board.performMoveLenient("ed5");
+    assertExactlyOneCode(result, LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
+    assertEquals("exd5", canonical(result));
+  }
+
+  // ---------------------------------------------------------------------------
   // Combination tests — multiple codes on one move.
   // ---------------------------------------------------------------------------
 
