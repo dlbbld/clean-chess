@@ -29,15 +29,15 @@ public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanV
 
     // one square advance (includes two square advance)
     for (final Square toSquare : Square.REAL) {
-      if (!Rank.calculateIsGroundRank(getSide(), toSquare.getRank())
-          && !Rank.calculateIsPawnInititalRank(getSide(), toSquare.getRank())) {
+      if (toSquare.getRank() != Rank.calculateGroundRank(getSide())
+          && toSquare.getRank() != Rank.calculatePawnInitialRank(getSide())) {
         appendOnlyMove(resultSet, toSquare);
       }
     }
 
     // diagonal moves
     for (final Square fromSquare : Square.REAL) {
-      if (!Rank.calculateIsGroundRank(getSide(), fromSquare.getRank())
+      if (fromSquare.getRank() != Rank.calculateGroundRank(getSide())
           && !Rank.calculateIsPromotionRank(getSide(), fromSquare.getRank())) {
 
         // diagonal left

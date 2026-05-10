@@ -29,7 +29,7 @@ public class GeneratePawnDiagonalSquares extends AbstractGenerateSquares {
     final Set<Square> resultSet = new TreeSet<>();
 
     final Rank rank = fromSquare.getRank();
-    if (Rank.calculateIsGroundRank(havingMove, rank) || Rank.calculateIsPromotionRank(havingMove, rank)) {
+    if (rank == Rank.calculateGroundRank(havingMove) || Rank.calculateIsPromotionRank(havingMove, rank)) {
       // no moves possibles which we represent as empty list
       // needed later in legal move generation to find illegal moves
       return resultSet;

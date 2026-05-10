@@ -188,40 +188,40 @@ class TestBasicFile implements EnumConstants {
     // white values
     checkExceptionLeftLeft(WHITE, File.FILE_A);
     checkExceptionLeftLeft(WHITE, File.FILE_B);
-    assertEquals(File.FILE_A, File.calculateLeftLeftFile(WHITE, File.FILE_C));
-    assertEquals(File.FILE_B, File.calculateLeftLeftFile(WHITE, File.FILE_D));
-    assertEquals(File.FILE_C, File.calculateLeftLeftFile(WHITE, File.FILE_E));
-    assertEquals(File.FILE_D, File.calculateLeftLeftFile(WHITE, File.FILE_F));
-    assertEquals(File.FILE_E, File.calculateLeftLeftFile(WHITE, File.FILE_G));
-    assertEquals(File.FILE_F, File.calculateLeftLeftFile(WHITE, File.FILE_H));
+    assertEquals(File.FILE_A, calculateLeftLeftFile(WHITE, File.FILE_C));
+    assertEquals(File.FILE_B, calculateLeftLeftFile(WHITE, File.FILE_D));
+    assertEquals(File.FILE_C, calculateLeftLeftFile(WHITE, File.FILE_E));
+    assertEquals(File.FILE_D, calculateLeftLeftFile(WHITE, File.FILE_F));
+    assertEquals(File.FILE_E, calculateLeftLeftFile(WHITE, File.FILE_G));
+    assertEquals(File.FILE_F, calculateLeftLeftFile(WHITE, File.FILE_H));
 
-    assertEquals(File.FILE_C, File.calculateRightRightFile(WHITE, File.FILE_A));
-    assertEquals(File.FILE_D, File.calculateRightRightFile(WHITE, File.FILE_B));
-    assertEquals(File.FILE_E, File.calculateRightRightFile(WHITE, File.FILE_C));
-    assertEquals(File.FILE_F, File.calculateRightRightFile(WHITE, File.FILE_D));
-    assertEquals(File.FILE_G, File.calculateRightRightFile(WHITE, File.FILE_E));
-    assertEquals(File.FILE_H, File.calculateRightRightFile(WHITE, File.FILE_F));
+    assertEquals(File.FILE_C, calculateRightRightFile(WHITE, File.FILE_A));
+    assertEquals(File.FILE_D, calculateRightRightFile(WHITE, File.FILE_B));
+    assertEquals(File.FILE_E, calculateRightRightFile(WHITE, File.FILE_C));
+    assertEquals(File.FILE_F, calculateRightRightFile(WHITE, File.FILE_D));
+    assertEquals(File.FILE_G, calculateRightRightFile(WHITE, File.FILE_E));
+    assertEquals(File.FILE_H, calculateRightRightFile(WHITE, File.FILE_F));
     checkExceptionRightRight(WHITE, File.FILE_G);
     checkExceptionRightRight(WHITE, File.FILE_H);
 
     // black values
-    assertEquals(File.FILE_C, File.calculateLeftLeftFile(BLACK, File.FILE_A));
-    assertEquals(File.FILE_D, File.calculateLeftLeftFile(BLACK, File.FILE_B));
-    assertEquals(File.FILE_E, File.calculateLeftLeftFile(BLACK, File.FILE_C));
-    assertEquals(File.FILE_F, File.calculateLeftLeftFile(BLACK, File.FILE_D));
-    assertEquals(File.FILE_G, File.calculateLeftLeftFile(BLACK, File.FILE_E));
-    assertEquals(File.FILE_H, File.calculateLeftLeftFile(BLACK, File.FILE_F));
+    assertEquals(File.FILE_C, calculateLeftLeftFile(BLACK, File.FILE_A));
+    assertEquals(File.FILE_D, calculateLeftLeftFile(BLACK, File.FILE_B));
+    assertEquals(File.FILE_E, calculateLeftLeftFile(BLACK, File.FILE_C));
+    assertEquals(File.FILE_F, calculateLeftLeftFile(BLACK, File.FILE_D));
+    assertEquals(File.FILE_G, calculateLeftLeftFile(BLACK, File.FILE_E));
+    assertEquals(File.FILE_H, calculateLeftLeftFile(BLACK, File.FILE_F));
     checkExceptionLeftLeft(BLACK, File.FILE_G);
     checkExceptionLeftLeft(BLACK, File.FILE_H);
 
     checkExceptionRightRight(BLACK, File.FILE_A);
     checkExceptionRightRight(BLACK, File.FILE_B);
-    assertEquals(File.FILE_A, File.calculateRightRightFile(BLACK, File.FILE_C));
-    assertEquals(File.FILE_B, File.calculateRightRightFile(BLACK, File.FILE_D));
-    assertEquals(File.FILE_C, File.calculateRightRightFile(BLACK, File.FILE_E));
-    assertEquals(File.FILE_D, File.calculateRightRightFile(BLACK, File.FILE_F));
-    assertEquals(File.FILE_E, File.calculateRightRightFile(BLACK, File.FILE_G));
-    assertEquals(File.FILE_F, File.calculateRightRightFile(BLACK, File.FILE_H));
+    assertEquals(File.FILE_A, calculateRightRightFile(BLACK, File.FILE_C));
+    assertEquals(File.FILE_B, calculateRightRightFile(BLACK, File.FILE_D));
+    assertEquals(File.FILE_C, calculateRightRightFile(BLACK, File.FILE_E));
+    assertEquals(File.FILE_D, calculateRightRightFile(BLACK, File.FILE_F));
+    assertEquals(File.FILE_E, calculateRightRightFile(BLACK, File.FILE_G));
+    assertEquals(File.FILE_F, calculateRightRightFile(BLACK, File.FILE_H));
 
   }
 
@@ -261,7 +261,7 @@ class TestBasicFile implements EnumConstants {
   private static void checkExceptionLeftLeft(Side side, File file) {
     boolean isException;
     try {
-      File.calculateLeftLeftFile(side, file);
+      calculateLeftLeftFile(side, file);
       isException = false;
     } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
       isException = true;
@@ -272,11 +272,25 @@ class TestBasicFile implements EnumConstants {
   private static void checkExceptionRightRight(Side side, File file) {
     boolean isException;
     try {
-      File.calculateRightRightFile(side, file);
+      calculateRightRightFile(side, file);
       isException = false;
     } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
       isException = true;
     }
     assertTrue(isException);
+  }
+
+  private static File calculateLeftLeftFile(Side side, File file) {
+    if (!File.calculateHasLeftLeftFile(side, file)) {
+      throw new IllegalArgumentException();
+    }
+    return File.calculateLeftFile(side, File.calculateLeftFile(side, file));
+  }
+
+  private static File calculateRightRightFile(Side side, File file) {
+    if (!File.calculateHasRightRightFile(side, file)) {
+      throw new IllegalArgumentException();
+    }
+    return File.calculateRightFile(side, File.calculateRightFile(side, file));
   }
 }

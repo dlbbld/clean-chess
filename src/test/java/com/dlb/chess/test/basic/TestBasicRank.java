@@ -172,40 +172,40 @@ class TestBasicRank implements EnumConstants {
     assertFalse(Rank.calculateHasPreviousPreviousRank(BLACK, RANK_8));
 
     // white value
-    assertEquals(RANK_3, Rank.calculateNextNextRank(WHITE, RANK_1));
-    assertEquals(RANK_4, Rank.calculateNextNextRank(WHITE, RANK_2));
-    assertEquals(RANK_5, Rank.calculateNextNextRank(WHITE, RANK_3));
-    assertEquals(RANK_6, Rank.calculateNextNextRank(WHITE, RANK_4));
-    assertEquals(RANK_7, Rank.calculateNextNextRank(WHITE, RANK_5));
-    assertEquals(RANK_8, Rank.calculateNextNextRank(WHITE, RANK_6));
+    assertEquals(RANK_3, calculateNextNextRank(WHITE, RANK_1));
+    assertEquals(RANK_4, calculateNextNextRank(WHITE, RANK_2));
+    assertEquals(RANK_5, calculateNextNextRank(WHITE, RANK_3));
+    assertEquals(RANK_6, calculateNextNextRank(WHITE, RANK_4));
+    assertEquals(RANK_7, calculateNextNextRank(WHITE, RANK_5));
+    assertEquals(RANK_8, calculateNextNextRank(WHITE, RANK_6));
     checkExceptionNextNext(WHITE, RANK_7);
     checkExceptionNextNext(WHITE, RANK_8);
 
     checkExceptionPreviousPrevious(WHITE, RANK_1);
     checkExceptionPreviousPrevious(WHITE, RANK_2);
-    assertEquals(RANK_1, Rank.calculatePreviousPreviousRank(WHITE, RANK_3));
-    assertEquals(RANK_2, Rank.calculatePreviousPreviousRank(WHITE, RANK_4));
-    assertEquals(RANK_3, Rank.calculatePreviousPreviousRank(WHITE, RANK_5));
-    assertEquals(RANK_4, Rank.calculatePreviousPreviousRank(WHITE, RANK_6));
-    assertEquals(RANK_5, Rank.calculatePreviousPreviousRank(WHITE, RANK_7));
-    assertEquals(RANK_6, Rank.calculatePreviousPreviousRank(WHITE, RANK_8));
+    assertEquals(RANK_1, calculatePreviousPreviousRank(WHITE, RANK_3));
+    assertEquals(RANK_2, calculatePreviousPreviousRank(WHITE, RANK_4));
+    assertEquals(RANK_3, calculatePreviousPreviousRank(WHITE, RANK_5));
+    assertEquals(RANK_4, calculatePreviousPreviousRank(WHITE, RANK_6));
+    assertEquals(RANK_5, calculatePreviousPreviousRank(WHITE, RANK_7));
+    assertEquals(RANK_6, calculatePreviousPreviousRank(WHITE, RANK_8));
 
     // black value
     checkExceptionNextNext(BLACK, RANK_1);
     checkExceptionNextNext(BLACK, RANK_2);
-    assertEquals(RANK_1, Rank.calculateNextNextRank(BLACK, RANK_3));
-    assertEquals(RANK_2, Rank.calculateNextNextRank(BLACK, RANK_4));
-    assertEquals(RANK_3, Rank.calculateNextNextRank(BLACK, RANK_5));
-    assertEquals(RANK_4, Rank.calculateNextNextRank(BLACK, RANK_6));
-    assertEquals(RANK_5, Rank.calculateNextNextRank(BLACK, RANK_7));
-    assertEquals(RANK_6, Rank.calculateNextNextRank(BLACK, RANK_8));
+    assertEquals(RANK_1, calculateNextNextRank(BLACK, RANK_3));
+    assertEquals(RANK_2, calculateNextNextRank(BLACK, RANK_4));
+    assertEquals(RANK_3, calculateNextNextRank(BLACK, RANK_5));
+    assertEquals(RANK_4, calculateNextNextRank(BLACK, RANK_6));
+    assertEquals(RANK_5, calculateNextNextRank(BLACK, RANK_7));
+    assertEquals(RANK_6, calculateNextNextRank(BLACK, RANK_8));
 
-    assertEquals(RANK_3, Rank.calculatePreviousPreviousRank(BLACK, RANK_1));
-    assertEquals(RANK_4, Rank.calculatePreviousPreviousRank(BLACK, RANK_2));
-    assertEquals(RANK_5, Rank.calculatePreviousPreviousRank(BLACK, RANK_3));
-    assertEquals(RANK_6, Rank.calculatePreviousPreviousRank(BLACK, RANK_4));
-    assertEquals(RANK_7, Rank.calculatePreviousPreviousRank(BLACK, RANK_5));
-    assertEquals(RANK_8, Rank.calculatePreviousPreviousRank(BLACK, RANK_6));
+    assertEquals(RANK_3, calculatePreviousPreviousRank(BLACK, RANK_1));
+    assertEquals(RANK_4, calculatePreviousPreviousRank(BLACK, RANK_2));
+    assertEquals(RANK_5, calculatePreviousPreviousRank(BLACK, RANK_3));
+    assertEquals(RANK_6, calculatePreviousPreviousRank(BLACK, RANK_4));
+    assertEquals(RANK_7, calculatePreviousPreviousRank(BLACK, RANK_5));
+    assertEquals(RANK_8, calculatePreviousPreviousRank(BLACK, RANK_6));
     checkExceptionPreviousPrevious(BLACK, RANK_7);
     checkExceptionPreviousPrevious(BLACK, RANK_8);
   }
@@ -224,7 +224,7 @@ class TestBasicRank implements EnumConstants {
   private static void checkExceptionNextNext(Side side, Rank rank) {
     boolean isException;
     try {
-      Rank.calculateNextNextRank(side, rank);
+      calculateNextNextRank(side, rank);
       isException = false;
     } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
       isException = true;
@@ -246,11 +246,25 @@ class TestBasicRank implements EnumConstants {
   private static void checkExceptionPreviousPrevious(Side side, Rank rank) {
     boolean isException;
     try {
-      Rank.calculatePreviousPreviousRank(side, rank);
+      calculatePreviousPreviousRank(side, rank);
       isException = false;
     } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
       isException = true;
     }
     assertTrue(isException);
+  }
+
+  private static Rank calculateNextNextRank(Side side, Rank rank) {
+    if (!Rank.calculateHasNextNextRank(side, rank)) {
+      throw new IllegalArgumentException();
+    }
+    return Rank.calculateNextRank(side, Rank.calculateNextRank(side, rank));
+  }
+
+  private static Rank calculatePreviousPreviousRank(Side side, Rank rank) {
+    if (!Rank.calculateHasPreviousPreviousRank(side, rank)) {
+      throw new IllegalArgumentException();
+    }
+    return Rank.calculatePreviousRank(side, Rank.calculatePreviousRank(side, rank));
   }
 }

@@ -4,6 +4,9 @@ Releases from 3.3 onward. Earlier history is in git tags only.
 
 ## [Unreleased]
 
+### Breaking — API surface
+- Removed unused public enum convenience methods for double-step file/rank movement and thin rank predicates.
+
 ## [4.0.0] - 2026-05-10
 
 Lenient SAN release. New parser pipeline accepts a defined set of forgivable deviations from canonical SAN; the move-execution and parser API is renamed across the board to make the strict / lenient axis explicit at every call site.

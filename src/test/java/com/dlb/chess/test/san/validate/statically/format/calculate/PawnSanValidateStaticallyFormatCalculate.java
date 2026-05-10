@@ -35,7 +35,8 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
   }
 
   private static boolean isPromotionRank(SanValidationFromTo model) {
-    return Rank.calculateIsAnyPromotionRank(model.toSquare().getRank());
+    final Rank rank = model.toSquare().getRank();
+    return rank == Rank.RANK_1 || rank == Rank.RANK_8;
   }
 
 }

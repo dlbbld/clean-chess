@@ -150,11 +150,11 @@ public abstract class SanValidateFormatReference {
 
     // pawn promotion rank enforcement
     if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION
-        || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION) && Rank.calculateIsAnyPromotionRank(toRank)) {
+        || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION) && isAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
     if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION)
-        && !Rank.calculateIsAnyPromotionRank(toRank)) {
+        && !isAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
@@ -209,6 +209,10 @@ public abstract class SanValidateFormatReference {
               || pieceType == PieceType.KNIGHT || pieceType == PieceType.BISHOP || pieceType == PieceType.QUEEN;
       default -> false;
     };
+  }
+
+  private static boolean isAnyPromotionRank(Rank rank) {
+    return rank == Rank.RANK_1 || rank == Rank.RANK_8;
   }
 
   private static boolean calculateIsAllowedLastChar(String san) {
