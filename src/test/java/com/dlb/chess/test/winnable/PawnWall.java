@@ -14,6 +14,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
@@ -74,13 +75,13 @@ public class PawnWall {
       // ahead, for opponent pawn having to move.
       final Set<Square> attackingSquaresWhite = calculateAttackingSquares(board, Side.WHITE);
       final Set<Square> pawnSquaresBlack = calculatePawnSquares(board, Side.BLACK);
-      if (!Square.calculateIsDisjoint(attackingSquaresWhite, pawnSquaresBlack)) {
+      if (!BasicUtility.calculateIsDisjoint(attackingSquaresWhite, pawnSquaresBlack)) {
         return false;
       }
 
       final Set<Square> attackingSquaresBlack = calculateAttackingSquares(board, Side.BLACK);
       final Set<Square> pawnSquaresWhite = calculatePawnSquares(board, Side.WHITE);
-      if (!Square.calculateIsDisjoint(attackingSquaresBlack, pawnSquaresWhite)) {
+      if (!BasicUtility.calculateIsDisjoint(attackingSquaresBlack, pawnSquaresWhite)) {
         return false;
       }
     }
@@ -407,7 +408,7 @@ public class PawnWall {
     final StaticPosition blockedSquares = calculateBlockedSquares(board, side);
 
     final List<Square> startCandidates = new ArrayList<>();
-    final List<Square> leftMostFile = Square.getLeftFile(side);
+    final List<Square> leftMostFile = leftmostFile(side);
 
     for (final Square squareLeftMostFile : leftMostFile) {
       if (!blockedSquares.isEmpty(squareLeftMostFile)) {
@@ -544,5 +545,20 @@ public class PawnWall {
       }
     }
     return true;
+  }
+
+  private static final List<Square> LEFTMOST_FILE_WHITE = List.of(Square.A1, Square.A2, Square.A3, Square.A4, Square.A5,
+      Square.A6, Square.A7, Square.A8);
+
+  private static final List<Square> LEFTMOST_FILE_BLACK = List.of(Square.H8, Square.H7, Square.H6, Square.H5, Square.H4,
+      Square.H3, Square.H2, Square.H1);
+
+  private static List<Square> leftmostFile(Side side) {
+    return switch (side) {
+      case WHITE -> LEFTMOST_FILE_WHITE;
+      case BLACK -> LEFTMOST_FILE_BLACK;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 }

@@ -5,7 +5,6 @@ import static com.dlb.chess.common.utility.ImmutableUtility.constructListSquare;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Set;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.NonePointerException;
@@ -186,19 +185,6 @@ public enum Square implements Comparable<Square> {
       E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5, E5, F5, G5, H5,
       A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7, D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
 
-  public static final ImmutableList<Square> WHITE_LEFT_FILE = constructListSquare(A1, A2, A3, A4, A5, A6, A7, A8);
-
-  public static final ImmutableList<Square> BLACK_LEFT_FILE = constructListSquare(H8, H7, H6, H5, H4, H3, H2, H1);
-
-  public static List<Square> getLeftFile(Side side) {
-    return switch (side) {
-      case WHITE -> WHITE_LEFT_FILE;
-      case BLACK -> BLACK_LEFT_FILE;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
   public static boolean calculateIsRightMostFile(Square square, Side side) {
     return switch (side) {
       case WHITE -> square.getFile() == File.FILE_H;
@@ -278,29 +264,6 @@ public enum Square implements Comparable<Square> {
       default:
         throw new IllegalArgumentException();
     }
-  }
-
-  public static final boolean calculateIsRightDiagonalSquare(final Side havingMove, final Square squareLookFrom,
-      final Square squareCheckIfRightDiagonal) {
-
-    if (!calculateHasRightDiagonalSquare(havingMove, squareLookFrom)) {
-      return false;
-    }
-
-    final Square diagonalSquare = calculateRightDiagonalSquare(havingMove, squareLookFrom);
-
-    return diagonalSquare.equals(squareCheckIfRightDiagonal);
-  }
-
-  public static final boolean calculateIsLeftDiagonalSquare(final Side havingMove, final Square squareLookFrom,
-      final Square squareCheckIfLeftDiagonal) {
-
-    if (!calculateHasLeftDiagonalSquare(havingMove, squareLookFrom)) {
-      return false;
-    }
-    final Square diagonalSquare = calculateLeftDiagonalSquare(havingMove, squareLookFrom);
-
-    return diagonalSquare.equals(squareCheckIfLeftDiagonal);
   }
 
   public static final boolean calculateHasRightSquare(final Side havingMove, final Square square) {
@@ -482,20 +445,6 @@ public enum Square implements Comparable<Square> {
     listList.add(constructListSquare(F7, F5));
     listList.add(constructListSquare(G7, G5));
     listList.add(constructListSquare(H7, H5));
-  }
-
-  public static boolean calculateIsDisjoint(Set<Square> setOne, Set<Square> setTwo) {
-    for (final Square squareSetOne : setOne) {
-      if (setTwo.contains(squareSetOne)) {
-        return false;
-      }
-    }
-    for (final Square squareSetTwo : setTwo) {
-      if (setOne.contains(squareSetTwo)) {
-        return false;
-      }
-    }
-    return true;
   }
 
   private void check() {
