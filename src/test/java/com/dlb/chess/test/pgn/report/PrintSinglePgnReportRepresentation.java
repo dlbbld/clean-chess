@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.pgnall.AbstractPgnTest;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -24,7 +23,9 @@ public class PrintSinglePgnReportRepresentation extends AbstractPgnTest {
     final var report = Reporter.calculateReport(pgnTest.getFolderPath(), PGN_FILE_NAME);
     final List<String> representation = BasicRepresentation.calculateRepresentation(report, PGN_FILE_NAME);
 
-    GeneralUtility.logLines(logger, representation);
+    for (final String line : representation) {
+      logger.info(line);
+    }
 
   }
 

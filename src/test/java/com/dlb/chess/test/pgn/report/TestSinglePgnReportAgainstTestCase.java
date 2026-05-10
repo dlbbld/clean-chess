@@ -6,7 +6,6 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.pgnall.AbstractPgnTest;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -29,7 +28,9 @@ class TestSinglePgnReportAgainstTestCase extends AbstractPgnTest {
     final var expectedReports = Reporter.calculateReport(pgnTest.getFolderPath(), PGN_FILE_NAME);
     final List<String> visualIndication = BasicRepresentation.calculateRepresentation(expectedReports, PGN_FILE_NAME);
 
-    GeneralUtility.logLines(logger, visualIndication);
+    for (final String line : visualIndication) {
+      logger.info(line);
+    }
 
     testReportAgainstTestCase(PGN_FILE_NAME, expectedReports);
   }
