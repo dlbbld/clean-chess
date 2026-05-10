@@ -76,8 +76,7 @@ import com.google.common.collect.ImmutableSet;
  * <p>
  * Move execution happens through {@link #moveStrict(String)}, {@link #moveLenient(String)},
  * {@link #move(MoveSpecification)}, {@link #movesStrict(String...)}, and is undone by {@link #unmove()}. Both
- * move-pipelines validate the
- * candidate against the current legal-move set; an invalid move throws (see
+ * move-pipelines validate the candidate against the current legal-move set; an invalid move throws (see
  * {@link com.dlb.chess.exceptions.InvalidMoveException} from the {@code MoveSpecification} pipeline,
  * {@code SanValidationException} from the SAN pipeline). Once the game has reached any FIDE-automatic termination
  * (checkmate, stalemate, mutual insufficient material, fivefold repetition, 75-move rule), neither pipeline accepts
@@ -250,29 +249,29 @@ public class Board implements ChessBoard {
    * answer. Use {@link #moveLenient(String)} when parsing real-world PGN that may contain forgivable deviations.
    *
    * @throws com.dlb.chess.san.exceptions.SanValidationException if {@code san} is not canonical SAN, or is canonical
-   *         but does not represent a legal move
+   *                                                             but does not represent a legal move
    */
   @Override
   public StrictSanParserValidationResult moveStrict(String san) {
     final StrictSanParserValidationResult result = StrictSanParser.parseText(san, this);
     this.performMoveWithoutValidation(result.moveSpecification());
     if (!san.equals(this.getSan())) {
-      throw new ProgrammingMistakeException(
-          "The provided SAN and generated SAN are different, this should not happen");
+      throw new ProgrammingMistakeException("The provided SAN and generated SAN are different, this should not happen");
     }
     return result;
   }
 
   /**
-   * Plays the given move on this board, specified in lenient SAN. Accepts inputs the strict pipeline rejects when
-   * those inputs uniquely identify a legal move and the deviation matches a supported tolerance category (case
-   * variation, long-algebraic / UCI form, castling with digit zero, missing or wrong check / checkmate suffix,
-   * over-specification, missing or spurious capture marker, missing promotion equals, explicit pawn letter). The
-   * returned {@link LenientSanParserValidationResult} carries the resolved {@code MoveSpecification} together with
-   * one {@code ForgivenItem} per deviation that was forgiven; on canonical input the forgiven-items list is empty.
+   * Plays the given move on this board, specified in lenient SAN. Accepts inputs the strict pipeline rejects when those
+   * inputs uniquely identify a legal move and the deviation matches a supported tolerance category (case variation,
+   * long-algebraic / UCI form, castling with digit zero, missing or wrong check / checkmate suffix, over-specification,
+   * missing or spurious capture marker, missing promotion equals, explicit pawn letter). The returned
+   * {@link LenientSanParserValidationResult} carries the resolved {@code MoveSpecification} together with one
+   * {@code ForgivenItem} per deviation that was forgiven; on canonical input the forgiven-items list is empty.
    *
-   * @throws com.dlb.chess.san.exceptions.LenientSanParserValidationException if the input cannot be resolved to a
-   *         legal move even after applying every supported tolerance
+   * @throws com.dlb.chess.san.exceptions.LenientSanParserValidationException if the input cannot be resolved to a legal
+   *                                                                          move even after applying every supported
+   *                                                                          tolerance
    */
   @Override
   public LenientSanParserValidationResult moveLenient(String san) {
@@ -282,8 +281,8 @@ public class Board implements ChessBoard {
   }
 
   /**
-   * Plays the given sequence of canonical SAN moves on this board, in order. Convenience for batch play; the
-   * absence of a thrown exception means every move was canonical and legal.
+   * Plays the given sequence of canonical SAN moves on this board, in order. Convenience for batch play; the absence of
+   * a thrown exception means every move was canonical and legal.
    */
   @Override
   public boolean movesStrict(String... sanArray) {
@@ -292,6 +291,21 @@ public class Board implements ChessBoard {
         throw new IllegalArgumentException("The SAN cannot be null");
       }
       moveStrict(san);
+    }
+    return true;
+  }
+
+  /**
+   * Plays the given sequence of canonical SAN moves on this board, in order. Convenience for batch play; the absence of
+   * a thrown exception means every move was canonical and legal.
+   */
+  @Override
+  public boolean movesLenient(String... sanArray) {
+    for (final String san : sanArray) {
+      if (san == null) {
+        throw new IllegalArgumentException("The SAN cannot be null");
+      }
+      moveLenient(san);
     }
     return true;
   }

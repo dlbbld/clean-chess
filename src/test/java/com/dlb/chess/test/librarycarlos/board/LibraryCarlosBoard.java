@@ -16,10 +16,10 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -33,8 +33,6 @@ import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.Board;
@@ -45,6 +43,8 @@ import com.github.bhlangonijr.chesslib.move.MoveConversionException;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.github.bhlangonijr.chesslib.move.MoveList;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableSet;
 
 public class LibraryCarlosBoard implements ChessBoard {
 
@@ -476,7 +476,8 @@ public class LibraryCarlosBoard implements ChessBoard {
     for (final MoveBackup moveBackup : moveBackupList) {
       final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
       final MoveSpecification moveSpecification = convertMove(board, move);
-      final Piece movingPiece = EnumConversionUtility.convertPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
+      final Piece movingPiece = EnumConversionUtility
+          .convertPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
       final Piece pieceCaptured = EnumConversionUtility
           .convertPiece(NonNullWrapperLibraryCarlos.getCapturedPiece(moveBackup));
       final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
@@ -578,6 +579,17 @@ public class LibraryCarlosBoard implements ChessBoard {
         throw new IllegalArgumentException();
       }
       this.moveStrict(san);
+    }
+    return true;
+  }
+
+  @Override
+  public boolean movesLenient(String... sanArray) {
+    for (final String san : sanArray) {
+      if (san == null) {
+        throw new IllegalArgumentException();
+      }
+      this.moveLenient(san);
     }
     return true;
   }

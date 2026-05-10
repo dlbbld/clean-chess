@@ -19,6 +19,8 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.san.model.LenientSanParserValidationResult;
+import com.dlb.chess.san.model.StrictSanParserValidationResult;
 import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
 import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
@@ -32,11 +34,13 @@ public interface ChessBoard extends EnumConstants {
 
   boolean move(MoveSpecification moveSpecification);
 
-  com.dlb.chess.san.model.StrictSanParserValidationResult moveStrict(String san);
+  StrictSanParserValidationResult moveStrict(String san);
 
-  com.dlb.chess.san.model.LenientSanParserValidationResult moveLenient(String san);
+  LenientSanParserValidationResult moveLenient(String san);
 
   boolean movesStrict(String... sanArray);
+
+  boolean movesLenient(String... sanArray);
 
   void unmove();
 
@@ -119,8 +123,8 @@ public interface ChessBoard extends EnumConstants {
 
   /**
    * Quick (microsecond-scale, structural) CHA-based check whether the current position is dead — unwinnable for both
-   * sides. Three-valued: {@code DEAD_POSITION}, {@code NON_DEAD_POSITION}, {@code POSSIBLY_NON_DEAD_POSITION} (the third
-   * is a deliberate honesty signal — the quick algorithm is sound but not complete).
+   * sides. Three-valued: {@code DEAD_POSITION}, {@code NON_DEAD_POSITION}, {@code POSSIBLY_NON_DEAD_POSITION} (the
+   * third is a deliberate honesty signal — the quick algorithm is sound but not complete).
    */
   default DeadPositionQuick isDeadPositionQuick() {
     final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
