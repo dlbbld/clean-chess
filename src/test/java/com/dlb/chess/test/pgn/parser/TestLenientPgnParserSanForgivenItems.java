@@ -16,8 +16,8 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
  * One fixture per {@link LenientSanValidationProblem} value. Each fixture is a minimal lenient PGN whose movetext
- * contains exactly one move with the named deviation; the rest of the moves (if any) are canonical SAN. The lenient
- * PGN parser must accept the fixture and surface exactly the expected forgiven code.
+ * contains exactly one move with the named deviation; the rest of the moves (if any) are canonical SAN. The lenient PGN
+ * parser must accept the fixture and surface exactly the expected forgiven code.
  */
 @SuppressWarnings("static-method")
 class TestLenientPgnParserSanForgivenItems {
@@ -146,7 +146,7 @@ class TestLenientPgnParserSanForgivenItems {
         "Expected valid lenient parse of " + fixtureFileName + " but got: " + result.message());
     assertEquals(1, result.sanForgivenItems().size(),
         "Expected exactly one forgiven item in " + fixtureFileName + " but got: " + result.sanForgivenItems());
-    final ForgivenItem item = result.sanForgivenItems().get(0);
+    final ForgivenItem item = NonNullWrapperCommon.get(result.sanForgivenItems(), 0);
     assertEquals(expectedCode, item.code(),
         "Expected forgiven code " + expectedCode + " in " + fixtureFileName + " but got: " + item.code());
   }

@@ -46,14 +46,14 @@ public final class LenientSanParser {
    * was forgiven. On a canonical input, the forgiven-items list is empty.
    *
    * @throws LenientSanParserValidationException if the input cannot be resolved to a legal move even after applying
-   *         every supported tolerance
+   *                                             every supported tolerance
    */
   public static LenientSanParserValidationResult parseText(String text, ChessBoard board) {
     // Phase 0: try strict on the raw input first. Canonical SAN pays zero lenient overhead.
     try {
       final MoveSpecification ms = StrictSanParser.parseText(text, board).moveSpecification();
       return new LenientSanParserValidationResult(ms, NonNullWrapperCommon.copyOfList(List.<ForgivenItem>of()));
-    } catch (SanValidationException ignored) {
+    } catch (@SuppressWarnings("unused") final SanValidationException ignored) {
       // Fall through to the lenient pipeline.
     }
 
@@ -67,7 +67,7 @@ public final class LenientSanParser {
     final MoveSpecification moveSpecification;
     try {
       moveSpecification = LenientSanRecover.parseWithRecovery(normalized, board, codes);
-    } catch (SanValidationException finalReject) {
+    } catch (final SanValidationException finalReject) {
       throw new LenientSanParserValidationException(
           Message.getString("validation.san.lenient.parseFailed", text, finalReject.getMessage()), text,
           finalReject.getSanValidationProblem(), finalReject.getGameStatus(), itemsWithoutCanonical(text, codes));
@@ -87,7 +87,7 @@ public final class LenientSanParser {
    * discarded.
    *
    * @throws LenientSanParserValidationException if the input cannot be resolved to a legal move even after applying
-   *         every supported tolerance
+   *                                             every supported tolerance
    */
   public static void validateText(String text, ChessBoard board) {
     parseText(text, board);

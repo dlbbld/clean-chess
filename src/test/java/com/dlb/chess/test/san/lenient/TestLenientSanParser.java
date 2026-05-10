@@ -11,6 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
@@ -26,8 +27,8 @@ class TestLenientSanParser implements EnumConstants {
   // Italian-game opening that exercises pawn pushes, knight/bishop development, and castling.
   // Castling is the only move whose canonical SAN, LAN, and UCI representations all differ — the rest
   // give us pawn vs piece coverage in each notation form.
-  private static final List<String> ITALIAN_OPENING_SAN = List.of("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6",
-      "d3", "d6");
+  private static final List<String> ITALIAN_OPENING_SAN = NonNullWrapperCommon.listOf("e4", "e5", "Nf3", "Nc6", "Bc4",
+      "Bc5", "O-O", "Nf6", "d3", "d6");
 
   // ---------------------------------------------------------------------------
   // Three full-game tests (canonical SAN / UCI / LAN end-to-end).
@@ -38,8 +39,8 @@ class TestLenientSanParser implements EnumConstants {
     final Board board = new Board();
     for (final String san : ITALIAN_OPENING_SAN) {
       final LenientSanParserValidationResult result = board.moveLenient(san);
-      assertTrue(result.forgivenItems().isEmpty(), "Expected no forgiven items for canonical SAN move: " + san
-          + " (got " + result.forgivenItems() + ")");
+      assertTrue(result.forgivenItems().isEmpty(),
+          "Expected no forgiven items for canonical SAN move: " + san + " (got " + result.forgivenItems() + ")");
     }
   }
 
@@ -76,7 +77,8 @@ class TestLenientSanParser implements EnumConstants {
         sawLongAlgebraic = true;
       }
     }
-    assertTrue(sawLongAlgebraic, "Expected at least one LONG_ALGEBRAIC_NOTATION forgiven item across the LAN-form game");
+    assertTrue(sawLongAlgebraic,
+        "Expected at least one LONG_ALGEBRAIC_NOTATION forgiven item across the LAN-form game");
   }
 
   // ---------------------------------------------------------------------------
@@ -513,14 +515,12 @@ class TestLenientSanParser implements EnumConstants {
       LenientSanValidationProblem expectedCode) {
     assertEquals(1, result.forgivenItems().size(),
         "Expected exactly one forgiven item with code " + expectedCode + " but got " + result.forgivenItems());
-    final ForgivenItem item = result.forgivenItems().get(0);
-    assertEquals(expectedCode, item.code(),
-        "Expected forgiven code " + expectedCode + " but got " + item.code());
+    final ForgivenItem item = NonNullWrapperCommon.get(result.forgivenItems(), 0);
+    assertEquals(expectedCode, item.code(), "Expected forgiven code " + expectedCode + " but got " + item.code());
   }
 
   private static String canonical(LenientSanParserValidationResult result) {
-    assertFalse(result.forgivenItems().isEmpty(),
-        "Cannot extract canonical SAN from a result with no forgiven items");
-    return result.forgivenItems().get(0).canonicalSan();
+    assertFalse(result.forgivenItems().isEmpty(), "Cannot extract canonical SAN from a result with no forgiven items");
+    return NonNullWrapperCommon.get(result.forgivenItems(), 0).canonicalSan();
   }
 }

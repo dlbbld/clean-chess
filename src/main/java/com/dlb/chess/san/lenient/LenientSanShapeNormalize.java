@@ -43,15 +43,15 @@ final class LenientSanShapeNormalize {
       return text;
     }
 
-    final @Nullable String castlingNormalized = tryNormalizeCastling(text, board, codes);
+    final var castlingNormalized = tryNormalizeCastling(text, board, codes);
     if (castlingNormalized != null) {
       return castlingNormalized;
     }
 
-    final char lastChar = text.charAt(text.length() - 1);
-    final boolean hasTerminalMarker = lastChar == '+' || lastChar == '#';
-    final String terminalMarker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
-    String body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
+    final var lastChar = text.charAt(text.length() - 1);
+    final var hasTerminalMarker = lastChar == '+' || lastChar == '#';
+    final var terminalMarker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
+    var body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
 
     body = stripExplicitPawnLetter(body, codes);
     // Case fixes run early so downstream steps (UCI/LAN translation, pawn-missing-x, promotion-equals)
@@ -68,15 +68,15 @@ final class LenientSanShapeNormalize {
 
   private static @Nullable String tryNormalizeCastling(String text, ChessBoard board,
       List<LenientSanValidationProblem> codes) {
-    final char lastChar = text.charAt(text.length() - 1);
-    final boolean hasTerminalMarker = lastChar == '+' || lastChar == '#';
-    final String marker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
-    final String body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
+    final var lastChar = text.charAt(text.length() - 1);
+    final var hasTerminalMarker = lastChar == '+' || lastChar == '#';
+    final var marker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
+    final var body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
 
     // Classic O-O / 0-0 / mixed forms. Three or five characters with hyphens and zero-or-O at every other position.
     if (matchesCastlingZeroOPattern(body)) {
-      final boolean hasO = body.indexOf('O') >= 0;
-      final boolean hasZero = body.indexOf('0') >= 0;
+      final var hasO = body.indexOf('O') >= 0;
+      final var hasZero = body.indexOf('0') >= 0;
       if (hasO && hasZero) {
         throw new LenientSanParserValidationException(
             Message.getString("validation.san.lenient.mixedCastlingZeroAndO", text), text, null,
@@ -91,7 +91,7 @@ final class LenientSanShapeNormalize {
     }
 
     // UCI king-castling: e1g1 / e1c1 / e8g8 / e8c8 with the king actually on the e-file home square.
-    final @Nullable String uciCastling = tryTranslateUciCastling(body, board);
+    final var uciCastling = tryTranslateUciCastling(body, board);
     if (uciCastling != null) {
       codes.add(LenientSanValidationProblem.UCI_NOTATION);
       return uciCastling + marker;
@@ -159,10 +159,10 @@ final class LenientSanShapeNormalize {
     if (body.indexOf('-') >= 0) {
       final String dehyphenated = NonNullWrapperCommon.replace(body, "-", "");
       codes.add(LenientSanValidationProblem.LONG_ALGEBRAIC_NOTATION);
-      final @Nullable String translated = tryTranslateUciShape(dehyphenated, board);
+      final var translated = tryTranslateUciShape(dehyphenated, board);
       return translated != null ? translated : dehyphenated;
     }
-    final @Nullable String translated = tryTranslateUciShape(body, board);
+    final var translated = tryTranslateUciShape(body, board);
     if (translated != null) {
       codes.add(LenientSanValidationProblem.UCI_NOTATION);
       return translated;
@@ -201,7 +201,7 @@ final class LenientSanShapeNormalize {
     final StringBuilder out = new StringBuilder();
     if (pieceType == PieceType.PAWN) {
       // Pawn SAN: forward "<file><rank>", capture "<fromFile>x<toFile><toRank>", optional "=<P>"
-      final boolean isCapture = body.charAt(0) != body.charAt(2);
+      final var isCapture = body.charAt(0) != body.charAt(2);
       if (isCapture) {
         out.append(body.charAt(0)).append('x').append(body.charAt(2)).append(body.charAt(3));
       } else {
@@ -223,10 +223,7 @@ final class LenientSanShapeNormalize {
   // --- Body transforms ---
 
   private static String stripExplicitPawnLetter(String body, List<LenientSanValidationProblem> codes) {
-    if (body.length() < 2 || body.charAt(0) != 'P') {
-      return body;
-    }
-    if (!isFileLetter(body.charAt(1))) {
+    if (body.length() < 2 || body.charAt(0) != 'P' || !isFileLetter(body.charAt(1))) {
       return body;
     }
     codes.add(LenientSanValidationProblem.EXPLICIT_PAWN_LETTER);
@@ -234,19 +231,16 @@ final class LenientSanShapeNormalize {
   }
 
   private static String insertMissingPromotionEquals(String body, List<LenientSanValidationProblem> codes) {
-    final int len = body.length();
+    final var len = body.length();
     if (len < 3) {
       return body;
     }
-    final char last = body.charAt(len - 1);
+    final var last = body.charAt(len - 1);
     if (!isPromotionPieceLetterAnyCase(last)) {
       return body;
     }
-    final char prev = body.charAt(len - 2);
-    if (prev != '1' && prev != '8') {
-      return body;
-    }
-    if (body.charAt(len - 3) == '=') {
+    final var prev = body.charAt(len - 2);
+    if (prev != '1' && prev != '8' || body.charAt(len - 3) == '=') {
       return body;
     }
     codes.add(LenientSanValidationProblem.MISSING_PROMOTION_EQUALS);
@@ -271,11 +265,11 @@ final class LenientSanShapeNormalize {
   }
 
   private static String caseFixLowercasePromotionPiece(String body, List<LenientSanValidationProblem> codes) {
-    final int eq = body.lastIndexOf('=');
+    final var eq = body.lastIndexOf('=');
     if (eq < 0 || eq != body.length() - 2) {
       return body;
     }
-    final char piece = body.charAt(eq + 1);
+    final var piece = body.charAt(eq + 1);
     if (piece == 'r' || piece == 'n' || piece == 'b' || piece == 'q') {
       codes.add(LenientSanValidationProblem.LOWERCASE_PROMOTION_PIECE);
       return NonNullWrapperCommon.substring(body, 0, eq + 1) + Character.toUpperCase(piece);
@@ -287,7 +281,7 @@ final class LenientSanShapeNormalize {
     if (body.isEmpty()) {
       return body;
     }
-    final char first = body.charAt(0);
+    final var first = body.charAt(0);
     if (first == 'n' || first == 'r' || first == 'q' || first == 'k') {
       codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
       return Character.toUpperCase(first) + NonNullWrapperCommon.substring(body, 1);
@@ -297,11 +291,11 @@ final class LenientSanShapeNormalize {
       // form (e.g. "b1c3"). Two shapes point at a lowercase bishop letter:
       //
       // (a) <piece><file>... — position 1 is a file letter (e.g. "bf3" = bishop to f3, "bdxe5" = bishop with
-      //     file disambig and capture). Pawn moves never have a file letter at position 1.
+      // file disambig and capture). Pawn moves never have a file letter at position 1.
       // (b) bx<file><rank> with non-adjacent files — pawn captures must be diagonal, so b-pawn can only
-      //     capture on a- or c-file. If the capture destination file is not adjacent to b, the pawn
-      //     interpretation is geometrically illegal regardless of board state, and the user must mean a
-      //     lowercase bishop capture (e.g. "bxf7" — bishop on c4 captures on f7).
+      // capture on a- or c-file. If the capture destination file is not adjacent to b, the pawn
+      // interpretation is geometrically illegal regardless of board state, and the user must mean a
+      // lowercase bishop capture (e.g. "bxf7" — bishop on c4 captures on f7).
       if (body.length() >= 2 && isFileLetterAnyCase(body.charAt(1))) {
         codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
         return "B" + NonNullWrapperCommon.substring(body, 1);
@@ -311,20 +305,19 @@ final class LenientSanShapeNormalize {
         codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
         return "B" + NonNullWrapperCommon.substring(body, 1);
       }
-      return body;
     }
     return body;
   }
 
   private static boolean isAdjacentFile(char a, char b) {
-    return Math.abs((int) a - (int) b) == 1;
+    return Math.abs(a - b) == 1;
   }
 
   private static String caseFixUppercaseFileLetters(String body, List<LenientSanValidationProblem> codes) {
     final StringBuilder out = new StringBuilder(body.length());
-    boolean changed = false;
+    var changed = false;
     for (var i = 0; i < body.length(); i++) {
-      final char c = body.charAt(i);
+      final var c = body.charAt(i);
       if (i == 0) {
         // Position 0 may be a piece letter (P, R, N, B, Q, K) OR a file letter for pawn / UCI / LAN forms.
         // A, C, D, E, F, G, H are unambiguously file letters (no piece uses these). B is ambiguous (file b
@@ -357,8 +350,8 @@ final class LenientSanShapeNormalize {
   }
 
   /**
-   * Returns true when {@code body} starts with uppercase {@code B} but the rest of the shape is incompatible with
-   * any valid bishop SAN — i.e. only the b-file pawn interpretation makes sense. Used to decide whether an uppercase
+   * Returns true when {@code body} starts with uppercase {@code B} but the rest of the shape is incompatible with any
+   * valid bishop SAN — i.e. only the b-file pawn interpretation makes sense. Used to decide whether an uppercase
    * {@code B} at position 0 should be lowercased. The shapes that pass here are:
    * <ul>
    * <li>{@code B<rank>} (length 2) — bishop has no length-2 SAN form
@@ -366,23 +359,21 @@ final class LenientSanShapeNormalize {
    * <li>{@code Bx<file><rank><piece>} (length 5 capture promotion missing {@code =}) — bishops don't promote
    * <li>{@code Bx<file><rank>=<piece>} (length 6 capture promotion) — bishops don't promote
    * </ul>
-   * Capture and disambiguation forms (e.g. {@code Bxf7}, {@code B1d4}) are canonically bishop, even though they
-   * could lexically also be uppercase b-file pawn forms; the case carries the user's intent and we respect it.
+   * Capture and disambiguation forms (e.g. {@code Bxf7}, {@code B1d4}) are canonically bishop, even though they could
+   * lexically also be uppercase b-file pawn forms; the case carries the user's intent and we respect it.
    */
   private static boolean isUppercaseBPawnOnlyShape(String body) {
     if (body.length() == 2) {
       return isRankDigit(body.charAt(1));
     }
     if (body.length() == 4) {
-      return isRankDigit(body.charAt(1)) && body.charAt(2) == '='
-          && isPromotionPieceLetterAnyCase(body.charAt(3));
+      return isRankDigit(body.charAt(1)) && body.charAt(2) == '=' && isPromotionPieceLetterAnyCase(body.charAt(3));
     }
     if (body.length() == 5) {
       // Bx<file><rank><piece>: capture promotion missing the '=' marker — bishops don't promote, so this is
       // unambiguously an uppercase b-file pawn capture promotion.
       return body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2))
-          && (body.charAt(3) == '1' || body.charAt(3) == '8')
-          && isPromotionPieceLetterAnyCase(body.charAt(4));
+          && (body.charAt(3) == '1' || body.charAt(3) == '8') && isPromotionPieceLetterAnyCase(body.charAt(4));
     }
     if (body.length() == 6) {
       return body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2)) && isRankDigit(body.charAt(3))
@@ -396,10 +387,10 @@ final class LenientSanShapeNormalize {
   }
 
   /**
-   * Detects pawn captures written without the {@code x} marker: {@code <file><file><rank>} (3 chars, e.g.
-   * {@code ed5}), {@code <file><file><rank>=<piece>} (5 chars, e.g. {@code ed8=Q}), or
-   * {@code <file><file><rank><piece>} (4 chars with rank 1/8, e.g. {@code ed8Q} — capture promotion missing both
-   * x and =). Inserts {@code x} at position 1 and emits {@link LenientSanValidationProblem#MISSING_CAPTURE_MARKER}.
+   * Detects pawn captures written without the {@code x} marker: {@code <file><file><rank>} (3 chars, e.g. {@code ed5}),
+   * {@code <file><file><rank>=<piece>} (5 chars, e.g. {@code ed8=Q}), or {@code <file><file><rank><piece>} (4 chars
+   * with rank 1/8, e.g. {@code ed8Q} — capture promotion missing both x and =). Inserts {@code x} at position 1 and
+   * emits {@link LenientSanValidationProblem#MISSING_CAPTURE_MARKER}.
    */
   private static String insertMissingPawnCaptureMarker(String body, List<LenientSanValidationProblem> codes) {
     if (body.length() == 3 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
@@ -441,7 +432,7 @@ final class LenientSanShapeNormalize {
   private static Square parseSquare(char fileLetter, char rankDigit) {
     try {
       return Square.valueOf(NonNullWrapperCommon.toUpperCase("" + fileLetter + rankDigit));
-    } catch (IllegalArgumentException e) {
+    } catch (final IllegalArgumentException e) {
       throw new ProgrammingMistakeException("Square.valueOf failed for validated file/rank chars", e);
     }
   }

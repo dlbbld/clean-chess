@@ -38,7 +38,6 @@ import com.dlb.chess.san.model.ForgivenItem;
 import com.dlb.chess.san.model.LenientSanParserValidationResult;
 import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
-import com.google.common.collect.ImmutableList;
 
 /**
  * Lenient PGN parser. Permissive inter-token rules: any whitespace separates tokens, move-number indicators are
@@ -116,8 +115,8 @@ public final class LenientPgnParser {
 
   /**
    * Like {@link #parseText(String)} but returns a structured result instead of throwing. The result also carries the
-   * parsed {@link PgnFile} (on success) and the list of SAN-level deviations the lenient layer forgave during
-   * movetext replay.
+   * parsed {@link PgnFile} (on success) and the list of SAN-level deviations the lenient layer forgave during movetext
+   * replay.
    */
   public static LenientPgnParserValidationResult validateText(String pgn) {
     return runValidation(new LenientPgnParser(pgn));
@@ -126,12 +125,12 @@ public final class LenientPgnParser {
   private static LenientPgnParserValidationResult runValidation(LenientPgnParser parser) {
     try {
       final PgnFile pgnFile = parser.parseInternal();
-      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE,
-          "OK", pgnFile, NonNullWrapperCommon.copyOfList(parser.sanForgivenItemsAccumulator));
+      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK",
+          pgnFile, NonNullWrapperCommon.copyOfList(parser.sanForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       @SuppressWarnings("null") @NonNull final String message = e.getMessage();
-      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(),
-          e.getSanValidationProblem(), message, null, e.getSanForgivenItemsAccumulated());
+      return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
+          message, null, e.getSanForgivenItemsAccumulated());
     } catch (final RuntimeException e) {
       final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
@@ -142,7 +141,7 @@ public final class LenientPgnParser {
   @SuppressWarnings("null")
   private static @NonNull String unexpectedValidationErrorMessage(RuntimeException e) {
     final @Nullable String nullableReason = e.getMessage();
-    final String reason = nullableReason == null ? "" : nullableReason;
+    final var reason = nullableReason == null ? "" : nullableReason;
     return "An unexpected error occurred during validation. Reason: " + reason;
   }
 
@@ -680,9 +679,9 @@ public final class LenientPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   /**
-   * Replays each half-move on a fresh board via {@link Board#moveLenient}, accumulates SAN-level forgiven items
-   * into the parser-instance accumulator, and returns a copy of the half-move list with the canonical SAN substituted
-   * (so the resulting {@link PgnFile} compares equal to a strict-parsed file built from the same canonical moves).
+   * Replays each half-move on a fresh board via {@link Board#moveLenient}, accumulates SAN-level forgiven items into
+   * the parser-instance accumulator, and returns a copy of the half-move list with the canonical SAN substituted (so
+   * the resulting {@link PgnFile} compares equal to a strict-parsed file built from the same canonical moves).
    * Move-suffix annotations and commentaries are carried through unchanged.
    *
    * <p>

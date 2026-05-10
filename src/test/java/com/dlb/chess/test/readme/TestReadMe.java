@@ -342,13 +342,13 @@ class TestReadMe {
     assertTrue(result.isValid());
     assertEquals(2, result.sanForgivenItems().size());
     assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
-        result.sanForgivenItems().get(0).code());
-    assertEquals("0-0", result.sanForgivenItems().get(0).originalToken());
-    assertEquals("O-O", result.sanForgivenItems().get(0).canonicalSan());
+        NonNullWrapperCommon.get(result.sanForgivenItems(), 0).code());
+    assertEquals("0-0", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).originalToken());
+    assertEquals("O-O", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).canonicalSan());
     assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
-        result.sanForgivenItems().get(1).code());
-    assertEquals("nf6", result.sanForgivenItems().get(1).originalToken());
-    assertEquals("Nf6", result.sanForgivenItems().get(1).canonicalSan());
+        NonNullWrapperCommon.get(result.sanForgivenItems(), 1).code());
+    assertEquals("nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).originalToken());
+    assertEquals("Nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).canonicalSan());
   }
 
   @Test
