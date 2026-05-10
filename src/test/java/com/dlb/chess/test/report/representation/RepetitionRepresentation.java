@@ -6,7 +6,6 @@ import java.util.List;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.report.model.Report;
@@ -51,7 +50,7 @@ public class RepetitionRepresentation {
 
       resultList.add(calculateRepresentationRepetitionList(repeatingPosition, enPassantCaptureRule));
     }
-    return BasicUtility.calculateSemicolonSeparatedList(resultList);
+    return NonNullWrapperCommon.join("; ", resultList);
   }
 
 }

@@ -15,7 +15,7 @@ public class NoProgressRepresentation {
     for (final List<NoProgressHalfMove> list : listList) {
       resultList.add(calculateRepresentationNoProgressMoveList(list));
     }
-    return BasicUtility.calculateSemicolonSeparatedList(resultList);
+    return NonNullWrapperCommon.join("; ", resultList);
   }
 
   private static String calculateRepresentationNoProgressMoveList(List<NoProgressHalfMove> list) {

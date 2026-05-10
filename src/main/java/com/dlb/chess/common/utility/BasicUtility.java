@@ -14,8 +14,6 @@ public abstract class BasicUtility {
 
   private static final String COMMA_SEPARATOR_LIST = ", ";
 
-  private static final String SEMICOLON_SEPARATOR_LIST = "; ";
-
   private static final String SPACE_SEPARATOR_LIST = " ";
 
   private static final String DATE_PATTERN = "yyyy.MM.dd";
@@ -25,10 +23,6 @@ public abstract class BasicUtility {
 
   public static String calculateCommaSeparatedList(List<String> list) {
     return NonNullWrapperCommon.join(COMMA_SEPARATOR_LIST, list);
-  }
-
-  public static String calculateSemicolonSeparatedList(List<String> list) {
-    return NonNullWrapperCommon.join(SEMICOLON_SEPARATOR_LIST, list);
   }
 
   public static String calculateSpaceSeparatedList(List<String> list) {
