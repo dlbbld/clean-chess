@@ -64,7 +64,7 @@ public class Reachability {
     return calculateEntries(VariableState.ZERO);
   }
 
-  public List<ReachabilityVariable> calculateEntriesWithValueOne() {
+  private List<ReachabilityVariable> calculateEntriesWithValueOne() {
     return calculateEntries(VariableState.ONE);
   }
 

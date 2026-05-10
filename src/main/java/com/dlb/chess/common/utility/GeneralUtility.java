@@ -8,10 +8,8 @@ import java.util.Set;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
@@ -29,15 +27,6 @@ public abstract class GeneralUtility {
       return CheckmateOrStalemate.STALEMATE;
     }
     return CheckmateOrStalemate.NA;
-  }
-
-  public static boolean calculateIsWhite(Side havingMove) {
-    return switch (havingMove) {
-      case BLACK -> false;
-      case WHITE -> true;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
   }
 
   public static void logLines(Logger logger, List<String> list) {
@@ -63,17 +52,6 @@ public abstract class GeneralUtility {
     final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
 
     return calculateBoard(pgnFile);
-  }
-
-  public static ChessBoard calculateBoard(List<HalfMove> halfMoveList) {
-
-    final var board = new Board();
-
-    for (final HalfMove halfMove : halfMoveList) {
-      board.move(halfMove.moveSpecification());
-    }
-
-    return board;
   }
 
   public static String calculateSquareList(Set<Square> squareSet) {

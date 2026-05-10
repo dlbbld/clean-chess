@@ -43,11 +43,7 @@ public class Clearability {
     return calculateEntries(VariableState.ZERO);
   }
 
-  public List<PiecePlacement> calculateEntriesWithValueOne() {
-    return calculateEntries(VariableState.ONE);
-  }
-
-  public List<PiecePlacement> calculateEntries(VariableState variableState) {
+  private List<PiecePlacement> calculateEntries(VariableState variableState) {
     final List<PiecePlacement> result = new ArrayList<>();
     for (final Entry<PiecePlacement, VariableState> entry : clearabilityMap.entrySet()) {
       if (entry.getValue() == variableState) {

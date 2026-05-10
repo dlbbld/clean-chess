@@ -399,7 +399,7 @@ public class Board implements ChessBoard {
   // moveSpecification as legal, and that's an invariant only the rule pipeline can guarantee. If a non-pipeline
   // caller passed an unvalidated MoveSpecification here, the result would silently carry incorrect derived data
   // (wrong moving piece, wrong captured piece, wrong en-passant role).
-  static LegalMove calculateLegalMove(StaticPosition staticPosition, Side havingMove,
+  private static LegalMove calculateLegalMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {

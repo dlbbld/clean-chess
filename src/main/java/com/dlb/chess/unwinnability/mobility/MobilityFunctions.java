@@ -1,7 +1,6 @@
 package com.dlb.chess.unwinnability.mobility;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -82,10 +81,6 @@ public class MobilityFunctions implements EnumConstants {
       }
     }
     return result;
-  }
-
-  static Set<PiecePlacement> attackers(List<PiecePlacement> piecePlacementList, Square square) {
-    return attackers(new TreeSet<>(piecePlacementList), square);
   }
 
 }

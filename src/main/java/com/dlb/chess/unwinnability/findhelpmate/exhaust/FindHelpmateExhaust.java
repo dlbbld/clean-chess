@@ -261,7 +261,7 @@ public class FindHelpmateExhaust extends AbstractFindHelpmate {
     return false;
   }
 
-  public static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
+  static boolean calculateIsNeedLoserPromotion(Side winner, StaticPosition staticPosition) {
     if (calculateIsKnightNeedsPromotion(winner, staticPosition)) {
       return true;
     }

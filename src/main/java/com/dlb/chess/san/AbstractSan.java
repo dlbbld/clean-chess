@@ -95,21 +95,6 @@ public abstract class AbstractSan {
     return filteredSet;
   }
 
-  public static int calculateNumberOfLegalMovesFromOtherRanks(Rank rank, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromOtherRanks(rank, legalMoveSet).size();
-  }
-
-  private static Set<LegalMove> calculateLegalMovesFromOtherRanks(Rank rank, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
-      final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
-      if (candidateFromRank != rank) {
-        filteredSet.add(moveCandidate);
-      }
-    }
-    return filteredSet;
-  }
-
   public static int calculateNumberOfLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
     return calculateLegalMovesFromSquare(square, legalMoveSet).size();
   }

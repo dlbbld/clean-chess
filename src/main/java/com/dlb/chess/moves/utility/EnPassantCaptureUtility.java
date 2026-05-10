@@ -13,7 +13,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.google.common.collect.ImmutableList;
@@ -190,16 +189,6 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     return result;
   }
 
-  /**
-   * Possible en passant capture ignoring check condition.
-   */
-  public static Square calculateEnPassantCaptureTargetSquare(ChessBoard board) {
-    if (board.isFirstMove()) {
-      return board.getInitialFen().enPassantCaptureTargetSquare();
-    }
-    return calculateEnPassantCaptureTargetSquare(board.getLastMove());
-  }
-
   public static Square calculateEnPassantCaptureTargetSquare(LegalMove legalMove) {
     if (legalMove.enPassantRole().createsEnPassantTarget()) {
       return calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(legalMove.havingMove(),
@@ -208,7 +197,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     return Square.NONE;
   }
 
-  public static Square calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(Side havingMove,
+  private static Square calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(Side havingMove,
       MoveSpecification move) {
     switch (havingMove) {
       case WHITE:
@@ -237,10 +226,12 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
       return false;
     }
     return switch (movingPiece.getSide()) {
-      case BLACK -> /* when the destination capture field is empty, this was an en passant capture */ BLACK_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(moveSpecification))
-                  && staticPosition.get(moveSpecification.toSquare()) == Piece.NONE;
-      case WHITE -> /* when the destination capture field is empty, this was an en passant capture */ WHITE_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(moveSpecification))
-                  && staticPosition.get(moveSpecification.toSquare()) == Piece.NONE;
+      case BLACK -> /* when the destination capture field is empty, this was an en passant capture */ BLACK_EN_PASSANT_CAPTURE_FROM_TO
+          .contains(calculateFromToList(moveSpecification))
+          && staticPosition.get(moveSpecification.toSquare()) == Piece.NONE;
+      case WHITE -> /* when the destination capture field is empty, this was an en passant capture */ WHITE_EN_PASSANT_CAPTURE_FROM_TO
+          .contains(calculateFromToList(moveSpecification))
+          && staticPosition.get(moveSpecification.toSquare()) == Piece.NONE;
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
@@ -256,10 +247,10 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
       return false;
     }
     return switch (movingPiece.getSide()) {
-      case WHITE -> /* when the destination capture field is empty, this was an en passant capture */ WHITE_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(move))
-                  && staticPositionBeforeMove.get(move.toSquare()) == Piece.NONE;
-      case BLACK -> /* when the destination capture field is empty, this was an en passant capture */ BLACK_EN_PASSANT_CAPTURE_FROM_TO.contains(calculateFromToList(move))
-                  && staticPositionBeforeMove.get(move.toSquare()) == Piece.NONE;
+      case WHITE -> /* when the destination capture field is empty, this was an en passant capture */ WHITE_EN_PASSANT_CAPTURE_FROM_TO
+          .contains(calculateFromToList(move)) && staticPositionBeforeMove.get(move.toSquare()) == Piece.NONE;
+      case BLACK -> /* when the destination capture field is empty, this was an en passant capture */ BLACK_EN_PASSANT_CAPTURE_FROM_TO
+          .contains(calculateFromToList(move)) && staticPositionBeforeMove.get(move.toSquare()) == Piece.NONE;
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

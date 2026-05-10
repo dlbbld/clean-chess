@@ -43,7 +43,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
         calculateLegalMovesBottomUp(staticPosition, havingMove, castlingRight, enPassantCaptureTargetSquare));
   }
 
-  public static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition,
+  private static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition,
       Square enPassantCaptureTargetSquare, CastlingRight castlingRight, Side havingMove, Square fromSquare) {
     final PieceType pieceType = staticPosition.get(fromSquare).getPieceType();
     return switch (pieceType) {
@@ -59,7 +59,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     };
   }
 
-  public static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition, Side havingMove,
+  private static Set<LegalMove> calculateLegalMovesBottomUp(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight, final Square enPassantCaptureTargetSquare) {
 
     final Set<LegalMove> resultSet = new TreeSet<>();

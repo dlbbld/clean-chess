@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
@@ -40,30 +39,6 @@ public abstract class HalfMoveUtility {
 
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
         countRepetition, countRepetitionIgnoringEnPassantCapture, san, movingPiece, moveSpecification);
-  }
-
-  public static int calculateHalfMoveCount(int fullMoveNumber, Side havingMove) {
-    return switch (havingMove) {
-      case BLACK -> (fullMoveNumber - 1) * 2 + 1;
-      case WHITE -> (fullMoveNumber - 1) * 2;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  public static int calculateNumberOfMovesGame(List<HalfMove> halfMoveList) {
-    final HalfMove lastHalfMove = NonNullWrapperCommon.getLast(halfMoveList);
-    return lastHalfMove.fullMoveNumber();
-  }
-
-  public static String calculateLastMoveRepresentation(List<HalfMove> halfMoveList) {
-
-    final HalfMove lastHalfMove = NonNullWrapperCommon.getLast(halfMoveList);
-    return calculateMoveNumberAndSanWithSpace(lastHalfMove);
-  }
-
-  public static String calculateMoveNumberAndSanWithSpace(HalfMove halfMove) {
-    return calculateMoveNumberAndSan(halfMove, AddSpace.YES);
   }
 
   public static String calculateMoveNumberAndSanWithSpace(int fullMoveNumber, Side havingMove, String san) {

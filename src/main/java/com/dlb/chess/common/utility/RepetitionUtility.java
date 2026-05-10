@@ -24,7 +24,7 @@ public abstract class RepetitionUtility {
    * one as it shouldn't be, ignoring the en passant condition, for finally finding such games where ignoring the
    * condition would have made a difference.
    */
-  public static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj,
+  private static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     return switch (enPassantCaptureRule) {
       case DO_IGNORE -> equalsIgnoringEnPassantCapture(dynamicPosition, obj);

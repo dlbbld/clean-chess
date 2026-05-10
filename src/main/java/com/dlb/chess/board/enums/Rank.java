@@ -270,15 +270,6 @@ public enum Rank {
     };
   }
 
-  public static Rank calculateEnPassantCaptureFromRank(Side havingMove) {
-    return switch (havingMove) {
-      case BLACK -> RANK_4;
-      case WHITE -> RANK_5;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
   public static boolean calculateIsPawnEnPassantCaptureToRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();

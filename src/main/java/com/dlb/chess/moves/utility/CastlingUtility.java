@@ -108,7 +108,7 @@ public abstract class CastlingUtility implements EnumConstants {
     };
   }
 
-  public static CastlingCheck calculateQueenSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
+  private static CastlingCheck calculateQueenSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
 
     final Side oppositeSide = havingMove.getOppositeSide();
     final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition, oppositeSide);
@@ -125,7 +125,7 @@ public abstract class CastlingUtility implements EnumConstants {
     return CastlingCheck.SUCCESS;
   }
 
-  public static CastlingCheck calculateKingSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
+  private static CastlingCheck calculateKingSideCheckCondition(StaticPosition staticPosition, Side havingMove) {
 
     final Side oppositeSide = havingMove.getOppositeSide();
     final Set<Square> attackedSquares = AbstractAttackedSquares.calculateAttackedSquares(staticPosition, oppositeSide);
@@ -142,13 +142,13 @@ public abstract class CastlingUtility implements EnumConstants {
     return CastlingCheck.SUCCESS;
   }
 
-  public static boolean calculateQueenSideCastlingIsEmptySquaresBetweenRookAndKing(StaticPosition staticPosition,
+  private static boolean calculateQueenSideCastlingIsEmptySquaresBetweenRookAndKing(StaticPosition staticPosition,
       Side havingMove) {
     final List<Square> requiredEmptySquareList = calculateQueenSideCastlingRequiredEmptySquareList(havingMove);
     return calculateIsAllEmpty(staticPosition, requiredEmptySquareList);
   }
 
-  public static boolean calculateKingSideCastlingIsEmptySquaresBetweenRookAndKing(StaticPosition staticPosition,
+  private static boolean calculateKingSideCastlingIsEmptySquaresBetweenRookAndKing(StaticPosition staticPosition,
       Side havingMove) {
     final List<Square> requiredEmptySquareList = calculateKingSideCastlingRequiredEmptySquareList(havingMove);
     return calculateIsAllEmpty(staticPosition, requiredEmptySquareList);
@@ -570,7 +570,7 @@ public abstract class CastlingUtility implements EnumConstants {
     };
   }
 
-  public static CastlingRight getCastlingRight(CastlingRight castlingRightWhite, CastlingRight castlingRightBlack,
+  private static CastlingRight getCastlingRight(CastlingRight castlingRightWhite, CastlingRight castlingRightBlack,
       Side side) {
     return switch (side) {
       case WHITE -> castlingRightWhite;

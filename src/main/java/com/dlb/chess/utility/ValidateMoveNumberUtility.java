@@ -6,7 +6,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.range.DiagonalRange;
 import com.dlb.chess.range.OrthogonalRange;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
@@ -50,19 +49,6 @@ public abstract class ValidateMoveNumberUtility {
     total += moves.squareListSouthWest().size();
     total += moves.squareListNorthWest().size();
     return total;
-  }
-
-  public static void validateMapOfListList(ImmutableMap<Square, ImmutableList<ImmutableList<Square>>> mapOfListList,
-      int numberOfExpectedMoves) {
-    var numberOfActualMoves = 0;
-    for (final ImmutableList<ImmutableList<Square>> listList : mapOfListList.values()) {
-      for (final ImmutableList<Square> list : listList) {
-        numberOfActualMoves += list.size();
-      }
-    }
-    if (numberOfExpectedMoves != numberOfActualMoves) {
-      throw new ProgrammingMistakeException("Move generation has a bug");
-    }
   }
 
   public static void validateMapOfSet(ImmutableMap<Square, ImmutableSet<Square>> mapOfSet, int numberOfExpectedMoves) {

@@ -40,16 +40,6 @@ public abstract class StaticPositionUtility implements EnumConstants {
         "There must be a king on the board each, the fun support for no kings is yet to be implemented ....");
   }
 
-  // here we allow king off the board
-  public static Square checkKingSquare(StaticPosition staticPosition, Side side) {
-    for (final Square square : Square.REAL) {
-      if (staticPosition.isOwnKing(square, side)) {
-        return square;
-      }
-    }
-    return Square.NONE;
-  }
-
   public static String calculatePiecePlacement(StaticPosition staticPosition) {
     final StringBuilder piecePlacement = new StringBuilder();
     for (var rankNumber = 8; rankNumber >= 1; rankNumber--) {
@@ -89,7 +79,8 @@ public abstract class StaticPositionUtility implements EnumConstants {
   public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
-    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove, moveSpecification);
+    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove,
+        moveSpecification);
     return staticPosition.createChangedPosition(updateSquareList);
   }
 

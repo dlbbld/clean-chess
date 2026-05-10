@@ -21,7 +21,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.google.common.base.Strings;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -92,10 +91,6 @@ public class NonNullWrapperCommon {
     return checkResult(string.replace(oldChar, newChar));
   }
 
-  public static String replaceAll(String string, String regex, String replacement) {
-    return checkResult(string.replaceAll(regex, replacement));
-  }
-
   public static String toLowerCase(String string) {
     return checkResult(string.toLowerCase());
   }
@@ -108,20 +103,8 @@ public class NonNullWrapperCommon {
     return checkResult(String.valueOf(charValue));
   }
 
-  public static String valueOf(double doubleValue) {
-    return checkResult(String.valueOf(doubleValue));
-  }
-
   public static String valueOf(int integerValue) {
     return checkResult(String.valueOf(integerValue));
-  }
-
-  public static String format(String string, Object... args) {
-    return checkResult(String.format(string, args));
-  }
-
-  public static String padEnd(String string, int minLength, char padChar) {
-    return checkResult(Strings.padEnd(string, minLength, padChar));
   }
 
   public static String join(CharSequence delimiter, Iterable<? extends CharSequence> elements) {
@@ -134,30 +117,6 @@ public class NonNullWrapperCommon {
 
   public static String trim(String str) {
     return checkResult(str.trim());
-  }
-
-  public static String stripLeading(String str) {
-    return checkResult(str.stripLeading());
-  }
-
-  public static String stripTrailing(String str) {
-    return checkResult(str.stripTrailing());
-  }
-
-  public static String strip(String str) {
-    return checkResult(str.strip());
-  }
-
-  public static String substringBefore(String str, String separator) {
-    return checkResult(StringUtils.substringBefore(str, separator));
-  }
-
-  public static String substringAfter(String str, String separator) {
-    return checkResult(StringUtils.substringAfter(str, separator));
-  }
-
-  public static String removeEnd(final String str, final String remove) {
-    return checkResult(org.apache.commons.lang3.Strings.CS.removeEnd(str, remove));
   }
 
   public static String capitalize(final String str) {
@@ -264,11 +223,6 @@ public class NonNullWrapperCommon {
   @SuppressWarnings({ "unchecked" })
   public static <T> List<T> asList(T... a) {
     return checkResult(Arrays.asList(a));
-  }
-
-  @SuppressWarnings("null")
-  public static <E> List<E> subList(List<E> list, int fromIndex, int toIndex) {
-    return list.subList(fromIndex, toIndex);
   }
 
   @SuppressWarnings("null")

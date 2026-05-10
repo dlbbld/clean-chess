@@ -75,7 +75,7 @@ public class MobilitySolution {
     return squareSet;
   }
 
-  public List<MobilitySolutionVariable> calculateEntries(VariableState mobility) {
+  private List<MobilitySolutionVariable> calculateEntries(VariableState mobility) {
     final List<MobilitySolutionVariable> result = new ArrayList<>();
     for (final @NonNull Entry<PiecePlacement, EnumMap<Square, VariableState>> mapEntryMap : NonNullWrapperCommon
         .entrySet(mobilityMap)) {

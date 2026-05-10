@@ -30,7 +30,7 @@ public class UnwinnableFullAnalyzer {
 
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
-  public static UnwinnableFullAnalysis unwinnableFull(ChessBoard board, Side winner, boolean isHasMobilitySolution,
+  private static UnwinnableFullAnalysis unwinnableFull(ChessBoard board, Side winner, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     // add optimization from code

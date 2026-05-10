@@ -25,8 +25,8 @@ import com.google.common.collect.ImmutableList;
  */
 public abstract class AbstractRangeSquares extends AbstractToSquares {
 
-  public static Set<Square> calculateOrthogonalRangeSquare(StaticPosition staticPosition, Side havingMove,
-      Square fromSquare, PieceType expectedSourcePieceType, OrthogonalRange orthogonalMoves, boolean isAllowOwnPiece) {
+  static Set<Square> calculateOrthogonalRangeSquare(StaticPosition staticPosition, Side havingMove, Square fromSquare,
+      PieceType expectedSourcePieceType, OrthogonalRange orthogonalMoves, boolean isAllowOwnPiece) {
 
     final Set<Square> calculatedToSquareSet = new TreeSet<>(calculateRangeSquare(staticPosition, havingMove, fromSquare,
         expectedSourcePieceType, orthogonalMoves.squareListNorth(), isAllowOwnPiece));
@@ -40,8 +40,8 @@ public abstract class AbstractRangeSquares extends AbstractToSquares {
     return calculatedToSquareSet;
   }
 
-  public static Set<Square> calculateDiagonalRangeSquare(StaticPosition staticPosition, Side havingMove,
-      Square fromSquare, PieceType expectedSourcePieceType, DiagonalRange diagonalMoves, boolean isAllowOwnPiece) {
+  static Set<Square> calculateDiagonalRangeSquare(StaticPosition staticPosition, Side havingMove, Square fromSquare,
+      PieceType expectedSourcePieceType, DiagonalRange diagonalMoves, boolean isAllowOwnPiece) {
 
     final Set<Square> calculatedToSquareSet = new TreeSet<>(calculateRangeSquare(staticPosition, havingMove, fromSquare,
         expectedSourcePieceType, diagonalMoves.squareListNorthEast(), isAllowOwnPiece));

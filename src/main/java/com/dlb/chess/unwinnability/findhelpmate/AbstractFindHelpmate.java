@@ -6,13 +6,11 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.unwinnability.findhelpmate.exhaust.classicalcheckmate.ClassicalCheckmate;
 
 public abstract class AbstractFindHelpmate {
 
@@ -57,28 +55,4 @@ public abstract class AbstractFindHelpmate {
     return boardCheck;
   }
 
-  protected static ChessBoard checkClassicalCheckmate(Side color, String fen, List<LegalMove> moveProgressList) {
-
-    final var boardCheck = new Board(fen);
-
-    for (final LegalMove legalMove : moveProgressList) {
-      boardCheck.move(legalMove.moveSpecification());
-    }
-    if (!ClassicalCheckmate.isClassicalCheckmatePosition(color, boardCheck.getStaticPosition())) {
-      throw new ProgrammingMistakeException("It is not a classical checkmate position");
-    }
-
-    if (IS_DEBUG) {
-      final var numberOfMovesForClassicalCheckmatePosition = calculateNumberOfMoves(moveProgressList);
-      logger.printf(Level.INFO, "Classical checkmate position found in %d moves",
-          numberOfMovesForClassicalCheckmatePosition);
-      logger.info(PgnCreate.createPgnFileString(boardCheck));
-    }
-
-    return boardCheck;
-  }
-
-  private static int calculateNumberOfMoves(List<LegalMove> moveProgressList) {
-    return (int) Math.ceil(moveProgressList.size() / 2.0);
-  }
 }

@@ -1,7 +1,5 @@
 package com.dlb.chess.unwinnability.quick.enums;
 
-import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-
 public enum UnwinnableQuick {
   WINNABLE("winnable"),
   UNWINNABLE("unwinnable"),
@@ -24,19 +22,6 @@ public enum UnwinnableQuick {
       }
     }
     return false;
-  }
-
-  public static UnwinnableQuick calculate(String identifier) {
-    if (!exists(identifier)) {
-      throw new IllegalArgumentException("No mode for this letter identifier");
-    }
-    for (final UnwinnableQuick mode : values()) {
-      if (mode.getIdentifier().equals(identifier)) {
-        return mode;
-      }
-    }
-    // not possible to come here
-    throw new ProgrammingMistakeException();
   }
 
 }
