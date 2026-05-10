@@ -294,17 +294,30 @@ final class LenientSanShapeNormalize {
     }
     if (first == 'b') {
       // Lowercase 'b' is canonically a file letter (pawn move from b-file) or the file leader of a UCI / LAN
-      // form (e.g. "b1c3"). The only shape that points unambiguously to a lowercase bishop letter is
-      // <piece><file>... — i.e. position 1 is a file letter (e.g. "bf3" = bishop to f3, "bxc4" but with x at
-      // position 1 we treat as pawn capture, not bishop, since pawn capture is the canonical reading of
-      // "<file>x..."). Anything else (rank digit at position 1, length 2, etc.) we leave as pawn / file.
+      // form (e.g. "b1c3"). Two shapes point at a lowercase bishop letter:
+      //
+      // (a) <piece><file>... — position 1 is a file letter (e.g. "bf3" = bishop to f3, "bdxe5" = bishop with
+      //     file disambig and capture). Pawn moves never have a file letter at position 1.
+      // (b) bx<file><rank> with non-adjacent files — pawn captures must be diagonal, so b-pawn can only
+      //     capture on a- or c-file. If the capture destination file is not adjacent to b, the pawn
+      //     interpretation is geometrically illegal regardless of board state, and the user must mean a
+      //     lowercase bishop capture (e.g. "bxf7" — bishop on c4 captures on f7).
       if (body.length() >= 2 && isFileLetterAnyCase(body.charAt(1))) {
+        codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
+        return "B" + NonNullWrapperCommon.substring(body, 1);
+      }
+      if (body.length() >= 4 && body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2))
+          && !isAdjacentFile('b', Character.toLowerCase(body.charAt(2)))) {
         codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
         return "B" + NonNullWrapperCommon.substring(body, 1);
       }
       return body;
     }
     return body;
+  }
+
+  private static boolean isAdjacentFile(char a, char b) {
+    return Math.abs((int) a - (int) b) == 1;
   }
 
   private static String caseFixUppercaseFileLetters(String body, List<LenientSanValidationProblem> codes) {
@@ -350,6 +363,7 @@ final class LenientSanShapeNormalize {
    * <ul>
    * <li>{@code B<rank>} (length 2) — bishop has no length-2 SAN form
    * <li>{@code B<rank>=<piece>} (length 4 promotion) — bishops don't promote
+   * <li>{@code Bx<file><rank><piece>} (length 5 capture promotion missing {@code =}) — bishops don't promote
    * <li>{@code Bx<file><rank>=<piece>} (length 6 capture promotion) — bishops don't promote
    * </ul>
    * Capture and disambiguation forms (e.g. {@code Bxf7}, {@code B1d4}) are canonically bishop, even though they
@@ -362,6 +376,13 @@ final class LenientSanShapeNormalize {
     if (body.length() == 4) {
       return isRankDigit(body.charAt(1)) && body.charAt(2) == '='
           && isPromotionPieceLetterAnyCase(body.charAt(3));
+    }
+    if (body.length() == 5) {
+      // Bx<file><rank><piece>: capture promotion missing the '=' marker — bishops don't promote, so this is
+      // unambiguously an uppercase b-file pawn capture promotion.
+      return body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2))
+          && (body.charAt(3) == '1' || body.charAt(3) == '8')
+          && isPromotionPieceLetterAnyCase(body.charAt(4));
     }
     if (body.length() == 6) {
       return body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2)) && isRankDigit(body.charAt(3))

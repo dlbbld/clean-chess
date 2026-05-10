@@ -345,6 +345,36 @@ class TestLenientSanParser implements EnumConstants {
   }
 
   @Test
+  void testLowercaseBishopCaptureNonAdjacentFile() {
+    // Regression: "bxf7" after 1.e4 e5 2.Bc4 Nc6 was treated as b-file pawn capture (illegal — non-adjacent)
+    // and rejected. The b-pawn cannot reach f7 geometrically, so the user must mean a lowercase bishop
+    // capture. Should resolve to canonical "Bxf7+" (the move is also check) with LOWERCASE_PIECE_LETTER and
+    // MISSING_CHECK_SUFFIX.
+    final Board board = new Board();
+    board.performMove("e4");
+    board.performMove("e5");
+    board.performMove("Bc4");
+    board.performMove("Nc6");
+    final LenientSanParserValidationResult result = board.performMoveLenient("bxf7");
+    assertContainsCode(result, LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
+    assertContainsCode(result, LenientSanValidationProblem.MISSING_CHECK_SUFFIX);
+    assertEquals("Bxf7+", canonical(result));
+  }
+
+  @Test
+  void testUppercaseBPawnCapturePromotionMissingEquals() {
+    // Regression: "Bxa8Q" (uppercase b-file pawn capture promotion missing the '=') was rejected because
+    // isUppercaseBPawnOnlyShape didn't cover the length-5 case. Should resolve to canonical "bxa8=Q" with
+    // UPPERCASE_FILE_LETTER and MISSING_PROMOTION_EQUALS. (Bishops don't promote, so uppercase B at the head
+    // of a capture-promotion shape unambiguously means b-file pawn.)
+    final Board board = new Board("r3k3/1P6/8/8/8/8/8/4K3 w - - 0 1");
+    final LenientSanParserValidationResult result = board.performMoveLenient("Bxa8Q");
+    assertContainsCode(result, LenientSanValidationProblem.UPPERCASE_FILE_LETTER);
+    assertContainsCode(result, LenientSanValidationProblem.MISSING_PROMOTION_EQUALS);
+    assertEquals("bxa8=Q+", canonical(result));
+  }
+
+  @Test
   void testMissingCaptureMarkerPawn() {
     // Regression: pawn captures missing the 'x' (e.g. "ed5" after 1.e4 d5) were rejected, despite the spec
     // documenting MISSING_CAPTURE_MARKER without a piece-only caveat. Should resolve to canonical "exd5".
