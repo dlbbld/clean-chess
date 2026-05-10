@@ -8,19 +8,12 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.model.UpdateSquare;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.model.LegalMove;
 
 public abstract class PromotionUtility implements EnumConstants {
 
   public static boolean calculateIsPromotionNewMove(MoveSpecification moveSpecification) {
     return moveSpecification.promotionPieceType() != PromotionPieceType.NONE;
-  }
-
-  public static boolean calculateIsPromotionLastMove(ChessBoard board) {
-    final LegalMove lastMove = board.getLastMove();
-    return lastMove.moveSpecification().promotionPieceType() != PromotionPieceType.NONE;
   }
 
   public static boolean calculateIsPromotion(MoveSpecification move) {
