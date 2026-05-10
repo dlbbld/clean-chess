@@ -4,12 +4,15 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
@@ -48,7 +51,7 @@ final class LenientSanRecover {
         return SanValidation.validateSan(current, board);
       } catch (SanValidationException e) {
         final SanValidationProblem strictCode = e.getSanValidationProblem();
-        final LenientSanValidationProblem lenientCode = mapToLenientCode(strictCode);
+        final @Nullable LenientSanValidationProblem lenientCode = mapToLenientCode(strictCode);
         if (lenientCode == null) {
           throw e;
         }
@@ -65,7 +68,7 @@ final class LenientSanRecover {
     throw new ProgrammingMistakeException("Lenient SAN recovery exceeded iteration bound for candidate: " + candidate);
   }
 
-  private static LenientSanValidationProblem mapToLenientCode(SanValidationProblem strictCode) {
+  private static @Nullable LenientSanValidationProblem mapToLenientCode(SanValidationProblem strictCode) {
     return switch (strictCode) {
       // Terminal-marker mismatches
       case NO_SYMBOL_BUT_CHECK -> LenientSanValidationProblem.MISSING_CHECK_SUFFIX;
@@ -126,7 +129,7 @@ final class LenientSanRecover {
     }
     final char last = s.charAt(s.length() - 1);
     if (last == '+' || last == '#') {
-      return s.substring(0, s.length() - 1);
+      return NonNullWrapperCommon.substring(s, 0, s.length() - 1);
     }
     return s;
   }
@@ -136,15 +139,15 @@ final class LenientSanRecover {
     if (x < 0) {
       throw new ProgrammingMistakeException("stripCaptureMarker called with no 'x' in input: " + s);
     }
-    return s.substring(0, x) + s.substring(x + 1);
+    return NonNullWrapperCommon.substring(s, 0, x) + NonNullWrapperCommon.substring(s, x + 1);
   }
 
   private static String insertCaptureMarker(String s) {
     final String body;
     final String marker;
     if (!s.isEmpty() && (s.charAt(s.length() - 1) == '+' || s.charAt(s.length() - 1) == '#')) {
-      body = s.substring(0, s.length() - 1);
-      marker = String.valueOf(s.charAt(s.length() - 1));
+      body = NonNullWrapperCommon.substring(s, 0, s.length() - 1);
+      marker = NonNullWrapperCommon.valueOf(s.charAt(s.length() - 1));
     } else {
       body = s;
       marker = "";
@@ -154,7 +157,8 @@ final class LenientSanRecover {
     }
     // Insert 'x' immediately before the destination square (last 2 chars of body).
     final int destStart = body.length() - 2;
-    return body.substring(0, destStart) + "x" + body.substring(destStart) + marker;
+    return NonNullWrapperCommon.substring(body, 0, destStart) + "x" + NonNullWrapperCommon.substring(body, destStart)
+        + marker;
   }
 
   private static String stripFirstDisambigChar(String s) {
@@ -163,7 +167,7 @@ final class LenientSanRecover {
       throw new ProgrammingMistakeException("stripFirstDisambigChar called with body too short: " + s);
     }
     // RNBQ form: position 0 = piece, position 1 = disambig char to strip.
-    return split.body().charAt(0) + split.body().substring(2) + split.marker();
+    return split.body().charAt(0) + NonNullWrapperCommon.substring(split.body(), 2) + split.marker();
   }
 
   private static String stripSecondDisambigChar(String s) {
@@ -172,7 +176,8 @@ final class LenientSanRecover {
       throw new ProgrammingMistakeException("stripSecondDisambigChar called with body too short: " + s);
     }
     // Square disambig form: positions 1 and 2 are file+rank; strip position 2 (rank).
-    return split.body().charAt(0) + split.body().substring(1, 2) + split.body().substring(3) + split.marker();
+    return split.body().charAt(0) + NonNullWrapperCommon.substring(split.body(), 1, 2)
+        + NonNullWrapperCommon.substring(split.body(), 3) + split.marker();
   }
 
   private static String stripSquareDisambig(String s) {
@@ -181,7 +186,7 @@ final class LenientSanRecover {
       throw new ProgrammingMistakeException("stripSquareDisambig called with body too short: " + s);
     }
     // Square disambig form: strip both file and rank at positions 1 and 2.
-    return split.body().charAt(0) + split.body().substring(3) + split.marker();
+    return split.body().charAt(0) + NonNullWrapperCommon.substring(split.body(), 3) + split.marker();
   }
 
   /**
@@ -205,7 +210,7 @@ final class LenientSanRecover {
     final Side havingMove = board.getHavingMove();
     final Piece movingPiece = PieceType.calculate(havingMove, pieceType);
 
-    LegalMove match = null;
+    @Nullable LegalMove match = null;
     for (final LegalMove lm : board.getLegalMoveSet()) {
       if (lm.movingPiece() == movingPiece && lm.moveSpecification().fromSquare().getRank() == fromRank
           && lm.moveSpecification().toSquare() == toSquare) {
@@ -221,14 +226,16 @@ final class LenientSanRecover {
           "No legal move matches rank-disambig recovery; strict invariant violated: " + s);
     }
     final File fromFile = match.moveSpecification().fromSquare().getFile();
-    return body.charAt(0) + String.valueOf(fromFile.getLetter()) + body.substring(2) + split.marker();
+    return body.charAt(0) + NonNullWrapperCommon.valueOf(fromFile.getLetter())
+        + NonNullWrapperCommon.substring(body, 2) + split.marker();
   }
 
   private static BodyAndMarker splitMarker(String s) {
     if (!s.isEmpty()) {
       final char last = s.charAt(s.length() - 1);
       if (last == '+' || last == '#') {
-        return new BodyAndMarker(s.substring(0, s.length() - 1), String.valueOf(last));
+        return new BodyAndMarker(NonNullWrapperCommon.substring(s, 0, s.length() - 1),
+            NonNullWrapperCommon.valueOf(last));
       }
     }
     return new BodyAndMarker(s, "");

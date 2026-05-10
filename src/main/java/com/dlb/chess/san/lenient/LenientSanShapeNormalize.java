@@ -2,6 +2,8 @@ package com.dlb.chess.san.lenient;
 
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -12,7 +14,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.san.enums.LenientSanValidationProblem;
 import com.dlb.chess.san.exceptions.LenientSanParserValidationException;
-import com.google.common.collect.ImmutableList;
+import com.dlb.chess.san.model.ForgivenItem;
 
 /**
  * Phase 1 of the lenient pipeline: pure-string shape normalization plus board-aware UCI translation. Takes the raw user
@@ -41,15 +43,15 @@ final class LenientSanShapeNormalize {
       return text;
     }
 
-    final String castlingNormalized = tryNormalizeCastling(text, board, codes);
+    final @Nullable String castlingNormalized = tryNormalizeCastling(text, board, codes);
     if (castlingNormalized != null) {
       return castlingNormalized;
     }
 
     final char lastChar = text.charAt(text.length() - 1);
     final boolean hasTerminalMarker = lastChar == '+' || lastChar == '#';
-    final String terminalMarker = hasTerminalMarker ? String.valueOf(lastChar) : "";
-    String body = hasTerminalMarker ? text.substring(0, text.length() - 1) : text;
+    final String terminalMarker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
+    String body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
 
     body = stripExplicitPawnLetter(body, codes);
     body = handleLanOrUci(body, board, codes);
@@ -61,11 +63,12 @@ final class LenientSanShapeNormalize {
 
   // --- Castling normalization (returns null if the input doesn't match a castling shape) ---
 
-  private static String tryNormalizeCastling(String text, ChessBoard board, List<LenientSanValidationProblem> codes) {
+  private static @Nullable String tryNormalizeCastling(String text, ChessBoard board,
+      List<LenientSanValidationProblem> codes) {
     final char lastChar = text.charAt(text.length() - 1);
     final boolean hasTerminalMarker = lastChar == '+' || lastChar == '#';
-    final String marker = hasTerminalMarker ? String.valueOf(lastChar) : "";
-    final String body = hasTerminalMarker ? text.substring(0, text.length() - 1) : text;
+    final String marker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
+    final String body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
 
     // Classic O-O / 0-0 / mixed forms. Three or five characters with hyphens and zero-or-O at every other position.
     if (matchesCastlingZeroOPattern(body)) {
@@ -73,18 +76,19 @@ final class LenientSanShapeNormalize {
       final boolean hasZero = body.indexOf('0') >= 0;
       if (hasO && hasZero) {
         throw new LenientSanParserValidationException(
-            Message.getString("validation.san.lenient.mixedCastlingZeroAndO", text), text, null, ImmutableList.of());
+            Message.getString("validation.san.lenient.mixedCastlingZeroAndO", text), text, null,
+            NonNullWrapperCommon.copyOfList(List.<ForgivenItem>of()));
       }
       if (hasZero) {
         codes.add(LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING);
-        return body.replace('0', 'O') + marker;
+        return NonNullWrapperCommon.replace(body, '0', 'O') + marker;
       }
       // All-O: already canonical (or canonical with marker) — let strict handle it.
       return text;
     }
 
     // UCI king-castling: e1g1 / e1c1 / e8g8 / e8c8 with the king actually on the e-file home square.
-    final String uciCastling = tryTranslateUciCastling(body, board);
+    final @Nullable String uciCastling = tryTranslateUciCastling(body, board);
     if (uciCastling != null) {
       codes.add(LenientSanValidationProblem.UCI_NOTATION);
       return uciCastling + marker;
@@ -108,7 +112,7 @@ final class LenientSanShapeNormalize {
     return c == '0' || c == 'O';
   }
 
-  private static String tryTranslateUciCastling(String body, ChessBoard board) {
+  private static @Nullable String tryTranslateUciCastling(String body, ChessBoard board) {
     if (body.length() != 4) {
       return null;
     }
@@ -150,12 +154,12 @@ final class LenientSanShapeNormalize {
 
   private static String handleLanOrUci(String body, ChessBoard board, List<LenientSanValidationProblem> codes) {
     if (body.indexOf('-') >= 0) {
-      final String dehyphenated = body.replace("-", "");
+      final String dehyphenated = NonNullWrapperCommon.replace(body, "-", "");
       codes.add(LenientSanValidationProblem.LONG_ALGEBRAIC_NOTATION);
-      final String translated = tryTranslateUciShape(dehyphenated, board);
+      final @Nullable String translated = tryTranslateUciShape(dehyphenated, board);
       return translated != null ? translated : dehyphenated;
     }
-    final String translated = tryTranslateUciShape(body, board);
+    final @Nullable String translated = tryTranslateUciShape(body, board);
     if (translated != null) {
       codes.add(LenientSanValidationProblem.UCI_NOTATION);
       return translated;
@@ -168,7 +172,7 @@ final class LenientSanShapeNormalize {
    * SAN using the piece on the from-square. Returns {@code null} when the shape doesn't match — the caller decides
    * whether that means "leave the body unchanged" or "this branch doesn't apply."
    */
-  private static String tryTranslateUciShape(String body, ChessBoard board) {
+  private static @Nullable String tryTranslateUciShape(String body, ChessBoard board) {
     if (body.length() != 4 && body.length() != 5) {
       return null;
     }
@@ -239,7 +243,7 @@ final class LenientSanShapeNormalize {
     if (prev != '1' && prev != '8') {
       return body;
     }
-    if (len >= 3 && body.charAt(len - 3) == '=') {
+    if (body.charAt(len - 3) == '=') {
       return body;
     }
     codes.add(LenientSanValidationProblem.MISSING_PROMOTION_EQUALS);
@@ -260,7 +264,7 @@ final class LenientSanShapeNormalize {
       return body;
     }
     codes.add(LenientSanValidationProblem.UPPERCASE_CAPTURE_MARKER);
-    return body.replace('X', 'x');
+    return NonNullWrapperCommon.replace(body, 'X', 'x');
   }
 
   private static String caseFixLowercasePromotionPiece(String body, List<LenientSanValidationProblem> codes) {
@@ -339,7 +343,7 @@ final class LenientSanShapeNormalize {
 
   private static Square parseSquare(char fileLetter, char rankDigit) {
     try {
-      return Square.valueOf(("" + fileLetter + rankDigit).toUpperCase(java.util.Locale.ROOT));
+      return Square.valueOf(NonNullWrapperCommon.toUpperCase("" + fileLetter + rankDigit));
     } catch (IllegalArgumentException e) {
       throw new ProgrammingMistakeException("Square.valueOf failed for validated file/rank chars", e);
     }

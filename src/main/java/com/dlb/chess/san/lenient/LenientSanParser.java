@@ -3,6 +3,9 @@ package com.dlb.chess.san.lenient;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.Nullable;
+
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -49,7 +52,7 @@ public final class LenientSanParser {
     // Phase 0: try strict on the raw input first. Canonical SAN pays zero lenient overhead.
     try {
       final MoveSpecification ms = SanValidation.validateSan(text, board);
-      return new LenientSanParserValidationResult(ms, ImmutableList.of());
+      return new LenientSanParserValidationResult(ms, NonNullWrapperCommon.copyOfList(List.<ForgivenItem>of()));
     } catch (SanValidationException ignored) {
       // Fall through to the lenient pipeline.
     }
@@ -72,11 +75,11 @@ public final class LenientSanParser {
 
     // Phase 3: compute the canonical-SAN equivalent and finalize the forgiven items.
     final String canonicalSan = computeCanonicalSan(moveSpecification, board);
-    final ImmutableList.Builder<ForgivenItem> builder = ImmutableList.builder();
+    final List<ForgivenItem> items = new ArrayList<>(codes.size());
     for (final LenientSanValidationProblem code : codes) {
-      builder.add(new ForgivenItem(code, text, canonicalSan));
+      items.add(new ForgivenItem(code, text, canonicalSan));
     }
-    return new LenientSanParserValidationResult(moveSpecification, builder.build());
+    return new LenientSanParserValidationResult(moveSpecification, NonNullWrapperCommon.copyOfList(items));
   }
 
   /**
@@ -94,7 +97,7 @@ public final class LenientSanParser {
 
   private static String computeCanonicalSan(MoveSpecification moveSpecification, ChessBoard board) {
     final ImmutableSet<LegalMove> legalMovesBefore = board.getLegalMoveSet();
-    LegalMove matching = null;
+    @Nullable LegalMove matching = null;
     for (final LegalMove candidate : legalMovesBefore) {
       if (candidate.moveSpecification().equals(moveSpecification)) {
         matching = candidate;
@@ -116,15 +119,15 @@ public final class LenientSanParser {
   private static ImmutableList<ForgivenItem> itemsWithoutCanonical(String text,
       List<LenientSanValidationProblem> codes) {
     if (codes.isEmpty()) {
-      return ImmutableList.of();
+      return NonNullWrapperCommon.copyOfList(List.<ForgivenItem>of());
     }
     // Failure path: the canonical SAN is unknown (the parse never resolved a move), so we surface the codes
     // accumulated so far paired with the original token. Callers diagnosing a failed lenient parse care about
     // which deviations applied before the failure, not the (unknown) canonical equivalent.
-    final ImmutableList.Builder<ForgivenItem> builder = ImmutableList.builder();
+    final List<ForgivenItem> items = new ArrayList<>(codes.size());
     for (final LenientSanValidationProblem code : codes) {
-      builder.add(new ForgivenItem(code, text, text));
+      items.add(new ForgivenItem(code, text, text));
     }
-    return builder.build();
+    return NonNullWrapperCommon.copyOfList(items);
   }
 }

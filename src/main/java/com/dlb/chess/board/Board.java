@@ -263,9 +263,6 @@ public class Board implements ChessBoard {
    *         legal move even after applying every supported tolerance
    */
   public LenientSanParserValidationResult performMoveLenient(String san) {
-    if (san == null) {
-      throw new IllegalArgumentException("The SAN cannot be null");
-    }
     final LenientSanParserValidationResult result = LenientSanParser.parseText(san, this);
     this.performMoveWithoutValidation(result.moveSpecification());
     return result;

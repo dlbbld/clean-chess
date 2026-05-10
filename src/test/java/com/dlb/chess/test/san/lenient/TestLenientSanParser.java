@@ -5,6 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -23,8 +26,8 @@ class TestLenientSanParser implements EnumConstants {
   // Italian-game opening that exercises pawn pushes, knight/bishop development, and castling.
   // Castling is the only move whose canonical SAN, LAN, and UCI representations all differ — the rest
   // give us pawn vs piece coverage in each notation form.
-  private static final String[] ITALIAN_OPENING_SAN = { "e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6", "d3",
-      "d6" };
+  private static final List<String> ITALIAN_OPENING_SAN = List.of("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6",
+      "d3", "d6");
 
   // ---------------------------------------------------------------------------
   // Three full-game tests (canonical SAN / UCI / LAN end-to-end).
@@ -42,11 +45,10 @@ class TestLenientSanParser implements EnumConstants {
 
   @Test
   void testGameInUciNotation() {
-    final String[] uciMoves = computeUciForms(ITALIAN_OPENING_SAN);
+    final List<String> uciMoves = computeUciForms(ITALIAN_OPENING_SAN);
     final Board board = new Board();
     var sawUciCode = false;
-    for (var i = 0; i < uciMoves.length; i++) {
-      final String uci = uciMoves[i];
+    for (final String uci : uciMoves) {
       final LenientSanParserValidationResult result = board.performMoveLenient(uci);
       if (containsCode(result, LenientSanValidationProblem.UCI_NOTATION)) {
         sawUciCode = true;
@@ -59,18 +61,17 @@ class TestLenientSanParser implements EnumConstants {
   void testGameInLanNotation() {
     // Use the project's getLan() output, then ensure pawn-forward moves get a hyphen so they're
     // unambiguously LAN (not UCI-equivalent).
-    final String[] sanMoves = ITALIAN_OPENING_SAN;
     final Board ref = new Board();
-    final String[] lanMoves = new String[sanMoves.length];
-    for (var i = 0; i < sanMoves.length; i++) {
-      ref.performMove(sanMoves[i]);
-      lanMoves[i] = toUnambiguousLan(ref.getLan());
+    final List<String> lanMoves = new ArrayList<>(ITALIAN_OPENING_SAN.size());
+    for (final String san : ITALIAN_OPENING_SAN) {
+      ref.performMove(san);
+      lanMoves.add(toUnambiguousLan(ref.getLan()));
     }
 
     final Board board = new Board();
     var sawLongAlgebraic = false;
-    for (var i = 0; i < lanMoves.length; i++) {
-      final LenientSanParserValidationResult result = board.performMoveLenient(lanMoves[i]);
+    for (final String lan : lanMoves) {
+      final LenientSanParserValidationResult result = board.performMoveLenient(lan);
       if (containsCode(result, LenientSanValidationProblem.LONG_ALGEBRAIC_NOTATION)) {
         sawLongAlgebraic = true;
       }
@@ -379,14 +380,14 @@ class TestLenientSanParser implements EnumConstants {
   // Helpers.
   // ---------------------------------------------------------------------------
 
-  private static String[] computeUciForms(String[] sanMoves) {
+  private static List<String> computeUciForms(List<String> sanMoves) {
     final Board ref = new Board();
-    final String[] uci = new String[sanMoves.length];
-    for (var i = 0; i < sanMoves.length; i++) {
-      ref.performMove(sanMoves[i]);
+    final List<String> uci = new ArrayList<>(sanMoves.size());
+    for (final String san : sanMoves) {
+      ref.performMove(san);
       final LegalMove last = ref.getLastMove();
       final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(last.havingMove(), last.moveSpecification());
-      uci[i] = uciMove.text();
+      uci.add(uciMove.text());
     }
     return uci;
   }

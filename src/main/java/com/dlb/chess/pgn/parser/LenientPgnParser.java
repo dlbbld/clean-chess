@@ -108,7 +108,8 @@ public final class LenientPgnParser {
       parser = new LenientPgnParser(FileUtility.readFileAsString(pgnFilePath));
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ImmutableList.of());
+          SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null,
+          NonNullWrapperCommon.copyOfList(java.util.List.<ForgivenItem>of()));
     }
     return runValidation(parser);
   }
@@ -126,7 +127,7 @@ public final class LenientPgnParser {
     try {
       final PgnFile pgnFile = parser.parseInternal();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE,
-          "OK", pgnFile, ImmutableList.copyOf(parser.sanForgivenItemsAccumulator));
+          "OK", pgnFile, NonNullWrapperCommon.copyOfList(parser.sanForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       @SuppressWarnings("null") @NonNull final String message = e.getMessage();
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(),
@@ -134,7 +135,7 @@ public final class LenientPgnParser {
     } catch (final RuntimeException e) {
       final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, message, null, ImmutableList.of());
+          SanValidationProblem.NONE, message, null, NonNullWrapperCommon.copyOfList(java.util.List.<ForgivenItem>of()));
     }
   }
 
@@ -709,7 +710,7 @@ public final class LenientPgnParser {
         final SanValidationProblem underlying = e.getUnderlyingSanValidationProblem();
         throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.SAN,
             underlying == null ? SanValidationProblem.UNKNOWN_ERROR : underlying, message, e.getGameStatus(),
-            ImmutableList.copyOf(sanForgivenItemsAccumulator));
+            NonNullWrapperCommon.copyOfList(sanForgivenItemsAccumulator));
       }
     }
     return canonicalList;
