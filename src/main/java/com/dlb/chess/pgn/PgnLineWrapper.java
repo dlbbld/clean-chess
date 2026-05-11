@@ -3,20 +3,10 @@ package com.dlb.chess.pgn;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.model.PgnHalfMove;
 
-public abstract class PgnUtility {
-
-  public static Board calculateBoardPerLastMove(PgnFile pgnFile) {
-    final Board board = new Board(pgnFile.startFen());
-    for (final PgnHalfMove pgnHalfMove : pgnFile.halfMoveList()) {
-      board.moveStrict(pgnHalfMove.san());
-    }
-    return board;
-  }
+abstract class PgnLineWrapper {
 
   /**
    * Wraps {@code line} into ≤ {@code lineLength}-char lines, splitting on spaces — except inside {@code {...}} brace
@@ -24,7 +14,7 @@ public abstract class PgnUtility {
    * broken: spaces inside commentary are content, not wrap candidates. The 79-char export-format guideline is a soft
    * target, matching python-chess.
    */
-  public static List<String> calculateWrappedLines(String line, int lineLength) {
+  static List<String> calculateWrappedLines(String line, int lineLength) {
     final List<String> atoms = splitIntoAtoms(line);
     if (atoms.isEmpty()) {
       throw new ProgrammingMistakeException("As the passed text cannot be null the array cannot be empty");
@@ -85,5 +75,4 @@ public abstract class PgnUtility {
     }
     return atoms;
   }
-
 }

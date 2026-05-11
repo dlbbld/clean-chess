@@ -1,4 +1,4 @@
-package com.dlb.chess.test.common.utility;
+package com.dlb.chess.pgn;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,9 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.pgn.PgnUtility;
-
-class TestPgnUtility {
+class TestPgnLineWrapper {
 
   @SuppressWarnings("static-method")
   @Test
@@ -94,7 +92,7 @@ class TestPgnUtility {
 
   private static void checkWrappedLines(String line, int lineLength, String... expectedLineArray) {
     @SuppressWarnings("null") final List<String> expectedResult = Arrays.asList(expectedLineArray);
-    final List<String> actualResult = PgnUtility.calculateWrappedLines(line, lineLength);
+    final List<String> actualResult = PgnLineWrapper.calculateWrappedLines(line, lineLength);
     assertEquals(expectedResult, actualResult);
   }
 

@@ -68,7 +68,7 @@ public class PgnCreate {
           + resultTagValue.getValue();
     }
 
-    fileLines.addAll(PgnUtility.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
+    fileLines.addAll(PgnLineWrapper.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
     // Trailing blank line per the strict format.
     fileLines.add("");
 

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnUtility;
+import com.dlb.chess.pgn.PgnFileUtility;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Square;
 import com.github.bhlangonijr.chesslib.move.Move;
@@ -204,7 +204,7 @@ class TestLibraryCarlosThreefoldPass {
 
   private static boolean isThreefold(String pgnText) {
     final PgnFile pgnFile = LenientPgnParser.parseText(pgnText);
-    final com.dlb.chess.board.Board boardActual = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final com.dlb.chess.board.Board boardActual = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
     return boardActual.isThreefoldRepetition();
   }
 

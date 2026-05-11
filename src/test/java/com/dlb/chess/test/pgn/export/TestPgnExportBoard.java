@@ -12,7 +12,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnUtility;
+import com.dlb.chess.pgn.PgnFileUtility;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.Tag;
 import com.dlb.chess.pgn.TagUtility;
@@ -61,7 +61,7 @@ class TestPgnExportBoard {
   }
 
   private static void checkBoardReplay(Board boardExpected, PgnFile boardExpectedPgnFile) {
-    final Board boardActual = PgnUtility.calculateBoardPerLastMove(boardExpectedPgnFile);
+    final Board boardActual = PgnFileUtility.calculateBoardPerLastMove(boardExpectedPgnFile);
     assertEquals(boardExpected, boardActual);
   }
 
