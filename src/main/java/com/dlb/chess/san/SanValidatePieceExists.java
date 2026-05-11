@@ -7,7 +7,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.messages.Message;
 
 abstract class SanValidatePieceExists extends AbstractSan {
@@ -24,7 +23,7 @@ abstract class SanValidatePieceExists extends AbstractSan {
       case PAWN_NON_CAPTURING_PROMOTION: {
         // for non-capturing pawn moves, the pawn must be on the to-square's file
         final File pawnFile = sanConversion.toSquare().getFile();
-        if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
+        if (!SanPieceCheck.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_PAWN,
               Message.getString("validation.san.exists.pawn", pawnFile.getLetterString()));
         }
@@ -34,7 +33,7 @@ abstract class SanValidatePieceExists extends AbstractSan {
       case PAWN_CAPTURING_PROMOTION: {
         // for capturing pawn moves, the SAN specifies the from-file explicitly
         final File pawnFile = sanConversion.fromFile();
-        if (!MaterialUtility.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
+        if (!SanPieceCheck.calculateHasPieceType(havingMove, PieceType.PAWN, staticPosition, pawnFile)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_PAWN,
               Message.getString("validation.san.exists.pawn", pawnFile.getLetterString()));
         }
@@ -42,14 +41,14 @@ abstract class SanValidatePieceExists extends AbstractSan {
       }
       case RNBQ_CAPTURING_NEITHER:
       case RNBQ_NON_CAPTURING_NEITHER:
-        if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
+        if (!SanPieceCheck.calculateHasPieceType(havingMove, movingPieceType, staticPosition)) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_NEITHER,
               Message.getString("validation.san.exists.rnbq.neither", movingPieceType.getName()));
         }
         break;
       case RNBQ_CAPTURING_FILE:
       case RNBQ_NON_CAPTURING_FILE:
-        if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
+        if (!SanPieceCheck.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromFile())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_FILE,
               Message.getString("validation.san.exists.rnbq.file", movingPieceType.getName(),
@@ -58,7 +57,7 @@ abstract class SanValidatePieceExists extends AbstractSan {
         break;
       case RNBQ_CAPTURING_RANK:
       case RNBQ_NON_CAPTURING_RANK:
-        if (!MaterialUtility.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
+        if (!SanPieceCheck.calculateHasPieceType(havingMove, movingPieceType, staticPosition,
             sanConversion.fromRank())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_RANK,
               Message.getString("validation.san.exists.rnbq.rank", movingPieceType.getName(),

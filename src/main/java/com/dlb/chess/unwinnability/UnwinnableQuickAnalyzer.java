@@ -8,7 +8,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 
 public class UnwinnableQuickAnalyzer {
@@ -120,8 +119,8 @@ public class UnwinnableQuickAnalyzer {
   }
 
   private static boolean calculateHasOnlyPawnsBishopsAndKings(StaticPosition staticPosition) {
-    return !MaterialUtility.calculateHasRook(staticPosition) && !MaterialUtility.calculateHasKnight(staticPosition)
-        && !MaterialUtility.calculateHasQueen(staticPosition);
+    return !UnwinnabilityMaterial.calculateHasRook(staticPosition) && !UnwinnabilityMaterial.calculateHasKnight(staticPosition)
+        && !UnwinnabilityMaterial.calculateHasQueen(staticPosition);
   }
 
   private static void unperformHalfmoves(Board board, int countHalfmoves) {

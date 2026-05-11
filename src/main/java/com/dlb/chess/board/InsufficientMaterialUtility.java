@@ -5,17 +5,16 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.utility.MaterialUtility;
 
 abstract class InsufficientMaterialUtility implements EnumConstants {
 
   public static boolean calculateIsInsufficientMaterial(Side side, StaticPosition staticPosition) {
     final Side oppositeSide = side.getOppositeSide();
 
-    if (MaterialUtility.calculateHasKingOnly(side, staticPosition)) {
+    if (BoardMaterial.calculateHasKingOnly(side, staticPosition)) {
       return true;
     }
-    if (MaterialUtility.calculateHasKingAndKnightOnly(side, staticPosition)) {
+    if (BoardMaterial.calculateHasKingAndKnightOnly(side, staticPosition)) {
       return calculateHasZeroOrMultipleQueenOnly(oppositeSide, staticPosition);
     }
     if (calculateHasZeroOrMultipleLightSquareBishopOnly(side, staticPosition)) {
@@ -34,7 +33,7 @@ abstract class InsufficientMaterialUtility implements EnumConstants {
     final Piece bishop = Piece.calculate(side, BISHOP);
     for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
+      if (BoardMaterial.calculateIsOwnPiece(side, pieceOnSquare)) {
         if (pieceOnSquare == king || pieceOnSquare == bishop && boardSquare.getSquareType() == squareType) {
           continue;
         }
@@ -57,7 +56,7 @@ abstract class InsufficientMaterialUtility implements EnumConstants {
     final Piece queen = Piece.calculate(side, QUEEN);
     for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare)) {
+      if (BoardMaterial.calculateIsOwnPiece(side, pieceOnSquare)) {
         if (pieceOnSquare == king || pieceOnSquare == queen) {
           continue;
         }
@@ -78,11 +77,11 @@ abstract class InsufficientMaterialUtility implements EnumConstants {
   }
 
   private static boolean calculateHasPawn(Side side, StaticPosition staticPosition) {
-    return MaterialUtility.calculateHasPieceType(side, PAWN, staticPosition);
+    return BoardMaterial.calculateHasPieceType(side, PAWN, staticPosition);
   }
 
   private static boolean calculateHasKnight(Side side, StaticPosition staticPosition) {
-    return MaterialUtility.calculateHasPieceType(side, KNIGHT, staticPosition);
+    return BoardMaterial.calculateHasPieceType(side, KNIGHT, staticPosition);
   }
 
   private static boolean calculateHasBishopForSpecifiedColor(Side side, SquareType squareType,

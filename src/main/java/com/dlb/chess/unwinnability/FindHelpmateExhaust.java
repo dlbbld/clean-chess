@@ -15,7 +15,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
@@ -133,8 +132,8 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
       return FindHelpmateRecursionResult.FALSE;
     }
 
-    if (MaterialUtility.calculateHasKingOnly(color, board.getStaticPosition())
-        || MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
+    if (UnwinnabilityMaterial.calculateHasKingOnly(color, board.getStaticPosition())
+        || UnwinnabilityMaterial.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
             && calculateIsNeedLoserPromotion(color, board.getStaticPosition())) {
       return FindHelpmateRecursionResult.FALSE;
     }
@@ -143,11 +142,11 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
 
     for (final LegalMove legalMove : legalMoveList) {
-      // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! âˆ’2
+      // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! Ã¢Ë†â€™2
       ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
 
       if (board.getHavingMove() == color.getOppositeSide()
-          && MaterialUtility.calculateHasQueen(color.getOppositeSide(), board.getStaticPosition())) {
+          && UnwinnabilityMaterial.calculateHasQueen(color.getOppositeSide(), board.getStaticPosition())) {
         score = score == ScoreResult.REWARD ? ScoreResult.NORMAL : score;
       }
 
@@ -233,11 +232,11 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
   }
 
   static boolean calculateIsUnwinnableAccordingLemma5(Side color, StaticPosition staticPosition) {
-    if (MaterialUtility.calculateHasKingAndKnightOnly(color, staticPosition)) {
-      if (MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoBishops(color.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoRooks(color.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), staticPosition)) {
+    if (UnwinnabilityMaterial.calculateHasKingAndKnightOnly(color, staticPosition)) {
+      if (UnwinnabilityMaterial.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && UnwinnabilityMaterial.calculateHasNoBishops(color.getOppositeSide(), staticPosition)
+          && UnwinnabilityMaterial.calculateHasNoRooks(color.getOppositeSide(), staticPosition)
+          && UnwinnabilityMaterial.calculateHasNoPawns(color.getOppositeSide(), staticPosition)) {
         return true;
       }
     }
@@ -246,10 +245,10 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   static boolean calculateIsUnwinnableAccordingLemma6(Side color, StaticPosition staticPosition) {
     for (final SquareType squareType : SquareType.REAL) {
-      if (MaterialUtility.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
-          && MaterialUtility.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
-          && MaterialUtility.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
-          && MaterialUtility.calculateHasNoPawns(color.getOppositeSide(), staticPosition)) {
+      if (UnwinnabilityMaterial.calculateHasKingAndBishopsOnly(color, staticPosition, squareType)
+          && UnwinnabilityMaterial.calculateHasNoKnights(color.getOppositeSide(), staticPosition)
+          && UnwinnabilityMaterial.calculateHasNoBishops(color, staticPosition, squareType.getOppositeSquareType())
+          && UnwinnabilityMaterial.calculateHasNoPawns(color.getOppositeSide(), staticPosition)) {
         return true;
       }
     }
@@ -267,10 +266,10 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
   private static boolean calculateIsKnightNeedsPromotion(Side winner, StaticPosition staticPosition) {
     // if the intended winner has just a knight and the intended loser has just pawns
     // and/or queens
-    return MaterialUtility.calculateHasKingAndKnightOnly(winner, staticPosition)
-        && MaterialUtility.calculateHasNoRooks(winner.getOppositeSide(), staticPosition)
-        && MaterialUtility.calculateHasNoBishops(winner.getOppositeSide(), staticPosition)
-        && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition);
+    return UnwinnabilityMaterial.calculateHasKingAndKnightOnly(winner, staticPosition)
+        && UnwinnabilityMaterial.calculateHasNoRooks(winner.getOppositeSide(), staticPosition)
+        && UnwinnabilityMaterial.calculateHasNoBishops(winner.getOppositeSide(), staticPosition)
+        && UnwinnabilityMaterial.calculateHasNoKnights(winner.getOppositeSide(), staticPosition);
   }
 
   private static boolean calculateIsBishopNeedsPromotion(Side winner, StaticPosition staticPosition) {
@@ -278,9 +277,10 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     // the intended loser does not have knights or bishops of the opposite color
 
     for (final SquareType squareType : SquareType.REAL) {
-      if (MaterialUtility.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)
-          && MaterialUtility.calculateHasNoKnights(winner.getOppositeSide(), staticPosition) && MaterialUtility
-              .calculateHasNoBishops(winner.getOppositeSide(), staticPosition, squareType.getOppositeSquareType())) {
+      if (UnwinnabilityMaterial.calculateHasKingAndBishopsOnly(winner, staticPosition, squareType)
+          && UnwinnabilityMaterial.calculateHasNoKnights(winner.getOppositeSide(), staticPosition)
+          && UnwinnabilityMaterial.calculateHasNoBishops(winner.getOppositeSide(), staticPosition,
+              squareType.getOppositeSquareType())) {
         return true;
       }
     }

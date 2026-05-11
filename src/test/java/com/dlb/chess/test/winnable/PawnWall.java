@@ -15,7 +15,6 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
 public class PawnWall {
@@ -30,13 +29,13 @@ public class PawnWall {
     // 1) we do not consider positions with rooks, knights or queens
     // 2) we need at least a pawn for a pawn wall (the minimum is most likely much higher, but not having a better
     // assessment for now)
-    if (MaterialUtility.calculateHasRook(staticPosition) || MaterialUtility.calculateHasKnight(staticPosition)
-        || MaterialUtility.calculateHasQueen(staticPosition) || !MaterialUtility.calculateHasPawn(staticPosition)) {
+    if (hasAnyPieceType(staticPosition, PieceType.ROOK) || hasAnyPieceType(staticPosition, PieceType.KNIGHT)
+        || hasAnyPieceType(staticPosition, PieceType.QUEEN) || !hasAnyPieceType(staticPosition, PieceType.PAWN)) {
       return false;
     }
 
     // here we branch between having bishops and no bishops
-    if (MaterialUtility.calculateHasBishop(staticPosition)) {
+    if (hasAnyPieceType(staticPosition, PieceType.BISHOP)) {
       // we only look at the case if no pawn can move
       if (!calculateIsAllPawnsBlocked(board)) {
         return false;
@@ -529,7 +528,7 @@ public class PawnWall {
       SquareType squareType) {
     for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
+      if (isOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
           && boardSquare.getSquareType() == squareType) {
         return true;
       }
@@ -552,6 +551,22 @@ public class PawnWall {
 
   private static final List<Square> LEFTMOST_FILE_BLACK = List.of(Square.H8, Square.H7, Square.H6, Square.H5, Square.H4,
       Square.H3, Square.H2, Square.H1);
+
+  // Local material checks. Inlined from the former public MaterialUtility so that
+  // material arithmetic is not re-exposed on the public API surface for this test helper.
+  private static boolean hasAnyPieceType(StaticPosition staticPosition, PieceType pieceType) {
+    for (final Square boardSquare : Square.REAL) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (pieceOnSquare != Piece.NONE && pieceOnSquare.getPieceType() == pieceType) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isOwnPiece(Side side, Piece pieceOnSquare) {
+    return pieceOnSquare != Piece.NONE && pieceOnSquare.getSide() == side;
+  }
 
   private static List<Square> leftmostFile(Side side) {
     return switch (side) {

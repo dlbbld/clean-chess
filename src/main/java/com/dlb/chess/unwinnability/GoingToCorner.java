@@ -6,7 +6,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.CastlingUtility;
 
@@ -34,7 +33,7 @@ class GoingToCorner implements EnumConstants {
       fromSquare = m.moveSpecification().fromSquare();
     }
 
-    // 2: if P.type not in {K,N} then return false ( -> We focus on Ã¢â‚¬Å“slowÃ¢â‚¬Â (non-sliding) pieces
+    // 2: if P.type not in {K,N} then return false ( -> We focus on ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œslowÃƒÂ¢Ã¢â€šÂ¬Ã‚Â (non-sliding) pieces
     // that could take several turns to reach the desired square)
     if (movingPiece.getPieceType() != PieceType.KING && movingPiece.getPieceType() != PieceType.KNIGHT) {
       return false;
@@ -57,9 +56,9 @@ class GoingToCorner implements EnumConstants {
   private static Square calculateTargetSquare(Side winner, StaticPosition staticPosition, Goal goal, Piece p) {
     Square target;
 
-    final var isDarkCorner = MaterialUtility.calculateHasDarkSquareBishops(winner, staticPosition)
-        || MaterialUtility.calculateHasLightSquareBishops(winner.getOppositeSide(), staticPosition)
-            && MaterialUtility.calculateHasNoBishops(winner, staticPosition);
+    final var isDarkCorner = UnwinnabilityMaterial.calculateHasDarkSquareBishops(winner, staticPosition)
+        || UnwinnabilityMaterial.calculateHasLightSquareBishops(winner.getOppositeSide(), staticPosition)
+            && UnwinnabilityMaterial.calculateHasNoBishops(winner, staticPosition);
 
     if (isDarkCorner) {
       // 4: set target := if goal = Win then (P.type=K)?h6 : h8 else (P.type =K)?h8 : g8

@@ -12,7 +12,6 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
@@ -74,14 +73,14 @@ class TestInsufficientMaterial implements EnumConstants {
   private static boolean calculateIsInsufficientMaterial(StaticPosition staticPosition) {
 
     // KNvK, KvKN
-    if (MaterialUtility.calculateHasKingAndKnightOnly(WHITE, staticPosition)
-        && MaterialUtility.calculateHasKingOnly(BLACK, staticPosition)
-        || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
-            && MaterialUtility.calculateHasKingAndKnightOnly(BLACK, staticPosition)
-        || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
-            && MaterialUtility.calculateHasKingAndBishopOnly(BLACK, staticPosition)
-        || MaterialUtility.calculateHasKingOnly(WHITE, staticPosition)
-            && MaterialUtility.calculateHasKingAndBishopOnly(BLACK, staticPosition)
+    if (BoardMaterial.calculateHasKingAndKnightOnly(WHITE, staticPosition)
+        && BoardMaterial.calculateHasKingOnly(BLACK, staticPosition)
+        || BoardMaterial.calculateHasKingOnly(WHITE, staticPosition)
+            && BoardMaterial.calculateHasKingAndKnightOnly(BLACK, staticPosition)
+        || BoardMaterial.calculateHasKingOnly(WHITE, staticPosition)
+            && BoardMaterial.calculateHasKingAndBishopOnly(BLACK, staticPosition)
+        || BoardMaterial.calculateHasKingOnly(WHITE, staticPosition)
+            && BoardMaterial.calculateHasKingAndBishopOnly(BLACK, staticPosition)
 
     ) {
       return true;
