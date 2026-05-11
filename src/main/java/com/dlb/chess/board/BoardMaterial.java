@@ -7,9 +7,8 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 
 /**
- * Internal material checks needed by the board package's rule helpers
- * (currently {@link InsufficientMaterialUtility}). Kept narrow and
- * package-private: the public API does not expose material arithmetic.
+ * Internal material checks needed by the board package's rule helpers (currently {@link InsufficientMaterialUtility}).
+ * Kept narrow and package-private: the public API does not expose material arithmetic.
  */
 abstract class BoardMaterial implements EnumConstants {
 

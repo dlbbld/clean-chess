@@ -12,9 +12,9 @@ import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.san.SanConversion;
 import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanParse;
 import com.dlb.chess.san.SanSymbol;
 import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.SanParse;
 import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.test.san.model.SanConversionCheck;
 

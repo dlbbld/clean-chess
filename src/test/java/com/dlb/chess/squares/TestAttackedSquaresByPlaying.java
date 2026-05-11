@@ -16,12 +16,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.squares.BishopAttackedSquares;
-import com.dlb.chess.squares.KingNonCastlingAttackedSquares;
-import com.dlb.chess.squares.KnightAttackedSquares;
-import com.dlb.chess.squares.PawnAttackedSquares;
-import com.dlb.chess.squares.QueenAttackedSquares;
-import com.dlb.chess.squares.RookAttackedSquares;
 
 class TestAttackedSquaresByPlaying implements EnumConstants {
 

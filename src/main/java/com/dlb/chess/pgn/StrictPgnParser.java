@@ -9,33 +9,19 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.ResultTagValue;
-import com.dlb.chess.pgn.SetUpTagValue;
-import com.dlb.chess.pgn.StandardTag;
-import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.StrictPgnParserValidationException;
-import com.dlb.chess.pgn.PgnCommentary;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.StrictPgnParserValidationResult;
-import com.dlb.chess.pgn.Tag;
-import com.dlb.chess.pgn.PgnCharStream;
-import com.dlb.chess.pgn.PgnToken;
-import com.dlb.chess.pgn.PgnTokenType;
-import com.dlb.chess.pgn.PgnTokenizer;
-import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.pgn.TagUtility;
+import com.dlb.chess.san.SanValidationProblem;
 
 /**
  * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen together.
@@ -65,7 +51,8 @@ public final class StrictPgnParser {
   }
 
   public static PgnFile parse(Path pgnFilePath) {
-    // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually present.
+    // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually
+    // present.
     return parseText(PgnFileReader.readPgnFile(pgnFilePath));
   }
 
@@ -459,7 +446,8 @@ public final class StrictPgnParser {
         try {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
-          // Defensive â€” the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          // Defensive â€” the tokenizer cannot produce `}` here (handled as separate types), so unreachable in
+          // practice.
           final String message = BasicUtility.getMessage(pcve);
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               message);

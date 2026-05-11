@@ -81,7 +81,8 @@ abstract class SanValidateFormatKing extends AbstractSan {
               PromotionPieceType.NONE, sanTerminalMarker));
     }
 
-    // Length > 3 after valid K[file][rank] Ã¢â‚¬â€ overlength. Square-disambiguation attempts like "Ka2b3" also land here;
+    // Length > 3 after valid K[file][rank] Ã¢â‚¬â€ overlength. Square-disambiguation attempts like "Ka2b3" also land
+    // here;
     // the generic overlength message is sufficient since the user can see the move already has 4+ chars.
     throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH,
         Message.getString("validation.san.format.king.nonCastling.nonCapture.overlength"));

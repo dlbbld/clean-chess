@@ -20,12 +20,6 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.KingLegalMoves;
-import com.dlb.chess.moves.PawnLegalMoves;
-import com.dlb.chess.moves.BishopLegalMoves;
-import com.dlb.chess.moves.KnightLegalMoves;
-import com.dlb.chess.moves.QueenLegalMoves;
-import com.dlb.chess.moves.RookLegalMoves;
 
 class TestLegalMovesForPiecesLegalPosition implements EnumConstants {
 

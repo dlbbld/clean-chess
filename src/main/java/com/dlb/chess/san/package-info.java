@@ -7,11 +7,11 @@
  * <p>
  * Two parser entry points sit on top of a shared validation core:
  * <ul>
- * <li>{@link com.dlb.chess.san.StrictSanParser#parseText(String, com.dlb.chess.board.Board)}
- * — canonical SAN only. Reached from {@link com.dlb.chess.board.Board#moveStrict(String)}.
- * <li>{@link com.dlb.chess.san.LenientSanParser#parseText(String, com.dlb.chess.board.Board)}
- * — accepts a defined set of forgivable deviations from canonical SAN. Reached from
- * {@link com.dlb.chess.board.Board#moveLenient(String)}. See {@code specification.md} §3.3.1 for the taxonomy.
+ * <li>{@link com.dlb.chess.san.StrictSanParser#parseText(String, com.dlb.chess.board.Board)} — canonical SAN only.
+ * Reached from {@link com.dlb.chess.board.Board#moveStrict(String)}.
+ * <li>{@link com.dlb.chess.san.LenientSanParser#parseText(String, com.dlb.chess.board.Board)} — accepts a defined set
+ * of forgivable deviations from canonical SAN. Reached from {@link com.dlb.chess.board.Board#moveLenient(String)}. See
+ * {@code specification.md} §3.3.1 for the taxonomy.
  * </ul>
  *
  * <p>
@@ -20,8 +20,8 @@
  * long algebraic notation.
  *
  * <p>
- * Format-level checks live in {@link com.dlb.chess.san.format}; movement-level (legal-move, king-safety)
- * checks live in {@link com.dlb.chess.san.movement}.
+ * Format-level checks live in {@link com.dlb.chess.san.format}; movement-level (legal-move, king-safety) checks live in
+ * {@link com.dlb.chess.san.movement}.
  */
 @NonNullByDefault
 package com.dlb.chess.san;

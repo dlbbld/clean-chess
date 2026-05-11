@@ -13,8 +13,8 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 class TestUnwinnabilityQuickAgainstWinnability {
 

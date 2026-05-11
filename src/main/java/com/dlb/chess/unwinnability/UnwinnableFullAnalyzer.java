@@ -2,9 +2,9 @@ package com.dlb.chess.unwinnability;
 
 import java.util.ArrayList;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.model.LegalMove;
 
 //Figure 9 Main routine for deciding chess unwinnability. It is based on our semi-static

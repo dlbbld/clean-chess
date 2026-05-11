@@ -3,13 +3,13 @@ package com.dlb.chess.unwinnability;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 
 //Figure 8 Semi-statically unwinnable algorithm, which may conclude that a position is
 //unwinnable for an intended winner based on an admissible solution to the mobility problem.

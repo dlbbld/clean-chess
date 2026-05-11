@@ -3,11 +3,11 @@ package com.dlb.chess.unwinnability;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.model.LegalMove;
 
 public class UnwinnableQuickAnalyzer {
@@ -119,7 +119,8 @@ public class UnwinnableQuickAnalyzer {
   }
 
   private static boolean calculateHasOnlyPawnsBishopsAndKings(StaticPosition staticPosition) {
-    return !UnwinnabilityMaterial.calculateHasRook(staticPosition) && !UnwinnabilityMaterial.calculateHasKnight(staticPosition)
+    return !UnwinnabilityMaterial.calculateHasRook(staticPosition)
+        && !UnwinnabilityMaterial.calculateHasKnight(staticPosition)
         && !UnwinnabilityMaterial.calculateHasQueen(staticPosition);
   }
 

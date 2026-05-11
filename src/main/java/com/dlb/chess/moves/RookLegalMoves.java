@@ -7,7 +7,6 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.squares.RookPotentialToSquares;
 
 class RookLegalMoves extends AbstractLegalMoves {

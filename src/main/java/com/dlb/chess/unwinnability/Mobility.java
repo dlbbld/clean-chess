@@ -7,6 +7,7 @@ import java.util.TreeSet;
 
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -14,7 +15,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
 
 //Figure 7 Mobility algorithm.

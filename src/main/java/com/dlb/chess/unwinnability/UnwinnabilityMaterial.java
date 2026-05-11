@@ -9,10 +9,9 @@ import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.constants.EnumConstants;
 
 /**
- * Internal material predicates used by the unwinnability/helpmate analysis.
- * Not part of the public API: the library's public surface is the
- * {@link UnwinnableFullAnalyzer} / {@link UnwinnableQuickAnalyzer} entry points,
- * not the per-square material arithmetic.
+ * Internal material predicates used by the unwinnability/helpmate analysis. Not part of the public API: the library's
+ * public surface is the {@link UnwinnableFullAnalyzer} / {@link UnwinnableQuickAnalyzer} entry points, not the
+ * per-square material arithmetic.
  */
 abstract class UnwinnabilityMaterial implements EnumConstants {
 

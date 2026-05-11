@@ -3,9 +3,9 @@ package com.dlb.chess.test.report.representation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.report.NoProgressHalfMove;
 
 public class NoProgressRepresentation {

@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.enums.CastlingCheck;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.CastlingCheckMapper;
 
 /**
  * Lock-down tests for the bridge between {@link CastlingCheck} + {@link CastlingRightLoss} (internal pipeline

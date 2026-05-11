@@ -8,9 +8,8 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 
 /**
- * Internal piece-count helpers used by FEN advanced validation. Not part of
- * the public API: the library exposes parsing and outcome reporting, not
- * material arithmetic.
+ * Internal piece-count helpers used by FEN advanced validation. Not part of the public API: the library exposes parsing
+ * and outcome reporting, not material arithmetic.
  */
 abstract class FenMaterialCount {
 

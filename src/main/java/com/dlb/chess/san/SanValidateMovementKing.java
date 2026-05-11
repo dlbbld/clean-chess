@@ -1,6 +1,5 @@
 package com.dlb.chess.san;
 
-
 /**
  * Intentional no-op validator for king SAN movement at the abstract movement layer.
  *

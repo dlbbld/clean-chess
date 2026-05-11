@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
 
 class TestStrictPgnParserMovetextWithoutCommentary {
 

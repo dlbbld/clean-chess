@@ -1,10 +1,10 @@
 package com.dlb.chess.common.utility;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.model.LegalMove;
 
 public abstract class BasicChessUtility {

@@ -1,12 +1,12 @@
 package com.dlb.chess.common.ucimove.utility;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.moves.CastlingUtility;

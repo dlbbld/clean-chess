@@ -3,8 +3,8 @@ package com.dlb.chess.test.generate;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.Report;
+import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
@@ -18,9 +18,9 @@ public class GenerateLibraryCarlosInsufficientMaterialTestCases {
 
   private static void generateTestCase() throws Exception {
 
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH,
-        PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK,
-        PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getTestList(
+        PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE,
+        PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK, PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
 
         final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());

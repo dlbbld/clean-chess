@@ -6,10 +6,10 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -40,8 +40,7 @@ class TestBasicPromotionPieceWhite extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_PROMOTION_PIECE_WHITE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
-          testCase.pgnFileName());
+      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
 
       logger.info(testCase.pgnFileName());
 

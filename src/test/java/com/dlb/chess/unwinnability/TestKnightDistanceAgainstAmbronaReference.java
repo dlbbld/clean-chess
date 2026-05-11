@@ -6,14 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.unwinnability.KnightDistance;
 
 /**
  * Cross-validates the BFS-based {@link KnightDistance} against an independent reference port of the closed-form
  * rank/file-distance algorithm from Miguel Ambrona's <em>D3-Chess</em> ({@code src/util.cpp},
- * {@code KnightDistance::knight_distance}). The two implementations use entirely different approaches Ã¢â‚¬â€ graph search
- * vs. table lookup with corner exception Ã¢â‚¬â€ so agreement on every one of the 64Ãƒâ€”64 = 4096 ordered square pairs is strong
- * evidence that both are correct.
+ * {@code KnightDistance::knight_distance}). The two implementations use entirely different approaches Ã¢â‚¬â€ graph
+ * search vs. table lookup with corner exception Ã¢â‚¬â€ so agreement on every one of the 64Ãƒâ€”64 = 4096 ordered
+ * square pairs is strong evidence that both are correct.
  *
  * <p>
  * The reference algorithm: for two squares, take the minimum and maximum of the file-distance and rank-distance. Three
@@ -49,7 +48,8 @@ class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
     final var idxFirst = Math.min(fileDist, rankDist);
     final var idxSecond = Math.max(fileDist, rankDist);
 
-    // Corner exception: a knight needs 4 moves to reach the diagonally adjacent square of a corner (a8 Ã¢â€ â€ b7 etc.).
+    // Corner exception: a knight needs 4 moves to reach the diagonally adjacent square of a corner (a8 Ã¢â€ â€ b7
+    // etc.).
     // The table lookup would say 2; override.
     if (idxFirst == 1 && idxSecond == 1 && (isCorner(x) || isCorner(y))) {
       return 4;
@@ -60,13 +60,10 @@ class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
       if (idxFirst == 0 && idxSecond == 0) {
         return 0;
       }
-      if ((idxFirst == 0 && idxSecond == 2) || (idxFirst == 0 && idxSecond == 4)) {
+      if ((idxFirst == 0 && (idxSecond == 2 || idxSecond == 4))) {
         return 2;
       }
-      if (idxFirst == 2 && idxSecond == 4) {
-        return 2;
-      }
-      if (idxFirst == 1 && idxSecond == 1) {
+      if ((idxFirst == 2 && idxSecond == 4) || (idxFirst == 1 && idxSecond == 1)) {
         return 2;
       }
       if (idxFirst == 1 && idxSecond == 3) {

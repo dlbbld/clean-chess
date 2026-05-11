@@ -1,14 +1,14 @@
 /**
- * Game-level reports about a {@link com.dlb.chess.board.Board}: threefold-repetition listings
- * (including the missed-claim-ahead opportunities other libraries don't surface), no-progress (50/75-move-rule)
- * sequences, and a printable summary. {@link com.dlb.chess.report.Reporter} is the entry point.
+ * Game-level reports about a {@link com.dlb.chess.board.Board}: threefold-repetition listings (including the
+ * missed-claim-ahead opportunities other libraries don't surface), no-progress (50/75-move-rule) sequences, and a
+ * printable summary. {@link com.dlb.chess.report.Reporter} is the entry point.
  *
  * <p>
  * Two surfaces:
  *
  * <ul>
- * <li>{@code Reporter.calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record — the
- * programmatic shape carrying repetition-list-of-lists, threefold-claim-ahead slots, no-progress sequences.</li>
+ * <li>{@code Reporter.calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record — the programmatic
+ * shape carrying repetition-list-of-lists, threefold-claim-ahead slots, no-progress sequences.</li>
  * <li>{@code Reporter.printReport(...)} emits a human-readable summary to {@code stdout} via the
  * {@link com.dlb.chess.messages.Message} bundle. Used by the README examples.</li>
  * </ul>

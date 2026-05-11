@@ -9,10 +9,10 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.StrictPgnParser;
-import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.Tag;
 
 /**

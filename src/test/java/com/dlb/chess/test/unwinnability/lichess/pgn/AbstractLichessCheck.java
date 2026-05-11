@@ -3,12 +3,12 @@ package com.dlb.chess.test.unwinnability.lichess.pgn;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnUtility;
+import com.dlb.chess.pgn.ResultTagValue;
+import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.pgn.PgnUtility;
-import com.dlb.chess.pgn.TagUtility;
 
 public abstract class AbstractLichessCheck {
 

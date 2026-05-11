@@ -10,8 +10,8 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public class LichessCheckFen extends AbstractLichessCheckFen {
 

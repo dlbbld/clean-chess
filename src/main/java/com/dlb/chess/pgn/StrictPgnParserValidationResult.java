@@ -1,6 +1,5 @@
 package com.dlb.chess.pgn;
 
-import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.san.SanValidationProblem;
 
 public record StrictPgnParserValidationResult(StrictPgnParserValidationProblem problemParser,

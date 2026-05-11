@@ -9,35 +9,20 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.ResultTagValue;
-import com.dlb.chess.pgn.SetUpTagValue;
-import com.dlb.chess.pgn.StandardTag;
-import com.dlb.chess.pgn.LenientPgnParserValidationException;
-import com.dlb.chess.pgn.LenientPgnParserValidationResult;
-import com.dlb.chess.pgn.PgnCommentary;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.Tag;
-import com.dlb.chess.pgn.PgnCharStream;
-import com.dlb.chess.pgn.PgnToken;
-import com.dlb.chess.pgn.PgnTokenType;
-import com.dlb.chess.pgn.PgnTokenizer;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.LenientSanParserValidationException;
 import com.dlb.chess.san.ForgivenItem;
+import com.dlb.chess.san.LenientSanParserValidationException;
 import com.dlb.chess.san.LenientSanParserValidationResult;
-import com.dlb.chess.pgn.TagPlaceHolderUtility;
-import com.dlb.chess.pgn.TagUtility;
+import com.dlb.chess.san.SanValidationProblem;
 
 /**
  * Lenient PGN parser. Permissive inter-token rules: any whitespace separates tokens, move-number indicators are
@@ -502,7 +487,8 @@ public final class LenientPgnParser {
         try {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
-          // Defensive â€” the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          // Defensive â€” the tokenizer cannot produce `}` here (handled as separate types), so unreachable in
+          // practice.
           final String message = BasicUtility.getMessage(pcve);
           throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               message);

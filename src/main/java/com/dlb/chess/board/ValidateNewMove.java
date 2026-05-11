@@ -67,8 +67,7 @@ class ValidateNewMove implements EnumConstants {
         gameStatus);
   }
 
-  private static void validateCastling(Board board, MoveSpecification moveSpecification)
-      throws InvalidMoveException {
+  private static void validateCastling(Board board, MoveSpecification moveSpecification) throws InvalidMoveException {
 
     if (!CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       throw new ProgrammingMistakeException("Precondition is not met");
@@ -156,8 +155,7 @@ class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validateMovement(Board board, MoveSpecification moveSpecification)
-      throws InvalidMoveException {
+  private static void validateMovement(Board board, MoveSpecification moveSpecification) throws InvalidMoveException {
     final MovementCheck movementCheck = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(),
         board.getHavingMove(), board.getEnPassantCaptureTargetSquare(), moveSpecification);
     if (movementCheck == MovementCheck.SUCCESS) {
@@ -198,8 +196,7 @@ class ValidateNewMove implements EnumConstants {
     };
   }
 
-  private static void validateKingSafety(Board board, MoveSpecification moveSpecification)
-      throws InvalidMoveException {
+  private static void validateKingSafety(Board board, MoveSpecification moveSpecification) throws InvalidMoveException {
     final KingSafetyCheck kingSafetyCheck = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(),
         board.getHavingMove(), moveSpecification);
     if (kingSafetyCheck == KingSafetyCheck.SUCCESS) {

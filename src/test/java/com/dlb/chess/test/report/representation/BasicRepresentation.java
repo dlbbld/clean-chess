@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.report.Report;
 
 public class BasicRepresentation {
@@ -128,7 +127,7 @@ public class BasicRepresentation {
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     final String attributeName = calculateRepetitionAttributeSequence(enPassantCaptureRule);
 
-    final List<List<HalfMove>> repetitionList = switch (enPassantCaptureRule) {
+    final var repetitionList = switch (enPassantCaptureRule) {
       case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
       case DO_NOT_IGNORE -> report.repetitionListList();
       default -> throw new IllegalArgumentException();

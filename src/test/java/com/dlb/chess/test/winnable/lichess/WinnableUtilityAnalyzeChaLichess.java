@@ -8,13 +8,13 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.model.LegalMove;

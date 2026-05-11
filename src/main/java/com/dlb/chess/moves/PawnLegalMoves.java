@@ -7,7 +7,6 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.AbstractLegalMoves;
 
 class PawnLegalMoves extends AbstractLegalMoves {
   public static Set<LegalMove> calculatePawnLegalMoves(StaticPosition staticPosition,

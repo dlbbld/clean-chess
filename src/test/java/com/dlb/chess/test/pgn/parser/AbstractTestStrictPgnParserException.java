@@ -7,8 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.nio.file.Path;
 
 import com.dlb.chess.pgn.StrictPgnParser;
-import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.StrictPgnParserValidationResult;
 import com.dlb.chess.san.SanValidationProblem;
 

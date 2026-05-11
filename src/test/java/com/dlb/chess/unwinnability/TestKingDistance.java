@@ -5,7 +5,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.unwinnability.KingDistance;
 
 class TestKingDistance implements EnumConstants {
 

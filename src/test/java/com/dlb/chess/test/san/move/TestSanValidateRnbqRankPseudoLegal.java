@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.StrictSanParser;
 
 class TestSanValidateRnbqRankPseudoLegal {

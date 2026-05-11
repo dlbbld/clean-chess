@@ -6,6 +6,7 @@ import java.util.Set;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -15,7 +16,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 
@@ -36,8 +36,7 @@ final class LenientSanRecover {
   private LenientSanRecover() {
   }
 
-  static MoveSpecification parseWithRecovery(String candidate, Board board,
-      List<LenientSanValidationProblem> codes) {
+  static MoveSpecification parseWithRecovery(String candidate, Board board, List<LenientSanValidationProblem> codes) {
     final Set<LenientSanValidationProblem> emitted = EnumSet.noneOf(LenientSanValidationProblem.class);
     emitted.addAll(codes);
 
@@ -182,9 +181,9 @@ final class LenientSanRecover {
 
   /**
    * Rewrites a rank-disambiguated SAN move to its canonical file-disambiguated form. Used when strict rejects with
-   * {@link SanValidationProblem#NON_STANDARD_SPECIFIED_RNBQ_RANK_INSTEAD_OF_FILE} â€” the move is uniquely identified by
-   * the user's rank disambig, but canonical SAN prefers file disambig when both forms work. We look up the from-file of
-   * the unique matching legal move and substitute it for the rank character.
+   * {@link SanValidationProblem#NON_STANDARD_SPECIFIED_RNBQ_RANK_INSTEAD_OF_FILE} â€” the move is uniquely identified
+   * by the user's rank disambig, but canonical SAN prefers file disambig when both forms work. We look up the from-file
+   * of the unique matching legal move and substitute it for the rank character.
    */
   private static String rewriteRankAsFile(String s, Board board) {
     final BodyAndMarker split = splitMarker(s);

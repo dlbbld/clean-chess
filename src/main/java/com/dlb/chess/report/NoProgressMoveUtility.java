@@ -3,17 +3,14 @@ package com.dlb.chess.report;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.NoProgressHalfMove;
-import com.dlb.chess.report.NoProgressIndex;
+import com.dlb.chess.common.utility.BasicChessUtility;
 
 abstract class NoProgressMoveUtility {
 

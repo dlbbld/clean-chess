@@ -9,9 +9,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 
 /**
- * Internal piece-presence checks used by SAN piece-exists validation.
- * Not part of the public API: SAN parsing is the public entry point;
- * the per-square scans are an implementation detail.
+ * Internal piece-presence checks used by SAN piece-exists validation. Not part of the public API: SAN parsing is the
+ * public entry point; the per-square scans are an implementation detail.
  */
 abstract class SanPieceCheck {
 

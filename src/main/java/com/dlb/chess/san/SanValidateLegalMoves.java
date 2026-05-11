@@ -1,10 +1,10 @@
 package com.dlb.chess.san;
 
-import java.util.ArrayList;
 import java.util.Set;
 import java.util.TreeSet;
 
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
@@ -18,7 +18,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.SetUtility;
@@ -35,8 +34,8 @@ import com.dlb.chess.squares.AbstractPotentialToSquares;
 
 abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstants {
 
-  public static MoveSpecification calculateMoveSpecificationForSan(Board board, Side havingMove,
-      SanFormat sanFormat, SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
+  public static MoveSpecification calculateMoveSpecificationForSan(Board board, Side havingMove, SanFormat sanFormat,
+      SanConversion sanConversion, MoveSpecification legalMoveOnlyCandidate) {
 
     if (sanFormat == SanFormat.KING_CASTLING_QUEEN_SIDE) {
       return new MoveSpecification(CastlingMove.QUEEN_SIDE);

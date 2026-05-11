@@ -3,6 +3,7 @@ package com.dlb.chess.test.legalmoves;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -990,9 +991,7 @@ class TestLegalMovesForGames {
       return new TreeSet<>();
     }
     final Set<String> result = new TreeSet<>();
-    for (final String token : commaSeparated.split(", ")) {
-      result.add(token);
-    }
+    Collections.addAll(result, commaSeparated.split(", "));
     return result;
   }
 
@@ -1006,8 +1005,7 @@ class TestLegalMovesForGames {
     for (final PgnHalfMove move : pgnFile.halfMoveList()) {
       board.moveStrict(move.san());
       final String san = board.getSan();
-      final String legalMoveList = BasicUtility
-          .calculateCommaSeparatedList(new ArrayList<>(board.getLegalMovesSan()));
+      final String legalMoveList = BasicUtility.calculateCommaSeparatedList(new ArrayList<>(board.getLegalMovesSan()));
       final var output = "checkLegalMoves(board, \"" + san + "\", \"" + legalMoveList + "\");";
       System.out.println(output);
     }

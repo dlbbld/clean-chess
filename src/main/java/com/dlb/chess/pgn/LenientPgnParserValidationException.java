@@ -6,9 +6,8 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
-import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
-import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.ForgivenItem;
+import com.dlb.chess.san.SanValidationProblem;
 import com.google.common.collect.ImmutableList;
 
 @SuppressWarnings("null")

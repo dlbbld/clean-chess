@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.report.ThreefoldClaimAheadUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.LenientPgnParser;
@@ -25,7 +24,8 @@ class TestThreefoldClaimAheadUtility {
     final List<List<ClaimAhead>> expectedEmptyListList = new ArrayList<>();
 
     {
-      final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(new Board());
+      final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility
+          .calculateThreefoldClaimAhead(new Board());
 
       assertEquals(expectedEmptyListList, actualListList);
     }

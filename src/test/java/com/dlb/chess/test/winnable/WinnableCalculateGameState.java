@@ -3,9 +3,9 @@ package com.dlb.chess.test.winnable;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.model.LegalMove;

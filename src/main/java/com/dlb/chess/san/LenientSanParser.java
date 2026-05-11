@@ -5,9 +5,9 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.Nullable;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.messages.Message;
@@ -23,8 +23,8 @@ import com.google.common.collect.ImmutableSet;
  * See {@link com.dlb.chess.san.lenient package-level Javadoc} for the strategy. The two public methods are:
  * <ul>
  * <li>{@link #parseText(String, Board)} â€” full parse, returns the resolved move plus the list of forgiven items.
- * <li>{@link #validateText(String, Board)} â€” discards the result, throws on rejection. Convenience for callers
- * that only need yes/no.
+ * <li>{@link #validateText(String, Board)} â€” discards the result, throws on rejection. Convenience for callers that
+ * only need yes/no.
  * </ul>
  */
 public final class LenientSanParser {

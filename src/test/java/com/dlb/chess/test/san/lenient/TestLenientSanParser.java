@@ -16,10 +16,10 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.san.LenientSanValidationProblem;
-import com.dlb.chess.san.LenientSanParserValidationException;
 import com.dlb.chess.san.ForgivenItem;
+import com.dlb.chess.san.LenientSanParserValidationException;
 import com.dlb.chess.san.LenientSanParserValidationResult;
+import com.dlb.chess.san.LenientSanValidationProblem;
 
 @SuppressWarnings("static-method")
 class TestLenientSanParser implements EnumConstants {

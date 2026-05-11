@@ -3,7 +3,6 @@ package com.dlb.chess.board;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.board.Board;
 
 public abstract class CommonTestUtility implements EnumConstants {
 
@@ -135,8 +134,7 @@ public abstract class CommonTestUtility implements EnumConstants {
   // Body duplicated from above to support Board-vs-Board comparison (internal consistency tests).
   // Java doesn't let us share a body without re-introducing a common supertype, which is exactly the
   // ChessBoard interface that this branch deleted. Both bodies must stay in sync if either is changed.
-  private static void checkBoardsAgainstEachOther(Board boardFirst, Board boardSecond,
-      boolean isIncludeHistory) {
+  private static void checkBoardsAgainstEachOther(Board boardFirst, Board boardSecond, boolean isIncludeHistory) {
 
     assertEquals(boardFirst.isCheck(), boardSecond.isCheck());
     assertEquals(boardFirst.isCheckmate(), boardSecond.isCheckmate());

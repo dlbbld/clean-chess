@@ -7,18 +7,18 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.test.common.exceptions.SetupException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.test.common.exceptions.SetupException;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
@@ -55,8 +55,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     // 2a)
     for (final String pgnFileName : junitHardcodedPgnFileNameList) {
       if (!FileUtility.exists(pgnTest.getFolderPath(), pgnFileName)) {
-        throw new SetupException(
-            "The JUnit hardcoded file \"" + pgnFileName + "\" does not exist in the test folder");
+        throw new SetupException("The JUnit hardcoded file \"" + pgnFileName + "\" does not exist in the test folder");
       }
     }
 
@@ -85,8 +84,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertFalse(board.isStalemate());
   }
 
-  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece,
-      Board board) {
+  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, Board board) {
     assertTrue(board.isCapture());
     assertFalse(board.isCheckmate());
     assertFalse(board.isStalemate());

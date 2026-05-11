@@ -33,7 +33,8 @@ class GoingToCorner implements EnumConstants {
       fromSquare = m.moveSpecification().fromSquare();
     }
 
-    // 2: if P.type not in {K,N} then return false ( -> We focus on ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œslowÃƒÂ¢Ã¢â€šÂ¬Ã‚Â (non-sliding) pieces
+    // 2: if P.type not in {K,N} then return false ( -> We focus on ÃƒÂ¢Ã¢â€šÂ¬Ã…â€œslowÃƒÂ¢Ã¢â€šÂ¬Ã‚Â (non-sliding)
+    // pieces
     // that could take several turns to reach the desired square)
     if (movingPiece.getPieceType() != PieceType.KING && movingPiece.getPieceType() != PieceType.KNIGHT) {
       return false;

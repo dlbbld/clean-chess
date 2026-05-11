@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.PgnTestHelper;
 

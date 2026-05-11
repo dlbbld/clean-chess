@@ -11,10 +11,10 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
+import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.TagUtility;
+import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserReadTag {
 

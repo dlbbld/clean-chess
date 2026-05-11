@@ -8,9 +8,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.enums.CastlingCheck;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.CastlingCheckMapper;
-import com.dlb.chess.san.StrictSanParser;
 
 class TestSanValidateAgainstLegalMovesCastling {
 

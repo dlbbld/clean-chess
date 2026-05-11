@@ -2,11 +2,11 @@ package com.dlb.chess.san;
 
 import java.util.Set;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.messages.Message;
@@ -14,9 +14,9 @@ import com.dlb.chess.model.LegalMove;
 
 /**
  * Public entry point for the strict SAN pipeline. Accepts canonical SAN only; the result is symmetric in shape with
- * {@link com.dlb.chess.san.LenientSanParser} so callers can switch between strict and lenient by changing one
- * method call. Use {@link com.dlb.chess.san.LenientSanParser} when parsing real-world PGN that may contain
- * forgivable deviations from canonical SAN.
+ * {@link com.dlb.chess.san.LenientSanParser} so callers can switch between strict and lenient by changing one method
+ * call. Use {@link com.dlb.chess.san.LenientSanParser} when parsing real-world PGN that may contain forgivable
+ * deviations from canonical SAN.
  */
 public class StrictSanParser extends AbstractSan {
 

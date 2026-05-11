@@ -11,13 +11,13 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.StrictPgnParser;
-import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationException;
-import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.StrictPgnParserValidationResult;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;

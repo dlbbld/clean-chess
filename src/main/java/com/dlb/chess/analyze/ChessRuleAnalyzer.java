@@ -19,8 +19,8 @@ import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.moves.PawnDiagonalMoveUtility;
 import com.dlb.chess.squares.AbstractEmptyBoardSquares;
-import com.dlb.chess.squares.KingNonCastlingEmptyBoardSquares;
 import com.dlb.chess.squares.BishopPotentialToSquares;
+import com.dlb.chess.squares.KingNonCastlingEmptyBoardSquares;
 import com.dlb.chess.squares.QueenPotentialToSquares;
 import com.dlb.chess.squares.RookPotentialToSquares;
 

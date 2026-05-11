@@ -8,7 +8,6 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.CastlingRightLoss;
@@ -16,15 +15,14 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
+import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.board.HalfMoveUtility;
+import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
@@ -597,8 +595,7 @@ public class LibraryCarlosBoard {
     final List<DynamicPosition> dynamicPositionList = getDynamicPositionList();
     final DynamicPosition dynamicPosition = getDynamicPosition();
     final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition,
-        EnPassantCaptureRuleThreefold.DO_IGNORE);
+        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition, EnPassantCaptureRuleThreefold.DO_IGNORE);
     final Piece movingPiece = getMovingPiece();
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
         countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);

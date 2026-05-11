@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.unwinnability.KnightDistance;
 
 class TestKnightDistance implements EnumConstants {
 

@@ -2,21 +2,21 @@ package com.dlb.chess.test.generate;
 
 import java.nio.file.Path;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.board.Board;
-import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.report.Report;
+import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.test.report.representation.RepetitionRepresentation;
-import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableFull;
-import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 

@@ -20,20 +20,12 @@ import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
-import com.dlb.chess.unwinnability.DeadPositionFull;
-import com.dlb.chess.unwinnability.DeadPositionQuick;
-import com.dlb.chess.unwinnability.UnwinnableFull;
-import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
-import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
-import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.utility.BasicChessUtility;
-import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -48,22 +40,28 @@ import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.moves.PromotionUtility;
+import com.dlb.chess.san.LenientSanParser;
+import com.dlb.chess.san.LenientSanParserValidationResult;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.LenientSanParser;
-import com.dlb.chess.san.LenientSanParserValidationResult;
-import com.dlb.chess.san.StrictSanParserValidationResult;
 import com.dlb.chess.san.StrictSanParser;
+import com.dlb.chess.san.StrictSanParserValidationResult;
 import com.dlb.chess.squares.AbstractAttackedSquares;
+import com.dlb.chess.unwinnability.DeadPositionFull;
+import com.dlb.chess.unwinnability.DeadPositionQuick;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
  * The library's central type â€” a chess <em>game</em>, not merely a position. A {@code Board} carries the position
  * <strong>plus</strong> the move history from its initial FEN: every halfmove ever performed, the legal-move set after
- * each, the halfmove clock, repetition counts, castling-right loss reasons, derived SAN/LAN strings â€” everything needed
- * to answer rule-level questions about the game so far.
+ * each, the halfmove clock, repetition counts, castling-right loss reasons, derived SAN/LAN strings â€” everything
+ * needed to answer rule-level questions about the game so far.
  *
  * <h2>Construction</h2>
  *
@@ -72,8 +70,8 @@ import com.google.common.collect.ImmutableSet;
  *
  * <ul>
  * <li>{@link #Board()} â€” start at the initial position.</li>
- * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser, so a
- * {@code Board} cannot be constructed from a position no real game could reach.</li>
+ * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser, so
+ * a {@code Board} cannot be constructed from a position no real game could reach.</li>
  * <li>{@link #Board(Fen)} â€” start at a pre-parsed {@link Fen} value.</li>
  * </ul>
  *
@@ -94,9 +92,9 @@ import com.google.common.collect.ImmutableSet;
  * <p>
  * Beyond move execution, {@code Board} exposes the standard rule-level predicates: {@link #isCheckmate()},
  * {@link #isStalemate()}, {@link #isThreefoldRepetition()}, {@link #isFiftyMove()}, {@link #isFivefoldRepetition()},
- * {@link #isSeventyFiveMove()}, plus the unwinnability/dead-position pair
- * ({@code isUnwinnableQuick}, {@code isUnwinnableFull}, {@code isDeadPositionQuick}, {@code isDeadPositionFull} â€” the
- * library's flagship CHA feature; see {@link com.dlb.chess.unwinnability}). Position-state accessors return Guava
+ * {@link #isSeventyFiveMove()}, plus the unwinnability/dead-position pair ({@code isUnwinnableQuick},
+ * {@code isUnwinnableFull}, {@code isDeadPositionQuick}, {@code isDeadPositionFull} â€” the library's flagship CHA
+ * feature; see {@link com.dlb.chess.unwinnability}). Position-state accessors return Guava
  * {@code ImmutableList}/{@code ImmutableSet}; mutation is exclusively via {@code move}/{@code unmove}.
  *
  * <p>
@@ -252,8 +250,8 @@ public class Board {
    * {@link MoveSpecification}; for callers that only need success / fail, the absence of a thrown exception is the
    * answer. Use {@link #moveLenient(String)} when parsing real-world PGN that may contain forgivable deviations.
    *
-   * @throws com.dlb.chess.san.SanValidationException if {@code san} is not canonical SAN, or is canonical
-   *                                                             but does not represent a legal move
+   * @throws com.dlb.chess.san.SanValidationException if {@code san} is not canonical SAN, or is canonical but does not
+   *                                                  represent a legal move
    */
   public StrictSanParserValidationResult moveStrict(String san) {
     final StrictSanParserValidationResult result = StrictSanParser.parseText(san, this);
@@ -272,9 +270,8 @@ public class Board {
    * {@link LenientSanParserValidationResult} carries the resolved {@code MoveSpecification} together with one
    * {@code ForgivenItem} per deviation that was forgiven; on canonical input the forgiven-items list is empty.
    *
-   * @throws com.dlb.chess.san.LenientSanParserValidationException if the input cannot be resolved to a legal
-   *                                                                          move even after applying every supported
-   *                                                                          tolerance
+   * @throws com.dlb.chess.san.LenientSanParserValidationException if the input cannot be resolved to a legal move even
+   *                                                               after applying every supported tolerance
    */
   public LenientSanParserValidationResult moveLenient(String san) {
     final LenientSanParserValidationResult result = LenientSanParser.parseText(san, this);
@@ -960,8 +957,7 @@ public class Board {
     final List<DynamicPosition> dynamicPositionList = getDynamicPositionList();
     final DynamicPosition dynamicPosition = getDynamicPosition();
     final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition,
-        EnPassantCaptureRuleThreefold.DO_IGNORE);
+        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition, EnPassantCaptureRuleThreefold.DO_IGNORE);
     final Piece movingPiece = getMovingPiece();
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
         countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);

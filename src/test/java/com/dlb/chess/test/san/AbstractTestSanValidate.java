@@ -3,10 +3,10 @@ package com.dlb.chess.test.san;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.board.Board;
-import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.StrictSanParser;
 
 public abstract class AbstractTestSanValidate implements EnumConstants {

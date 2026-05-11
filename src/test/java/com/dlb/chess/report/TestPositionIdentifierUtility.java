@@ -7,8 +7,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.report.PositionIdentifierUtility;
-
 class TestPositionIdentifierUtility {
 
   @Test

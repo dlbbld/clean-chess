@@ -9,7 +9,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.CastlingUtility;
 
 class KingCastlingLegalMoves extends KingLegalMoves {
   public static Set<LegalMove> calculateKingCastlingLegalMoves(StaticPosition staticPosition, Side havingMove,

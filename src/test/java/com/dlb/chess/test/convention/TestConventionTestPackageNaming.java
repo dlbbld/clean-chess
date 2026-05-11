@@ -9,8 +9,8 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.ConfigurationTestConstants;
+import com.dlb.chess.test.common.utility.FileUtility;
 
 /**
  * Convention test: every Java file under {@code src/test/java} must declare a package starting with
@@ -27,8 +27,9 @@ import com.dlb.chess.test.ConfigurationTestConstants;
  * </ul>
  *
  * <p>
- * The test-scope marker (this file is {@code src/test/java}) keeps the source-tree separation; the {@code com.dlb.chess}
- * prefix keeps the package tree single-rooted and prevents stray test files in unrelated namespaces.
+ * The test-scope marker (this file is {@code src/test/java}) keeps the source-tree separation; the
+ * {@code com.dlb.chess} prefix keeps the package tree single-rooted and prevents stray test files in unrelated
+ * namespaces.
  *
  * <p>
  * The package name is derived from the file's path under {@code src/test/java}; Java requires the {@code package}

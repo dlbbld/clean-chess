@@ -12,7 +12,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.squares.PawnPotentialToSquares;
 
 class PawnForwardNonPromotionLegalMoves extends PawnLegalMoves {

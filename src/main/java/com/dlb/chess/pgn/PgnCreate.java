@@ -4,28 +4,19 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.dlb.chess.board.Board;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.ResultTagValue;
-import com.dlb.chess.pgn.SetUpTagValue;
-import com.dlb.chess.pgn.StandardTag;
-import com.dlb.chess.pgn.PgnCommentary;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.Tag;
-import com.dlb.chess.pgn.PgnUtility;
-import com.dlb.chess.pgn.TagPlaceHolderUtility;
-import com.dlb.chess.pgn.TagUtility;
 
 public class PgnCreate {
 

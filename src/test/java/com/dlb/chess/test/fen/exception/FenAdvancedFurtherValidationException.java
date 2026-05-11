@@ -1,7 +1,7 @@
 package com.dlb.chess.test.fen.exception;
 
-import com.dlb.chess.test.fen.enums.FenAdvancedFurtherValidationProblem;
 import com.dlb.chess.common.exceptions.UsageException;
+import com.dlb.chess.test.fen.enums.FenAdvancedFurtherValidationProblem;
 
 public class FenAdvancedFurtherValidationException extends UsageException {
 

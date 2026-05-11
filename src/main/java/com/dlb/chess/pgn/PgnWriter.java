@@ -9,9 +9,6 @@ import java.util.List;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
-import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.Tag;
 
 public class PgnWriter {
 

@@ -6,27 +6,20 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.report.NoProgressMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.report.ThreefoldClaimAheadUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.report.NoProgressHalfMove;
-import com.dlb.chess.report.Report;
-import com.dlb.chess.report.NoProgressPrint;
-import com.dlb.chess.report.RepetitionPrint;
-import com.dlb.chess.report.ThreefoldClaimAheadPrint;
 
 /**
  * Generates game-level reports â€” threefold-repetition listings (including missed-claim-ahead opportunities),
@@ -36,8 +29,8 @@ import com.dlb.chess.report.ThreefoldClaimAheadPrint;
  * Two surfaces:
  *
  * <ul>
- * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record carrying all the
- * analytical data â€” repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
+ * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record carrying all the analytical
+ * data â€” repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
  * inspection.</li>
  * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
  * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README examples.</li>
