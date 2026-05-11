@@ -1,6 +1,6 @@
 package com.dlb.chess.test.san.model;
 
-import com.dlb.chess.model.SanConversion;
+import com.dlb.chess.san.SanConversion;
 
 public record SanConversionCheck(boolean isMatch, SanConversion sanConversion) {
 

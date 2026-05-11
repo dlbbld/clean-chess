@@ -6,14 +6,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.ForgivenItem;
 import com.google.common.collect.ImmutableList;
 
 /**
  * Thrown when the lenient SAN parser cannot resolve the input to a legal move even after applying every supported
  * tolerance. Carries the original text, the deepest underlying strict-pipeline reason (when the failure originated
- * there), and any forgiven items the lenient layer had already accumulated before the failure point — so the consumer
+ * there), and any forgiven items the lenient layer had already accumulated before the failure point â€” so the consumer
  * can see how far the parse got.
  */
 @SuppressWarnings("null")
@@ -32,7 +30,7 @@ public class LenientSanParserValidationException extends UsageException {
 
   /**
    * Constructor used when the underlying strict failure carries a {@link GameStatus} (the {@code GAME_ALREADY_ENDED}
-   * case): propagate the status so callers — particularly the lenient PGN parser — can identify the specific
+   * case): propagate the status so callers â€” particularly the lenient PGN parser â€” can identify the specific
    * FIDE-automatic termination without parsing the message.
    */
   public LenientSanParserValidationException(String message, String originalText,
@@ -59,7 +57,7 @@ public class LenientSanParserValidationException extends UsageException {
   }
 
   /**
-   * The forgiven items the lenient parser had already accumulated before failing. Useful for diagnostics — shows which
+   * The forgiven items the lenient parser had already accumulated before failing. Useful for diagnostics â€” shows which
    * tolerances applied before the input became unrecoverable.
    */
   public @NonNull ImmutableList<@NonNull ForgivenItem> getForgivenItemsAccumulated() {

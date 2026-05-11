@@ -6,7 +6,6 @@ import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
 import com.dlb.chess.enums.MoveCheck;
-import com.dlb.chess.san.SanValidationProblem;
 
 public class SanValidationException extends UsageException {
 

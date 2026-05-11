@@ -7,13 +7,6 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanFormat;
-import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.SanParse;
 
 /**
  * Parses king-move SAN (core starts with 'K'). Castling (O-O / O-O-O) is handled separately in
@@ -56,7 +49,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
               NonNullWrapperCommon.toString(secondChar)));
     }
 
-    // K[file]... — non-capturing path continues with the destination rank
+    // K[file]... Ã¢â‚¬â€ non-capturing path continues with the destination rank
     return parseKingNonCaptureMove(core, sanTerminalMarker);
   }
 
@@ -80,7 +73,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
               NonNullWrapperCommon.toString(thirdChar)));
     }
 
-    // K[file][rank] — valid destination, length 3 expected
+    // K[file][rank] Ã¢â‚¬â€ valid destination, length 3 expected
     if (core.length() == 3) {
       return new SanParse(SanFormat.KING_NON_CASTLING_NON_CAPTURING,
           new SanConversion(PieceType.KING, File.NONE, Rank.NONE,
@@ -88,7 +81,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
               PromotionPieceType.NONE, sanTerminalMarker));
     }
 
-    // Length > 3 after valid K[file][rank] — overlength. Square-disambiguation attempts like "Ka2b3" also land here;
+    // Length > 3 after valid K[file][rank] Ã¢â‚¬â€ overlength. Square-disambiguation attempts like "Ka2b3" also land here;
     // the generic overlength message is sufficient since the user can see the move already has 4+ chars.
     throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_OVERLENGTH,
         Message.getString("validation.san.format.king.nonCastling.nonCapture.overlength"));
@@ -125,7 +118,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
               NonNullWrapperCommon.toString(fourthChar)));
     }
 
-    // Valid Kx[file][rank] — length 4 expected
+    // Valid Kx[file][rank] Ã¢â‚¬â€ length 4 expected
     if (core.length() == 4) {
       return new SanParse(SanFormat.KING_NON_CASTLING_CAPTURING,
           new SanConversion(PieceType.KING, File.NONE, Rank.NONE,
@@ -133,7 +126,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
               PromotionPieceType.NONE, sanTerminalMarker));
     }
 
-    // Length > 4 after valid Kx[file][rank] — always overlength
+    // Length > 4 after valid Kx[file][rank] Ã¢â‚¬â€ always overlength
     throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_OVERLENGTH,
         Message.getString("validation.san.format.king.nonCastling.capture.overlength"));
   }

@@ -8,13 +8,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanFormat;
-import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.SanParse;
 
 /**
  * Parses a non-king piece move SAN (core starts with R, N, B, or Q) sequentially, character by character.
@@ -23,14 +16,14 @@ import com.dlb.chess.san.SanParse;
  * Recognised forms:
  *
  * <pre>
- *   Length 3:  R[toFile][toRank]                   — no disambiguation, no capture  e.g. Ra1
- *   Length 4:  R[fromFile][toFile][toRank]         — file disambiguation           e.g. Rba1
- *              R[fromRank][toFile][toRank]         — rank disambiguation           e.g. R2a1
- *              Rx[toFile][toRank]                  — capture, no disambiguation    e.g. Rxa1
- *   Length 5:  R[fromFile][fromRank][toFile][toRank] — square disambiguation       e.g. Rb2a1
- *              R[fromFile]x[toFile][toRank]        — file disambiguation + capture e.g. Rbxa1
- *              R[fromRank]x[toFile][toRank]        — rank disambiguation + capture e.g. R2xa1
- *   Length 6:  R[fromFile][fromRank]x[toFile][toRank] — square + capture           e.g. Rb2xa1
+ *   Length 3:  R[toFile][toRank]                   Ã¢â‚¬â€ no disambiguation, no capture  e.g. Ra1
+ *   Length 4:  R[fromFile][toFile][toRank]         Ã¢â‚¬â€ file disambiguation           e.g. Rba1
+ *              R[fromRank][toFile][toRank]         Ã¢â‚¬â€ rank disambiguation           e.g. R2a1
+ *              Rx[toFile][toRank]                  Ã¢â‚¬â€ capture, no disambiguation    e.g. Rxa1
+ *   Length 5:  R[fromFile][fromRank][toFile][toRank] Ã¢â‚¬â€ square disambiguation       e.g. Rb2a1
+ *              R[fromFile]x[toFile][toRank]        Ã¢â‚¬â€ file disambiguation + capture e.g. Rbxa1
+ *              R[fromRank]x[toFile][toRank]        Ã¢â‚¬â€ rank disambiguation + capture e.g. R2xa1
+ *   Length 6:  R[fromFile][fromRank]x[toFile][toRank] Ã¢â‚¬â€ square + capture           e.g. Rb2xa1
  * </pre>
  *
  * <p>
@@ -45,7 +38,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
     // core[0] is the piece letter, already validated to be R/N/B/Q by the dispatcher in SanValidateFormat.
     final var piece = parsePieceLetter(core.charAt(0));
 
-    // pos 1: second character — file letter, rank digit, or the capture symbol 'x'
+    // pos 1: second character Ã¢â‚¬â€ file letter, rank digit, or the capture symbol 'x'
     if (core.length() == 1) {
       throw new SanValidationException(SanValidationProblem.FORMAT_RNBQ_NO_SECOND_CHARACTER,
           Message.getString("validation.san.format.rnbq.noSecondCharacter"));
@@ -66,7 +59,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
   }
 
   // ---------------------------------------------------------------------------
-  // Rx[toFile][toRank] — capture, no disambiguation
+  // Rx[toFile][toRank] Ã¢â‚¬â€ capture, no disambiguation
   // ---------------------------------------------------------------------------
 
   private static SanParse parseCaptureNoDisambig(final String core, final SanTerminalMarker sanTerminalMarker,
@@ -105,7 +98,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
   }
 
   // ---------------------------------------------------------------------------
-  // R[rank]... — rank branch (at pos 2 we need 'x' for capture or a file letter for non-capture)
+  // R[rank]... Ã¢â‚¬â€ rank branch (at pos 2 we need 'x' for capture or a file letter for non-capture)
   // ---------------------------------------------------------------------------
 
   private static SanParse parseRankBranch(final String core, final SanTerminalMarker sanTerminalMarker,
@@ -126,7 +119,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
         Message.getString("validation.san.format.rnbq.rank.wrongThirdCharacter", NonNullWrapperCommon.toString(c2)));
   }
 
-  // R[rank][toFile][toRank] — non-capture rank disambiguation (e.g. R2a1)
+  // R[rank][toFile][toRank] Ã¢â‚¬â€ non-capture rank disambiguation (e.g. R2a1)
   private static SanParse parseNonCaptureRank(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final Rank fromRank, final File toFile) {
     // pos 3: destination rank
@@ -151,7 +144,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
         new SanConversion(piece, File.NONE, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
-  // R[rank]x[toFile][toRank] — capture rank disambiguation (e.g. R2xa1)
+  // R[rank]x[toFile][toRank] Ã¢â‚¬â€ capture rank disambiguation (e.g. R2xa1)
   private static SanParse parseCaptureRank(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final Rank fromRank) {
     // pos 3: destination file
@@ -189,7 +182,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
   }
 
   // ---------------------------------------------------------------------------
-  // R[file]... — file branch (3-way ambiguity at pos 2: rank=toRank, file=fromFile, x=capture)
+  // R[file]... Ã¢â‚¬â€ file branch (3-way ambiguity at pos 2: rank=toRank, file=fromFile, x=capture)
   // ---------------------------------------------------------------------------
 
   private static SanParse parseFileBranch(final String core, final SanTerminalMarker sanTerminalMarker,
@@ -213,7 +206,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
         Message.getString("validation.san.format.rnbq.file.wrongThirdCharacter", NonNullWrapperCommon.toString(c2)));
   }
 
-  // R[fromFile][toFile][toRank] — non-capture file disambiguation (e.g. Rba1)
+  // R[fromFile][toFile][toRank] Ã¢â‚¬â€ non-capture file disambiguation (e.g. Rba1)
   private static SanParse parseNonCaptureFile(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final File fromFile, final File toFile) {
     // pos 3: destination rank
@@ -238,7 +231,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
         new SanConversion(piece, fromFile, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
-  // R[fromFile]x[toFile][toRank] — capture file disambiguation (e.g. Rbxa1)
+  // R[fromFile]x[toFile][toRank] Ã¢â‚¬â€ capture file disambiguation (e.g. Rbxa1)
   private static SanParse parseCaptureFile(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final File fromFile) {
     // pos 3: destination file
@@ -276,19 +269,19 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
   }
 
   // ---------------------------------------------------------------------------
-  // R[file][rank]... — ambiguous between plain destination (Ra1) and source-square prefix (Rb2a1 / Rb2xa1)
+  // R[file][rank]... Ã¢â‚¬â€ ambiguous between plain destination (Ra1) and source-square prefix (Rb2a1 / Rb2xa1)
   // ---------------------------------------------------------------------------
 
   private static SanParse parseFileRankBranch(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final File firstFile, final Rank firstRank) {
-    // Length 3: interpret as plain destination Ra1 — firstFile/firstRank are the destination square.
+    // Length 3: interpret as plain destination Ra1 Ã¢â‚¬â€ firstFile/firstRank are the destination square.
     if (core.length() == 3) {
       final var toSquare = Square.calculate(firstFile, firstRank);
       return new SanParse(pieceMoveSanFormat(false, false, false),
           new SanConversion(piece, File.NONE, Rank.NONE, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
     }
 
-    // Length > 3: commit to source-square interpretation — firstFile/firstRank become the source square,
+    // Length > 3: commit to source-square interpretation Ã¢â‚¬â€ firstFile/firstRank become the source square,
     // and pos 3 must be either the destination file (non-capture) or 'x' (capture).
     final var c3 = core.charAt(3);
 
@@ -303,7 +296,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
         Message.getString("validation.san.format.rnbq.square.wrongThirdCharacter", NonNullWrapperCommon.toString(c3)));
   }
 
-  // R[fromFile][fromRank][toFile][toRank] — non-capture square disambiguation (e.g. Rb2a1)
+  // R[fromFile][fromRank][toFile][toRank] Ã¢â‚¬â€ non-capture square disambiguation (e.g. Rb2a1)
   private static SanParse parseNonCaptureSquare(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final File fromFile, final Rank fromRank, final File toFile) {
     // pos 4: destination rank
@@ -328,7 +321,7 @@ abstract class SanValidateFormatRnbq extends AbstractSan {
         new SanConversion(piece, fromFile, fromRank, toSquare, PromotionPieceType.NONE, sanTerminalMarker));
   }
 
-  // R[fromFile][fromRank]x[toFile][toRank] — capture square disambiguation (e.g. Rb2xa1)
+  // R[fromFile][fromRank]x[toFile][toRank] Ã¢â‚¬â€ capture square disambiguation (e.g. Rb2xa1)
   private static SanParse parseCaptureSquare(final String core, final SanTerminalMarker sanTerminalMarker,
       final PieceType piece, final File fromFile, final Rank fromRank) {
     // pos 4: destination file

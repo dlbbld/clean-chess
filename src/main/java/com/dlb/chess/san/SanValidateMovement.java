@@ -3,9 +3,6 @@ package com.dlb.chess.san;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanFormat;
-import com.dlb.chess.san.SanParse;
 
 abstract class SanValidateMovement extends AbstractSan implements EnumConstants {
 

@@ -12,15 +12,6 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.MoveToSan;
-import com.dlb.chess.san.LenientSanValidationProblem;
-import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.LenientSanParserValidationException;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.ForgivenItem;
-import com.dlb.chess.san.LenientSanParserValidationResult;
-import com.dlb.chess.san.StrictSanParser;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
@@ -31,8 +22,8 @@ import com.google.common.collect.ImmutableSet;
  * <p>
  * See {@link com.dlb.chess.san.lenient package-level Javadoc} for the strategy. The two public methods are:
  * <ul>
- * <li>{@link #parseText(String, Board)} — full parse, returns the resolved move plus the list of forgiven items.
- * <li>{@link #validateText(String, Board)} — discards the result, throws on rejection. Convenience for callers
+ * <li>{@link #parseText(String, Board)} â€” full parse, returns the resolved move plus the list of forgiven items.
+ * <li>{@link #validateText(String, Board)} â€” discards the result, throws on rejection. Convenience for callers
  * that only need yes/no.
  * </ul>
  */

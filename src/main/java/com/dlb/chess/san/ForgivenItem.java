@@ -2,7 +2,6 @@ package com.dlb.chess.san;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.san.LenientSanValidationProblem;
 import com.google.common.collect.ImmutableList;
 
 /**

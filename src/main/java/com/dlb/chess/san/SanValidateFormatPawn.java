@@ -8,16 +8,9 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanFormat;
-import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.SanParse;
 
 /**
- * Parses pawn SAN moves — both forward (e.g. {@code d3}, {@code d8=Q}) and capturing (e.g. {@code dxe5},
+ * Parses pawn SAN moves Ã¢â‚¬â€ both forward (e.g. {@code d3}, {@code d8=Q}) and capturing (e.g. {@code dxe5},
  * {@code dxe8=Q}).
  */
 abstract class SanValidateFormatPawn extends AbstractSan {

@@ -7,7 +7,6 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.model.SanConversion;
 
 abstract class AbstractSan {
 

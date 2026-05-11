@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
-import com.dlb.chess.model.SanConversion;
+import com.dlb.chess.san.SanConversion;
 import com.dlb.chess.san.SanFormat;
 import com.dlb.chess.san.SanSymbol;
 import com.dlb.chess.san.SanTerminalMarker;

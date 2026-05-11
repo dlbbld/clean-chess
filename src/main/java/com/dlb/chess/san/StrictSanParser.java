@@ -11,12 +11,6 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.StrictSanParserValidationResult;
-import com.dlb.chess.san.SanValidateFormat;
-import com.dlb.chess.san.SanValidateMovement;
 
 /**
  * Public entry point for the strict SAN pipeline. Accepts canonical SAN only; the result is symmetric in shape with
@@ -74,7 +68,7 @@ public class StrictSanParser extends AbstractSan {
 
   /**
    * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic termination has been
-   * reached the game has ended permanently — no further moves are accepted.
+   * reached the game has ended permanently â€” no further moves are accepted.
    *
    * <p>
    * The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE 5.2.2 dead position),

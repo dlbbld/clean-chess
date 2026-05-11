@@ -3,10 +3,6 @@ package com.dlb.chess.san;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
 
 abstract class SanValidateCheck extends AbstractSan {
 

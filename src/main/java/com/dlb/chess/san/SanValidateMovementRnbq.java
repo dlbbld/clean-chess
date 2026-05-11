@@ -10,11 +10,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.SanParse;
 import com.dlb.chess.squares.AbstractEmptyBoardSquares;
 
 abstract class SanValidateMovementRnbq extends AbstractSan implements EnumConstants {

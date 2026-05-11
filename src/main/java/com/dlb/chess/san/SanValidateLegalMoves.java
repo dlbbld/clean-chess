@@ -29,15 +29,8 @@ import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
-import com.dlb.chess.model.SanConversion;
 import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.moves.CastlingUtility;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.MoveToSan;
-import com.dlb.chess.san.SanFormat;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.SanParse;
 import com.dlb.chess.squares.AbstractPotentialToSquares;
 
 abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstants {

@@ -8,23 +8,16 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanFormat;
-import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.san.SanValidationProblem;
-import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.san.SanParse;
 
 /**
  * Public entry point for SAN format validation. Dispatches on the leading character of the core (trailing check /
  * checkmate marker already stripped) to the appropriate piece-type parser:
  *
  * <pre>
- *   O            → {@link #parseCastling}
- *   a–h          → {@link SanValidateFormatPawn#parsePawnMove}
- *   K            → {@link SanValidateFormatKing#parseKingMove}
- *   R, N, B, Q   → {@link SanValidateFormatRnbq#parseRnbqMove}
+ *   O            Ã¢â€ â€™ {@link #parseCastling}
+ *   aÃ¢â‚¬â€œh          Ã¢â€ â€™ {@link SanValidateFormatPawn#parsePawnMove}
+ *   K            Ã¢â€ â€™ {@link SanValidateFormatKing#parseKingMove}
+ *   R, N, B, Q   Ã¢â€ â€™ {@link SanValidateFormatRnbq#parseRnbqMove}
  * </pre>
  */
 public abstract class SanValidateFormat extends AbstractSan {

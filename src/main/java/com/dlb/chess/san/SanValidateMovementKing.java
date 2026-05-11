@@ -1,7 +1,5 @@
 package com.dlb.chess.san;
 
-import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.SanParse;
 
 /**
  * Intentional no-op validator for king SAN movement at the abstract movement layer.

@@ -3,7 +3,6 @@ package com.dlb.chess.san;
 import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.enums.CastlingCheck;
-import com.dlb.chess.san.SanValidationProblem;
 
 /**
  * Maps {@link CastlingCheck} + {@link CastlingRightLoss} to their counterparts in {@link SanValidationProblem}.
