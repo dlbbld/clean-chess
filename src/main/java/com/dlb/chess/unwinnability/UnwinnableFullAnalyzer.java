@@ -6,12 +6,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.unwinnability.FindHelpmateExhaust;
-import com.dlb.chess.unwinnability.UnwinnableFull;
-import com.dlb.chess.unwinnability.UnwinnableFullAnalysis;
-import com.dlb.chess.unwinnability.Mobility;
-import com.dlb.chess.unwinnability.MobilitySolution;
-import com.dlb.chess.unwinnability.UnwinnableSemiStatic;
 
 //Figure 9 Main routine for deciding chess unwinnability. It is based on our semi-static
 //algorithm (Figure 8) and our search routine (Figure 5) integrated via iterative deepening.

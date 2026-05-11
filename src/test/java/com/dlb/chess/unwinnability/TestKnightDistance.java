@@ -1,4 +1,4 @@
-package com.dlb.chess.test.distance;
+package com.dlb.chess.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.distance.KnightDistance;
+import com.dlb.chess.unwinnability.KnightDistance;
 
 class TestKnightDistance implements EnumConstants {
 

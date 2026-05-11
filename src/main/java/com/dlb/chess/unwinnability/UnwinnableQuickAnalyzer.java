@@ -10,12 +10,6 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.unwinnability.FindHelpMateInterrupt;
-import com.dlb.chess.unwinnability.Mobility;
-import com.dlb.chess.unwinnability.MobilitySolution;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
-import com.dlb.chess.unwinnability.SemiOpenFilesUtility;
-import com.dlb.chess.unwinnability.UnwinnableSemiStatic;
 
 public class UnwinnableQuickAnalyzer {
 

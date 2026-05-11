@@ -13,7 +13,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.unwinnability.VariableState;
 
 class Reachability {
 

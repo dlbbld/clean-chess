@@ -21,11 +21,6 @@ import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
-import com.dlb.chess.unwinnability.AbstractFindHelpmate;
-import com.dlb.chess.unwinnability.FindHelpmateRecursionResult;
-import com.dlb.chess.unwinnability.FindHelpmateResult;
-import com.dlb.chess.unwinnability.ScoreResult;
-import com.dlb.chess.unwinnability.FindHelpmateAnalysis;
 
 //Figure 5 Find-Helpmatec routine, returns true if a checkmate sequence for player c in {w, b},
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
@@ -148,7 +143,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
 
     for (final LegalMove legalMove : legalMoveList) {
-      // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! −2
+      // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! âˆ’2
       ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
 
       if (board.getHavingMove() == color.getOppositeSide()

@@ -1,4 +1,4 @@
-package com.dlb.chess.distance;
+package com.dlb.chess.unwinnability;
 
 import java.util.ArrayDeque;
 import java.util.Arrays;
@@ -7,7 +7,7 @@ import java.util.Queue;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 
-public final class KnightDistance {
+final class KnightDistance {
 
   private static final int BOARD_SIZE = 8;
   private static final int SQUARE_COUNT = BOARD_SIZE * BOARD_SIZE;

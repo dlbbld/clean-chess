@@ -7,11 +7,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.unwinnability.KingDistanceOneFunctions;
-import com.dlb.chess.unwinnability.MobilityFunctions;
-import com.dlb.chess.unwinnability.MobilitySolution;
-import com.dlb.chess.unwinnability.MobilitySolutionVariable;
-import com.dlb.chess.unwinnability.PiecePlacement;
 
 class SemiStaticFunctions {
 

@@ -11,8 +11,6 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.unwinnability.VariableState;
-import com.dlb.chess.unwinnability.PiecePlacement;
 
 class Clearability {
 

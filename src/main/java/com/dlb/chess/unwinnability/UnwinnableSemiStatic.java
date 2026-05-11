@@ -10,9 +10,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
-import com.dlb.chess.unwinnability.KingDistanceOneFunctions;
-import com.dlb.chess.unwinnability.MobilitySolution;
-import com.dlb.chess.unwinnability.PiecePlacement;
 
 //Figure 8 Semi-statically unwinnable algorithm, which may conclude that a position is
 //unwinnable for an intended winner based on an admissible solution to the mobility problem.
@@ -37,11 +34,11 @@ class UnwinnableSemiStatic {
     // 2: for every piece P in pos, define region(P) := {s in S |MP>s = 1} ( -> The squares that
     // can potentially be reached by piece P)
 
-    // 3: let Kc (resp. K¬c) be the intended winner’s king (resp. intended loser’s king)
+    // 3: let Kc (resp. KÂ¬c) be the intended winnerâ€™s king (resp. intended loserâ€™s king)
     final PiecePlacement intendedLoserKing = calculateKing(c.getOppositeSide(), mobilitySolution);
 
-    // 4: set intruders := {P in pos | P.side = c ^ region(P) \ region(K¬c) != the empty set} ( -> The
-    // intended winner’s pieces that can potentially reach the intended loser’s king region)
+    // 4: set intruders := {P in pos | P.side = c ^ region(P) \ region(KÂ¬c) != the empty set} ( -> The
+    // intended winnerâ€™s pieces that can potentially reach the intended loserâ€™s king region)
 
     // 5: if ex P in intruders with P.type != bishop then return false ( -> We require that the set of
     // intruders be empty or formed entirely by bishops for the position to be unwinnable)
@@ -66,14 +63,14 @@ class UnwinnableSemiStatic {
     // squares that can potentially be attacked by piece P)
 
     // 8: for s 2 S, let blockers(s) := {P 2 pos | P.side 6= c ^ region(P) \ (s) 6= ;}a ( -> The
-    // intended loser’s pieces that can potentially reach an adjacent square to s)
+    // intended loserâ€™s pieces that can potentially reach an adjacent square to s)
 
     // 9: for s 2 S, define assistants(s) := {P 2 pos | P.side = c ^ att-region(P) \ (s) 6= ;}
-    // ( -> The intended winner’s pieces that can potentially attack an adjacent square to s)
+    // ( -> The intended winnerâ€™s pieces that can potentially attack an adjacent square to s)
 
-    // 10: if 9s 2 region(K¬c) such that |blockers(s)| + |assistants(s)|  | (s)| and 9P 2 pos
+    // 10: if 9s 2 region(KÂ¬c) such that |blockers(s)| + |assistants(s)|  | (s)| and 9P 2 pos
     // satisfying s 2 att-region(P) ^ P.side = c then return false . There is a square s
-    // that can potentially be reached by K¬c and attacked by the intended winner; and
+    // that can potentially be reached by KÂ¬c and attacked by the intended winner; and
     // there are enough defenders/attackers that can block/cover all adjacent squares to s
 
     for (final Square squareKingEscape : SemiStaticFunctions.region(intendedLoserKing, mobilitySolution)) {

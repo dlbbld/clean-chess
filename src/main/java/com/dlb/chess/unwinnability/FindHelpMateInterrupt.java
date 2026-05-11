@@ -12,9 +12,6 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.unwinnability.AbstractFindHelpmate;
-import com.dlb.chess.unwinnability.FindHelpmateResult;
-import com.dlb.chess.unwinnability.FindHelpMateInterruptResult;
 
 class FindHelpMateInterrupt extends AbstractFindHelpmate {
 

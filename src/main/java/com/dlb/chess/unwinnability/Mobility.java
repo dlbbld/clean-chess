@@ -16,13 +16,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.unwinnability.VariableState;
-import com.dlb.chess.unwinnability.Clearability;
-import com.dlb.chess.unwinnability.MobilitySolution;
-import com.dlb.chess.unwinnability.MobilitySolutionVariable;
-import com.dlb.chess.unwinnability.Reachability;
-import com.dlb.chess.unwinnability.ReachabilityVariable;
-import com.dlb.chess.unwinnability.PiecePlacement;
 
 //Figure 7 Mobility algorithm.
 class Mobility {
@@ -70,7 +63,7 @@ class Mobility {
       }
     }
 
-    // 2: set MP -> P.sq := 1, for all P in pos ( -> Every piece can “move” to its current square)
+    // 2: set MP -> P.sq := 1, for all P in pos ( -> Every piece can â€œmoveâ€ to its current square)
     for (final PiecePlacement piecePlacement : piecePlacementList) {
       mobility.put(piecePlacement, piecePlacement.squareOriginal(), VariableState.ONE);
     }
@@ -81,7 +74,7 @@ class Mobility {
           reachability);
       // 3: for every variable V in X_arrow that is still set to 0 do
 
-      // 4: if for every rule from Figure 6 of the form “V ) f”, formula f evaluates to true
+      // 4: if for every rule from Figure 6 of the form â€œV ) fâ€, formula f evaluates to true
       // on the current state of variables ~X then set V to 1 in X_arrow
 
       // Update clearability

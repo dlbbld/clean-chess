@@ -7,11 +7,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.utility.MaterialUtility;
-import com.dlb.chess.distance.KingDistance;
-import com.dlb.chess.distance.KnightDistance;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.CastlingUtility;
-import com.dlb.chess.unwinnability.Goal;
 
 //Figure 13 Going-to-corner routine used in Figure 12.
 class GoingToCorner implements EnumConstants {
@@ -37,7 +34,7 @@ class GoingToCorner implements EnumConstants {
       fromSquare = m.moveSpecification().fromSquare();
     }
 
-    // 2: if P.type not in {K,N} then return false ( -> We focus on “slow” (non-sliding) pieces
+    // 2: if P.type not in {K,N} then return false ( -> We focus on Ã¢â‚¬Å“slowÃ¢â‚¬Â (non-sliding) pieces
     // that could take several turns to reach the desired square)
     if (movingPiece.getPieceType() != PieceType.KING && movingPiece.getPieceType() != PieceType.KNIGHT) {
       return false;
