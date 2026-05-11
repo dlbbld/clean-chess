@@ -49,7 +49,6 @@ import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.moves.PromotionUtility;
-import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
 import com.dlb.chess.san.SanTerminalMarker;
@@ -384,7 +383,7 @@ public class Board {
     final ImmutableSet<LegalMove> legalMoveSetBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveSetList,
         legalMoveSetList.size() - 2);
 
-    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck, isCheckmate);
+    final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck, isCheckmate);
 
     this.sanList
         .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));

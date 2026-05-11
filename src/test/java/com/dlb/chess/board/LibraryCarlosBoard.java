@@ -29,7 +29,6 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
-import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.SanSymbol;
 import com.dlb.chess.san.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
@@ -276,8 +275,8 @@ public class LibraryCarlosBoard {
       lan.append(promotionPieceSymbol);
     }
 
-    final SanTerminalMarker sanTerminalMarker = AbstractSan.calculateSanTerminalMarker(isCheck(), isCheckmate());
-    AbstractSan.appendSanTerminalMarker(lan, sanTerminalMarker);
+    final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck(), isCheckmate());
+    sanTerminalMarker.append(lan);
 
     return NonNullWrapperCommon.toString(lan);
   }
