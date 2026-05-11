@@ -5,7 +5,6 @@ import java.util.Set;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.squares.PawnDiagonalSquares;
 
 class PawnAttackedSquares extends AbstractAttackedSquares {
 

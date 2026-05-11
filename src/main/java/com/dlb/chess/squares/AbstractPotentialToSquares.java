@@ -9,8 +9,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.enums.SquareOccupation;
-import com.dlb.chess.squares.AbstractToSquares;
-import com.dlb.chess.squares.AbstractRangeSquares;
 
 /**
  * Potentially to defined as all squares the piece can move to, being empty or occupied by an opponent piece, in the

@@ -6,8 +6,6 @@ import java.util.TreeSet;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.range.QueenRange;
-import com.dlb.chess.squares.QueenEmptyBoardSquares;
 
 class QueenRangeSquares extends AbstractRangeSquares {
 

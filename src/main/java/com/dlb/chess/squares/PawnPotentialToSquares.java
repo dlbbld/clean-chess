@@ -7,9 +7,6 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.squares.PawnOneAdvanceEmptyBoardSquares;
-import com.dlb.chess.squares.PawnTwoAdvanceEmptyBoardSquares;
-import com.dlb.chess.squares.PawnDiagonalSquares;
 
 public class PawnPotentialToSquares extends AbstractPotentialToSquares {
 

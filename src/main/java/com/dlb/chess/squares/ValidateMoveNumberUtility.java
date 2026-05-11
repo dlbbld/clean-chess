@@ -4,8 +4,6 @@ import java.util.Set;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.range.DiagonalRange;
-import com.dlb.chess.range.OrthogonalRange;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 

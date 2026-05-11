@@ -1,4 +1,4 @@
-package com.dlb.chess.range;
+package com.dlb.chess.squares;
 
 import com.dlb.chess.board.enums.Square;
 import com.google.common.collect.ImmutableList;

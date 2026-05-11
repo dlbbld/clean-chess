@@ -17,11 +17,11 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.range.DiagonalRange;
-import com.dlb.chess.range.OrthogonalRange;
-import com.dlb.chess.range.BishopRange;
-import com.dlb.chess.range.QueenRange;
-import com.dlb.chess.range.RookRange;
+import com.dlb.chess.squares.DiagonalRange;
+import com.dlb.chess.squares.OrthogonalRange;
+import com.dlb.chess.squares.BishopRange;
+import com.dlb.chess.squares.QueenRange;
+import com.dlb.chess.squares.RookRange;
 import com.google.common.collect.ImmutableList;
 
 public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {

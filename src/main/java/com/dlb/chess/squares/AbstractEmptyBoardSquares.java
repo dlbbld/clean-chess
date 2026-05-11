@@ -8,8 +8,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.range.DiagonalRange;
-import com.dlb.chess.range.OrthogonalRange;
 
 public abstract class AbstractEmptyBoardSquares {
 

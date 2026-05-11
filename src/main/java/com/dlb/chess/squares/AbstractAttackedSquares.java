@@ -7,7 +7,6 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.squares.AbstractToSquares;
 
 /**
  * Potentially to defined as all squares the piece can move to, being empty or occupied by an opponent piece, in the
