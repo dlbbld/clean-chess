@@ -954,10 +954,10 @@ public class Board {
     final String fen = getFen();
     final var isCapture = isCapture();
     final var countRepetition = getRepetitionCount();
-    final List<DynamicPosition> dynamicPositionList = getDynamicPositionList();
+    final List<DynamicPosition> currentDynamicPositionList = getDynamicPositionList();
     final DynamicPosition dynamicPosition = getDynamicPosition();
     final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition, EnPassantCaptureRuleThreefold.DO_IGNORE);
+        getPerformedLegalMoveList(), currentDynamicPositionList, dynamicPosition, EnPassantCaptureRuleThreefold.DO_IGNORE);
     final Piece movingPiece = getMovingPiece();
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
         countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);

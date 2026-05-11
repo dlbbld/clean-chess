@@ -21,6 +21,10 @@ abstract class UnwinnabilityMaterial implements EnumConstants {
     return hasAnySide(PieceType.ROOK, staticPosition);
   }
 
+  static boolean calculateHasRook(Side side, StaticPosition staticPosition) {
+    return hasPieceType(side, PieceType.ROOK, staticPosition);
+  }
+
   static boolean calculateHasKnight(StaticPosition staticPosition) {
     return hasAnySide(PieceType.KNIGHT, staticPosition);
   }
@@ -35,10 +39,6 @@ abstract class UnwinnabilityMaterial implements EnumConstants {
 
   static boolean calculateHasQueen(Side side, StaticPosition staticPosition) {
     return hasPieceType(side, PieceType.QUEEN, staticPosition);
-  }
-
-  static boolean calculateHasRook(Side side, StaticPosition staticPosition) {
-    return hasPieceType(side, PieceType.ROOK, staticPosition);
   }
 
   // --- absence checks ---

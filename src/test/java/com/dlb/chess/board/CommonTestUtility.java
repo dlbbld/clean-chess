@@ -10,10 +10,6 @@ public abstract class CommonTestUtility implements EnumConstants {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, true);
   }
 
-  public static void checkBoardsAgainstEachOtherExcludeHistory(Board boardFirst, LibraryCarlosBoard boardSecond) {
-    checkBoardsAgainstEachOther(boardFirst, boardSecond, false);
-  }
-
   public static void checkBoardsAgainstEachOtherAll(Board boardFirst, Board boardSecond) {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, true);
   }
@@ -61,13 +57,6 @@ public abstract class CommonTestUtility implements EnumConstants {
       assertEquals(boardFirst.canClaimThreefoldRepetitionRule(), boardSecond.canClaimThreefoldRepetitionRule());
       assertEquals(boardFirst.isFivefoldRepetition(), boardSecond.isFivefoldRepetition());
     }
-
-    // in super
-    // assertEquals(boardFirst.calculateInsufficientMaterial(), boardSecond.calculateInsufficientMaterial());
-    // in super
-    // assertEquals(boardFirst.isDeadPosition(), boardSecond.isDeadPosition());
-    // in super
-    // assertEquals(boardFirst.isGameEnd(), boardSecond.isGameEnd());
 
     assertEquals(boardFirst.getFen(), boardSecond.getFen());
 

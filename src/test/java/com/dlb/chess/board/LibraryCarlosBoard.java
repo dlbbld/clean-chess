@@ -8,9 +8,7 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
-import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
@@ -199,6 +197,7 @@ public class LibraryCarlosBoard {
     return NonNullWrapperLibraryCarlos.getFen(this.board);
   }
 
+  @SuppressWarnings("static-method")
   public Fen getInitialFen() {
     // always using initial position, starting from FEN is not supported
     return FenConstants.FEN_INITIAL;
@@ -299,6 +298,7 @@ public class LibraryCarlosBoard {
     return moveBackup.getCapturedPiece() != com.github.bhlangonijr.chesslib.Piece.NONE;
   }
 
+  @SuppressWarnings("static-method")
   public int getInitialFenFullMoveNumber() {
     // currently playing from FEN not supported
     return 1;
@@ -340,7 +340,7 @@ public class LibraryCarlosBoard {
     return LibraryCarlosImplementationUtility.calculateIsEnPassantCapturePossible(this.board);
   }
 
-  public @NonNull CastlingRight getCastlingRightWhite() {
+  public CastlingRight getCastlingRightWhite() {
     @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
         .getCastleRight();
     @SuppressWarnings("null") final CastleRight castlingRightWhite = castlingRightMap
@@ -348,7 +348,7 @@ public class LibraryCarlosBoard {
     return mapCastlingRight(castlingRightWhite);
   }
 
-  public @NonNull CastlingRight getCastlingRightBlack() {
+  public CastlingRight getCastlingRightBlack() {
     @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
         .getCastleRight();
     @SuppressWarnings("null") final CastleRight castlingRightBlack = castlingRightMap
@@ -553,10 +553,6 @@ public class LibraryCarlosBoard {
     return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
   }
 
-  public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingMove) {
-    throw new UnsupportedOperationException("Castling right loss tracking is not supported in Carlos's API");
-  }
-
   // ===== Methods previously inherited as `default` from the (now-removed) ChessBoard interface =====
   // Only the ones still cross-validated in CommonTestUtility are kept.
 
@@ -592,10 +588,11 @@ public class LibraryCarlosBoard {
     final String fen = getFen();
     final var isCapture = isCapture();
     final var countRepetition = getRepetitionCount();
-    final List<DynamicPosition> dynamicPositionList = getDynamicPositionList();
+    final List<DynamicPosition> currentDynamicPositionList = getDynamicPositionList();
     final DynamicPosition dynamicPosition = getDynamicPosition();
     final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition, EnPassantCaptureRuleThreefold.DO_IGNORE);
+        getPerformedLegalMoveList(), currentDynamicPositionList, dynamicPosition,
+        EnPassantCaptureRuleThreefold.DO_IGNORE);
     final Piece movingPiece = getMovingPiece();
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
         countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);

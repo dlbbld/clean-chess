@@ -26,6 +26,16 @@ public class PgnWriter {
     writeLinesReplacing(filePath, fileLines);
   }
 
+  public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName) {
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board, tagList);
+    writePgnFile(pgnFile, folderPath, pgnFileName);
+  }
+
+  public static void writePgnFile(Board board, Path folderPath, String pgnFileName) {
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    writePgnFile(pgnFile, folderPath, pgnFileName);
+  }
+
   private static void writeLinesReplacing(Path filePath, List<String> lineList) {
     try {
       Files.deleteIfExists(filePath);
@@ -40,16 +50,6 @@ public class PgnWriter {
     } catch (final IOException ioe) {
       throw new FileSystemAccessException("Writing file \"" + filePath + "\" failed.", ioe);
     }
-  }
-
-  public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName) {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board, tagList);
-    writePgnFile(pgnFile, folderPath, pgnFileName);
-  }
-
-  public static void writePgnFile(Board board, Path folderPath, String pgnFileName) {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-    writePgnFile(pgnFile, folderPath, pgnFileName);
   }
 
 }
