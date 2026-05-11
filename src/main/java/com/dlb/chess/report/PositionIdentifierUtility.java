@@ -1,4 +1,4 @@
-package com.dlb.chess.common.utility;
+package com.dlb.chess.report;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 
-public abstract class PositionIdentifierUtility {
+abstract class PositionIdentifierUtility {
 
   private static final int BASE = 26;
   private static final int ASCII_TABLE_BEFORE_UPPER_CASE_A_NUMBER = 64;

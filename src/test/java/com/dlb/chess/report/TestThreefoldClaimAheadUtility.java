@@ -1,4 +1,4 @@
-package com.dlb.chess.test.common.utility;
+package com.dlb.chess.report;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
+import com.dlb.chess.report.ThreefoldClaimAheadUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.LenientPgnParser;

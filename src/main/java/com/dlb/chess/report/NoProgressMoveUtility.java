@@ -1,4 +1,4 @@
-package com.dlb.chess.common.utility;
+package com.dlb.chess.report;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,7 @@ import java.util.List;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
+import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.board.Board;
@@ -14,7 +15,7 @@ import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.NoProgressHalfMove;
 import com.dlb.chess.report.NoProgressIndex;
 
-public abstract class NoProgressMoveUtility {
+abstract class NoProgressMoveUtility {
 
   public static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(Board board,
       int numberOfHalfMovesThreshold) {

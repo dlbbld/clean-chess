@@ -1,4 +1,4 @@
-package com.dlb.chess.test.common.utility;
+package com.dlb.chess.report;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.utility.PositionIdentifierUtility;
+import com.dlb.chess.report.PositionIdentifierUtility;
 
 class TestPositionIdentifierUtility {
 

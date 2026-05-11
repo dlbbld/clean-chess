@@ -16,9 +16,9 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.common.utility.NoProgressMoveUtility;
+import com.dlb.chess.report.NoProgressMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
+import com.dlb.chess.report.ThreefoldClaimAheadUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
@@ -29,15 +29,15 @@ import com.dlb.chess.report.RepetitionPrint;
 import com.dlb.chess.report.ThreefoldClaimAheadPrint;
 
 /**
- * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities),
- * no-progress (50/75-move-rule) sequences, and a printable summary — from a {@link Board} or a parsed PGN.
+ * Generates game-level reports â€” threefold-repetition listings (including missed-claim-ahead opportunities),
+ * no-progress (50/75-move-rule) sequences, and a printable summary â€” from a {@link Board} or a parsed PGN.
  *
  * <p>
  * Two surfaces:
  *
  * <ul>
  * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record carrying all the
- * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
+ * analytical data â€” repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
  * inspection.</li>
  * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
  * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README examples.</li>
@@ -49,7 +49,7 @@ import com.dlb.chess.report.ThreefoldClaimAheadPrint;
  * claim opportunities other libraries don't.
  *
  * <p>
- * Final class with a private constructor — all entry points are static.
+ * Final class with a private constructor â€” all entry points are static.
  */
 public final class Reporter {
 
@@ -76,7 +76,7 @@ public final class Reporter {
 
   /**
    * Returns the same human-readable report as {@link #printReport(String)} but as a single string, lines joined by
-   * {@code "\n"}. Use this when the consumer is not stdout — web responses, file writes, GUI displays, etc.
+   * {@code "\n"}. Use this when the consumer is not stdout â€” web responses, file writes, GUI displays, etc.
    */
   public static String calculateReportText(String pgnString) {
     final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
@@ -200,7 +200,7 @@ public final class Reporter {
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Private helpers — calculate*
+  // Private helpers â€” calculate*
   // ---------------------------------------------------------------------------------------------
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {
@@ -292,7 +292,7 @@ public final class Reporter {
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Private helpers — output formatting
+  // Private helpers â€” output formatting
   // ---------------------------------------------------------------------------------------------
 
   private static void addFirstMainSection(List<String> output, String key) {
