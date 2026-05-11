@@ -73,7 +73,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     return resultSet;
   }
 
-  public static ImmutableSet<LegalMove> calculateLegalMoveSet(StaticPosition staticPosition, Side havingMove,
+  static ImmutableSet<LegalMove> calculateLegalMoveSet(StaticPosition staticPosition, Side havingMove,
       Square fromSquare, Set<Square> toSquareSet) {
     return calculateLegalMoveCalculation(staticPosition, havingMove, fromSquare, toSquareSet).legalMoveSet();
   }

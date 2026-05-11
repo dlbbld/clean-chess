@@ -38,7 +38,7 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
     UCI_MOVE_TEXT_LOOKUP = NonNullWrapperCommon.copyOfMap(uciMoveTextLookup);
   }
 
-  public static boolean exists(String text) {
+  static boolean exists(String text) {
     return UCI_MOVE_TEXT_LOOKUP.containsKey(text);
   }
 

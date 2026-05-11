@@ -29,19 +29,19 @@ public abstract class TagUtility {
     return existsTagName(tagList, StandardTag.EVENT);
   }
 
-  public static String readEvent(List<Tag> tagList) {
+  static String readEvent(List<Tag> tagList) {
     return readTagValue(tagList, StandardTag.EVENT);
   }
 
-  public static boolean hasSite(List<Tag> tagList) {
+  static boolean hasSite(List<Tag> tagList) {
     return existsTagName(tagList, StandardTag.SITE);
   }
 
-  public static String readSite(List<Tag> tagList) {
+  static String readSite(List<Tag> tagList) {
     return readTagValue(tagList, StandardTag.SITE);
   }
 
-  public static boolean hasDate(List<Tag> tagList) {
+  static boolean hasDate(List<Tag> tagList) {
     return existsTagName(tagList, StandardTag.DATE);
   }
 
@@ -49,27 +49,27 @@ public abstract class TagUtility {
     return readTagValue(tagList, StandardTag.DATE);
   }
 
-  public static boolean hasRound(List<Tag> tagList) {
+  static boolean hasRound(List<Tag> tagList) {
     return existsTagName(tagList, StandardTag.ROUND);
   }
 
-  public static String readRound(List<Tag> tagList) {
+  static String readRound(List<Tag> tagList) {
     return readTagValue(tagList, StandardTag.ROUND);
   }
 
-  public static boolean hasWhite(List<Tag> tagList) {
+  static boolean hasWhite(List<Tag> tagList) {
     return existsTagName(tagList, StandardTag.WHITE);
   }
 
-  public static String readWhite(List<Tag> tagList) {
+  static String readWhite(List<Tag> tagList) {
     return readTagValue(tagList, StandardTag.WHITE);
   }
 
-  public static boolean hasBlack(List<Tag> tagList) {
+  static boolean hasBlack(List<Tag> tagList) {
     return existsTagName(tagList, StandardTag.BLACK);
   }
 
-  public static String readBlack(List<Tag> tagList) {
+  static String readBlack(List<Tag> tagList) {
     return readTagValue(tagList, StandardTag.BLACK);
   }
 
@@ -105,7 +105,7 @@ public abstract class TagUtility {
     return readResultTagValue(pgnFile.tagList());
   }
 
-  public static Tag calculateTag(String tagLine) {
+  static Tag calculateTag(String tagLine) {
     final var pattern = Pattern.compile(TAG_PATTERN);
     final var matcher = pattern.matcher(tagLine);
     // check all occurance
@@ -121,7 +121,7 @@ public abstract class TagUtility {
     return readTagValue(tagList, tag.getName());
   }
 
-  public static String readTagValue(List<Tag> tagList, String tagName) {
+  static String readTagValue(List<Tag> tagList, String tagName) {
     if (!existsTagName(tagList, tagName)) {
       throw new IllegalArgumentException(
           "The method can only be used if a tag with the tagName exists, check first with the provided method.");
