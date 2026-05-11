@@ -21,7 +21,7 @@ import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 public class GenerateChaTestCases implements EnumConstants {
 
@@ -43,7 +43,7 @@ public class GenerateChaTestCases implements EnumConstants {
     try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
         PrintWriter pw = new PrintWriter(w)) {
 
-      for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+      for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
         final Path folderPath = testCaseList.pgnTest().getFolderPath();
         logger.info("Processing folder " + folderPath);
 

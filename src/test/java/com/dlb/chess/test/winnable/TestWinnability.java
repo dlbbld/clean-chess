@@ -13,7 +13,7 @@ import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
@@ -46,7 +46,7 @@ class TestWinnability {
   void testPgnFileValue() {
     final var pgnFileName = "pawn_wall_norgaard_example_2.pgn";
 
-    final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
+    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
     final Board board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
@@ -59,7 +59,7 @@ class TestWinnability {
   // TODO not workin
   // @Test
   void testFolder() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_AMBRONA);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Board board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());

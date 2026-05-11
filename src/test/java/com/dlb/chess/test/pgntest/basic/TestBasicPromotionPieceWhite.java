@@ -13,7 +13,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicPromotionPieceWhite extends AbstractTestBasic {
@@ -38,7 +38,7 @@ class TestBasicPromotionPieceWhite extends AbstractTestBasic {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.BASIC_PROMOTION_PIECE_WHITE);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_PROMOTION_PIECE_WHITE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
           testCase.pgnFileName());

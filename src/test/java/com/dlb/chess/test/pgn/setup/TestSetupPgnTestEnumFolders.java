@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgntest;
+package com.dlb.chess.test.pgn.setup;
 
 import static org.junit.jupiter.api.Assertions.fail;
 

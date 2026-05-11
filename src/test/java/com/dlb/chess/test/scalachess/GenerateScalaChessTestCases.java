@@ -29,7 +29,7 @@ import com.dlb.chess.report.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateScalaChessTestCases implements EnumConstants {
@@ -37,7 +37,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   // if true test for folder is ignored
   private static final boolean IS_GENERATE_FOR_PGN_FILE_NAME = true;
   private static final String GENERATE_PGN_FILE_NAME = "insufficient_material_KBbBb_K.pgn";
-  private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = PgnExpectedValue.findPgnTest(GENERATE_PGN_FILE_NAME);
+  private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = CreatePgnTestCases.findPgnTest(GENERATE_PGN_FILE_NAME);
 
   // is ignored if test for file is true
   private static final boolean IS_GENERATE_ONLY_FOR_TEST_CASE = true;
@@ -82,7 +82,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         codeLineList);
     processScalaChessCodeLine("", counterList, codeLineList);
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
 
       if (isContinueFolderLevel(IS_GENERATE_FOR_PGN_FILE_NAME, IS_GENERATE_ONLY_FOR_TEST_CASE, testCaseList)) {
         continue;

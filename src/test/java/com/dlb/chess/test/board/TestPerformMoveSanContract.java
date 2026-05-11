@@ -14,7 +14,7 @@ import com.dlb.chess.san.StrictSanParser;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 /**
  * Verifies the SAN ↔ MoveSpecification consistency that {@link com.dlb.chess.board.Board#performMove(String)
@@ -56,7 +56,7 @@ class TestPerformMoveSanContract {
   @SuppressWarnings("static-method")
   @Test
   void testPlayedMoveSanMoveSpecRoundtrip() {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         logger.info(testCase.pgnFileName());
         verifyProvidedSanToCalculatedSan(testCaseList, testCase);
@@ -67,7 +67,7 @@ class TestPerformMoveSanContract {
   @SuppressWarnings("static-method")
   @Test
   void testAllLegalMovesSanMoveSpecRoundtrip() {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         logger.info(testCase.pgnFileName());
         verifyCalculatedSanToCalculatedMoveSpecification(testCaseList, testCase);

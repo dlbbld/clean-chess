@@ -7,7 +7,7 @@ import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateLibraryCarlosInsufficientMaterialTestCases {
@@ -18,7 +18,7 @@ public class GenerateLibraryCarlosInsufficientMaterialTestCases {
 
   private static void generateTestCase() throws Exception {
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH,
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH,
         PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK,
         PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {

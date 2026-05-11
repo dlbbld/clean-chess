@@ -12,7 +12,7 @@ import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
 import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
@@ -67,7 +67,7 @@ public abstract class AbstractCheckAgainstCha {
   static void createFenList() throws Exception {
 
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         System.out.println(testCase.fen() + ";noLichessGameId");
       }

@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgntest;
+package com.dlb.chess.test.pgn.setup;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -21,9 +21,9 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.UnwinnableFull;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
 
-public class PgnExpectedValue {
+public class CreatePgnTestCases {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(PgnExpectedValue.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(CreatePgnTestCases.class);
 
   private static PgnFileTestCaseList calculateTestCaseList(PgnTest pgnTest) {
 

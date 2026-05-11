@@ -16,7 +16,7 @@ import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
@@ -53,7 +53,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
     var totalFixtures = 0;
 
     for (final PgnTest bucket : BUCKETS) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(bucket);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(bucket);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         totalFixtures++;
         final String pgnFileName = testCase.pgnFileName();

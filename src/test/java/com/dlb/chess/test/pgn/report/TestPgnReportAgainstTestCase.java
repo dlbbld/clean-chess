@@ -7,8 +7,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgnall.AbstractPgnTest;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 /**
  * Analyzes PGN test cases and validates expected values. Default scope (when
@@ -19,7 +18,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  * To widen scope locally, flip {@link RestrictTestConstants#IS_RESTRICT_PGN_REPORT_TEST} to {@code false} (or the
  * master gate {@code IS_RESTRICT_PGN}) and the full restricted corpus runs.
  */
-class TestPgnReportAgainstTestCase extends AbstractPgnTest {
+class TestPgnReportAgainstTestCase extends AbstractPgnReportTest {
 
   private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnReportAgainstTestCase.class);
 
@@ -29,7 +28,7 @@ class TestPgnReportAgainstTestCase extends AbstractPgnTest {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_REPORT_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
         continue;
       }

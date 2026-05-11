@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgnall;
+package com.dlb.chess.test.pgn.report;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -8,13 +8,13 @@ import com.dlb.chess.report.Report;
 import com.dlb.chess.test.librarycomparison.utility.RepetitionTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 
-public abstract class AbstractPgnTest {
+public abstract class AbstractPgnReportTest {
 
   public static void testReportAgainstTestCase(String pgnFileName, Report report) throws Exception {
-    final PgnFileTestCase testCase = PgnExpectedValue.findTestCase(pgnFileName);
+    final PgnFileTestCase testCase = CreatePgnTestCases.findTestCase(pgnFileName);
     testReportAgainstTestCase(testCase, report);
   }
 

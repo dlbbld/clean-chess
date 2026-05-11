@@ -96,7 +96,7 @@ import com.google.common.collect.ImmutableSet;
  * <p>
  * Beyond move execution, {@code Board} exposes the standard rule-level predicates: {@link #isCheckmate()},
  * {@link #isStalemate()}, {@link #isThreefoldRepetition()}, {@link #isFiftyMove()}, {@link #isFivefoldRepetition()},
- * {@link #isSeventyFiveMove()}, plus the unwinnability/dead-position pair from {@link ChessBoard}
+ * {@link #isSeventyFiveMove()}, plus the unwinnability/dead-position pair
  * ({@code isUnwinnableQuick}, {@code isUnwinnableFull}, {@code isDeadPositionQuick}, {@code isDeadPositionFull} — the
  * library's flagship CHA feature; see {@link com.dlb.chess.unwinnability}). Position-state accessors return Guava
  * {@code ImmutableList}/{@code ImmutableSet}; mutation is exclusively via {@code move}/{@code unmove}.

@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgnall;
+package com.dlb.chess.test.pgn.setup;
 
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -14,7 +14,6 @@ import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
@@ -30,9 +29,9 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * is gated behind {@link RestrictTestConstants#IS_EXCLUDE_LONG_RUNNING_PGN_CORPUS_NOT_PLAYS_BEYOND_AUDIT} and skipped
  * via {@code assumeFalse} during routine runs. Flip the flag to {@code false} locally to run.
  */
-class TestPgnCorpusNotPlaysBeyondAudit {
+class TestSetupPgnCorpusNotPlaysBeyondAudit {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnCorpusNotPlaysBeyondAudit.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestSetupPgnCorpusNotPlaysBeyondAudit.class);
 
   @SuppressWarnings("static-method")
   @Test
@@ -44,7 +43,7 @@ class TestPgnCorpusNotPlaysBeyondAudit {
     var totalFiles = 0;
 
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         totalFiles++;
         final String pgnFileName = testCase.pgnFileName();

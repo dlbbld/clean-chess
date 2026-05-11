@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.test.pgnall;
+package com.dlb.chess.test.pgn.setup;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

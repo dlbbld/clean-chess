@@ -13,7 +13,7 @@ import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 /**
  * Verifies the {@link com.dlb.chess.board.Board#unperformMove} contract: after performing a move and immediately
@@ -60,7 +60,7 @@ class TestBoardUnperformMove {
     var pgnsExercised = 0;
     var halfMovesExercised = 0;
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         logger.info(testCase.pgnFileName());
         halfMovesExercised += runUnperformContractTest(testCaseList, testCase);

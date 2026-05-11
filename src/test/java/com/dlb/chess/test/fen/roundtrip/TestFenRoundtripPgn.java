@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgnall;
+package com.dlb.chess.test.fen.roundtrip;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -12,21 +12,20 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.custom.AbstractTestFenParser;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
-class TestFenParserAll extends AbstractTestFenParser {
+class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFenParserAll.class);
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFenRoundtripPgn.class);
 
   @SuppressWarnings("static-method")
   @Test
   void testPgnFiles() throws Exception {
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_FEN_PARSER_ALL_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_CHECK_WHITE:
@@ -41,12 +40,12 @@ class TestFenParserAll extends AbstractTestFenParser {
         }
       }
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        checkFromFen(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        checkFenRoundtrip(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       }
     }
   }
 
-  private static void checkFromFen(Path folderPath, String pgnFileName) throws Exception {
+  private static void checkFenRoundtrip(Path folderPath, String pgnFileName) throws Exception {
 
     logger.info(pgnFileName);
 
@@ -57,7 +56,7 @@ class TestFenParserAll extends AbstractTestFenParser {
       board.moveStrict(halfMove.san());
     }
     final List<MoveSpecification> moveList = board.getPerformedMoveSpecificationList();
-    checkGames(pgnFile.startFen().fen(), moveList, false);
+    checFenRoundtrip(pgnFile.startFen().fen(), moveList);
   }
 
 }

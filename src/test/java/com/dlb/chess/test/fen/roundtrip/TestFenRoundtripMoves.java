@@ -1,18 +1,17 @@
-package com.dlb.chess.test.fen;
+package com.dlb.chess.test.fen.roundtrip;
 
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.CommonTestUtility;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.test.custom.AbstractTestFenParser;
-import com.dlb.chess.board.CommonTestUtility;
 
-class TestFenParserUsingBoard extends AbstractTestFenParser {
+class TestFenRoundtripMoves extends AbstractTestFenRoundtrip {
 
   @SuppressWarnings("static-method")
   @Test
@@ -26,7 +25,7 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
 
   @SuppressWarnings("static-method")
   @Test
-  void testAlongMovesExcludingHistory() {
+  void testFenRoundtripGame1() {
     final Board boardMakeMoves = new Board();
 
     boardMakeMoves.movesStrict("d4", "d5", "Nc3", "Nf6", "Bf4", "a6", "e3", "b5", "Bd3", "e6", "Nf3", "c5", "O-O",
@@ -49,19 +48,19 @@ class TestFenParserUsingBoard extends AbstractTestFenParser {
 
     final List<MoveSpecification> moveList = boardMakeMoves.getPerformedMoveSpecificationList();
 
-    checkGames(FenConstants.FEN_INITIAL_STR, moveList, false);
+    checFenRoundtrip(FenConstants.FEN_INITIAL_STR, moveList);
   }
 
   @SuppressWarnings("static-method")
   @Test
-  void testAlongMovesIncludingHistory() {
+  void testFenRoundtripGame2() {
     final Board boardMakeMoves = new Board();
     boardMakeMoves.movesStrict("e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "c3", "d6", "d4", "exd4", "cxd4", "Bxd4", "Nxd4",
         "Nxd4", "O-O", "Nf6", "Re1", "Nxe4", "Nc3", "O-O");
 
     final List<MoveSpecification> moveList = boardMakeMoves.getPerformedMoveSpecificationList();
 
-    checkGames(FenConstants.FEN_INITIAL_STR, moveList, true);
+    checFenRoundtrip(FenConstants.FEN_INITIAL_STR, moveList);
   }
 
 }

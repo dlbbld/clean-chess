@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.test.librarycomparison.allpgn;
+package com.dlb.chess.test.librarycomparison;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

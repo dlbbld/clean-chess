@@ -1,4 +1,4 @@
-package com.dlb.chess.test.pgntest;
+package com.dlb.chess.test.pgn.setup;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -17,7 +17,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
  * Setup invariant: every PGN file under {@code src/test/resources/pgn} has a corresponding test case registered in
- * {@link PgnExpectedValue}, and every registered test case has a matching PGN file on disk. The two sets must agree
+ * {@link CreatePgnTestCases}, and every registered test case has a matching PGN file on disk. The two sets must agree
  * exactly.
  *
  * <p>
@@ -81,7 +81,7 @@ class TestSetupPgnFileRegistration {
   private static Set<String> collectRegisteredPgnFileNames() {
     final Set<String> names = new TreeSet<>();
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         names.add(testCase.pgnFileName());
       }

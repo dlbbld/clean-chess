@@ -30,7 +30,7 @@ import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateAmbronaHelpMateTestCases {
@@ -53,7 +53,7 @@ public class GenerateAmbronaHelpMateTestCases {
     final Map<String, String> havingHelpMate = new TreeMap<>();
     populateHelpMateUci(havingHelpMate);
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
       final var report = Reporter.calculateReport(folderPath, testCase.pgnFileName());

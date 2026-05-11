@@ -1,4 +1,4 @@
-package com.dlb.chess.test.librarycomparison.allpgn;
+package com.dlb.chess.test.librarycomparison;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -19,7 +19,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgn.parser.model.PgnSan;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestLenientPgnParserAgainstEachOther {
 
@@ -31,7 +31,7 @@ class TestLenientPgnParserAgainstEachOther {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (RestrictTestConstants.IS_RESTRICT_PGN_LENIENT_PARSER_API_AGAINST_EACH_OTHER_TEST) {
           switch (testCaseList.pgnTest()) {

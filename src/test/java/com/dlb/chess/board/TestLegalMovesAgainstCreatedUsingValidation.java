@@ -31,7 +31,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
@@ -43,7 +43,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
   void test() {
     // the move generation from validation for testing is about ten times slower than the used on
     // so we only perform a spot checks on the PGN^s
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_CHECK_WHITE:

@@ -15,7 +15,7 @@ import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestPgnExportIdempotency {
 
@@ -27,8 +27,8 @@ class TestPgnExportIdempotency {
     // true (default) → curated export-roundtrip smoke subset (~20 files).
     // false → full ALL_EXCEPT_LONGEST_POSSIBLE corpus for a pre-release / regression sweep.
     final var source = RestrictTestConstants.IS_RESTRICT_PGN_EXPORT_IDEMPOTENCY_TEST
-        ? PgnExpectedValue.getExportRoundtripSmokeList()
-        : PgnExpectedValue.getRestrictedTestListList();
+        ? CreatePgnTestCases.getExportRoundtripSmokeList()
+        : CreatePgnTestCases.getRestrictedTestListList();
     for (final PgnFileTestCaseList testCaseList : source) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();

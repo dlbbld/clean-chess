@@ -21,7 +21,7 @@ import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public abstract class AbstractTestBasic implements EnumConstants {
@@ -33,7 +33,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
   // 2b) for each file in the test folder there is an entry in the JUnit hardcoded file list
   protected static void checkTestFolder(List<String> junitHardcodedPgnFileNameList, PgnTest pgnTest) {
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
     final List<String> expectedValueHardcodedFileList = calculatePgnFileNameList(testCaseList.list());
 
     // 1a)
