@@ -14,16 +14,21 @@ import com.dlb.chess.test.ConfigurationTestConstants;
 
 /**
  * Convention test: every Java file under {@code src/test/java} must declare a package starting with
- * {@code com.dlb.chess.test}.
+ * {@code com.dlb.chess}.
  *
  * <p>
- * Rationale: a class in {@code src/test/java} is test-scope code by Maven contract. Forcing the package name to start
- * with {@code com.dlb.chess.test} makes that scope visible at every import site, so a future reader cannot mistake test
- * infrastructure for production code by name alone. The single-prefix invariant also keeps the source tree easy to
- * navigate.
+ * Two flavours of test live under this prefix:
+ * <ul>
+ * <li><b>Black-box / integration tests</b> under {@code com.dlb.chess.test.*}: exercise production code through its
+ * public API. The majority of the suite lives here.</li>
+ * <li><b>Same-package white-box tests</b> under {@code com.dlb.chess.<production-package>}: exercise package-private
+ * production code that does not belong on the public API surface. Use sparingly — only when an internal class genuinely
+ * needs test coverage that can't be achieved through the public surface.</li>
+ * </ul>
  *
  * <p>
- * The test class itself satisfies the invariant — it lives in {@code com.dlb.chess.test.convention}.
+ * The test-scope marker (this file is {@code src/test/java}) keeps the source-tree separation; the {@code com.dlb.chess}
+ * prefix keeps the package tree single-rooted and prevents stray test files in unrelated namespaces.
  *
  * <p>
  * The package name is derived from the file's path under {@code src/test/java}; Java requires the {@code package}
@@ -34,7 +39,7 @@ class TestConventionTestPackageNaming {
   private static final Path TEST_JAVA_ROOT = NonNullWrapperCommon
       .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
 
-  private static final String REQUIRED_PACKAGE_PREFIX = "com.dlb.chess.test";
+  private static final String REQUIRED_PACKAGE_PREFIX = "com.dlb.chess";
 
   @SuppressWarnings("static-method")
   @Test
