@@ -207,10 +207,10 @@ public enum Square implements Comparable<Square> {
     };
   }
 
-  public static final ImmutableList<Square> WHITE_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST = constructListSquare(A6,
+  static final ImmutableList<Square> WHITE_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST = constructListSquare(A6,
       B6, C6, D6, E6, F6, G6, H6);
 
-  public static final ImmutableList<Square> BLACK_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST = constructListSquare(A3,
+  static final ImmutableList<Square> BLACK_MOVE_EN_PASSANT_CAPTURE_TARGET_SQUARE_LIST = constructListSquare(A3,
       B3, C3, D3, E3, F3, G3, H3);
 
   private static final ImmutableMap<Square, Square> WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER;
