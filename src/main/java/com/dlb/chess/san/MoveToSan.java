@@ -12,11 +12,8 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.san.enums.SanSourceSpecification;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.PromotionUtility;
 
 public class MoveToSan extends AbstractSan {
 
@@ -75,7 +72,7 @@ public class MoveToSan extends AbstractSan {
       default -> throw new IllegalArgumentException();
     }
 
-    appendSanTerminalMarker(buildSan, sanTerminalMarker);
+    sanTerminalMarker.append(buildSan);
     return NonNullWrapperCommon.toString(buildSan);
   }
 
@@ -161,13 +158,13 @@ public class MoveToSan extends AbstractSan {
       default:
         throw new IllegalArgumentException();
     }
-    appendSanTerminalMarker(buildSan, sanTerminalMarker);
+    sanTerminalMarker.append(buildSan);
     return NonNullWrapperCommon.toString(buildSan);
   }
 
   // semantics for moving piece: for castling the moving piece is none! so the castling is not returned here when
   // searching for the king as moving piece!!!
-  public static Set<LegalMove> calculateLegalMoveSetForMovingPiece(Piece movingPiece, Set<LegalMove> legalMoveSet) {
+  static Set<LegalMove> calculateLegalMoveSetForMovingPiece(Piece movingPiece, Set<LegalMove> legalMoveSet) {
     final Set<LegalMove> legalMoveSetForMovingPiece = new TreeSet<>();
     for (final LegalMove legalMove : legalMoveSet) {
       if (legalMove.movingPiece() == movingPiece) {

@@ -11,17 +11,16 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 class TestUnwinnabilityQuick {
 
@@ -73,9 +72,9 @@ class TestUnwinnabilityQuick {
   void testPgnFileValue() {
     final var pgnFileName = "special_unwinnable_fivefold_inevitable.pgn";
 
-    final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
+    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    final Board board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
     assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
@@ -87,8 +86,8 @@ class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileExpected() {
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase("25_black_capture_king_pawn.pgn");
-    final ChessBoard board = new Board(pgnFileTestCase.fen());
+    final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase("25_black_capture_king_pawn.pgn");
+    final Board board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
     final UnwinnableQuick unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
@@ -104,9 +103,9 @@ class TestUnwinnabilityQuick {
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_AMBRONA);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
       {

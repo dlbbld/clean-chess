@@ -1,8 +1,5 @@
 package com.dlb.chess.board;
 
-import java.util.Set;
-import java.util.TreeSet;
-
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.CastlingRight;
@@ -15,7 +12,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.enums.CastlingCheck;
@@ -23,12 +19,11 @@ import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
-import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 
-public class ValidateNewMove implements EnumConstants {
+class ValidateNewMove implements EnumConstants {
 
-  public static MoveCheck validateNewMove(ChessBoard board, MoveSpecification moveSpecification)
+  public static MoveCheck validateNewMove(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
 
     validateGameNotEnded(board);
@@ -55,25 +50,24 @@ public class ValidateNewMove implements EnumConstants {
   }
 
   /**
-   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic
-   * termination has been reached the game has ended permanently — no further moves are accepted.
+   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic termination has been
+   * reached the game has ended permanently — no further moves are accepted.
    *
-   * <p>The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE
-   * 5.2.2 dead position), fivefold repetition, and the 75-move rule. Single-side
-   * insufficient-material diagnostics, the claimable draws (3-fold repetition, 50-move rule),
-   * and ongoing positions are deliberately NOT rejected here.
+   * <p>
+   * The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE 5.2.2 dead position),
+   * fivefold repetition, and the 75-move rule. Single-side insufficient-material diagnostics, the claimable draws
+   * (3-fold repetition, 50-move rule), and ongoing positions are deliberately NOT rejected here.
    */
-  private static void validateGameNotEnded(ChessBoard board) throws InvalidMoveException {
+  private static void validateGameNotEnded(Board board) throws InvalidMoveException {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
     if (!gameStatus.isAutomaticTermination()) {
       return;
     }
-    throw new InvalidMoveException("the game has already ended by " + gameStatus,
-        MoveCheck.GAME_ALREADY_ENDED, gameStatus);
+    throw new InvalidMoveException("the game has already ended by " + gameStatus, MoveCheck.GAME_ALREADY_ENDED,
+        gameStatus);
   }
 
-  private static void validateCastling(ChessBoard board, MoveSpecification moveSpecification)
-      throws InvalidMoveException {
+  private static void validateCastling(Board board, MoveSpecification moveSpecification) throws InvalidMoveException {
 
     if (!CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       throw new ProgrammingMistakeException("Precondition is not met");
@@ -89,7 +83,7 @@ public class ValidateNewMove implements EnumConstants {
           board.getCastlingRight(havingMove));
       case NONE -> throw new IllegalArgumentException();
     };
-    final CastlingRightLoss castlingRightLoss = castlingCheck == CastlingCheck.FINAL_NO_RIGHT
+    final var castlingRightLoss = castlingCheck == CastlingCheck.FINAL_NO_RIGHT
         ? board.getCastlingRightLoss(havingMove, castlingMove)
         : CastlingRightLoss.NOT_LOST;
     switch (castlingCheck) {
@@ -120,7 +114,7 @@ public class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validateNonCastlingBasic(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validateNonCastlingBasic(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final Side havingMove = board.getHavingMove();
     final Square fromSquare = moveSpecification.fromSquare();
@@ -147,7 +141,7 @@ public class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validatePawnPromotionPieceConsistency(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validatePawnPromotionPieceConsistency(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final Side havingMove = board.getHavingMove();
     if (Rank.calculateIsPromotionRank(havingMove, moveSpecification.toSquare().getRank())) {
@@ -161,8 +155,7 @@ public class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validateMovement(ChessBoard board, MoveSpecification moveSpecification)
-      throws InvalidMoveException {
+  private static void validateMovement(Board board, MoveSpecification moveSpecification) throws InvalidMoveException {
     final MovementCheck movementCheck = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(),
         board.getHavingMove(), board.getEnPassantCaptureTargetSquare(), moveSpecification);
     if (movementCheck == MovementCheck.SUCCESS) {
@@ -172,7 +165,7 @@ public class ValidateNewMove implements EnumConstants {
         movementCheck.toMoveCheck());
   }
 
-  private static String movementMessage(MovementCheck check, ChessBoard board, MoveSpecification moveSpecification) {
+  private static String movementMessage(MovementCheck check, Board board, MoveSpecification moveSpecification) {
     final Piece movingPiece = board.getStaticPosition().get(moveSpecification.fromSquare());
     return switch (check) {
       case NOT_POSSIBLE -> movingPiece.getPieceType() == PAWN ? "pawns cannot move in this way"
@@ -186,16 +179,13 @@ public class ValidateNewMove implements EnumConstants {
           + "destination square must be empty, but the destination square is occcupied";
       case PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY -> "when moving two squares both the passing and "
           + "destination square must be empty, but both squares are occcupied";
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE ->
-          "when moving a pawn one square forwards, the destination square must be empty, but the destination "
-              + "square is occupied by an own piece";
-      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE ->
-          "when moving a pawn one square forwards, the destination square must be empty, but the destination "
-              + "square is occupied by an opponent pieces";
+      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE -> "when moving a pawn one square forwards, the destination square must be empty, but the destination "
+          + "square is occupied by an own piece";
+      case PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE -> "when moving a pawn one square forwards, the destination square must be empty, but the destination "
+          + "square is occupied by an opponent pieces";
       case PAWN_DIAGONAL_OWN_PIECE -> "the pawn you cannot diagonally capture an own piece";
-      case PAWN_EN_PASSANT_WRONG_RANK ->
-          "the pawn cannot move diagonally to an empty field, except when en passant capture is possible, "
-              + "which is not the case";
+      case PAWN_EN_PASSANT_WRONG_RANK -> "the pawn cannot move diagonally to an empty field, except when en passant capture is possible, "
+          + "which is not the case";
       case PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE -> "the en passant capture requires that the pawn "
           + "move " + Square.calculateBehindSquare(board.getHavingMove(), moveSpecification.toSquare()).getName()
           + " was immediately played before, which is not the case";
@@ -206,8 +196,7 @@ public class ValidateNewMove implements EnumConstants {
     };
   }
 
-  private static void validateKingSafety(ChessBoard board, MoveSpecification moveSpecification)
-      throws InvalidMoveException {
+  private static void validateKingSafety(Board board, MoveSpecification moveSpecification) throws InvalidMoveException {
     final KingSafetyCheck kingSafetyCheck = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(),
         board.getHavingMove(), moveSpecification);
     if (kingSafetyCheck == KingSafetyCheck.SUCCESS) {
@@ -222,14 +211,6 @@ public class ValidateNewMove implements EnumConstants {
       case NON_KING_EXPOSED_TO_CHECK -> "it would expose the own king to check";
       case SUCCESS -> throw new ProgrammingMistakeException("SUCCESS has no message");
     };
-  }
-
-  public static Set<MoveSpecification> calculateMoveSpecifications(Set<LegalMove> legalMoveSet) {
-    final Set<MoveSpecification> result = new TreeSet<>();
-    for (final LegalMove legalMove : legalMoveSet) {
-      result.add(legalMove.moveSpecification());
-    }
-    return result;
   }
 
 }

@@ -1,6 +1,6 @@
 package com.dlb.chess.test.san.reference;
 
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanValidateFormat;
 
 /**
  * Test-only coarse sanity filter over SAN strings — a superset of the structurally valid SAN language that lives in

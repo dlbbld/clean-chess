@@ -2,7 +2,7 @@ package com.dlb.chess.test.pgn.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 
 public abstract class AbstractTestLenientPgnParser {
 

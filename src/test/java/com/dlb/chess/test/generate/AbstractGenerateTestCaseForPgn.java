@@ -2,21 +2,21 @@ package com.dlb.chess.test.generate;
 
 import java.nio.file.Path;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.report.CheckmateOrStalemate;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.enums.CheckmateOrStalemate;
-import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.report.representation.RepetitionRepresentation;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.test.report.representation.RepetitionRepresentation;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
@@ -40,14 +40,15 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    final String repetitionInitialEnPassantCapture = RepetitionRepresentation.calculateRepresentationRepetitionReport(report,
-        EnPassantCaptureRuleThreefold.DO_IGNORE);
+    final String repetitionInitialEnPassantCapture = RepetitionRepresentation
+        .calculateRepresentationRepetitionReport(report, EnPassantCaptureRuleThreefold.DO_IGNORE);
     result.append("\"");
     result.append(repetitionInitialEnPassantCapture);
     result.append("\"");
     result.append(", ");
 
-    final String noProgressMove = NoProgressRepresentation.calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
+    final String noProgressMove = NoProgressRepresentation
+        .calculateRepresentationNoProgressMoveListList(report.noProgressMoveListList());
     result.append("\"");
     result.append(noProgressMove);
     result.append("\"");
@@ -76,7 +77,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(insufficientMaterial.name());
     result.append(", ");
 
-    final ChessBoard finalBoard = report.board();
+    final Board finalBoard = report.board();
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
         .unwinnableFull();
     final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)

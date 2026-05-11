@@ -7,8 +7,8 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.model.SanValidationFromTo;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.enums.KingNonCastlingSanValidateStaticallyStrict;
 import com.google.common.collect.ImmutableMap;
 

@@ -9,11 +9,11 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.parser.model.Tag;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.Tag;
 
 /**
  * Tag-parsing tests restored from the removed {@code TestParseTagUtility}. The removed tests drove the now-deleted

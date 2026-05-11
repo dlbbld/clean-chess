@@ -12,11 +12,11 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.moves.utility.StandardMoveUtility;
-import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.EnPassantCaptureUtility;
+import com.dlb.chess.moves.PromotionUtility;
+import com.dlb.chess.moves.StandardMoveUtility;
+import com.dlb.chess.squares.AbstractAttackedSquares;
 
 public abstract class StaticPositionUtility implements EnumConstants {
 
@@ -38,16 +38,6 @@ public abstract class StaticPositionUtility implements EnumConstants {
     }
     throw new ProgrammingMistakeException(
         "There must be a king on the board each, the fun support for no kings is yet to be implemented ....");
-  }
-
-  // here we allow king off the board
-  public static Square checkKingSquare(StaticPosition staticPosition, Side side) {
-    for (final Square square : Square.REAL) {
-      if (staticPosition.isOwnKing(square, side)) {
-        return square;
-      }
-    }
-    return Square.NONE;
   }
 
   public static String calculatePiecePlacement(StaticPosition staticPosition) {
@@ -89,7 +79,8 @@ public abstract class StaticPositionUtility implements EnumConstants {
   public static StaticPosition createPositionAfterMove(StaticPosition staticPosition, Side havingMove,
       MoveSpecification moveSpecification) {
 
-    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove, moveSpecification);
+    final List<UpdateSquare> updateSquareList = calculateUpdateSquareList(staticPosition, havingMove,
+        moveSpecification);
     return staticPosition.createChangedPosition(updateSquareList);
   }
 

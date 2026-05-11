@@ -10,13 +10,13 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.model.SanConversionCheck;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanConversion;
+import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.san.SanValidateFormat;
+import com.dlb.chess.test.san.model.SanConversionCheck;
 
 /**
  * Reference implementation of {@link SanValidateFormat#validateFormat}. Uses the original type-enumeration approach
@@ -149,12 +149,12 @@ public abstract class SanValidateFormatReference {
     }
 
     // pawn promotion rank enforcement
-    if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION
-        || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION) && Rank.calculateIsAnyPromotionRank(toRank)) {
+    if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_NON_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION)
+        && isAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
     if ((sanFormat == SanFormat.PAWN_NON_CAPTURING_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION)
-        && !Rank.calculateIsAnyPromotionRank(toRank)) {
+        && !isAnyPromotionRank(toRank)) {
       return SanConversionCheck.IS_NO_MATCH;
     }
 
@@ -197,18 +197,21 @@ public abstract class SanValidateFormatReference {
   /**
    * Whether the given piece type can produce the given non-pawn, non-castling SAN format.
    * <ul>
-   *   <li>King formats accept only KING.</li>
-   *   <li>RNBQ formats accept ROOK, KNIGHT, BISHOP, QUEEN.</li>
+   * <li>King formats accept only KING.</li>
+   * <li>RNBQ formats accept ROOK, KNIGHT, BISHOP, QUEEN.</li>
    * </ul>
    */
   private static boolean isPieceTypeForSanFormat(PieceType pieceType, SanFormat sanFormat) {
     return switch (sanFormat) {
       case KING_NON_CASTLING_NON_CAPTURING, KING_NON_CASTLING_CAPTURING -> pieceType == PieceType.KING;
-      case RNBQ_NON_CAPTURING_NEITHER, RNBQ_NON_CAPTURING_FILE, RNBQ_NON_CAPTURING_RANK, RNBQ_NON_CAPTURING_SQUARE,
-          RNBQ_CAPTURING_NEITHER, RNBQ_CAPTURING_FILE, RNBQ_CAPTURING_RANK, RNBQ_CAPTURING_SQUARE -> pieceType == PieceType.ROOK
-              || pieceType == PieceType.KNIGHT || pieceType == PieceType.BISHOP || pieceType == PieceType.QUEEN;
+      case RNBQ_NON_CAPTURING_NEITHER, RNBQ_NON_CAPTURING_FILE, RNBQ_NON_CAPTURING_RANK, RNBQ_NON_CAPTURING_SQUARE, RNBQ_CAPTURING_NEITHER, RNBQ_CAPTURING_FILE, RNBQ_CAPTURING_RANK, RNBQ_CAPTURING_SQUARE -> pieceType == PieceType.ROOK
+          || pieceType == PieceType.KNIGHT || pieceType == PieceType.BISHOP || pieceType == PieceType.QUEEN;
       default -> false;
     };
+  }
+
+  private static boolean isAnyPromotionRank(Rank rank) {
+    return rank == Rank.RANK_1 || rank == Rank.RANK_8;
   }
 
   private static boolean calculateIsAllowedLastChar(String san) {

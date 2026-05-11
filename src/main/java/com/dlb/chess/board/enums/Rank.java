@@ -77,15 +77,6 @@ public enum Rank {
     };
   }
 
-  public static Rank calculatePreviousPreviousRank(Side havingMove, Rank rank) {
-    if (havingMove == Side.NONE || rank == NONE || !calculateHasPreviousPreviousRank(havingMove, rank)) {
-      throw new IllegalArgumentException();
-    }
-    final Rank previousRank = calculatePreviousRank(havingMove, rank);
-
-    return calculatePreviousRank(havingMove, previousRank);
-  }
-
   public static Rank calculateNextRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE || !calculateHasNextRank(havingMove, rank)) {
       throw new IllegalArgumentException();
@@ -97,15 +88,6 @@ public enum Rank {
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
-  }
-
-  public static Rank calculateNextNextRank(Side havingMove, Rank rank) {
-    if (havingMove == Side.NONE || rank == NONE || !calculateHasNextNextRank(havingMove, rank)) {
-      throw new IllegalArgumentException();
-    }
-    final Rank nextRank = calculateNextRank(havingMove, rank);
-
-    return calculateNextRank(havingMove, nextRank);
   }
 
   public static boolean calculateHasPreviousRank(Side havingMove, Rank rank) {
@@ -190,13 +172,6 @@ public enum Rank {
     };
   }
 
-  public static boolean calculateIsGroundRank(Side havingMove, Rank rank) {
-    if (havingMove == Side.NONE || rank == NONE) {
-      throw new IllegalArgumentException();
-    }
-    return rank == calculateGroundRank(havingMove);
-  }
-
   public static Rank calculateGroundRank(Side havingMove) {
     return switch (havingMove) {
       case WHITE -> RANK_1;
@@ -204,10 +179,6 @@ public enum Rank {
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
-  }
-
-  public static boolean calculateIsAnyPromotionRank(Rank rank) {
-    return rank == RANK_8 || rank == RANK_1;
   }
 
   public static boolean calculateIsPromotionRank(Side havingMove, Rank rank) {
@@ -225,14 +196,6 @@ public enum Rank {
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
-  }
-
-  public static boolean calculateIsPawnInititalRank(Side havingMove, Rank rank) {
-    if (havingMove == Side.NONE || rank == NONE) {
-      throw new IllegalArgumentException();
-    }
-
-    return rank == calculatePawnInitialRank(havingMove);
   }
 
   public static Rank calculatePawnInitialRank(Side havingMove) {
@@ -265,15 +228,6 @@ public enum Rank {
     return switch (havingMove) {
       case BLACK -> RANK_3;
       case WHITE -> RANK_6;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  public static Rank calculateEnPassantCaptureFromRank(Side havingMove) {
-    return switch (havingMove) {
-      case BLACK -> RANK_4;
-      case WHITE -> RANK_5;
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

@@ -9,8 +9,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
-import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
+import com.dlb.chess.squares.AbstractEmptyBoardSquares;
+import com.dlb.chess.squares.PawnDiagonalSquares;
 
 public class GenerateUciMove implements EnumConstants {
 

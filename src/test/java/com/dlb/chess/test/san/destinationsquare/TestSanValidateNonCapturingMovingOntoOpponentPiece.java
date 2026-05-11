@@ -6,10 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.StrictSanParser;
 
 class TestSanValidateNonCapturingMovingOntoOpponentPiece {
 
@@ -19,7 +18,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
 
     // rook
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("a4");
       board.moveStrict("d5");
@@ -29,7 +28,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // knight
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("Nc3");
       board.moveStrict("Nf6");
@@ -39,7 +38,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // bishop
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("e4");
       board.moveStrict("e5");
@@ -49,7 +48,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // queen
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("e4");
       board.moveStrict("e5");
@@ -59,7 +58,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // king
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("e4");
       board.moveStrict("e5");
@@ -77,7 +76,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
   void testBlack() {
     // rook
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("e4");
       board.moveStrict("h5");
@@ -88,7 +87,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // knight
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("Nc3");
       board.moveStrict("Nf6");
@@ -97,7 +96,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // bishop
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("Nf3");
       board.moveStrict("d5");
@@ -108,7 +107,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // queen
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("e4");
       board.moveStrict("e5");
@@ -119,7 +118,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     }
     // king
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("e4");
       board.moveStrict("e5");
@@ -131,7 +130,7 @@ class TestSanValidateNonCapturingMovingOntoOpponentPiece {
     // pawn diagonal move must contain capture symbol by format specification
   }
 
-  private static void checkException(String san, ChessBoard board) {
+  private static void checkException(String san, Board board) {
     boolean isException;
     try {
       StrictSanParser.parseText(san, board);

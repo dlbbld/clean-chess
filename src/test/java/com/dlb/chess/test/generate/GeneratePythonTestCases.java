@@ -12,16 +12,15 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.ConfigurationTestConstants;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class GeneratePythonTestCases implements EnumConstants {
@@ -53,7 +52,7 @@ public class GeneratePythonTestCases implements EnumConstants {
     processPythonCodeLine("", counterList, codeLineList);
     processPythonCodeLine("class GameTestCase(unittest.TestCase):", counterList, codeLineList);
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
       logger.info("Processing folder " + folderPath);
       processPythonCodeLine("", counterList, codeLineList);
@@ -79,7 +78,7 @@ public class GeneratePythonTestCases implements EnumConstants {
             codeLineList);
         processPythonCodeLine("    board = chess.Board()", counterList, codeLineList);
 
-        final ChessBoard boardPlayAlong = new Board();
+        final Board boardPlayAlong = new Board();
         for (final HalfMove halfMove : report.halfMoveList()) {
           boardPlayAlong.move(halfMove.moveSpecification());
           processPythonCodeLine("    board.push_san(\"" + halfMove.san() + "\")", counterList, codeLineList);

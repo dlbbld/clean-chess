@@ -3,13 +3,12 @@ package com.dlb.chess.test.report.representation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 
 public class RepetitionRepresentation {
 
@@ -36,8 +35,11 @@ public class RepetitionRepresentation {
   public static String calculateRepresentationRepetitionReport(Report report,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
 
-    final List<List<HalfMove>> repetitionList = RepetitionUtility.getRepetitionListListType(report,
-        enPassantCaptureRule);
+    final var repetitionList = switch (enPassantCaptureRule) {
+      case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
+      case DO_NOT_IGNORE -> report.repetitionListList();
+      default -> throw new IllegalArgumentException();
+    };
     return calculateRepresentationRepetitionListList(repetitionList, enPassantCaptureRule);
   }
 
@@ -51,7 +53,7 @@ public class RepetitionRepresentation {
 
       resultList.add(calculateRepresentationRepetitionList(repeatingPosition, enPassantCaptureRule));
     }
-    return BasicUtility.calculateSemicolonSeparatedList(resultList);
+    return NonNullWrapperCommon.join("; ", resultList);
   }
 
 }

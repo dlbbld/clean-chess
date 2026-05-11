@@ -6,16 +6,15 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 class TestUnwinnabilityQuickAgainstWinnability {
 
@@ -26,7 +25,7 @@ class TestUnwinnabilityQuickAgainstWinnability {
   void test() throws Exception {
 
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         if (RestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST) {
           switch (testCaseList.pgnTest()) {
@@ -52,7 +51,7 @@ class TestUnwinnabilityQuickAgainstWinnability {
             break;
         }
 
-        final ChessBoard board = new Board(testCase.fen());
+        final Board board = new Board(testCase.fen());
 
         logger.info(testCase.pgnFileName());
 

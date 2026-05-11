@@ -120,8 +120,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
     // Black pawn on h7 ensures the position is not in INSUFFICIENT_MATERIAL_BOTH (which the
     // library otherwise reports for K + same-colour-bishop pair vs K) so the strict-pipeline
     // GAME_ALREADY_ENDED check does not pre-empt this test.
-    check("4k3/7p/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2),
-        MoveCheck.KING_CAPTURES_GUARDED_PIECE);
+    check("4k3/7p/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2), MoveCheck.KING_CAPTURES_GUARDED_PIECE);
   }
 
   @SuppressWarnings("static-method")
@@ -129,8 +128,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   void testKingMovesNextToOpponentKing() {
     // Black rook on a8 ensures the position is not in mutual insufficient material; it does
     // not attack the squares involved in the test.
-    check("r7/8/8/8/8/4k3/8/4K3 w - - 0 1", new MoveSpecification(E1, E2),
-        MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
+    check("r7/8/8/8/8/4k3/8/4K3 w - - 0 1", new MoveSpecification(E1, E2), MoveCheck.KING_MOVES_NEXT_TO_OPPONENT_KING);
   }
 
   // --- KING_MOVES_TO_ATTACKED_EMPTY_SQUARE (king-move to attacked empty destination) ---

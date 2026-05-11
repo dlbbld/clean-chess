@@ -6,10 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.StrictSanParser;
 
 class TestSanValidatePawnForwardMoves {
 
@@ -18,7 +17,7 @@ class TestSanValidatePawnForwardMoves {
   void testWhite() {
 
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("d4");
       board.moveStrict("d5");
@@ -26,7 +25,7 @@ class TestSanValidatePawnForwardMoves {
     }
 
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("d4");
       board.moveStrict("e5");
@@ -43,7 +42,7 @@ class TestSanValidatePawnForwardMoves {
   void testBlack() {
 
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("d4");
       board.moveStrict("d5");
@@ -52,7 +51,7 @@ class TestSanValidatePawnForwardMoves {
     }
 
     {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       board.moveStrict("d4");
       board.moveStrict("e5");
@@ -65,15 +64,15 @@ class TestSanValidatePawnForwardMoves {
     }
   }
 
-  private static void checkExceptionOpponent(String san, ChessBoard board) {
+  private static void checkExceptionOpponent(String san, Board board) {
     checkException(san, board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OPPONENT_PIECE_NOT_KING);
   }
 
-  private static void checkExceptionOwn(String san, ChessBoard board) {
+  private static void checkExceptionOwn(String san, Board board) {
     checkException(san, board, SanValidationProblem.DESTINATION_PAWN_FORWARD_OWN_PIECE);
   }
 
-  private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
+  private static void checkException(String san, Board board, SanValidationProblem svp) {
     boolean isException;
     try {
       StrictSanParser.parseText(san, board);

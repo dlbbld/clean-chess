@@ -15,14 +15,14 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
-import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
-import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
-import com.dlb.chess.squares.emptyboard.KingNonCastlingEmptyBoardSquares;
-import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
-import com.dlb.chess.squares.to.potential.QueenPotentialToSquares;
-import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.EnPassantCaptureUtility;
+import com.dlb.chess.moves.PawnDiagonalMoveUtility;
+import com.dlb.chess.squares.AbstractEmptyBoardSquares;
+import com.dlb.chess.squares.BishopPotentialToSquares;
+import com.dlb.chess.squares.KingNonCastlingEmptyBoardSquares;
+import com.dlb.chess.squares.QueenPotentialToSquares;
+import com.dlb.chess.squares.RookPotentialToSquares;
 
 /**
  * Stateless chess-rules analysis shared by both validation pipelines (MoveSpecification and SAN).
@@ -84,7 +84,8 @@ public final class ChessRuleAnalyzer implements EnumConstants {
     // King moves: their king-safety is fully covered by analyzeMovement (KING_CAPTURES_GUARDED_PIECE
     // / KING_MOVES_TO_ATTACKED_EMPTY_SQUARE). The was-in-check distinction has no analog for the
     // king itself, so this method only handles non-king moves.
-    if ((movingPiece.getPieceType() == KING) || !StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove, moveSpecification)) {
+    if (movingPiece.getPieceType() == KING
+        || !StaticPositionUtility.calculateIsKingAttackedAfterMove(staticPosition, havingMove, moveSpecification)) {
       return KingSafetyCheck.SUCCESS;
     }
     final var wasInCheck = StaticPositionUtility.calculateIsCheck(staticPosition, havingMove);

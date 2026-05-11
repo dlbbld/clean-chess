@@ -7,7 +7,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.PgnExtensionUtility;
+import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn {

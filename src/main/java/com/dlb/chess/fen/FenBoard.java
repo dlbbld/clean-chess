@@ -1,16 +1,16 @@
 package com.dlb.chess.fen;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
 public class FenBoard implements EnumConstants {
 
-  public static String calculateFen(ChessBoard board) {
+  public static String calculateFen(Board board) {
 
     final Side havingMove = board.getHavingMove();
 

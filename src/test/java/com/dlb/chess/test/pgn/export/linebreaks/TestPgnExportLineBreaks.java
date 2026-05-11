@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.writer.PgnWriter;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.test.FileComparison;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 

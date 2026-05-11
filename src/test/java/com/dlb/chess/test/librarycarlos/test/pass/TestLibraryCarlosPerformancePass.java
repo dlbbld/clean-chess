@@ -12,7 +12,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.move.Move;
@@ -34,7 +34,7 @@ class TestLibraryCarlosPerformancePass {
   @Test
   void testPerformance() throws Exception {
     for (final PgnTest pgnTest : PGN_TEST_LIST) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();
         logger.info(pgnFileName);

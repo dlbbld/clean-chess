@@ -12,17 +12,16 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 public class GenerateChaTestCases implements EnumConstants {
 
@@ -44,7 +43,7 @@ public class GenerateChaTestCases implements EnumConstants {
     try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
         PrintWriter pw = new PrintWriter(w)) {
 
-      for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+      for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
         final Path folderPath = testCaseList.pgnTest().getFolderPath();
         logger.info("Processing folder " + folderPath);
 
@@ -58,7 +57,7 @@ public class GenerateChaTestCases implements EnumConstants {
 
           final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-          final ChessBoard board = new Board(pgnFile.startFen());
+          final Board board = new Board(pgnFile.startFen());
 
           var halfMoveCounter = 0;
           pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
@@ -79,7 +78,7 @@ public class GenerateChaTestCases implements EnumConstants {
     logger.info("END generating code");
   }
 
-  private static String calculateLine(ChessBoard board, Path folderPath, String game, int halfMoveCounter) {
+  private static String calculateLine(Board board, Path folderPath, String game, int halfMoveCounter) {
     final StringBuilder line = new StringBuilder();
     line.append(board.getFen());
 

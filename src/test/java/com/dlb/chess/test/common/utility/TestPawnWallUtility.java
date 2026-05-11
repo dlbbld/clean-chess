@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.test.winnable.PawnWall;
 
@@ -47,7 +46,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testAttacking(String fen, Side side, @NonNull Square... expectedSquareList) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     final Set<Square> expectedSquareSet = new TreeSet<>(Arrays.asList(expectedSquareList));
     assertEquals(expectedSquareSet, PawnWall.calculateAttackingSquares(board, side));
@@ -65,7 +64,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testReachAhead(String fen, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateIsAllPawnsCanReachPawnAhead(board));
@@ -94,7 +93,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testHelperForward(String fen, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateIsAllPawnsHavePawnAhead(board));
@@ -122,7 +121,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testAllPawnsCannotCapture(String fen, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
@@ -135,7 +134,7 @@ class TestPawnWallUtility extends PawnWall {
   @Test
   void testIsAllPawnsCannotCaptureEnPassantCapture() {
     {
-      final ChessBoard board = new Board("4k3/8/8/8/p7/8/1P6/4K3 w - - 0 50");
+      final Board board = new Board("4k3/8/8/8/p7/8/1P6/4K3 w - - 0 50");
 
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
       board.moveStrict("b4");
@@ -145,7 +144,7 @@ class TestPawnWallUtility extends PawnWall {
     }
 
     {
-      final ChessBoard board = new Board("8/5p2/3k4/6P1/8/8/8/4K3 b - - 0 50");
+      final Board board = new Board("8/5p2/3k4/6P1/8/8/8/4K3 b - - 0 50");
 
       assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
       board.moveStrict("f5");
@@ -170,7 +169,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testAllBlocked(String fen, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateIsAllPawnsBlocked(board));
@@ -226,7 +225,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testHasLine(String fen, Side side, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateHasPawnWallLine(board, side));
@@ -266,7 +265,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testHasPawnWallHelper(String fen, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateHasPawnWall(board));
@@ -607,7 +606,7 @@ class TestPawnWallUtility extends PawnWall {
   }
 
   private static void testHelperLichess(String fen, boolean isExpectedTrue) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
 
     if (isExpectedTrue) {
       assertTrue(PawnWall.calculateHasPawnWall(board));

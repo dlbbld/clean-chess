@@ -6,10 +6,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.StrictSanParser;
 
 class TestSanValidatePieceExists {
 
@@ -18,7 +17,7 @@ class TestSanValidatePieceExists {
   void testWhiteNeither() {
 
     {
-      final ChessBoard board = new Board("k7/1q6/8/8/8/8/6Q1/7K w - - 0 100");
+      final Board board = new Board("k7/1q6/8/8/8/8/6Q1/7K w - - 0 100");
 
       checkExceptionNeither("Ra1", board);
       checkExceptionNeither("Nb1", board);
@@ -26,7 +25,7 @@ class TestSanValidatePieceExists {
     }
 
     {
-      final ChessBoard board = new Board("k7/1r6/8/8/8/8/6R1/7K w - - 0 100");
+      final Board board = new Board("k7/1r6/8/8/8/8/6R1/7K w - - 0 100");
 
       checkExceptionNeither("Qd1", board);
     }
@@ -37,7 +36,7 @@ class TestSanValidatePieceExists {
   void testBlackNeither() {
 
     {
-      final ChessBoard board = new Board("k7/1q6/8/8/8/8/6Q1/7K b - - 0 100");
+      final Board board = new Board("k7/1q6/8/8/8/8/6Q1/7K b - - 0 100");
 
       checkExceptionNeither("Rh8", board);
       checkExceptionNeither("Ng8", board);
@@ -45,13 +44,13 @@ class TestSanValidatePieceExists {
     }
 
     {
-      final ChessBoard board = new Board("k7/1r6/8/8/8/8/6R1/7K b - - 0 100");
+      final Board board = new Board("k7/1r6/8/8/8/8/6R1/7K b - - 0 100");
 
       checkExceptionNeither("Qd8", board);
     }
   }
 
-  private static void checkExceptionNeither(String san, ChessBoard board) {
+  private static void checkExceptionNeither(String san, Board board) {
     checkException(san, board, SanValidationProblem.EXISTS_RNBQ_NEITHER);
   }
 
@@ -60,7 +59,7 @@ class TestSanValidatePieceExists {
   void testWhiteFile() {
 
     {
-      final ChessBoard board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
 
       checkExceptionFile("Raa1", board);
       checkExceptionFile("Nab1", board);
@@ -79,7 +78,7 @@ class TestSanValidatePieceExists {
   void testBlackFile() {
 
     {
-      final ChessBoard board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
 
       checkExceptionFile("Rhd8", board);
 
@@ -94,7 +93,7 @@ class TestSanValidatePieceExists {
 
   }
 
-  private static void checkExceptionFile(String san, ChessBoard board) {
+  private static void checkExceptionFile(String san, Board board) {
     checkException(san, board, SanValidationProblem.EXISTS_RNBQ_FILE);
   }
 
@@ -103,7 +102,7 @@ class TestSanValidatePieceExists {
   void testWhiteRank() {
 
     {
-      final ChessBoard board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
 
       checkExceptionRank("R1a1", board);
 
@@ -122,7 +121,7 @@ class TestSanValidatePieceExists {
   void testBlackRank() {
 
     {
-      final ChessBoard board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
 
       checkExceptionRank("R8d8", board);
       checkExceptionRank("N7g8", board);
@@ -137,7 +136,7 @@ class TestSanValidatePieceExists {
 
   }
 
-  private static void checkExceptionRank(String san, ChessBoard board) {
+  private static void checkExceptionRank(String san, Board board) {
     checkException(san, board, SanValidationProblem.EXISTS_RNBQ_RANK);
   }
 
@@ -146,7 +145,7 @@ class TestSanValidatePieceExists {
   void testWhiteSquare() {
 
     {
-      final ChessBoard board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
 
       checkExceptionSquare("Rb1a1", board);
       checkExceptionSquare("Na3b1", board);
@@ -160,7 +159,7 @@ class TestSanValidatePieceExists {
   void testBlackSquare() {
 
     {
-      final ChessBoard board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
 
       checkExceptionSquare("Rf8e8", board);
       checkExceptionSquare("Nh6g8", board);
@@ -170,11 +169,11 @@ class TestSanValidatePieceExists {
 
   }
 
-  private static void checkExceptionSquare(String san, ChessBoard board) {
+  private static void checkExceptionSquare(String san, Board board) {
     checkException(san, board, SanValidationProblem.EXISTS_RNBQ_SQUARE);
   }
 
-  private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
+  private static void checkException(String san, Board board, SanValidationProblem svp) {
     boolean isException;
     try {
       StrictSanParser.parseText(san, board);

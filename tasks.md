@@ -287,6 +287,17 @@ Three FEN parsers exist: `FenParserRaw`, `FenParserAdvanced`, `FenParserAdvanced
 - [ ] Document each tier's contract precisely in `specification.md`
 - [ ] Decide: keep three tiers, collapse `AdvancedFurther` into `Advanced`, or drop it
 
+### Move FEN-letter parsing off `Side` and `BasicChessUtility` onto the FEN parser
+Layering violation surfaced by the API-surface audit. `Side.calculate(String)` parses the FEN single-letter side indicator (`"w"` / `"b"`) into a `Side` enum value — but FEN-syntax knowledge does not belong on the chess-rules `Side` enum. The same parsing also appears, redundantly, on `BasicChessUtility.calculateSideHavingMoveForSide(String)`. Both should be deleted; their logic belongs in `FenParserRaw` / `FenParserAdvanced` (wherever the rest of FEN field parsing lives).
+
+While in `FenParserAdvanced`, `validateHavingMove` currently checks for `w` or `b` via a regular expression — overkill for a two-character alphabet. A direct equality check that throws the advanced FEN validation exception on mismatch is the natural shape.
+
+- [ ] Move FEN-letter → `Side` parsing into the FEN parser layer; pick the right home (likely `FenParserRaw` since this is purely lexical)
+- [ ] Delete `Side.calculate(String)` from the `Side` enum
+- [ ] Delete `BasicChessUtility.calculateSideHavingMoveForSide(String)` (duplicate of the above)
+- [ ] Replace the regex in `FenParserAdvanced.validateHavingMove` with a direct equality check + advanced-FEN-validation throw
+- [ ] Update any test callers of the removed methods to go through the FEN parser instead
+
 ### Replace `UciValidateHelper` enum with computed lookup
 Auto-generated 1984-line enum, ~111 KB class file (~50% of the JAR's bytecode mass). Used as a list-of-strings rather than as an enum. A generation loop in the static init of its only caller would replace 1984 lines of source with ~12.
 - [ ] Replace the enum with a `Set<String>` (or similar) computed via a constructor loop
@@ -309,6 +320,145 @@ README and `unwinnability/package-info.java` use "worst play / worst-case play b
 ### README inconsistency — CHA full "100% accurate" vs `UNDETERMINED`
 README says CHA full is "slower but 100% accurate," then a few lines down documents the `UNDETERMINED` outcome (and again later in the doc).
 - [ ] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
+
+### Remove the `EnPassantCaptureRuleThreefold` dual-path
+The `EnPassantCaptureRuleThreefold` enum (`DO_IGNORE` / `DO_NOT_IGNORE`) drives a second, parallel repetition-tracking code path that ignores en passant availability when comparing dynamic positions. It was added as a research tool: in FIDE rules, two positions with the same piece arrangement but different en-passant availability are *not* the same position for threefold-repetition purposes — but chess.com (and other platforms) implemented the lazy "visual repetition" rule and don't check en-passant availability. The dual path made it easy to find PGN games where the two interpretations diverge, producing examples to demonstrate the platform-side bug.
+
+That research goal is no longer load-bearing for the library. The dual code path costs ongoing complexity (two flavours of `equals`-like comparison, two parallel data structures on `Report`, two flavours of every repetition test fixture) for a feature whose audience was one researcher. As clean-chess matures, the library should implement the FIDE rule cleanly and only.
+
+- [ ] Drop the `EnPassantCaptureRuleThreefold` enum
+- [ ] Remove `Report.repetitionListListInitialEnPassantCapture()` and any other dual-path fields/methods on `Report`
+- [ ] Collapse `RepetitionUtility.getCountRepetition` and the surrounding repetition-tracking machinery to the single FIDE-correct path
+- [ ] Drop the dual-path test fixtures, reports, and representation code in `com.dlb.chess.test.report.representation.*`
+- [ ] Strip the explanatory paragraph in `RepetitionUtility`'s class-level Javadoc about "two different ways" of counting repetition
+- [ ] Verify `git grep -i "ignoring en passant"` (or similar phrasing) returns zero hits afterwards
+
+### Replace `EnumConstants` constant interface
+`com.dlb.chess.common.constants.EnumConstants` is a `public interface` whose only purpose is to expose ~90 `public static final` aliases for `Square.*`, `Side.*`, `Piece.*`, `PieceType.*`, `Rank.*`, `File.*` so implementing classes inherit them unqualified. This is the classic "constant interface" anti-pattern (Effective Java item 22): interfaces should describe a contract/behavior, not be a convenience-inheritance vehicle for constants. The mechanism reads as beginner Java and leaks an internal vocabulary choice into the public type surface — `ChessBoard extends EnumConstants` is the clearest symptom (the chess contract has nothing to do with how implementers prefer to spell `Square.E4`). Used by 43 files under `src/main` plus tests.
+
+Replacement strategy options, depending on intended audience:
+- public-API constants: `public final class EnumConstants` with `public static final` fields and a private constructor (callers `import static`)
+- internal-only: make package-private and split closer to where they belong (domain-grouped, e.g. `BoardSquares`, `PieceLetters`)
+- derived enum collections: prefer local `EnumSet` / `ImmutableSet` factories in the utility that needs them, or dedicated package-private constants classes by domain
+
+- [ ] Pick a replacement strategy (default lean: package-private utility class with `import static`, since the constants are internal vocabulary and the audit reduces public surface anyway)
+- [ ] Drop `extends EnumConstants` from `ChessBoard` regardless of strategy — the interface should not carry constants
+- [ ] Convert the 43 src/main call sites + tests to static imports
+- [ ] Folds naturally into the API-surface reduction release; treat as a cleanup target there
+
+### Profound-level square geometry — promote single-step calculations to lookup tables
+The codebase already uses lookup tables for the geometry that matters — `OrthogonalRange`, `DiagonalRange`, `KnightEmptyBoardSquares`, `BishopEmptyBoardSquares`, `RookEmptyBoardSquares`, `DiagonalLineUtility`. Single-step instance-style methods on `Square` (`calculateLeftSquare`, `calculateLeftDiagonalSquare`, `calculateAheadSquare`, etc.) and `File` / `Rank` are the calculate-on-demand holdouts in an otherwise table-based codebase. The "calculate" form has a deeper testing problem: any independent test implementation faces a definitional regress ("left of E4 from White is D4 — but what does *left* mean if not what `calculateLeft` returns?"), which is how `Square.calculateIsLeftDiagonalSquare` ended up as a tautological method that tested itself against itself.
+
+The fix is to promote these single-step relationships to data:
+- `Map<Square, Map<Side, Square>>` (or `EnumMap<Square, EnumMap<Side, Square>>`) constants for left, right, ahead, behind, left-diagonal, right-diagonal
+- The "has" predicates collapse to `map.containsKey(...)` or `value != NONE`
+- The map is built once at class load; tests verify the table by inspection or via python-chess cross-reference (folds into the existing python-chess backlog)
+- The bug surface shrinks to one place: the table-builder
+
+- [ ] Inventory single-step `calculate*` methods on `Square` / `File` / `Rank` that are pure square→square (or square+side→square) lookups
+- [ ] Replace each with a precomputed `EnumMap` constant + a thin accessor
+- [ ] Generate the expected tables either by hand-curation or by python-chess cross-reference (latter is preferred once the python-chess infrastructure lands)
+- [ ] Drop the algorithm-vs-algorithm test patterns; tests become "look up in production table, compare to reference table"
+- [ ] Folds naturally into the DeepSquare rename moment — this kind of foundational rigor is exactly what the rename signals
+- [ ] **Companion concern — bloated lookup-table implementations.** `PawnDiagonalSquares` is 826 lines of generated code (per-square `addWhiteA1`, `addWhiteA2`, … methods) to express what is conceptually "for each pawn from-square, the 0–2 diagonal capture squares." The same shape recurs across the `com.dlb.chess.squares.emptyboard.*` family (`Knight`, `Bishop`, `Rook`, `Queen`, `King`, `PawnOneAdvance`, `PawnTwoAdvance`, `PawnAnyAdvance`). These tables are correctly precomputed, but their implementation should be a single `static {}` initializer that loops over `Square.REAL` and computes each entry via simple file/rank arithmetic — not hundreds of method-per-square stubs. Replacing them collapses ~thousand-line files to dozens of lines while preserving the precomputed-table API. Same theme as the main bullet: keep the lookup, sane the implementation.
+
+### Separate PGN parse, semantics, and export — stop normalising input on the lenient path
+
+#### The problem
+Today's lenient PGN pipeline conflates **four distinct jobs** into one path:
+1. **Parsing** — should preserve what the user gave (tag presence/absence, FEN without SetUp, missing Result, unknown tags, tag order).
+2. **Validation** — should *report* forgiven issues to the consumer (already done via `LenientPgnParserValidationResult.sanForgivenItems()` for SAN deviations; needs the same for tag-level issues).
+3. **Canonical export** — produces a strict-spec-compliant PGN (completed Seven Tag Roster, `SetUp "1"` when `FEN` is present, `Result` synthesised from termination marker, canonical SAN, normalised formatting).
+4. **Round-trip export** — re-emits the input as parsed: same tags, same values, same Result presence/absence — without inventing what the user didn't give.
+
+In the current code, "parse leniently and then write" silently does jobs 1+3 together: the lenient parser accepts a deficient PGN, then `TagPlaceHolderUtility` fabricates STR placeholders, a `*` Result is invented from nothing, `SetUp "1"` is added when `FEN` lacked it, and the output is presented as if it had been the input. The friction is real and load-bearing: **a lenient `parse → write` does not return the user's PGN.** And the discomfort is not bikeshedding — it has been "what was keeping me so long" from finishing the lenient feature.
+
+The principle: **parse preserves, validation reports, canonical export normalises, round-trip export echoes.** Four jobs, separable concerns; each gets its own seam.
+
+#### The three model layers to introduce
+1. **Parse model** — what was actually in the PGN. Tag list preserves real presence/absence and order; `FEN`-without-`SetUp` is preserved; missing `Result` is preserved as missing (not collapsed to `*`); unknown tags pass through.
+2. **Game semantic model** — the engine's internal view for rules/reporting. Introduces `declaredResult: Optional<ResultTagValue>` (what the input said, if anything) and `effectiveResult` (derived/defaulted, used for chess-rule logic). **Missing must remain distinguishable from `ONGOING`.** Today the codebase maps "Result not present" → `*` ongoing; that is a semantic bug, or at least a design debt, because "the user did not say" and "the game is in progress" are different facts.
+3. **Export modes** — `PgnWriter` gains an explicit mode (recommended: `WriteMode` enum parameter, or separate methods):
+   - **Canonical export** — strict-spec-compliant output. Completes STR, adds `SetUp "1"` when `FEN` is present, fabricates `Result` from termination marker (or `*` if neither), canonical SAN, standard formatting.
+   - **Semantic-preserving export** *(the right default for `PgnWriter`)* — preserves which tags existed, their values, their order, and missing-ness. **Normalises** harmless formatting (whitespace inside tag brackets, line wrapping) and move spelling (canonical SAN — `e2-e4` → `e4`, `Nb1c3` → `Nc3`, bogus `a6+` → `a6`). Forgiven items remain on the validation result, *not echoed in the export*.
+   - **Text-preserving export** — re-emits the original source bytes byte-for-byte, including weird whitespace, blank lines, original SAN spelling. **Out of scope for this work** — that is a source-preserving syntax tree, a much heavier feature. Captured here only so the export-mode taxonomy is complete.
+
+#### Concrete cases under the new model
+1. **Missing STR tags** — parse keeps tags missing. Semantic export emits only the tags the user gave (no placeholder fill). Canonical export adds placeholders. **`TagPlaceHolderUtility` either goes away or moves to canonical-only path.**
+2. **`Result` tag absent** — parse stores `declaredResult: Optional.empty()`. Semantic export omits `Result` from output. Canonical export synthesises `Result "*"` if neither tag nor termination marker exists, otherwise from the termination marker. The engine's chess-rule code uses `effectiveResult` derived separately.
+3. **`FEN` without `SetUp`** — parse keeps `FEN` alone. Semantic export emits `FEN` without `SetUp`. Canonical export adds `SetUp "1"`.
+4. **Tag-bracket whitespace** (`[White      "John Travolta"     ]`) — semantic export emits `[White "John Travolta"]`. Whitespace is formatting trivia, not chess data; preserving it would require text-preserving mode.
+5. **Move spelling** (`1. e2-e4 d5 2. Nb1c3 a6+` where `a6+` is not actually check) — semantic export emits canonical `1. e4 d5 2. Nc3 a6`. The lenient parser already reports each deviation via `ForgivenItem` — that is the reporting channel, not the export.
+
+#### What `PgnWriter` should do by default
+Make `PgnWriter` **semantic-preserving** by default. It's the honest balance: respects what the consumer gave (no fabricated tags, no invented Result), but produces clean PGN (canonical SAN, normalised whitespace). Canonical export becomes the opt-in path for consumers who explicitly need strict-spec output.
+
+#### Action items
+- [ ] Define `declaredResult: Optional<ResultTagValue>` on the parse-model side; introduce `effectiveResult` as a derivation used by engine code; audit every "result is `*`?" check and split into "declared missing?" vs "is ongoing?"
+- [ ] `PgnFile` (or its tag list) preserves missing-tag information explicitly — verify whether today's structure already supports this or needs widening
+- [ ] Drop `TagPlaceHolderUtility` STR auto-fill on the lenient parse path; if a canonical-export path needs the same logic, move it there
+- [ ] Lenient parser stops synthesising a `Result` tag from the termination marker into the parsed model; the termination marker is part of the movetext, the Result tag is part of the header, they are separate signals
+- [ ] Lenient parser stops fabricating `SetUp` when `FEN` is present
+- [ ] Introduce explicit `WriteMode` (or two methods) on `PgnWriter`: `SEMANTIC` (the new default) and `CANONICAL` (the spec-strict alternative)
+- [ ] Default `PgnWriter.writePgnFile(...)` to `SEMANTIC`; `PgnWriter.writePgnFileCanonical(...)` (or `writePgnFile(..., WriteMode.CANONICAL)`) for spec-compliant output
+- [ ] Document the contract in `specification.md`: explicit table of the four jobs (parse / validate / canonical export / semantic export); explicit statement that lenient `parse → semantic-write` round-trips the meaning of the input (tag presence, Result presence, FEN-without-SetUp) while normalising formatting and move spelling
+- [ ] Test fixtures: a "deficient" PGN (missing STR, no Result tag, `FEN` without `SetUp`, weird whitespace, `e2-e4`-style moves, bogus check suffixes). Semantic export → equals the same input with normalised whitespace and canonical SAN, *no fabricated tags*. Canonical export → equals a fully strict-compliant form with STR filled, `SetUp "1"` added, `Result "*"` synthesised, canonical SAN.
+- [ ] Text-preserving export remains **out of scope** — note in `specification.md` that source-text-preserving export would be a separate library mode if ever needed.
+
+#### Notes for whoever picks this up
+- The `LenientPgnParserValidationResult.sanForgivenItems()` channel is already the right pattern for SAN-level forgiven items. The same pattern should be extended (or a parallel `tagForgivenItems()` added) so consumers can see which tags the lenient parser accepted leniently.
+- `TagUtility` (kept as consumer-facing in the API audit) is not the source of the problem; the issue is what the parser *fabricates* before `TagUtility`'s consumers see the tag list. Once the parser stops fabricating, `TagUtility` consumers see what the user actually wrote.
+- This work also subsumes the earlier short backlog entry "PGN round-trip fidelity — stop auto-completing tags on import" — that was an early sketch of the same idea; this entry is the full framing.
+
+### Introduce `LegalMoveKind` on `LegalMove`; absorb `EnPassantRole`
+A legal move has a category — normal, castling, en passant capture, pawn two-square advance, promotion — that the move pipeline already knows when it constructs the `LegalMove`. Today consumers (and tests) recover that category by re-reading `MoveSpecification` fields one at a time (e.g. `move.moveSpecification().promotionPieceType() != PromotionPieceType.NONE` to ask "was this a promotion?"). That is a smell: the move pipeline knew the answer, then threw it away.
+
+The proposed shape is one mutually-exclusive enum on `LegalMove`:
+
+```java
+public enum LegalMoveKind {
+  NORMAL,
+  CASTLING,
+  EN_PASSANT_CAPTURE,
+  PAWN_TWO_SQUARE_ADVANCE,
+  PROMOTION
+}
+```
+
+```java
+public record LegalMove(
+    MoveSpecification moveSpecification,
+    Piece movingPiece,
+    Piece pieceCaptured,
+    LegalMoveKind kind) {
+}
+```
+
+This **replaces / absorbs** `EnPassantRole` rather than sitting beside it as a narrow `promotionRole`. Adding `promotionRole` next to `enPassantRole` would multiply the number of redundant booleans / role-enums; one mutually-exclusive `kind` is cleaner.
+
+Why this is the right shape even if tests are the first consumer: the value isn't test scaffolding. It is true metadata of a legal move, computed at the moment the engine knows the move is legal. Tests using it first is fine — what matters is that the metadata belongs on the type, not in scattered "calculate was last move X?" helpers.
+
+Name caution: prefer `LegalMoveKind` over `MoveType`. `MoveType` is broad enough that future readers will expect it to describe arbitrary move concepts; `LegalMoveKind` is precise — it categorises an already-legal move per this engine's move pipeline.
+
+API trade-off: expands `LegalMove`'s public surface by one field/enum, but lets the project remove the more awkward public `EnPassantRole` and a family of "calculate-was-last-move-X" utility methods. Net effect is **API clarification**, not API bloat.
+
+Surfaced during the API-surface audit by `PromotionUtility.calculateIsPromotionLastMove(ChessBoard)`, which had only test callers and was moved to a private test helper as a stop-gap; the helper still re-reads `MoveSpecification` to answer the question. Once `LegalMoveKind` lands, the test helper collapses to `board.getLastMove().kind() == LegalMoveKind.PROMOTION`, the `EnPassantRole` enum disappears, and the family of "is this kind of move?" helpers on production utilities all collapse to direct `kind()` reads.
+
+- [ ] Define `LegalMoveKind` enum; decide final value set (the five above as a starting list)
+- [ ] Add `kind()` component to `LegalMove`; populate at construction in the rule pipeline
+- [ ] Remove `EnPassantRole` enum and `LegalMove.enPassantRole()`; switch callers to `kind()`
+- [ ] Sweep production "calculate-was-last-move-X" helpers (`PromotionUtility.calculateIsPromotion(...)`, `CastlingUtility.calculateIsCastlingMove(...)`, the various enPassant-checks) and collapse to direct `kind()` reads; delete the helpers if no caller remains
+- [ ] Update the private `calculateIsPromotionLastMove` helpers in `TestPerformMoveSeveralStates` and similar test classes to use `kind()` directly
+
+### Records carry data, not behavior — sweep for violations
+The project rule (documented in `coding-conventions.md`): records carry data; domain logic that operates on them lives in dedicated utility / service classes. Permitted on a record: compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals` / `hashCode` / `toString`. Domain-operation methods are not.
+
+Surfaced by the unused-code-detector pass on `StaticPosition`: the record carries multiple non-data methods — `createChangedPosition` (three overloads), `isPawn`, `isOwnPawn`, `isOpponentPawn`, `isOwnKing`, `isOpponentKing`, almost certainly more. Some have only test callers (suggesting test scaffolding), some have production callers, one (`isOwnKing`) has zero callers anywhere.
+
+- [ ] Catalog every non-permitted member on `StaticPosition` and assign a disposition per member: delete (no callers anywhere), move to a test-side helper that **takes** a `StaticPosition` rather than duplicating it (test-only callers), or move to a `StaticPositionUtility` (production callers).
+- [ ] Sweep every record under `src/main/java` for the same pattern. Records to check include at least `Fen`, `Tag`, `PgnFile`, `LegalMove`, `MoveSpecification`, `StaticPosition`, plus any other top-level `record` declarations under `src/main`.
+- [ ] Apply the dispositions; verify only the permitted member shapes remain on each record.
+- [ ] Naturally folds into the API-surface reduction release, since most "move to utility" relocations open the door to making the utility itself package-private.
 
 ### Rename `NonNullWrapperCommon` to `Nulls`
 The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes through it), and `NonNullWrapperCommon` is too long for something so frequent. `Nulls` is short, pronounceable, says the domain (this utility exists because of nullness handling), and discoverable in the IDE. Rejected alternatives: `NNVC` (cryptic codeword), `Safe` / `Checked` (vague), `NonNulls` (awkward plural).

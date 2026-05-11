@@ -8,23 +8,20 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.StrictSanParser;
 
 /**
- * Surface-level tests for the strict-pipeline game-end pre-check in
- * {@link StrictSanParser#parseText}: one scenario per FIDE-automatic termination
- * ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE},
+ * Surface-level tests for the strict-pipeline game-end pre-check in {@link StrictSanParser#parseText}: one scenario per
+ * FIDE-automatic termination ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE},
  * {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
- * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any SAN attempted on a
- * terminal-state board is rejected with {@link SanValidationProblem#GAME_ALREADY_ENDED} and
- * that the thrown {@link SanValidationException} carries the originating {@link GameStatus}
- * as payload.
+ * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any SAN attempted on a terminal-state board is
+ * rejected with {@link SanValidationProblem#GAME_ALREADY_ENDED} and that the thrown {@link SanValidationException}
+ * carries the originating {@link GameStatus} as payload.
  *
- * <p>The companion {@code TestValidateNewMoveGameEnded} mirrors this set against the
- * MoveSpecification pipeline.
+ * <p>
+ * The companion {@code TestValidateNewMoveGameEnded} mirrors this set against the MoveSpecification pipeline.
  */
 class TestSanValidationGameEnded {
 
@@ -32,43 +29,43 @@ class TestSanValidationGameEnded {
   @Test
   void testGameEndedByCheckmate() {
     // Fool's mate.
-    final ChessBoard board = new Board("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3");
+    final Board board = new Board("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3");
     check("Ke2", board, GameStatus.CHECKMATE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByStalemate() {
-    final ChessBoard board = new Board("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+    final Board board = new Board("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
     check("Kg8", board, GameStatus.STALEMATE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByInsufficientMaterialBoth() {
-    final ChessBoard board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
+    final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
     check("Ke2", board, GameStatus.INSUFFICIENT_MATERIAL_BOTH);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedBySeventyFiveMoveRule() {
-    final ChessBoard board = new Board("4k3/8/4P3/8/8/8/2N1B3/3KQ2R w - - 150 76");
+    final Board board = new Board("4k3/8/4P3/8/8/8/2N1B3/3KQ2R w - - 150 76");
     check("Kd2", board, GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByFivefoldRepetition() {
-    final ChessBoard board = new Board();
-    board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3",
-        "Nf6", "Ng1", "Ng8");
+    final Board board = new Board();
+    board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6",
+        "Ng1", "Ng8");
     check("e4", board, GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
 
   // --- helpers ---
 
-  private static void check(String san, ChessBoard board, GameStatus expectedGameStatus) {
+  private static void check(String san, Board board, GameStatus expectedGameStatus) {
     var isException = false;
     try {
       StrictSanParser.parseText(san, board);

@@ -13,8 +13,8 @@ import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.test.common.utility.FileUtility;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
@@ -35,7 +35,8 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
     final var fenFilePathAmbronaResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH,
         FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
-    final var fenFilePathMineResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT_QUICK);
+    final var fenFilePathMineResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH,
+        FEN_FILE_NAME_MINE_RESULT_QUICK);
 
     final var fenFilePathCompareQuick = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_COMPARE_QUICK);
 

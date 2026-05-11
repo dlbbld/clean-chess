@@ -1,25 +1,13 @@
 package com.dlb.chess.common.utility;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.LegalMove;
 
 public abstract class BasicChessUtility {
-
-  public static String calculateSanList(List<HalfMove> halfMoveList) {
-    final List<String> sanList = new ArrayList<>();
-    for (final HalfMove halfMove : halfMoveList) {
-      sanList.add(halfMove.san());
-    }
-    return BasicUtility.calculateCommaSeparatedList(sanList);
-  }
 
   public static Side calculateSideHavingMoveForSide(String side) {
     return switch (side) {
@@ -58,7 +46,7 @@ public abstract class BasicChessUtility {
     };
   }
 
-  public static GameStatus calculateGameStatus(ChessBoard board) {
+  public static GameStatus calculateGameStatus(Board board) {
 
     if (board.isCheckmate()) {
       return GameStatus.CHECKMATE;

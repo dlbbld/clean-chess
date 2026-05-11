@@ -9,33 +9,31 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.ConfigurationTestConstants;
 
 /**
- * Verifies that the lenient PGN parser rejects every fixture under
- * {@code src/test/resources/pgnParser/common/beyond/} and that the rejection reason carries the
- * specific {@link GameStatus} that ended the game.
+ * Verifies that the lenient PGN parser rejects every fixture under {@code src/test/resources/pgnParser/common/beyond/}
+ * and that the rejection reason carries the specific {@link GameStatus} that ended the game.
  *
  * <p>
- * Each fixture has its own {@code @Test} method with the expected {@link GameStatus} pinned
- * literally in the method body. No runtime filename parsing.
+ * Each fixture has its own {@code @Test} method with the expected {@link GameStatus} pinned literally in the method
+ * body. No runtime filename parsing.
  *
  * <p>
  * The lenient parser raises {@link LenientPgnParserValidationException} with
- * {@link LenientPgnParserValidationProblem#SAN} and
- * {@link SanValidationProblem#GAME_ALREADY_ENDED}; the
- * {@link LenientPgnParserValidationException#getGameStatus()} accessor returns the specific
- * termination cause, which is asserted directly.
+ * {@link LenientPgnParserValidationProblem#SAN} and {@link SanValidationProblem#GAME_ALREADY_ENDED}; the
+ * {@link LenientPgnParserValidationException#getGameStatus()} accessor returns the specific termination cause, which is
+ * asserted directly.
  */
 @SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestLenientPgnParserBeyondTermination {
 
-  private static final Path BEYOND_FOLDER = NonNullWrapperCommon.pathResolve(
-      ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
+  private static final Path BEYOND_FOLDER = NonNullWrapperCommon
+      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
 
   @SuppressWarnings("static-method")
   @Test
@@ -78,34 +76,29 @@ class TestLenientPgnParserBeyondTermination {
   @SuppressWarnings("static-method")
   @Test
   void test07PlayBeyondFivefoldRepetitionWithWhiteMove() {
-    assertRejectedWith("07_play_beyond_fivefold_repetition_with_white_move.pgn",
-        GameStatus.FIVE_FOLD_REPETITION_RULE);
+    assertRejectedWith("07_play_beyond_fivefold_repetition_with_white_move.pgn", GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test08PlayBeyondFivefoldRepetitionWithBlackMove() {
-    assertRejectedWith("08_play_beyond_fivefold_repetition_with_black_move.pgn",
-        GameStatus.FIVE_FOLD_REPETITION_RULE);
+    assertRejectedWith("08_play_beyond_fivefold_repetition_with_black_move.pgn", GameStatus.FIVE_FOLD_REPETITION_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test09PlayBeyondSeventyFiveMoveRuleWithWhiteMove() {
-    assertRejectedWith("09_play_beyond_seventy_five_move_rule_with_white_move.pgn",
-        GameStatus.SEVENTY_FIVE_MOVE_RULE);
+    assertRejectedWith("09_play_beyond_seventy_five_move_rule_with_white_move.pgn", GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test10PlayBeyondSeventyFiveMoveRuleWithBlackMove() {
-    assertRejectedWith("10_play_beyond_seventy_five_move_rule_with_black_move.pgn",
-        GameStatus.SEVENTY_FIVE_MOVE_RULE);
+    assertRejectedWith("10_play_beyond_seventy_five_move_rule_with_black_move.pgn", GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
   private static void assertRejectedWith(String pgnFileName, GameStatus expectedStatus) {
-    final LenientPgnParserValidationException e = assertThrows(
-        LenientPgnParserValidationException.class,
+    final LenientPgnParserValidationException e = assertThrows(LenientPgnParserValidationException.class,
         () -> LenientPgnParser.parse(BEYOND_FOLDER, pgnFileName));
 
     assertEquals(LenientPgnParserValidationProblem.SAN, e.getLenientPgnParserValidationProblem());

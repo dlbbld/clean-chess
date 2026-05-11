@@ -3,11 +3,11 @@ package com.dlb.chess.test.winnable;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
@@ -27,7 +27,7 @@ public class WinnableAnalyzer {
   // we return unknown but we could see that is is unwinnable. here there is a possible improvement.
   // we have a problem with an enemy pawn on the same square type as our bishop
 
-  public static Winnable calculateWinnable(ChessBoard board, Side side) {
+  public static Winnable calculateWinnable(Board board, Side side) {
 
     if (board.isCheckmate()) {
       if (side == board.getHavingMove()) {
@@ -60,7 +60,7 @@ public class WinnableAnalyzer {
     return calculateWinnableNotHavingMove(board);
   }
 
-  private static Winnable calculateWinnableHavingMove(ChessBoard board) {
+  private static Winnable calculateWinnableHavingMove(Board board) {
 
     final Side sideToEvaluate = board.getHavingMove();
 
@@ -116,7 +116,7 @@ public class WinnableAnalyzer {
     return Winnable.UNKNOWN;
   }
 
-  private static Winnable calculateWinnableNotHavingMove(ChessBoard board) {
+  private static Winnable calculateWinnableNotHavingMove(Board board) {
 
     final Side sideToEvaluate = board.getHavingMove().getOppositeSide();
 

@@ -10,15 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.PrintDuration;
+import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestFindHelpMate {
 
@@ -33,10 +32,10 @@ class TestFindHelpMate {
     final List<Long> milliSecondsList = new ArrayList<>();
 
     var hasFound = false;
-    final PgnFileTestCaseList testCaseHavingHelpmateList = PgnExpectedValue
+    final PgnFileTestCaseList testCaseHavingHelpmateList = CreatePgnTestCases
         .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE);
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       if (!hasFound) {
         if (IS_START_FROM_PGN_FILE) {
@@ -55,7 +54,7 @@ class TestFindHelpMate {
 
         logger.info(testCase.pgnFileName());
 
-        final ChessBoard board = new Board(testCase.fen());
+        final Board board = new Board(testCase.fen());
 
         final var beforeMilliSeconds = System.currentTimeMillis();
         final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer

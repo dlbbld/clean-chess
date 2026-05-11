@@ -5,15 +5,14 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnabilityFullAgainstWinnability {
 
@@ -26,15 +25,14 @@ class TestUnwinnabilityFullAgainstWinnability {
   // @Test
   void test() throws Exception {
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue
-        .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       test(testCase);
     }
   }
 
   private static void test(PgnFileTestCase testCase) {
-    final ChessBoard board = new Board(testCase.fen());
+    final Board board = new Board(testCase.fen());
     logger.info(testCase.pgnFileName());
 
     final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);

@@ -6,7 +6,7 @@ import java.util.List;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.san.model.SanValidationFromTo;
+import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.calculate.AbstractSanValidateStaticallyStrictCalculate;
 
 public class AbstractSanValidateStaticallyFormatCalculate extends AbstractSanValidateStaticallyStrictCalculate {

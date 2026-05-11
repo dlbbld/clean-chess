@@ -48,7 +48,7 @@ public class WinnableEvaluateGameState {
   static Winnable calculateWinnableMadeTheMove(Set<GameStatus> gameStatusFirstHalfMove) {
 
     if (gameStatusFirstHalfMove.size() == 1) {
-      final GameStatus singleGameStatus = BasicUtility.getFirstElement(gameStatusFirstHalfMove);
+      final GameStatus singleGameStatus = BasicUtility.calculateOnlyElement(gameStatusFirstHalfMove);
 
       return switch (singleGameStatus) {
         case CHECKMATE -> Winnable.YES;

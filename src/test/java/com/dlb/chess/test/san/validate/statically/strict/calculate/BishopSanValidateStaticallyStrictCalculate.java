@@ -4,8 +4,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.model.SanValidationFromTo;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.enums.BishopSanValidateStaticallyStrict;
 import com.google.common.collect.ImmutableMap;
 

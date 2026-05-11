@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParser;
 
 /**
  * Verifies that the strict PGN parser correctly initializes board state from a {@code [FEN]} tag and updates the

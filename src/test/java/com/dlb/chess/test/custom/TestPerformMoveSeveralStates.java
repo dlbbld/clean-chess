@@ -11,18 +11,17 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.CastlingCheck;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.PromotionUtility;
 
 class TestPerformMoveSeveralStates implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
   void testTrivial() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // white move 1
     // test before move
@@ -96,7 +95,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -136,7 +135,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -176,7 +175,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -216,7 +215,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -256,7 +255,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(1, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -296,7 +295,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -336,7 +335,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -376,7 +375,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertTrue(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -416,7 +415,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(1, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -456,7 +455,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(2, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -496,7 +495,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -536,7 +535,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(1, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -576,7 +575,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(0, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -616,7 +615,7 @@ class TestPerformMoveSeveralStates implements EnumConstants {
       assertEquals(1, board.getHalfMoveClock());
       assertFalse(calculateIsEnPassantCaptureLastMove(board));
       assertFalse(CastlingUtility.calculateIsCastlingMove(board.getLastMove().moveSpecification()));
-      assertFalse(PromotionUtility.calculateIsPromotionLastMove(board));
+      assertFalse(calculateIsPromotionLastMove(board));
 
       assertEquals(Piece.NONE, board.getStaticPosition().get(fromSquare));
       assertEquals(movingPiece, board.getStaticPosition().get(toSquare));
@@ -628,7 +627,11 @@ class TestPerformMoveSeveralStates implements EnumConstants {
     }
   }
 
-  private static boolean calculateIsEnPassantCaptureLastMove(ChessBoard board) {
+  private static boolean calculateIsEnPassantCaptureLastMove(Board board) {
     return board.getLastMove().enPassantRole().isEnPassantCapture();
+  }
+
+  private static boolean calculateIsPromotionLastMove(Board board) {
+    return PromotionUtility.calculateIsPromotion(board.getLastMove().moveSpecification());
   }
 }

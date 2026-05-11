@@ -8,9 +8,8 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.StrictSanParser;
 
 class TestPerformMoveForSan implements EnumConstants {
 
@@ -21,7 +20,7 @@ class TestPerformMoveForSan implements EnumConstants {
     var isException = false;
 
     try {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       // we require checks in SAN to be real checks
       // we do not allow fake checks white
@@ -55,7 +54,7 @@ class TestPerformMoveForSan implements EnumConstants {
 
       // real checkmate black
       {
-        final ChessBoard boardCheckmateBlack = new Board();
+        final Board boardCheckmateBlack = new Board();
 
         boardCheckmateBlack.moveStrict("f3");
         boardCheckmateBlack.moveStrict("e5");
@@ -76,7 +75,7 @@ class TestPerformMoveForSan implements EnumConstants {
     var isException = false;
 
     try {
-      final ChessBoard board = new Board();
+      final Board board = new Board();
 
       checkMoveSpecificationTest(board, "e4", new MoveSpecification(E2, E4));
       checkMoveSpecificationTest(board, "d5", new MoveSpecification(D7, D5));
@@ -115,7 +114,7 @@ class TestPerformMoveForSan implements EnumConstants {
 
       // rook
       {
-        final ChessBoard board = new Board();
+        final Board board = new Board();
 
         board.movesStrict("a4", "a5", "h4", "h5", "Ra3", "Ra6");
         // valid file specification white
@@ -151,7 +150,7 @@ class TestPerformMoveForSan implements EnumConstants {
       // "N4e5", "h4", "a5", "h5", "a4", "h6", "a3", "hxg7", "axb2", "gxf8=N", "bxc1=N", "Ng5", "Ng4", "Nfe6", "Nb3",
       // "Nc5", "Nba5", "Nc5e4", "Nc4", "Nc5", "Nc4e5"
       {
-        final ChessBoard board = new Board();
+        final Board board = new Board();
 
         board.movesStrict("Nc3", "Nc6", "Nh3", "Nh6", "Nf4", "Nf5");
         // valid file specification white
@@ -182,7 +181,7 @@ class TestPerformMoveForSan implements EnumConstants {
       // "exf7", "axb2", "fxg8=B", "Qc8", "Na3", "b1=B", "Bc4", "Bxc2", "Bgd5", "Be4", "Be6", "Bf1", "Bc6d5", "Bfe2",
       // "Nb1", "Be4f3
       {
-        final ChessBoard board = new Board();
+        final Board board = new Board();
 
         board.movesStrict("d4", "e5", "d5", "e4", "f3", "c6", "dxc6", "exf3", "cxb7", "fxg2", "bxa8=B", "gxh1=B", "e3",
             "d6", "Bd5", "Bf3");
@@ -212,7 +211,7 @@ class TestPerformMoveForSan implements EnumConstants {
       // "Qe4", "Qcc3", "Qgf4", "Qcb4", "Qfe5", "Q3c4", "Q5f4", "d4", "g5", "d5", "g4", "d6", "g3", "dxc7", "gxh2",
       // "cxb8=Q", "hxg1=Q", "Q8b5", "Qgg5", "Qb4c5", "Qef5", "Qc5b4", "Qf5g4"
       {
-        final ChessBoard board = new Board();
+        final Board board = new Board();
 
         board.movesStrict("c4", "f5", "c5", "f4", "c6", "f3", "cxb7", "fxg2", "bxa8=Q", "gxh1=Q", "Qb3", "e6");
         // valid file specification white
@@ -244,7 +243,7 @@ class TestPerformMoveForSan implements EnumConstants {
     assertFalse(isException);
   }
 
-  private static void checkMoveSpecificationTest(ChessBoard board, String san, MoveSpecification expectedMove) {
+  private static void checkMoveSpecificationTest(Board board, String san, MoveSpecification expectedMove) {
     final MoveSpecification parsedMoveAsIs = StrictSanParser.parseText(san, board).moveSpecification();
     assertEquals(expectedMove, parsedMoveAsIs);
 

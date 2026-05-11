@@ -10,9 +10,8 @@ import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
 
 /**
- * Lock-down test for {@link KingSafetyCheck#toMoveCheck()}. Ensures the translator stays
- * exhaustive over all failure values and that SUCCESS is rejected as a refusal-reason
- * translation.
+ * Lock-down test for {@link KingSafetyCheck#toMoveCheck()}. Ensures the translator stays exhaustive over all failure
+ * values and that SUCCESS is rejected as a refusal-reason translation.
  */
 class TestKingSafetyCheckTranslator {
 

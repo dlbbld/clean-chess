@@ -8,7 +8,6 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
@@ -16,36 +15,33 @@ import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
 
 /**
- * Base for analyzer-routed scenario tests. The {@link #check} helper inspects the expected
- * {@link MoveCheck} and dispatches:
+ * Base for analyzer-routed scenario tests. The {@link #check} helper inspects the expected {@link MoveCheck} and
+ * dispatches:
  * <ul>
- * <li>movement-category and king-specific MoveChecks ({@code MOVEMENT_*},
- *     {@code KING_CAPTURES_GUARDED_PIECE}, {@code KING_MOVES_NEXT_TO_OPPONENT_KING}) — call
- *     {@link ChessRuleAnalyzer#analyzeMovement} directly and assert the translated MovementCheck;
- * </li>
+ * <li>movement-category and king-specific MoveChecks ({@code MOVEMENT_*}, {@code KING_CAPTURES_GUARDED_PIECE},
+ * {@code KING_MOVES_NEXT_TO_OPPONENT_KING}) — call {@link ChessRuleAnalyzer#analyzeMovement} directly and assert the
+ * translated MovementCheck;</li>
  * <li>king-safety MoveChecks ({@code KING_KING_*}, {@code ALL_BUT_KING_KING_*}) — call
- *     {@link ChessRuleAnalyzer#analyzeKingSafety} directly and assert the translated
- *     KingSafetyCheck;</li>
- * <li>spec-coherence and castling MoveChecks ({@code MOVE_SPEC_*}, {@code KING_CASTLING_*}) — fall
- *     back to {@code Board.move} and assert the InvalidMoveException's MoveCheck. These are
- *     not in analyzer territory.</li>
+ * {@link ChessRuleAnalyzer#analyzeKingSafety} directly and assert the translated KingSafetyCheck;</li>
+ * <li>spec-coherence and castling MoveChecks ({@code MOVE_SPEC_*}, {@code KING_CASTLING_*}) — fall back to
+ * {@code Board.move} and assert the InvalidMoveException's MoveCheck. These are not in analyzer territory.</li>
  * </ul>
  *
  * <p>
- * The fallback path lets the inherited TestValidateNewMove scenarios run unchanged in this class
- * while routing analyzer-territory assertions through the analyzer for direct test coverage.
+ * The fallback path lets the inherited TestValidateNewMove scenarios run unchanged in this class while routing
+ * analyzer-territory assertions through the analyzer for direct test coverage.
  */
 public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumConstants {
 
-  static void check(ChessBoard board, MoveSpecification move, MoveCheck expectedMoveCheck) {
-    final @Nullable MovementCheck expectedMc = toMovementCheck(expectedMoveCheck);
+  static void check(Board board, MoveSpecification move, MoveCheck expectedMoveCheck) {
+    final var expectedMc = toMovementCheck(expectedMoveCheck);
     if (expectedMc != null) {
       final MovementCheck actual = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
           board.getEnPassantCaptureTargetSquare(), move);
       assertEquals(expectedMc, actual);
       return;
     }
-    final @Nullable KingSafetyCheck expectedKs = toKingSafetyCheck(expectedMoveCheck);
+    final var expectedKs = toKingSafetyCheck(expectedMoveCheck);
     if (expectedKs != null) {
       // king-safety presupposes movement passes
       final MovementCheck actualMc = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
@@ -76,20 +72,14 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
       case MOVEMENT_NOT_POSSIBLE -> MovementCheck.NOT_POSSIBLE;
       case MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE -> MovementCheck.TO_SQUARE_OCCUPIED_BY_OWN_PIECE;
       case MOVEMENT_LONG_RANGE_PIECE_JUMPS_OVER_PIECE -> MovementCheck.LONG_RANGE_PIECE_JUMPS_OVER_PIECE;
-      case MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY ->
-          MovementCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY;
-      case MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY ->
-          MovementCheck.PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY;
-      case MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY ->
-          MovementCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY;
-      case MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE ->
-          MovementCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE;
-      case MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE ->
-          MovementCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE;
+      case MOVEMENT_PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY -> MovementCheck.PAWN_FORWARD_TWO_SQUARE_JUMP_OVER_SQUARE_ONLY_NOT_EMPTY;
+      case MOVEMENT_PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY -> MovementCheck.PAWN_FORWARD_TWO_SQUARE_TO_SQUARE_ONLY_NOT_EMPTY;
+      case MOVEMENT_PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY -> MovementCheck.PAWN_FORWARD_TWO_SQUARE_BOTH_SQUARE_NOT_EMPTY;
+      case MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE -> MovementCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OWN_PIECE;
+      case MOVEMENT_PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE -> MovementCheck.PAWN_FORWARD_ONE_SQUARE_TO_SQUARE_NOT_EMPTY_OPPONENT_PIECE;
       case MOVEMENT_PAWN_DIAGONAL_OWN_PIECE -> MovementCheck.PAWN_DIAGONAL_OWN_PIECE;
       case MOVEMENT_PAWN_EN_PASSANT_WRONG_RANK -> MovementCheck.PAWN_EN_PASSANT_WRONG_RANK;
-      case MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE ->
-          MovementCheck.PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE;
+      case MOVEMENT_PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE -> MovementCheck.PAWN_EN_PASSANT_NO_IMMEDIATE_BEFORE_TWO_SQUARE_ADVANCE;
       case KING_CAPTURES_GUARDED_PIECE -> MovementCheck.KING_CAPTURES_GUARDED_PIECE;
       case KING_MOVES_NEXT_TO_OPPONENT_KING -> MovementCheck.KING_MOVES_NEXT_TO_OPPONENT_KING;
       case KING_MOVES_TO_ATTACKED_EMPTY_SQUARE -> MovementCheck.KING_MOVES_TO_ATTACKED_EMPTY_SQUARE;

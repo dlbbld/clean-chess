@@ -7,8 +7,8 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class PgnCacheForLenientPgnParserTestCases {

@@ -12,8 +12,8 @@ import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanValidateFormat;
+import com.dlb.chess.san.SanValidationException;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.san.reference.SanValidateFormatBasic;
 import com.dlb.chess.test.san.validate.statically.format.calculate.SanValidateStaticallyFormat;

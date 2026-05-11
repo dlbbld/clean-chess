@@ -13,7 +13,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
-import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.dlb.chess.squares.AbstractAttackedSquares;
 
 class TestAttackedSquaresByPosition implements EnumConstants {
 

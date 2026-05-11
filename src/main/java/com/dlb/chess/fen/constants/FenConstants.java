@@ -19,11 +19,11 @@ public class FenConstants implements EnumConstants {
 
   public static final String FEN_AFTER_E4_STR = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq e3 0 1";
 
-  public static final String PIECE_PLACEMENT_INITIAL = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
+  static final String PIECE_PLACEMENT_INITIAL = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR";
 
-  public static final String PIECE_PLACEMENT_AFTER_E4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR";
+  static final String PIECE_PLACEMENT_AFTER_E4 = "rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR";
 
-  public static final String PIECE_PLACEMENT_AFTER_E4_E5 = "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR";
+  static final String PIECE_PLACEMENT_AFTER_E4_E5 = "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR";
 
   // we set the max full move counter so that the halfmove clock still fits in the int range
   public static final int MAX_FULL_MOVE_NUMBER = (Integer.MAX_VALUE - 1) / 2;

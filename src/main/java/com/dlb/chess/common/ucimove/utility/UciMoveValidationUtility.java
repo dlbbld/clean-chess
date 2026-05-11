@@ -19,7 +19,6 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
 
   private static final ImmutableList<UciMove> UCI_MOVE_LIST;
   private static final ImmutableMap<String, UciMove> UCI_MOVE_TEXT_LOOKUP;
-  private static final ImmutableMap<UciValidateHelper, UciMove> UCI_MOVE_ENUM_LOOKUP;
 
   static {
 
@@ -37,10 +36,9 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
 
     UCI_MOVE_LIST = NonNullWrapperCommon.copyOfList(uciMoveList);
     UCI_MOVE_TEXT_LOOKUP = NonNullWrapperCommon.copyOfMap(uciMoveTextLookup);
-    UCI_MOVE_ENUM_LOOKUP = NonNullWrapperCommon.copyOfMap(uciMoveEnumLookup);
   }
 
-  public static boolean exists(String text) {
+  static boolean exists(String text) {
     return UCI_MOVE_TEXT_LOOKUP.containsKey(text);
   }
 
@@ -49,10 +47,6 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
       throw new IllegalArgumentException("No such UCI move exists");
     }
     return NonNullWrapperCommon.get(UCI_MOVE_TEXT_LOOKUP, uciMoveStr);
-  }
-
-  public static UciMove read(UciValidateHelper uciValidate) {
-    return NonNullWrapperCommon.get(UCI_MOVE_ENUM_LOOKUP, uciValidate);
   }
 
   public static List<UciMove> getUciMoveList() {
@@ -83,7 +77,7 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
     return new UciMove(uciMove, firstSquare, secondSquare, uciText, isPromotion, promotionPieceType);
   }
 
-  public static String calculateUciMoveStr(Square fromSquare, Square toSquare, PromotionPieceType promotionPieceType) {
+  static String calculateUciMoveStr(Square fromSquare, Square toSquare, PromotionPieceType promotionPieceType) {
     final StringBuilder uciMove = new StringBuilder();
     uciMove.append(fromSquare.getName());
     uciMove.append(toSquare.getName());

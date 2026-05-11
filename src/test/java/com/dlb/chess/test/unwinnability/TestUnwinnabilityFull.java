@@ -12,15 +12,14 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnabilityFull {
 
@@ -51,8 +50,8 @@ class TestUnwinnabilityFull {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST);
     final var pgnFileName = "ambrona_10.pgn";
 
-    final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase(pgnFileName);
-    final ChessBoard board = new Board(pgnFileTestCase.fen());
+    final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase(pgnFileName);
+    final Board board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileName);
 
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
@@ -68,10 +67,9 @@ class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testChaLichessExamples() throws Exception {
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue
-        .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 
@@ -89,9 +87,9 @@ class TestUnwinnabilityFull {
 
   static void testFolderPerformance(PgnTest pgnTest) throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 

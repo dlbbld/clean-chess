@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
+import com.dlb.chess.squares.AbstractEmptyBoardSquares;
 
 public class GenerateRookSanValidateStrict extends AbstractGenerateSanValidateStrict {
 

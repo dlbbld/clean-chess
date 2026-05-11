@@ -7,21 +7,21 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.exceptions.TestSetupException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.test.common.exceptions.SetupException;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public abstract class AbstractTestBasic implements EnumConstants {
@@ -33,13 +33,13 @@ public abstract class AbstractTestBasic implements EnumConstants {
   // 2b) for each file in the test folder there is an entry in the JUnit hardcoded file list
   protected static void checkTestFolder(List<String> junitHardcodedPgnFileNameList, PgnTest pgnTest) {
 
-    final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
+    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
     final List<String> expectedValueHardcodedFileList = calculatePgnFileNameList(testCaseList.list());
 
     // 1a)
     for (final String pgnFileName : junitHardcodedPgnFileNameList) {
       if (!expectedValueHardcodedFileList.contains(pgnFileName)) {
-        throw new TestSetupException("The JUnit hardcoded file \"" + pgnFileName
+        throw new SetupException("The JUnit hardcoded file \"" + pgnFileName
             + "\" has no corresponding entry in the expected value hardcoded file list");
       }
     }
@@ -47,7 +47,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     // 1b)
     for (final String pgnFileName : expectedValueHardcodedFileList) {
       if (!junitHardcodedPgnFileNameList.contains(pgnFileName)) {
-        throw new TestSetupException("The expected value hardcoded file \"" + pgnFileName
+        throw new SetupException("The expected value hardcoded file \"" + pgnFileName
             + "\" has no corresponding entry in the JUnit hardcoded list");
       }
     }
@@ -55,8 +55,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     // 2a)
     for (final String pgnFileName : junitHardcodedPgnFileNameList) {
       if (!FileUtility.exists(pgnTest.getFolderPath(), pgnFileName)) {
-        throw new TestSetupException(
-            "The JUnit hardcoded file \"" + pgnFileName + "\" does not exist in the test folder");
+        throw new SetupException("The JUnit hardcoded file \"" + pgnFileName + "\" does not exist in the test folder");
       }
     }
 
@@ -64,7 +63,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     final List<String> testFolderPgnFileNameList = FileUtility.readFileNameList(pgnTest.getFolderPath());
     for (final String pgnFileName : testFolderPgnFileNameList) {
       if (!junitHardcodedPgnFileNameList.contains(pgnFileName)) {
-        throw new TestSetupException(
+        throw new SetupException(
             "The test directory file \"" + pgnFileName + "\" does not exist in the JUnit hardcoded file list");
       }
     }
@@ -79,13 +78,13 @@ public abstract class AbstractTestBasic implements EnumConstants {
     return result;
   }
 
-  protected static void checkCheckmate(ChessBoard board) {
+  protected static void checkCheckmate(Board board) {
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
     assertFalse(board.isStalemate());
   }
 
-  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, ChessBoard board) {
+  static void checkCapture(Square fromSquare, Square toSquare, Piece movingPiece, Piece capturedPiece, Board board) {
     assertTrue(board.isCapture());
     assertFalse(board.isCheckmate());
     assertFalse(board.isStalemate());
@@ -95,7 +94,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkNonCaptureCheck(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board) {
+  static void checkNonCaptureCheck(Square fromSquare, Square toSquare, Piece movingPiece, Board board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertFalse(board.isCheckmate());
@@ -106,7 +105,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkNonCaptureCheckmate(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board) {
+  static void checkNonCaptureCheckmate(Square fromSquare, Square toSquare, Piece movingPiece, Board board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
@@ -117,7 +116,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkEnPassantCapture(Side side, Square fromSquare, Square toSquare, ChessBoard board) {
+  static void checkEnPassantCapture(Side side, Square fromSquare, Square toSquare, Board board) {
 
     assertTrue(board.isCapture());
     assertFalse(board.isCheck());
@@ -146,12 +145,12 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, lastMoveEnPassantCapture);
   }
 
-  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board) {
+  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, Board board) {
 
     checkMovingPiece(fromSquare, toSquare, movingPiece, board, EnPassantRole.NONE);
   }
 
-  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, ChessBoard board,
+  static void checkMovingPiece(Square fromSquare, Square toSquare, Piece movingPiece, Board board,
       EnPassantRole enPassantRole) {
 
     assertFalse(board.isCapture());
@@ -166,7 +165,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
   }
 
   static void checkPromotion(Side side, Square fromSquare, Square toSquare, Piece capturedPiece,
-      PromotionPieceType promotionPieceType, ChessBoard board) {
+      PromotionPieceType promotionPieceType, Board board) {
 
     if (capturedPiece == Piece.NONE) {
       assertFalse(board.isCapture());
@@ -183,13 +182,13 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkCastle(Side side, CastlingMove castlingMove, ChessBoard board) {
+  static void checkCastle(Side side, CastlingMove castlingMove, Board board) {
     final var moveSpecification = new MoveSpecification(castlingMove);
     final LegalMove expected = new LegalMove(moveSpecification, Piece.calculateKingPiece(side), Piece.NONE);
     assertEquals(expected, board.getLastMove());
   }
 
-  static void checkDoubleCheck(Piece movingPiece, ChessBoard board) {
+  static void checkDoubleCheck(Piece movingPiece, Board board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertFalse(board.isCheckmate());
@@ -198,7 +197,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(movingPiece, board.getLastMove().movingPiece());
   }
 
-  static void checkDoubleCheckCheckmate(Piece movingPiece, ChessBoard board) {
+  static void checkDoubleCheckCheckmate(Piece movingPiece, Board board) {
     assertFalse(board.isCapture());
     assertTrue(board.isCheck());
     assertTrue(board.isCheckmate());
@@ -207,7 +206,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     assertEquals(movingPiece, board.getLastMove().movingPiece());
   }
 
-  private static boolean calculateIsEnPassantCaptureLastMove(ChessBoard board) {
+  private static boolean calculateIsEnPassantCaptureLastMove(Board board) {
     return board.getLastMove().enPassantRole().isEnPassantCapture();
   }
 

@@ -1,0 +1,62 @@
+package com.dlb.chess.test.fen.roundtrip;
+
+import java.nio.file.Path;
+import java.util.List;
+
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
+
+import com.dlb.chess.board.Board;
+import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.model.PgnHalfMove;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.test.RestrictTestConstants;
+import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+
+class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
+
+  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFenRoundtripPgn.class);
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPgnFiles() throws Exception {
+
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+      if (RestrictTestConstants.IS_RESTRICT_PGN_FEN_PARSER_ALL_TEST) {
+        switch (testCaseList.pgnTest()) {
+          case BASIC_CHECK_WHITE:
+          case BASIC_CHECK_BLACK:
+          case BASIC_CHECKMATE_WHITE:
+          case BASIC_CHECKMATE_BLACK:
+          case BASIC_STALEMATE:
+            break;
+          // $CASES-OMITTED$
+          default:
+            continue;
+        }
+      }
+      for (final PgnFileTestCase testCase : testCaseList.list()) {
+        checkFenRoundtrip(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+      }
+    }
+  }
+
+  private static void checkFenRoundtrip(Path folderPath, String pgnFileName) throws Exception {
+
+    logger.info(pgnFileName);
+
+    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+
+    final Board board = new Board(pgnFile.startFen());
+    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+      board.moveStrict(halfMove.san());
+    }
+    final List<MoveSpecification> moveList = board.getPerformedMoveSpecificationList();
+    checFenRoundtrip(pgnFile.startFen().fen(), moveList);
+  }
+
+}

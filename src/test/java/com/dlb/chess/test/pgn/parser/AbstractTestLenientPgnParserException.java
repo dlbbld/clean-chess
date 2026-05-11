@@ -6,11 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.nio.file.Path;
 
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
-import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParserValidationResult;
+import com.dlb.chess.san.SanValidationProblem;
 
 public abstract class AbstractTestLenientPgnParserException extends AbstractTestLenientPgnParser {
   static void checkException(Path pgnTestFolderPath, String pgnFileName,

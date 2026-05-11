@@ -1,7 +1,6 @@
 package com.dlb.chess.test.special;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -18,13 +17,11 @@ class TestSpecialReverseMethods implements EnumConstants {
       for (final Side side : Side.REAL) {
         if (Square.calculateHasLeftDiagonalSquare(side, square)) {
           final Square calculatedSquare = Square.calculateLeftDiagonalSquare(side, square);
-          assertTrue(Square.calculateIsLeftDiagonalSquare(side, square, calculatedSquare));
           final Square revertedSquare = Square.calculateLeftDiagonalSquare(side.getOppositeSide(), calculatedSquare);
           assertEquals(square, revertedSquare);
         }
         if (Square.calculateHasRightDiagonalSquare(side, square)) {
           final Square calculatedSquare = Square.calculateRightDiagonalSquare(side, square);
-          assertTrue(Square.calculateIsRightDiagonalSquare(side, square, calculatedSquare));
           final Square revertedSquare = Square.calculateRightDiagonalSquare(side.getOppositeSide(), calculatedSquare);
           assertEquals(square, revertedSquare);
         }

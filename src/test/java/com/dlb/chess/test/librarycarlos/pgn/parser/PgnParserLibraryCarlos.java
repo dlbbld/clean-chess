@@ -7,8 +7,8 @@ import java.util.List;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.fen.constants.FenConstants;
-import com.dlb.chess.pgn.parser.model.PgnSan;
 import com.dlb.chess.test.librarycarlos.utility.PgnParserUtilityLibraryCarlos;
+import com.dlb.chess.test.pgn.parser.model.PgnSan;
 import com.github.bhlangonijr.chesslib.game.Game;
 import com.github.bhlangonijr.chesslib.move.Move;
 

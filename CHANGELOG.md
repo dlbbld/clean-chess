@@ -4,6 +4,29 @@ Releases from 3.3 onward. Earlier history is in git tags only.
 
 ## [Unreleased]
 
+## [5.0.0] - 2026-05-11
+
+Reduce public API surface release. No feature changes; the surface is narrowed to what was always intended — play chess correctly and report rule-true outcomes. Material arithmetic and other internal helpers that supported that intent are now internal.
+
+### Breaking — packages removed
+- `com.dlb.chess.utility` — split into the feature packages that own each helper.
+- `com.dlb.chess.range` — absorbed into `com.dlb.chess.squares` (the only consumer).
+- `com.dlb.chess.distance` — absorbed into `com.dlb.chess.unwinnability` and made internal.
+
+### Breaking — types no longer public
+- `MaterialUtility`, `InsufficientMaterialUtility` — material-arithmetic helpers that were never part of the contract. Insufficient-material termination remains observable via `Board.isInsufficientMaterial(Side)` and `Board.calculateInsufficientMaterial()`.
+- `ChessBoard` interface — collapsed into `Board`. There is one board type.
+- Numerous internal helpers across `squares`, `moves`, `san`, `unwinnability`, `pgn`, `report` that were public only because they sat in `src/main/java`. After this release the implementation classes that exist to serve a public entry point are package-private.
+
+### Migration
+For typical use (`Board`, the parsers, the reporters): none.
+
+If your code referenced one of the removed-or-demoted types, it was reaching into internals. The current public API is the supported surface; please open an issue if you have a legitimate use case that no longer fits.
+
+### Notable
+- Sub-package flattens for `squares`, `moves`, `unwinnability`, `san`, `pgn`, `report` — each feature is now a single coherent package rather than a tree of mostly-trivial sub-packages.
+- Removed unused public enum convenience methods for double-step file/rank movement and thin rank predicates.
+
 ## [4.0.0] - 2026-05-10
 
 Lenient SAN release. New parser pipeline accepts a defined set of forgivable deviations from canonical SAN; the move-execution and parser API is renamed across the board to make the strict / lenient axis explicit at every call site.

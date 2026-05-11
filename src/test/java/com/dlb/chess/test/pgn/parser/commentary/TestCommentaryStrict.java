@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 
 /**
  * Commentary delimiter validation for StrictPgnParser. Three delimiter rules:

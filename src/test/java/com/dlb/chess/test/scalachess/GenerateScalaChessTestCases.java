@@ -14,23 +14,22 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.PromotionUtility;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateScalaChessTestCases implements EnumConstants {
@@ -38,7 +37,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   // if true test for folder is ignored
   private static final boolean IS_GENERATE_FOR_PGN_FILE_NAME = true;
   private static final String GENERATE_PGN_FILE_NAME = "insufficient_material_KBbBb_K.pgn";
-  private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = PgnExpectedValue.findPgnTest(GENERATE_PGN_FILE_NAME);
+  private static final PgnTest GENERATE_PGN_FILE_NAME_PGN_TEST = CreatePgnTestCases.findPgnTest(GENERATE_PGN_FILE_NAME);
 
   // is ignored if test for file is true
   private static final boolean IS_GENERATE_ONLY_FOR_TEST_CASE = true;
@@ -83,7 +82,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         codeLineList);
     processScalaChessCodeLine("", counterList, codeLineList);
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getRestrictedTestListList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
 
       if (isContinueFolderLevel(IS_GENERATE_FOR_PGN_FILE_NAME, IS_GENERATE_ONLY_FOR_TEST_CASE, testCaseList)) {
         continue;
@@ -124,8 +123,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
         logger.info("Processing game " + testCase.pgnFileName());
 
-        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(),
-            testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
         processScalaChessCodeLine("", counterList, codeLineList);
         processScalaChessCodeLine("  println(\"Declaring test case for " + testCase.pgnFileName() + "\")", counterList,
             codeLineList);
@@ -136,7 +134,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         processScalaChessCodeLine("    val uciAdaptedList = new java.util.ArrayList[String]()", counterList,
             codeLineList);
 
-        final ChessBoard boardPlayAlong = new Board();
+        final Board boardPlayAlong = new Board();
         final List<HalfMove> halfMoveList = report.halfMoveList();
         for (var i = 0; i < halfMoveList.size(); i++) {
           final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);

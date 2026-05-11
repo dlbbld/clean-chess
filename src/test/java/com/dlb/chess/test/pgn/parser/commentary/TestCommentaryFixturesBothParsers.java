@@ -10,16 +10,16 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParserValidationResult;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.StrictPgnParserValidationResult;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
@@ -86,8 +86,7 @@ class TestCommentaryFixturesBothParsers {
 
   @ParameterizedTest(name = "strict/pregameCommentary/exception/spacing/{0}")
   @ValueSource(strings = { "03_movetext_commentary_not_followed_by_space.pgn",
-      "04_movetext_commentary_followed_by_space_but_ending.pgn",
-      "05_movetext_commentary_followed_by_two_spaces.pgn",
+      "04_movetext_commentary_followed_by_space_but_ending.pgn", "05_movetext_commentary_followed_by_two_spaces.pgn",
       "06_movetext_commentary_not_followed_by_value.pgn" })
   @SuppressWarnings("static-method")
   void strictRejectsPregameCommentarySpacingFixtures(String pgnFileName) {
@@ -117,10 +116,8 @@ class TestCommentaryFixturesBothParsers {
 
   @ParameterizedTest(name = "strict/nonPregameCommentary/exception/spacing/{0}")
   @ValueSource(strings = { "03_1_movetext_commentary_not_followed_by_space.pgn",
-      "03_2_movetext_commentary_not_followed_by_space.pgn",
-      "04_movetext_commentary_followed_by_space_but_ending.pgn",
-      "05_1_movetext_commentary_followed_by_two_spaces.pgn",
-      "05_2_movetext_commentary_followed_by_two_spaces.pgn",
+      "03_2_movetext_commentary_not_followed_by_space.pgn", "04_movetext_commentary_followed_by_space_but_ending.pgn",
+      "05_1_movetext_commentary_followed_by_two_spaces.pgn", "05_2_movetext_commentary_followed_by_two_spaces.pgn",
       "06_movetext_commentary_not_followed_by_value.pgn" })
   @SuppressWarnings("static-method")
   void strictRejectsNonPregameCommentarySpacingFixtures(String pgnFileName) {
@@ -159,8 +156,7 @@ class TestCommentaryFixturesBothParsers {
 
   @ParameterizedTest(name = "lenient/pregameCommentary/strict-only-exception/{0}")
   @ValueSource(strings = { "03_movetext_commentary_not_followed_by_space.pgn",
-      "04_movetext_commentary_followed_by_space_but_ending.pgn",
-      "05_movetext_commentary_followed_by_two_spaces.pgn",
+      "04_movetext_commentary_followed_by_space_but_ending.pgn", "05_movetext_commentary_followed_by_two_spaces.pgn",
       "06_movetext_commentary_not_followed_by_value.pgn" })
   @SuppressWarnings("static-method")
   void lenientAcceptsPregameCommentaryStrictOnlyExceptionFixtures(String pgnFileName) {
@@ -191,10 +187,8 @@ class TestCommentaryFixturesBothParsers {
 
   @ParameterizedTest(name = "lenient/nonPregameCommentary/strict-only-exception/{0}")
   @ValueSource(strings = { "03_1_movetext_commentary_not_followed_by_space.pgn",
-      "03_2_movetext_commentary_not_followed_by_space.pgn",
-      "04_movetext_commentary_followed_by_space_but_ending.pgn",
-      "05_1_movetext_commentary_followed_by_two_spaces.pgn",
-      "05_2_movetext_commentary_followed_by_two_spaces.pgn",
+      "03_2_movetext_commentary_not_followed_by_space.pgn", "04_movetext_commentary_followed_by_space_but_ending.pgn",
+      "05_1_movetext_commentary_followed_by_two_spaces.pgn", "05_2_movetext_commentary_followed_by_two_spaces.pgn",
       "06_movetext_commentary_not_followed_by_value.pgn" })
   @SuppressWarnings("static-method")
   void lenientAcceptsNonPregameCommentaryStrictOnlyExceptionFixtures(String pgnFileName) {
@@ -208,8 +202,7 @@ class TestCommentaryFixturesBothParsers {
         "Strict and lenient parsers disagree on " + folder.getFileName() + "/" + pgnFileName);
   }
 
-  private static void assertStrictRejects(Path folder, String pgnFileName,
-      StrictPgnParserValidationProblem expected) {
+  private static void assertStrictRejects(Path folder, String pgnFileName, StrictPgnParserValidationProblem expected) {
     var isException = false;
     try {
       StrictPgnParser.parse(folder, pgnFileName);

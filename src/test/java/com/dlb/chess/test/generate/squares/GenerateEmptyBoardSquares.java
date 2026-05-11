@@ -17,11 +17,11 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.range.DiagonalRange;
-import com.dlb.chess.range.OrthogonalRange;
-import com.dlb.chess.range.model.BishopRange;
-import com.dlb.chess.range.model.QueenRange;
-import com.dlb.chess.range.model.RookRange;
+import com.dlb.chess.squares.BishopRange;
+import com.dlb.chess.squares.DiagonalRange;
+import com.dlb.chess.squares.OrthogonalRange;
+import com.dlb.chess.squares.QueenRange;
+import com.dlb.chess.squares.RookRange;
 import com.google.common.collect.ImmutableList;
 
 public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
@@ -319,7 +319,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
       var candidateRank = RANK_NONE;
       if (Rank.calculateHasNextNextRank(WHITE, sourceRank)) {
-        candidateRank = Rank.calculateNextNextRank(WHITE, sourceRank);
+        candidateRank = calculateNextNextRank(WHITE, sourceRank);
       } else {
         candidateRank = RANK_NONE;
       }
@@ -331,7 +331,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     {
       final File candidateFile;
       if (File.calculateHasRightRightFile(WHITE, sourceFile)) {
-        candidateFile = File.calculateRightRightFile(WHITE, sourceFile);
+        candidateFile = calculateRightRightFile(WHITE, sourceFile);
       } else {
         candidateFile = FILE_NONE;
       }
@@ -350,7 +350,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     {
       final File candidateFile;
       if (File.calculateHasRightRightFile(WHITE, sourceFile)) {
-        candidateFile = File.calculateRightRightFile(WHITE, sourceFile);
+        candidateFile = calculateRightRightFile(WHITE, sourceFile);
       } else {
         candidateFile = FILE_NONE;
       }
@@ -376,7 +376,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
       var candidateRank = RANK_NONE;
       if (Rank.calculateHasPreviousPreviousRank(WHITE, sourceRank)) {
-        candidateRank = Rank.calculatePreviousPreviousRank(WHITE, sourceRank);
+        candidateRank = calculatePreviousPreviousRank(WHITE, sourceRank);
       } else {
         candidateRank = RANK_NONE;
       }
@@ -395,7 +395,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
       var candidateRank = RANK_NONE;
       if (Rank.calculateHasPreviousPreviousRank(WHITE, sourceRank)) {
-        candidateRank = Rank.calculatePreviousPreviousRank(WHITE, sourceRank);
+        candidateRank = calculatePreviousPreviousRank(WHITE, sourceRank);
       } else {
         candidateRank = RANK_NONE;
       }
@@ -407,7 +407,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     {
       final File candidateFile;
       if (File.calculateHasLeftLeftFile(WHITE, sourceFile)) {
-        candidateFile = File.calculateLeftLeftFile(WHITE, sourceFile);
+        candidateFile = calculateLeftLeftFile(WHITE, sourceFile);
       } else {
         candidateFile = FILE_NONE;
       }
@@ -426,7 +426,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     {
       final File candidateFile;
       if (File.calculateHasLeftLeftFile(WHITE, sourceFile)) {
-        candidateFile = File.calculateLeftLeftFile(WHITE, sourceFile);
+        candidateFile = calculateLeftLeftFile(WHITE, sourceFile);
       } else {
         candidateFile = FILE_NONE;
       }
@@ -452,7 +452,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
       var candidateRank = RANK_NONE;
       if (Rank.calculateHasNextNextRank(WHITE, sourceRank)) {
-        candidateRank = Rank.calculateNextNextRank(WHITE, sourceRank);
+        candidateRank = calculateNextNextRank(WHITE, sourceRank);
       } else {
         candidateRank = RANK_NONE;
       }
@@ -657,7 +657,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
     final Set<Square> resultSet = new TreeSet<>();
 
     final Rank rank = fromSquare.getRank();
-    if (Rank.calculateIsGroundRank(havingMove, rank) || Rank.calculateIsPromotionRank(havingMove, rank)) {
+    if (rank == Rank.calculateGroundRank(havingMove) || Rank.calculateIsPromotionRank(havingMove, rank)) {
       // no moves possibles which we represent as empty list
       // needed later in legal move generation to find illegal moves
       return resultSet;
@@ -671,7 +671,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
       case ANY_ADVANCE:
         processNonEmpty(resultSet, fixedFile, nextRank);
         // two ahead
-        if (Rank.calculateIsPawnInititalRank(havingMove, rank)) {
+        if (rank == Rank.calculatePawnInitialRank(havingMove)) {
           final Rank nextNextRank = Rank.calculateNextRank(havingMove, nextRank);
           processNonEmpty(resultSet, fixedFile, nextNextRank);
         }
@@ -681,7 +681,7 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
         break;
       case TWO_SQUARE_ADVANCE:
         // two ahead
-        if (Rank.calculateIsPawnInititalRank(havingMove, rank)) {
+        if (rank == Rank.calculatePawnInitialRank(havingMove)) {
           final Rank nextNextRank = Rank.calculateNextRank(havingMove, nextRank);
           processNonEmpty(resultSet, fixedFile, nextNextRank);
         }
@@ -702,6 +702,22 @@ public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
 
       resultSet.add(toSquare);
     }
+  }
+
+  private static File calculateLeftLeftFile(Side side, File file) {
+    return File.calculateLeftFile(side, File.calculateLeftFile(side, file));
+  }
+
+  private static File calculateRightRightFile(Side side, File file) {
+    return File.calculateRightFile(side, File.calculateRightFile(side, file));
+  }
+
+  private static Rank calculateNextNextRank(Side side, Rank rank) {
+    return Rank.calculateNextRank(side, Rank.calculateNextRank(side, rank));
+  }
+
+  private static Rank calculatePreviousPreviousRank(Side side, Rank rank) {
+    return Rank.calculatePreviousRank(side, Rank.calculatePreviousRank(side, rank));
   }
 
 }

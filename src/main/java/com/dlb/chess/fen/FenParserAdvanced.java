@@ -24,13 +24,13 @@ import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.FenRawValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.MaterialUtility;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.CastlingRightBoth;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 
 public class FenParserAdvanced implements EnumConstants {
 
@@ -54,7 +54,7 @@ public class FenParserAdvanced implements EnumConstants {
     try {
       fenRaw = FenParserRaw.parseFenRaw(fen);
     } catch (final FenRawValidationException e) {
-      @SuppressWarnings("null") @NonNull final String message = e.getMessage();
+      final String message = BasicUtility.getMessage(e);
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_FORMAT, message);
     }
 
@@ -555,7 +555,7 @@ public class FenParserAdvanced implements EnumConstants {
 
   private static void validateWhiteNumberOfPieces(StaticPosition staticPosition) throws FenAdvancedValidationException {
     // kings
-    final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KING);
+    final var numberOfKings = FenMaterialCount.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KING);
     if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KINGS,
           "there is more than one white king");
@@ -566,7 +566,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // pawns
-    final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.PAWN);
+    final var numberOfPawns = FenMaterialCount.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.PAWN);
     if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_PAWNS,
           "there are too many white pawns");
@@ -575,7 +575,7 @@ public class FenParserAdvanced implements EnumConstants {
     final var numberOfPossiblePromotions = ChessConstants.INITIAL_NUMBER_OF_PAWNS - numberOfPawns;
 
     // rooks
-    final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.ROOK);
+    final var numberOfRooks = FenMaterialCount.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.ROOK);
     final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
     if (numberOfRooksPromoted > numberOfPossiblePromotions) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_ROOKS,
@@ -583,7 +583,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // knights
-    final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KNIGHT);
+    final var numberOfKnights = FenMaterialCount.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.KNIGHT);
     final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
     if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_KNIGHTS,
@@ -591,7 +591,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // light square bishops
-    final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
+    final var numberOfLightSquareBishops = FenMaterialCount.calculateNumberOfBishops(Side.WHITE, staticPosition,
         SquareType.LIGHT_SQUARE);
     final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
@@ -601,7 +601,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // dark square bishops
-    final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.WHITE, staticPosition,
+    final var numberOfDarkSquareBishops = FenMaterialCount.calculateNumberOfBishops(Side.WHITE, staticPosition,
         SquareType.DARK_SQUARE);
     final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
@@ -611,7 +611,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // queens
-    final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.QUEEN);
+    final var numberOfQueens = FenMaterialCount.calculateNumberOfPieces(Side.WHITE, staticPosition, PieceType.QUEEN);
     final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
     if (numberOfQueensPromoted > numberOfPossiblePromotions) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_WHITE_TOO_MANY_QUEENS,
@@ -622,7 +622,7 @@ public class FenParserAdvanced implements EnumConstants {
   private static void validateBlackNumberOfPieces(StaticPosition staticPosition) throws FenAdvancedValidationException {
     // copy/replace code of white
     // kings
-    final var numberOfKings = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KING);
+    final var numberOfKings = FenMaterialCount.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KING);
     if (numberOfKings > ChessConstants.NUMBER_OF_KINGS) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KINGS,
           "there is more than one black king");
@@ -633,7 +633,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // pawns
-    final var numberOfPawns = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.PAWN);
+    final var numberOfPawns = FenMaterialCount.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.PAWN);
     if (numberOfPawns > ChessConstants.INITIAL_NUMBER_OF_PAWNS) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_PAWNS,
           "there are too many black pawns");
@@ -642,7 +642,7 @@ public class FenParserAdvanced implements EnumConstants {
     final var numberOfPossiblePromotions = ChessConstants.INITIAL_NUMBER_OF_PAWNS - numberOfPawns;
 
     // rooks
-    final var numberOfRooks = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.ROOK);
+    final var numberOfRooks = FenMaterialCount.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.ROOK);
     final var numberOfRooksPromoted = numberOfRooks - ChessConstants.INITIAL_NUMBER_OF_ROOKS;
     if (numberOfRooksPromoted > numberOfPossiblePromotions) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_ROOKS,
@@ -650,7 +650,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // knights
-    final var numberOfKnights = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KNIGHT);
+    final var numberOfKnights = FenMaterialCount.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.KNIGHT);
     final var numberOfKnightsPromoted = numberOfKnights - ChessConstants.INITIAL_NUMBER_OF_KNIGHTS;
     if (numberOfKnightsPromoted > numberOfPossiblePromotions) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_KNIGHTS,
@@ -658,7 +658,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // light square bishops
-    final var numberOfLightSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
+    final var numberOfLightSquareBishops = FenMaterialCount.calculateNumberOfBishops(Side.BLACK, staticPosition,
         SquareType.LIGHT_SQUARE);
     final var numberOfLightSquareBishopsPromoted = numberOfLightSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_LIGHT_SQUARE_BISHOPS;
@@ -668,7 +668,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // dark square bishops
-    final var numberOfDarkSquareBishops = MaterialUtility.calculateNumberOfBishops(Side.BLACK, staticPosition,
+    final var numberOfDarkSquareBishops = FenMaterialCount.calculateNumberOfBishops(Side.BLACK, staticPosition,
         SquareType.DARK_SQUARE);
     final var numberOfDarkSquareBishopsPromoted = numberOfDarkSquareBishops
         - ChessConstants.INITIAL_NUMBER_OF_DARK_SQUARE_BISHOPS;
@@ -678,7 +678,7 @@ public class FenParserAdvanced implements EnumConstants {
     }
 
     // queens
-    final var numberOfQueens = MaterialUtility.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.QUEEN);
+    final var numberOfQueens = FenMaterialCount.calculateNumberOfPieces(Side.BLACK, staticPosition, PieceType.QUEEN);
     final var numberOfQueensPromoted = numberOfQueens - ChessConstants.INITIAL_NUMBER_OF_QUEENS;
     if (numberOfQueensPromoted > numberOfPossiblePromotions) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_BLACK_TOO_MANY_QUEENS,

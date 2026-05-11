@@ -3,10 +3,10 @@ package com.dlb.chess.test.report.representation;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.HalfMoveUtility;
-import com.dlb.chess.report.model.NoProgressHalfMove;
+import com.dlb.chess.report.NoProgressHalfMove;
 
 public class NoProgressRepresentation {
 
@@ -15,7 +15,7 @@ public class NoProgressRepresentation {
     for (final List<NoProgressHalfMove> list : listList) {
       resultList.add(calculateRepresentationNoProgressMoveList(list));
     }
-    return BasicUtility.calculateSemicolonSeparatedList(resultList);
+    return NonNullWrapperCommon.join("; ", resultList);
   }
 
   private static String calculateRepresentationNoProgressMoveList(List<NoProgressHalfMove> list) {
@@ -35,7 +35,8 @@ public class NoProgressRepresentation {
         noProgressHalfMove.sideMoved()) + noProgressHalfMove.san();
   }
 
-  private static String calculateRepresentationNoProgressMoveIncludingSequenceLength(NoProgressHalfMove noProgressHalfMove) {
+  private static String calculateRepresentationNoProgressMoveIncludingSequenceLength(
+      NoProgressHalfMove noProgressHalfMove) {
     return calculateRepresentationNoProgressMove(noProgressHalfMove) + " (" + noProgressHalfMove.sequenceLength() + ")";
   }
 

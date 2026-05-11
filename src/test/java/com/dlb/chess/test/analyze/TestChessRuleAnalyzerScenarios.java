@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.PromotionPieceType;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 
@@ -13,7 +12,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @Test
   @SuppressWarnings("static-method")
   void testWhiteMovingPiece() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     MoveSpecification move = new MoveSpecification(E3, E4);
 
     check(board, move, MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
@@ -144,7 +143,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testWhiteCapturingNonPawn() {
 
     // capturing own pieces
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // rook
     MoveSpecification move = new MoveSpecification(A1, A2);
@@ -209,7 +208,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testWhiteCapturingPawn() {
 
-    ChessBoard board = new Board("rnb1kbnr/pppq1ppp/8/3pp3/3P4/P7/1PPQPPPP/RNB1KBNR w KQkq - 2 4");
+    Board board = new Board("rnb1kbnr/pppq1ppp/8/3pp3/3P4/P7/1PPQPPPP/RNB1KBNR w KQkq - 2 4");
 
     // pawn
     MoveSpecification move = new MoveSpecification(A3, A4);
@@ -483,7 +482,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testWhitePawnTwoSquareAdvanceMoves() {
     // pawn two advance moves
 
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, C3);
     board.move(move);
@@ -529,7 +528,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testWhiteKingMoves() {
 
-    ChessBoard board = new Board();
+    Board board = new Board();
 
     // king
     board = new Board();
@@ -693,7 +692,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testWhitePromotionPieceWronglySet() {
 
-    ChessBoard board = new Board();
+    Board board = new Board();
     // non pawn move - promotion piece set
     board = new Board();
 
@@ -837,7 +836,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @Test
   @SuppressWarnings("static-method")
   void testBlackMovingPieces() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     board.moveStrict("e4");
 
@@ -970,7 +969,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testBlackCapturingNonPawn() {
 
     // capturing own pieces
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     board.moveStrict("e4");
 
     // rook
@@ -1037,7 +1036,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   void testBlackCapturingPawn() {
     // pawn
 
-    ChessBoard board = new Board();
+    Board board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A3);
     board.move(move);
@@ -1245,7 +1244,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testBlackPawnTwoSquareAdvanceMoves() {
 
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     MoveSpecification move = new MoveSpecification(E2, E4);
     board.move(move);
@@ -1316,7 +1315,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testBlackKingMoves() {
 
-    ChessBoard board = new Board();
+    Board board = new Board();
 
     MoveSpecification move = new MoveSpecification(B1, C3);
     board.move(move);
@@ -1374,7 +1373,7 @@ class TestChessRuleAnalyzerScenarios extends AbstractTestChessRuleAnalyzerScenar
   @SuppressWarnings("static-method")
   void testBlackPromotionPieceWronglySet() {
 
-    ChessBoard board = new Board();
+    Board board = new Board();
 
     MoveSpecification move = new MoveSpecification(A2, A4);
     board.move(move);

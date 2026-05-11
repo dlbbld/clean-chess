@@ -1,6 +1,6 @@
 /**
- * Pipeline-level domain enums shared across SAN and movement validation. Distinct from {@code board.enums} (which
- * holds basic chess primitives like {@link com.dlb.chess.board.enums.Side}, {@link com.dlb.chess.board.enums.Piece},
+ * Pipeline-level domain enums shared across SAN and movement validation. Distinct from {@code board.enums} (which holds
+ * basic chess primitives like {@link com.dlb.chess.board.enums.Side}, {@link com.dlb.chess.board.enums.Piece},
  * {@link com.dlb.chess.board.enums.Square}); this package holds enums that classify <em>diagnostic outcomes</em>:
  *
  * <ul>

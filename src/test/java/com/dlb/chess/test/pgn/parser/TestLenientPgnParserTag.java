@@ -8,10 +8,10 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.enums.ResultTagValue;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.ResultTagValue;
+import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
-import com.dlb.chess.utility.TagUtility;
 
 class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon

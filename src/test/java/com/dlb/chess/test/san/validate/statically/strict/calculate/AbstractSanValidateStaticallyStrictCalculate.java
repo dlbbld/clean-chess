@@ -10,11 +10,11 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.SanCalculate;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.model.SanValidationFromTo;
+import com.dlb.chess.san.SanConversion;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.test.san.SanCalculate;
+import com.dlb.chess.test.san.model.SanValidationFromTo;
 
 public abstract class AbstractSanValidateStaticallyStrictCalculate implements EnumConstants {
 

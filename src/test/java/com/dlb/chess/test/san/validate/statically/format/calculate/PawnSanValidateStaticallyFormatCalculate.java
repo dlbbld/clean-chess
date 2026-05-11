@@ -5,8 +5,8 @@ import java.util.TreeMap;
 
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.model.SanValidationFromTo;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.google.common.collect.ImmutableMap;
 
 public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidateStaticallyFormatCalculate {
@@ -35,7 +35,8 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
   }
 
   private static boolean isPromotionRank(SanValidationFromTo model) {
-    return Rank.calculateIsAnyPromotionRank(model.toSquare().getRank());
+    final Rank rank = model.toSquare().getRank();
+    return rank == Rank.RANK_1 || rank == Rank.RANK_8;
   }
 
 }

@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
+import com.dlb.chess.pgn.LenientPgnParser;
 
 /**
  * Verifies that the lenient PGN parser correctly initializes board state from a {@code [FEN]} tag and updates the

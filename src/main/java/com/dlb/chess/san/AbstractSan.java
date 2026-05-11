@@ -7,20 +7,17 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
 
-public abstract class AbstractSan {
+abstract class AbstractSan {
 
-  public static Square calculateFromSquare(SanConversion sanConversion) {
+  static Square calculateFromSquare(SanConversion sanConversion) {
     if (sanConversion.fromFile() == File.NONE || sanConversion.fromRank() == Rank.NONE) {
       return Square.NONE;
     }
     return Square.calculate(sanConversion.fromFile(), sanConversion.fromRank());
   }
 
-  public static Set<LegalMove> filterLegalMovesCandidates(Set<LegalMove> legalMoveSet, Square toSquare) {
+  static Set<LegalMove> filterLegalMovesCandidates(Set<LegalMove> legalMoveSet, Square toSquare) {
     final Set<LegalMove> legalMovesForToQuare = new TreeSet<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       if (moveCandidate.moveSpecification().toSquare() == toSquare) {
@@ -30,7 +27,7 @@ public abstract class AbstractSan {
     return legalMovesForToQuare;
   }
 
-  public static Set<LegalMove> calculateLegalMovesCandidates(Set<LegalMove> legalMoveSet, File fromFile) {
+  static Set<LegalMove> calculateLegalMovesCandidates(Set<LegalMove> legalMoveSet, File fromFile) {
     final Set<LegalMove> legalMovesForToQuare = new TreeSet<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       if (moveCandidate.moveSpecification().fromSquare().getFile() == fromFile) {
@@ -40,7 +37,7 @@ public abstract class AbstractSan {
     return legalMovesForToQuare;
   }
 
-  public static boolean calculateHasOtherFilesHavingLegalMoves(File file, Set<LegalMove> legalMoveSet) {
+  static boolean calculateHasOtherFilesHavingLegalMoves(File file, Set<LegalMove> legalMoveSet) {
     for (final LegalMove moveCandidate : legalMoveSet) {
       final File candidateFromFile = moveCandidate.moveSpecification().fromSquare().getFile();
       if (candidateFromFile != file) {
@@ -50,7 +47,7 @@ public abstract class AbstractSan {
     return false;
   }
 
-  public static int calculateNumberOfLegalMovesFromFile(File file, Set<LegalMove> legalMoveSet) {
+  static int calculateNumberOfLegalMovesFromFile(File file, Set<LegalMove> legalMoveSet) {
     return calculateLegalMovesFromFile(file, legalMoveSet).size();
   }
 
@@ -65,7 +62,7 @@ public abstract class AbstractSan {
     return filteredSet;
   }
 
-  public static int calculateNumberOfLegalMovesFromOtherFiles(File file, Set<LegalMove> legalMoveSet) {
+  static int calculateNumberOfLegalMovesFromOtherFiles(File file, Set<LegalMove> legalMoveSet) {
     return calculateLegalMovesFromOtherFiles(file, legalMoveSet).size();
   }
 
@@ -80,7 +77,7 @@ public abstract class AbstractSan {
     return filteredSet;
   }
 
-  public static int calculateNumberOfLegalMovesFromRank(Rank rank, Set<LegalMove> legalMoveSet) {
+  static int calculateNumberOfLegalMovesFromRank(Rank rank, Set<LegalMove> legalMoveSet) {
     return calculateLegalMovesFromRank(rank, legalMoveSet).size();
   }
 
@@ -95,22 +92,7 @@ public abstract class AbstractSan {
     return filteredSet;
   }
 
-  public static int calculateNumberOfLegalMovesFromOtherRanks(Rank rank, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromOtherRanks(rank, legalMoveSet).size();
-  }
-
-  private static Set<LegalMove> calculateLegalMovesFromOtherRanks(Rank rank, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
-      final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
-      if (candidateFromRank != rank) {
-        filteredSet.add(moveCandidate);
-      }
-    }
-    return filteredSet;
-  }
-
-  public static int calculateNumberOfLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
+  static int calculateNumberOfLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
     return calculateLegalMovesFromSquare(square, legalMoveSet).size();
   }
 
@@ -125,7 +107,7 @@ public abstract class AbstractSan {
     return filteredSet;
   }
 
-  public static boolean calculateHasOtherRanksHavingLegalMoves(Rank rank, Set<LegalMove> legalMoveSet) {
+  static boolean calculateHasOtherRanksHavingLegalMoves(Rank rank, Set<LegalMove> legalMoveSet) {
     for (final LegalMove moveCandidate : legalMoveSet) {
       final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
       if (candidateFromRank != rank) {
@@ -135,30 +117,4 @@ public abstract class AbstractSan {
     return false;
   }
 
-  public static void appendSanTerminalMarker(StringBuilder buildSan, SanTerminalMarker sanTerminalMarker) {
-    switch (sanTerminalMarker) {
-      case NONE:
-        break;
-      case CHECK:
-        buildSan.append(SanSymbol.CHECK.getSymbol());
-        break;
-      case CHECKMATE:
-        buildSan.append(SanSymbol.CHECKMATE.getSymbol());
-        break;
-      default:
-        throw new IllegalArgumentException();
-    }
-  }
-
-  public static SanTerminalMarker calculateSanTerminalMarker(boolean isCheck, boolean isCheckmate) {
-    // attention - checkmate is also a check, so checkmate must be checked first
-    if (isCheckmate) {
-      return SanTerminalMarker.CHECKMATE;
-    }
-    // attenion - check must be checked after checkmate, because checkmate is also a check
-    if (isCheck) {
-      return SanTerminalMarker.CHECK;
-    }
-    return SanTerminalMarker.NONE;
-  }
 }

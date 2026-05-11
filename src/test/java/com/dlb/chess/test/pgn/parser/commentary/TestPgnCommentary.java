@@ -7,19 +7,19 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
-import com.dlb.chess.pgn.parser.model.PgnCommentary;
+import com.dlb.chess.pgn.PgnCommentary;
 
 /**
  * Direct tests for the {@link PgnCommentary} value object. The parser-side behaviour is exercised in
- * {@link TestCommentaryStrict} and {@link TestCommentaryLenient}; this test class covers the programmatic-API
- * contract for callers constructing commentary outside the parsers.
+ * {@link TestCommentaryStrict} and {@link TestCommentaryLenient}; this test class covers the programmatic-API contract
+ * for callers constructing commentary outside the parsers.
  *
  * <p>
  * Contract: a constructed {@code PgnCommentary} must satisfy two prohibitions:
  * <ul>
  * <li><b>Grammar:</b> no {@code {} or {@code }} (would corrupt the brace grammar on export).</li>
- * <li><b>Unicode categories:</b> no control characters except {@code \t} / {@code \n} / {@code \r}, no surrogates,
- *     no unassigned code points, no private-use code points.</li>
+ * <li><b>Unicode categories:</b> no control characters except {@code \t} / {@code \n} / {@code \r}, no surrogates, no
+ * unassigned code points, no private-use code points.</li>
  * </ul>
  * Everything else is permitted — letters, marks, numbers, punctuation, symbols, separators, format characters
  * (zero-width joiner etc.), and supplementary characters above U+FFFF (emoji, rare scripts).
@@ -182,8 +182,7 @@ class TestPgnCommentary {
   @SuppressWarnings("static-method")
   @Test
   void bellControlCharacterIsRejected() {
-    final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("ab"));
+    final var thrown = assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("ab"));
     org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("control character"),
         "Message should name the offending category: " + thrown.getMessage());
   }
@@ -231,8 +230,7 @@ class TestPgnCommentary {
   @Test
   void privateUseAreaCharacterIsRejected() {
     // U+E000 — start of the BMP private-use area.
-    final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("ab"));
+    final var thrown = assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("ab"));
     org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("private-use"),
         "Message should name the offending category: " + thrown.getMessage());
   }
@@ -260,8 +258,7 @@ class TestPgnCommentary {
   @SuppressWarnings("static-method")
   @Test
   void closingBraceIsRejected() {
-    final var thrown = assertThrows(PgnCommentaryValidationException.class,
-        () -> new PgnCommentary("a } b"));
+    final var thrown = assertThrows(PgnCommentaryValidationException.class, () -> new PgnCommentary("a } b"));
     org.junit.jupiter.api.Assertions.assertTrue(thrown.getMessage().contains("closing brace"),
         "Message should name the offending character: " + thrown.getMessage());
   }

@@ -11,13 +11,12 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
@@ -54,7 +53,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
     var totalFixtures = 0;
 
     for (final PgnTest bucket : BUCKETS) {
-      final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(bucket);
+      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(bucket);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         totalFixtures++;
         final String pgnFileName = testCase.pgnFileName();
@@ -62,7 +61,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
         final PgnFile pgnFile = parse.apply(bucket.getFolderPath(), pgnFileName);
 
-        final ChessBoard board = new Board(pgnFile.startFen());
+        final Board board = new Board(pgnFile.startFen());
         for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
           board.moveStrict(halfMove.san());
         }

@@ -192,30 +192,6 @@ public enum File {
     };
   }
 
-  public static final File calculateLeftLeftFile(final Side havingMove, final File file) {
-    if (havingMove == Side.NONE || file == NONE) {
-      throw new IllegalArgumentException();
-    }
-
-    if (!calculateHasLeftLeftFile(havingMove, file)) {
-      throw new IllegalArgumentException("No left file");
-    }
-    final File leftFile = calculateLeftFile(havingMove, file);
-    return calculateLeftFile(havingMove, leftFile);
-  }
-
-  public static final File calculateRightRightFile(final Side havingMove, final File file) {
-    if (havingMove == Side.NONE || file == NONE) {
-      throw new IllegalArgumentException();
-    }
-
-    if (!calculateHasRightRightFile(havingMove, file)) {
-      throw new IllegalArgumentException("No right file");
-    }
-    final File rightFile = calculateRightFile(havingMove, file);
-    return calculateRightFile(havingMove, rightFile);
-  }
-
   private void check() {
     if (this == NONE) {
       throw new NonePointerException();

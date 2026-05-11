@@ -15,26 +15,26 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
-import com.dlb.chess.pgn.parser.model.Tag;
-import com.dlb.chess.pgn.writer.PgnWriter;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParserValidationResult;
+import com.dlb.chess.pgn.PgnCreate;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.pgn.PgnWriter;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.StrictPgnParserValidationResult;
+import com.dlb.chess.pgn.Tag;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
-import com.dlb.chess.utility.PgnUtility;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.unwinnability.DeadPositionFull;
+import com.dlb.chess.unwinnability.DeadPositionQuick;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 class TestReadMe {
 
@@ -155,8 +155,8 @@ class TestReadMe {
 
     PgnWriter.writePgnFile(pgnFile, filePath);
 
-    final Board lenientBoard = PgnUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
-    final Board strictBoard = PgnUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
+    final Board lenientBoard = PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
+    final Board strictBoard = PgnFileUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
 
     assertFalse(lenientBoard.isCheckmate());
     assertFalse(strictBoard.isThreefoldRepetition());
@@ -176,7 +176,7 @@ class TestReadMe {
                 """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
     board.moveStrict("a3");
 
     assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
@@ -243,7 +243,7 @@ class TestReadMe {
         """;
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
     board.moveStrict("a3");
 
     assertEquals(6, pgnFile.halfMoveList().size());
@@ -341,11 +341,11 @@ class TestReadMe {
     final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     assertTrue(result.isValid());
     assertEquals(2, result.sanForgivenItems().size());
-    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
+    assertEquals(com.dlb.chess.san.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
         NonNullWrapperCommon.get(result.sanForgivenItems(), 0).code());
     assertEquals("0-0", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).originalToken());
     assertEquals("O-O", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).canonicalSan());
-    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
+    assertEquals(com.dlb.chess.san.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
         NonNullWrapperCommon.get(result.sanForgivenItems(), 1).code());
     assertEquals("nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).originalToken());
     assertEquals("Nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).canonicalSan());
@@ -389,7 +389,7 @@ class TestReadMe {
   }
 
   private static Board calculateBoard(String pgn) {
-    return PgnUtility.calculateBoardPerLastMove(LenientPgnParser.parseText(pgn));
+    return PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parseText(pgn));
   }
 
   private static Board createOpeningExampleBoard() {

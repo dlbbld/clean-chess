@@ -10,14 +10,15 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
-import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.common.utility.BasicUtility;
+import com.dlb.chess.model.UciMove;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
 import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalysis;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
 
@@ -111,7 +112,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
       mineOut.append(UnwinnabilityMode.FULL.getIdentifier()).append(";");
       mineOut.append(fullChaResult.winner().getFenLetter()).append(";");
       mineOut.append(fullMineResult.unwinnableFull().getIdentifier()).append(";");
-      final String mateLine = GeneralUtility.composeCheckmateLine(fullMineResult.mateLine());
+      final String mateLine = uciMoveSequence(fullMineResult.mateLine());
       mineOut.append(mateLine);
 
       final String mineOutStr = NonNullWrapperCommon.toString(mineOut);
@@ -129,6 +130,14 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
         logger.printf(Level.INFO, "Processed %d / %d", testCounter, remaining);
       }
     }
+  }
+
+  private static String uciMoveSequence(List<UciMove> uciMoveList) {
+    final List<String> uciMoveStrList = new ArrayList<>();
+    for (final UciMove uciMove : uciMoveList) {
+      uciMoveStrList.add(uciMove.text());
+    }
+    return BasicUtility.calculateSpaceSeparatedList(uciMoveStrList);
   }
 
 }

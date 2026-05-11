@@ -8,13 +8,12 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.test.custom.model.UciMoveTest;
 import com.dlb.chess.test.scalachess.GenerateScalaChessTestCases;
 
@@ -87,7 +86,7 @@ class TestUciMoveUtility {
   }
 
   private static void checkMoveSpecificationToUci(List<UciMoveTest> list) {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     for (final UciMoveTest test : list) {
       board.moveStrict(test.san());
@@ -110,7 +109,7 @@ class TestUciMoveUtility {
   }
 
   private static void checkUciMoveToMoveSpecification(List<UciMoveTest> list) {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     for (final UciMoveTest test : list) {
       final UciMove moveModel = UciMoveValidationUtility.lookup(test.uciMoveStr());

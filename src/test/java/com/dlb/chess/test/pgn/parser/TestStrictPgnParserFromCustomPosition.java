@@ -8,12 +8,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.CommonTestUtility;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.test.librarycomparison.utility.CommonTestUtility;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserFromCustomPosition {
@@ -65,13 +64,13 @@ class TestStrictPgnParserFromCustomPosition {
 
     assertNotEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
 
-    final ChessBoard boardFromFen = new Board(pgnFile.startFen());
+    final Board boardFromFen = new Board(pgnFile.startFen());
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       boardFromFen.moveStrict(halfMove.san());
     }
 
-    final ChessBoard boardFromFirstMove = new Board();
+    final Board boardFromFirstMove = new Board();
     for (final String san : hardCodedCompleteSanList) {
       @SuppressWarnings("null") @NonNull final String nonNullSan = san;
       boardFromFirstMove.moveStrict(nonNullSan);

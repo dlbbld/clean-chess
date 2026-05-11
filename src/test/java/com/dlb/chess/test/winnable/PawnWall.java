@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
@@ -12,9 +13,9 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.utility.MaterialUtility;
+import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
 public class PawnWall {
@@ -22,20 +23,20 @@ public class PawnWall {
   // TODO own pawns outside pawn wall line
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;
 
-  public static boolean calculateHasPawnWall(ChessBoard board) {
+  public static boolean calculateHasPawnWall(Board board) {
 
     final StaticPosition staticPosition = board.getStaticPosition();
 
     // 1) we do not consider positions with rooks, knights or queens
     // 2) we need at least a pawn for a pawn wall (the minimum is most likely much higher, but not having a better
     // assessment for now)
-    if (MaterialUtility.calculateHasRook(staticPosition) || MaterialUtility.calculateHasKnight(staticPosition)
-        || MaterialUtility.calculateHasQueen(staticPosition) || !MaterialUtility.calculateHasPawn(staticPosition)) {
+    if (hasAnyPieceType(staticPosition, PieceType.ROOK) || hasAnyPieceType(staticPosition, PieceType.KNIGHT)
+        || hasAnyPieceType(staticPosition, PieceType.QUEEN) || !hasAnyPieceType(staticPosition, PieceType.PAWN)) {
       return false;
     }
 
     // here we branch between having bishops and no bishops
-    if (MaterialUtility.calculateHasBishop(staticPosition)) {
+    if (hasAnyPieceType(staticPosition, PieceType.BISHOP)) {
       // we only look at the case if no pawn can move
       if (!calculateIsAllPawnsBlocked(board)) {
         return false;
@@ -74,13 +75,13 @@ public class PawnWall {
       // ahead, for opponent pawn having to move.
       final Set<Square> attackingSquaresWhite = calculateAttackingSquares(board, Side.WHITE);
       final Set<Square> pawnSquaresBlack = calculatePawnSquares(board, Side.BLACK);
-      if (!Square.calculateIsDisjoint(attackingSquaresWhite, pawnSquaresBlack)) {
+      if (!BasicUtility.calculateIsDisjoint(attackingSquaresWhite, pawnSquaresBlack)) {
         return false;
       }
 
       final Set<Square> attackingSquaresBlack = calculateAttackingSquares(board, Side.BLACK);
       final Set<Square> pawnSquaresWhite = calculatePawnSquares(board, Side.WHITE);
-      if (!Square.calculateIsDisjoint(attackingSquaresBlack, pawnSquaresWhite)) {
+      if (!BasicUtility.calculateIsDisjoint(attackingSquaresBlack, pawnSquaresWhite)) {
         return false;
       }
     }
@@ -90,7 +91,7 @@ public class PawnWall {
 
   }
 
-  private static boolean calculateIsHasPawnWallAfterPrecheck(ChessBoard board) {
+  private static boolean calculateIsHasPawnWallAfterPrecheck(Board board) {
     // check pawn wall line
     final var hasPawnWallWhite = calculateHasPawnWallLine(board, Side.WHITE);
     if (!hasPawnWallWhite) {
@@ -112,13 +113,13 @@ public class PawnWall {
   }
 
   // calculate capturing squares
-  protected static Set<Square> calculateAttackingSquares(ChessBoard board, Side side) {
+  protected static Set<Square> calculateAttackingSquares(Board board, Side side) {
     final Set<Square> attackingSquares = new TreeSet<>(calculateAttackingSquareAsIs(board, side));
     attackingSquares.addAll(calculateAttackingSquareAfterMoving(board, side));
     return attackingSquares;
   }
 
-  private static Set<Square> calculateAttackingSquareAsIs(ChessBoard board, Side side) {
+  private static Set<Square> calculateAttackingSquareAsIs(Board board, Side side) {
     final Set<Square> attackingSquaresAsIs = new TreeSet<>();
     for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
@@ -135,7 +136,7 @@ public class PawnWall {
     return attackingSquaresAsIs;
   }
 
-  private static Set<Square> calculateAttackingSquareAfterMoving(ChessBoard board, Side side) {
+  private static Set<Square> calculateAttackingSquareAfterMoving(Board board, Side side) {
     final Set<Square> attackingSquaresAll = new TreeSet<>();
 
     final StaticPosition staticPosition = board.getStaticPosition();
@@ -180,13 +181,13 @@ public class PawnWall {
   }
 
   // same for pawn squares
-  protected static Set<Square> calculatePawnSquares(ChessBoard board, Side side) {
+  protected static Set<Square> calculatePawnSquares(Board board, Side side) {
     final Set<Square> pawnSquares = new TreeSet<>(calculatePawnSquareAsIs(board, side));
     pawnSquares.addAll(calculatePawnSquareAfterMoving(board, side));
     return pawnSquares;
   }
 
-  private static Set<Square> calculatePawnSquareAsIs(ChessBoard board, Side side) {
+  private static Set<Square> calculatePawnSquareAsIs(Board board, Side side) {
     final Set<Square> pawnSquaresAsIs = new TreeSet<>();
     for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
@@ -196,7 +197,7 @@ public class PawnWall {
     return pawnSquaresAsIs;
   }
 
-  private static Set<Square> calculatePawnSquareAfterMoving(ChessBoard board, Side side) {
+  private static Set<Square> calculatePawnSquareAfterMoving(Board board, Side side) {
     final Set<Square> pawnSquaresAll = new TreeSet<>();
 
     final StaticPosition staticPosition = board.getStaticPosition();
@@ -232,7 +233,7 @@ public class PawnWall {
     }
   }
 
-  private static boolean calculateIsKingBehindPawnWall(ChessBoard board, Side side) {
+  private static boolean calculateIsKingBehindPawnWall(Board board, Side side) {
     final StaticPosition blockedSquares = calculateBlockedSquares(board, side);
     final Square kingSquare = StaticPositionUtility.calculateKingSquare(board.getStaticPosition(), side);
     return calculateIsKingBehindPawnWall(blockedSquares, kingSquare, side);
@@ -261,7 +262,7 @@ public class PawnWall {
     return true;
   }
 
-  protected static boolean calculateIsAllPawnsHavePawnAhead(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsHavePawnAhead(Board board) {
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
     for (final Square square : Square.REAL) {
@@ -285,7 +286,7 @@ public class PawnWall {
     return true;
   }
 
-  protected static boolean calculateIsAllPawnsCanReachPawnAhead(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsCanReachPawnAhead(Board board) {
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
     for (final Square square : Square.REAL) {
@@ -320,7 +321,7 @@ public class PawnWall {
     return calculateHasPawnAhead(staticPosition, squareAhead, side);
   }
 
-  protected static boolean calculateIsAllPawnsCannotCapture(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsCannotCapture(Board board) {
     // we must check the en passant capture as not seen by following static checks
     if (board.isEnPassantCapturePossible()) {
       return false;
@@ -356,11 +357,11 @@ public class PawnWall {
     return true;
   }
 
-  protected static boolean calculateIsAllPawnsBlocked(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsBlocked(Board board) {
     return calculateIsAllPawnsHavePawnAhead(board) && calculateIsAllPawnsCannotCapture(board);
   }
 
-  private static StaticPosition calculateBlockedSquares(ChessBoard board, Side side) {
+  private static StaticPosition calculateBlockedSquares(Board board, Side side) {
     final StaticPosition staticPosition = board.getStaticPosition();
     final Square ownKingSquare = StaticPositionUtility.calculateKingSquare(staticPosition, side);
 
@@ -402,12 +403,12 @@ public class PawnWall {
     return staticPosition;
   }
 
-  protected static boolean calculateHasPawnWallLine(ChessBoard board, Side side) {
+  protected static boolean calculateHasPawnWallLine(Board board, Side side) {
 
     final StaticPosition blockedSquares = calculateBlockedSquares(board, side);
 
     final List<Square> startCandidates = new ArrayList<>();
-    final List<Square> leftMostFile = Square.getLeftFile(side);
+    final List<Square> leftMostFile = leftmostFile(side);
 
     for (final Square squareLeftMostFile : leftMostFile) {
       if (!blockedSquares.isEmpty(squareLeftMostFile)) {
@@ -528,7 +529,7 @@ public class PawnWall {
       SquareType squareType) {
     for (final Square boardSquare : Square.REAL) {
       final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (MaterialUtility.calculateIsOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
+      if (isOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
           && boardSquare.getSquareType() == squareType) {
         return true;
       }
@@ -544,5 +545,36 @@ public class PawnWall {
       }
     }
     return true;
+  }
+
+  private static final List<Square> LEFTMOST_FILE_WHITE = NonNullWrapperCommon.listOf(Square.A1, Square.A2, Square.A3,
+      Square.A4, Square.A5, Square.A6, Square.A7, Square.A8);
+
+  private static final List<Square> LEFTMOST_FILE_BLACK = NonNullWrapperCommon.listOf(Square.H8, Square.H7, Square.H6,
+      Square.H5, Square.H4, Square.H3, Square.H2, Square.H1);
+
+  // Local material checks. Inlined from the former public MaterialUtility so that
+  // material arithmetic is not re-exposed on the public API surface for this test helper.
+  private static boolean hasAnyPieceType(StaticPosition staticPosition, PieceType pieceType) {
+    for (final Square boardSquare : Square.REAL) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (pieceOnSquare != Piece.NONE && pieceOnSquare.getPieceType() == pieceType) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean isOwnPiece(Side side, Piece pieceOnSquare) {
+    return pieceOnSquare != Piece.NONE && pieceOnSquare.getSide() == side;
+  }
+
+  private static List<Square> leftmostFile(Side side) {
+    return switch (side) {
+      case WHITE -> LEFTMOST_FILE_WHITE;
+      case BLACK -> LEFTMOST_FILE_BLACK;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
   }
 }

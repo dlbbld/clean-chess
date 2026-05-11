@@ -6,38 +6,31 @@ import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
 
+import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.common.utility.NoProgressMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.report.model.NoProgressHalfMove;
-import com.dlb.chess.report.model.Report;
-import com.dlb.chess.report.print.NoProgressPrint;
-import com.dlb.chess.report.print.RepetitionPrint;
-import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 
 /**
- * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities),
- * no-progress (50/75-move-rule) sequences, and a printable summary — from a {@link ChessBoard} or a parsed PGN.
+ * Generates game-level reports â€” threefold-repetition listings (including missed-claim-ahead opportunities),
+ * no-progress (50/75-move-rule) sequences, and a printable summary â€” from a {@link Board} or a parsed PGN.
  *
  * <p>
  * Two surfaces:
  *
  * <ul>
- * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.model.Report} record carrying all the
- * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
+ * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record carrying all the analytical
+ * data â€” repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
  * inspection.</li>
  * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via
  * {@link com.dlb.chess.messages.Message}. Use this for the kind of CLI-style output shown in the README examples.</li>
@@ -49,7 +42,7 @@ import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
  * claim opportunities other libraries don't.
  *
  * <p>
- * Final class with a private constructor — all entry points are static.
+ * Final class with a private constructor â€” all entry points are static.
  */
 public final class Reporter {
 
@@ -61,26 +54,26 @@ public final class Reporter {
 
   public static void printReport(String pgnString) {
     final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
-    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    final Board board = GeneralUtility.calculateBoard(pgnFile);
     printReport(board);
   }
 
   public static void printReport(Path folderPath, String pgnFileName) {
-    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     printReport(board);
   }
 
-  public static void printReport(ChessBoard board) {
+  public static void printReport(Board board) {
     printList(calculateReportLines(board));
   }
 
   /**
    * Returns the same human-readable report as {@link #printReport(String)} but as a single string, lines joined by
-   * {@code "\n"}. Use this when the consumer is not stdout — web responses, file writes, GUI displays, etc.
+   * {@code "\n"}. Use this when the consumer is not stdout â€” web responses, file writes, GUI displays, etc.
    */
   public static String calculateReportText(String pgnString) {
     final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
-    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    final Board board = GeneralUtility.calculateBoard(pgnFile);
     return calculateReportText(board);
   }
 
@@ -89,25 +82,24 @@ public final class Reporter {
    * by {@code "\n"}.
    */
   public static String calculateReportText(Path folderPath, String pgnFileName) {
-    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateReportText(board);
   }
 
   /**
-   * Returns the same human-readable report as {@link #printReport(ChessBoard)} but as a single string, lines joined by
+   * Returns the same human-readable report as {@link #printReport(Board)} but as a single string, lines joined by
    * {@code "\n"}.
    */
-  public static String calculateReportText(ChessBoard board) {
+  public static String calculateReportText(Board board) {
     return NonNullWrapperCommon.join("\n", calculateReportLines(board));
   }
 
-  private static List<String> calculateReportLines(ChessBoard board) {
+  private static List<String> calculateReportLines(Board board) {
     final @NonNull List<String> output = new ArrayList<>();
 
     // repetition
     addFirstMainSection(output, "report.repetition.threefold.ahead.title");
-    final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility
-        .calculateThreefoldClaimAhead(board.getPerformedLegalMoveList(), board.getInitialFen());
+    final List<List<ClaimAhead>> claimAheadListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
     if (claimAheadListList.isEmpty()) {
       output.add(Message.getString("report.repetition.threefold.ahead.none"));
     } else {
@@ -150,11 +142,11 @@ public final class Reporter {
 
   public static Report calculateReport(Path folderPath, String pgnFileName) throws Exception {
 
-    final ChessBoard board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
     return calculateReport(board);
   }
 
-  public static Report calculateReport(ChessBoard board) {
+  public static Report calculateReport(Board board) {
 
     final String invariant = board.getFen();
 
@@ -201,7 +193,7 @@ public final class Reporter {
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Private helpers — calculate*
+  // Private helpers â€” calculate*
   // ---------------------------------------------------------------------------------------------
 
   private static boolean calculateHasFivefoldRepetition(List<List<HalfMove>> repetitionListList) {
@@ -269,7 +261,7 @@ public final class Reporter {
     return false;
   }
 
-  private static int calculateMaxNoProgressSequence(ChessBoard board) {
+  private static int calculateMaxNoProgressSequence(Board board) {
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
     if (board.getHalfMoveList().isEmpty()) {
@@ -293,7 +285,7 @@ public final class Reporter {
   }
 
   // ---------------------------------------------------------------------------------------------
-  // Private helpers — output formatting
+  // Private helpers â€” output formatting
   // ---------------------------------------------------------------------------------------------
 
   private static void addFirstMainSection(List<String> output, String key) {

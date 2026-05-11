@@ -10,8 +10,8 @@ import java.util.regex.Pattern;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.utility.FileUtility;
 import com.dlb.chess.test.ConfigurationTestConstants;
+import com.dlb.chess.test.common.utility.FileUtility;
 
 /**
  * Convention test: every Java class under {@code src/test/java} whose simple name starts with {@code Test} must contain
@@ -56,7 +56,8 @@ class TestConventionTestClassHasActiveTest {
     final List<String> violations = new ArrayList<>();
 
     for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
-      if (!NonNullWrapperCommon.toString(p).endsWith(".java") || !NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
+      if (!NonNullWrapperCommon.toString(p).endsWith(".java")
+          || !NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
         continue;
       }
       final String contents = FileUtility.readFileAsString(p);

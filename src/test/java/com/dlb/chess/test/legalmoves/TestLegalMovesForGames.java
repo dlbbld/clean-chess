@@ -2,13 +2,17 @@ package com.dlb.chess.test.legalmoves;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Set;
+import java.util.TreeSet;
+
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
@@ -20,7 +24,7 @@ class TestLegalMovesForGames {
   @Test
   void testGame1() {
     // 2_0_1_spassky_fischer_1972_seventeenth
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     checkInitial(board);
 
     checkLegalMoves(board, "e4", "Na6, Nc6, Nf6, Nh6, a5, a6, b5, b6, c5, c6, d5, d6, e5, e6, f5, f6, g5, g6, h5, h6");
@@ -970,15 +974,25 @@ class TestLegalMovesForGames {
 
   }
 
-  private static void checkInitial(ChessBoard board) {
-    final String initial = BasicUtility.calculateCommaSeparatedList(board.getLegalMovesSan());
-    assertEquals(INITIAL_LEGAL_MOVES, initial);
+  private static void checkInitial(Board board) {
+    assertEquals(parseSanSet(INITIAL_LEGAL_MOVES), board.getLegalMovesSan());
   }
 
-  private static void checkLegalMoves(ChessBoard board, String san, String expected) {
+  private static void checkLegalMoves(Board board, String san, String expected) {
     board.moveStrict(san);
-    final String actual = BasicUtility.calculateCommaSeparatedList(board.getLegalMovesSan());
-    assertEquals(expected, actual);
+    assertEquals(parseSanSet(expected), board.getLegalMovesSan());
+  }
+
+  // Legal-move generation has no defined order; comparing comma-separated strings would couple the
+  // test to generation-order detail. Parse the hardcoded fixture into a Set and compare set-to-set.
+  @SuppressWarnings("null")
+  private static Set<String> parseSanSet(String commaSeparated) {
+    if (commaSeparated.isEmpty()) {
+      return new TreeSet<>();
+    }
+    final Set<String> result = new TreeSet<>();
+    Collections.addAll(result, commaSeparated.split(", "));
+    return result;
   }
 
   public static void main(String[] args) {
@@ -991,7 +1005,7 @@ class TestLegalMovesForGames {
     for (final PgnHalfMove move : pgnFile.halfMoveList()) {
       board.moveStrict(move.san());
       final String san = board.getSan();
-      final String legalMoveList = BasicUtility.calculateCommaSeparatedList(board.getLegalMovesSan());
+      final String legalMoveList = BasicUtility.calculateCommaSeparatedList(new ArrayList<>(board.getLegalMovesSan()));
       final var output = "checkLegalMoves(board, \"" + san + "\", \"" + legalMoveList + "\");";
       System.out.println(output);
     }

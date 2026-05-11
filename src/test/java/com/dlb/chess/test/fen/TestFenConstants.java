@@ -8,7 +8,6 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.constants.FenConstants;
 
@@ -23,7 +22,7 @@ class TestFenConstants {
 
     // second we calculate what we expect them to be
     final Set<String> calculatedFenSet = new TreeSet<>();
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     for (final MoveSpecification moveSpecification : board.getPossibleMoveSpecificationSet()) {
       board.move(moveSpecification);
       calculatedFenSet.add(board.getFen());

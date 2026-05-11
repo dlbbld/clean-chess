@@ -8,12 +8,14 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+import com.dlb.chess.board.Board;
+import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.winnable.PawnWall;
@@ -75,7 +77,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     }
   }
 
-  public static Winnable calculateWinnable(ChessBoard board, Side sideToEvaluate) {
+  public static Winnable calculateWinnable(Board board, Side sideToEvaluate) {
 
     // we need an ongoing game
     if (board.isCheckmate()) {
@@ -135,12 +137,12 @@ public class WinnableUtilityAnalyzeChaLichess {
       if (numberOfFirstHalfMoves == 1) {
         final LegalMove legalMove = SetUtility.getOnly(board.getLegalMoveSet());
         board.move(legalMove.moveSpecification());
-        if (MaterialUtility.calculateHasKingOnly(board.getHavingMove(), board.getStaticPosition())) {
+        if (hasKingOnly(board.getHavingMove(), board.getStaticPosition())) {
           isKingOnlyNonFlagging = "yes";
         } else {
           isKingOnlyNonFlagging = "no";
         }
-        if (MaterialUtility.calculateHasKingOnly(board.getHavingMove().getOppositeSide(), board.getStaticPosition())) {
+        if (hasKingOnly(board.getHavingMove().getOppositeSide(), board.getStaticPosition())) {
           isKingOnlyFlagging = "yes";
         } else {
           isKingOnlyFlagging = "no";
@@ -205,7 +207,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     final Set<GameStatusAnalysis> gameStatusSet = evaluation.gameStatusSet();
 
     if (gameStatusSet.size() == 1) {
-      final GameStatusAnalysis singleGameStatus = BasicUtility.getFirstElement(gameStatusSet);
+      final GameStatusAnalysis singleGameStatus = BasicUtility.calculateOnlyElement(gameStatusSet);
 
       switch (singleGameStatus) {
         case WHITE_DELIVERS_CHECKMATE:
@@ -302,7 +304,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     return new WinnableAnalysis(winnable, gameStatusSet);
   }
 
-  private static GameMultipleAnalysis evaluateOneMove(ChessBoard board) {
+  private static GameMultipleAnalysis evaluateOneMove(Board board) {
 
     final Set<GameStatusAnalysis> gameTermination = new TreeSet<>();
     final var numberOfHalfMoves = board.getLegalMoveSet().size();
@@ -339,7 +341,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     return new GameMultipleAnalysis(gameTermination, numberOfHalfMoves, board.getHavingMove());
   }
 
-  private static GameForcedAnalysis evaluateForced(ChessBoard board, Side sideToEvaluate) {
+  private static GameForcedAnalysis evaluateForced(Board board, Side sideToEvaluate) {
     // we check position after series of forced moves
     // we cannot use early returns for after evaluation we need to undo the moves
     var countForcedHalfMoves = 0;
@@ -362,7 +364,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     return new GameForcedAnalysis(evaluation, countForcedHalfMoves);
   }
 
-  private static GameStatusAnalysis calculateGameStatusAnalysis(ChessBoard board, Side sideToEvaluate) {
+  private static GameStatusAnalysis calculateGameStatusAnalysis(Board board, Side sideToEvaluate) {
     if (board.isCheckmate()) {
       if (board.getHavingMove() == Side.WHITE) {
         return GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE;
@@ -392,12 +394,30 @@ public class WinnableUtilityAnalyzeChaLichess {
     return GameStatusAnalysis.OTHER;
   }
 
-  private static void logResult(boolean isLogResult, String message, WinnableAnalysis winnable, ChessBoard board,
+  private static void logResult(boolean isLogResult, String message, WinnableAnalysis winnable, Board board,
       Side sideToEvaluate, String isKingOnlyNonFlagging, String isKingOnlyFlagging) {
     // we need the non flagging player for the lichess examples
     if (isLogResult && sideToEvaluate == board.getHavingMove().getOppositeSide()) {
       logger.printf(Level.INFO, ";%s;%s;%s;%s;%s;%s", message, winnable.winnable(), winnable.gameStatusSet(),
           board.getFen(), isKingOnlyNonFlagging, isKingOnlyFlagging);
     }
+  }
+
+  // Inlined from the former public MaterialUtility (only one method is needed
+  // and only as diagnostic-log payload — no need to keep an analysis toolkit public).
+  private static boolean hasKingOnly(Side side, StaticPosition staticPosition) {
+    var countKing = 0;
+    for (final Square boardSquare : Square.REAL) {
+      final Piece pieceOnSquare = staticPosition.get(boardSquare);
+      if (pieceOnSquare == Piece.NONE || pieceOnSquare.getSide() != side) {
+        continue;
+      }
+      if (pieceOnSquare.getPieceType() == com.dlb.chess.board.enums.PieceType.KING) {
+        countKing++;
+        continue;
+      }
+      return false;
+    }
+    return countKing == 1;
   }
 }

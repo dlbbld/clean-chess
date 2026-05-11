@@ -5,22 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import org.apache.logging.log4j.Logger;
-
 import com.dlb.chess.board.Board;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.model.UciMove;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.report.enums.CheckmateOrStalemate;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.report.CheckmateOrStalemate;
 
 public abstract class GeneralUtility {
 
-  public static CheckmateOrStalemate calculateLastPositionEvaluation(ChessBoard board) {
+  public static CheckmateOrStalemate calculateLastPositionEvaluation(Board board) {
     // order is crucial
     if (board.isCheckmate()) {
       return CheckmateOrStalemate.CHECKMATE;
@@ -29,21 +23,6 @@ public abstract class GeneralUtility {
       return CheckmateOrStalemate.STALEMATE;
     }
     return CheckmateOrStalemate.NA;
-  }
-
-  public static boolean calculateIsWhite(Side havingMove) {
-    return switch (havingMove) {
-      case BLACK -> false;
-      case WHITE -> true;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  public static void logLines(Logger logger, List<String> list) {
-    for (final String line : list) {
-      logger.info(line);
-    }
   }
 
   public static Board calculateBoard(PgnFile pgnFile) {
@@ -58,22 +37,11 @@ public abstract class GeneralUtility {
     return board;
   }
 
-  public static ChessBoard calculateBoard(Path folderPath, String pgnFileName) {
+  public static Board calculateBoard(Path folderPath, String pgnFileName) {
 
     final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
 
     return calculateBoard(pgnFile);
-  }
-
-  public static ChessBoard calculateBoard(List<HalfMove> halfMoveList) {
-
-    final var board = new Board();
-
-    for (final HalfMove halfMove : halfMoveList) {
-      board.move(halfMove.moveSpecification());
-    }
-
-    return board;
   }
 
   public static String calculateSquareList(Set<Square> squareSet) {
@@ -84,13 +52,4 @@ public abstract class GeneralUtility {
     return BasicUtility.calculateCommaSeparatedList(squareList);
   }
 
-  public static String composeCheckmateLine(List<UciMove> uciMoveList) {
-    final List<String> uciMoveStrList = new ArrayList<>();
-
-    for (final UciMove uciMove : uciMoveList) {
-      uciMoveStrList.add(uciMove.text());
-    }
-
-    return BasicUtility.calculateSpaceSeparatedList(uciMoveStrList);
-  }
 }

@@ -5,7 +5,7 @@ package com.dlb.chess.common.exceptions;
  * other non-printing/control character.
  *
  * <p>
- * Surfaces at the point of {@link com.dlb.chess.pgn.parser.model.PgnCommentary} construction, which is invoked by:
+ * Surfaces at the point of {@link com.dlb.chess.pgn.model.PgnCommentary} construction, which is invoked by:
  * <ul>
  * <li>programmatic API callers building a {@code PgnFile} or {@code PgnHalfMove} directly,</li>
  * <li>{@code StrictPgnParser} on commentary content extracted between {@code {} and {@code }},</li>

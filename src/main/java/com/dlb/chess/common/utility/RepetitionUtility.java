@@ -13,7 +13,6 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.report.model.Report;
 
 public abstract class RepetitionUtility {
 
@@ -24,7 +23,7 @@ public abstract class RepetitionUtility {
    * one as it shouldn't be, ignoring the en passant condition, for finally finding such games where ignoring the
    * condition would have made a difference.
    */
-  public static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj,
+  private static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj,
       EnPassantCaptureRuleThreefold enPassantCaptureRule) {
     return switch (enPassantCaptureRule) {
       case DO_IGNORE -> equalsIgnoringEnPassantCapture(dynamicPosition, obj);
@@ -149,15 +148,6 @@ public abstract class RepetitionUtility {
       }
     }
     return false;
-  }
-
-  public static List<List<HalfMove>> getRepetitionListListType(Report report,
-      EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    return switch (enPassantCaptureRule) {
-      case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
-      case DO_NOT_IGNORE -> report.repetitionListList();
-      default -> throw new IllegalArgumentException();
-    };
   }
 
 }

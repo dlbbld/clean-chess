@@ -10,13 +10,13 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
-import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanConversion;
+import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.san.SanValidateFormat;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.san.reference.SanValidateFormatReference;
 
 class TestSanValidateFormat {
@@ -27,23 +27,23 @@ class TestSanValidateFormat {
     checkException("+", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("#", SanValidationProblem.FORMAT_FIRST_CHARACTER);
 
-    // d3 — replace first char with valid non-file, second char with valid non-digit
+    // d3 â€” replace first char with valid non-file, second char with valid non-digit
     checkException("=3", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("dd", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
 
-    // dxe5 — invalid first, second, third, fourth chars
+    // dxe5 â€” invalid first, second, third, fourth chars
     checkException("+xe5", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("d=e5", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
     checkException("dx15", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE);
     checkException("dxeR", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
 
-    // d8=Q — invalid first, second (rank), structure, promotion piece
+    // d8=Q â€” invalid first, second (rank), structure, promotion piece
     checkException("18=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("dd=Q", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
     checkException("d8xQ", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_SYMBOL);
     checkException("d8=K", SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE);
 
-    // dxe8=Q — invalid chars replaced with valid SAN chars
+    // dxe8=Q â€” invalid chars replaced with valid SAN chars
     checkException("1xe8=Q", SanValidationProblem.FORMAT_FIRST_CHARACTER);
     checkException("d=e8=Q", SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER);
     checkException("dxa=Q", SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK);
@@ -437,8 +437,8 @@ class TestSanValidateFormat {
     }
     // (3a) rookNonCapturingMoves Re5, Rae5, R2e5
     {
-      checkValid(SanFormat.RNBQ_NON_CAPTURING_NEITHER, new SanConversion(PieceType.ROOK, File.NONE, Rank.NONE, Square.E5,
-          PromotionPieceType.NONE, SanTerminalMarker.NONE), "Re5");
+      checkValid(SanFormat.RNBQ_NON_CAPTURING_NEITHER, new SanConversion(PieceType.ROOK, File.NONE, Rank.NONE,
+          Square.E5, PromotionPieceType.NONE, SanTerminalMarker.NONE), "Re5");
     }
     {
       checkValid(SanFormat.RNBQ_NON_CAPTURING_FILE, new SanConversion(PieceType.ROOK, File.FILE_A, Rank.NONE, Square.E5,

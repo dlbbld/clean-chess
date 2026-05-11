@@ -8,9 +8,8 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.EmptyBoardMove;
-import com.dlb.chess.model.PawnDiagonalBoardMove;
-import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
-import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
+import com.dlb.chess.squares.AbstractEmptyBoardSquares;
+import com.dlb.chess.squares.PawnDiagonalSquares;
 
 //TODO make the count for the possible SAN
 public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanValidateStrict {
@@ -29,15 +28,15 @@ public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanV
 
     // one square advance (includes two square advance)
     for (final Square toSquare : Square.REAL) {
-      if (!Rank.calculateIsGroundRank(getSide(), toSquare.getRank())
-          && !Rank.calculateIsPawnInititalRank(getSide(), toSquare.getRank())) {
+      if (toSquare.getRank() != Rank.calculateGroundRank(getSide())
+          && toSquare.getRank() != Rank.calculatePawnInitialRank(getSide())) {
         appendOnlyMove(resultSet, toSquare);
       }
     }
 
     // diagonal moves
     for (final Square fromSquare : Square.REAL) {
-      if (!Rank.calculateIsGroundRank(getSide(), fromSquare.getRank())
+      if (fromSquare.getRank() != Rank.calculateGroundRank(getSide())
           && !Rank.calculateIsPromotionRank(getSide(), fromSquare.getRank())) {
 
         // diagonal left
@@ -65,9 +64,10 @@ public abstract class AbstractPawnSanValidateStrict extends AbstractGenerateSanV
       appendOnlyMove(resultSet, move.toSquare());
     }
 
-    final Set<PawnDiagonalBoardMove> diagonalMoveSet = PawnDiagonalMoveUtility.calculatePawnDiagonalMoves(getSide());
-    for (final PawnDiagonalBoardMove diagonalMove : diagonalMoveSet) {
-      appendMoveWithFile(resultSet, diagonalMove.toSquare(), diagonalMove.fromSquare().getFile());
+    for (final Square fromSquare : Square.REAL) {
+      for (final Square diagonalSquare : PawnDiagonalSquares.getPawnDiagonalSquares(getSide(), fromSquare)) {
+        appendMoveWithFile(resultSet, diagonalSquare, fromSquare.getFile());
+      }
     }
 
     return resultSet;

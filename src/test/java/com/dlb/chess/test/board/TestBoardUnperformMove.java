@@ -8,13 +8,12 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgntest.PgnExpectedValue;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 /**
  * Verifies the {@link com.dlb.chess.board.Board#unperformMove} contract: after performing a move and immediately
@@ -61,7 +60,7 @@ class TestBoardUnperformMove {
     var pgnsExercised = 0;
     var halfMovesExercised = 0;
 
-    for (final PgnFileTestCaseList testCaseList : PgnExpectedValue.getParserIntegrationSmokeList()) {
+    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getParserIntegrationSmokeList()) {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         logger.info(testCase.pgnFileName());
         halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
@@ -84,8 +83,8 @@ class TestBoardUnperformMove {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
 
-    final ChessBoard expected = new Board(pgnFile.startFen());
-    final ChessBoard actual = new Board(pgnFile.startFen());
+    final Board expected = new Board(pgnFile.startFen());
+    final Board actual = new Board(pgnFile.startFen());
 
     var halfMoveIndex = 0;
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -104,7 +103,7 @@ class TestBoardUnperformMove {
     return halfMoveIndex;
   }
 
-  private static void assertBoardsEqual(ChessBoard expected, ChessBoard actual, String pgnFileName, int halfMoveIndex,
+  private static void assertBoardsEqual(Board expected, Board actual, String pgnFileName, int halfMoveIndex,
       String san) {
     if (!EqualsBuilder.reflectionEquals(expected, actual)) {
       fail("Boards differ in " + pgnFileName + " after perform+unperform of halfmove " + halfMoveIndex + " (" + san

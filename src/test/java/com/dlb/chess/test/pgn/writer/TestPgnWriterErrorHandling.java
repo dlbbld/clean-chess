@@ -10,8 +10,8 @@ import org.junit.jupiter.api.io.TempDir;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
-import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.pgn.writer.PgnWriter;
+import com.dlb.chess.pgn.PgnCreate;
+import com.dlb.chess.pgn.PgnWriter;
 
 class TestPgnWriterErrorHandling {
 

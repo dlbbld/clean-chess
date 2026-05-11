@@ -12,11 +12,11 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.FileUtility;
-import com.dlb.chess.pgn.parser.enums.StandardTag;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StandardTag;
+import com.dlb.chess.pgn.TagUtility;
+import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.utility.TagUtility;
 
 public abstract class GeneratePgnInformationUtility {
 
