@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
+import com.dlb.chess.squares.PawnDiagonalSquares;
 
 public abstract class PawnDiagonalMoveUtility {
 

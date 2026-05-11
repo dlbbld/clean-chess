@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.legal.AbstractLegalMoves;
-import com.dlb.chess.squares.to.potential.QueenPotentialToSquares;
+import com.dlb.chess.squares.QueenPotentialToSquares;
 
 public class QueenLegalMoves extends AbstractLegalMoves {
   public static Set<LegalMove> calculateQueenLegalMoves(StaticPosition staticPosition, Side havingMove,

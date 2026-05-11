@@ -49,7 +49,7 @@ import com.dlb.chess.san.lenient.LenientSanParser;
 import com.dlb.chess.san.model.LenientSanParserValidationResult;
 import com.dlb.chess.san.model.StrictSanParserValidationResult;
 import com.dlb.chess.san.validate.StrictSanParser;
-import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 

@@ -17,12 +17,12 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
-import com.dlb.chess.squares.to.potential.KingNonCastlingPotentialToSquares;
-import com.dlb.chess.squares.to.potential.KnightPotentialToSquares;
-import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
-import com.dlb.chess.squares.to.potential.QueenPotentialToSquares;
-import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
+import com.dlb.chess.squares.BishopPotentialToSquares;
+import com.dlb.chess.squares.KingNonCastlingPotentialToSquares;
+import com.dlb.chess.squares.KnightPotentialToSquares;
+import com.dlb.chess.squares.PawnPotentialToSquares;
+import com.dlb.chess.squares.QueenPotentialToSquares;
+import com.dlb.chess.squares.RookPotentialToSquares;
 
 class TestPotentialToSquares implements EnumConstants {
 

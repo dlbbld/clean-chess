@@ -7,8 +7,8 @@ import java.util.TreeSet;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.squares.emptyboard.KingNonCastlingEmptyBoardSquares;
-import com.dlb.chess.squares.emptyboard.KnightEmptyBoardSquares;
+import com.dlb.chess.squares.KingNonCastlingEmptyBoardSquares;
+import com.dlb.chess.squares.KnightEmptyBoardSquares;
 import com.dlb.chess.unwinnability.functions.KingDistanceOneFunctions;
 import com.dlb.chess.unwinnability.model.PiecePlacement;
 

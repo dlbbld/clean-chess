@@ -19,12 +19,12 @@ import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.moves.legal.AbstractLegalMoves;
-import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
-import com.dlb.chess.squares.to.potential.KingNonCastlingPotentialToSquares;
-import com.dlb.chess.squares.to.potential.KnightPotentialToSquares;
-import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
-import com.dlb.chess.squares.to.potential.QueenPotentialToSquares;
-import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
+import com.dlb.chess.squares.BishopPotentialToSquares;
+import com.dlb.chess.squares.KingNonCastlingPotentialToSquares;
+import com.dlb.chess.squares.KnightPotentialToSquares;
+import com.dlb.chess.squares.PawnPotentialToSquares;
+import com.dlb.chess.squares.QueenPotentialToSquares;
+import com.dlb.chess.squares.RookPotentialToSquares;
 
 class TestPseudoLegalMoves implements EnumConstants {
 

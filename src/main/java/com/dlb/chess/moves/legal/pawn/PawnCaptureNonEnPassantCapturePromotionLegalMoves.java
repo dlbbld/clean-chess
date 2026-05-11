@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.squares.pawn.diagonal.PawnDiagonalSquares;
+import com.dlb.chess.squares.PawnDiagonalSquares;
 
 class PawnCaptureNonEnPassantCapturePromotionLegalMoves extends PawnLegalMoves {
 

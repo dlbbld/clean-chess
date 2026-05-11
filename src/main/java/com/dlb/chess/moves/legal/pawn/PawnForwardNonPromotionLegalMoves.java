@@ -13,7 +13,7 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
-import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
+import com.dlb.chess.squares.PawnPotentialToSquares;
 
 class PawnForwardNonPromotionLegalMoves extends PawnLegalMoves {
 

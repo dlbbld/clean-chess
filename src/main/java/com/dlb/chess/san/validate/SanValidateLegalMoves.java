@@ -38,7 +38,7 @@ import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;
 import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.squares.to.potential.AbstractPotentialToSquares;
+import com.dlb.chess.squares.AbstractPotentialToSquares;
 
 abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstants {
 

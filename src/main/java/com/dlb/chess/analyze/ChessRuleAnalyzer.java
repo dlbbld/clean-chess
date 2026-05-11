@@ -18,11 +18,11 @@ import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PawnDiagonalMoveUtility;
-import com.dlb.chess.squares.emptyboard.AbstractEmptyBoardSquares;
-import com.dlb.chess.squares.emptyboard.KingNonCastlingEmptyBoardSquares;
-import com.dlb.chess.squares.to.potential.BishopPotentialToSquares;
-import com.dlb.chess.squares.to.potential.QueenPotentialToSquares;
-import com.dlb.chess.squares.to.potential.RookPotentialToSquares;
+import com.dlb.chess.squares.AbstractEmptyBoardSquares;
+import com.dlb.chess.squares.KingNonCastlingEmptyBoardSquares;
+import com.dlb.chess.squares.BishopPotentialToSquares;
+import com.dlb.chess.squares.QueenPotentialToSquares;
+import com.dlb.chess.squares.RookPotentialToSquares;
 
 /**
  * Stateless chess-rules analysis shared by both validation pipelines (MoveSpecification and SAN).

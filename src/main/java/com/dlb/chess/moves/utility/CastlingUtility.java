@@ -22,7 +22,7 @@ import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 
 public abstract class CastlingUtility implements EnumConstants {

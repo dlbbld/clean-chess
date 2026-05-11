@@ -12,7 +12,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.squares.to.potential.PawnPotentialToSquares;
+import com.dlb.chess.squares.PawnPotentialToSquares;
 
 class PawnForwardPromotionLegalMoves extends PawnLegalMoves {
 

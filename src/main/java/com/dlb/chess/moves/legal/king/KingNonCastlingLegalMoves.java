@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.squares.to.potential.KingNonCastlingPotentialToSquares;
+import com.dlb.chess.squares.KingNonCastlingPotentialToSquares;
 
 class KingNonCastlingLegalMoves extends KingLegalMoves {
   public static Set<LegalMove> calculateKingNonCastlingLegalMoves(StaticPosition staticPosition, Side havingMove,

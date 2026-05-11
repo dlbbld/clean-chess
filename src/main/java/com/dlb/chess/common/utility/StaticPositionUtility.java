@@ -16,7 +16,7 @@ import com.dlb.chess.moves.utility.CastlingUtility;
 import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
 import com.dlb.chess.moves.utility.PromotionUtility;
 import com.dlb.chess.moves.utility.StandardMoveUtility;
-import com.dlb.chess.squares.to.attacked.AbstractAttackedSquares;
+import com.dlb.chess.squares.AbstractAttackedSquares;
 
 public abstract class StaticPositionUtility implements EnumConstants {
 
