@@ -33,8 +33,8 @@ import com.dlb.chess.pgn.parser.sequential.PgnCharStream;
 import com.dlb.chess.pgn.parser.sequential.PgnToken;
 import com.dlb.chess.pgn.parser.sequential.PgnTokenType;
 import com.dlb.chess.pgn.parser.sequential.PgnTokenizer;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.SanValidationException;
 import com.dlb.chess.utility.TagUtility;
 
 /**
@@ -615,7 +615,7 @@ public final class StrictPgnParser {
     for (var i = 0; i < san.length(); i++) {
       final var c = san.charAt(i);
       if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
-          && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.enums.SanSymbol.exists(c)) {
+          && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.SanSymbol.exists(c)) {
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             "The movetext is invalid because a SAN contains an invalid character of \"" + c + "\".");
       }

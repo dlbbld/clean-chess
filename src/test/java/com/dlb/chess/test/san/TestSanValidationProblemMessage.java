@@ -13,9 +13,9 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.StrictSanParser;
 
 /**
  * Per-entry coverage for {@link SanValidationProblem}. For each enum constant that can be triggered from a SAN input,

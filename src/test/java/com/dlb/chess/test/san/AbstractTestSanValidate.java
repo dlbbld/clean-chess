@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.StrictSanParser;
 
 public abstract class AbstractTestSanValidate implements EnumConstants {
 

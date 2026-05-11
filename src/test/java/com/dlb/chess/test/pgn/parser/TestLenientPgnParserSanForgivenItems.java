@@ -10,8 +10,8 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.LenientPgnParser;
 import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
-import com.dlb.chess.san.enums.LenientSanValidationProblem;
-import com.dlb.chess.san.model.ForgivenItem;
+import com.dlb.chess.san.LenientSanValidationProblem;
+import com.dlb.chess.san.ForgivenItem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**

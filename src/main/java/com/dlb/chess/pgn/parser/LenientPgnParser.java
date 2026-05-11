@@ -32,10 +32,10 @@ import com.dlb.chess.pgn.parser.sequential.PgnCharStream;
 import com.dlb.chess.pgn.parser.sequential.PgnToken;
 import com.dlb.chess.pgn.parser.sequential.PgnTokenType;
 import com.dlb.chess.pgn.parser.sequential.PgnTokenizer;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.LenientSanParserValidationException;
-import com.dlb.chess.san.model.ForgivenItem;
-import com.dlb.chess.san.model.LenientSanParserValidationResult;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.LenientSanParserValidationException;
+import com.dlb.chess.san.ForgivenItem;
+import com.dlb.chess.san.LenientSanParserValidationResult;
 import com.dlb.chess.utility.TagPlaceHolderUtility;
 import com.dlb.chess.utility.TagUtility;
 
@@ -587,7 +587,7 @@ public final class LenientPgnParser {
 
   private static boolean isAllowedLenientSanCharacter(char c) {
     if (com.dlb.chess.board.enums.Piece.exists(c) || com.dlb.chess.board.enums.File.exists(c)
-        || com.dlb.chess.board.enums.Rank.exists(c) || com.dlb.chess.san.enums.SanSymbol.exists(c)) {
+        || com.dlb.chess.board.enums.Rank.exists(c) || com.dlb.chess.san.SanSymbol.exists(c)) {
       return true;
     }
     // Lenient additions: uppercase file letter (UPPERCASE_FILE_LETTER), uppercase capture marker

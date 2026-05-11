@@ -10,7 +10,7 @@ import com.dlb.chess.pgn.parser.StrictPgnParser;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 
 public abstract class AbstractTestStrictPgnParserException {
   static void checkException(Path pgnTestFolderPath, String pgnFileName,

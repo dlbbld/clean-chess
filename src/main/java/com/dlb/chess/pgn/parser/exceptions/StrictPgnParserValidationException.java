@@ -5,7 +5,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 
 public class StrictPgnParserValidationException extends UsageException {
 

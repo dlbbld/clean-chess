@@ -2,7 +2,7 @@ package com.dlb.chess.test.san.reference;
 
 import java.util.EnumMap;
 
-import com.dlb.chess.san.enums.SanFormat;
+import com.dlb.chess.san.SanFormat;
 
 public class SanFormatPropertiesMap {
 

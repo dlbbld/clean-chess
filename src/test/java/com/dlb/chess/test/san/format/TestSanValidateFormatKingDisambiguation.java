@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanValidateFormat;
 
 class TestSanValidateFormatKingDisambiguation {
 

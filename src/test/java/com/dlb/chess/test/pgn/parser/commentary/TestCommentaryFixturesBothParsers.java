@@ -19,7 +19,7 @@ import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.parser.model.PgnFile;
 import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**

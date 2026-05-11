@@ -29,8 +29,8 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
 import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
@@ -74,20 +74,20 @@ public class LibraryCarlosBoard implements ChessBoard {
   }
 
   @Override
-  public com.dlb.chess.san.model.StrictSanParserValidationResult moveStrict(String san) {
+  public com.dlb.chess.san.StrictSanParserValidationResult moveStrict(String san) {
     board.doMove(san);
     final MoveSpecification lastMoveSpecification = calculateLastMoveSpecification();
     populateMoveHistory(lastMoveSpecification);
-    return new com.dlb.chess.san.model.StrictSanParserValidationResult(lastMoveSpecification);
+    return new com.dlb.chess.san.StrictSanParserValidationResult(lastMoveSpecification);
   }
 
   @Override
-  public com.dlb.chess.san.model.LenientSanParserValidationResult moveLenient(String san) {
+  public com.dlb.chess.san.LenientSanParserValidationResult moveLenient(String san) {
     // Carlos's chesslib doesn't have a lenient SAN concept; delegate to strict, then wrap into the lenient result
     // shape with empty forgiven items. Cross-validation tests only need the move to land on the board.
-    final com.dlb.chess.san.model.StrictSanParserValidationResult strict = moveStrict(san);
-    return new com.dlb.chess.san.model.LenientSanParserValidationResult(strict.moveSpecification(),
-        com.dlb.chess.san.model.ForgivenItem.EMPTY_LIST);
+    final com.dlb.chess.san.StrictSanParserValidationResult strict = moveStrict(san);
+    return new com.dlb.chess.san.LenientSanParserValidationResult(strict.moveSpecification(),
+        com.dlb.chess.san.ForgivenItem.EMPTY_LIST);
   }
 
   private MoveSpecification calculateLastMoveSpecification() {

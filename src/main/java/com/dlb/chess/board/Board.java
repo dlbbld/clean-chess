@@ -44,11 +44,11 @@ import com.dlb.chess.moves.PromotionUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.MoveToLan;
 import com.dlb.chess.san.MoveToSan;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.lenient.LenientSanParser;
-import com.dlb.chess.san.model.LenientSanParserValidationResult;
-import com.dlb.chess.san.model.StrictSanParserValidationResult;
-import com.dlb.chess.san.validate.StrictSanParser;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.san.LenientSanParser;
+import com.dlb.chess.san.LenientSanParserValidationResult;
+import com.dlb.chess.san.StrictSanParserValidationResult;
+import com.dlb.chess.san.StrictSanParser;
 import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -248,7 +248,7 @@ public class Board implements ChessBoard {
    * {@link MoveSpecification}; for callers that only need success / fail, the absence of a thrown exception is the
    * answer. Use {@link #moveLenient(String)} when parsing real-world PGN that may contain forgivable deviations.
    *
-   * @throws com.dlb.chess.san.exceptions.SanValidationException if {@code san} is not canonical SAN, or is canonical
+   * @throws com.dlb.chess.san.SanValidationException if {@code san} is not canonical SAN, or is canonical
    *                                                             but does not represent a legal move
    */
   @Override
@@ -269,7 +269,7 @@ public class Board implements ChessBoard {
    * {@link LenientSanParserValidationResult} carries the resolved {@code MoveSpecification} together with one
    * {@code ForgivenItem} per deviation that was forgiven; on canonical input the forgiven-items list is empty.
    *
-   * @throws com.dlb.chess.san.exceptions.LenientSanParserValidationException if the input cannot be resolved to a legal
+   * @throws com.dlb.chess.san.LenientSanParserValidationException if the input cannot be resolved to a legal
    *                                                                          move even after applying every supported
    *                                                                          tolerance
    */

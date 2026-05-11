@@ -8,9 +8,9 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.san.AbstractSan;
-import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
 
 public class SanCalculate implements EnumConstants {
 

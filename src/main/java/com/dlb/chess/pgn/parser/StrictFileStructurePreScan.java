@@ -2,7 +2,7 @@ package com.dlb.chess.pgn.parser;
 
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 
 /**
  * Whole-file structural pre-scan for the strict format: file non-empty, no leading blank line, trailing blank line

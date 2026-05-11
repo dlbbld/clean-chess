@@ -10,7 +10,7 @@
  *
  * <ul>
  * <li>{@link com.dlb.chess.board.ValidateNewMove#validateNewMove} (MoveSpecification pipeline)</li>
- * <li>{@code com.dlb.chess.san.validate.StrictSanParser#parseText} (SAN pipeline)</li>
+ * <li>{@code com.dlb.chess.san.StrictSanParser#parseText} (SAN pipeline)</li>
  * </ul>
  *
  * <p>

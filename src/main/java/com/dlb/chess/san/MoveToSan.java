@@ -14,9 +14,9 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.PromotionUtility;
-import com.dlb.chess.san.enums.SanSourceSpecification;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.san.SanSourceSpecification;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
 
 public class MoveToSan extends AbstractSan {
 

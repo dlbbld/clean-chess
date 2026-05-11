@@ -7,8 +7,8 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.test.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 
 class TestSanValidateFormatSuccessOracle {
@@ -19,7 +19,7 @@ class TestSanValidateFormatSuccessOracle {
    *
    * <p>
    * This uses the static map as an oracle: if the new parser produces a different result for any known-valid SAN string
-   * (wrong {@link com.dlb.chess.san.enums.SanFormat}, wrong from-square, wrong promotion piece, etc.) the test will
+   * (wrong {@link com.dlb.chess.san.SanFormat}, wrong from-square, wrong promotion piece, etc.) the test will
    * catch it immediately without having to enumerate strings manually.
    */
   @SuppressWarnings("static-method")

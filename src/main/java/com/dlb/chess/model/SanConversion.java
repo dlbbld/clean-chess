@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.san.SanTerminalMarker;
 
 public record SanConversion(PieceType movingPieceType, File fromFile, Rank fromRank, Square toSquare,
     PromotionPieceType promotionPieceType, SanTerminalMarker sanTerminalMarker) {

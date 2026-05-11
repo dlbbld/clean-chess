@@ -8,8 +8,8 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
 
 public abstract class AbstractSan {
 

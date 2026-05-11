@@ -9,10 +9,10 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.san.SanParse;
 import com.google.common.collect.ImmutableMap;
 
 public class KingCastlingSanValidateStaticallyStrictCalculate extends AbstractSanValidateStaticallyStrictCalculate {

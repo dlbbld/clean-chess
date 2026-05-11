@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.test.san.reference.SanValidateFormatReference;
 import com.dlb.chess.test.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
 

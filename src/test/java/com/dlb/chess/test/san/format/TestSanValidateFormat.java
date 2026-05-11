@@ -11,12 +11,12 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.exceptions.SanValidationException;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.SanValidationException;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.test.san.reference.SanValidateFormatReference;
 
 class TestSanValidateFormat {

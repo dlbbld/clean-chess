@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.san.enums.SanSymbol;
+import com.dlb.chess.san.SanSymbol;
 
 public abstract class CastlingConstants implements EnumConstants {
 

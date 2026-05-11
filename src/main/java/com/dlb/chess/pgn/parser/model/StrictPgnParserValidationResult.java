@@ -1,7 +1,7 @@
 package com.dlb.chess.pgn.parser.model;
 
 import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 
 public record StrictPgnParserValidationResult(StrictPgnParserValidationProblem problemParser,
     SanValidationProblem problemSan, String message) {

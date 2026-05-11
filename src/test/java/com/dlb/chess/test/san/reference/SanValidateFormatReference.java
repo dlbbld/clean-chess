@@ -11,11 +11,11 @@ import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.san.enums.SanFormat;
-import com.dlb.chess.san.enums.SanSymbol;
-import com.dlb.chess.san.enums.SanTerminalMarker;
-import com.dlb.chess.san.model.SanParse;
-import com.dlb.chess.san.validate.format.SanValidateFormat;
+import com.dlb.chess.san.SanFormat;
+import com.dlb.chess.san.SanSymbol;
+import com.dlb.chess.san.SanTerminalMarker;
+import com.dlb.chess.san.SanParse;
+import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.test.san.model.SanConversionCheck;
 
 /**

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
-import com.dlb.chess.san.exceptions.SanValidationException;
+import com.dlb.chess.san.SanValidationException;
 
 class TestSpecialCastling implements EnumConstants {
 

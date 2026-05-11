@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.SanParse;
 import com.google.common.collect.ImmutableMap;
 
 public class SanValidateStaticallyStrict implements EnumConstants {

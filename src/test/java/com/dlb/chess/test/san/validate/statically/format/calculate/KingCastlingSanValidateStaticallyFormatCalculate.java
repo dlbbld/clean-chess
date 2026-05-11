@@ -1,6 +1,6 @@
 package com.dlb.chess.test.san.validate.statically.format.calculate;
 
-import com.dlb.chess.san.model.SanParse;
+import com.dlb.chess.san.SanParse;
 import com.dlb.chess.test.san.validate.statically.strict.calculate.KingCastlingSanValidateStaticallyStrictCalculate;
 import com.google.common.collect.ImmutableMap;
 

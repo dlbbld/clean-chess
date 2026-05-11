@@ -5,8 +5,8 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
-import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.san.model.ForgivenItem;
+import com.dlb.chess.san.SanValidationProblem;
+import com.dlb.chess.san.ForgivenItem;
 import com.google.common.collect.ImmutableList;
 
 /**

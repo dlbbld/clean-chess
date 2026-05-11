@@ -29,7 +29,7 @@ import com.dlb.chess.pgn.parser.model.Tag;
 import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.model.Report;
-import com.dlb.chess.san.enums.SanValidationProblem;
+import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.UnwinnableFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
@@ -341,11 +341,11 @@ class TestReadMe {
     final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     assertTrue(result.isValid());
     assertEquals(2, result.sanForgivenItems().size());
-    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
+    assertEquals(com.dlb.chess.san.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
         NonNullWrapperCommon.get(result.sanForgivenItems(), 0).code());
     assertEquals("0-0", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).originalToken());
     assertEquals("O-O", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).canonicalSan());
-    assertEquals(com.dlb.chess.san.enums.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
+    assertEquals(com.dlb.chess.san.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
         NonNullWrapperCommon.get(result.sanForgivenItems(), 1).code());
     assertEquals("nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).originalToken());
     assertEquals("Nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).canonicalSan());
