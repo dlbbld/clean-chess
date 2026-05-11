@@ -4,7 +4,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.model.LegalMove;
 
 public abstract class BasicChessUtility {
@@ -46,7 +46,7 @@ public abstract class BasicChessUtility {
     };
   }
 
-  public static GameStatus calculateGameStatus(ChessBoard board) {
+  public static GameStatus calculateGameStatus(Board board) {
 
     if (board.isCheckmate()) {
       return GameStatus.CHECKMATE;

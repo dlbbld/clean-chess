@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -38,7 +37,7 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
  * <h2>Reverse (every legal move at every position)</h2>
  *
  * <p>
- * At each position reached during PGN playthrough, for <em>every</em> legal move from {@link ChessBoard#getLegalMoveSet
+ * At each position reached during PGN playthrough, for <em>every</em> legal move from {@link Board#getLegalMoveSet
  * getLegalMoveSet}: perform the move so the board can compute its SAN, capture the SAN, unperform back to the original
  * position, then derive a fresh MoveSpec from that SAN via {@code validateSan} and assert it equals the LegalMove's
  * stored MoveSpec. This checks the round-trip on every legal move, not just the chosen line.
@@ -83,7 +82,7 @@ class TestPerformMoveSanContract {
   private static void verifyProvidedSanToCalculatedSan(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
-    final ChessBoard board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen());
 
     var halfMoveIndex = 0;
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -115,7 +114,7 @@ class TestPerformMoveSanContract {
       PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
-    final ChessBoard board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen());
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       board.moveStrict(halfMove.san());

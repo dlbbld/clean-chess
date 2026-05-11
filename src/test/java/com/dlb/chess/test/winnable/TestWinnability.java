@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
@@ -49,7 +48,7 @@ class TestWinnability {
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    final Board board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
     assertEquals(Winnable.NO, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
@@ -62,7 +61,7 @@ class TestWinnability {
   void testFolder() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
       check(testCase.unwinnableQuickWhite(), Side.WHITE, board);
@@ -70,7 +69,7 @@ class TestWinnability {
     }
   }
 
-  private static void check(UnwinnableQuick unwinnableQuickSide, Side side, ChessBoard board) {
+  private static void check(UnwinnableQuick unwinnableQuickSide, Side side, Board board) {
     final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, side);
     switch (unwinnableQuickSide) {
       case UNWINNABLE -> assertEquals(Winnable.NO, winnable);

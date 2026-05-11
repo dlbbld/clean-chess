@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -45,7 +45,7 @@ class TestBasicCheckmateWhite extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.BASIC_CHECKMATE_WHITE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
+      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(),
           testCase.pgnFileName());
 
       logger.info(testCase.pgnFileName());

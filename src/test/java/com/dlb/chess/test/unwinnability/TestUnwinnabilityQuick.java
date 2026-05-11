@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
@@ -75,7 +74,7 @@ class TestUnwinnabilityQuick {
 
     final PgnTest pgnTest = PgnExpectedValue.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final ChessBoard board = GeneralUtility.calculateBoard(pgnFile);
+    final Board board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
     assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
@@ -88,7 +87,7 @@ class TestUnwinnabilityQuick {
   @Test
   void testPgnFileExpected() {
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase("25_black_capture_king_pawn.pgn");
-    final ChessBoard board = new Board(pgnFileTestCase.fen());
+    final Board board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileTestCase.pgnFileName());
 
     final UnwinnableQuick unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
@@ -106,7 +105,7 @@ class TestUnwinnabilityQuick {
 
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
       logger.info(testCase.pgnFileName());
 
       {

@@ -8,7 +8,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.NoProgressHalfMove;
@@ -16,7 +16,7 @@ import com.dlb.chess.report.NoProgressIndex;
 
 public abstract class NoProgressMoveUtility {
 
-  public static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(ChessBoard board,
+  public static List<List<NoProgressHalfMove>> calculateNoProgressMoveRule(Board board,
       int numberOfHalfMovesThreshold) {
 
     final List<NoProgressIndex> indexList = NoProgressMoveUtility.calculateNoProgressMoveIndex(board,
@@ -150,7 +150,7 @@ public abstract class NoProgressMoveUtility {
     return new NoProgressHalfMove(performedHalfMoveCount, fullMoveNumber, san, sideMoved, sequenceLength);
   }
 
-  private static List<NoProgressIndex> calculateNoProgressMoveIndex(ChessBoard board, int numberOfHalfMovesThreshold) {
+  private static List<NoProgressIndex> calculateNoProgressMoveIndex(Board board, int numberOfHalfMovesThreshold) {
 
     if (numberOfHalfMovesThreshold > ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
       throw new IllegalArgumentException("The threshold cannot be below fifty moves");

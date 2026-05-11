@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.fen.FenParserRaw;
@@ -54,7 +54,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     this.color = side;
   }
 
-  public FindHelpmateAnalysis calculateHelpmate(ChessBoard board, int maxDepth) {
+  public FindHelpmateAnalysis calculateHelpmate(Board board, int maxDepth) {
 
     final String invariant = board.getFen();
 
@@ -96,7 +96,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   // Inputs: position, depth (int), maxDepth (int)
   // Output: bool (true if a checkmate sequence was found, false otherwise)
-  private FindHelpmateRecursionResult findHelpmate(ChessBoard board, int depth, int maxDepth, int actualDepth,
+  private FindHelpmateRecursionResult findHelpmate(Board board, int depth, int maxDepth, int actualDepth,
       boolean isPastProgress) {
 
     // 1: if the intended winner is checkmating their opponent in pos then return true
@@ -301,7 +301,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     return result;
   }
 
-  private static String calculateStockfishFen(ChessBoard board) {
+  private static String calculateStockfishFen(Board board) {
 
     if (!calculateIsEraseEnPassantCaptureTargetSquare(board)) {
       return board.getFen();
@@ -331,7 +331,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     return NonNullWrapperCommon.toString(fenSquareErased);
   }
 
-  private static String calculateCacheKey(ChessBoard board) {
+  private static String calculateCacheKey(Board board) {
     final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
 
     final StringBuilder fenSquareErased = new StringBuilder();
@@ -353,7 +353,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     return NonNullWrapperCommon.toString(fenSquareErased);
   }
 
-  private static boolean calculateIsEraseEnPassantCaptureTargetSquare(ChessBoard board) {
+  private static boolean calculateIsEraseEnPassantCaptureTargetSquare(Board board) {
     final Square enPassantCaptureTargetSquare = board.getEnPassantCaptureTargetSquare();
 
     if (enPassantCaptureTargetSquare == Square.NONE) {

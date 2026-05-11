@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.KingSafetyCheck;
 
@@ -25,7 +24,7 @@ class TestKingSafetyCheck implements EnumConstants {
 
   private static final Set<KingSafetyCheck> COVERED = new TreeSet<>();
 
-  private static KingSafetyCheck analyze(ChessBoard board, MoveSpecification move) {
+  private static KingSafetyCheck analyze(Board board, MoveSpecification move) {
     final KingSafetyCheck result = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(), board.getHavingMove(),
         move);
     COVERED.add(result);
@@ -33,7 +32,7 @@ class TestKingSafetyCheck implements EnumConstants {
   }
 
   private static void check(String fen, MoveSpecification move, KingSafetyCheck expected) {
-    final ChessBoard board = new Board(fen);
+    final Board board = new Board(fen);
     assertEquals(expected, analyze(board, move));
   }
 
@@ -41,7 +40,7 @@ class TestKingSafetyCheck implements EnumConstants {
   @Test
   void testSuccess() {
     // initial position: e2-e4 leaves king safe
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     assertEquals(KingSafetyCheck.SUCCESS, analyze(board, new MoveSpecification(E2, E4)));
   }
 

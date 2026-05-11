@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.report.Report;
@@ -77,7 +77,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(insufficientMaterial.name());
     result.append(", ");
 
-    final ChessBoard finalBoard = report.board();
+    final Board finalBoard = report.board();
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
         .unwinnableFull();
     final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)

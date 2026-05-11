@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -33,7 +32,7 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
   @Test
   void testGameEndedByCheckmate() {
     // Fool's mate: white is checkmated by black queen on h4.
-    final ChessBoard board = new Board("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3");
+    final Board board = new Board("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3");
     check(board, new MoveSpecification(E1, E2), GameStatus.CHECKMATE);
   }
 
@@ -45,7 +44,7 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
     // Classic K + Q stalemate: black king h8 has no legal move, no check, white to move.
     // White-to-move queries; it's actually black-to-move stalemate so we set black-to-move
     // and ask validation to reject any black move attempt.
-    final ChessBoard board = new Board("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+    final Board board = new Board("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
     check(board, new MoveSpecification(H8, G8), GameStatus.STALEMATE);
   }
 
@@ -55,7 +54,7 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
   @Test
   void testGameEndedByInsufficientMaterialBoth() {
     // K vs K: dead position under FIDE 5.2.2.
-    final ChessBoard board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
+    final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
     check(board, new MoveSpecification(E1, E2), GameStatus.INSUFFICIENT_MATERIAL_BOTH);
   }
 
@@ -66,7 +65,7 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
   void testGameEndedBySeventyFiveMoveRule() {
     // FEN with halfmove clock at the 75-move threshold (150) — the position is the terminal
     // moment of the 75-move rule. Any further move is rejected.
-    final ChessBoard board = new Board("4k3/8/4P3/8/8/8/2N1B3/3KQ2R w - - 150 76");
+    final Board board = new Board("4k3/8/4P3/8/8/8/2N1B3/3KQ2R w - - 150 76");
     check(board, new MoveSpecification(D1, D2), GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
@@ -77,7 +76,7 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
   void testGameEndedByFivefoldRepetition() {
     // Drive a board to fivefold by alternating knight moves between two squares for both
     // sides, so the same position recurs 5 times.
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     // Sequence: 1.Nf3 Nf6 2.Ng1 Ng8 3.Nf3 Nf6 4.Ng1 Ng8 5.Nf3 Nf6 6.Ng1 Ng8 7.Nf3 Nf6 8.Ng1 Ng8
     // After move 8...Ng8 the starting position has occurred 5 times (move 0, 2, 4, 6, 8).
     board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6",
@@ -87,7 +86,7 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
 
   // --- helpers ---
 
-  private static void check(ChessBoard board, MoveSpecification move, GameStatus expectedGameStatus) {
+  private static void check(Board board, MoveSpecification move, GameStatus expectedGameStatus) {
     var isException = false;
     try {
       board.move(move);

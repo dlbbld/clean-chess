@@ -12,7 +12,6 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.enums.CastlingCheck;
@@ -24,7 +23,7 @@ import com.dlb.chess.moves.CastlingUtility;
 
 class ValidateNewMove implements EnumConstants {
 
-  public static MoveCheck validateNewMove(ChessBoard board, MoveSpecification moveSpecification)
+  public static MoveCheck validateNewMove(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
 
     validateGameNotEnded(board);
@@ -59,7 +58,7 @@ class ValidateNewMove implements EnumConstants {
    * fivefold repetition, and the 75-move rule. Single-side insufficient-material diagnostics, the claimable draws
    * (3-fold repetition, 50-move rule), and ongoing positions are deliberately NOT rejected here.
    */
-  private static void validateGameNotEnded(ChessBoard board) throws InvalidMoveException {
+  private static void validateGameNotEnded(Board board) throws InvalidMoveException {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
     if (!gameStatus.isAutomaticTermination()) {
       return;
@@ -68,7 +67,7 @@ class ValidateNewMove implements EnumConstants {
         gameStatus);
   }
 
-  private static void validateCastling(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validateCastling(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
 
     if (!CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
@@ -116,7 +115,7 @@ class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validateNonCastlingBasic(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validateNonCastlingBasic(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final Side havingMove = board.getHavingMove();
     final Square fromSquare = moveSpecification.fromSquare();
@@ -143,7 +142,7 @@ class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validatePawnPromotionPieceConsistency(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validatePawnPromotionPieceConsistency(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final Side havingMove = board.getHavingMove();
     if (Rank.calculateIsPromotionRank(havingMove, moveSpecification.toSquare().getRank())) {
@@ -157,7 +156,7 @@ class ValidateNewMove implements EnumConstants {
     }
   }
 
-  private static void validateMovement(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validateMovement(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final MovementCheck movementCheck = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(),
         board.getHavingMove(), board.getEnPassantCaptureTargetSquare(), moveSpecification);
@@ -168,7 +167,7 @@ class ValidateNewMove implements EnumConstants {
         movementCheck.toMoveCheck());
   }
 
-  private static String movementMessage(MovementCheck check, ChessBoard board, MoveSpecification moveSpecification) {
+  private static String movementMessage(MovementCheck check, Board board, MoveSpecification moveSpecification) {
     final Piece movingPiece = board.getStaticPosition().get(moveSpecification.fromSquare());
     return switch (check) {
       case NOT_POSSIBLE -> movingPiece.getPieceType() == PAWN ? "pawns cannot move in this way"
@@ -199,7 +198,7 @@ class ValidateNewMove implements EnumConstants {
     };
   }
 
-  private static void validateKingSafety(ChessBoard board, MoveSpecification moveSpecification)
+  private static void validateKingSafety(Board board, MoveSpecification moveSpecification)
       throws InvalidMoveException {
     final KingSafetyCheck kingSafetyCheck = ChessRuleAnalyzer.analyzeKingSafety(board.getStaticPosition(),
         board.getHavingMove(), moveSpecification);

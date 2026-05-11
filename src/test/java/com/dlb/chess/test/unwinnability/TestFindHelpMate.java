@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -55,7 +54,7 @@ class TestFindHelpMate {
 
         logger.info(testCase.pgnFileName());
 
-        final ChessBoard board = new Board(testCase.fen());
+        final Board board = new Board(testCase.fen());
 
         final var beforeMilliSeconds = System.currentTimeMillis();
         final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer

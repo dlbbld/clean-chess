@@ -1,5 +1,5 @@
 /**
- * Game-level reports about a {@link com.dlb.chess.common.interfaces.ChessBoard}: threefold-repetition listings
+ * Game-level reports about a {@link com.dlb.chess.board.Board}: threefold-repetition listings
  * (including the missed-claim-ahead opportunities other libraries don't surface), no-progress (50/75-move-rule)
  * sequences, and a printable summary. {@link com.dlb.chess.report.Reporter} is the entry point.
  *

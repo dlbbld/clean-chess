@@ -14,7 +14,6 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
@@ -135,7 +134,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         processScalaChessCodeLine("    val uciAdaptedList = new java.util.ArrayList[String]()", counterList,
             codeLineList);
 
-        final ChessBoard boardPlayAlong = new Board();
+        final Board boardPlayAlong = new Board();
         final List<HalfMove> halfMoveList = report.halfMoveList();
         for (var i = 0; i < halfMoveList.size(); i++) {
           final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);

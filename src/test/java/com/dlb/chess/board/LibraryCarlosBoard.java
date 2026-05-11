@@ -1,4 +1,4 @@
-package com.dlb.chess.test.librarycarlos.board;
+package com.dlb.chess.board;
 
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -19,11 +19,11 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;

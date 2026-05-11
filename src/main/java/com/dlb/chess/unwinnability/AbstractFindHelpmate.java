@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.PgnCreate;
 
@@ -18,7 +17,7 @@ abstract class AbstractFindHelpmate {
 
   private static final boolean IS_DEBUG = false;
 
-  protected static ChessBoard checkHelpmate(String fen, List<LegalMove> moveProgressList) {
+  protected static Board checkHelpmate(String fen, List<LegalMove> moveProgressList) {
 
     final var boardCheck = new Board(fen);
 

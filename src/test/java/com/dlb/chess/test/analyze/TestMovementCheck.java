@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.analyze.ChessRuleAnalyzer;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.MovementCheck;
 
@@ -25,14 +24,14 @@ class TestMovementCheck implements EnumConstants {
 
   private static final Set<MovementCheck> COVERED = new TreeSet<>();
 
-  private static MovementCheck analyze(ChessBoard board, MoveSpecification move) {
+  private static MovementCheck analyze(Board board, MoveSpecification move) {
     final MovementCheck result = ChessRuleAnalyzer.analyzeMovement(board.getStaticPosition(), board.getHavingMove(),
         board.getEnPassantCaptureTargetSquare(), move);
     COVERED.add(result);
     return result;
   }
 
-  private static void check(ChessBoard board, MoveSpecification move, MovementCheck expected) {
+  private static void check(Board board, MoveSpecification move, MovementCheck expected) {
     assertEquals(expected, analyze(board, move));
   }
 

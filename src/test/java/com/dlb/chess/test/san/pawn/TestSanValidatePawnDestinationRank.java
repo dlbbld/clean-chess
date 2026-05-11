@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.SanValidationException;
 import com.dlb.chess.san.StrictSanParser;
@@ -18,7 +17,7 @@ class TestSanValidatePawnDestinationRank {
   void testWhite() {
 
     {
-      final ChessBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
+      final Board board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 w - - 0 100");
 
       checkException("d2", board);
       checkException("d1=Q", board);
@@ -35,7 +34,7 @@ class TestSanValidatePawnDestinationRank {
   void testBlack() {
 
     {
-      final ChessBoard board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
+      final Board board = new Board("4k3/5p2/8/8/8/8/3P4/4K3 b - - 0 100");
 
       checkException("f7", board);
       checkException("f8=Q", board);
@@ -47,11 +46,11 @@ class TestSanValidatePawnDestinationRank {
 
   }
 
-  private static void checkException(String san, ChessBoard board) {
+  private static void checkException(String san, Board board) {
     checkException(san, board, SanValidationProblem.MOVEMENT_PAWN_FORWARD_BACKWARDS);
   }
 
-  private static void checkException(String san, ChessBoard board, SanValidationProblem svp) {
+  private static void checkException(String san, Board board, SanValidationProblem svp) {
     boolean isException;
     try {
       StrictSanParser.parseText(san, board);

@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
@@ -23,7 +23,7 @@ public class PawnWall {
   // TODO own pawns outside pawn wall line
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;
 
-  public static boolean calculateHasPawnWall(ChessBoard board) {
+  public static boolean calculateHasPawnWall(Board board) {
 
     final StaticPosition staticPosition = board.getStaticPosition();
 
@@ -91,7 +91,7 @@ public class PawnWall {
 
   }
 
-  private static boolean calculateIsHasPawnWallAfterPrecheck(ChessBoard board) {
+  private static boolean calculateIsHasPawnWallAfterPrecheck(Board board) {
     // check pawn wall line
     final var hasPawnWallWhite = calculateHasPawnWallLine(board, Side.WHITE);
     if (!hasPawnWallWhite) {
@@ -113,13 +113,13 @@ public class PawnWall {
   }
 
   // calculate capturing squares
-  protected static Set<Square> calculateAttackingSquares(ChessBoard board, Side side) {
+  protected static Set<Square> calculateAttackingSquares(Board board, Side side) {
     final Set<Square> attackingSquares = new TreeSet<>(calculateAttackingSquareAsIs(board, side));
     attackingSquares.addAll(calculateAttackingSquareAfterMoving(board, side));
     return attackingSquares;
   }
 
-  private static Set<Square> calculateAttackingSquareAsIs(ChessBoard board, Side side) {
+  private static Set<Square> calculateAttackingSquareAsIs(Board board, Side side) {
     final Set<Square> attackingSquaresAsIs = new TreeSet<>();
     for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
@@ -136,7 +136,7 @@ public class PawnWall {
     return attackingSquaresAsIs;
   }
 
-  private static Set<Square> calculateAttackingSquareAfterMoving(ChessBoard board, Side side) {
+  private static Set<Square> calculateAttackingSquareAfterMoving(Board board, Side side) {
     final Set<Square> attackingSquaresAll = new TreeSet<>();
 
     final StaticPosition staticPosition = board.getStaticPosition();
@@ -181,13 +181,13 @@ public class PawnWall {
   }
 
   // same for pawn squares
-  protected static Set<Square> calculatePawnSquares(ChessBoard board, Side side) {
+  protected static Set<Square> calculatePawnSquares(Board board, Side side) {
     final Set<Square> pawnSquares = new TreeSet<>(calculatePawnSquareAsIs(board, side));
     pawnSquares.addAll(calculatePawnSquareAfterMoving(board, side));
     return pawnSquares;
   }
 
-  private static Set<Square> calculatePawnSquareAsIs(ChessBoard board, Side side) {
+  private static Set<Square> calculatePawnSquareAsIs(Board board, Side side) {
     final Set<Square> pawnSquaresAsIs = new TreeSet<>();
     for (final Square square : Square.REAL) {
       if (board.getStaticPosition().isOwnPawn(square, side)) {
@@ -197,7 +197,7 @@ public class PawnWall {
     return pawnSquaresAsIs;
   }
 
-  private static Set<Square> calculatePawnSquareAfterMoving(ChessBoard board, Side side) {
+  private static Set<Square> calculatePawnSquareAfterMoving(Board board, Side side) {
     final Set<Square> pawnSquaresAll = new TreeSet<>();
 
     final StaticPosition staticPosition = board.getStaticPosition();
@@ -233,7 +233,7 @@ public class PawnWall {
     }
   }
 
-  private static boolean calculateIsKingBehindPawnWall(ChessBoard board, Side side) {
+  private static boolean calculateIsKingBehindPawnWall(Board board, Side side) {
     final StaticPosition blockedSquares = calculateBlockedSquares(board, side);
     final Square kingSquare = StaticPositionUtility.calculateKingSquare(board.getStaticPosition(), side);
     return calculateIsKingBehindPawnWall(blockedSquares, kingSquare, side);
@@ -262,7 +262,7 @@ public class PawnWall {
     return true;
   }
 
-  protected static boolean calculateIsAllPawnsHavePawnAhead(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsHavePawnAhead(Board board) {
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
     for (final Square square : Square.REAL) {
@@ -286,7 +286,7 @@ public class PawnWall {
     return true;
   }
 
-  protected static boolean calculateIsAllPawnsCanReachPawnAhead(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsCanReachPawnAhead(Board board) {
     // loop over all square and check each pawn
     final StaticPosition staticPosition = board.getStaticPosition();
     for (final Square square : Square.REAL) {
@@ -321,7 +321,7 @@ public class PawnWall {
     return calculateHasPawnAhead(staticPosition, squareAhead, side);
   }
 
-  protected static boolean calculateIsAllPawnsCannotCapture(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsCannotCapture(Board board) {
     // we must check the en passant capture as not seen by following static checks
     if (board.isEnPassantCapturePossible()) {
       return false;
@@ -357,11 +357,11 @@ public class PawnWall {
     return true;
   }
 
-  protected static boolean calculateIsAllPawnsBlocked(ChessBoard board) {
+  protected static boolean calculateIsAllPawnsBlocked(Board board) {
     return calculateIsAllPawnsHavePawnAhead(board) && calculateIsAllPawnsCannotCapture(board);
   }
 
-  private static StaticPosition calculateBlockedSquares(ChessBoard board, Side side) {
+  private static StaticPosition calculateBlockedSquares(Board board, Side side) {
     final StaticPosition staticPosition = board.getStaticPosition();
     final Square ownKingSquare = StaticPositionUtility.calculateKingSquare(staticPosition, side);
 
@@ -403,7 +403,7 @@ public class PawnWall {
     return staticPosition;
   }
 
-  protected static boolean calculateHasPawnWallLine(ChessBoard board, Side side) {
+  protected static boolean calculateHasPawnWallLine(Board board, Side side) {
 
     final StaticPosition blockedSquares = calculateBlockedSquares(board, side);
 

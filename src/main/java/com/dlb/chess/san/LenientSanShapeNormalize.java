@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.san.LenientSanValidationProblem;
 import com.dlb.chess.san.LenientSanParserValidationException;
@@ -37,7 +37,7 @@ final class LenientSanShapeNormalize {
   private LenientSanShapeNormalize() {
   }
 
-  static String normalize(String text, ChessBoard board, List<LenientSanValidationProblem> codes) {
+  static String normalize(String text, Board board, List<LenientSanValidationProblem> codes) {
     if (text.isBlank()) {
       // Defer to strict for the canonical "blank" diagnostic.
       return text;
@@ -66,7 +66,7 @@ final class LenientSanShapeNormalize {
 
   // --- Castling normalization (returns null if the input doesn't match a castling shape) ---
 
-  private static @Nullable String tryNormalizeCastling(String text, ChessBoard board,
+  private static @Nullable String tryNormalizeCastling(String text, Board board,
       List<LenientSanValidationProblem> codes) {
     final var lastChar = text.charAt(text.length() - 1);
     final var hasTerminalMarker = lastChar == '+' || lastChar == '#';
@@ -115,7 +115,7 @@ final class LenientSanShapeNormalize {
     return c == '0' || c == 'O';
   }
 
-  private static @Nullable String tryTranslateUciCastling(String body, ChessBoard board) {
+  private static @Nullable String tryTranslateUciCastling(String body, Board board) {
     if (body.length() != 4) {
       return null;
     }
@@ -155,7 +155,7 @@ final class LenientSanShapeNormalize {
   // a hyphen means LAN (only LONG_ALGEBRAIC_NOTATION code); no hyphen means UCI shape (only UCI_NOTATION code).
   // Either branch may then translate to canonical SAN; the translation itself does not emit a second code.
 
-  private static String handleLanOrUci(String body, ChessBoard board, List<LenientSanValidationProblem> codes) {
+  private static String handleLanOrUci(String body, Board board, List<LenientSanValidationProblem> codes) {
     if (body.indexOf('-') >= 0) {
       final String dehyphenated = NonNullWrapperCommon.replace(body, "-", "");
       codes.add(LenientSanValidationProblem.LONG_ALGEBRAIC_NOTATION);
@@ -175,7 +175,7 @@ final class LenientSanShapeNormalize {
    * SAN using the piece on the from-square. Returns {@code null} when the shape doesn't match — the caller decides
    * whether that means "leave the body unchanged" or "this branch doesn't apply."
    */
-  private static @Nullable String tryTranslateUciShape(String body, ChessBoard board) {
+  private static @Nullable String tryTranslateUciShape(String body, Board board) {
     if (body.length() != 4 && body.length() != 5) {
       return null;
     }

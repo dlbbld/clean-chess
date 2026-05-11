@@ -6,14 +6,13 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 
 class TestSanCalculation implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     board.moveStrict("e4");
     assertEquals("e4", board.getSan());

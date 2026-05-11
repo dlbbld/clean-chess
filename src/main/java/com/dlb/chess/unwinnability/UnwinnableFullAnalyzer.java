@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.unwinnability.FindHelpmateExhaust;
 import com.dlb.chess.unwinnability.UnwinnableFull;
@@ -24,13 +24,13 @@ public class UnwinnableFullAnalyzer {
   private static final int MAX_DEPTH = 100;
   private static final int GLOBAL_NODES_BOUND = 500000;
 
-  public static UnwinnableFullAnalysis unwinnableFull(ChessBoard board, Side winner) {
+  public static UnwinnableFullAnalysis unwinnableFull(Board board, Side winner) {
     return unwinnableFull(board, winner, false, new MobilitySolution());
   }
 
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
-  private static UnwinnableFullAnalysis unwinnableFull(ChessBoard board, Side winner, boolean isHasMobilitySolution,
+  private static UnwinnableFullAnalysis unwinnableFull(Board board, Side winner, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     // add optimization from code
@@ -99,7 +99,7 @@ public class UnwinnableFullAnalyzer {
     return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
   }
 
-  private static void undoForcedMoves(ChessBoard board, int totalForcedMoves) {
+  private static void undoForcedMoves(Board board, int totalForcedMoves) {
     for (var i = 1; i <= totalForcedMoves; i++) {
       board.unmove();
     }

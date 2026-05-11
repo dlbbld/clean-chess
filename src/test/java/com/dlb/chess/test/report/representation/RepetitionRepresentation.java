@@ -6,7 +6,7 @@ import java.util.List;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.report.Report;
 

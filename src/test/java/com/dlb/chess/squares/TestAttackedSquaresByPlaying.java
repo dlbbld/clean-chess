@@ -15,7 +15,6 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.squares.BishopAttackedSquares;
 import com.dlb.chess.squares.KingNonCastlingAttackedSquares;
@@ -29,7 +28,7 @@ class TestAttackedSquaresByPlaying implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testRookSquares() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // test initital position
     // white
@@ -393,7 +392,7 @@ class TestAttackedSquaresByPlaying implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testKnightSquares() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // test initital position
     // white
@@ -776,7 +775,7 @@ class TestAttackedSquaresByPlaying implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testBishopSquares() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // test initital position
     // white
@@ -1160,7 +1159,7 @@ class TestAttackedSquaresByPlaying implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testQueenSquares() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // test initital position
     // white
@@ -1528,7 +1527,7 @@ class TestAttackedSquaresByPlaying implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testKingNonCastlingSquares() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // test initital position
     // white
@@ -1988,7 +1987,7 @@ class TestAttackedSquaresByPlaying implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testPawnSquares() {
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // test initital position
     // white

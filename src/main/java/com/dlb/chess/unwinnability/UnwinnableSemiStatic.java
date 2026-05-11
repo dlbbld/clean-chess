@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.unwinnability.KingDistanceOneFunctions;
 import com.dlb.chess.unwinnability.MobilitySolution;
 import com.dlb.chess.unwinnability.PiecePlacement;
@@ -23,7 +23,7 @@ class UnwinnableSemiStatic {
 
   // Inputs: position, intended winner, solution to the mobility problem
   // Output: bool (true if position is declared unwinnable, false otherwise)
-  public static boolean unwinnableSemiStatic(ChessBoard board, Side c, MobilitySolution mobilitySolution) {
+  public static boolean unwinnableSemiStatic(Board board, Side c, MobilitySolution mobilitySolution) {
 
     // 1: if en passant is possible or a player has castling rights in pos then return false
 

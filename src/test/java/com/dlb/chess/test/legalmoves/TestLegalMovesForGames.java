@@ -9,7 +9,6 @@ import java.util.TreeSet;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -24,7 +23,7 @@ class TestLegalMovesForGames {
   @Test
   void testGame1() {
     // 2_0_1_spassky_fischer_1972_seventeenth
-    final ChessBoard board = new Board();
+    final Board board = new Board();
     checkInitial(board);
 
     checkLegalMoves(board, "e4", "Na6, Nc6, Nf6, Nh6, a5, a6, b5, b6, c5, c6, d5, d6, e5, e6, f5, f6, g5, g6, h5, h6");
@@ -974,11 +973,11 @@ class TestLegalMovesForGames {
 
   }
 
-  private static void checkInitial(ChessBoard board) {
+  private static void checkInitial(Board board) {
     assertEquals(parseSanSet(INITIAL_LEGAL_MOVES), board.getLegalMovesSan());
   }
 
-  private static void checkLegalMoves(ChessBoard board, String san, String expected) {
+  private static void checkLegalMoves(Board board, String san, String expected) {
     board.moveStrict(san);
     assertEquals(parseSanSet(expected), board.getLegalMovesSan());
   }

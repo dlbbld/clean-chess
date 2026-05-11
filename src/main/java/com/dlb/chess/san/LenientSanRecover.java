@@ -15,7 +15,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.LenientSanValidationProblem;
@@ -40,7 +40,7 @@ final class LenientSanRecover {
   private LenientSanRecover() {
   }
 
-  static MoveSpecification parseWithRecovery(String candidate, ChessBoard board,
+  static MoveSpecification parseWithRecovery(String candidate, Board board,
       List<LenientSanValidationProblem> codes) {
     final Set<LenientSanValidationProblem> emitted = EnumSet.noneOf(LenientSanValidationProblem.class);
     emitted.addAll(codes);
@@ -89,7 +89,7 @@ final class LenientSanRecover {
     };
   }
 
-  private static String mutate(String current, SanValidationProblem strictCode, ChessBoard board) {
+  private static String mutate(String current, SanValidationProblem strictCode, Board board) {
     return switch (strictCode) {
       // Terminal markers operate on the trailing character only
       case NO_SYMBOL_BUT_CHECK -> current + "+";
@@ -190,7 +190,7 @@ final class LenientSanRecover {
    * the user's rank disambig, but canonical SAN prefers file disambig when both forms work. We look up the from-file of
    * the unique matching legal move and substitute it for the rank character.
    */
-  private static String rewriteRankAsFile(String s, ChessBoard board) {
+  private static String rewriteRankAsFile(String s, Board board) {
     final BodyAndMarker split = splitMarker(s);
     final String body = split.body();
     if (body.length() < 4) {

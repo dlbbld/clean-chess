@@ -1,4 +1,4 @@
-package com.dlb.chess.common.interfaces;
+package com.dlb.chess.board;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -30,7 +30,7 @@ import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-public interface ChessBoard extends EnumConstants {
+interface ChessBoard extends EnumConstants {
 
   boolean move(MoveSpecification moveSpecification);
 
@@ -127,8 +127,8 @@ public interface ChessBoard extends EnumConstants {
    * third is a deliberate honesty signal — the quick algorithm is sound but not complete).
    */
   default DeadPositionQuick isDeadPositionQuick() {
-    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
-    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
+    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick((Board) this, Side.WHITE);
+    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick((Board) this, Side.BLACK);
 
     if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
       return DeadPositionQuick.DEAD_POSITION;
@@ -147,12 +147,12 @@ public interface ChessBoard extends EnumConstants {
    * 500&nbsp;000-position bound; most positions resolve well below it).
    */
   default DeadPositionFull isDeadPositionFull() {
-    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
+    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull((Board) this, Side.WHITE).unwinnableFull();
     if (unwinnableWhite == UnwinnableFull.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
 
-    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).unwinnableFull();
+    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull((Board) this, Side.BLACK).unwinnableFull();
     if (unwinnableBlack == UnwinnableFull.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
@@ -170,7 +170,7 @@ public interface ChessBoard extends EnumConstants {
    * the structural test cannot decide — sound but not complete).
    */
   default UnwinnableQuick isUnwinnableQuick(Side side) {
-    return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
+    return UnwinnableQuickAnalyzer.unwinnableQuick((Board) this, side);
   }
 
   /**
@@ -179,7 +179,7 @@ public interface ChessBoard extends EnumConstants {
    * the 500&nbsp;000-position bound; most positions resolve well below it).
    */
   default UnwinnableFull isUnwinnableFull(Side side) {
-    return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
+    return UnwinnableFullAnalyzer.unwinnableFull((Board) this, side).unwinnableFull();
   }
 
   // name collision with API Carlos's method which must be adapted for warnings

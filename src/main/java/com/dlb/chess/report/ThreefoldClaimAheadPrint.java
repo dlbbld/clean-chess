@@ -6,7 +6,7 @@ import java.util.List;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.model.LegalMove;
 
 class ThreefoldClaimAheadPrint {

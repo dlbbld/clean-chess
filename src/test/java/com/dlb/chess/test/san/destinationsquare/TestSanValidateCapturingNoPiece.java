@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.SanValidationException;
 import com.dlb.chess.san.StrictSanParser;
@@ -17,7 +16,7 @@ class TestSanValidateCapturingNoPiece {
   @Test
   void testWhite() {
 
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // pawn
     checkExceptionPawn("axb3", board);
@@ -49,7 +48,7 @@ class TestSanValidateCapturingNoPiece {
   @Test
   void testBlack() {
 
-    final ChessBoard board = new Board();
+    final Board board = new Board();
 
     // pawn
     board.movesStrict("a3");
@@ -80,15 +79,15 @@ class TestSanValidateCapturingNoPiece {
     checkExceptionRnbqk("Kxd8", board);
   }
 
-  private static void checkExceptionPawn(String san, ChessBoard board) {
+  private static void checkExceptionPawn(String san, Board board) {
     checkException(san, board, SanValidationProblem.DESTINATION_PAWN_CAPTURE_EMPTY_NOT_EN_PASSANT);
   }
 
-  private static void checkExceptionRnbqk(String san, ChessBoard board) {
+  private static void checkExceptionRnbqk(String san, Board board) {
     checkException(san, board, SanValidationProblem.DESTINATION_RNBQK_EMPTY_CAPTURE_SYMBOL);
   }
 
-  private static void checkException(String san, ChessBoard board, SanValidationProblem expected) {
+  private static void checkException(String san, Board board, SanValidationProblem expected) {
     boolean isException;
     try {
       StrictSanParser.parseText(san, board);

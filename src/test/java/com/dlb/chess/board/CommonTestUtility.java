@@ -1,9 +1,9 @@
-package com.dlb.chess.test.librarycomparison.utility;
+package com.dlb.chess.board;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 
 public abstract class CommonTestUtility implements EnumConstants {
 

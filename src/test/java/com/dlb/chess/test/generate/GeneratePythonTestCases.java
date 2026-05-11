@@ -12,7 +12,6 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
@@ -79,7 +78,7 @@ public class GeneratePythonTestCases implements EnumConstants {
             codeLineList);
         processPythonCodeLine("    board = chess.Board()", counterList, codeLineList);
 
-        final ChessBoard boardPlayAlong = new Board();
+        final Board boardPlayAlong = new Board();
         for (final HalfMove halfMove : report.halfMoveList()) {
           boardPlayAlong.move(halfMove.moveSpecification());
           processPythonCodeLine("    board.push_san(\"" + halfMove.san() + "\")", counterList, codeLineList);

@@ -8,7 +8,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -53,7 +52,7 @@ class TestFenParserAll extends AbstractTestFenParser {
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final ChessBoard board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen());
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       board.moveStrict(halfMove.san());
     }

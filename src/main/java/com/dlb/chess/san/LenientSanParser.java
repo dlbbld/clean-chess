@@ -7,7 +7,7 @@ import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.messages.Message;
@@ -31,8 +31,8 @@ import com.google.common.collect.ImmutableSet;
  * <p>
  * See {@link com.dlb.chess.san.lenient package-level Javadoc} for the strategy. The two public methods are:
  * <ul>
- * <li>{@link #parseText(String, ChessBoard)} — full parse, returns the resolved move plus the list of forgiven items.
- * <li>{@link #validateText(String, ChessBoard)} — discards the result, throws on rejection. Convenience for callers
+ * <li>{@link #parseText(String, Board)} — full parse, returns the resolved move plus the list of forgiven items.
+ * <li>{@link #validateText(String, Board)} — discards the result, throws on rejection. Convenience for callers
  * that only need yes/no.
  * </ul>
  */
@@ -49,7 +49,7 @@ public final class LenientSanParser {
    * @throws LenientSanParserValidationException if the input cannot be resolved to a legal move even after applying
    *                                             every supported tolerance
    */
-  public static LenientSanParserValidationResult parseText(String text, ChessBoard board) {
+  public static LenientSanParserValidationResult parseText(String text, Board board) {
     // Phase 0: try strict on the raw input first. Canonical SAN pays zero lenient overhead.
     try {
       final MoveSpecification ms = StrictSanParser.parseText(text, board).moveSpecification();
@@ -91,13 +91,13 @@ public final class LenientSanParser {
    * @throws LenientSanParserValidationException if the input cannot be resolved to a legal move even after applying
    *                                             every supported tolerance
    */
-  public static void validateText(String text, ChessBoard board) {
+  public static void validateText(String text, Board board) {
     parseText(text, board);
   }
 
   // --- Helpers ---
 
-  private static String computeCanonicalSan(MoveSpecification moveSpecification, ChessBoard board) {
+  private static String computeCanonicalSan(MoveSpecification moveSpecification, Board board) {
     final ImmutableSet<LegalMove> legalMovesBefore = board.getLegalMoveSet();
     @Nullable LegalMove matching = null;
     for (final LegalMove candidate : legalMovesBefore) {

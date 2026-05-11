@@ -5,7 +5,6 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
@@ -33,7 +32,7 @@ class TestUnwinnabilityFullAgainstWinnability {
   }
 
   private static void test(PgnFileTestCase testCase) {
-    final ChessBoard board = new Board(testCase.fen());
+    final Board board = new Board(testCase.fen());
     logger.info(testCase.pgnFileName());
 
     final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);

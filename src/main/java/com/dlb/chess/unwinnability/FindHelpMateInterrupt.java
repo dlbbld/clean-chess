@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
@@ -28,7 +28,7 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
   // Database except three were correctly identified by Unwinnablequick.
   private static final int D = 9;
 
-  public static FindHelpmateResult calculateHelpmate(ChessBoard board, Side c) {
+  public static FindHelpmateResult calculateHelpmate(Board board, Side c) {
     final List<LegalMove> mateList = new ArrayList<>();
     final FindHelpMateInterruptResult result = calculateHelpmate(board, c, 0, mateList);
 
@@ -43,7 +43,7 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
     };
   }
 
-  private static FindHelpMateInterruptResult calculateHelpmate(ChessBoard board, Side c, int currentDepth,
+  private static FindHelpMateInterruptResult calculateHelpmate(Board board, Side c, int currentDepth,
       List<LegalMove> mateList) {
     final var isIntendedWinnerHavingCheckmate = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
     if (isIntendedWinnerHavingCheckmate) {

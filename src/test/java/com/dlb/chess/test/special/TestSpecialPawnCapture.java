@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.san.SanValidationException;
 
 class TestSpecialPawnCapture implements EnumConstants {
@@ -16,7 +15,7 @@ class TestSpecialPawnCapture implements EnumConstants {
   void testWhite() throws Exception {
     // two pawns can capture the same piece
     // caused a bug
-    final ChessBoard board = new Board("rrrrrrrr/PPPPPPPP/8/8/8/8/8/2k1K3 w - - 0 100");
+    final Board board = new Board("rrrrrrrr/PPPPPPPP/8/8/8/8/8/2k1K3 w - - 0 100");
 
     board.moveStrict("bxa8=Q");
     board.unmove();
@@ -34,7 +33,7 @@ class TestSpecialPawnCapture implements EnumConstants {
   void testBlack() throws Exception {
     // two pawns can capture the same piece
     // caused a bug
-    final ChessBoard board = new Board("3k1K2/8/8/8/8/8/pppppppp/QQQQQQQQ b - - 0 100");
+    final Board board = new Board("3k1K2/8/8/8/8/8/pppppppp/QQQQQQQQ b - - 0 100");
 
     board.moveStrict("bxa1=Q");
     board.unmove();
@@ -48,7 +47,7 @@ class TestSpecialPawnCapture implements EnumConstants {
 
   }
 
-  private static void checkException(ChessBoard board, String san) {
+  private static void checkException(Board board, String san) {
     var isCorrectException = false;
     try {
       board.moveStrict(san);

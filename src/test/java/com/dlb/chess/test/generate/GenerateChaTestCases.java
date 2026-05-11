@@ -15,7 +15,6 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -58,7 +57,7 @@ public class GenerateChaTestCases implements EnumConstants {
 
           final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-          final ChessBoard board = new Board(pgnFile.startFen());
+          final Board board = new Board(pgnFile.startFen());
 
           var halfMoveCounter = 0;
           pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
@@ -79,7 +78,7 @@ public class GenerateChaTestCases implements EnumConstants {
     logger.info("END generating code");
   }
 
-  private static String calculateLine(ChessBoard board, Path folderPath, String game, int halfMoveCounter) {
+  private static String calculateLine(Board board, Path folderPath, String game, int halfMoveCounter) {
     final StringBuilder line = new StringBuilder();
     line.append(board.getFen());
 

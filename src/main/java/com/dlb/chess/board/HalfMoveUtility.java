@@ -1,15 +1,16 @@
-package com.dlb.chess.common.utility;
+package com.dlb.chess.board;
 
 import java.util.List;
 
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.enums.AddSpace;
+import com.dlb.chess.common.utility.RepetitionUtility;
 
 public abstract class HalfMoveUtility {
   public static HalfMove calculateHalfMove(MoveSpecification moveSpecification, ChessBoard board) {

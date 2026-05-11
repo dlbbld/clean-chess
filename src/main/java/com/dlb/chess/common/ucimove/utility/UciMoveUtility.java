@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.CastlingConstants;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.moves.CastlingUtility;
@@ -35,7 +35,7 @@ public abstract class UciMoveUtility {
   // we are avoiding checks weather the uci move is legal move or not
   // the goal is to provide a move specification
   // the move specificatoin can then be checked to be legal
-  public static MoveSpecification convertUciMoveToMoveSpecification(ChessBoard board, UciMove uciMove) {
+  public static MoveSpecification convertUciMoveToMoveSpecification(Board board, UciMove uciMove) {
     // we need the board to identify the castling move
 
     final Square fromSquare = uciMove.fromSquare();
@@ -62,7 +62,7 @@ public abstract class UciMoveUtility {
     return new MoveSpecification(fromSquare, toSquare);
   }
 
-  public static String convertUciMoveToSan(ChessBoard board, UciMove uciMove) {
+  public static String convertUciMoveToSan(Board board, UciMove uciMove) {
     final MoveSpecification moveSpecification = convertUciMoveToMoveSpecification(board, uciMove);
     board.move(moveSpecification);
     final String san = board.getSan();

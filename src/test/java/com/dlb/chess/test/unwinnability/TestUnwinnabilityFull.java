@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -52,7 +51,7 @@ class TestUnwinnabilityFull {
     final var pgnFileName = "ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = PgnExpectedValue.findTestCase(pgnFileName);
-    final ChessBoard board = new Board(pgnFileTestCase.fen());
+    final Board board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileName);
 
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
@@ -70,7 +69,7 @@ class TestUnwinnabilityFull {
   void testChaLichessExamples() throws Exception {
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 
@@ -90,7 +89,7 @@ class TestUnwinnabilityFull {
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = PgnExpectedValue.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final ChessBoard board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen());
 
       logger.info(testCase.pgnFileName());
 

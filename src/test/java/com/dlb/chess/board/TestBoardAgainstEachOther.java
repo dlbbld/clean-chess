@@ -1,17 +1,17 @@
-package com.dlb.chess.test.librarycomparison.allpgn;
+package com.dlb.chess.board;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.librarycarlos.board.LibraryCarlosBoard;
-import com.dlb.chess.test.librarycomparison.utility.CommonTestUtility;
+import com.dlb.chess.board.LibraryCarlosBoard;
+import com.dlb.chess.board.CommonTestUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;

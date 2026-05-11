@@ -8,11 +8,11 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
@@ -32,7 +32,7 @@ public class PgnCreate {
   /** PGN export-format guideline: lines should not exceed 79 characters. */
   public static final int MAX_LINE_LENGTH = 79;
 
-  public static String createPgnFileString(ChessBoard board) {
+  public static String createPgnFileString(Board board) {
     return createPgnFileString(createPgnFile(board));
   }
 
@@ -116,7 +116,7 @@ public class PgnCreate {
     return halfMoveList;
   }
 
-  private static ResultTagValue calculateResultTagValue(ChessBoard board) {
+  private static ResultTagValue calculateResultTagValue(Board board) {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);
 
     return switch (gameStatus) {
@@ -188,7 +188,7 @@ public class PgnCreate {
     return NonNullWrapperCommon.toString(result);
   }
 
-  public static PgnFile createPgnFile(ChessBoard board, List<Tag> tagList) {
+  public static PgnFile createPgnFile(Board board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
@@ -196,7 +196,7 @@ public class PgnCreate {
         NonNullWrapperCommon.copyOfList(halfMoveList));
   }
 
-  public static PgnFile createPgnFile(ChessBoard board) {
+  public static PgnFile createPgnFile(Board board) {
 
     final ResultTagValue resultTagValue = calculateResultTagValue(board);
     final List<Tag> tagList = createBoardPlaceHolderTagList(resultTagValue);

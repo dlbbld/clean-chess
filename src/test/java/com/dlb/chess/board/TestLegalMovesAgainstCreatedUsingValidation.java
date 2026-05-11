@@ -19,7 +19,7 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.interfaces.ChessBoard;
+import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -69,7 +69,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final ChessBoard board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen());
     checkLegalMoves(board);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -79,7 +79,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
   }
 
-  private static void checkLegalMoves(ChessBoard board) {
+  private static void checkLegalMoves(Board board) {
 
     // Under the strict-game invariant, positions in FIDE-automatic termination cannot accept
     // any further move; ValidateNewMove rejects everything with GAME_ALREADY_ENDED. The
@@ -104,7 +104,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     assertEquals(moveSpecificationsFromValidation, moveSpecificationsBottomUp);
   }
 
-  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(ChessBoard board) {
+  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(Board board) {
     final Set<MoveSpecification> listForBoard = new TreeSet<>();
     // now we do something crazy:
     // we loop through all possible from/to square combinations and filter out the legal ones using the validation
@@ -116,7 +116,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     return listForBoard;
   }
 
-  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(ChessBoard board, Square fromSquare) {
+  private static Set<MoveSpecification> calculateMoveSpecificationsFromValidation(Board board, Square fromSquare) {
     final Side havingMove = board.getHavingMove();
 
     final Set<MoveSpecification> listForSquare = new TreeSet<>();

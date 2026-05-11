@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.HalfMoveUtility;
+import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;

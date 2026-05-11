@@ -7,7 +7,6 @@ import java.util.Set;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
@@ -15,7 +14,7 @@ import com.dlb.chess.report.CheckmateOrStalemate;
 
 public abstract class GeneralUtility {
 
-  public static CheckmateOrStalemate calculateLastPositionEvaluation(ChessBoard board) {
+  public static CheckmateOrStalemate calculateLastPositionEvaluation(Board board) {
     // order is crucial
     if (board.isCheckmate()) {
       return CheckmateOrStalemate.CHECKMATE;
@@ -38,7 +37,7 @@ public abstract class GeneralUtility {
     return board;
   }
 
-  public static ChessBoard calculateBoard(Path folderPath, String pgnFileName) {
+  public static Board calculateBoard(Path folderPath, String pgnFileName) {
 
     final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
 

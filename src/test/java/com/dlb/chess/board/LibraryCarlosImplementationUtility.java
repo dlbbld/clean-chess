@@ -1,4 +1,4 @@
-package com.dlb.chess.test.librarycarlos.board;
+package com.dlb.chess.board;
 
 import java.util.List;
 
