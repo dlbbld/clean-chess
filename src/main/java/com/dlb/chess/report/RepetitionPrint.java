@@ -1,4 +1,4 @@
-package com.dlb.chess.report.print;
+package com.dlb.chess.report;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,9 +10,9 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.PositionIdentifierUtility;
 import com.dlb.chess.messages.Message;
-import com.dlb.chess.report.print.model.RepetitionMove;
+import com.dlb.chess.report.RepetitionMove;
 
-public class RepetitionPrint {
+class RepetitionPrint {
 
   public static List<String> calculateOutputRepetition(List<List<HalfMove>> repetitionList) {
     final List<String> resultList = new ArrayList<>();

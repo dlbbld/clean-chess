@@ -11,8 +11,8 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.NoProgressHalfMove;
-import com.dlb.chess.report.model.NoProgressIndex;
+import com.dlb.chess.report.NoProgressHalfMove;
+import com.dlb.chess.report.NoProgressIndex;
 
 public abstract class NoProgressMoveUtility {
 

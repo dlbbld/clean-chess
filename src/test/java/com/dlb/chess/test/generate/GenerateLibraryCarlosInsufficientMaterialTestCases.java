@@ -4,7 +4,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;

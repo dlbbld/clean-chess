@@ -11,7 +11,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.utility.NoProgressMoveUtility;
-import com.dlb.chess.report.model.NoProgressHalfMove;
+import com.dlb.chess.report.NoProgressHalfMove;
 
 class TestNoProgressMoveUtility {
 

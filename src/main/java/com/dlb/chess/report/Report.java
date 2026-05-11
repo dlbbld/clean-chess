@@ -1,4 +1,4 @@
-package com.dlb.chess.report.model;
+package com.dlb.chess.report;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.report.enums.CheckmateOrStalemate;
+import com.dlb.chess.report.CheckmateOrStalemate;
 
 /**
  * Result of analyzing a fully-replayed game. Note that under the strict move-validation pipeline a game cannot continue

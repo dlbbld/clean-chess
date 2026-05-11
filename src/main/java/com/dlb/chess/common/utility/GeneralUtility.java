@@ -11,7 +11,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.report.enums.CheckmateOrStalemate;
+import com.dlb.chess.report.CheckmateOrStalemate;
 
 public abstract class GeneralUtility {
 

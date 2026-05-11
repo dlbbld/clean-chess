@@ -6,7 +6,7 @@ import java.util.List;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
-import com.dlb.chess.report.model.NoProgressHalfMove;
+import com.dlb.chess.report.NoProgressHalfMove;
 
 public class NoProgressRepresentation {
 

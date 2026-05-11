@@ -1,4 +1,4 @@
-package com.dlb.chess.report.enums;
+package com.dlb.chess.report;
 
 public enum CheckmateOrStalemate {
 

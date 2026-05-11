@@ -28,7 +28,7 @@ import com.dlb.chess.pgn.StrictPgnParserValidationResult;
 import com.dlb.chess.pgn.Tag;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.UnwinnableFull;

@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 
 public class BasicRepresentation {
 

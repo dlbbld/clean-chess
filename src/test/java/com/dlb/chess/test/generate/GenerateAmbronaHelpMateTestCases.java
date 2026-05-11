@@ -25,7 +25,7 @@ import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.Tag;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;

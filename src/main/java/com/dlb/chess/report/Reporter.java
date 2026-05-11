@@ -22,11 +22,11 @@ import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.report.model.NoProgressHalfMove;
-import com.dlb.chess.report.model.Report;
-import com.dlb.chess.report.print.NoProgressPrint;
-import com.dlb.chess.report.print.RepetitionPrint;
-import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
+import com.dlb.chess.report.NoProgressHalfMove;
+import com.dlb.chess.report.Report;
+import com.dlb.chess.report.NoProgressPrint;
+import com.dlb.chess.report.RepetitionPrint;
+import com.dlb.chess.report.ThreefoldClaimAheadPrint;
 
 /**
  * Generates game-level reports — threefold-repetition listings (including missed-claim-ahead opportunities),
@@ -36,7 +36,7 @@ import com.dlb.chess.report.print.ThreefoldClaimAheadPrint;
  * Two surfaces:
  *
  * <ul>
- * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.model.Report} record carrying all the
+ * <li>{@code calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record carrying all the
  * analytical data — repetition lists, threefold-claim-ahead slots, no-progress sequences. Use this for programmatic
  * inspection.</li>
  * <li>{@code printReport(...)} emits a human-readable summary to {@code stdout} via

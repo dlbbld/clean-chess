@@ -13,7 +13,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.report.enums.CheckmateOrStalemate;
+import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;

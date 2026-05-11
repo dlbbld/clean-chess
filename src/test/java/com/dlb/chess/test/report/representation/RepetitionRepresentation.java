@@ -8,7 +8,7 @@ import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 
 public class RepetitionRepresentation {
 

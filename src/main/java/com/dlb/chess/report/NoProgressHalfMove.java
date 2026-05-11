@@ -1,4 +1,4 @@
-package com.dlb.chess.report.model;
+package com.dlb.chess.report;
 
 import com.dlb.chess.board.enums.Side;
 

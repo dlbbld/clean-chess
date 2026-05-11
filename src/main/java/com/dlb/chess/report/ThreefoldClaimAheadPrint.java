@@ -1,4 +1,4 @@
-package com.dlb.chess.report.print;
+package com.dlb.chess.report;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +9,7 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.model.LegalMove;
 
-public class ThreefoldClaimAheadPrint {
+class ThreefoldClaimAheadPrint {
 
   public static List<String> calculateClaimAheadList(List<List<ClaimAhead>> claimAheadListList) {
 

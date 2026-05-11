@@ -7,7 +7,7 @@
  * Two surfaces:
  *
  * <ul>
- * <li>{@code Reporter.calculateReport(...)} returns a {@link com.dlb.chess.report.model.Report} record — the
+ * <li>{@code Reporter.calculateReport(...)} returns a {@link com.dlb.chess.report.Report} record — the
  * programmatic shape carrying repetition-list-of-lists, threefold-claim-ahead slots, no-progress sequences.</li>
  * <li>{@code Reporter.printReport(...)} emits a human-readable summary to {@code stdout} via the
  * {@link com.dlb.chess.messages.Message} bundle. Used by the README examples.</li>

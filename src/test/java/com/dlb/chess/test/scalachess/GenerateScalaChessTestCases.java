@@ -26,7 +26,7 @@ import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.PromotionUtility;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.report.model.Report;
+import com.dlb.chess.report.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;

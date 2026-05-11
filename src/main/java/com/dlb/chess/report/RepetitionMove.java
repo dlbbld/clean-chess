@@ -1,8 +1,8 @@
-package com.dlb.chess.report.print.model;
+package com.dlb.chess.report;
 
 import com.dlb.chess.common.model.HalfMove;
 
-public record RepetitionMove(int positionId, int fold, HalfMove halfMove) implements Comparable<RepetitionMove> {
+record RepetitionMove(int positionId, int fold, HalfMove halfMove) implements Comparable<RepetitionMove> {
 
   @Override
   public int compareTo(RepetitionMove o) {

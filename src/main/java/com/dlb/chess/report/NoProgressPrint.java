@@ -1,4 +1,4 @@
-package com.dlb.chess.report.print;
+package com.dlb.chess.report;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,9 +6,9 @@ import java.util.List;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.HalfMoveUtility;
-import com.dlb.chess.report.model.NoProgressHalfMove;
+import com.dlb.chess.report.NoProgressHalfMove;
 
-public class NoProgressPrint {
+class NoProgressPrint {
 
   public static List<String> calculateOutputNoProgressMoveListList(List<List<NoProgressHalfMove>> listList) {
     final List<String> resultList = new ArrayList<>();
