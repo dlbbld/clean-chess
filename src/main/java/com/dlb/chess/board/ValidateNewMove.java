@@ -20,7 +20,7 @@ import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.enums.MoveCheck;
 import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 
 class ValidateNewMove implements EnumConstants {
 

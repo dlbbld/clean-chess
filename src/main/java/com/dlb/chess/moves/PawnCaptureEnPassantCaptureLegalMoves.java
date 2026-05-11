@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.legal.pawn;
+package com.dlb.chess.moves;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,7 +12,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.squares.PawnPotentialToSquares;
 
 class PawnCaptureEnPassantCaptureLegalMoves extends PawnLegalMoves {

@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.utility;
+package com.dlb.chess.moves;
 
 import static com.dlb.chess.common.utility.ImmutableUtility.constructListSquare;
 

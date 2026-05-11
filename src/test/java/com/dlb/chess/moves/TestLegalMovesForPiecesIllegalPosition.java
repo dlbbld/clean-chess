@@ -1,4 +1,4 @@
-package com.dlb.chess.test.legalmoves;
+package com.dlb.chess.moves;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,12 +15,12 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.legal.king.KingLegalMoves;
-import com.dlb.chess.moves.legal.pawn.PawnLegalMoves;
-import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
-import com.dlb.chess.moves.legal.pieces.KnightLegalMoves;
-import com.dlb.chess.moves.legal.pieces.QueenLegalMoves;
-import com.dlb.chess.moves.legal.pieces.RookLegalMoves;
+import com.dlb.chess.moves.KingLegalMoves;
+import com.dlb.chess.moves.PawnLegalMoves;
+import com.dlb.chess.moves.BishopLegalMoves;
+import com.dlb.chess.moves.KnightLegalMoves;
+import com.dlb.chess.moves.QueenLegalMoves;
+import com.dlb.chess.moves.RookLegalMoves;
 
 class TestLegalMovesForPiecesIllegalPosition implements EnumConstants {
 

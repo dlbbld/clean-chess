@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.legal;
+package com.dlb.chess.moves;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -18,12 +18,12 @@ import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
-import com.dlb.chess.moves.legal.king.KingLegalMoves;
-import com.dlb.chess.moves.legal.pawn.PawnLegalMoves;
-import com.dlb.chess.moves.legal.pieces.BishopLegalMoves;
-import com.dlb.chess.moves.legal.pieces.KnightLegalMoves;
-import com.dlb.chess.moves.legal.pieces.QueenLegalMoves;
-import com.dlb.chess.moves.legal.pieces.RookLegalMoves;
+import com.dlb.chess.moves.KingLegalMoves;
+import com.dlb.chess.moves.PawnLegalMoves;
+import com.dlb.chess.moves.BishopLegalMoves;
+import com.dlb.chess.moves.KnightLegalMoves;
+import com.dlb.chess.moves.QueenLegalMoves;
+import com.dlb.chess.moves.RookLegalMoves;
 import com.google.common.collect.ImmutableSet;
 
 public abstract class AbstractLegalMoves implements EnumConstants {

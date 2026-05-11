@@ -27,7 +27,7 @@ import com.dlb.chess.common.utility.HalfMoveUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanSymbol;
 import com.dlb.chess.san.enums.SanTerminalMarker;

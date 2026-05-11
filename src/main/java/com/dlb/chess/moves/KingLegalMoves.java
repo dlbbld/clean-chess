@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.legal.king;
+package com.dlb.chess.moves;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -8,9 +8,9 @@ import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.legal.AbstractLegalMoves;
+import com.dlb.chess.moves.AbstractLegalMoves;
 
-public class KingLegalMoves extends AbstractLegalMoves {
+class KingLegalMoves extends AbstractLegalMoves {
   public static Set<LegalMove> calculateKingLegalMoves(StaticPosition staticPosition, CastlingRight castlingRight,
       Side havingMove, Square fromSquare) {
 

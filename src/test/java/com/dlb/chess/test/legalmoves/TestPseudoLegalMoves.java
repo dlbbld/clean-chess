@@ -18,7 +18,7 @@ import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.PseudoLegalMove;
-import com.dlb.chess.moves.legal.AbstractLegalMoves;
+import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.squares.BishopPotentialToSquares;
 import com.dlb.chess.squares.KingNonCastlingPotentialToSquares;
 import com.dlb.chess.squares.KnightPotentialToSquares;

@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.utility;
+package com.dlb.chess.moves;
 
 import java.util.Set;
 

@@ -12,10 +12,10 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
-import com.dlb.chess.moves.utility.StandardMoveUtility;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.EnPassantCaptureUtility;
+import com.dlb.chess.moves.PromotionUtility;
+import com.dlb.chess.moves.StandardMoveUtility;
 import com.dlb.chess.squares.AbstractAttackedSquares;
 
 public abstract class StaticPositionUtility implements EnumConstants {

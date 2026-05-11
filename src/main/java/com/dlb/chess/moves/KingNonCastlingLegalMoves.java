@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.legal.king;
+package com.dlb.chess.moves;
 
 import java.util.Set;
 

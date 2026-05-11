@@ -11,7 +11,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.SanConversion;
-import com.dlb.chess.moves.utility.EnPassantCaptureUtility;
+import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.san.AbstractSan;
 import com.dlb.chess.san.enums.SanFormat;
 import com.dlb.chess.san.enums.SanValidationProblem;

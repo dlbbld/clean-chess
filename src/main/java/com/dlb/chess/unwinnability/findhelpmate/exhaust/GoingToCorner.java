@@ -10,7 +10,7 @@ import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.distance.KingDistance;
 import com.dlb.chess.distance.KnightDistance;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 
 //Figure 13 Going-to-corner routine used in Figure 12.

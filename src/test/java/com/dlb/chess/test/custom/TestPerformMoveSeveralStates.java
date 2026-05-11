@@ -14,8 +14,8 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.enums.CastlingCheck;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.PromotionUtility;
 
 class TestPerformMoveSeveralStates implements EnumConstants {
 

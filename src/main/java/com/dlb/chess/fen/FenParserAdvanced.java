@@ -31,7 +31,7 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.fen.model.FenRaw;
 import com.dlb.chess.model.CastlingRightBoth;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 
 public class FenParserAdvanced implements EnumConstants {
 

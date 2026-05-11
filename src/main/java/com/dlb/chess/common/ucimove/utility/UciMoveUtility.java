@@ -9,7 +9,7 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 
 public abstract class UciMoveUtility {
 

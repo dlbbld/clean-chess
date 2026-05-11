@@ -1,4 +1,4 @@
-package com.dlb.chess.moves.legal.pawn;
+package com.dlb.chess.moves;
 
 import java.util.Set;
 import java.util.TreeSet;

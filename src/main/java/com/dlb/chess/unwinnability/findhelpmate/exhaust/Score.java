@@ -7,8 +7,8 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
-import com.dlb.chess.moves.utility.PromotionUtility;
+import com.dlb.chess.moves.CastlingUtility;
+import com.dlb.chess.moves.PromotionUtility;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.Goal;
 import com.dlb.chess.unwinnability.findhelpmate.exhaust.enums.ScoreResult;
 

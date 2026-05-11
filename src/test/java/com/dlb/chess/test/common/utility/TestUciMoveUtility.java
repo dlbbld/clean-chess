@@ -14,7 +14,7 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.moves.utility.CastlingUtility;
+import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.test.custom.model.UciMoveTest;
 import com.dlb.chess.test.scalachess.GenerateScalaChessTestCases;
 
