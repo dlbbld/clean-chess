@@ -167,7 +167,7 @@ public class MoveToSan extends AbstractSan {
 
   // semantics for moving piece: for castling the moving piece is none! so the castling is not returned here when
   // searching for the king as moving piece!!!
-  public static Set<LegalMove> calculateLegalMoveSetForMovingPiece(Piece movingPiece, Set<LegalMove> legalMoveSet) {
+  static Set<LegalMove> calculateLegalMoveSetForMovingPiece(Piece movingPiece, Set<LegalMove> legalMoveSet) {
     final Set<LegalMove> legalMoveSetForMovingPiece = new TreeSet<>();
     for (final LegalMove legalMove : legalMoveSet) {
       if (legalMove.movingPiece() == movingPiece) {

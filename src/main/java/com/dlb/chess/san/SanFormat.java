@@ -51,7 +51,7 @@ public enum SanFormat {
     };
   }
 
-  public boolean isKingCastlingMove() {
+  boolean isKingCastlingMove() {
     return this == KING_CASTLING_KING_SIDE || this == KING_CASTLING_QUEEN_SIDE;
   }
 
