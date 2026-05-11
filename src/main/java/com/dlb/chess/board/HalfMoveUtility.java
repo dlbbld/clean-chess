@@ -1,46 +1,10 @@
 package com.dlb.chess.board;
 
-import java.util.List;
-
-import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
-import com.dlb.chess.board.Board;
-import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.enums.AddSpace;
-import com.dlb.chess.common.utility.RepetitionUtility;
 
 public abstract class HalfMoveUtility {
-  public static HalfMove calculateHalfMove(MoveSpecification moveSpecification, ChessBoard board) {
-    final String san = board.getSan();
-    return calculateHalfMoveInternal(moveSpecification, board, san);
-  }
-
-  private static HalfMove calculateHalfMoveInternal(MoveSpecification moveSpecification, ChessBoard board, String san) {
-
-    final var halfMoveCount = board.getPerformedHalfMoveCount();
-    final var index = halfMoveCount - 1;
-
-    final var halfMoveClock = board.getHalfMoveClock();
-    final var fullMoveNumber = board.getFullMoveNumber();
-    final String fen = board.getFen();
-    final var isCapture = board.isCapture();
-
-    final var countRepetition = board.getRepetitionCount();
-
-    final List<DynamicPosition> dynamicPositionList = board.getDynamicPositionList();
-    final DynamicPosition dynamicPosition = board.getDynamicPosition();
-    final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        board.getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition,
-        EnPassantCaptureRuleThreefold.DO_IGNORE);
-
-    final Piece movingPiece = board.getMovingPiece();
-
-    return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
-        countRepetition, countRepetitionIgnoringEnPassantCapture, san, movingPiece, moveSpecification);
-  }
 
   public static String calculateMoveNumberAndSanWithSpace(int fullMoveNumber, Side havingMove, String san) {
     return calculateMoveNumberAndSan(fullMoveNumber, havingMove, san, AddSpace.YES);

@@ -7,11 +7,19 @@ import com.dlb.chess.board.Board;
 
 public abstract class CommonTestUtility implements EnumConstants {
 
-  public static void checkBoardsAgainstEachOtherAll(ChessBoard boardFirst, ChessBoard boardSecond) {
+  public static void checkBoardsAgainstEachOtherAll(Board boardFirst, LibraryCarlosBoard boardSecond) {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, true);
   }
 
-  public static void checkBoardsAgainstEachOtherExcludeHistory(ChessBoard boardFirst, ChessBoard boardSecond) {
+  public static void checkBoardsAgainstEachOtherExcludeHistory(Board boardFirst, LibraryCarlosBoard boardSecond) {
+    checkBoardsAgainstEachOther(boardFirst, boardSecond, false);
+  }
+
+  public static void checkBoardsAgainstEachOtherAll(Board boardFirst, Board boardSecond) {
+    checkBoardsAgainstEachOther(boardFirst, boardSecond, true);
+  }
+
+  public static void checkBoardsAgainstEachOtherExcludeHistory(Board boardFirst, Board boardSecond) {
     checkBoardsAgainstEachOther(boardFirst, boardSecond, false);
   }
 
@@ -19,7 +27,7 @@ public abstract class CommonTestUtility implements EnumConstants {
   // Must contain all methods in API interface which are not implemented in AbstractBoard
   // that is also crucial performance wise because in AbstractBoard there are methods taking very long,
   // and testing against makes no sense as always true as long board implentation match, what we test here.
-  private static void checkBoardsAgainstEachOther(ChessBoard boardFirst, ChessBoard boardSecond,
+  private static void checkBoardsAgainstEachOther(Board boardFirst, LibraryCarlosBoard boardSecond,
       boolean isIncludeHistory) {
 
     assertEquals(boardFirst.isCheck(), boardSecond.isCheck());
@@ -122,6 +130,86 @@ public abstract class CommonTestUtility implements EnumConstants {
 
     assertEquals(boardFirst.getEnPassantCaptureTargetSquare(), boardSecond.getEnPassantCaptureTargetSquare());
 
+  }
+
+  // Body duplicated from above to support Board-vs-Board comparison (internal consistency tests).
+  // Java doesn't let us share a body without re-introducing a common supertype, which is exactly the
+  // ChessBoard interface that this branch deleted. Both bodies must stay in sync if either is changed.
+  private static void checkBoardsAgainstEachOther(Board boardFirst, Board boardSecond,
+      boolean isIncludeHistory) {
+
+    assertEquals(boardFirst.isCheck(), boardSecond.isCheck());
+    assertEquals(boardFirst.isCheckmate(), boardSecond.isCheckmate());
+    assertEquals(boardFirst.isStalemate(), boardSecond.isStalemate());
+
+    assertEquals(boardFirst.isInsufficientMaterial(), boardSecond.isInsufficientMaterial());
+    assertEquals(boardFirst.isInsufficientMaterial(WHITE), boardSecond.isInsufficientMaterial(WHITE));
+    assertEquals(boardFirst.isInsufficientMaterial(BLACK), boardSecond.isInsufficientMaterial(BLACK));
+
+    assertEquals(boardFirst.getHalfMoveClock(), boardSecond.getHalfMoveClock());
+
+    assertEquals(boardFirst.getFullMoveNumber(), boardSecond.getFullMoveNumber());
+    if (isIncludeHistory) {
+      assertEquals(boardFirst.getInitialFenFullMoveNumber(), boardSecond.getInitialFenFullMoveNumber());
+    }
+
+    if (isIncludeHistory) {
+      assertEquals(boardFirst.getRepetitionCount(), boardSecond.getRepetitionCount());
+    }
+
+    assertEquals(boardFirst.isFiftyMove(), boardSecond.isFiftyMove());
+    assertEquals(boardFirst.canClaimFiftyMoveRule(), boardSecond.canClaimFiftyMoveRule());
+    assertEquals(boardFirst.isSeventyFiveMove(), boardSecond.isSeventyFiveMove());
+
+    if (isIncludeHistory) {
+      assertEquals(boardFirst.isThreefoldRepetition(), boardSecond.isThreefoldRepetition());
+      assertEquals(boardFirst.canClaimThreefoldRepetitionRule(), boardSecond.canClaimThreefoldRepetitionRule());
+      assertEquals(boardFirst.isFivefoldRepetition(), boardSecond.isFivefoldRepetition());
+    }
+
+    assertEquals(boardFirst.getFen(), boardSecond.getFen());
+
+    if (isIncludeHistory) {
+      assertEquals(boardFirst.getInitialFen(), boardSecond.getInitialFen());
+    }
+
+    if (!boardFirst.isFirstMove() && !boardSecond.isFirstMove()) {
+      assertEquals(boardFirst.getSan(), boardSecond.getSan());
+      assertEquals(boardFirst.getLan(), boardSecond.getLan());
+      assertEquals(boardFirst.getMovingPiece(), boardSecond.getMovingPiece());
+      assertEquals(boardFirst.isCapture(), boardSecond.isCapture());
+    }
+
+    assertEquals(boardFirst.getHavingMove(), boardSecond.getHavingMove());
+    assertEquals(boardFirst.isEnPassantCapturePossible(), boardSecond.isEnPassantCapturePossible());
+    assertEquals(boardFirst.getCastlingRightWhite(), boardSecond.getCastlingRightWhite());
+    assertEquals(boardFirst.getCastlingRightBlack(), boardSecond.getCastlingRightBlack());
+
+    if (isIncludeHistory) {
+      assertEquals(boardFirst.getPerformedHalfMoveCount(), boardSecond.getPerformedHalfMoveCount());
+      assertEquals(boardFirst.getDynamicPositionList(), boardSecond.getDynamicPositionList());
+      assertEquals(boardFirst.getDynamicPosition(), boardSecond.getDynamicPosition());
+      assertEquals(boardFirst.getHalfMoveList(), boardSecond.getHalfMoveList());
+      assertEquals(boardFirst.getPossibleMoveSpecificationSet(), boardSecond.getPossibleMoveSpecificationSet());
+      assertEquals(boardFirst.getLegalMoveSet(), boardSecond.getLegalMoveSet());
+      assertEquals(boardFirst.getPerformedMoveSpecificationList(), boardSecond.getPerformedMoveSpecificationList());
+      assertEquals(boardFirst.getLegalMovesSan(), boardSecond.getLegalMovesSan());
+    }
+
+    if (!boardFirst.isFirstMove() && !boardSecond.isFirstMove()) {
+      assertEquals(boardFirst.getLastMove(), boardSecond.getLastMove());
+    }
+
+    assertEquals(boardFirst.getStaticPosition(), boardSecond.getStaticPosition());
+    if (!boardFirst.isFirstMove() && !boardSecond.isFirstMove()) {
+      assertEquals(boardFirst.getStaticPositionBeforeLastMove(), boardSecond.getStaticPositionBeforeLastMove());
+    }
+
+    if (isIncludeHistory) {
+      assertEquals(boardFirst.isFirstMove(), boardSecond.isFirstMove());
+    }
+
+    assertEquals(boardFirst.getEnPassantCaptureTargetSquare(), boardSecond.getEnPassantCaptureTargetSquare());
   }
 
 }

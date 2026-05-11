@@ -5,7 +5,6 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.board.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -56,8 +55,8 @@ class TestBoardAgainstEachOther {
           continue;
         }
 
-        final ChessBoard board = new Board();
-        final ChessBoard carlosBoard = new LibraryCarlosBoard();
+        final Board board = new Board();
+        final LibraryCarlosBoard carlosBoard = new LibraryCarlosBoard();
 
         for (final PgnHalfMove pgnFileHalfMove : pgnFile.halfMoveList()) {
 

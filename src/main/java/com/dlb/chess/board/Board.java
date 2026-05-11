@@ -19,8 +19,16 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
+import com.dlb.chess.common.enums.InsufficientMaterial;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
+import com.dlb.chess.unwinnability.DeadPositionFull;
+import com.dlb.chess.unwinnability.DeadPositionQuick;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
+import com.google.common.collect.ImmutableSet;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -105,7 +113,7 @@ import com.google.common.collect.ImmutableSet;
  * in a {@link java.util.HashMap} or {@link java.util.HashSet} and then mutated will violate the collection's invariants
  * — don't do that.
  */
-public class Board implements ChessBoard {
+public class Board {
 
   private final Fen initialFen;
   private final List<LegalMove> performedLegalMoveList;
@@ -228,7 +236,6 @@ public class Board implements ChessBoard {
     this(FenParserAdvanced.parseFenAdvanced(fen));
   }
 
-  @Override
   public boolean isFirstMove() {
     return this.performedLegalMoveList.isEmpty();
   }
@@ -237,7 +244,6 @@ public class Board implements ChessBoard {
    * Plays the given move on this board. The {@code MoveSpecification} is validated against the current legal-move set;
    * an illegal move (or a move on a game already terminated) throws {@link InvalidMoveException}.
    */
-  @Override
   public boolean move(MoveSpecification moveSpecification) throws InvalidMoveException {
     ValidateNewMove.validateNewMove(this, moveSpecification);
     return performMoveWithoutValidation(moveSpecification);
@@ -251,7 +257,6 @@ public class Board implements ChessBoard {
    * @throws com.dlb.chess.san.SanValidationException if {@code san} is not canonical SAN, or is canonical
    *                                                             but does not represent a legal move
    */
-  @Override
   public StrictSanParserValidationResult moveStrict(String san) {
     final StrictSanParserValidationResult result = StrictSanParser.parseText(san, this);
     this.performMoveWithoutValidation(result.moveSpecification());
@@ -273,7 +278,6 @@ public class Board implements ChessBoard {
    *                                                                          move even after applying every supported
    *                                                                          tolerance
    */
-  @Override
   public LenientSanParserValidationResult moveLenient(String san) {
     final LenientSanParserValidationResult result = LenientSanParser.parseText(san, this);
     this.performMoveWithoutValidation(result.moveSpecification());
@@ -284,7 +288,6 @@ public class Board implements ChessBoard {
    * Plays the given sequence of canonical SAN moves on this board, in order. Convenience for batch play; the absence of
    * a thrown exception means every move was canonical and legal.
    */
-  @Override
   public boolean movesStrict(String... sanArray) {
     for (final String san : sanArray) {
       if (san == null) {
@@ -299,7 +302,6 @@ public class Board implements ChessBoard {
    * Plays the given sequence of canonical SAN moves on this board, in order. Convenience for batch play; the absence of
    * a thrown exception means every move was canonical and legal.
    */
-  @Override
   public boolean movesLenient(String... sanArray) {
     for (final String san : sanArray) {
       if (san == null) {
@@ -388,7 +390,7 @@ public class Board implements ChessBoard {
         .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));
     this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
-    final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
+    final HalfMove halfMove = buildHalfMove(moveSpecification);
     this.halfMoveList.add(halfMove);
 
     return true;
@@ -429,7 +431,6 @@ public class Board implements ChessBoard {
    * Undoes the most recently played halfmove, restoring the board to the state immediately before that move. Throws if
    * no move has been played from the initial FEN.
    */
-  @Override
   public void unmove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("Undo move requested but no move to undo");
@@ -458,7 +459,6 @@ public class Board implements ChessBoard {
 
   }
 
-  @Override
   public LegalMove getLastMove() {
     if (isFirstMove()) {
       throw new IllegalArgumentException("There is no last move");
@@ -466,12 +466,10 @@ public class Board implements ChessBoard {
     return NonNullWrapperCommon.getLast(this.performedLegalMoveList);
   }
 
-  @Override
   public ImmutableSet<LegalMove> getLegalMoveSet() {
     return NonNullWrapperCommon.getLast(legalMoveSetList);
   }
 
-  @Override
   public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
     for (final LegalMove legalMove : this.performedLegalMoveList) {
@@ -488,24 +486,20 @@ public class Board implements ChessBoard {
     return lastMove.pieceCaptured() != Piece.NONE;
   }
 
-  @Override
   public boolean isCheck() {
     return NonNullWrapperCommon.getLast(isCheckList);
   }
 
   /** True iff the side to move is in check and has no legal move (FIDE 5.1.1). */
-  @Override
   public boolean isCheckmate() {
     return NonNullWrapperCommon.getLast(isCheckmateList);
   }
 
   /** True iff the side to move is not in check but has no legal move (FIDE 5.2.1). */
-  @Override
   public boolean isStalemate() {
     return NonNullWrapperCommon.getLast(isStalemateList);
   }
 
-  @Override
   public boolean canClaimFiftyMoveRuleWithOwnMove() {
     final var halfMoveCounterNow = this.getHalfMoveClock();
     if (halfMoveCounterNow >= 99) {
@@ -519,7 +513,6 @@ public class Board implements ChessBoard {
     return false;
   }
 
-  @Override
   public boolean canClaimThreefoldRepetitionRuleWithOwnMove() {
     for (final LegalMove legalMove : getLegalMoveSet()) {
       // we must not check moves creating a position that never occurred so far
@@ -535,7 +528,6 @@ public class Board implements ChessBoard {
     return false;
   }
 
-  @Override
   public int getHalfMoveClock() {
     return NonNullWrapperCommon.getLast(halfMoveClockList);
   }
@@ -548,22 +540,18 @@ public class Board implements ChessBoard {
     return lastHalfMoveClock + 1;
   }
 
-  @Override
   public int getRepetitionCount() {
     return NonNullWrapperCommon.getLast(repetitionCountList);
   }
 
-  @Override
   public boolean isInsufficientMaterial() {
     return isInsufficientMaterial(Side.WHITE) && isInsufficientMaterial(Side.BLACK);
   }
 
-  @Override
   public boolean isInsufficientMaterial(Side side) {
     return InsufficientMaterialUtility.calculateIsInsufficientMaterial(side, getStaticPosition());
   }
 
-  @Override
   public String getFen() {
     if (isFirstMove()) {
       return getInitialFen().fen();
@@ -571,12 +559,10 @@ public class Board implements ChessBoard {
     return FenBoard.calculateFen(this);
   }
 
-  @Override
   public Fen getInitialFen() {
     return initialFen;
   }
 
-  @Override
   public Piece getMovingPiece() {
     if (isFirstMove()) {
       throw new IllegalStateException("There is no last move");
@@ -584,7 +570,6 @@ public class Board implements ChessBoard {
     return getLastMove().movingPiece();
   }
 
-  @Override
   public boolean isCapture() {
     if (isFirstMove()) {
       throw new IllegalStateException("There is no last move");
@@ -592,12 +577,10 @@ public class Board implements ChessBoard {
     return calculateIsCapture();
   }
 
-  @Override
   public int getInitialFenFullMoveNumber() {
     return initialFen.fullMoveNumber();
   }
 
-  @Override
   public int getFullMoveNumber() {
     // because I implemented the full move number calculation for the next half move to be played, I now calculate the
     // full move number using this existing method. nicer would be to implement full move counter calculation and then
@@ -657,7 +640,6 @@ public class Board implements ChessBoard {
    * True iff the halfmove clock has reached the 50-move-rule threshold (FIDE 9.3). This is the on-board predicate
    * (claimable rule); the game continues until claimed.
    */
-  @Override
   public boolean isFiftyMove() {
     return getHalfMoveClock() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
   }
@@ -666,7 +648,6 @@ public class Board implements ChessBoard {
    * True iff the current position has occurred at least three times in the game (FIDE 9.2). This is the on-board
    * predicate (claimable rule); the game continues until claimed.
    */
-  @Override
   public boolean isThreefoldRepetition() {
     return getRepetitionCount() >= ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD;
   }
@@ -675,7 +656,6 @@ public class Board implements ChessBoard {
    * True iff the halfmove clock has reached the 75-move-rule threshold (FIDE 9.6.2). This is an automatic FIDE
    * termination — once true, the game has ended in a draw and no further moves are accepted.
    */
-  @Override
   public boolean isSeventyFiveMove() {
     return getHalfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
   }
@@ -684,12 +664,10 @@ public class Board implements ChessBoard {
    * True iff the current position has occurred at least five times in the game (FIDE 9.6.1). This is an automatic FIDE
    * termination — once true, the game has ended in a draw and no further moves are accepted.
    */
-  @Override
   public boolean isFivefoldRepetition() {
     return getRepetitionCount() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD;
   }
 
-  @Override
   public String getSan() {
     if (isFirstMove()) {
       throw new IllegalStateException("There is no last move");
@@ -697,7 +675,6 @@ public class Board implements ChessBoard {
     return NonNullWrapperCommon.getLast(sanList);
   }
 
-  @Override
   public String getLan() {
     if (isFirstMove()) {
       throw new IllegalStateException("There is no last move");
@@ -705,7 +682,6 @@ public class Board implements ChessBoard {
     return NonNullWrapperCommon.getLast(lanList);
   }
 
-  @Override
   public Side getHavingMove() {
     if (isFirstMove()) {
       return initialFen.havingMove();
@@ -714,12 +690,10 @@ public class Board implements ChessBoard {
     return lastMove.havingMove().getOppositeSide();
   }
 
-  @Override
   public StaticPosition getStaticPosition() {
     return NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
   }
 
-  @Override
   public StaticPosition getStaticPositionBeforeLastMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("The method cannot be called if no move was yet made");
@@ -727,7 +701,6 @@ public class Board implements ChessBoard {
     return NonNullWrapperCommon.get(dynamicPositionList, this.dynamicPositionList.size() - 2).staticPosition();
   }
 
-  @Override
   public boolean isEnPassantCapturePossible() {
     return NonNullWrapperCommon.getLast(dynamicPositionList).isEnPassantCapturePossible();
   }
@@ -768,27 +741,22 @@ public class Board implements ChessBoard {
     return false;
   }
 
-  @Override
   public int getPerformedHalfMoveCount() {
     return performedLegalMoveList.size();
   }
 
-  @Override
   public ImmutableList<DynamicPosition> getDynamicPositionList() {
     return NonNullWrapperCommon.copyOfList(dynamicPositionList);
   }
 
-  @Override
   public ImmutableList<HalfMove> getHalfMoveList() {
     return NonNullWrapperCommon.copyOfList(halfMoveList);
   }
 
-  @Override
   public DynamicPosition getDynamicPosition() {
     return NonNullWrapperCommon.getLast(dynamicPositionList);
   }
 
-  @Override
   public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
     final Set<MoveSpecification> result = new TreeSet<>();
     for (final LegalMove legalMove : this.getLegalMoveSet()) {
@@ -802,7 +770,6 @@ public class Board implements ChessBoard {
     return getStaticPosition().toString();
   }
 
-  @Override
   public Square getEnPassantCaptureTargetSquare() {
     if (isFirstMove()) {
       return initialFen.enPassantCaptureTargetSquare();
@@ -818,7 +785,6 @@ public class Board implements ChessBoard {
     }
   }
 
-  @Override
   public ImmutableList<LegalMove> getPerformedLegalMoveList() {
     return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
   }
@@ -864,7 +830,6 @@ public class Board implements ChessBoard {
     return NonNullWrapperCommon.getLast(blackQueenSideLossList);
   }
 
-  @Override
   public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingSide) {
     return switch (side) {
       case WHITE -> castlingSide == CastlingMove.KING_SIDE ? getWhiteKingSideLoss() : getWhiteQueenSideLoss();
@@ -873,14 +838,135 @@ public class Board implements ChessBoard {
     };
   }
 
-  @Override
   public CastlingRight getCastlingRightWhite() {
     return getDynamicPosition().castlingRightWhite();
   }
 
-  @Override
   public CastlingRight getCastlingRightBlack() {
     return getDynamicPosition().castlingRightBlack();
+  }
+
+  // ===== Methods previously inherited as `default` from the (now-removed) ChessBoard interface =====
+
+  public int getFullMoveNumberForNextHalfMove() {
+    if (isFirstMove()) {
+      return getInitialFenFullMoveNumber();
+    }
+    return switch (getHavingMove()) {
+      case BLACK -> getFullMoveNumber();
+      case WHITE -> getFullMoveNumber() + 1;
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
+
+  public boolean canClaimFiftyMoveRule() {
+    if (isFiftyMove()) {
+      return true;
+    }
+    return canClaimFiftyMoveRuleWithOwnMove();
+  }
+
+  public boolean canClaimThreefoldRepetitionRule() {
+    if (isThreefoldRepetition()) {
+      return true;
+    }
+    return canClaimThreefoldRepetitionRuleWithOwnMove();
+  }
+
+  public InsufficientMaterial calculateInsufficientMaterial() {
+    if (isInsufficientMaterial()) {
+      return InsufficientMaterial.BOTH;
+    }
+    if (isInsufficientMaterial(Side.WHITE)) {
+      return InsufficientMaterial.WHITE_ONLY;
+    }
+    if (isInsufficientMaterial(Side.BLACK)) {
+      return InsufficientMaterial.BLACK_ONLY;
+    }
+    return InsufficientMaterial.NONE;
+  }
+
+  public DeadPositionQuick isDeadPositionQuick() {
+    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
+    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
+    if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
+      return DeadPositionQuick.DEAD_POSITION;
+    }
+    if (unwinnableWhite == UnwinnableQuick.WINNABLE && unwinnableBlack == UnwinnableQuick.WINNABLE) {
+      return DeadPositionQuick.NON_DEAD_POSITION;
+    }
+    return DeadPositionQuick.POSSIBLY_NON_DEAD_POSITION;
+  }
+
+  public DeadPositionFull isDeadPositionFull() {
+    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
+    if (unwinnableWhite == UnwinnableFull.WINNABLE) {
+      return DeadPositionFull.NON_DEAD_POSITION;
+    }
+    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).unwinnableFull();
+    if (unwinnableBlack == UnwinnableFull.WINNABLE) {
+      return DeadPositionFull.NON_DEAD_POSITION;
+    }
+    if (unwinnableWhite == UnwinnableFull.UNWINNABLE && unwinnableBlack == UnwinnableFull.UNWINNABLE) {
+      return DeadPositionFull.DEAD_POSITION;
+    }
+    return DeadPositionFull.UNDETERMINED;
+  }
+
+  public UnwinnableQuick isUnwinnableQuick(Side side) {
+    return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
+  }
+
+  public UnwinnableFull isUnwinnableFull(Side side) {
+    return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
+  }
+
+  public CastlingRight getCastlingRight(Side havingMove) {
+    return switch (havingMove) {
+      case WHITE -> getDynamicPosition().castlingRightWhite();
+      case BLACK -> getDynamicPosition().castlingRightBlack();
+      case NONE -> throw new IllegalArgumentException();
+      default -> throw new IllegalArgumentException();
+    };
+  }
+
+  public ImmutableSet<String> getLegalMovesSan() {
+    final Set<String> result = new TreeSet<>();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+      this.move(moveSpecification);
+      result.add(getSan());
+      this.unmove();
+    }
+    return NonNullWrapperCommon.copyOfSet(result);
+  }
+
+  public ImmutableSet<String> getLegalMovesUci() {
+    final Set<String> result = new TreeSet<>();
+    final Side havingMove = getHavingMove();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+      final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
+      result.add(uci);
+    }
+    return NonNullWrapperCommon.copyOfSet(result);
+  }
+
+  private HalfMove buildHalfMove(MoveSpecification moveSpecification) {
+    final var halfMoveCount = getPerformedHalfMoveCount();
+    final var index = halfMoveCount - 1;
+    final var halfMoveClock = getHalfMoveClock();
+    final var fullMoveNumber = getFullMoveNumber();
+    final String fen = getFen();
+    final var isCapture = isCapture();
+    final var countRepetition = getRepetitionCount();
+    final List<DynamicPosition> dynamicPositionList = getDynamicPositionList();
+    final DynamicPosition dynamicPosition = getDynamicPosition();
+    final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
+        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition,
+        EnPassantCaptureRuleThreefold.DO_IGNORE);
+    final Piece movingPiece = getMovingPiece();
+    return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
+        countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);
   }
 
 }

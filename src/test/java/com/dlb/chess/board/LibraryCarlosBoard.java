@@ -16,10 +16,11 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
+import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.board.ChessBoard;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -46,7 +47,7 @@ import com.github.bhlangonijr.chesslib.move.MoveList;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
-public class LibraryCarlosBoard implements ChessBoard {
+public class LibraryCarlosBoard {
 
   private final Board board = new Board();
 
@@ -65,7 +66,6 @@ public class LibraryCarlosBoard implements ChessBoard {
 
   }
 
-  @Override
   public boolean move(MoveSpecification moveSpecification) {
     final Side havingMove = getHavingMove();
     final var result = board.doMove(MoveConversionUtility.convertMoveSpecification(havingMove, moveSpecification));
@@ -73,7 +73,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return result;
   }
 
-  @Override
   public com.dlb.chess.san.StrictSanParserValidationResult moveStrict(String san) {
     board.doMove(san);
     final MoveSpecification lastMoveSpecification = calculateLastMoveSpecification();
@@ -81,7 +80,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return new com.dlb.chess.san.StrictSanParserValidationResult(lastMoveSpecification);
   }
 
-  @Override
   public com.dlb.chess.san.LenientSanParserValidationResult moveLenient(String san) {
     // Carlos's chesslib doesn't have a lenient SAN concept; delegate to strict, then wrap into the lenient result
     // shape with empty forgiven items. Cross-validation tests only need the move to land on the board.
@@ -118,11 +116,10 @@ public class LibraryCarlosBoard implements ChessBoard {
         getCastlingRightWhite(), getCastlingRightBlack()));
 
     // TODO timely dependency, must be after the above code is very very dangerous
-    final HalfMove halfMove = HalfMoveUtility.calculateHalfMove(moveSpecification, this);
+    final HalfMove halfMove = buildHalfMove(moveSpecification);
     halfMoveList.add(halfMove);
   }
 
-  @Override
   public void unmove() {
     board.undoMove();
 
@@ -132,7 +129,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     halfMoveList.remove(halfMoveList.size() - 1);
   }
 
-  @Override
   public boolean canClaimFiftyMoveRuleWithOwnMove() {
     final var halfMoveClock = getHalfMoveClock();
     if (halfMoveClock == 99) {
@@ -151,7 +147,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return false;
   }
 
-  @Override
   public boolean canClaimThreefoldRepetitionRuleWithOwnMove() {
     for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
       move(moveSpecification);
@@ -164,28 +159,23 @@ public class LibraryCarlosBoard implements ChessBoard {
     return false;
   }
 
-  @Override
   public boolean isCheck() {
     return board.isKingAttacked();
   }
 
-  @Override
   public boolean isCheckmate() {
     return board.isMated();
   }
 
-  @Override
   public boolean isStalemate() {
     return board.isStaleMate();
   }
 
-  @Override
   public int getHalfMoveClock() {
     return board.getHalfMoveCounter();
   }
 
   @SuppressWarnings("null")
-  @Override
   public int getRepetitionCount() {
     var rep = 1;
     final List<Long> history = board.getHistory();
@@ -200,28 +190,23 @@ public class LibraryCarlosBoard implements ChessBoard {
     return rep;
   }
 
-  @Override
   public boolean isInsufficientMaterial() {
     return LibraryCarlosImplementationUtility.calculateIsInsufficientMaterial(this.board);
   }
 
-  @Override
   public boolean isInsufficientMaterial(Side side) {
     return LibraryCarlosImplementationUtility.calculateIsInsufficientMaterial(side, this.board);
   }
 
-  @Override
   public String getFen() {
     return NonNullWrapperLibraryCarlos.getFen(this.board);
   }
 
-  @Override
   public Fen getInitialFen() {
     // always using initial position, starting from FEN is not supported
     return FenConstants.FEN_INITIAL;
   }
 
-  @Override
   public String getSan() {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
@@ -252,7 +237,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return result;
   }
 
-  @Override
   public String getLan() {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
@@ -298,7 +282,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return NonNullWrapperCommon.toString(lan);
   }
 
-  @Override
   public Piece getMovingPiece() {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
@@ -311,7 +294,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return EnumConversionUtility.convertToMyPiece(movingPiece);
   }
 
-  @Override
   public boolean isCapture() {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
@@ -320,13 +302,11 @@ public class LibraryCarlosBoard implements ChessBoard {
     return moveBackup.getCapturedPiece() != com.github.bhlangonijr.chesslib.Piece.NONE;
   }
 
-  @Override
   public int getInitialFenFullMoveNumber() {
     // currently playing from FEN not supported
     return 1;
   }
 
-  @Override
   public int getFullMoveNumber() {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
@@ -335,42 +315,34 @@ public class LibraryCarlosBoard implements ChessBoard {
     return moveBackup.getMoveCounter();
   }
 
-  @Override
   public boolean isFiftyMove() {
     return getHalfMoveClock() >= ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
   }
 
-  @Override
   public boolean isThreefoldRepetition() {
     return board.isRepetition();
   }
 
-  @Override
   public boolean isSeventyFiveMove() {
     return getHalfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
   }
 
-  @Override
   public boolean isFivefoldRepetition() {
     return board.isRepetition(5);
   }
 
-  @Override
   public Side getHavingMove() {
     return EnumConversionUtility.convertToMySide(NonNullWrapperLibraryCarlos.getSideToMove(this.board));
   }
 
-  @Override
   public StaticPosition getStaticPosition() {
     return BoardConversionUtitlity.convertBoardToStaticPosition(this.board);
   }
 
-  @Override
   public boolean isEnPassantCapturePossible() {
     return LibraryCarlosImplementationUtility.calculateIsEnPassantCapturePossible(this.board);
   }
 
-  @Override
   public @NonNull CastlingRight getCastlingRightWhite() {
     @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
         .getCastleRight();
@@ -379,7 +351,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return mapCastlingRight(castlingRightWhite);
   }
 
-  @Override
   public @NonNull CastlingRight getCastlingRightBlack() {
     @SuppressWarnings("null") final EnumMap<com.github.bhlangonijr.chesslib.Side, CastleRight> castlingRightMap = board
         .getCastleRight();
@@ -398,27 +369,22 @@ public class LibraryCarlosBoard implements ChessBoard {
     };
   }
 
-  @Override
   public int getPerformedHalfMoveCount() {
     return performedHalfMoveCount;
   }
 
-  @Override
   public ImmutableList<DynamicPosition> getDynamicPositionList() {
     return NonNullWrapperCommon.copyOfList(dynamicPositionList);
   }
 
-  @Override
   public ImmutableList<HalfMove> getHalfMoveList() {
     return NonNullWrapperCommon.copyOfList(halfMoveList);
   }
 
-  @Override
   public DynamicPosition getDynamicPosition() {
     return NonNullWrapperCommon.getLast(dynamicPositionList);
   }
 
-  @Override
   public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
     return NonNullWrapperCommon.copyOfSet(generateMoveSpecificationSet(this.board));
   }
@@ -486,12 +452,10 @@ public class LibraryCarlosBoard implements ChessBoard {
     return result;
   }
 
-  @Override
   public boolean isFirstMove() {
     return board.getBackup().isEmpty();
   }
 
-  @Override
   public LegalMove getLastMove() {
     return NonNullWrapperCommon.getLast(performedLegalMoveList);
   }
@@ -504,12 +468,10 @@ public class LibraryCarlosBoard implements ChessBoard {
     return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
   }
 
-  @Override
   public Square getEnPassantCaptureTargetSquare() {
     return EnPassantCaptureUtility.calculateEnPassantCaptureTargetSquare(getLastMove());
   }
 
-  @Override
   public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
     for (final MoveBackup moveBackup : NonNullWrapperLibraryCarlos.getBackup(this.board)) {
@@ -522,7 +484,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return NonNullWrapperCommon.copyOfList(moveSpecificationList);
   }
 
-  @Override
   public ImmutableSet<LegalMove> getLegalMoveSet() {
     return NonNullWrapperCommon.copyOfSet(generateLegalMoveSet(this.board));
   }
@@ -561,7 +522,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     };
   }
 
-  @Override
   public StaticPosition getStaticPositionBeforeLastMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("The method cannot be called if no move was yet made");
@@ -572,7 +532,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return staticPosition;
   }
 
-  @Override
   public boolean movesStrict(String... sanArray) {
     for (final String san : sanArray) {
       if (san == null) {
@@ -583,7 +542,6 @@ public class LibraryCarlosBoard implements ChessBoard {
     return true;
   }
 
-  @Override
   public boolean movesLenient(String... sanArray) {
     for (final String san : sanArray) {
       if (san == null) {
@@ -594,13 +552,56 @@ public class LibraryCarlosBoard implements ChessBoard {
     return true;
   }
 
-  @Override
   public ImmutableList<LegalMove> getPerformedLegalMoveList() {
     return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
   }
 
-  @Override
   public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingMove) {
     throw new UnsupportedOperationException("Castling right loss tracking is not supported in Carlos's API");
+  }
+
+  // ===== Methods previously inherited as `default` from the (now-removed) ChessBoard interface =====
+  // Only the ones still cross-validated in CommonTestUtility are kept.
+
+  public boolean canClaimFiftyMoveRule() {
+    if (isFiftyMove()) {
+      return true;
+    }
+    return canClaimFiftyMoveRuleWithOwnMove();
+  }
+
+  public boolean canClaimThreefoldRepetitionRule() {
+    if (isThreefoldRepetition()) {
+      return true;
+    }
+    return canClaimThreefoldRepetitionRuleWithOwnMove();
+  }
+
+  public ImmutableSet<String> getLegalMovesSan() {
+    final Set<String> result = new TreeSet<>();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+      this.move(moveSpecification);
+      result.add(getSan());
+      this.unmove();
+    }
+    return NonNullWrapperCommon.copyOfSet(result);
+  }
+
+  private HalfMove buildHalfMove(MoveSpecification moveSpecification) {
+    final var halfMoveCount = getPerformedHalfMoveCount();
+    final var index = halfMoveCount - 1;
+    final var halfMoveClock = getHalfMoveClock();
+    final var fullMoveNumber = getFullMoveNumber();
+    final String fen = getFen();
+    final var isCapture = isCapture();
+    final var countRepetition = getRepetitionCount();
+    final List<DynamicPosition> dynamicPositionList = getDynamicPositionList();
+    final DynamicPosition dynamicPosition = getDynamicPosition();
+    final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
+        getPerformedLegalMoveList(), dynamicPositionList, dynamicPosition,
+        EnPassantCaptureRuleThreefold.DO_IGNORE);
+    final Piece movingPiece = getMovingPiece();
+    return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
+        countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);
   }
 }
