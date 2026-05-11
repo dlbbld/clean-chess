@@ -576,7 +576,7 @@ public class Board {
     return calculateIsCapture();
   }
 
-  public int getInitialFenFullMoveNumber() {
+  int getInitialFenFullMoveNumber() {
     return initialFen.fullMoveNumber();
   }
 
@@ -693,7 +693,7 @@ public class Board {
     return NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
   }
 
-  public StaticPosition getStaticPositionBeforeLastMove() {
+  StaticPosition getStaticPositionBeforeLastMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("The method cannot be called if no move was yet made");
     }
@@ -744,7 +744,7 @@ public class Board {
     return performedLegalMoveList.size();
   }
 
-  public ImmutableList<DynamicPosition> getDynamicPositionList() {
+  ImmutableList<DynamicPosition> getDynamicPositionList() {
     return NonNullWrapperCommon.copyOfList(dynamicPositionList);
   }
 
