@@ -23,7 +23,7 @@ import com.dlb.chess.san.enums.SanValidationProblem;
  * Both inner switches are exhaustive (no {@code default:}) so any new value added to {@code CastlingCheck} or
  * {@code CastlingRightLoss} causes a compile error here.
  */
-public abstract class CastlingCheckMapper {
+abstract class CastlingCheckMapper {
 
   public static SanValidationProblem map(CastlingCheck castlingCheck, CastlingRightLoss castlingRightLoss) {
     return switch (castlingCheck) {

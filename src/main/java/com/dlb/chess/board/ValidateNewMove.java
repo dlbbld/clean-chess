@@ -22,7 +22,7 @@ import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.moves.utility.CastlingUtility;
 
-public class ValidateNewMove implements EnumConstants {
+class ValidateNewMove implements EnumConstants {
 
   public static MoveCheck validateNewMove(ChessBoard board, MoveSpecification moveSpecification)
       throws InvalidMoveException {

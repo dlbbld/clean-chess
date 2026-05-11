@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.squares.to.range.QueenRangeSquares;
 
-public class QueenAttackedSquares extends AbstractAttackedSquares {
+class QueenAttackedSquares extends AbstractAttackedSquares {
 
   public static Set<Square> calculateQueenAttackedSquares(StaticPosition staticPosition, Square fromSquare,
       Side havingMove) {

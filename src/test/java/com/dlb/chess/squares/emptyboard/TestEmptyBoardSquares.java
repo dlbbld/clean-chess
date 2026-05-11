@@ -1,4 +1,4 @@
-package com.dlb.chess.test.custom;
+package com.dlb.chess.squares.emptyboard;
 
 import static com.dlb.chess.common.utility.ImmutableUtility.constructListSquare;
 import static org.junit.jupiter.api.Assertions.assertEquals;

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.exceptions.TestSetupException;
+import com.dlb.chess.test.common.exceptions.SetupException;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.game.Game;
@@ -34,7 +34,7 @@ class TestLibraryCarlosHashPass {
   private static void processFileList(PgnTest pgnTest) throws Exception {
     final var folder = pgnTest.getFolderPath().toFile();
     if (!folder.isDirectory()) {
-      throw new TestSetupException("\"" + pgnTest.getFolderPath() + "\" is not a directory");
+      throw new SetupException("\"" + pgnTest.getFolderPath() + "\" is not a directory");
     }
 
     final var filesList = folder.listFiles();

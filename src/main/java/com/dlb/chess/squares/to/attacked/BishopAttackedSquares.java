@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.squares.to.range.BishopRangeSquares;
 
-public class BishopAttackedSquares extends AbstractAttackedSquares {
+class BishopAttackedSquares extends AbstractAttackedSquares {
 
   public static Set<Square> calculateBishopAttackedSquares(StaticPosition staticPosition, Square fromSquare,
       Side havingMove) {

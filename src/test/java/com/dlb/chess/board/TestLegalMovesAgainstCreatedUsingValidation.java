@@ -1,4 +1,4 @@
-package com.dlb.chess.test.legalmoves;
+package com.dlb.chess.board;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 

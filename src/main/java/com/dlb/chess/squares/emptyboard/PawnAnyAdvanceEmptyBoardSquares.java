@@ -14,7 +14,7 @@ import com.dlb.chess.utility.ValidateMoveNumberUtility;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-public class PawnAnyAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares implements EnumConstants {
+class PawnAnyAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares implements EnumConstants {
 
   // BEGIN generated code
 

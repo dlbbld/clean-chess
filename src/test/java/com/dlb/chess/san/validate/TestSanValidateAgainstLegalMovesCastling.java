@@ -1,6 +1,7 @@
-package com.dlb.chess.test.san.move;
+package com.dlb.chess.san.validate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -12,17 +13,25 @@ import com.dlb.chess.san.exceptions.SanValidationException;
 import com.dlb.chess.san.validate.CastlingCheckMapper;
 import com.dlb.chess.san.validate.StrictSanParser;
 
-class TestSanValidateCastling {
+class TestSanValidateAgainstLegalMovesCastling {
 
   // --- Priority 2: No castling right - king moved ---
 
   @SuppressWarnings("static-method")
   @Test
-  void testNoRightKingMoved() {
+  void testNoRightKingMovedWhite() {
     final ChessBoard board = new Board();
     board.movesStrict("e4", "e5", "Ke2", "d6", "Ke1", "d5");
     checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT, CastlingRightLoss.KING_MOVED);
     checkCastlingException("O-O-O", board, CastlingCheck.FINAL_NO_RIGHT, CastlingRightLoss.KING_MOVED);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testNoRightKingMovedBlack() {
+    final ChessBoard board = new Board();
+    board.movesStrict("e4", "e5", "d4", "Ke7", "d5", "Ke8", "Nf3");
+    checkCastlingException("O-O", board, CastlingCheck.FINAL_NO_RIGHT, CastlingRightLoss.KING_MOVED);
   }
 
   // --- Priority 2: No castling right - rook moved ---
@@ -58,7 +67,19 @@ class TestSanValidateCastling {
 
   @SuppressWarnings("static-method")
   @Test
-  void testSquaresNotEmpty() {
+  void testSquaresNotEmptyWhite() {
+    // Initial position, white tries to castle
+    final ChessBoard board = new Board();
+    board.movesStrict("e4", "e5");
+    // King-side: f1 and g1 occupied
+    checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingRightLoss.NOT_LOST);
+    // Queen-side: b1, c1, d1 occupied
+    checkCastlingException("O-O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingRightLoss.NOT_LOST);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testSquaresNotEmptyBlack() {
     final ChessBoard board = new Board();
     board.movesStrict("e4");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingRightLoss.NOT_LOST);
@@ -69,8 +90,15 @@ class TestSanValidateCastling {
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingInCheck() {
+  void testKingInCheckWhite() {
     final ChessBoard board = new Board("rnbqk2r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1bPP/R1BQK2R w KQkq - 0 5");
+    checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_IN_CHECK, CastlingRightLoss.NOT_LOST);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testKingInCheckBlack() {
+    final ChessBoard board = new Board("r1bqk2r/1ppp1pNp/p1n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 6");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_IN_CHECK, CastlingRightLoss.NOT_LOST);
   }
 
@@ -78,8 +106,16 @@ class TestSanValidateCastling {
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingWouldTravelThroughCheck() {
+  void testKingWouldTravelThroughCheckWhite() {
     final ChessBoard board = new Board("rnb1kbnr/pppp2pp/5q2/8/2B5/7N/PPPP2PP/RNBQK2R w KQkq - 0 25");
+    checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
+        CastlingRightLoss.NOT_LOST);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testKingWouldTravelThroughCheckBlack() {
+    final ChessBoard board = new Board("rnbqk2r/ppppppbp/4Nnp1/8/8/8/PPPPPPPP/R1BQKBNR b KQkq - 0 25");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK,
         CastlingRightLoss.NOT_LOST);
   }
@@ -88,21 +124,31 @@ class TestSanValidateCastling {
 
   @SuppressWarnings("static-method")
   @Test
-  void testKingWouldEndInCheck() {
+  void testKingWouldEndInCheckWhite() {
     final ChessBoard board = new Board("rnbqk1nr/pppp1ppp/4p3/2b5/2B1P3/5P1N/PPPP2PP/RNBQK2R w KQkq - 0 25");
+    checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK, CastlingRightLoss.NOT_LOST);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testKingWouldEndInCheckBlack() {
+    final ChessBoard board = new Board("rnbqk2r/ppppppbp/6pN/8/6n1/4P3/PPPP1PPP/RNBQKB1R b KQkq - 0 25");
     checkCastlingException("O-O", board, CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK, CastlingRightLoss.NOT_LOST);
   }
 
   private static void checkCastlingException(String san, ChessBoard board, CastlingCheck expectedCastlingCheck,
       CastlingRightLoss expectedLoss) {
+    boolean isException;
     try {
       StrictSanParser.parseText(san, board);
-      throw new AssertionError("Expected SanValidationException");
+      isException = false;
     } catch (final SanValidationException e) {
+      isException = true;
       assertEquals(CastlingCheckMapper.map(expectedCastlingCheck, expectedLoss), e.getSanValidationProblem());
       assertEquals(expectedCastlingCheck.toMoveCheck(expectedLoss), e.getMoveCheck());
       assertEquals(expectedLoss, e.getCastlingRightLoss());
     }
+    assertTrue(isException);
   }
 
 }

@@ -1,4 +1,4 @@
-package com.dlb.chess.common.enums;
+package com.dlb.chess.test.fen.enums;
 
 public enum FenAdvancedFurtherValidationProblem {
   SUCCESS,

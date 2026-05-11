@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.squares.emptyboard.KnightEmptyBoardSquares;
 
-public class KnightAttackedSquares extends AbstractAttackedSquares {
+class KnightAttackedSquares extends AbstractAttackedSquares {
 
   public static Set<Square> calculateKnightAttackedSquares(StaticPosition staticPosition, Square fromSquare,
       Side havingMove) {

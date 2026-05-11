@@ -2,7 +2,7 @@ package com.dlb.chess.test.fen;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.enums.FenAdvancedFurtherValidationProblem;
+import com.dlb.chess.test.fen.enums.FenAdvancedFurtherValidationProblem;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.test.fen.exception.FenAdvancedFurtherValidationException;

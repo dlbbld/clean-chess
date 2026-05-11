@@ -1,4 +1,4 @@
-package com.dlb.chess.test.custom;
+package com.dlb.chess.squares.to.attacked;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;

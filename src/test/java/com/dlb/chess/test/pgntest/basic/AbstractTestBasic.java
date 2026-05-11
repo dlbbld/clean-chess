@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.exceptions.TestSetupException;
+import com.dlb.chess.test.common.exceptions.SetupException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.test.common.utility.FileUtility;
@@ -39,7 +39,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     // 1a)
     for (final String pgnFileName : junitHardcodedPgnFileNameList) {
       if (!expectedValueHardcodedFileList.contains(pgnFileName)) {
-        throw new TestSetupException("The JUnit hardcoded file \"" + pgnFileName
+        throw new SetupException("The JUnit hardcoded file \"" + pgnFileName
             + "\" has no corresponding entry in the expected value hardcoded file list");
       }
     }
@@ -47,7 +47,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     // 1b)
     for (final String pgnFileName : expectedValueHardcodedFileList) {
       if (!junitHardcodedPgnFileNameList.contains(pgnFileName)) {
-        throw new TestSetupException("The expected value hardcoded file \"" + pgnFileName
+        throw new SetupException("The expected value hardcoded file \"" + pgnFileName
             + "\" has no corresponding entry in the JUnit hardcoded list");
       }
     }
@@ -55,7 +55,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     // 2a)
     for (final String pgnFileName : junitHardcodedPgnFileNameList) {
       if (!FileUtility.exists(pgnTest.getFolderPath(), pgnFileName)) {
-        throw new TestSetupException(
+        throw new SetupException(
             "The JUnit hardcoded file \"" + pgnFileName + "\" does not exist in the test folder");
       }
     }
@@ -64,7 +64,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
     final List<String> testFolderPgnFileNameList = FileUtility.readFileNameList(pgnTest.getFolderPath());
     for (final String pgnFileName : testFolderPgnFileNameList) {
       if (!junitHardcodedPgnFileNameList.contains(pgnFileName)) {
-        throw new TestSetupException(
+        throw new SetupException(
             "The test directory file \"" + pgnFileName + "\" does not exist in the JUnit hardcoded file list");
       }
     }

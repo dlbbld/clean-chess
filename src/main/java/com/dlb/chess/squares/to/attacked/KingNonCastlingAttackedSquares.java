@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.squares.emptyboard.KingNonCastlingEmptyBoardSquares;
 
-public class KingNonCastlingAttackedSquares extends AbstractAttackedSquares {
+class KingNonCastlingAttackedSquares extends AbstractAttackedSquares {
 
   public static Set<Square> calculateKingNonCastlingAttackedSquares(StaticPosition staticPosition, Square fromSquare,
       Side havingMove) {
