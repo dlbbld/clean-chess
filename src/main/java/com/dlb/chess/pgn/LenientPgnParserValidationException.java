@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.exceptions;
+package com.dlb.chess.pgn;
 
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
@@ -6,7 +6,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.ForgivenItem;
 import com.google.common.collect.ImmutableList;

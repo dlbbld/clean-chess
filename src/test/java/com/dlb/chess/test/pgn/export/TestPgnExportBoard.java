@@ -10,10 +10,10 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.pgn.parser.enums.ResultTagValue;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.parser.model.Tag;
+import com.dlb.chess.pgn.PgnCreate;
+import com.dlb.chess.pgn.ResultTagValue;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.Tag;
 import com.dlb.chess.utility.PgnUtility;
 import com.dlb.chess.utility.TagUtility;
 

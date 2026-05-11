@@ -10,7 +10,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.pgn.create.PgnCreate;
+import com.dlb.chess.pgn.PgnCreate;
 
 abstract class AbstractFindHelpmate {
 

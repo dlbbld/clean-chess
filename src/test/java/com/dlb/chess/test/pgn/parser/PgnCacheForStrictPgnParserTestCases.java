@@ -8,8 +8,8 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 
 public class PgnCacheForStrictPgnParserTestCases {
   private static final Map<String, PgnFile> PGN_CACHE = new HashMap<>();

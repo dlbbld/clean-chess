@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.enums;
+package com.dlb.chess.pgn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.google.common.collect.ImmutableList;
 
-public enum SetUpTagValue {
+enum SetUpTagValue {
   START_FROM_INITIAL_POSITION("0"),
   START_FROM_SETUP_POSITION("1"),
   NONE("");

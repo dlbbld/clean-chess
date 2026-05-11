@@ -18,7 +18,7 @@ import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;

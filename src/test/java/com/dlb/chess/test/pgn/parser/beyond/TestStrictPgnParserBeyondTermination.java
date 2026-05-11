@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.enums.GameStatus;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.ConfigurationTestConstants;
 

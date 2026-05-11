@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.model;
+package com.dlb.chess.pgn;
 
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 

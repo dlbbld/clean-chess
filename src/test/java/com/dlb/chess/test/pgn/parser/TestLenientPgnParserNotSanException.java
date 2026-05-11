@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 

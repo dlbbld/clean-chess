@@ -24,7 +24,7 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.PromotionUtility;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.model.Report;
 import com.dlb.chess.test.model.PgnFileTestCase;

@@ -9,8 +9,8 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.report.enums.CheckmateOrStalemate;
 
 public abstract class GeneralUtility {

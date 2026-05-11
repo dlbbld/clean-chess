@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.utility.PgnUtility;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Square;

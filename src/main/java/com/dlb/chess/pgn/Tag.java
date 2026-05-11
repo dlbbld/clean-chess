@@ -1,6 +1,6 @@
-package com.dlb.chess.pgn.parser.model;
+package com.dlb.chess.pgn;
 
-import com.dlb.chess.pgn.parser.enums.StandardTag;
+import com.dlb.chess.pgn.StandardTag;
 
 public record Tag(String name, String value) implements Comparable<Tag> {
 

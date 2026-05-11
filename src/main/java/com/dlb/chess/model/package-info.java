@@ -5,7 +5,7 @@
  * <li>{@link com.dlb.chess.model.LegalMove} — a {@link com.dlb.chess.common.model.MoveSpecification} plus the moving
  * piece, captured piece (if any), and en-passant role. Returned by the legal-move generator.</li>
  * <li>{@link com.dlb.chess.model.PgnHalfMove} — a SAN string plus its move-suffix-annotation and
- * {@link com.dlb.chess.pgn.parser.model.PgnCommentary}. The unit of PGN movetext.</li>
+ * {@link com.dlb.chess.pgn.model.PgnCommentary}. The unit of PGN movetext.</li>
  * <li>{@link com.dlb.chess.model.UciMove} — a UCI move string with the convenience accessors.</li>
  * <li>{@link com.dlb.chess.model.CastlingRightBoth}, {@link com.dlb.chess.model.EnPassantRole} — small enums and
  * records used in move execution.</li>

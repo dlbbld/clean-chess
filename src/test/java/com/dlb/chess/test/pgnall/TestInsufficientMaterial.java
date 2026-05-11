@@ -16,7 +16,7 @@ import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;

@@ -8,9 +8,9 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.create.PgnCreate;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnCreate;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;

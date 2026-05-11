@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.sequential;
+package com.dlb.chess.pgn;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -8,7 +8,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
  * Pull-based PGN tokenizer. Emits tokens for every construct the grammar cares about; strict-specific inter-token
  * constraints (exact single spacing, required move numbers, termination presence) are enforced by the parser, not here.
  */
-public final class PgnTokenizer {
+final class PgnTokenizer {
 
   private static final int CHAR_EOF = PgnCharStream.EOF;
 

@@ -1,10 +1,10 @@
-package com.dlb.chess.pgn.parser.sequential;
+package com.dlb.chess.pgn;
 
 /**
  * Forward-only character stream with one-based line/column tracking for error messages. Newline normalisation (CRLF/CR
  * → LF) is the parser's responsibility — see {@code NewlineNormalization}.
  */
-public final class PgnCharStream {
+final class PgnCharStream {
 
   public static final int EOF = -1;
 

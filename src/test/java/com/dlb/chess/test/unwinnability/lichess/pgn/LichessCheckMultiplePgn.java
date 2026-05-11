@@ -12,8 +12,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.utility.TagUtility;
 
 //manual to create multiple pgn file

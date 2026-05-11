@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
-import com.dlb.chess.pgn.parser.model.PgnCommentary;
+import com.dlb.chess.pgn.PgnCommentary;
 
 /**
  * Direct tests for the {@link PgnCommentary} value object. The parser-side behaviour is exercised in

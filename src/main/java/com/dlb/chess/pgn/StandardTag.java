@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.enums;
+package com.dlb.chess.pgn;
 
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 

@@ -13,8 +13,8 @@ import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.common.utility.ThreefoldClaimAheadUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
 
 class TestThreefoldClaimAheadUtility {
 

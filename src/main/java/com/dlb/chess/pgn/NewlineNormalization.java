@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser;
+package com.dlb.chess.pgn;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 

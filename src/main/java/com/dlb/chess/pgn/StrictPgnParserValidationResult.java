@@ -1,6 +1,6 @@
-package com.dlb.chess.pgn.parser.model;
+package com.dlb.chess.pgn;
 
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.san.SanValidationProblem;
 
 public record StrictPgnParserValidationResult(StrictPgnParserValidationProblem problemParser,

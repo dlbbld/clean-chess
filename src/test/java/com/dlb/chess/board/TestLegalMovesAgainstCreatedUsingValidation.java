@@ -25,7 +25,7 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.squares.AbstractPotentialToSquares;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;

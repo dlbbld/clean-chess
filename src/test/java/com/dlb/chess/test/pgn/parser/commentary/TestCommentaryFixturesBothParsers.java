@@ -10,15 +10,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.pgn.parser.LenientPgnParser;
-import com.dlb.chess.pgn.parser.StrictPgnParser;
-import com.dlb.chess.pgn.parser.enums.LenientPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.LenientPgnParserValidationException;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
-import com.dlb.chess.pgn.parser.model.LenientPgnParserValidationResult;
-import com.dlb.chess.pgn.parser.model.PgnFile;
-import com.dlb.chess.pgn.parser.model.StrictPgnParserValidationResult;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.StrictPgnParser;
+import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.LenientPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.LenientPgnParserValidationResult;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.StrictPgnParserValidationResult;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 

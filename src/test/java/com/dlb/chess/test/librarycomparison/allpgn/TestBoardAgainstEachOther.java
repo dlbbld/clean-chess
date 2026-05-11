@@ -8,7 +8,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.interfaces.ChessBoard;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.librarycarlos.board.LibraryCarlosBoard;
 import com.dlb.chess.test.librarycomparison.utility.CommonTestUtility;

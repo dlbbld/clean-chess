@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.sequential;
+package com.dlb.chess.pgn;
 
 /**
  * A single lexical unit produced by a PGN tokenizer. The {@code text} field carries the logical payload — for tag
@@ -9,5 +9,5 @@ package com.dlb.chess.pgn.parser.sequential;
  * <p>
  * Line and column are one-based and refer to the first character of the token in the source.
  */
-public record PgnToken(PgnTokenType type, String text, int line, int column) {
+record PgnToken(PgnTokenType type, String text, int line, int column) {
 }

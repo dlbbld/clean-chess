@@ -7,7 +7,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.parser.model.PgnFile;
+import com.dlb.chess.pgn.PgnFile;
 
 public abstract class PgnUtility {
 

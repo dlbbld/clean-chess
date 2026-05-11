@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser;
+package com.dlb.chess.pgn;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;

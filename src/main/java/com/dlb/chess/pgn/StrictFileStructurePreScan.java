@@ -1,7 +1,7 @@
-package com.dlb.chess.pgn.parser;
+package com.dlb.chess.pgn;
 
-import com.dlb.chess.pgn.parser.enums.StrictPgnParserValidationProblem;
-import com.dlb.chess.pgn.parser.exceptions.StrictPgnParserValidationException;
+import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
+import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.san.SanValidationProblem;
 
 /**

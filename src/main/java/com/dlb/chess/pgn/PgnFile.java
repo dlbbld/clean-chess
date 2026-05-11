@@ -1,4 +1,4 @@
-package com.dlb.chess.pgn.parser.model;
+package com.dlb.chess.pgn;
 
 import org.eclipse.jdt.annotation.NonNull;
 

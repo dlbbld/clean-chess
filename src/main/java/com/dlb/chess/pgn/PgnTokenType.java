@@ -1,7 +1,7 @@
-package com.dlb.chess.pgn.parser.sequential;
+package com.dlb.chess.pgn;
 
 /** Lexical categories the sequential PGN tokenizer can emit. */
-public enum PgnTokenType {
+enum PgnTokenType {
 
   TAG_BRACKET_OPEN,
   TAG_BRACKET_CLOSE,
