@@ -7,8 +7,8 @@ import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.utility.PgnUtility;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.PgnUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 public abstract class AbstractLichessCheck {
 

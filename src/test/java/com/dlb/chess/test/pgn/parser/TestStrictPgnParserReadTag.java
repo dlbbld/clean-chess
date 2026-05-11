@@ -14,7 +14,7 @@ import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 class TestStrictPgnParserReadTag {
 

@@ -35,7 +35,7 @@ import com.dlb.chess.pgn.PgnTokenType;
 import com.dlb.chess.pgn.PgnTokenizer;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.SanValidationException;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 /**
  * Strict PGN parser. Single forward pass over the token stream; validation and semantic construction happen together.
@@ -65,7 +65,7 @@ public final class StrictPgnParser {
   }
 
   public static PgnFile parse(Path pgnFilePath) {
-    // Read raw bytes — line-based reconstruction would hide whether the source's trailing newline is actually present.
+    // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually present.
     return parseText(PgnFileReader.readPgnFile(pgnFilePath));
   }
 
@@ -224,7 +224,7 @@ public final class StrictPgnParser {
     final PgnToken valueToken = tokenizer.next();
     if (valueToken.type() == PgnTokenType.TAG_VALUE_STRING_UNTERMINATED) {
       // If the unterminated content ends with `]` the source had `["Tag "value]` (closing quote missing but bracket
-      // present) → unterminated-string error; otherwise the bracket itself is missing.
+      // present) â†’ unterminated-string error; otherwise the bracket itself is missing.
       final String content = valueToken.text();
       if (!content.isEmpty() && content.charAt(content.length() - 1) == ']') {
         throw tagFormatError(StrictPgnParserValidationProblem.TAG_FORMAT_INVALID,
@@ -298,7 +298,7 @@ public final class StrictPgnParser {
   private static ResultTagValue validateResultTagValue(List<Tag> tagList) {
     if (!TagUtility.hasResult(tagList)) {
       throw new ProgrammingMistakeException(
-          "At this point the result tag must be present — seven-tag roster was validated.");
+          "At this point the result tag must be present â€” seven-tag roster was validated.");
     }
     final String value = TagUtility.readResult(tagList);
     if (!ResultTagValue.exists(value)) {
@@ -378,7 +378,7 @@ public final class StrictPgnParser {
     var fullMoveNumber = startFen.fullMoveNumber();
     var isFirstMove = true;
 
-    // Zero-move game: just <space><terminator> after the (optional) pregame commentary — no move numbers, no SANs.
+    // Zero-move game: just <space><terminator> after the (optional) pregame commentary â€” no move numbers, no SANs.
     if (tokenizer.peek().type() == PgnTokenType.SPACES && tokenizer.peek().text().length() == 1
         && tokenizer.peekNext().type() == PgnTokenType.TERMINATION_MARKER) {
       tokenizer.next();
@@ -387,7 +387,7 @@ public final class StrictPgnParser {
       return new MovetextOutcome(halfMoves, pregameCommentary);
     }
 
-    // T-002 / PGN spec §8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
+    // T-002 / PGN spec Â§8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
     var priorCommentaryAttached = false;
 
     while (true) {
@@ -427,7 +427,7 @@ public final class StrictPgnParser {
 
       final SanAndSuffix sanAndSuffix = parseSanAndSuffix();
 
-      // Trailing blank line at this position → file has no termination marker; report specifically.
+      // Trailing blank line at this position â†’ file has no termination marker; report specifically.
       expectInterTokenSeparatorOrMissingTermination(resultTagValue);
 
       var commentary = PgnCommentary.EMPTY;
@@ -459,7 +459,7 @@ public final class StrictPgnParser {
         try {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
-          // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          // Defensive â€” the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
           final String message = BasicUtility.getMessage(pcve);
           throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               message);
@@ -521,7 +521,7 @@ public final class StrictPgnParser {
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
       default:
-        // Not a broken brace — caller handles.
+        // Not a broken brace â€” caller handles.
     }
   }
 

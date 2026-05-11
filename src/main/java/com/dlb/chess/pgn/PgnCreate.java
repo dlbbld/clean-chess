@@ -23,9 +23,9 @@ import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.PgnCommentary;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.Tag;
-import com.dlb.chess.utility.PgnUtility;
-import com.dlb.chess.utility.TagPlaceHolderUtility;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.PgnUtility;
+import com.dlb.chess.pgn.TagPlaceHolderUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 public class PgnCreate {
 
@@ -149,7 +149,7 @@ public class PgnCreate {
     var currentFullMoveNumber = fullMoveNumber;
     Side currentHavingMove = havingMove;
     var isFirstMove = true;
-    // T-002 / PGN spec §8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
+    // T-002 / PGN spec Â§8.2.2 case 1: commentary on White's move forces "N..." before the next Black move.
     var priorCommentaryAttached = false;
     for (final PgnHalfMove halfMove : halfMoveList) {
 

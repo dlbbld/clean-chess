@@ -1,4 +1,4 @@
-package com.dlb.chess.utility;
+package com.dlb.chess.pgn;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,6 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
 
 public abstract class PgnUtility {
 

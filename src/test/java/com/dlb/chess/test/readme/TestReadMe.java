@@ -34,7 +34,7 @@ import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.UnwinnableFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
-import com.dlb.chess.utility.PgnUtility;
+import com.dlb.chess.pgn.PgnUtility;
 
 class TestReadMe {
 

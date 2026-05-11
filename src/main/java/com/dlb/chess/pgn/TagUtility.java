@@ -1,4 +1,4 @@
-package com.dlb.chess.utility;
+package com.dlb.chess.pgn;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,10 +10,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.pgn.ResultTagValue;
-import com.dlb.chess.pgn.StandardTag;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.Tag;
 import com.google.common.collect.ImmutableList;
 
 public abstract class TagUtility {

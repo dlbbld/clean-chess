@@ -1,4 +1,4 @@
-package com.dlb.chess.utility;
+package com.dlb.chess.squares;
 
 import java.util.Set;
 

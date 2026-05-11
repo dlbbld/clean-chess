@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.utility.ImmutableUtility;
-import com.dlb.chess.utility.ValidateMoveNumberUtility;
+import com.dlb.chess.squares.ValidateMoveNumberUtility;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 

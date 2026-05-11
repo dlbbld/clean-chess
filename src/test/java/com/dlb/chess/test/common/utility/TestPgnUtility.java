@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.utility.PgnUtility;
+import com.dlb.chess.pgn.PgnUtility;
 
 class TestPgnUtility {
 

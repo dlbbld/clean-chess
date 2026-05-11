@@ -11,7 +11,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon

@@ -16,7 +16,7 @@ import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 public abstract class GeneratePgnInformationUtility {
 

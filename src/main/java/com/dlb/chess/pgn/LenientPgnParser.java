@@ -36,8 +36,8 @@ import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.LenientSanParserValidationException;
 import com.dlb.chess.san.ForgivenItem;
 import com.dlb.chess.san.LenientSanParserValidationResult;
-import com.dlb.chess.utility.TagPlaceHolderUtility;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.TagPlaceHolderUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 /**
  * Lenient PGN parser. Permissive inter-token rules: any whitespace separates tokens, move-number indicators are
@@ -47,7 +47,7 @@ import com.dlb.chess.utility.TagUtility;
 public final class LenientPgnParser {
 
   private static final int SAN_MIN_LENGTH = 2;
-  // Bumped from 7 to 9 to admit the longest lenient SAN forms — e.g. pawn LAN promotion with hyphen and check
+  // Bumped from 7 to 9 to admit the longest lenient SAN forms â€” e.g. pawn LAN promotion with hyphen and check
   // ("e7-e8=Q+" is 8 chars).
   private static final int SAN_MAX_LENGTH = 9;
 
@@ -382,7 +382,7 @@ public final class LenientPgnParser {
         continue;
       }
       if (type == PgnTokenType.SYMBOL) {
-        // Tolerate spaced move-number indicators like `1 . e4` and `1 ... e5` — see consumedSpacedMoveNumber.
+        // Tolerate spaced move-number indicators like `1 . e4` and `1 ... e5` â€” see consumedSpacedMoveNumber.
         if (consumedSpacedMoveNumber(peek)) {
           continue;
         }
@@ -413,7 +413,7 @@ public final class LenientPgnParser {
     if (!isPurelyDigits(digitsPeek.text())) {
       return false;
     }
-    // Pattern 1 — digits + SPACES + dots-only symbol. Committing to consume the digits is safe because a lone
+    // Pattern 1 â€” digits + SPACES + dots-only symbol. Committing to consume the digits is safe because a lone
     // digits symbol is not a valid SAN; the length-error path below catches the no-dots case.
     final PgnTokenType next = tokenizer.peekNext().type();
     if (next == PgnTokenType.SPACES) {
@@ -427,7 +427,7 @@ public final class LenientPgnParser {
       throw movetextError(LenientPgnParserValidationProblem.EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
           "The movetext contains the SAN '" + digitsPeek.text() + "' with an invalid SAN length.");
     }
-    // Pattern 2 — digits + dots-only SYMBOL with no separating SPACES. Rare; tokenizer normally coalesces these.
+    // Pattern 2 â€” digits + dots-only SYMBOL with no separating SPACES. Rare; tokenizer normally coalesces these.
     if (next == PgnTokenType.SYMBOL && isAllDots(tokenizer.peekNext().text())) {
       tokenizer.next(); // digits
       tokenizer.next(); // dots
@@ -502,7 +502,7 @@ public final class LenientPgnParser {
         try {
           return new PgnCommentary(token.text());
         } catch (final PgnCommentaryValidationException pcve) {
-          // Defensive — the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
+          // Defensive â€” the tokenizer cannot produce `}` here (handled as separate types), so unreachable in practice.
           final String message = BasicUtility.getMessage(pcve);
           throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_CONTAINS_FORBIDDEN_CHARACTER,
               message);
@@ -556,7 +556,7 @@ public final class LenientPgnParser {
         throw movetextError(LenientPgnParserValidationProblem.MOVETEXT_COMMENTARY_END_BRACE_WITHOUT_START_BRACE,
             "A closing brace } was found with no matching opening brace.");
       default:
-        // Not a broken brace — caller handles.
+        // Not a broken brace â€” caller handles.
     }
   }
 

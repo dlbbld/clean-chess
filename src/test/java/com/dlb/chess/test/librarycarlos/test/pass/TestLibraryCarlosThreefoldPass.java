@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.utility.PgnUtility;
+import com.dlb.chess.pgn.PgnUtility;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Square;
 import com.github.bhlangonijr.chesslib.move.Move;

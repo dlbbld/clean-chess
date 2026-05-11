@@ -14,7 +14,7 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.Tag;
-import com.dlb.chess.utility.TagUtility;
+import com.dlb.chess.pgn.TagUtility;
 
 class TestTagUtility implements EnumConstants {
 
