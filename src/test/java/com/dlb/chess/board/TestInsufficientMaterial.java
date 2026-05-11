@@ -1,4 +1,4 @@
-package com.dlb.chess.test.insufficientmaterial;
+package com.dlb.chess.board;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -12,7 +12,6 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.MaterialUtility;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;

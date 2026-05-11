@@ -34,7 +34,6 @@ import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.board.HalfMoveUtility;
-import com.dlb.chess.common.utility.InsufficientMaterialUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -61,9 +60,9 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 /**
- * The library's central type — a chess <em>game</em>, not merely a position. A {@code Board} carries the position
+ * The library's central type â€” a chess <em>game</em>, not merely a position. A {@code Board} carries the position
  * <strong>plus</strong> the move history from its initial FEN: every halfmove ever performed, the legal-move set after
- * each, the halfmove clock, repetition counts, castling-right loss reasons, derived SAN/LAN strings — everything needed
+ * each, the halfmove clock, repetition counts, castling-right loss reasons, derived SAN/LAN strings â€” everything needed
  * to answer rule-level questions about the game so far.
  *
  * <h2>Construction</h2>
@@ -72,10 +71,10 @@ import com.google.common.collect.ImmutableSet;
  * Three constructors:
  *
  * <ul>
- * <li>{@link #Board()} — start at the initial position.</li>
- * <li>{@link #Board(String)} — start at the position given by a FEN string. Validated by the advanced FEN parser, so a
+ * <li>{@link #Board()} â€” start at the initial position.</li>
+ * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser, so a
  * {@code Board} cannot be constructed from a position no real game could reach.</li>
- * <li>{@link #Board(Fen)} — start at a pre-parsed {@link Fen} value.</li>
+ * <li>{@link #Board(Fen)} â€” start at a pre-parsed {@link Fen} value.</li>
  * </ul>
  *
  * <h2>Mutating the game</h2>
@@ -87,7 +86,7 @@ import com.google.common.collect.ImmutableSet;
  * {@link com.dlb.chess.exceptions.InvalidMoveException} from the {@code MoveSpecification} pipeline,
  * {@code SanValidationException} from the SAN pipeline). Once the game has reached any FIDE-automatic termination
  * (checkmate, stalemate, mutual insufficient material, fivefold repetition, 75-move rule), neither pipeline accepts
- * further moves — the package-level Javadoc on {@link com.dlb.chess.board} documents the strict-game invariant in
+ * further moves â€” the package-level Javadoc on {@link com.dlb.chess.board} documents the strict-game invariant in
  * detail.
  *
  * <h2>Querying the game</h2>
@@ -96,7 +95,7 @@ import com.google.common.collect.ImmutableSet;
  * Beyond move execution, {@code Board} exposes the standard rule-level predicates: {@link #isCheckmate()},
  * {@link #isStalemate()}, {@link #isThreefoldRepetition()}, {@link #isFiftyMove()}, {@link #isFivefoldRepetition()},
  * {@link #isSeventyFiveMove()}, plus the unwinnability/dead-position pair
- * ({@code isUnwinnableQuick}, {@code isUnwinnableFull}, {@code isDeadPositionQuick}, {@code isDeadPositionFull} — the
+ * ({@code isUnwinnableQuick}, {@code isUnwinnableFull}, {@code isDeadPositionQuick}, {@code isDeadPositionFull} â€” the
  * library's flagship CHA feature; see {@link com.dlb.chess.unwinnability}). Position-state accessors return Guava
  * {@code ImmutableList}/{@code ImmutableSet}; mutation is exclusively via {@code move}/{@code unmove}.
  *
@@ -110,7 +109,7 @@ import com.google.common.collect.ImmutableSet;
  * {@code Board} is mutable and <strong>not thread-safe</strong>. Use one {@code Board} per thread, or synchronize
  * externally. {@link #equals(Object)} and {@link #hashCode()} reflect the current game state, so a {@code Board} placed
  * in a {@link java.util.HashMap} or {@link java.util.HashSet} and then mutated will violate the collection's invariants
- * — don't do that.
+ * â€” don't do that.
  */
 public class Board {
 
@@ -396,7 +395,7 @@ public class Board {
 
   }
 
-  // Package-private — a LegalMove can only be safely constructed when the caller has already validated the
+  // Package-private â€” a LegalMove can only be safely constructed when the caller has already validated the
   // moveSpecification as legal, and that's an invariant only the rule pipeline can guarantee. If a non-pipeline
   // caller passed an unvalidated MoveSpecification here, the result would silently carry incorrect derived data
   // (wrong moving piece, wrong captured piece, wrong en-passant role).
@@ -653,7 +652,7 @@ public class Board {
 
   /**
    * True iff the halfmove clock has reached the 75-move-rule threshold (FIDE 9.6.2). This is an automatic FIDE
-   * termination — once true, the game has ended in a draw and no further moves are accepted.
+   * termination â€” once true, the game has ended in a draw and no further moves are accepted.
    */
   public boolean isSeventyFiveMove() {
     return getHalfMoveClock() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD;
@@ -661,7 +660,7 @@ public class Board {
 
   /**
    * True iff the current position has occurred at least five times in the game (FIDE 9.6.1). This is an automatic FIDE
-   * termination — once true, the game has ended in a draw and no further moves are accepted.
+   * termination â€” once true, the game has ended in a draw and no further moves are accepted.
    */
   public boolean isFivefoldRepetition() {
     return getRepetitionCount() >= ChessConstants.FIVEFOLD_REPETITION_RULE_THRESHOLD;
