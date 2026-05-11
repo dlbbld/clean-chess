@@ -14,7 +14,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 public class LichessReportCheckFen extends AbstractLichessCheckFen {
 

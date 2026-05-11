@@ -18,8 +18,8 @@ import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 public class PgnExpectedValue {
 

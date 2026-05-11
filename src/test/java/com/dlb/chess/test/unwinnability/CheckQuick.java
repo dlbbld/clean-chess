@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 public class CheckQuick {
 

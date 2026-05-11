@@ -16,9 +16,9 @@ import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
 import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.full.model.UnwinnableFullAnalysis;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalysis;
 
 public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
 

@@ -17,8 +17,8 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableFull;
 
 class TestFindHelpMate {
 

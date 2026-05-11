@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.constants.FenConstants;
-import com.dlb.chess.unwinnability.quick.utility.SemiOpenFilesUtility;
+import com.dlb.chess.unwinnability.SemiOpenFilesUtility;
 
 class TestSemiOpenFilesUtility implements EnumConstants {
 

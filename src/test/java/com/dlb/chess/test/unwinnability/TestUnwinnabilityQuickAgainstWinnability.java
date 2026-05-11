@@ -14,8 +14,8 @@ import com.dlb.chess.test.pgntest.PgnExpectedValue;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 class TestUnwinnabilityQuickAgainstWinnability {
 

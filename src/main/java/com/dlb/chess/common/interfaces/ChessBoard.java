@@ -21,12 +21,12 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.san.model.LenientSanParserValidationResult;
 import com.dlb.chess.san.model.StrictSanParserValidationResult;
-import com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer;
-import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
+import com.dlb.chess.unwinnability.DeadPositionFull;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
+import com.dlb.chess.unwinnability.DeadPositionQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 

@@ -30,10 +30,10 @@ import com.dlb.chess.pgn.writer.PgnWriter;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.report.model.Report;
 import com.dlb.chess.san.enums.SanValidationProblem;
-import com.dlb.chess.unwinnability.full.enums.DeadPositionFull;
-import com.dlb.chess.unwinnability.full.enums.UnwinnableFull;
-import com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick;
-import com.dlb.chess.unwinnability.quick.enums.UnwinnableQuick;
+import com.dlb.chess.unwinnability.DeadPositionFull;
+import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.DeadPositionQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.dlb.chess.utility.PgnUtility;
 
 class TestReadMe {

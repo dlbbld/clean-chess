@@ -18,9 +18,9 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.unwinnability.mobility.Mobility;
-import com.dlb.chess.unwinnability.mobility.model.MobilitySolution;
-import com.dlb.chess.unwinnability.model.PiecePlacement;
+import com.dlb.chess.unwinnability.Mobility;
+import com.dlb.chess.unwinnability.MobilitySolution;
+import com.dlb.chess.unwinnability.PiecePlacement;
 
 class TestMobilitySolution implements EnumConstants {
 
