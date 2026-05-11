@@ -5,7 +5,7 @@ import java.util.Set;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.range.model.BishopRange;
+import com.dlb.chess.range.BishopRange;
 import com.dlb.chess.squares.BishopEmptyBoardSquares;
 
 class BishopRangeSquares extends AbstractRangeSquares {

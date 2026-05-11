@@ -7,7 +7,7 @@ import java.util.EnumMap;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.range.model.QueenRange;
+import com.dlb.chess.range.QueenRange;
 import com.dlb.chess.utility.ValidateMoveNumberUtility;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

@@ -1,4 +1,4 @@
-package com.dlb.chess.range.model;
+package com.dlb.chess.range;
 
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.range.OrthogonalRange;

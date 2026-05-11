@@ -5,7 +5,7 @@ import java.util.Set;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.range.model.RookRange;
+import com.dlb.chess.range.RookRange;
 import com.dlb.chess.squares.RookEmptyBoardSquares;
 
 class RookRangeSquares extends AbstractRangeSquares {

@@ -19,9 +19,9 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.range.DiagonalRange;
 import com.dlb.chess.range.OrthogonalRange;
-import com.dlb.chess.range.model.BishopRange;
-import com.dlb.chess.range.model.QueenRange;
-import com.dlb.chess.range.model.RookRange;
+import com.dlb.chess.range.BishopRange;
+import com.dlb.chess.range.QueenRange;
+import com.dlb.chess.range.RookRange;
 import com.google.common.collect.ImmutableList;
 
 public class GenerateEmptyBoardSquares extends AbstractGenerateSquares {
