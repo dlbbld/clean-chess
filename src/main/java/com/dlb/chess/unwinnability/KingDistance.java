@@ -2,7 +2,7 @@ package com.dlb.chess.unwinnability;
 
 import com.dlb.chess.board.enums.Square;
 
-public class KingDistance {
+class KingDistance {
 
   // Chebyshev Distance
   // minimum king moves on empty board
