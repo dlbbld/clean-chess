@@ -40,8 +40,8 @@ import com.dlb.chess.test.common.utility.FileUtility;
  */
 class TestConventionTestClassHasActiveTest {
 
-  private static final Path TEST_JAVA_ROOT = Nulls
-      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
+  private static final Path TEST_JAVA_ROOT = Nulls.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH,
+      "src/test/java");
 
   private static final String REQUIRED_NAME_PREFIX = "Test";
 
@@ -62,8 +62,7 @@ class TestConventionTestClassHasActiveTest {
       }
       final String contents = FileUtility.readFileAsString(p);
       if (!TEST_ANNOTATION.matcher(contents).find()) {
-        violations.add(Nulls
-            .replace(Nulls.toString(Nulls.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
+        violations.add(Nulls.replace(Nulls.toString(Nulls.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
       }
     }
 

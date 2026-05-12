@@ -33,8 +33,7 @@ class TestLibraryCarlosZobristBugPass {
 
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.MAX_MOVES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Path pgnFilePath = Nulls.pathResolve(testCaseList.pgnTest().getFolderPath(),
-          testCase.pgnFileName());
+      final Path pgnFilePath = Nulls.pathResolve(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       logger.info(testCase.pgnFileName());
       testPrintingPosition(pgnFilePath);
       testWithoutPrintingPosition(pgnFilePath);

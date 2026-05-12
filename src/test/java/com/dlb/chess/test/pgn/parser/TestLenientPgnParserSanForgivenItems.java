@@ -22,8 +22,8 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 @SuppressWarnings("static-method")
 class TestLenientPgnParserSanForgivenItems {
 
-  private static final Path FOLDER = Nulls
-      .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "sanForgivenItems");
+  private static final Path FOLDER = Nulls.pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH,
+      "sanForgivenItems");
 
   @Test
   void test01_missingCheckSuffix() {

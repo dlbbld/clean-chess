@@ -37,8 +37,8 @@ import com.dlb.chess.test.common.utility.FileUtility;
  */
 class TestConventionTestPackageNaming {
 
-  private static final Path TEST_JAVA_ROOT = Nulls
-      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
+  private static final Path TEST_JAVA_ROOT = Nulls.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH,
+      "src/test/java");
 
   private static final String REQUIRED_PACKAGE_PREFIX = "com.dlb.chess";
 
@@ -53,8 +53,8 @@ class TestConventionTestPackageNaming {
       }
       final String packageName = derivePackageName(p);
       if (!REQUIRED_PACKAGE_PREFIX.equals(packageName) && !packageName.startsWith(REQUIRED_PACKAGE_PREFIX + ".")) {
-        violations.add(packageName + "  in  " + Nulls
-            .replace(Nulls.toString(Nulls.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
+        violations.add(
+            packageName + "  in  " + Nulls.replace(Nulls.toString(Nulls.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
       }
     }
 
@@ -75,7 +75,6 @@ class TestConventionTestPackageNaming {
       return "";
     }
     final Path relative = Nulls.pathRelativize(TEST_JAVA_ROOT, parent);
-    return Nulls
-        .replace(Nulls.replace(Nulls.toString(relative), '\\', '.'), '/', '.');
+    return Nulls.replace(Nulls.replace(Nulls.toString(relative), '\\', '.'), '/', '.');
   }
 }

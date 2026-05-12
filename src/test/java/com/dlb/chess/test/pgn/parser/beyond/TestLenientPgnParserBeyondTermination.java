@@ -32,8 +32,8 @@ import com.dlb.chess.test.ConfigurationTestConstants;
 @SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestLenientPgnParserBeyondTermination {
 
-  private static final Path BEYOND_FOLDER = Nulls
-      .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
+  private static final Path BEYOND_FOLDER = Nulls.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH,
+      "src/test/resources/pgnParser/common/beyond");
 
   @SuppressWarnings("static-method")
   @Test

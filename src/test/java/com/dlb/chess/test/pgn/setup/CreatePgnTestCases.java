@@ -115,8 +115,7 @@ public class CreatePgnTestCases {
     };
   }
 
-  private static final EnumMap<PgnTest, PgnFileTestCaseList> allTestCaseListMap = Nulls
-      .newEnumMap(PgnTest.class);
+  private static final EnumMap<PgnTest, PgnFileTestCaseList> allTestCaseListMap = Nulls.newEnumMap(PgnTest.class);
 
   private static final List<PgnFileTestCaseList> allTestCaseListList = new ArrayList<>();
 

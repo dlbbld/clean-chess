@@ -439,10 +439,8 @@ public class LibraryCarlosBoard {
     for (final MoveBackup moveBackup : moveBackupList) {
       final Move move = NullsCarlos.getMove(moveBackup);
       final MoveSpecification moveSpecification = convertMove(board, move);
-      final Piece movingPiece = EnumConversionUtility
-          .convertPiece(NullsCarlos.getMovingPiece(moveBackup));
-      final Piece pieceCaptured = EnumConversionUtility
-          .convertPiece(NullsCarlos.getCapturedPiece(moveBackup));
+      final Piece movingPiece = EnumConversionUtility.convertPiece(NullsCarlos.getMovingPiece(moveBackup));
+      final Piece pieceCaptured = EnumConversionUtility.convertPiece(NullsCarlos.getCapturedPiece(moveBackup));
       final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured,
           calculateKind(moveBackup));
       result.add(legalMove);
@@ -459,10 +457,8 @@ public class LibraryCarlosBoard {
   }
 
   private static LegalMove calculateLegalMove(MoveSpecification moveSpecification, MoveBackup moveBackup) {
-    final Piece movingPiece = EnumConversionUtility
-        .convertToMyPiece(NullsCarlos.getMovingPiece(moveBackup));
-    final Piece pieceCaptured = EnumConversionUtility
-        .convertToMyPiece(NullsCarlos.getCapturedPiece(moveBackup));
+    final Piece movingPiece = EnumConversionUtility.convertToMyPiece(NullsCarlos.getMovingPiece(moveBackup));
+    final Piece pieceCaptured = EnumConversionUtility.convertToMyPiece(NullsCarlos.getCapturedPiece(moveBackup));
     return new LegalMove(moveSpecification, movingPiece, pieceCaptured, calculateKind(moveBackup));
   }
 

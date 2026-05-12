@@ -25,8 +25,8 @@ import com.dlb.chess.enums.CastlingCheck;
  */
 class TestCastlingCheckMapper {
 
-  private static final List<CastlingCheck> EXPECTED_CASTLING_CHECKS = Nulls.listOf(
-      CastlingCheck.FINAL_NO_RIGHT, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingCheck.TEMPORARY_KING_IN_CHECK,
+  private static final List<CastlingCheck> EXPECTED_CASTLING_CHECKS = Nulls.listOf(CastlingCheck.FINAL_NO_RIGHT,
+      CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingCheck.TEMPORARY_KING_IN_CHECK,
       CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK, CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK);
 
   private static final List<SanValidationProblem> EXPECTED_KING_CASTLING_PROBLEMS = Nulls.listOf(
@@ -89,10 +89,8 @@ class TestCastlingCheckMapper {
   void testFinalNoRightMappingMatchesProvenanceOrder() {
     for (var i = 0; i < EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size(); i++) {
       assertEquals(Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROBLEMS, i),
-          CastlingCheckMapper.map(CastlingCheck.FINAL_NO_RIGHT,
-              Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i)),
-          "FINAL_NO_RIGHT mapping mismatch for provenance "
-              + Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i));
+          CastlingCheckMapper.map(CastlingCheck.FINAL_NO_RIGHT, Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i)),
+          "FINAL_NO_RIGHT mapping mismatch for provenance " + Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i));
     }
   }
 

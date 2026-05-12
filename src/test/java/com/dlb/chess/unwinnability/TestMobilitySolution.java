@@ -106,10 +106,10 @@ class TestMobilitySolution implements EnumConstants {
   @Test
   void testPawnWall() throws Exception {
     {
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3);
-      final List<Square> blackKingToSquareList = Nulls.asList(A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7,
-          D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, A3, B3, C3, D3, E3, F3, G3, H3);
+      final List<Square> blackKingToSquareList = Nulls.asList(A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7, D7, E7, F7,
+          G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
 
       checkPawnWallOnlyKingAndPawn("4k3/8/8/p1p1p1p1/P1P1P1P1/8/8/4K3 w - - 0 50", whiteKingToSquareList,
           blackKingToSquareList);
@@ -119,10 +119,10 @@ class TestMobilitySolution implements EnumConstants {
     }
 
     {
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, E3, F3, G3, H3, F4, G4, H4);
-      final List<Square> blackKingToSquareList = Nulls.asList(A6, B6, C6, A7, B7, C7, D7, A8, B8, C8, D8,
-          E8, F8, G8, H8);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, E3, F3, G3, H3, F4, G4, H4);
+      final List<Square> blackKingToSquareList = Nulls.asList(A6, B6, C6, A7, B7, C7, D7, A8, B8, C8, D8, E8, F8, G8,
+          H8);
       checkPawnWallOnlyKingAndPawn("4k3/5p1p/4pPpP/1p1pP1P1/pPpP4/P1P5/8/4K3 w - - 0 50", whiteKingToSquareList,
           blackKingToSquareList);
 
@@ -131,10 +131,10 @@ class TestMobilitySolution implements EnumConstants {
     }
 
     {
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, E3, F3, G3, H3, F4, G4, H4, G5, H5);
-      final List<Square> blackKingToSquareList = Nulls.asList(A5, B5, A6, B6, C6, A7, B7, C7, D7, A8, B8,
-          C8, D8, E8, F8, G8, H8);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, E3, F3, G3, H3, F4, G4, H4, G5, H5);
+      final List<Square> blackKingToSquareList = Nulls.asList(A5, B5, A6, B6, C6, A7, B7, C7, D7, A8, B8, C8, D8, E8,
+          F8, G8, H8);
 
       checkPawnWallOnlyKingAndPawn("4k3/5p1p/4pP1P/3pP3/p1pP4/P1P5/8/4K3 w - - 0 50", whiteKingToSquareList,
           blackKingToSquareList);
@@ -156,12 +156,12 @@ class TestMobilitySolution implements EnumConstants {
   void testAllLockedButKing() throws Exception {
 
     {
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, E2, F2, G2,
-          H2, D3, E3, F3, F3, G3, H3, E4, F4, G4, H4, B5, D5, E5, F5, G5, H5, A6, B6, C6, D6, E6, F6, G6, H6, A7, B7,
-          C7, D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
-      final List<Square> blackKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, B2, D2, E2,
-          F2, G2, H2, E3, F3, G3, H3, D4, E4, F4, G4, H4, E5, F5, G5, H5, A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7,
-          D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, E2, F2, G2, H2, D3, E3,
+          F3, F3, G3, H3, E4, F4, G4, H4, B5, D5, E5, F5, G5, H5, A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7, D7, E7,
+          F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
+      final List<Square> blackKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, B2, D2, E2, F2, G2, H2,
+          E3, F3, G3, H3, D4, E4, F4, G4, H4, E5, F5, G5, H5, A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7, D7, E7, F7,
+          G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
 
       checkAllLockedButKing("8/8/8/p1p4k/PbP5/pBp5/P1P3K1/8 w - - 2 41", whiteKingToSquareList, blackKingToSquareList);
 
@@ -169,8 +169,8 @@ class TestMobilitySolution implements EnumConstants {
     }
 
     {
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5);
       final List<Square> blackKingToSquareList = Nulls.asList(A8, B8, C8, D8, E8, F8, G7, H7, H8);
 
       checkAllLockedButKing("3k2n1/1p2p3/1P2Pp1p/5P1P/1K6/8/8/8 w - - 0 100", whiteKingToSquareList,
@@ -181,8 +181,8 @@ class TestMobilitySolution implements EnumConstants {
     }
 
     {
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, D4, E4, F4, G4, H4);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, D4, E4, F4, G4, H4);
       final List<Square> blackKingToSquareList = Nulls.asList(A8, B8, C8, D8, E8, F8, G7, H7, H8);
 
       checkAllLockedButKing("3k2n1/1p2p3/1Pp1Pp1p/BpP2P1P/1P6/3K4/8/8 w - - 0 100", whiteKingToSquareList,
@@ -201,9 +201,9 @@ class TestMobilitySolution implements EnumConstants {
     {
       final Map<Square, List<Square>> mobilityMap = new HashMap<>();
 
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, C5, D5, E5, F5, G5,
-          H5, C6, D6, E6, F6, G6, H6, D7, E7, F7, G7, H7, D8, E8, F8, G8, H8);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, C5, D5, E5, F5, G5, H5, C6, D6,
+          E6, F6, G6, H6, D7, E7, F7, G7, H7, D8, E8, F8, G8, H8);
       mobilityMap.put(G2, whiteKingToSquareList);
 
       mobilityMap.put(B5, Nulls.asList(B5));
@@ -221,8 +221,8 @@ class TestMobilitySolution implements EnumConstants {
     {
       final Map<Square, List<Square>> mobilityMap = new HashMap<>();
 
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, A3, B3, C3, A4, B4);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, A3, B3, C3, A4, B4);
       mobilityMap.put(F2, whiteKingToSquareList);
 
       mobilityMap.put(E3, Nulls.asList(E3));
@@ -246,8 +246,8 @@ class TestMobilitySolution implements EnumConstants {
       mobilityMap.put(B6, Nulls.asList(B6));
       mobilityMap.put(C6, Nulls.asList(C6));
 
-      final List<Square> blackKingToSquareList = Nulls.asList(F5, E6, F6, G6, H6, D7, E7, F7, G7, H7, A8,
-          B8, C8, D8, E8, F8, G8, H8);
+      final List<Square> blackKingToSquareList = Nulls.asList(F5, E6, F6, G6, H6, D7, E7, F7, G7, H7, A8, B8, C8, D8,
+          E8, F8, G8, H8);
       mobilityMap.put(G6, blackKingToSquareList);
 
       mobilityMap.put(B7, Nulls.asList(B7));
@@ -262,9 +262,8 @@ class TestMobilitySolution implements EnumConstants {
     {
       final Map<Square, List<Square>> mobilityMap = new HashMap<>();
 
-      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2,
-          D2, E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5, E5, F5,
-          G5, H5);
+      final List<Square> whiteKingToSquareList = Nulls.asList(A1, B1, C1, D1, E1, F1, G1, H1, A2, B2, C2, D2, E2, F2,
+          G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5, E5, F5, G5, H5);
       mobilityMap.put(E1, whiteKingToSquareList);
 
       mobilityMap.put(A2, Nulls.asList(A2, A3, A4, A5));

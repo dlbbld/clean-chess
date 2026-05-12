@@ -30,20 +30,20 @@ class TestCommentaryFixturesBothParsers {
   private static final Path COMMENTARY_FOLDER_PATH = Nulls
       .pathResolve(PgnTestConstants.PGN_PARSER_TEST_ROOT_FOLDER_PATH, "common/commentary");
 
-  private static final Path PREGAME_COMMENTARY_SUCCESS_FOLDER_PATH = Nulls
-      .pathResolve(COMMENTARY_FOLDER_PATH, "pregameCommentary/success");
+  private static final Path PREGAME_COMMENTARY_SUCCESS_FOLDER_PATH = Nulls.pathResolve(COMMENTARY_FOLDER_PATH,
+      "pregameCommentary/success");
 
-  private static final Path PREGAME_COMMENTARY_EXCEPTION_FOLDER_PATH = Nulls
-      .pathResolve(COMMENTARY_FOLDER_PATH, "pregameCommentary/exception");
+  private static final Path PREGAME_COMMENTARY_EXCEPTION_FOLDER_PATH = Nulls.pathResolve(COMMENTARY_FOLDER_PATH,
+      "pregameCommentary/exception");
 
-  private static final Path NON_PREGAME_COMMENTARY_SUCCESS_FOLDER_PATH = Nulls
-      .pathResolve(COMMENTARY_FOLDER_PATH, "nonPregameCommentary/success");
+  private static final Path NON_PREGAME_COMMENTARY_SUCCESS_FOLDER_PATH = Nulls.pathResolve(COMMENTARY_FOLDER_PATH,
+      "nonPregameCommentary/success");
 
-  private static final Path NON_PREGAME_COMMENTARY_EXCEPTION_FOLDER_PATH = Nulls
-      .pathResolve(COMMENTARY_FOLDER_PATH, "nonPregameCommentary/exception");
+  private static final Path NON_PREGAME_COMMENTARY_EXCEPTION_FOLDER_PATH = Nulls.pathResolve(COMMENTARY_FOLDER_PATH,
+      "nonPregameCommentary/exception");
 
-  private static final Path COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH = Nulls
-      .pathResolve(COMMENTARY_FOLDER_PATH, "combinedCommentary/success");
+  private static final Path COMBINED_COMMENTARY_SUCCESS_FOLDER_PATH = Nulls.pathResolve(COMMENTARY_FOLDER_PATH,
+      "combinedCommentary/success");
 
   @ParameterizedTest(name = "pregameCommentary/success/{0}")
   @ValueSource(strings = { "01_example.pgn", "02_example.pgn", "03_example.pgn",

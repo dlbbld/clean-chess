@@ -21,10 +21,8 @@ class TestStrictPgnParserMovetextWithoutCommentary {
     checkInitialWithoutCommentary("1. e4 e5", Nulls.asList("e4", "e5"));
     checkInitialWithoutCommentary("1. e4 e5 2. d4", Nulls.asList("e4", "e5", "d4"));
     checkInitialWithoutCommentary("1. e4 e5 2. d4 d5", Nulls.asList("e4", "e5", "d4", "d5"));
-    checkInitialWithoutCommentary("1. e4 e5 2. d4 d5 3. Nc3",
-        Nulls.asList("e4", "e5", "d4", "d5", "Nc3"));
-    checkInitialWithoutCommentary("1. e4 e5 2. d4 d5 3. Nc3 Nc6",
-        Nulls.asList("e4", "e5", "d4", "d5", "Nc3", "Nc6"));
+    checkInitialWithoutCommentary("1. e4 e5 2. d4 d5 3. Nc3", Nulls.asList("e4", "e5", "d4", "d5", "Nc3"));
+    checkInitialWithoutCommentary("1. e4 e5 2. d4 d5 3. Nc3 Nc6", Nulls.asList("e4", "e5", "d4", "d5", "Nc3", "Nc6"));
     checkInitialWithoutCommentary("1. e4 e5 2. d4 d5 3. Nc3 Nc6 4. a4",
         Nulls.asList("e4", "e5", "d4", "d5", "Nc3", "Nc6", "a4"));
     checkInitialWithoutCommentary("1. e4 e5 2. d4 d5 3. Nc3 Nc6 4. a4 h5",
@@ -37,8 +35,8 @@ class TestStrictPgnParserMovetextWithoutCommentary {
     checkInitialWithoutCommentary(
         "1. e4 e5 2. d4 d5 3. Nc3 Nc6 4. a4 h5 5. Ra2 Rh7 6. a5 h4 7. Ra3 Rh6 8. a6 h3 9. Ra4 Rh5"
             + " 10. Ra5 Rh4 11. Ra1 Rh8 12. exd5 exd4",
-        Nulls.asList("e4", "e5", "d4", "d5", "Nc3", "Nc6", "a4", "h5", "Ra2", "Rh7", "a5", "h4", "Ra3",
-            "Rh6", "a6", "h3", "Ra4", "Rh5", "Ra5", "Rh4", "Ra1", "Rh8", "exd5", "exd4"));
+        Nulls.asList("e4", "e5", "d4", "d5", "Nc3", "Nc6", "a4", "h5", "Ra2", "Rh7", "a5", "h4", "Ra3", "Rh6", "a6",
+            "h3", "Ra4", "Rh5", "Ra5", "Rh4", "Ra1", "Rh8", "exd5", "exd4"));
   }
 
   /**

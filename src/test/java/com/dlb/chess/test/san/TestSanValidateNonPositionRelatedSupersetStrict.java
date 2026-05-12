@@ -18,12 +18,10 @@ class TestSanValidateNonPositionRelatedSupersetStrict extends AbstractTestSanVal
   @SuppressWarnings("static-method")
   @Test
   void testStaticallySubsetRuntime() {
-    for (final Entry<String, SanParse> entry : Nulls
-        .entrySet(SanValidateStaticallyStrict.getSanValidationWhiteMap())) {
+    for (final Entry<String, SanParse> entry : Nulls.entrySet(SanValidateStaticallyStrict.getSanValidationWhiteMap())) {
       checkStaticallySubsetRuntime(Nulls.getKey(entry), Nulls.getValue(entry));
     }
-    for (final Entry<String, SanParse> entry : Nulls
-        .entrySet(SanValidateStaticallyStrict.getSanValidationBlackMap())) {
+    for (final Entry<String, SanParse> entry : Nulls.entrySet(SanValidateStaticallyStrict.getSanValidationBlackMap())) {
       checkStaticallySubsetRuntime(Nulls.getKey(entry), Nulls.getValue(entry));
     }
   }

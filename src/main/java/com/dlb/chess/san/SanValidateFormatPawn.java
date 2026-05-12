@@ -31,8 +31,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
       return parsePawnCaptureMove(core, sanTerminalMarker);
     }
 
-    throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER, Message
-        .getString("validation.san.format.pawn.wrongSecondCharacter", Nulls.toString(secondChar)));
+    throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER,
+        Message.getString("validation.san.format.pawn.wrongSecondCharacter", Nulls.toString(secondChar)));
   }
 
   private static SanParse parsePawnForwardMove(final String core, final SanTerminalMarker sanTerminalMarker) {
@@ -83,9 +83,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // wrong promotion piece
     if (!NotationPromotionPiece.exists(fourthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE,
-          Message.getString("validation.san.format.pawn.forward.promotion.wrongPromotionPiece",
-              Nulls.toString(fourthChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE, Message
+          .getString("validation.san.format.pawn.forward.promotion.wrongPromotionPiece", Nulls.toString(fourthChar)));
     }
 
     // too long
@@ -176,9 +175,8 @@ abstract class SanValidateFormatPawn extends AbstractSan {
 
     // wrong promotion piece
     if (!NotationPromotionPiece.exists(sixthChar)) {
-      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_PIECE,
-          Message.getString("validation.san.format.pawn.capture.promotion.wrongPromotionPiece",
-              Nulls.toString(sixthChar)));
+      throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_PIECE, Message
+          .getString("validation.san.format.pawn.capture.promotion.wrongPromotionPiece", Nulls.toString(sixthChar)));
     }
 
     // too long

@@ -270,8 +270,8 @@ public final class LenientPgnParser {
       for (var j = i + 1; j < tagList.size(); j++) {
         if (Nulls.get(tagList, i).name().equals(Nulls.get(tagList, j).name())) {
           throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
-              SanValidationProblem.NONE, "The tag name must be unique. The tag name \""
-                  + Nulls.get(tagList, i).name() + "\" was used more than once.");
+              SanValidationProblem.NONE, "The tag name must be unique. The tag name \"" + Nulls.get(tagList, i).name()
+                  + "\" was used more than once.");
         }
       }
     }

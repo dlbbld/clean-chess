@@ -27,8 +27,8 @@ public class GenerateChaTestCases implements EnumConstants {
 
   private static final Logger logger = Nulls.getLogger(GenerateChaTestCases.class);
 
-  private static final Path LIST_FOR_CHA_FILE_PATH = Nulls
-      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "list_cha_2.txt");
+  private static final Path LIST_FOR_CHA_FILE_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "list_cha_2.txt");
 
   public static void main(String[] args) throws Exception {
     generateChaTestCases(LIST_FOR_CHA_FILE_PATH);

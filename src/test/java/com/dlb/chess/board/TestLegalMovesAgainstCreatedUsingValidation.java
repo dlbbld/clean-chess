@@ -32,8 +32,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
-  private static final Logger logger = Nulls
-      .getLogger(TestLegalMovesAgainstCreatedUsingValidation.class);
+  private static final Logger logger = Nulls.getLogger(TestLegalMovesAgainstCreatedUsingValidation.class);
 
   @SuppressWarnings("static-method")
   @Test

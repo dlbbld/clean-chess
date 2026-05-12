@@ -16,8 +16,7 @@ import com.dlb.chess.common.utility.GeneralUtility;
 
 class Reachability {
 
-  private final EnumMap<Side, EnumMap<Square, VariableState>> reachabilityMap = Nulls
-      .newEnumMap(Side.class);
+  private final EnumMap<Side, EnumMap<Square, VariableState>> reachabilityMap = Nulls.newEnumMap(Side.class);
 
   public void put(Side side, Square toSquare, VariableState reachable) {
     EnumMap<Square, VariableState> enumMap;
@@ -46,10 +45,8 @@ class Reachability {
 
   public int calculateVariableCountSetToOne() {
     var count = 0;
-    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : Nulls
-        .entrySet(reachabilityMap)) {
-      final EnumMap<Square, VariableState> mapEntry = Nulls.get(reachabilityMap,
-          Nulls.getKey(mapEntryMap));
+    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : Nulls.entrySet(reachabilityMap)) {
+      final EnumMap<Square, VariableState> mapEntry = Nulls.get(reachabilityMap, Nulls.getKey(mapEntryMap));
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == VariableState.ONE) {
           count++;
@@ -69,14 +66,11 @@ class Reachability {
 
   private List<ReachabilityVariable> calculateEntries(VariableState reachable) {
     final List<ReachabilityVariable> result = new ArrayList<>();
-    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : Nulls
-        .entrySet(reachabilityMap)) {
-      final EnumMap<Square, VariableState> mapEntry = Nulls.get(reachabilityMap,
-          Nulls.getKey(mapEntryMap));
+    for (final Entry<Side, EnumMap<Square, VariableState>> mapEntryMap : Nulls.entrySet(reachabilityMap)) {
+      final EnumMap<Square, VariableState> mapEntry = Nulls.get(reachabilityMap, Nulls.getKey(mapEntryMap));
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == reachable) {
-          result.add(
-              new ReachabilityVariable(Nulls.getKey(mapEntryMap), Nulls.getKey(entry)));
+          result.add(new ReachabilityVariable(Nulls.getKey(mapEntryMap), Nulls.getKey(entry)));
         }
       }
     }

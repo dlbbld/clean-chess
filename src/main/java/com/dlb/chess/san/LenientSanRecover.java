@@ -147,8 +147,7 @@ final class LenientSanRecover {
     }
     // Insert 'x' immediately before the destination square (last 2 chars of body).
     final var destStart = body.length() - 2;
-    return Nulls.substring(body, 0, destStart) + "x" + Nulls.substring(body, destStart)
-        + marker;
+    return Nulls.substring(body, 0, destStart) + "x" + Nulls.substring(body, destStart) + marker;
   }
 
   private static String stripFirstDisambigChar(String s) {
@@ -166,8 +165,8 @@ final class LenientSanRecover {
       throw new ProgrammingMistakeException("stripSecondDisambigChar called with body too short: " + s);
     }
     // Square disambig form: positions 1 and 2 are file+rank; strip position 2 (rank).
-    return split.body().charAt(0) + Nulls.substring(split.body(), 1, 2)
-        + Nulls.substring(split.body(), 3) + split.marker();
+    return split.body().charAt(0) + Nulls.substring(split.body(), 1, 2) + Nulls.substring(split.body(), 3)
+        + split.marker();
   }
 
   private static String stripSquareDisambig(String s) {
@@ -216,16 +215,14 @@ final class LenientSanRecover {
           "No legal move matches rank-disambig recovery; strict invariant violated: " + s);
     }
     final File fromFile = match.moveSpecification().fromSquare().getFile();
-    return body.charAt(0) + Nulls.valueOf(fromFile.getLetter()) + Nulls.substring(body, 2)
-        + split.marker();
+    return body.charAt(0) + Nulls.valueOf(fromFile.getLetter()) + Nulls.substring(body, 2) + split.marker();
   }
 
   private static BodyAndMarker splitMarker(String s) {
     if (!s.isEmpty()) {
       final var last = s.charAt(s.length() - 1);
       if (last == '+' || last == '#') {
-        return new BodyAndMarker(Nulls.substring(s, 0, s.length() - 1),
-            Nulls.valueOf(last));
+        return new BodyAndMarker(Nulls.substring(s, 0, s.length() - 1), Nulls.valueOf(last));
       }
     }
     return new BodyAndMarker(s, "");

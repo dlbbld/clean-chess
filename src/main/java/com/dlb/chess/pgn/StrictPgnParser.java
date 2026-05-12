@@ -264,8 +264,8 @@ public final class StrictPgnParser {
       for (var j = i + 1; j < tagList.size(); j++) {
         if (Nulls.get(tagList, i).name().equals(Nulls.get(tagList, j).name())) {
           throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
-              SanValidationProblem.NONE, "The tag name must be unique. The tag name \""
-                  + Nulls.get(tagList, i).name() + "\" was used more than once.");
+              SanValidationProblem.NONE, "The tag name must be unique. The tag name \"" + Nulls.get(tagList, i).name()
+                  + "\" was used more than once.");
         }
       }
     }

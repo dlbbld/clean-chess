@@ -640,8 +640,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED,
           Message.getString("validation.san.insufficientlySpecified.rnbq.rank.eitherFileOrSquareRequired",
-              pieceType.getName(), Nulls.valueOf(sanConversion.fromRank().getNumber()),
-              toSquare.getName()));
+              pieceType.getName(), Nulls.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
     }
 
     final File onlyPossibleFromFile = calculateOnlyPossibleFile(legalMovesCandidates, sanConversion);

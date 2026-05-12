@@ -35,8 +35,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
   private static final Path CHA_FULL_RESULT = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "chaFullResult.txt");
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final Path MINE_OUT = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
-      "mineFullResult.txt");
+  private static final Path MINE_OUT = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "mineFullResult.txt");
 
   public static void main(String[] args) throws Exception {
     checkMineFullAgainstChaFull();

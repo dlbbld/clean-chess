@@ -108,8 +108,8 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     } else {
       pseudoLegalKingSafety = KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
     }
-    return new LegalMoveCalculation(Nulls.copyOfSet(legalMoveSet),
-        Nulls.copyOfSet(pseudoLegalMoveSet), pseudoLegalKingSafety);
+    return new LegalMoveCalculation(Nulls.copyOfSet(legalMoveSet), Nulls.copyOfSet(pseudoLegalMoveSet),
+        pseudoLegalKingSafety);
   }
 
 }

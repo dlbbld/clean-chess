@@ -310,10 +310,8 @@ public class Board {
 
   private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
 
-    final CastlingRight beforeCastlingRightWhite = Nulls.getLast(dynamicPositionList)
-        .castlingRightWhite();
-    final CastlingRight beforeCastlingRightBlack = Nulls.getLast(dynamicPositionList)
-        .castlingRightBlack();
+    final CastlingRight beforeCastlingRightWhite = Nulls.getLast(dynamicPositionList).castlingRightWhite();
+    final CastlingRight beforeCastlingRightBlack = Nulls.getLast(dynamicPositionList).castlingRightBlack();
 
     final Side havingMove = this.getHavingMove();
     final LegalMove moveToPerform = calculateLegalMove(this.getStaticPosition(), havingMove, moveSpecification);

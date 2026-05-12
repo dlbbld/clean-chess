@@ -22,8 +22,8 @@ public class TestPgnExportLineBreaks {
   private static final Path TEST_SOURCE_FILE_PATH = Nulls
       .pathResolve(PgnTestConstants.PGN_EXPORT_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, "01_linux.pgn");
 
-  private static final Path TEST_DESTINATION_FILE_PATH = Nulls
-      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "test_write_line_breaks.pgn");
+  private static final Path TEST_DESTINATION_FILE_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "test_write_line_breaks.pgn");
 
   @SuppressWarnings("static-method")
   @Test

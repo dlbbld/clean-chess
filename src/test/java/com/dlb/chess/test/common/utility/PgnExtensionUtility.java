@@ -18,8 +18,7 @@ public abstract class PgnExtensionUtility extends ChessConstants {
       throw new IllegalArgumentException("File does not end with \"" + PGN_FILE_EXTENSION_INCLUDING_DOT + "\"");
     }
 
-    return Nulls.substring(pgnFileName, 0,
-        pgnFileName.length() - PGN_FILE_EXTENSION_INCLUDING_DOT.length());
+    return Nulls.substring(pgnFileName, 0, pgnFileName.length() - PGN_FILE_EXTENSION_INCLUDING_DOT.length());
   }
 
 }

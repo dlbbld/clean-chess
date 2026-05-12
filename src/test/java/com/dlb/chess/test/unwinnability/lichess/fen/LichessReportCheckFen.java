@@ -33,10 +33,8 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
   private static void reportDifferencesQuick() throws IOException {
 
-    final var fenFilePathAmbronaResult = Nulls.pathResolve(FEN_FOLDER_PATH,
-        FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
-    final var fenFilePathMineResult = Nulls.pathResolve(FEN_FOLDER_PATH,
-        FEN_FILE_NAME_MINE_RESULT_QUICK);
+    final var fenFilePathAmbronaResult = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
+    final var fenFilePathMineResult = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT_QUICK);
 
     final var fenFilePathCompareQuick = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_COMPARE_QUICK);
 

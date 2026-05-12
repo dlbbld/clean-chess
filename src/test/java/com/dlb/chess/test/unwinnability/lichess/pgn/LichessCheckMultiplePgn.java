@@ -31,8 +31,8 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
   private static final int RESUME_FROM_PGN_NUMBER = 550000;
 
   // 2020 - March - 13.9 GB - 55,544,817 games
-  private static final Path MULTIPLE_PGN_FILE_PATH = Nulls
-      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "lichess_db_standard_rated_2020-03.pgn");
+  private static final Path MULTIPLE_PGN_FILE_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "lichess_db_standard_rated_2020-03.pgn");
 
   private static final Logger logger = Nulls.getLogger(LichessCheckMultiplePgn.class);
 

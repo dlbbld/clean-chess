@@ -60,10 +60,10 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   @SuppressWarnings("static-method")
   @Test
   void testMoveSuffixAnnotationSuccess() {
-    checkMoveSuffixAnnotationSuccess("01_example.pgn", Nulls.asList(MoveSuffixAnnotation.BLUNDER,
-        MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE));
-    checkMoveSuffixAnnotationSuccess("02_example.pgn", Nulls.asList(MoveSuffixAnnotation.BLUNDER,
-        MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.GOOD_MOVE));
+    checkMoveSuffixAnnotationSuccess("01_example.pgn",
+        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE));
+    checkMoveSuffixAnnotationSuccess("02_example.pgn",
+        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.GOOD_MOVE));
   }
 
   private static void checkMoveSuffixAnnotationSuccess(String pgnFileName,
@@ -77,8 +77,8 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   // Combined (SAN + suffix + commentary) — exception (non-commentary subset) and success
   // -------------------------------------------------------------------------------------------------
 
-  private static final Path PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = Nulls
-      .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/exception");
+  private static final Path PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = Nulls.pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH,
+      "moveSuffixAnnotationAndCommentary/exception");
 
   @SuppressWarnings("static-method")
   @Test
@@ -98,20 +98,18 @@ class TestStrictPgnParserMoveSuffixAnnotation {
     assertTrue(isException);
   }
 
-  private static final Path PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = Nulls
-      .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/success");
+  private static final Path PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = Nulls.pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH,
+      "moveSuffixAnnotationAndCommentary/success");
 
   @SuppressWarnings("static-method")
   @Test
   void testCombinedSuccess() {
     // SAN + suffix + commentary together. Commentary alone is covered by TestCommentaryStrict.
     checkCombinedSuccess("01_example.pgn", "pregame commentary", Nulls.asList("e4", "d5", "d4"),
-        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
-            MoveSuffixAnnotation.BRILLIANT_MOVE),
+        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE),
         Nulls.asList("commentWhite1", "commentBlack", "commentWhite2"));
     checkCombinedSuccess("02_example.pgn", "pregame commentary", Nulls.asList("d5", "a3", "Qd6"),
-        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
-            MoveSuffixAnnotation.BRILLIANT_MOVE),
+        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE),
         Nulls.asList("commentBlack1", "commentWhite", "commentBlack2"));
   }
 

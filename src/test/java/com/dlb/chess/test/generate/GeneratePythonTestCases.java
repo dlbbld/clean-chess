@@ -31,8 +31,7 @@ public class GeneratePythonTestCases implements EnumConstants {
 
   private static final int WRITE_LINE_INTERVAL = 100000;
   private static final Path PYTHON_SCRIPT = Nulls.pathResolve(
-      Nulls.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
-      "test_play_game.py");
+      Nulls.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"), "test_play_game.py");
 
   public static void main(String[] args) throws Exception {
     generatePythonTestCase();

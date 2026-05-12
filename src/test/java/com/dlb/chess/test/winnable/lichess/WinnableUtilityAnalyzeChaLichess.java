@@ -46,8 +46,7 @@ public class WinnableUtilityAnalyzeChaLichess {
 
   static {
     {
-      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.add(GameStatusAnalysis.STALEMATE);
       set.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_BOTH);
@@ -57,8 +56,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     }
 
     {
-      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.addAll(GAME_DRAW_SET);
       set.add(GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE);
@@ -67,8 +65,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     }
 
     {
-      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.addAll(GAME_DRAW_SET);
       set.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
