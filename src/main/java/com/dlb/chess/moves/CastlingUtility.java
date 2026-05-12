@@ -22,6 +22,7 @@ import com.dlb.chess.enums.CastlingCheck;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.google.common.collect.ImmutableList;
 
@@ -298,8 +299,7 @@ public abstract class CastlingUtility implements EnumConstants {
     final CastlingRight newCastlingRightHavingMove;
 
     // as always, the castling needs a separate treatment
-    final MoveSpecification moveSpecification = legalMove.moveSpecification();
-    if (calculateIsCastlingMove(moveSpecification)) {
+    if (legalMove.kind() == LegalMoveKind.CASTLING) {
       newCastlingRightHavingMoveBefore = CastlingRight.NONE;
       newCastlingRightHavingMove = oldCastlingRightHavingMove;
     } else {
@@ -377,7 +377,7 @@ public abstract class CastlingUtility implements EnumConstants {
       return previousLoss;
     }
     final Side havingMoveBefore = legalMove.havingMove();
-    if (calculateIsCastlingMove(legalMove.moveSpecification()) && havingMoveBefore == side) {
+    if (legalMove.kind() == LegalMoveKind.CASTLING && havingMoveBefore == side) {
       return CastlingRightLoss.CASTLED;
     }
     if (havingMoveBefore == side) {

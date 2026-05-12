@@ -121,46 +121,6 @@ While in the neighbourhood, also delete the now-orphan generators in `src/test/j
 The principle (carried over from the `GenerateUciMove` deletion): once the runtime computation supersedes a one-shot
 generator that printed code, the generator is dead test code. Git keeps the history; the repo doesn't need to.
 
-### Introduce `LegalMoveKind` on `LegalMove`; absorb `EnPassantRole`
-A legal move has a category — normal, castling, en passant capture, pawn two-square advance, promotion — that the move pipeline already knows when it constructs the `LegalMove`. Today consumers (and tests) recover that category by re-reading `MoveSpecification` fields one at a time (e.g. `move.moveSpecification().promotionPieceType() != PromotionPieceType.NONE` to ask "was this a promotion?"). That is a smell: the move pipeline knew the answer, then threw it away.
-
-The proposed shape is one mutually-exclusive enum on `LegalMove`:
-
-```java
-public enum LegalMoveKind {
-  NORMAL,
-  CASTLING,
-  EN_PASSANT_CAPTURE,
-  PAWN_TWO_SQUARE_ADVANCE,
-  PROMOTION
-}
-```
-
-```java
-public record LegalMove(
-    MoveSpecification moveSpecification,
-    Piece movingPiece,
-    Piece pieceCaptured,
-    LegalMoveKind kind) {
-}
-```
-
-This **replaces / absorbs** `EnPassantRole` rather than sitting beside it as a narrow `promotionRole`. Adding `promotionRole` next to `enPassantRole` would multiply the number of redundant booleans / role-enums; one mutually-exclusive `kind` is cleaner.
-
-Why this is the right shape even if tests are the first consumer: the value isn't test scaffolding. It is true metadata of a legal move, computed at the moment the engine knows the move is legal. Tests using it first is fine — what matters is that the metadata belongs on the type, not in scattered "calculate was last move X?" helpers.
-
-Name caution: prefer `LegalMoveKind` over `MoveType`. `MoveType` is broad enough that future readers will expect it to describe arbitrary move concepts; `LegalMoveKind` is precise — it categorises an already-legal move per this engine's move pipeline.
-
-API trade-off: expands `LegalMove`'s public surface by one field/enum, but lets the project remove the more awkward public `EnPassantRole` and a family of "calculate-was-last-move-X" utility methods. Net effect is **API clarification**, not API bloat.
-
-Surfaced during the API-surface audit by `PromotionUtility.calculateIsPromotionLastMove(ChessBoard)`, which had only test callers and was moved to a private test helper as a stop-gap; the helper still re-reads `MoveSpecification` to answer the question. Once `LegalMoveKind` lands, the test helper collapses to `board.getLastMove().kind() == LegalMoveKind.PROMOTION`, the `EnPassantRole` enum disappears, and the family of "is this kind of move?" helpers on production utilities all collapse to direct `kind()` reads.
-
-- [ ] Define `LegalMoveKind` enum; decide final value set (the five above as a starting list)
-- [ ] Add `kind()` component to `LegalMove`; populate at construction in the rule pipeline
-- [ ] Remove `EnPassantRole` enum and `LegalMove.enPassantRole()`; switch callers to `kind()`
-- [ ] Sweep production "calculate-was-last-move-X" helpers (`PromotionUtility.calculateIsPromotion(...)`, `CastlingUtility.calculateIsCastlingMove(...)`, the various enPassant-checks) and collapse to direct `kind()` reads; delete the helpers if no caller remains
-- [ ] Update the private `calculateIsPromotionLastMove` helpers in `TestPerformMoveSeveralStates` and similar test classes to use `kind()` directly
-
 ### Records carry data, not behavior — sweep for violations
 The project rule (documented in `coding-conventions.md`): records carry data; domain logic that operates on them lives in dedicated utility / service classes. Permitted on a record: compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals` / `hashCode` / `toString`. Domain-operation methods are not.
 

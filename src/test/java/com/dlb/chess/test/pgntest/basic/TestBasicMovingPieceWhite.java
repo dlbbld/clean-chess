@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.model.EnPassantRole;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
@@ -48,7 +48,7 @@ class TestBasicMovingPieceWhite extends AbstractTestBasic {
         case "04_white_moving_piece_queen.pgn" -> checkMovingPiece(D1, D3, WHITE_QUEEN, board);
         case "05_white_moving_piece_king.pgn" -> checkMovingPiece(E1, E2, WHITE_KING, board);
         case "06_white_moving_piece_pawn.pgn" -> checkMovingPiece(E2, E4, WHITE_PAWN, board,
-            EnPassantRole.TWO_SQUARE_ADVANCE);
+            LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE);
         default -> throw new IllegalArgumentException();
       }
     }

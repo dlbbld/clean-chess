@@ -23,6 +23,7 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.san.SanSymbol;
 import com.dlb.chess.san.SanTerminalMarker;
@@ -442,7 +443,8 @@ public class LibraryCarlosBoard {
           .convertPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
       final Piece pieceCaptured = EnumConversionUtility
           .convertPiece(NonNullWrapperLibraryCarlos.getCapturedPiece(moveBackup));
-      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured,
+          calculateKind(moveBackup));
       result.add(legalMove);
     }
     return result;
@@ -461,7 +463,33 @@ public class LibraryCarlosBoard {
         .convertToMyPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
     final Piece pieceCaptured = EnumConversionUtility
         .convertToMyPiece(NonNullWrapperLibraryCarlos.getCapturedPiece(moveBackup));
-    return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, calculateKind(moveBackup));
+  }
+
+  private static LegalMoveKind calculateKind(MoveBackup moveBackup) {
+    if (moveBackup.isCastleMove()) {
+      return LegalMoveKind.CASTLING;
+    }
+    if (moveBackup.isEnPassantMove()) {
+      return LegalMoveKind.EN_PASSANT_CAPTURE;
+    }
+    if (calculateIsPromotion(moveBackup)) {
+      return LegalMoveKind.PROMOTION;
+    }
+    if (calculateIsPawnTwoSquareAdvance(moveBackup)) {
+      return LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE;
+    }
+    return LegalMoveKind.NORMAL;
+  }
+
+  private static boolean calculateIsPawnTwoSquareAdvance(MoveBackup moveBackup) {
+    if (!calculateIsPawnMove(moveBackup)) {
+      return false;
+    }
+    final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
+    final int fromRank = move.getFrom().getRank().ordinal();
+    final int toRank = move.getTo().getRank().ordinal();
+    return Math.abs(fromRank - toRank) == 2;
   }
 
   public Square getEnPassantCaptureTargetSquare() {

@@ -15,6 +15,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Maps;
@@ -190,7 +191,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
   }
 
   public static Square calculateEnPassantCaptureTargetSquare(LegalMove legalMove) {
-    if (legalMove.enPassantRole().createsEnPassantTarget()) {
+    if (legalMove.kind() == LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE) {
       return calculateEnPassantCaptureTargetSquareForTwoSquareAdvanceMove(legalMove.havingMove(),
           legalMove.moveSpecification());
     }

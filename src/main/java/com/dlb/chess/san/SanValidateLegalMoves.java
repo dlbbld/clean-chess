@@ -27,6 +27,7 @@ import com.dlb.chess.enums.MovementCheck;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.model.PseudoLegalMove;
 import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.moves.CastlingUtility;
@@ -146,7 +147,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   private static Set<LegalMove> filterCastlingMove(Set<LegalMove> allLegalMoves) {
     final Set<LegalMove> filteredLegalMoves = new TreeSet<>();
     for (final LegalMove legalMove : allLegalMoves) {
-      if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())) {
+      if (legalMove.kind() == LegalMoveKind.CASTLING) {
         filteredLegalMoves.add(legalMove);
       }
     }

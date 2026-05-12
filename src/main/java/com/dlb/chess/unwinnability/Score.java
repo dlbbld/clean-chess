@@ -7,8 +7,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.moves.CastlingUtility;
-import com.dlb.chess.moves.PromotionUtility;
+import com.dlb.chess.model.LegalMoveKind;
 
 // Figure 12 Score routine used in Figure 5. Algorithm Going-to-corner is defined in Figure 13.
 class Score {
@@ -81,7 +80,7 @@ class Score {
     // in the castling we don't set the king as the moving piece. querying the
     // moving piece type would trigger an error as the moving piece is not set.
     // so we must treat it separately, otherwise there is a runtime exception.
-    if (CastlingUtility.calculateIsCastlingMove(legalMove.moveSpecification())) {
+    if (legalMove.kind() == LegalMoveKind.CASTLING) {
       return false;
     }
     return legalMove.movingPiece().getPieceType() == PieceType.PAWN;
@@ -107,7 +106,7 @@ class Score {
   }
 
   private static boolean calculateIsPromotionToHeavyPiece(LegalMove legalMove) {
-    return PromotionUtility.calculateIsPromotion(legalMove.moveSpecification())
+    return legalMove.kind() == LegalMoveKind.PROMOTION
         && (legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.QUEEN
             || legalMove.moveSpecification().promotionPieceType() == PromotionPieceType.ROOK);
   }

@@ -17,6 +17,7 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.model.PseudoLegalMove;
 import com.google.common.collect.ImmutableSet;
 
@@ -89,7 +90,10 @@ public abstract class AbstractLegalMoves implements EnumConstants {
       }
 
       if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
-        final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+        // This helper services non-pawn, non-castling moves only (rook / knight / bishop / queen / king-non-castling).
+        // Pawn moves go through PawnLegalMoves; castling goes through KingCastlingLegalMoves. None of those routes lead
+        // here, so the kind is always NORMAL.
+        final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured, LegalMoveKind.NORMAL);
         legalMoveSet.add(legalMove);
       } else {
         final PseudoLegalMove pseudoLegalMove = new PseudoLegalMove(moveSpecification, movingPiece, pieceCaptured);

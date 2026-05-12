@@ -7,6 +7,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.moves.CastlingUtility;
 
 //Figure 13 Going-to-corner routine used in Figure 12.
@@ -23,7 +24,7 @@ class GoingToCorner implements EnumConstants {
     // let s be the square P is moving to
     final Square toSquare;
     final Square fromSquare;
-    if (CastlingUtility.calculateIsCastlingMove(m.moveSpecification())) {
+    if (m.kind() == LegalMoveKind.CASTLING) {
       movingPiece = m.movingPiece();
       toSquare = CastlingUtility.calculateKingCastlingTo(m.havingMove(), m.moveSpecification());
       fromSquare = CastlingUtility.calculateKingCastlingFrom(m.havingMove(), m.moveSpecification());

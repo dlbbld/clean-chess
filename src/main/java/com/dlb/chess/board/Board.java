@@ -33,8 +33,8 @@ import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
-import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
@@ -402,7 +402,7 @@ public class Board {
 
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       final Piece king = Piece.calculateKingPiece(havingMove);
-      return new LegalMove(moveSpecification, king, Piece.NONE);
+      return new LegalMove(moveSpecification, king, Piece.NONE, LegalMoveKind.CASTLING);
     }
 
     final Piece movingPiece = staticPosition.get(moveSpecification.fromSquare());
@@ -411,16 +411,17 @@ public class Board {
       final Square squareOfCapturedPawnForEnPassantCapture = EnPassantCaptureUtility
           .calculateSquareOfCapturedPawnForEnPassantCapture(havingMove, moveSpecification);
       final Piece pieceCaptured = staticPosition.get(squareOfCapturedPawnForEnPassantCapture);
-      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, EnPassantRole.EN_PASSANT_CAPTURE);
+      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, LegalMoveKind.EN_PASSANT_CAPTURE);
     }
     if (PromotionUtility.calculateIsPromotionNewMove(moveSpecification)) {
       final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-      return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, LegalMoveKind.PROMOTION);
     }
     final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-    final var enPassantRole = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece,
-        moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE : EnPassantRole.NONE;
-    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
+    final var kind = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece, moveSpecification)
+        ? LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE
+        : LegalMoveKind.NORMAL;
+    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, kind);
   }
 
   /**
