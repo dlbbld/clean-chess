@@ -18,10 +18,7 @@ public class KingNonCastlingSanValidateStaticallyStrictCalculate extends Abstrac
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final KingNonCastlingSanValidateStaticallyStrict sanEnum : KingNonCastlingSanValidateStaticallyStrict
-        .values()) {
-      final String enumName = NonNullWrapperCommon.name(sanEnum);
-
+    for (final String enumName : KingNonCastlingSanValidateStaticallyStrict.VALUES) {
       final String parse = NonNullWrapperCommon.toLowerCase(enumName);
       final var fromFile = File.NONE;
       final var fromRank = Rank.NONE;

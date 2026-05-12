@@ -53,28 +53,11 @@ public class PawnSanValidateStaticallyStrictCalculate extends AbstractSanValidat
   }
 
   private static List<String> calculateEnumNameList(Side side) {
-
-    switch (side) {
-      case WHITE: {
-        final List<String> enumNameList = new ArrayList<>();
-        for (final PawnWhiteSanValidateStaticallyStrict sanEnum : PawnWhiteSanValidateStaticallyStrict.values()) {
-          final String enumName = NonNullWrapperCommon.name(sanEnum);
-          enumNameList.add(enumName);
-        }
-        return enumNameList;
-      }
-      case BLACK: {
-        final List<String> enumNameList = new ArrayList<>();
-        for (final PawnBlackSanValidateStaticallyStrict sanEnum : PawnBlackSanValidateStaticallyStrict.values()) {
-          final String enumName = NonNullWrapperCommon.name(sanEnum);
-          enumNameList.add(enumName);
-        }
-        return enumNameList;
-      }
-      case NONE:
-      default:
-        throw new IllegalArgumentException();
-    }
+    return switch (side) {
+      case WHITE -> new ArrayList<>(PawnWhiteSanValidateStaticallyStrict.VALUES);
+      case BLACK -> new ArrayList<>(PawnBlackSanValidateStaticallyStrict.VALUES);
+      case NONE -> throw new IllegalArgumentException();
+    };
   }
 
 }

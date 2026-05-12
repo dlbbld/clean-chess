@@ -15,8 +15,7 @@ public class QueenSanValidateStaticallyStrictCalculate extends AbstractSanValida
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final QueenSanValidateStaticallyStrict sanEnum : QueenSanValidateStaticallyStrict.values()) {
-      final String enumName = NonNullWrapperCommon.name(sanEnum);
+    for (final String enumName : QueenSanValidateStaticallyStrict.VALUES) {
       final SanValidationFromTo model = calculateFromFileAndOrRankTo(enumName, QUEEN);
       populateMap(sanValidateMap, model, QUEEN);
     }

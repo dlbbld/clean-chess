@@ -15,8 +15,7 @@ public class RookSanValidateStaticallyStrictCalculate extends AbstractSanValidat
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final RookSanValidateStaticallyStrict sanEnum : RookSanValidateStaticallyStrict.values()) {
-      final String enumName = NonNullWrapperCommon.name(sanEnum);
+    for (final String enumName : RookSanValidateStaticallyStrict.VALUES) {
       final SanValidationFromTo model = calculateFromFileXorRankTo(enumName, ROOK);
       populateMap(sanValidateMap, model, ROOK);
     }
