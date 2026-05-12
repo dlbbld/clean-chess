@@ -336,6 +336,21 @@ For clean-chess, adapt: short project description, copyright line, GPL v3 refere
 - [ ] Performance check: with disable flag on, suite within ~10% of current
 - [ ] Targeted regression tests on positions that should auto-terminate
 
+### Pawn-wall false positives the local heuristic cannot catch
+
+The current `PawnWall.calculateHasPawnWall` heuristic checks: blocked pawn chain forms a separator + no bishop of either side can reach an opponent pawn (BFS through empty/enemy squares). It misses cases where the **king** can capture undefended wall pawns to walk through the zigzag, possibly after a bishop maneuvers to clear a square. CHA-grade reachability analysis (king walks with capture-of-undefended-pawns + bishop coordination) is needed.
+
+Concrete commented-out fixture in `TestPawnWallUtility.testHasPawnWallLichessHelper`:
+
+```
+7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 0 1
+```
+
+Three white light-square bishops (b3, c2, d1), all black pawns on dark squares — local check returns `true`. But white king walks `g1 → f1 → e1 → d2 → c3 → b2 → a3` capturing the undefended a3 pawn. Not a pawn wall.
+
+- [ ] Replace the local pawn-wall predicate with (or back-stop it by) a CHA-quick call once auto-CHA is wired in
+- [ ] Re-enable the commented-out fixture above and verify it returns `false`
+
 ---
 
 ## Future release — python-chess as primary cross-validation reference

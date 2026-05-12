@@ -1,6 +1,9 @@
 package com.dlb.chess.test.winnable;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -12,7 +15,6 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
@@ -41,14 +43,13 @@ public class PawnWall {
       if (!calculateIsAllPawnsBlocked(board)) {
         return false;
       }
-      // if one side has a bishop we only allow only opponent pawns of different colour
+      // A bishop only threatens the wall if it can actually reach an opponent pawn through a
+      // sequence of diagonal moves. Same-square-colour is necessary but not sufficient: a bishop
+      // trapped behind its own pawns (e.g. h2 with f4 and d4 of the same side on its diagonals)
+      // cannot reach any opponent pawn no matter what colour the opponent pawns sit on.
       for (final Side side : Side.REAL) {
-        for (final SquareType squareType : SquareType.REAL) {
-          if (calculateHasOneOrMultipleBishopForSpecifiedColor(side, staticPosition, squareType)
-              && !calculateHasOnlyPawnsForSpecifiedColor(side.getOppositeSide(), staticPosition,
-                  squareType.getOppositeSquareType())) {
-            return false;
-          }
+        if (calculateAnyBishopCanReachOpponentPawn(staticPosition, side)) {
+          return false;
         }
       }
       return calculateIsHasPawnWallAfterPrecheck(board);
@@ -525,26 +526,79 @@ public class PawnWall {
     }
   }
 
-  private static boolean calculateHasOneOrMultipleBishopForSpecifiedColor(Side side, StaticPosition staticPosition,
-      SquareType squareType) {
-    for (final Square boardSquare : Square.REAL) {
-      final Piece pieceOnSquare = staticPosition.get(boardSquare);
-      if (isOwnPiece(side, pieceOnSquare) && pieceOnSquare.getPieceType() == PieceType.BISHOP
-          && boardSquare.getSquareType() == squareType) {
-        return true;
+  /**
+   * Returns {@code true} iff any bishop of {@code side} has at least one opponent pawn in its diagonal-reachability
+   * set on the current static position. Reachability is computed by BFS from each bishop along all four diagonal
+   * directions: empty squares are passed through, opponent pieces can be captured (terminate that ray), own pieces
+   * block the bishop entirely.
+   *
+   * <p>
+   * Used by the pawn-wall heuristic: a bishop can only threaten the wall if it can actually capture a pawn that's
+   * part of the wall. A bishop trapped behind its own pawns is harmless even if opponent pawns share its square
+   * colour.
+   */
+  private static boolean calculateAnyBishopCanReachOpponentPawn(StaticPosition staticPosition, Side side) {
+    for (final Square bishopSquare : Square.REAL) {
+      final Piece piece = staticPosition.get(bishopSquare);
+      if (piece == Piece.NONE || piece.getSide() != side || piece.getPieceType() != PieceType.BISHOP) {
+        continue;
+      }
+      final Set<Square> reach = calculateBishopReach(staticPosition, bishopSquare, side);
+      for (final Square reachSquare : reach) {
+        final Piece pieceOnReach = staticPosition.get(reachSquare);
+        if (pieceOnReach != Piece.NONE && pieceOnReach.getSide() != side
+            && pieceOnReach.getPieceType() == PieceType.PAWN) {
+          return true;
+        }
       }
     }
     return false;
   }
 
-  private static boolean calculateHasOnlyPawnsForSpecifiedColor(Side side, StaticPosition staticPosition,
-      SquareType squareType) {
-    for (final Square boardSquare : Square.REAL) {
-      if (staticPosition.isOwnPawn(boardSquare, side) && boardSquare.getSquareType() != squareType) {
-        return false;
+  private static final int[][] BISHOP_DIAGONALS = { { 1, 1 }, { 1, -1 }, { -1, 1 }, { -1, -1 } };
+
+  /**
+   * BFS the bishop's transitive diagonal reach from {@code bishopSquare} on the current position. A square is in the
+   * returned set if the bishop can stand on it after some sequence of legal bishop moves (sliding through empty
+   * squares only; opponent pieces can be the terminal square — captured; own pieces block the ray).
+   */
+  private static Set<Square> calculateBishopReach(StaticPosition staticPosition, Square bishopSquare, Side side) {
+    final Set<Square> reachable = new TreeSet<>();
+    final Set<Square> visited = new HashSet<>();
+    final Deque<Square> queue = new ArrayDeque<>();
+    queue.add(bishopSquare);
+    visited.add(bishopSquare);
+
+    while (!queue.isEmpty()) {
+      final Square current = queue.poll();
+      for (final int[] dir : BISHOP_DIAGONALS) {
+        int file = current.getFile().getNumber();
+        int rank = current.getRank().getNumber();
+        while (true) {
+          file += dir[0];
+          rank += dir[1];
+          if (file < 1 || file > 8 || rank < 1 || rank > 8) {
+            break;
+          }
+          final Square next = Square.calculate(file, rank);
+          final Piece pieceOnNext = staticPosition.get(next);
+          if (pieceOnNext == Piece.NONE) {
+            reachable.add(next);
+            if (visited.add(next)) {
+              queue.add(next);
+            }
+          } else if (pieceOnNext.getSide() != side) {
+            // opponent piece — bishop can capture (terminal); ray stops here
+            reachable.add(next);
+            break;
+          } else {
+            // own piece — bishop is blocked, this square is NOT reachable
+            break;
+          }
+        }
       }
     }
-    return true;
+    return reachable;
   }
 
   private static final List<Square> LEFTMOST_FILE_WHITE = NonNullWrapperCommon.listOf(Square.A1, Square.A2, Square.A3,

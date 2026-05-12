@@ -396,8 +396,17 @@ class TestPawnWallUtility extends PawnWall {
     testHelperLichess("8/8/1k6/p1p1p1p1/P1P1P1Pb/7K/4B3/8 w - - 49 80", true); // blocked pawns with bishops
     testHelperLichess("8/8/p7/Pp1p1p1k/1P1P1Pp1/3b2P1/3K1B2/8 b - - 4 54", true); // blocked pawns with bishops
 
-    // TODO this test case we cannot solve yet with bishops on opponent pawns on both square types
-    // testHelperLichess("5k2/8/3p4/3p1p1p/p1pP1P1P/PpP2K2/1P5B/8 w - - 20 67", true); // blocked pawns with bishops
+    testHelperLichess("5k2/8/3p4/3p1p1p/p1pP1P1P/PpP2K2/1P5B/8 w - - 20 67", true); // blocked pawns with bishops;
+                                                                                    // bishop on h2 trapped by own
+                                                                                    // pawns, cannot reach any black
+                                                                                    // pawn
+
+    // Known false positive — deferred to the Auto-CHA / DeepSquare release (see tasks.md). The bishop-reachability
+    // check correctly determines no white bishop can capture any black pawn, so the local pawn-wall predicate fires.
+    // But the position is not a pawn wall: the white king can walk g1 -> f1 -> e1 -> d2 -> c3 -> b2 -> a3 and capture
+    // the undefended a3 pawn, breaching the wall. Resolving this requires king-reachability with capture-of-undefended
+    // pawns plus possibly bishop maneuvering to clear king paths — essentially partial CHA.
+    // testHelperLichess("7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 0 1", false);
 
     testHelperLichess("8/4k3/4b3/1p1p1p1p/1P1P1P1P/8/8/7K w - - 46 78", true); // blocked pawns with bishops
     testHelperLichess("8/1k6/1p1pB3/pPpP4/P1Pp1p1p/3PbP1P/6K1/8 w - - 48 85", true); // blocked pawns with bishops
@@ -603,6 +612,7 @@ class TestPawnWallUtility extends PawnWall {
     testHelperLichess("8/7p/4npp1/1pk5/1P6/2K5/1r1r4/8 b - - 0 52", false); // stalemate or king only
     testHelperLichess("8/5pp1/6kp/7P/5n2/p7/6r1/7K b - - 0 58", false); // stalemate or king only
 
+    testHelperLichess("7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 10 100", true); // ambrona
   }
 
   private static void testHelperLichess(String fen, boolean isExpectedTrue) {
