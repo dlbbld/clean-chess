@@ -89,6 +89,38 @@ The fix is to promote these single-step relationships to data:
 - [ ] Folds naturally into the DeepSquare rename moment — this kind of foundational rigor is exactly what the rename signals
 - [ ] **Companion concern — bloated lookup-table implementations.** `PawnDiagonalSquares` is 826 lines of generated code (per-square `addWhiteA1`, `addWhiteA2`, … methods) to express what is conceptually "for each pawn from-square, the 0–2 diagonal capture squares." The same shape recurs across the `com.dlb.chess.squares.emptyboard.*` family (`Knight`, `Bishop`, `Rook`, `Queen`, `King`, `PawnOneAdvance`, `PawnTwoAdvance`, `PawnAnyAdvance`). These tables are correctly precomputed, but their implementation should be a single `static {}` initializer that loops over `Square.REAL` and computes each entry via simple file/rank arithmetic — not hundreds of method-per-square stubs. Replacing them collapses ~thousand-line files to dozens of lines while preserving the precomputed-table API. Same theme as the main bullet: keep the lookup, sane the implementation.
 
+### SAN-validator generated-enum cleanup
+Same shape as the (already-done) `UciValidateHelper` replacement: seven hand-generated enums under
+`src/test/java/com/dlb/chess/test/san/validate/statically/strict/enums/` carry **5,105 lines** of flat SAN-string
+constants (`QueenSanValidateStaticallyStrict` alone is 2,356 lines). Each is used exclusively via `.values()` +
+`.name()` — no caller references a specific enum constant by name, verified by `grep`. The companion generator
+scripts under `src/test/java/com/dlb/chess/test/generate/san/strict/` (~1,262 lines, 7 `Generate*SanValidateStrict`
+files plus an abstract base) produced these enums via a one-shot `main()` that prints constants for copy-paste.
+
+The empty-board geometry tables now exist as data (post the "Profound-level square geometry" refactor), so the SAN
+strings the enums encode can be **computed at class load** via the same loops — one `Set<String>` per piece,
+populated in a static initializer using `AbstractEmptyBoardSquares` + the disambiguation logic the generator
+scripts already contain. The generators become deletable.
+
+Action items:
+- [ ] Audit `*SanValidateStaticallyStrict*Calculate.java` callers to confirm they need only the SAN-string set, not the enum type
+- [ ] Replace each of the 7 enums with a `static final ImmutableSet<String>` populated in a static initializer; the
+  generation logic lives in the production file's `static {}` (mirroring the empty-board pattern)
+- [ ] Delete the 7 `Generate*SanValidateStrict.java` scripts + `AbstractGenerateSanValidateStrict.java` + `AbstractPawnSanValidateStrict.java`
+- [ ] Verify total bytecode shrink (~5k source lines → ~100; not as JAR-dominant as `UciValidateHelper` was since these are in `src/test`)
+
+While in the neighbourhood, also delete the now-orphan generators in `src/test/java/com/dlb/chess/test/generate/squares/`:
+- [ ] `GenerateEmptyBoardSquares.java` (723 lines) — produced the per-square `addXX(map)` methods that the
+  "Profound-level square geometry" refactor replaced with arithmetic loops
+- [ ] `GeneratePawnDiagonalSquares.java` — same status
+- [ ] `GenerateSquareFlip.java` — produced the `Square.flip` 65-case switch; the switch stays (it *is* the lookup
+  table), but the generator that printed it is no longer load-bearing
+- [ ] `GeneratePawnMoveType.java` if unreferenced — verify via grep first
+- [ ] Drop the `com.dlb.chess.test.generate.squares` package if it ends up empty
+
+The principle (carried over from the `GenerateUciMove` deletion): once the runtime computation supersedes a one-shot
+generator that printed code, the generator is dead test code. Git keeps the history; the repo doesn't need to.
+
 ### Introduce `LegalMoveKind` on `LegalMove`; absorb `EnPassantRole`
 A legal move has a category — normal, castling, en passant capture, pawn two-square advance, promotion — that the move pipeline already knows when it constructs the `LegalMove`. Today consumers (and tests) recover that category by re-reading `MoveSpecification` fields one at a time (e.g. `move.moveSpecification().promotionPieceType() != PromotionPieceType.NONE` to ask "was this a promotion?"). That is a smell: the move pipeline knew the answer, then threw it away.
 

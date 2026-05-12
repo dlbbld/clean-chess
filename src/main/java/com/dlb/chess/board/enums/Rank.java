@@ -1,5 +1,8 @@
 package com.dlb.chess.board.enums;
 
+import java.util.EnumMap;
+
+import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableList;
@@ -65,111 +68,95 @@ public enum Rank {
     throw new ProgrammingMistakeException("The code for calculating the rank is wrong");
   }
 
-  public static Rank calculatePreviousRank(Side havingMove, Rank rank) {
-    if (havingMove == Side.NONE || rank == NONE || !calculateHasPreviousRank(havingMove, rank)) {
-      throw new IllegalArgumentException();
+  // ---------------------------------------------------------------------------------------------
+  // Single-step rank-geometry lookup tables.
+  //
+  // For each Side, a mapping from each Rank to its previous / next neighbour from that side's
+  // perspective. Absent entries mean the source rank is on the relevant board edge.
+  // ---------------------------------------------------------------------------------------------
+
+  private static EnumMap<Side, EnumMap<Rank, Rank>> buildOffsetTable(int offsetForWhite) {
+    final EnumMap<Side, EnumMap<Rank, Rank>> result = NonNullWrapperCommon.newEnumMap(Side.class);
+    for (final Side side : Side.REAL) {
+      final int offset = side == Side.WHITE ? offsetForWhite : -offsetForWhite;
+      final EnumMap<Rank, Rank> sideMap = NonNullWrapperCommon.newEnumMap(Rank.class);
+      for (final Rank source : REAL) {
+        final int targetNumber = source.getNumber() + offset;
+        if (targetNumber >= 1 && targetNumber <= 8) {
+          sideMap.put(source, calculateByNumberInternal(targetNumber));
+        }
+      }
+      result.put(side, sideMap);
     }
-    return switch (havingMove) {
-      case BLACK -> calculateNextRankWhiteView(rank);
-      case WHITE -> calculatePreviousRankWhiteView(rank);
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return result;
   }
 
-  public static Rank calculateNextRank(Side havingMove, Rank rank) {
-    if (havingMove == Side.NONE || rank == NONE || !calculateHasNextRank(havingMove, rank)) {
-      throw new IllegalArgumentException();
+  private static Rank calculateByNumberInternal(int number) {
+    for (final Rank rank : REAL) {
+      if (rank.getNumber() == number) {
+        return rank;
+      }
     }
-
-    return switch (havingMove) {
-      case BLACK -> calculatePreviousRankWhiteView(rank);
-      case WHITE -> calculateNextRankWhiteView(rank);
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    throw new ProgrammingMistakeException("No rank for number " + number);
   }
+
+  private static final EnumMap<Side, EnumMap<Rank, Rank>> PREVIOUS_RANK = buildOffsetTable(-1);
+  private static final EnumMap<Side, EnumMap<Rank, Rank>> NEXT_RANK = buildOffsetTable(1);
 
   public static boolean calculateHasPreviousRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-
-    return switch (havingMove) {
-      case BLACK -> rank != RANK_8;
-      case WHITE -> rank != RANK_1;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return NonNullWrapperCommon.get(PREVIOUS_RANK, havingMove).containsKey(rank);
   }
 
-  public static boolean calculateHasPreviousPreviousRank(Side havingMove, Rank rank) {
+  public static Rank calculatePreviousRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-
-    if (!calculateHasPreviousRank(havingMove, rank)) {
-      return false;
+    final EnumMap<Rank, Rank> sideMap = NonNullWrapperCommon.get(PREVIOUS_RANK, havingMove);
+    if (!sideMap.containsKey(rank)) {
+      throw new IllegalArgumentException();
     }
-    final Rank previousRank = calculatePreviousRank(havingMove, rank);
-
-    return calculateHasPreviousRank(havingMove, previousRank);
+    return NonNullWrapperCommon.get(sideMap, rank);
   }
 
   public static boolean calculateHasNextRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-    return switch (havingMove) {
-      case BLACK -> rank != RANK_1;
-      case WHITE -> rank != RANK_8;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return NonNullWrapperCommon.get(NEXT_RANK, havingMove).containsKey(rank);
+  }
+
+  public static Rank calculateNextRank(Side havingMove, Rank rank) {
+    if (havingMove == Side.NONE || rank == NONE) {
+      throw new IllegalArgumentException();
+    }
+    final EnumMap<Rank, Rank> sideMap = NonNullWrapperCommon.get(NEXT_RANK, havingMove);
+    if (!sideMap.containsKey(rank)) {
+      throw new IllegalArgumentException();
+    }
+    return NonNullWrapperCommon.get(sideMap, rank);
+  }
+
+  public static boolean calculateHasPreviousPreviousRank(Side havingMove, Rank rank) {
+    if (havingMove == Side.NONE || rank == NONE) {
+      throw new IllegalArgumentException();
+    }
+    if (!calculateHasPreviousRank(havingMove, rank)) {
+      return false;
+    }
+    return calculateHasPreviousRank(havingMove, calculatePreviousRank(havingMove, rank));
   }
 
   public static boolean calculateHasNextNextRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-
     if (!calculateHasNextRank(havingMove, rank)) {
       return false;
     }
-    final Rank nextRank = calculateNextRank(havingMove, rank);
-
-    return calculateHasNextRank(havingMove, nextRank);
-  }
-
-  private static Rank calculatePreviousRankWhiteView(Rank rank) {
-
-    return switch (rank) {
-      case RANK_1 -> throw new IllegalArgumentException();
-      case RANK_2 -> RANK_1;
-      case RANK_3 -> RANK_2;
-      case RANK_4 -> RANK_3;
-      case RANK_5 -> RANK_4;
-      case RANK_6 -> RANK_5;
-      case RANK_7 -> RANK_6;
-      case RANK_8 -> RANK_7;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  private static Rank calculateNextRankWhiteView(Rank rank) {
-    return switch (rank) {
-      case RANK_1 -> RANK_2;
-      case RANK_2 -> RANK_3;
-      case RANK_3 -> RANK_4;
-      case RANK_4 -> RANK_5;
-      case RANK_5 -> RANK_6;
-      case RANK_6 -> RANK_7;
-      case RANK_7 -> RANK_8;
-      case RANK_8 -> throw new IllegalArgumentException();
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return calculateHasNextRank(havingMove, calculateNextRank(havingMove, rank));
   }
 
   public static Rank calculateGroundRank(Side havingMove) {

@@ -1,5 +1,7 @@
 package com.dlb.chess.board.enums;
 
+import java.util.EnumMap;
+
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -80,116 +82,95 @@ public enum File {
     throw new ProgrammingMistakeException("The code for calculating the file by letter is wrong");
   }
 
-  private static File calculateLeftFileWhiteView(File file) {
-    return switch (file) {
-      case FILE_A -> throw new IllegalArgumentException();
-      case FILE_B -> FILE_A;
-      case FILE_C -> FILE_B;
-      case FILE_D -> FILE_C;
-      case FILE_E -> FILE_D;
-      case FILE_F -> FILE_E;
-      case FILE_G -> FILE_F;
-      case FILE_H -> FILE_G;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+  // ---------------------------------------------------------------------------------------------
+  // Single-step file-geometry lookup tables.
+  //
+  // For each Side, a mapping from each File to its left / right neighbour from that side's
+  // perspective. Absent entries mean the source file is on the relevant board edge.
+  // ---------------------------------------------------------------------------------------------
+
+  private static EnumMap<Side, EnumMap<File, File>> buildOffsetTable(int offsetForWhite) {
+    final EnumMap<Side, EnumMap<File, File>> result = NonNullWrapperCommon.newEnumMap(Side.class);
+    for (final Side side : Side.REAL) {
+      final int offset = side == Side.WHITE ? offsetForWhite : -offsetForWhite;
+      final EnumMap<File, File> sideMap = NonNullWrapperCommon.newEnumMap(File.class);
+      for (final File source : REAL) {
+        final int targetNumber = source.getNumber() + offset;
+        if (targetNumber >= 1 && targetNumber <= 8) {
+          sideMap.put(source, calculateByNumber(targetNumber));
+        }
+      }
+      result.put(side, sideMap);
+    }
+    return result;
   }
 
-  private static File calculateRightFileWhiteView(File file) {
-    return switch (file) {
-      case FILE_A -> FILE_B;
-      case FILE_B -> FILE_C;
-      case FILE_C -> FILE_D;
-      case FILE_D -> FILE_E;
-      case FILE_E -> FILE_F;
-      case FILE_F -> FILE_G;
-      case FILE_G -> FILE_H;
-      case FILE_H -> throw new IllegalArgumentException();
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+  private static File calculateByNumber(int number) {
+    for (final File file : REAL) {
+      if (file.getNumber() == number) {
+        return file;
+      }
+    }
+    throw new ProgrammingMistakeException("No file for number " + number);
   }
 
-  public static final boolean calculateHasLeftFile(final Side havingMove, final File file) {
+  private static final EnumMap<Side, EnumMap<File, File>> LEFT_FILE = buildOffsetTable(-1);
+  private static final EnumMap<Side, EnumMap<File, File>> RIGHT_FILE = buildOffsetTable(1);
+
+  public static boolean calculateHasLeftFile(Side havingMove, File file) {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
-
-    return switch (havingMove) {
-      case BLACK -> file != FILE_H;
-      case WHITE -> file != FILE_A;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return NonNullWrapperCommon.get(LEFT_FILE, havingMove).containsKey(file);
   }
 
-  public static final boolean calculateHasLeftLeftFile(final Side havingMove, final File file) {
+  public static File calculateLeftFile(Side havingMove, File file) {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
-
-    if (!calculateHasLeftFile(havingMove, file)) {
-      return false;
-    }
-    final File leftFile = calculateLeftFile(havingMove, file);
-    return calculateHasLeftFile(havingMove, leftFile);
-  }
-
-  public static final boolean calculateHasRightFile(final Side havingMove, final File file) {
-    if (havingMove == Side.NONE || file == NONE) {
-      throw new IllegalArgumentException();
-    }
-
-    return switch (havingMove) {
-      case BLACK -> file != FILE_A;
-      case WHITE -> file != FILE_H;
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  public static final boolean calculateHasRightRightFile(final Side havingMove, final File file) {
-    if (havingMove == Side.NONE || file == NONE) {
-      throw new IllegalArgumentException();
-    }
-
-    if (!calculateHasRightFile(havingMove, file)) {
-      return false;
-    }
-    final File rightFile = calculateRightFile(havingMove, file);
-    return calculateHasRightFile(havingMove, rightFile);
-  }
-
-  public static final File calculateLeftFile(final Side havingMove, final File file) {
-    if (havingMove == Side.NONE || file == NONE) {
-      throw new IllegalArgumentException();
-    }
-
-    if (!calculateHasLeftFile(havingMove, file)) {
+    final EnumMap<File, File> sideMap = NonNullWrapperCommon.get(LEFT_FILE, havingMove);
+    if (!sideMap.containsKey(file)) {
       throw new IllegalArgumentException("No left file");
     }
-    return switch (havingMove) {
-      case BLACK -> calculateRightFileWhiteView(file);
-      case WHITE -> calculateLeftFileWhiteView(file);
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return NonNullWrapperCommon.get(sideMap, file);
   }
 
-  public static File calculateRightFile(Side havingMove, final File file) {
+  public static boolean calculateHasRightFile(Side havingMove, File file) {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
+    return NonNullWrapperCommon.get(RIGHT_FILE, havingMove).containsKey(file);
+  }
 
-    if (!calculateHasRightFile(havingMove, file)) {
+  public static File calculateRightFile(Side havingMove, File file) {
+    if (havingMove == Side.NONE || file == NONE) {
+      throw new IllegalArgumentException();
+    }
+    final EnumMap<File, File> sideMap = NonNullWrapperCommon.get(RIGHT_FILE, havingMove);
+    if (!sideMap.containsKey(file)) {
       throw new IllegalArgumentException("No right file");
     }
-    return switch (havingMove) {
-      case BLACK -> calculateLeftFileWhiteView(file);
-      case WHITE -> calculateRightFileWhiteView(file);
-      case NONE -> throw new IllegalArgumentException();
-      default -> throw new IllegalArgumentException();
-    };
+    return NonNullWrapperCommon.get(sideMap, file);
+  }
+
+  public static boolean calculateHasLeftLeftFile(Side havingMove, File file) {
+    if (havingMove == Side.NONE || file == NONE) {
+      throw new IllegalArgumentException();
+    }
+    if (!calculateHasLeftFile(havingMove, file)) {
+      return false;
+    }
+    return calculateHasLeftFile(havingMove, calculateLeftFile(havingMove, file));
+  }
+
+  public static boolean calculateHasRightRightFile(Side havingMove, File file) {
+    if (havingMove == Side.NONE || file == NONE) {
+      throw new IllegalArgumentException();
+    }
+    if (!calculateHasRightFile(havingMove, file)) {
+      return false;
+    }
+    return calculateHasRightFile(havingMove, calculateRightFile(havingMove, file));
   }
 
   private void check() {

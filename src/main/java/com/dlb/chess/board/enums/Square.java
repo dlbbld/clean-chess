@@ -185,6 +185,62 @@ public enum Square implements Comparable<Square> {
       E2, F2, G2, H2, A3, B3, C3, D3, E3, F3, G3, H3, A4, B4, C4, D4, E4, F4, G4, H4, A5, B5, C5, D5, E5, F5, G5, H5,
       A6, B6, C6, D6, E6, F6, G6, H6, A7, B7, C7, D7, E7, F7, G7, H7, A8, B8, C8, D8, E8, F8, G8, H8);
 
+  // ---------------------------------------------------------------------------------------------
+  // Single-step square-geometry lookup tables.
+  //
+  // For each of the eight directional relationships (left, right, ahead, behind, plus the four
+  // diagonals), a per-side mapping from each source square to its neighbour in that direction.
+  // Absent entries mean the source square has no neighbour in that direction (it is on the
+  // relevant board edge). All public calculate*Square / calculateHas*Square methods are thin
+  // accessors over these tables.
+  // ---------------------------------------------------------------------------------------------
+
+  private static EnumMap<Side, EnumMap<Square, Square>> buildOffsetTable(int fileOffsetForWhite,
+      int rankOffsetForWhite) {
+    final EnumMap<Side, EnumMap<Square, Square>> result = NonNullWrapperCommon.newEnumMap(Side.class);
+    for (final Side side : Side.REAL) {
+      final int fileOffset = side == Side.WHITE ? fileOffsetForWhite : -fileOffsetForWhite;
+      final int rankOffset = side == Side.WHITE ? rankOffsetForWhite : -rankOffsetForWhite;
+      final EnumMap<Square, Square> sideMap = NonNullWrapperCommon.newEnumMap(Square.class);
+      for (final Square source : REAL) {
+        final int targetFile = source.getFile().getNumber() + fileOffset;
+        final int targetRank = source.getRank().getNumber() + rankOffset;
+        if (targetFile >= 1 && targetFile <= 8 && targetRank >= 1 && targetRank <= 8) {
+          sideMap.put(source, calculate(targetFile, targetRank));
+        }
+      }
+      result.put(side, sideMap);
+    }
+    return result;
+  }
+
+  private static final EnumMap<Side, EnumMap<Square, Square>> LEFT_SQUARE = buildOffsetTable(-1, 0);
+  private static final EnumMap<Side, EnumMap<Square, Square>> RIGHT_SQUARE = buildOffsetTable(1, 0);
+  private static final EnumMap<Side, EnumMap<Square, Square>> AHEAD_SQUARE = buildOffsetTable(0, 1);
+  private static final EnumMap<Side, EnumMap<Square, Square>> BEHIND_SQUARE = buildOffsetTable(0, -1);
+  private static final EnumMap<Side, EnumMap<Square, Square>> LEFT_DIAGONAL_SQUARE = buildOffsetTable(-1, 1);
+  private static final EnumMap<Side, EnumMap<Square, Square>> RIGHT_DIAGONAL_SQUARE = buildOffsetTable(1, 1);
+  private static final EnumMap<Side, EnumMap<Square, Square>> BEHIND_LEFT_DIAGONAL_SQUARE = buildOffsetTable(-1, -1);
+  private static final EnumMap<Side, EnumMap<Square, Square>> BEHIND_RIGHT_DIAGONAL_SQUARE = buildOffsetTable(1, -1);
+
+  private static boolean hasNeighbour(EnumMap<Side, EnumMap<Square, Square>> table, Side havingMove, Square square) {
+    if (havingMove == Side.NONE || square == NONE) {
+      throw new IllegalArgumentException();
+    }
+    return NonNullWrapperCommon.get(table, havingMove).containsKey(square);
+  }
+
+  private static Square getNeighbour(EnumMap<Side, EnumMap<Square, Square>> table, Side havingMove, Square square) {
+    if (havingMove == Side.NONE || square == NONE) {
+      throw new IllegalArgumentException();
+    }
+    final EnumMap<Square, Square> sideMap = NonNullWrapperCommon.get(table, havingMove);
+    if (!sideMap.containsKey(square)) {
+      throw new IllegalArgumentException();
+    }
+    return NonNullWrapperCommon.get(sideMap, square);
+  }
+
   public static boolean calculateIsRightMostFile(Square square, Side side) {
     return switch (side) {
       case WHITE -> square.getFile() == File.FILE_H;
@@ -266,62 +322,68 @@ public enum Square implements Comparable<Square> {
     }
   }
 
-  public static final boolean calculateHasRightSquare(final Side havingMove, final Square square) {
-    return File.calculateHasRightFile(havingMove, square.getFile());
+  public static boolean calculateHasLeftSquare(Side havingMove, Square square) {
+    return hasNeighbour(LEFT_SQUARE, havingMove, square);
   }
 
-  public static final boolean calculateHasLeftSquare(final Side havingMove, final Square square) {
-    return File.calculateHasLeftFile(havingMove, square.getFile());
+  public static Square calculateLeftSquare(Side havingMove, Square square) {
+    return getNeighbour(LEFT_SQUARE, havingMove, square);
   }
 
-  public static final boolean calculateHasLeftDiagonalSquare(final Side havingMove, final Square square) {
-
-    return File.calculateHasLeftFile(havingMove, square.getFile())
-        && Rank.calculateHasNextRank(havingMove, square.getRank());
+  public static boolean calculateHasRightSquare(Side havingMove, Square square) {
+    return hasNeighbour(RIGHT_SQUARE, havingMove, square);
   }
 
-  public static final boolean calculateHasRightDiagonalSquare(final Side havingMove, final Square square) {
-
-    return File.calculateHasRightFile(havingMove, square.getFile())
-        && Rank.calculateHasNextRank(havingMove, square.getRank());
+  public static Square calculateRightSquare(Side havingMove, Square square) {
+    return getNeighbour(RIGHT_SQUARE, havingMove, square);
   }
 
-  public static final Square calculateLeftDiagonalSquare(final Side havingMove, final Square square) {
-
-    if (!calculateHasLeftDiagonalSquare(havingMove, square)) {
-      throw new IllegalArgumentException();
-    }
-
-    final File leftFile = File.calculateLeftFile(havingMove, square.getFile());
-    final Rank nextRank = Rank.calculateNextRank(havingMove, square.getRank());
-    return calculate(leftFile, nextRank);
+  public static boolean calculateHasAheadSquare(Side havingMove, Square square) {
+    return hasNeighbour(AHEAD_SQUARE, havingMove, square);
   }
 
-  public static final Square calculateRightDiagonalSquare(final Side havingMove, final Square square) {
-
-    if (!calculateHasRightDiagonalSquare(havingMove, square)) {
-      throw new IllegalArgumentException();
-    }
-
-    final File rightFile = File.calculateRightFile(havingMove, square.getFile());
-    final Rank nextRank = Rank.calculateNextRank(havingMove, square.getRank());
-    return calculate(rightFile, nextRank);
+  public static Square calculateAheadSquare(Side havingMove, Square square) {
+    return getNeighbour(AHEAD_SQUARE, havingMove, square);
   }
 
-  public static final boolean calculateHasBehindLeftDiagonalSquare(final Side havingMove, final Square square) {
-    return calculateHasRightDiagonalSquare(havingMove.getOppositeSide(), square);
+  public static boolean calculateHasBehindSquare(Side havingMove, Square square) {
+    return hasNeighbour(BEHIND_SQUARE, havingMove, square);
   }
 
-  public static final boolean calculateHasBehindRightDiagonalSquare(final Side havingMove, final Square square) {
-    return calculateHasLeftDiagonalSquare(havingMove.getOppositeSide(), square);
+  public static Square calculateBehindSquare(Side havingMove, Square square) {
+    return getNeighbour(BEHIND_SQUARE, havingMove, square);
   }
 
-  public static final Square calculateBehindLeftDiagonalSquare(final Side havingMove, final Square square) {
-    return calculateRightDiagonalSquare(havingMove.getOppositeSide(), square);
+  public static boolean calculateHasLeftDiagonalSquare(Side havingMove, Square square) {
+    return hasNeighbour(LEFT_DIAGONAL_SQUARE, havingMove, square);
   }
 
-  public static final Square calculateBehindRightDiagonalSquare(final Side havingMove, final Square square) {
-    return calculateLeftDiagonalSquare(havingMove.getOppositeSide(), square);
+  public static Square calculateLeftDiagonalSquare(Side havingMove, Square square) {
+    return getNeighbour(LEFT_DIAGONAL_SQUARE, havingMove, square);
+  }
+
+  public static boolean calculateHasRightDiagonalSquare(Side havingMove, Square square) {
+    return hasNeighbour(RIGHT_DIAGONAL_SQUARE, havingMove, square);
+  }
+
+  public static Square calculateRightDiagonalSquare(Side havingMove, Square square) {
+    return getNeighbour(RIGHT_DIAGONAL_SQUARE, havingMove, square);
+  }
+
+  public static boolean calculateHasBehindLeftDiagonalSquare(Side havingMove, Square square) {
+    return hasNeighbour(BEHIND_LEFT_DIAGONAL_SQUARE, havingMove, square);
+  }
+
+  public static Square calculateBehindLeftDiagonalSquare(Side havingMove, Square square) {
+    return getNeighbour(BEHIND_LEFT_DIAGONAL_SQUARE, havingMove, square);
+  }
+
+  public static boolean calculateHasBehindRightDiagonalSquare(Side havingMove, Square square) {
+    return hasNeighbour(BEHIND_RIGHT_DIAGONAL_SQUARE, havingMove, square);
+  }
+
+  public static Square calculateBehindRightDiagonalSquare(Side havingMove, Square square) {
+    return getNeighbour(BEHIND_RIGHT_DIAGONAL_SQUARE, havingMove, square);
   }
 
   public static Square calculateKingOriginalSquare(Side side) {
@@ -349,58 +411,6 @@ public enum Square implements Comparable<Square> {
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };
-  }
-
-  public static Square calculateRightSquare(Side havingMove, Square square) {
-
-    if (!calculateHasRightSquare(havingMove, square)) {
-      throw new IllegalArgumentException();
-    }
-
-    final File file = File.calculateRightFile(havingMove, square.getFile());
-    final Rank rank = square.getRank();
-    return calculate(file, rank);
-  }
-
-  public static Square calculateLeftSquare(Side havingMove, Square square) {
-
-    if (!calculateHasLeftSquare(havingMove, square)) {
-      throw new IllegalArgumentException();
-    }
-
-    final File file = File.calculateLeftFile(havingMove, square.getFile());
-    final Rank rank = square.getRank();
-    return calculate(file, rank);
-  }
-
-  public static boolean calculateHasAheadSquare(Side havingMove, Square square) {
-    return Rank.calculateHasNextRank(havingMove, square.getRank());
-  }
-
-  public static Square calculateAheadSquare(Side havingMove, Square square) {
-
-    if (!calculateHasAheadSquare(havingMove, square)) {
-      throw new IllegalArgumentException();
-    }
-
-    final File file = square.getFile();
-    final Rank rank = Rank.calculateNextRank(havingMove, square.getRank());
-    return calculate(file, rank);
-  }
-
-  public static boolean calculateHasBehindSquare(Side havingMove, Square square) {
-    return Rank.calculateHasPreviousRank(havingMove, square.getRank());
-  }
-
-  public static Square calculateBehindSquare(Side havingMove, Square square) {
-
-    if (!calculateHasBehindSquare(havingMove, square)) {
-      throw new IllegalArgumentException();
-    }
-
-    final File file = square.getFile();
-    final Rank rank = Rank.calculatePreviousRank(havingMove, square.getRank());
-    return calculate(file, rank);
   }
 
   public static List<Square> calculateEnPassantCaptureTargetSquareList(Side havingMove) {
