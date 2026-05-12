@@ -15,8 +15,8 @@ import com.dlb.chess.test.common.utility.DiagonalLineUtility;
  * Shared utilities for the SAN-validator strict-mode lookup tables: per-piece classes populate their
  * {@code static final ImmutableSet<String> VALUES} at class load time by calling these helpers. The string format
  * mirrors what the (now-deleted) {@code Generate*SanValidateStrict} scripts emitted as enum constants — e.g.
- * {@code "N1A2"} (piece-letter + rank-disambig + target square) — so the {@code *Calculate} consumers parse the
- * same shape.
+ * {@code "N1A2"} (piece-letter + rank-disambig + target square) — so the {@code *Calculate} consumers parse the same
+ * shape.
  */
 abstract class SanValidateStaticallyStrictHelpers {
 
@@ -32,8 +32,8 @@ abstract class SanValidateStaticallyStrictHelpers {
   }
 
   static void appendMoveWithFromSquare(Set<String> set, Square toSquare, Square fromSquare, PieceType pieceType) {
-    set.add(String.valueOf(pieceType.getLetter()) + fromSquare.getName().toUpperCase()
-        + toSquare.getName().toUpperCase());
+    set.add(
+        String.valueOf(pieceType.getLetter()) + fromSquare.getName().toUpperCase() + toSquare.getName().toUpperCase());
   }
 
   static void appendMoveWithFile(Set<String> set, Square toSquare, com.dlb.chess.board.enums.File file,
@@ -58,7 +58,8 @@ abstract class SanValidateStaticallyStrictHelpers {
 
   // ---- disambiguation predicates ----------------------------------------------------------------
 
-  static boolean calculateIsFromRankPossibleOrthogonal(Square fromSquare, Square toSquare, List<Square> fromSquareList) {
+  static boolean calculateIsFromRankPossibleOrthogonal(Square fromSquare, Square toSquare,
+      List<Square> fromSquareList) {
     for (final Square otherFromSquare : fromSquareList) {
       if (otherFromSquare.getFile() == fromSquare.getFile() && otherFromSquare.getRank() != fromSquare.getRank()
           && calculateIsOppositeVertical(fromSquare, toSquare, otherFromSquare)) {
@@ -90,7 +91,8 @@ abstract class SanValidateStaticallyStrictHelpers {
     throw new ProgrammingMistakeException("Unexpected program flow - at this point the rank numbers must be different");
   }
 
-  static boolean calculateIsFromFilePossibleOrthogonal(Square fromSquare, Square toSquare, List<Square> fromSquareList) {
+  static boolean calculateIsFromFilePossibleOrthogonal(Square fromSquare, Square toSquare,
+      List<Square> fromSquareList) {
     for (final Square otherFromSquare : fromSquareList) {
       if (otherFromSquare.getFile() != fromSquare.getFile()
           && calculateIsFromFilePossibleOrthogonal(fromSquare, toSquare, otherFromSquare)) {

@@ -1,10 +1,10 @@
 package com.dlb.chess.model;
 
 /**
- * Categorises a {@link LegalMove} produced by the rule pipeline. The five values are mutually exclusive — a single legal
- * move cannot, for example, be both a castling move and a pawn two-square advance. The move pipeline knows the category
- * at the moment it constructs the {@code LegalMove}, so the kind is stored as a field rather than recomputed by
- * consumers from {@link com.dlb.chess.common.model.MoveSpecification} fields.
+ * Categorises a {@link LegalMove} produced by the rule pipeline. The five values are mutually exclusive — a single
+ * legal move cannot, for example, be both a castling move and a pawn two-square advance. The move pipeline knows the
+ * category at the moment it constructs the {@code LegalMove}, so the kind is stored as a field rather than recomputed
+ * by consumers from {@link com.dlb.chess.common.model.MoveSpecification} fields.
  *
  * <ul>
  * <li>{@link #NORMAL} — any non-pawn move that is not castling, and any pawn move that is neither an en-passant

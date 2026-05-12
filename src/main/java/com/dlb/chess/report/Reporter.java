@@ -106,8 +106,8 @@ public final class Reporter {
       output.addAll(claimAheadList);
     }
 
-    final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(
-        board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD);
+    final List<List<HalfMove>> repetitionListList = RepetitionUtility
+        .calculateRepetitionListList(board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD);
     addMainSection(output, "report.repetition.threefold.list.title");
     if (repetitionListList.isEmpty()) {
       output.add(Message.getString("report.repetition.threefold.list.none"));

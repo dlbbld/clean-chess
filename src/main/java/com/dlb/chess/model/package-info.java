@@ -5,8 +5,8 @@
  * <li>{@link com.dlb.chess.model.LegalMove} — a {@link com.dlb.chess.common.model.MoveSpecification} plus the moving
  * piece, captured piece (if any), and the {@link com.dlb.chess.model.LegalMoveKind} category. Returned by the
  * legal-move generator.</li>
- * <li>{@link com.dlb.chess.model.LegalMoveKind} — categorises a legal move (normal, castling, en-passant capture,
- * pawn two-square advance, promotion).</li>
+ * <li>{@link com.dlb.chess.model.LegalMoveKind} — categorises a legal move (normal, castling, en-passant capture, pawn
+ * two-square advance, promotion).</li>
  * <li>{@link com.dlb.chess.model.PgnHalfMove} — a SAN string plus its move-suffix-annotation and
  * {@link com.dlb.chess.pgn.model.PgnCommentary}. The unit of PGN movetext.</li>
  * <li>{@link com.dlb.chess.model.UciMove} — a UCI move string with the convenience accessors.</li>

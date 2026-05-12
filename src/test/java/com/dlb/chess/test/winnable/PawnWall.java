@@ -527,15 +527,14 @@ public class PawnWall {
   }
 
   /**
-   * Returns {@code true} iff any bishop of {@code side} has at least one opponent pawn in its diagonal-reachability
-   * set on the current static position. Reachability is computed by BFS from each bishop along all four diagonal
+   * Returns {@code true} iff any bishop of {@code side} has at least one opponent pawn in its diagonal-reachability set
+   * on the current static position. Reachability is computed by BFS from each bishop along all four diagonal
    * directions: empty squares are passed through, opponent pieces can be captured (terminate that ray), own pieces
    * block the bishop entirely.
    *
    * <p>
-   * Used by the pawn-wall heuristic: a bishop can only threaten the wall if it can actually capture a pawn that's
-   * part of the wall. A bishop trapped behind its own pawns is harmless even if opponent pawns share its square
-   * colour.
+   * Used by the pawn-wall heuristic: a bishop can only threaten the wall if it can actually capture a pawn that's part
+   * of the wall. A bishop trapped behind its own pawns is harmless even if opponent pawns share its square colour.
    */
   private static boolean calculateAnyBishopCanReachOpponentPawn(StaticPosition staticPosition, Side side) {
     for (final Square bishopSquare : Square.REAL) {
@@ -559,8 +558,8 @@ public class PawnWall {
 
   /**
    * BFS the bishop's transitive diagonal reach from {@code bishopSquare} on the current position. A square is in the
-   * returned set if the bishop can stand on it after some sequence of legal bishop moves (sliding through empty
-   * squares only; opponent pieces can be the terminal square — captured; own pieces block the ray).
+   * returned set if the bishop can stand on it after some sequence of legal bishop moves (sliding through empty squares
+   * only; opponent pieces can be the terminal square — captured; own pieces block the ray).
    */
   private static Set<Square> calculateBishopReach(StaticPosition staticPosition, Square bishopSquare, Side side) {
     final Set<Square> reachable = new TreeSet<>();
