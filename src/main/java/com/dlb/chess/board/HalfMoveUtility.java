@@ -1,8 +1,8 @@
 package com.dlb.chess.board;
 
+import com.dlb.chess.board.enums.AddSpace;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.ucimove.utility.enums.AddSpace;
 
 public abstract class HalfMoveUtility {
 
