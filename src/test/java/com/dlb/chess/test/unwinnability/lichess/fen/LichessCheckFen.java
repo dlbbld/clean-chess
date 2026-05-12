@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.fen.FenSideSymbol;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
@@ -77,7 +78,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
         outputLine.append(fen).append(";");
         outputLine.append(lichessGameId).append(";");
         outputLine.append("quick").append(";");
-        outputLine.append(testingSide.getFenLetter()).append(";");
+        outputLine.append(FenSideSymbol.calculate(testingSide).sideLetter()).append(";");
         outputLine.append(unwinnableQuick.getIdentifier()).append(";");
         outputLine.append(durationMilliSeconds);
 

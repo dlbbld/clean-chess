@@ -602,7 +602,7 @@ public final class StrictPgnParser {
   private static void validateSanCharacters(String san) {
     for (var i = 0; i < san.length(); i++) {
       final var c = san.charAt(i);
-      if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
+      if (!com.dlb.chess.fen.FenPieceSymbol.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
           && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.SanSymbol.exists(c)) {
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             "The movetext is invalid because a SAN contains an invalid character of \"" + c + "\".");

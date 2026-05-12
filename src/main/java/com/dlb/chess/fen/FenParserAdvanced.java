@@ -42,10 +42,6 @@ public class FenParserAdvanced implements EnumConstants {
   @SuppressWarnings("null")
   private static final Pattern PATTERN_RANK = Pattern.compile(REG_EXP_RANK);
 
-  private static final String REG_EXP_SIDE = "^[wb]$";
-  @SuppressWarnings("null")
-  private static final Pattern PATTERN_SIDE = Pattern.compile(REG_EXP_SIDE);
-
   private FenParserAdvanced() {
   }
 
@@ -188,11 +184,11 @@ public class FenParserAdvanced implements EnumConstants {
         rankPieceList.add(Piece.NONE);
       } else {
         final var letterChar = letter.charAt(0);
-        if (!Piece.exists(letterChar)) {
+        if (!FenPieceSymbol.exists(letterChar)) {
           throw new ProgrammingMistakeException(
               "An unknown piece was found which was not filtered before by regular expression");
         }
-        final Piece piece = Piece.calculate(letterChar);
+        final Piece piece = FenPieceSymbol.calculate(letterChar).piece();
         rankPieceList.add(piece);
       }
     }
@@ -238,18 +234,11 @@ public class FenParserAdvanced implements EnumConstants {
   }
 
   private static Side validateHavingMove(String havingMove) throws FenAdvancedValidationException {
-    final var matcher = PATTERN_SIDE.matcher(havingMove);
-    if (!matcher.find()) {
+    if (havingMove.length() != 1 || !FenSideSymbol.exists(havingMove.charAt(0))) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_HAVING_MOVE_RANGE,
           "the having move part of \"" + havingMove + "\" is not valid");
     }
-    if ("w".equals(havingMove)) {
-      return WHITE;
-    }
-    if ("b".equals(havingMove)) {
-      return BLACK;
-    }
-    throw new ProgrammingMistakeException("Check the regular expression");
+    return FenSideSymbol.calculate(havingMove.charAt(0)).side();
   }
 
   private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition, String castlingRightBothStr)

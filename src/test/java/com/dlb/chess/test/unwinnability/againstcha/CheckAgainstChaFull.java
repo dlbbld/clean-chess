@@ -11,6 +11,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.utility.BasicUtility;
+import com.dlb.chess.fen.FenSideSymbol;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
@@ -110,7 +111,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
       mineOut.append(fullChaResult.fen().fen()).append(";");
       mineOut.append(fullChaResult.lichessGameId()).append(";");
       mineOut.append(UnwinnabilityMode.FULL.getIdentifier()).append(";");
-      mineOut.append(fullChaResult.winner().getFenLetter()).append(";");
+      mineOut.append(FenSideSymbol.calculate(fullChaResult.winner()).sideLetter()).append(";");
       mineOut.append(fullMineResult.unwinnableFull().getIdentifier()).append(";");
       final String mateLine = uciMoveSequence(fullMineResult.mateLine());
       mineOut.append(mateLine);

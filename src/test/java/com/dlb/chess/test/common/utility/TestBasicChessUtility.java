@@ -1,7 +1,6 @@
 package com.dlb.chess.test.common.utility;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -9,22 +8,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.utility.BasicChessUtility;
 
 class TestBasicChessUtility {
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testSideHavingMoveForSide() {
-
-    assertEquals(Side.WHITE, BasicChessUtility.calculateSideHavingMoveForSide("w"));
-    assertEquals(Side.BLACK, BasicChessUtility.calculateSideHavingMoveForSide("b"));
-
-    var isException = false;
-    try {
-      assertEquals(Side.BLACK, BasicChessUtility.calculateSideHavingMoveForSide("x"));
-    } catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
-      isException = true;
-    }
-    assertTrue(isException);
-  }
 
   @SuppressWarnings("static-method")
   @Test

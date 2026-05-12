@@ -9,14 +9,6 @@ import com.dlb.chess.model.LegalMove;
 
 public abstract class BasicChessUtility {
 
-  public static Side calculateSideHavingMoveForSide(String side) {
-    return switch (side) {
-      case "b" -> Side.BLACK;
-      case "w" -> Side.WHITE;
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
   public static Side calculateSideMoved(Side havingMoveInitial, int halfMoveCount) {
     switch (havingMoveInitial) {
       case BLACK:

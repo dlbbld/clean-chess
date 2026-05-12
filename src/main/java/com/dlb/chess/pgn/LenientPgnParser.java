@@ -572,7 +572,7 @@ public final class LenientPgnParser {
   }
 
   private static boolean isAllowedLenientSanCharacter(char c) {
-    if (com.dlb.chess.board.enums.Piece.exists(c) || com.dlb.chess.board.enums.File.exists(c)
+    if (com.dlb.chess.fen.FenPieceSymbol.exists(c) || com.dlb.chess.board.enums.File.exists(c)
         || com.dlb.chess.board.enums.Rank.exists(c) || com.dlb.chess.san.SanSymbol.exists(c)) {
       return true;
     }

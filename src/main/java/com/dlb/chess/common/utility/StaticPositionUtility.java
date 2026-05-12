@@ -12,6 +12,7 @@ import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
+import com.dlb.chess.fen.FenPieceSymbol;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.moves.PromotionUtility;
@@ -59,7 +60,7 @@ public abstract class StaticPositionUtility implements EnumConstants {
             piecePlacement.append(consecutiveEmptySquares);
             consecutiveEmptySquares = 0;
           }
-          piecePlacement.append(pieceOnSquare.getLetter());
+          piecePlacement.append(FenPieceSymbol.calculate(pieceOnSquare).pieceLetter());
         }
       }
       if (rankNumber != 1) {

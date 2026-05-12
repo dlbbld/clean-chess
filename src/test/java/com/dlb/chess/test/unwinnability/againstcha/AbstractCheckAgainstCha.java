@@ -48,10 +48,11 @@ public abstract class AbstractCheckAgainstCha {
       final UnwinnabilityMode chaMode = UnwinnabilityMode.calculate(chaModeStr);
 
       final var winnerStr = NonNullWrapperCommon.get(fileLineItemList, 3);
-      if (!Side.exists(winnerStr)) {
-        throw new IllegalArgumentException("Illegal winning side of \"" + winnerStr + "\" was found");
-      }
-      final Side winner = Side.calculate(winnerStr);
+      final Side winner = switch (winnerStr) {
+        case "w" -> Side.WHITE;
+        case "b" -> Side.BLACK;
+        default -> throw new IllegalArgumentException("Illegal winning side of \"" + winnerStr + "\" was found");
+      };
 
       final var result = NonNullWrapperCommon.get(fileLineItemList, 4);
 
