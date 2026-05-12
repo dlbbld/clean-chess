@@ -70,8 +70,8 @@ import com.google.common.collect.ImmutableSet;
  *
  * <ul>
  * <li>{@link #Board()} â€” start at the initial position.</li>
- * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser, so
- * a {@code Board} cannot be constructed from a position no real game could reach.</li>
+ * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser; see
+ * the {@code com.dlb.chess.fen} package documentation for the validation contract.</li>
  * <li>{@link #Board(Fen)} â€” start at a pre-parsed {@link Fen} value.</li>
  * </ul>
  *
@@ -224,9 +224,11 @@ public class Board {
   }
 
   /**
-   * Constructs a {@code Board} from a FEN string, validated by the advanced FEN parser. Rejects positions no real game
-   * could reach (impossible double-checks, halfmove clock above the 75-move-rule threshold, castling rights
-   * inconsistent with rooks-and-king positions, etc.).
+   * Constructs a {@code Board} from a FEN string, validated by the advanced FEN parser. Enforces structural and
+   * rule-consistency checks (piece counts within physical bounds, no pawns on rank 1 or 8, castling rights consistent
+   * with king/rook static positions, en-passant target consistent with the side to move, halfmove clock not above the
+   * 75-move-rule threshold of 150, etc.). Does not prove full game reachability — see the {@code com.dlb.chess.fen}
+   * package documentation for the full contract.
    */
   public Board(String fen) {
     this(FenParserAdvanced.parseFenAdvanced(fen));
