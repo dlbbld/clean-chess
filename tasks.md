@@ -142,6 +142,56 @@ The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes th
 - [ ] Rename class `NonNullWrapperCommon` → `Nulls`; update all call sites (uses appear in most files in the project — bulk rename)
 - [ ] Verify the methods are still all about nullness handling; if any aren't, reconsider the name
 
+## Future release — PGN headers treatment and lenient FEN validation
+
+### Separate PGN parse, semantics, and export — stop normalising input on the lenient path
+
+#### The problem
+Today's lenient PGN pipeline conflates **four distinct jobs** into one path:
+1. **Parsing** — should preserve what the user gave (tag presence/absence, FEN without SetUp, missing Result, unknown tags, tag order).
+2. **Validation** — should *report* forgiven issues to the consumer (already done via `LenientPgnParserValidationResult.sanForgivenItems()` for SAN deviations; needs the same for tag-level issues).
+3. **Canonical export** — produces a strict-spec-compliant PGN (completed Seven Tag Roster, `SetUp "1"` when `FEN` is present, `Result` synthesised from termination marker, canonical SAN, normalised formatting).
+4. **Round-trip export** — re-emits the input as parsed: same tags, same values, same Result presence/absence — without inventing what the user didn't give.
+
+In the current code, "parse leniently and then write" silently does jobs 1+3 together: the lenient parser accepts a deficient PGN, then `TagPlaceHolderUtility` fabricates STR placeholders, a `*` Result is invented from nothing, `SetUp "1"` is added when `FEN` lacked it, and the output is presented as if it had been the input. The friction is real and load-bearing: **a lenient `parse → write` does not return the user's PGN.** And the discomfort is not bikeshedding — it has been "what was keeping me so long" from finishing the lenient feature.
+
+The principle: **parse preserves, validation reports, canonical export normalises, round-trip export echoes.** Four jobs, separable concerns; each gets its own seam.
+
+#### The three model layers to introduce
+1. **Parse model** — what was actually in the PGN. Tag list preserves real presence/absence and order; `FEN`-without-`SetUp` is preserved; missing `Result` is preserved as missing (not collapsed to `*`); unknown tags pass through.
+2. **Game semantic model** — the engine's internal view for rules/reporting. Introduces `declaredResult: Optional<ResultTagValue>` (what the input said, if anything) and `effectiveResult` (derived/defaulted, used for chess-rule logic). **Missing must remain distinguishable from `ONGOING`.** Today the codebase maps "Result not present" → `*` ongoing; that is a semantic bug, or at least a design debt, because "the user did not say" and "the game is in progress" are different facts.
+3. **Export modes** — `PgnWriter` gains an explicit mode (recommended: `WriteMode` enum parameter, or separate methods):
+   - **Canonical export** — strict-spec-compliant output. Completes STR, adds `SetUp "1"` when `FEN` is present, fabricates `Result` from termination marker (or `*` if neither), canonical SAN, standard formatting.
+   - **Semantic-preserving export** *(the right default for `PgnWriter`)* — preserves which tags existed, their values, their order, and missing-ness. **Normalises** harmless formatting (whitespace inside tag brackets, line wrapping) and move spelling (canonical SAN — `e2-e4` → `e4`, `Nb1c3` → `Nc3`, bogus `a6+` → `a6`). Forgiven items remain on the validation result, *not echoed in the export*.
+   - **Text-preserving export** — re-emits the original source bytes byte-for-byte, including weird whitespace, blank lines, original SAN spelling. **Out of scope for this work** — that is a source-preserving syntax tree, a much heavier feature. Captured here only so the export-mode taxonomy is complete.
+
+#### Concrete cases under the new model
+1. **Missing STR tags** — parse keeps tags missing. Semantic export emits only the tags the user gave (no placeholder fill). Canonical export adds placeholders. **`TagPlaceHolderUtility` either goes away or moves to canonical-only path.**
+2. **`Result` tag absent** — parse stores `declaredResult: Optional.empty()`. Semantic export omits `Result` from output. Canonical export synthesises `Result "*"` if neither tag nor termination marker exists, otherwise from the termination marker. The engine's chess-rule code uses `effectiveResult` derived separately.
+3. **`FEN` without `SetUp`** — parse keeps `FEN` alone. Semantic export emits `FEN` without `SetUp`. Canonical export adds `SetUp "1"`.
+4. **Tag-bracket whitespace** (`[White      "John Travolta"     ]`) — semantic export emits `[White "John Travolta"]`. Whitespace is formatting trivia, not chess data; preserving it would require text-preserving mode.
+5. **Move spelling** (`1. e2-e4 d5 2. Nb1c3 a6+` where `a6+` is not actually check) — semantic export emits canonical `1. e4 d5 2. Nc3 a6`. The lenient parser already reports each deviation via `ForgivenItem` — that is the reporting channel, not the export.
+
+#### What `PgnWriter` should do by default
+Make `PgnWriter` **semantic-preserving** by default. It's the honest balance: respects what the consumer gave (no fabricated tags, no invented Result), but produces clean PGN (canonical SAN, normalised whitespace). Canonical export becomes the opt-in path for consumers who explicitly need strict-spec output.
+
+#### Action items
+- [ ] Define `declaredResult: Optional<ResultTagValue>` on the parse-model side; introduce `effectiveResult` as a derivation used by engine code; audit every "result is `*`?" check and split into "declared missing?" vs "is ongoing?"
+- [ ] `PgnFile` (or its tag list) preserves missing-tag information explicitly — verify whether today's structure already supports this or needs widening
+- [ ] Drop `TagPlaceHolderUtility` STR auto-fill on the lenient parse path; if a canonical-export path needs the same logic, move it there
+- [ ] Lenient parser stops synthesising a `Result` tag from the termination marker into the parsed model; the termination marker is part of the movetext, the Result tag is part of the header, they are separate signals
+- [ ] Lenient parser stops fabricating `SetUp` when `FEN` is present
+- [ ] Introduce explicit `WriteMode` (or two methods) on `PgnWriter`: `SEMANTIC` (the new default) and `CANONICAL` (the spec-strict alternative)
+- [ ] Default `PgnWriter.writePgnFile(...)` to `SEMANTIC`; `PgnWriter.writePgnFileCanonical(...)` (or `writePgnFile(..., WriteMode.CANONICAL)`) for spec-compliant output
+- [ ] Document the contract in `specification.md`: explicit table of the four jobs (parse / validate / canonical export / semantic export); explicit statement that lenient `parse → semantic-write` round-trips the meaning of the input (tag presence, Result presence, FEN-without-SetUp) while normalising formatting and move spelling
+- [ ] Test fixtures: a "deficient" PGN (missing STR, no Result tag, `FEN` without `SetUp`, weird whitespace, `e2-e4`-style moves, bogus check suffixes). Semantic export → equals the same input with normalised whitespace and canonical SAN, *no fabricated tags*. Canonical export → equals a fully strict-compliant form with STR filled, `SetUp "1"` added, `Result "*"` synthesised, canonical SAN.
+- [ ] Text-preserving export remains **out of scope** — note in `specification.md` that source-text-preserving export would be a separate library mode if ever needed.
+
+#### Notes for whoever picks this up
+- The `LenientPgnParserValidationResult.sanForgivenItems()` channel is already the right pattern for SAN-level forgiven items. The same pattern should be extended (or a parallel `tagForgivenItems()` added) so consumers can see which tags the lenient parser accepted leniently.
+- `TagUtility` (kept as consumer-facing in the API audit) is not the source of the problem; the issue is what the parser *fabricates* before `TagUtility`'s consumers see the tag list. Once the parser stops fabricating, `TagUtility` consumers see what the user actually wrote.
+- This work also subsumes the earlier short backlog entry "PGN round-trip fidelity — stop auto-completing tags on import" — that was an early sketch of the same idea; this entry is the full framing.
+
 ## Future release — Auto-CHA (DeepSquare moment)
 
 ### GPL v3 source-file headers
@@ -271,53 +321,6 @@ Whatever ships in the first Central artifact is in the public record forever. Re
 
 Items here are not assigned to any release. Captured so they don't get lost; revisit if/when scope or motivation aligns.
 
-### Separate PGN parse, semantics, and export — stop normalising input on the lenient path
-
-#### The problem
-Today's lenient PGN pipeline conflates **four distinct jobs** into one path:
-1. **Parsing** — should preserve what the user gave (tag presence/absence, FEN without SetUp, missing Result, unknown tags, tag order).
-2. **Validation** — should *report* forgiven issues to the consumer (already done via `LenientPgnParserValidationResult.sanForgivenItems()` for SAN deviations; needs the same for tag-level issues).
-3. **Canonical export** — produces a strict-spec-compliant PGN (completed Seven Tag Roster, `SetUp "1"` when `FEN` is present, `Result` synthesised from termination marker, canonical SAN, normalised formatting).
-4. **Round-trip export** — re-emits the input as parsed: same tags, same values, same Result presence/absence — without inventing what the user didn't give.
-
-In the current code, "parse leniently and then write" silently does jobs 1+3 together: the lenient parser accepts a deficient PGN, then `TagPlaceHolderUtility` fabricates STR placeholders, a `*` Result is invented from nothing, `SetUp "1"` is added when `FEN` lacked it, and the output is presented as if it had been the input. The friction is real and load-bearing: **a lenient `parse → write` does not return the user's PGN.** And the discomfort is not bikeshedding — it has been "what was keeping me so long" from finishing the lenient feature.
-
-The principle: **parse preserves, validation reports, canonical export normalises, round-trip export echoes.** Four jobs, separable concerns; each gets its own seam.
-
-#### The three model layers to introduce
-1. **Parse model** — what was actually in the PGN. Tag list preserves real presence/absence and order; `FEN`-without-`SetUp` is preserved; missing `Result` is preserved as missing (not collapsed to `*`); unknown tags pass through.
-2. **Game semantic model** — the engine's internal view for rules/reporting. Introduces `declaredResult: Optional<ResultTagValue>` (what the input said, if anything) and `effectiveResult` (derived/defaulted, used for chess-rule logic). **Missing must remain distinguishable from `ONGOING`.** Today the codebase maps "Result not present" → `*` ongoing; that is a semantic bug, or at least a design debt, because "the user did not say" and "the game is in progress" are different facts.
-3. **Export modes** — `PgnWriter` gains an explicit mode (recommended: `WriteMode` enum parameter, or separate methods):
-   - **Canonical export** — strict-spec-compliant output. Completes STR, adds `SetUp "1"` when `FEN` is present, fabricates `Result` from termination marker (or `*` if neither), canonical SAN, standard formatting.
-   - **Semantic-preserving export** *(the right default for `PgnWriter`)* — preserves which tags existed, their values, their order, and missing-ness. **Normalises** harmless formatting (whitespace inside tag brackets, line wrapping) and move spelling (canonical SAN — `e2-e4` → `e4`, `Nb1c3` → `Nc3`, bogus `a6+` → `a6`). Forgiven items remain on the validation result, *not echoed in the export*.
-   - **Text-preserving export** — re-emits the original source bytes byte-for-byte, including weird whitespace, blank lines, original SAN spelling. **Out of scope for this work** — that is a source-preserving syntax tree, a much heavier feature. Captured here only so the export-mode taxonomy is complete.
-
-#### Concrete cases under the new model
-1. **Missing STR tags** — parse keeps tags missing. Semantic export emits only the tags the user gave (no placeholder fill). Canonical export adds placeholders. **`TagPlaceHolderUtility` either goes away or moves to canonical-only path.**
-2. **`Result` tag absent** — parse stores `declaredResult: Optional.empty()`. Semantic export omits `Result` from output. Canonical export synthesises `Result "*"` if neither tag nor termination marker exists, otherwise from the termination marker. The engine's chess-rule code uses `effectiveResult` derived separately.
-3. **`FEN` without `SetUp`** — parse keeps `FEN` alone. Semantic export emits `FEN` without `SetUp`. Canonical export adds `SetUp "1"`.
-4. **Tag-bracket whitespace** (`[White      "John Travolta"     ]`) — semantic export emits `[White "John Travolta"]`. Whitespace is formatting trivia, not chess data; preserving it would require text-preserving mode.
-5. **Move spelling** (`1. e2-e4 d5 2. Nb1c3 a6+` where `a6+` is not actually check) — semantic export emits canonical `1. e4 d5 2. Nc3 a6`. The lenient parser already reports each deviation via `ForgivenItem` — that is the reporting channel, not the export.
-
-#### What `PgnWriter` should do by default
-Make `PgnWriter` **semantic-preserving** by default. It's the honest balance: respects what the consumer gave (no fabricated tags, no invented Result), but produces clean PGN (canonical SAN, normalised whitespace). Canonical export becomes the opt-in path for consumers who explicitly need strict-spec output.
-
-#### Action items
-- [ ] Define `declaredResult: Optional<ResultTagValue>` on the parse-model side; introduce `effectiveResult` as a derivation used by engine code; audit every "result is `*`?" check and split into "declared missing?" vs "is ongoing?"
-- [ ] `PgnFile` (or its tag list) preserves missing-tag information explicitly — verify whether today's structure already supports this or needs widening
-- [ ] Drop `TagPlaceHolderUtility` STR auto-fill on the lenient parse path; if a canonical-export path needs the same logic, move it there
-- [ ] Lenient parser stops synthesising a `Result` tag from the termination marker into the parsed model; the termination marker is part of the movetext, the Result tag is part of the header, they are separate signals
-- [ ] Lenient parser stops fabricating `SetUp` when `FEN` is present
-- [ ] Introduce explicit `WriteMode` (or two methods) on `PgnWriter`: `SEMANTIC` (the new default) and `CANONICAL` (the spec-strict alternative)
-- [ ] Default `PgnWriter.writePgnFile(...)` to `SEMANTIC`; `PgnWriter.writePgnFileCanonical(...)` (or `writePgnFile(..., WriteMode.CANONICAL)`) for spec-compliant output
-- [ ] Document the contract in `specification.md`: explicit table of the four jobs (parse / validate / canonical export / semantic export); explicit statement that lenient `parse → semantic-write` round-trips the meaning of the input (tag presence, Result presence, FEN-without-SetUp) while normalising formatting and move spelling
-- [ ] Test fixtures: a "deficient" PGN (missing STR, no Result tag, `FEN` without `SetUp`, weird whitespace, `e2-e4`-style moves, bogus check suffixes). Semantic export → equals the same input with normalised whitespace and canonical SAN, *no fabricated tags*. Canonical export → equals a fully strict-compliant form with STR filled, `SetUp "1"` added, `Result "*"` synthesised, canonical SAN.
-- [ ] Text-preserving export remains **out of scope** — note in `specification.md` that source-text-preserving export would be a separate library mode if ever needed.
-
-#### Notes for whoever picks this up
-- The `LenientPgnParserValidationResult.sanForgivenItems()` channel is already the right pattern for SAN-level forgiven items. The same pattern should be extended (or a parallel `tagForgivenItems()` added) so consumers can see which tags the lenient parser accepted leniently.
-- `TagUtility` (kept as consumer-facing in the API audit) is not the source of the problem; the issue is what the parser *fabricates* before `TagUtility`'s consumers see the tag list. Once the parser stops fabricating, `TagUtility` consumers see what the user actually wrote.
-- This work also subsumes the earlier short backlog entry "PGN round-trip fidelity — stop auto-completing tags on import" — that was an early sketch of the same idea; this entry is the full framing.
 
 ---
 
