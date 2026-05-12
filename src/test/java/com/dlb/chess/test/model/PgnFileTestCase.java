@@ -7,11 +7,11 @@ import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.unwinnability.UnwinnableFull;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
 
-public record PgnFileTestCase(String pgnFileName, String expectedRepetition,
-    String expectedRepetitionInitialEnPassantCapture, String expectedNoProgressMoveRule, int firstCapture,
-    int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate, int repetitionCountFinalPosition,
-    InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite, UnwinnableFull unwinnableFullBlack,
-    UnwinnableQuick unwinnableQuickWhite, UnwinnableQuick unwinnableQuickBlack, String fen) {
+public record PgnFileTestCase(String pgnFileName, String expectedRepetition, String expectedNoProgressMoveRule,
+    int firstCapture, int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate,
+    int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial, UnwinnableFull unwinnableFullWhite,
+    UnwinnableFull unwinnableFullBlack, UnwinnableQuick unwinnableQuickWhite, UnwinnableQuick unwinnableQuickBlack,
+    String fen) {
 
   @SuppressWarnings("null")
   @Override

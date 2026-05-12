@@ -11,7 +11,6 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.report.Report;
@@ -119,23 +118,19 @@ public class GeneratePythonTestCases implements EnumConstants {
           processPythonCodeLine("    self.assertEqual(board.can_claim_fifty_moves(), "
               + convertJavaBooleanToPythonBoolean(canClaimFiftyMoveRule) + ")", counterList, codeLineList);
 
-          final var isTwoFoldRepetition = RepetitionUtility.getCountRepetition(halfMove,
-              EnPassantCaptureRuleThreefold.DO_NOT_IGNORE) >= 2;
+          final var isTwoFoldRepetition = RepetitionUtility.getCountRepetition(halfMove) >= 2;
           processPythonCodeLine("    self.assertEqual(board.is_repetition(2), "
               + convertJavaBooleanToPythonBoolean(isTwoFoldRepetition) + ")", counterList, codeLineList);
 
-          final var isThreeFoldRepetition = RepetitionUtility.getCountRepetition(halfMove,
-              EnPassantCaptureRuleThreefold.DO_NOT_IGNORE) >= 3;
+          final var isThreeFoldRepetition = RepetitionUtility.getCountRepetition(halfMove) >= 3;
           processPythonCodeLine("    self.assertEqual(board.is_repetition(), "
               + convertJavaBooleanToPythonBoolean(isThreeFoldRepetition) + ")", counterList, codeLineList);
 
-          final var isFourFoldRepetition = RepetitionUtility.getCountRepetition(halfMove,
-              EnPassantCaptureRuleThreefold.DO_NOT_IGNORE) >= 4;
+          final var isFourFoldRepetition = RepetitionUtility.getCountRepetition(halfMove) >= 4;
           processPythonCodeLine("    self.assertEqual(board.is_repetition(4), "
               + convertJavaBooleanToPythonBoolean(isFourFoldRepetition) + ")", counterList, codeLineList);
 
-          final var isFiveFoldRepetitionRule = RepetitionUtility.getCountRepetition(halfMove,
-              EnPassantCaptureRuleThreefold.DO_NOT_IGNORE) >= 5;
+          final var isFiveFoldRepetitionRule = RepetitionUtility.getCountRepetition(halfMove) >= 5;
           processPythonCodeLine("    self.assertEqual(board.is_fivefold_repetition(), "
               + convertJavaBooleanToPythonBoolean(isFiveFoldRepetitionRule) + ")", counterList, codeLineList);
 

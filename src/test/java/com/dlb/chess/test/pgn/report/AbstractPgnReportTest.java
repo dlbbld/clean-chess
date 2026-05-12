@@ -2,7 +2,6 @@ package com.dlb.chess.test.pgn.report;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.librarycomparison.utility.RepetitionTestUtility;
@@ -27,7 +26,6 @@ public abstract class AbstractPgnReportTest {
   public static void testReportAgainstTestCase(PgnFileTestCase testCase, Report report) throws Exception {
     testFen(testCase.fen(), report.fen());
     testRepetition(report, testCase);
-    testRepetitionInitialEnPassantCapture(report, testCase);
     testNoProgressMoveRule(report, testCase);
     testFirstCapture(report, testCase);
     testMaxNoProgressSequence(report, testCase);
@@ -41,11 +39,7 @@ public abstract class AbstractPgnReportTest {
   }
 
   private static void testRepetition(Report report, PgnFileTestCase testCase) {
-    RepetitionTestUtility.testRepetition(report, testCase, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
-  }
-
-  private static void testRepetitionInitialEnPassantCapture(Report report, PgnFileTestCase testCase) {
-    RepetitionTestUtility.testRepetition(report, testCase, EnPassantCaptureRuleThreefold.DO_IGNORE);
+    RepetitionTestUtility.testRepetition(report, testCase);
   }
 
   private static void testNoProgressMoveRule(Report report, PgnFileTestCase testCase) {

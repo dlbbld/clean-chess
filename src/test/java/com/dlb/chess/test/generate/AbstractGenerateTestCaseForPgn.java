@@ -5,7 +5,6 @@ import java.nio.file.Path;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.report.Report;
@@ -33,17 +32,9 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append("\"");
     result.append(", ");
 
-    final String repetition = RepetitionRepresentation.calculateRepresentationRepetitionReport(report,
-        EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+    final String repetition = RepetitionRepresentation.calculateRepresentationRepetitionReport(report);
     result.append("\"");
     result.append(repetition);
-    result.append("\"");
-    result.append(", ");
-
-    final String repetitionInitialEnPassantCapture = RepetitionRepresentation
-        .calculateRepresentationRepetitionReport(report, EnPassantCaptureRuleThreefold.DO_IGNORE);
-    result.append("\"");
-    result.append(repetitionInitialEnPassantCapture);
     result.append("\"");
     result.append(", ");
 

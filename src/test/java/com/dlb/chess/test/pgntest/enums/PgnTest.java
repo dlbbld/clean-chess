@@ -36,7 +36,6 @@ public enum PgnTest {
   BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK(true, "basic/insufficientMaterial/onlyBlack"),
   BASIC_INSUFFICIENT_MATERIAL_NONE(true, "basic/insufficientMaterial/none"),
   BASIC_THREEFOLD(true, "basic/threefold"),
-  BASIC_THREEFOLD_INITIAL_EP(true, "basic/threefoldInitialEnPassantCapture"),
   BASIC_FIFTY(true, "basic/fifty"),
   BASIC_FIVEFOLD(true, "basic/fivefold"),
   BASIC_SEVENTY_FIVE(true, "basic/seventyFive"),

@@ -10,7 +10,6 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.NonNullWrapperCommon;
 import com.dlb.chess.common.constants.ChessConstants;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.ClaimAhead;
@@ -108,7 +107,7 @@ public final class Reporter {
     }
 
     final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(
-        board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+        board.getHalfMoveList(), REPETITION_COUNT_THRESHOLD);
     addMainSection(output, "report.repetition.threefold.list.title");
     if (repetitionListList.isEmpty()) {
       output.add(Message.getString("report.repetition.threefold.list.none"));
@@ -155,15 +154,12 @@ public final class Reporter {
     final List<HalfMove> halfMoveList = board.getHalfMoveList();
 
     final List<List<HalfMove>> repetitionListList = RepetitionUtility.calculateRepetitionListList(halfMoveList,
-        ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
-    final List<List<HalfMove>> repetitionListListInitialEnPassantCapture = calculateRepetitionListListInitialEnPassantCapture(
-        halfMoveList);
+        ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD);
 
     final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility
         .calculateNoProgressMoveRule(board, ChessConstants.FIFTY_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD);
 
     final var hasThreefoldRepetition = !repetitionListList.isEmpty();
-    final var hasThreefoldRepetitionInitialEnPassantCapture = !repetitionListListInitialEnPassantCapture.isEmpty();
     final var hasFivefoldRepetition = calculateHasFivefoldRepetition(repetitionListList);
     final var hasFiftyMoveRule = !noProgressMoveListList.isEmpty();
     final var hasSeventyFiveMoveRule = calculateHasSeventyFiveMoveRule(noProgressMoveListList);
@@ -182,8 +178,7 @@ public final class Reporter {
       throw new ProgrammingMistakeException("Board was changed");
     }
 
-    return new Report(havingMove, halfMoveList, repetitionListList, repetitionListListInitialEnPassantCapture,
-        noProgressMoveListList, hasThreefoldRepetition, hasThreefoldRepetitionInitialEnPassantCapture,
+    return new Report(havingMove, halfMoveList, repetitionListList, noProgressMoveListList, hasThreefoldRepetition,
         hasFivefoldRepetition, hasFiftyMoveRule, hasSeventyFiveMoveRule, firstCapture, hasCapture,
         maxNoProgressSequence, checkmateOrStalemate, insufficientMaterial, fen, board);
   }
@@ -225,22 +220,6 @@ public final class Reporter {
       }
     }
     return false;
-  }
-
-  private static List<List<HalfMove>> calculateRepetitionListListInitialEnPassantCapture(List<HalfMove> halfMoveList) {
-
-    final List<List<HalfMove>> repetitionListListIgnoringEnPassantCapture = RepetitionUtility
-        .calculateRepetitionListList(halfMoveList, ChessConstants.THREEFOLD_REPETITION_RULE_THRESHOLD,
-            EnPassantCaptureRuleThreefold.DO_IGNORE);
-
-    final List<List<HalfMove>> list = new ArrayList<>();
-    for (final List<HalfMove> currentHalfMoveList : repetitionListListIgnoringEnPassantCapture) {
-      final HalfMove firstHalfMove = NonNullWrapperCommon.getFirst(currentHalfMoveList);
-      if (firstHalfMove.dynamicPosition().isEnPassantCapturePossible()) {
-        list.add(currentHalfMoveList);
-      }
-    }
-    return list;
   }
 
   private static int calculateFirstCapture(List<HalfMove> halfMoveList) {

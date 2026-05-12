@@ -14,10 +14,9 @@ import com.dlb.chess.common.model.HalfMove;
  * sequences for corpus-mining use cases.
  */
 public record Report(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
-    List<List<HalfMove>> repetitionListListInitialEnPassantCapture,
     List<List<NoProgressHalfMove>> noProgressMoveListList, boolean hasThreefoldRepetition,
-    boolean hasThreefoldRepetitionInitialEnPassantCapture, boolean hasFivefoldRepetition, boolean hasFiftyMoveRule,
-    boolean hasSeventyFiveMoveRule, int firstCapture, boolean hasCapture, int maxNoProgressSequence,
-    CheckmateOrStalemate checkmateOrStalemate, InsufficientMaterial insufficientMaterial, String fen, Board board) {
+    boolean hasFivefoldRepetition, boolean hasFiftyMoveRule, boolean hasSeventyFiveMoveRule, int firstCapture,
+    boolean hasCapture, int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate,
+    InsufficientMaterial insufficientMaterial, String fen, Board board) {
 
 }
