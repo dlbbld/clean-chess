@@ -192,6 +192,71 @@ Make `PgnWriter` **semantic-preserving** by default. It's the honest balance: re
 - `TagUtility` (kept as consumer-facing in the API audit) is not the source of the problem; the issue is what the parser *fabricates* before `TagUtility`'s consumers see the tag list. Once the parser stops fabricating, `TagUtility` consumers see what the user actually wrote.
 - This work also subsumes the earlier short backlog entry "PGN round-trip fidelity — stop auto-completing tags on import" — that was an early sketch of the same idea; this entry is the full framing.
 
+### Lenient FEN parser/validator
+The strict FEN parser `FenParserRaw` is one regex (`^([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+) ([^ ]+)$`): six fields, single space between, no leading/trailing whitespace, no tabs, no newlines, no missing counters. Any deviation gets the same bland exception. For a class-A library that consumes FEN from outside producers (engine output, lichess/chess.com exports, Stockfish, ChessBase), that's too narrow. Mirrors the strict/lenient split already established for PGN and planned for SAN.
+
+The lenient layer is purely a **syntactic-tolerance pass**, not a semantic one. A FEN with a king missing must still fail `FenParserAdvanced`; the lenient layer just doesn't reject for whitespace, casing, or missing counters. Strict-vs-lenient (syntactic) and raw-vs-advanced (semantic) are orthogonal axes:
+
+|                | Raw (lexical only)        | Advanced (rules-consistent)        |
+|----------------|---------------------------|------------------------------------|
+| Strict input   | `FenParserRaw` (today)    | `FenParserAdvanced` (today)        |
+| Lenient input  | `LenientFenParser` → Raw  | `LenientFenParser` → Advanced      |
+
+#### Implementation strategy — normalise → delegate
+The lenient parser walks the input, produces a canonical FEN string plus a list of forgiven items, then hands the canonical string to the *existing* `FenParserRaw` (and `FenParserAdvanced` if requested). No duplication of the strict parsing logic; the strict regex stays one line.
+
+#### Diagnostic taxonomy (starting set; will sharpen with the arbiter lens)
+- `EXTRA_WHITESPACE_BETWEEN_FIELDS` — 2+ spaces collapse to 1
+- `LEADING_WHITESPACE`
+- `TRAILING_WHITESPACE`
+- `TAB_OR_NEWLINE_AS_SEPARATOR` — common in engine output
+- `MISSING_HALFMOVE_CLOCK` — 5-field FEN → default `0`
+- `MISSING_FULLMOVE_NUMBER` — 5- or 4-field FEN → default `1`
+- `MISSING_HALFMOVE_AND_FULLMOVE` — 4-field FEN; engines like Stockfish produce this constantly
+- `UPPERCASE_SIDE_TO_MOVE` — `W`/`B` → `w`/`b`
+- `CASTLING_NON_CANONICAL_ORDER` — `QKqk` → `KQkq`; intra-field whitespace; etc.
+- `EN_PASSANT_NON_STANDARD_DASH` — `—`, `–`, `X` → `-`
+- `EN_PASSANT_UPPERCASE` — `E3` → `e3`
+- `RANK_DIGIT_ZERO` — `0` used for empty squares (typo)
+- `TRAILING_GARBAGE_TOKEN` — extra junk after fullmove
+
+#### Public API sketch
+```java
+public final class LenientFenParser {
+  public static LenientFenParserValidationResult parseText(String fen);
+  public static LenientFenParserValidationResult validateText(String fen);  // diagnostics only
+}
+
+public record LenientFenParserValidationResult(
+    Fen fen,                                      // null only if validateText
+    ImmutableList<ForgivenFenItem> forgivenItems);
+
+public record ForgivenFenItem(
+    ForgivenFenItemCode code,
+    String originalToken,
+    String canonicalValue);
+
+public class LenientFenParserValidationException extends UsageException { ... }
+```
+
+Plus `Board.fromFenLenient(String)` (or `new Board(String, FenStrictness)`) for the consumer-facing opt-in. `new Board(String)` stays strict — same call-site discipline as `performMove` vs `performMoveLenient`.
+
+#### Action items
+- [ ] Settle the diagnostic taxonomy with the arbiter lens — add/remove codes based on real-world FEN deviations
+- [ ] Define `ForgivenFenItemCode` enum + `ForgivenFenItem` record + `LenientFenParserValidationResult` record
+- [ ] Implement `LenientFenParser` as a normaliser that produces a canonical FEN string + forgiven items list, then delegates to `FenParserRaw` (and optionally `FenParserAdvanced`)
+- [ ] `LenientFenParser.parseText` vs `validateText`: same pipeline, payload vs diagnostics-only
+- [ ] `LenientFenParserValidationException extends UsageException` for unrecoverable input
+- [ ] `Board` opt-in entry point for lenient FEN; `new Board(String)` stays strict
+- [ ] Decide: does `LenientPgnParser` use lenient FEN when reading the `FEN`/`SetUp` PGN tag, or stay strict on the tag? Lean: lenient, for consistency with movetext leniency
+- [ ] One test fixture per forgiven code; one end-to-end "deficient FEN" fixture; round-trip test (lenient parse → canonical FEN → strict parse) for each
+- [ ] Document the contract in `specification.md` — explicit table of strict-vs-lenient × raw-vs-advanced
+- [ ] Update README "Lenient PGN parser" framing — the project now has lenient parsers for all three input languages
+
+#### Open design questions
+- Castling normalisation scope — KQkq-ordering deviations only, or also X-FEN / Shredder-FEN (Chess960) castling notation? Lean: KQkq-ordering only; X-FEN is a separate feature.
+- Order of forgiven items in the result — left-to-right (token position) or grouped by code? PGN does left-to-right; mirror.
+
 ## Future release — Auto-CHA (DeepSquare moment)
 
 ### GPL v3 source-file headers
