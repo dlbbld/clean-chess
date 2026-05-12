@@ -24,9 +24,11 @@ While in `FenParserAdvanced`, `validateHavingMove` currently checks for `w` or `
 - [ ] Update any test callers of the removed methods to go through the FEN parser instead
 
 ### Replace `UciValidateHelper` enum with computed lookup
-Auto-generated 1984-line enum, ~111 KB class file (~50% of the JAR's bytecode mass). Used as a list-of-strings rather than as an enum. A generation loop in the static init of its only caller would replace 1984 lines of source with ~12.
-- [ ] Replace the enum with a `Set<String>` (or similar) computed via a constructor loop
-- [ ] Verify JAR shrinks by ~50%
+Auto-generated 1984-line enum, ~111 KB class file — the single largest `.class` in the project (~7.75% of production bytecode, ~2.5× the next-largest class). The "~50%" framing in the earlier draft of this item was overstated. Used as a list-of-strings rather than as an enum; a generation loop in the static init of its only caller (`UciMoveValidationUtility`) replaces the 1984 lines of source with ~35 lines of generation logic.
+- [ ] Replace the enum with a computed in-memory lookup in `UciMoveValidationUtility`'s static init (the loop logic from the now-deletable `GenerateUciMove` test scaffold).
+- [ ] Drop the `UciValidateHelper` field from the `UciMove` record (zero external callers — verify with grep before removing).
+- [ ] Delete `GenerateUciMove` (one-shot code-template generator whose output is superseded by the runtime computation).
+- [ ] Verify production bytecode shrinks (expected ~10% reduction; not 50%).
 
 ### FEN-validation documentation overclaims
 `fen/package-info.java` and `Board.java` (class-level + constructor docs) say advanced FEN rejects positions "no real game could reach." The code does strong structural and rule-consistency checks but does not prove full game reachability. Also: package text says halfmove clock "at or above 150" while code accepts exactly 150.
