@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.common.utility.FileUtility;
 
@@ -37,7 +37,7 @@ import com.dlb.chess.test.common.utility.FileUtility;
  */
 class TestConventionTestPackageNaming {
 
-  private static final Path TEST_JAVA_ROOT = NonNullWrapperCommon
+  private static final Path TEST_JAVA_ROOT = Nulls
       .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
 
   private static final String REQUIRED_PACKAGE_PREFIX = "com.dlb.chess";
@@ -48,13 +48,13 @@ class TestConventionTestPackageNaming {
     final List<String> violations = new ArrayList<>();
 
     for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
-      if (!NonNullWrapperCommon.toString(p).endsWith(".java")) {
+      if (!Nulls.toString(p).endsWith(".java")) {
         continue;
       }
       final String packageName = derivePackageName(p);
       if (!REQUIRED_PACKAGE_PREFIX.equals(packageName) && !packageName.startsWith(REQUIRED_PACKAGE_PREFIX + ".")) {
-        violations.add(packageName + "  in  " + NonNullWrapperCommon
-            .replace(NonNullWrapperCommon.toString(NonNullWrapperCommon.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
+        violations.add(packageName + "  in  " + Nulls
+            .replace(Nulls.toString(Nulls.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
       }
     }
 
@@ -74,8 +74,8 @@ class TestConventionTestPackageNaming {
     if (parent == null) {
       return "";
     }
-    final Path relative = NonNullWrapperCommon.pathRelativize(TEST_JAVA_ROOT, parent);
-    return NonNullWrapperCommon
-        .replace(NonNullWrapperCommon.replace(NonNullWrapperCommon.toString(relative), '\\', '.'), '/', '.');
+    final Path relative = Nulls.pathRelativize(TEST_JAVA_ROOT, parent);
+    return Nulls
+        .replace(Nulls.replace(Nulls.toString(relative), '\\', '.'), '/', '.');
   }
 }

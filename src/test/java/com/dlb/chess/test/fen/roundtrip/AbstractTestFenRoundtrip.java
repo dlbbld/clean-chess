@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.CommonTestUtility;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 
@@ -15,7 +15,7 @@ public abstract class AbstractTestFenRoundtrip implements EnumConstants {
 
     Board previousBoardFromFen = null;
     for (var i = 0; i < moveList.size(); i++) {
-      final MoveSpecification move = NonNullWrapperCommon.get(moveList, i);
+      final MoveSpecification move = Nulls.get(moveList, i);
       boardPlayMoves.move(move);
       if (previousBoardFromFen != null) {
         // testing fen plus played move equals played move

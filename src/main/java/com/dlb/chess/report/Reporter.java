@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -90,7 +90,7 @@ public final class Reporter {
    * {@code "\n"}.
    */
   public static String calculateReportText(Board board) {
-    return NonNullWrapperCommon.join("\n", calculateReportLines(board));
+    return Nulls.join("\n", calculateReportLines(board));
   }
 
   private static List<String> calculateReportLines(Board board) {
@@ -120,7 +120,7 @@ public final class Reporter {
     final List<List<NoProgressHalfMove>> noProgressMoveListList = NoProgressMoveUtility
         .calculateNoProgressMoveRule(board, 2 * NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD);
     addMainSection(output, "report.noProgressMove.sequence.title",
-        NonNullWrapperCommon.valueOf(NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD));
+        Nulls.valueOf(NO_PROGRESS_FULL_MOVE_COUNT_THRESHOLD));
     if (noProgressMoveListList.isEmpty()) {
       output.add(Message.getString("report.noProgressMove.sequence.none"));
     } else {
@@ -202,7 +202,7 @@ public final class Reporter {
 
   private static boolean calculateHasSeventyFiveMoveRule(List<List<NoProgressHalfMove>> noProgressMoveListList) {
     for (final List<NoProgressHalfMove> list : noProgressMoveListList) {
-      final NoProgressHalfMove lastNoProgressHalfMove = NonNullWrapperCommon.getLast(list);
+      final NoProgressHalfMove lastNoProgressHalfMove = Nulls.getLast(list);
 
       if (lastNoProgressHalfMove.sequenceLength() >= ChessConstants.SEVENTY_FIVE_MOVE_RULE_HALF_MOVE_CLOCK_THRESHOLD) {
         return true;
@@ -254,7 +254,7 @@ public final class Reporter {
     var maxHalfMoveClock = board.getInitialFen().halfMoveClock();
     final var maxIndex = halfMoveList.size() - 1;
     for (var i = 0; i <= maxIndex; i++) {
-      final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
+      final HalfMove halfMove = Nulls.get(halfMoveList, i);
       final var halfMoveClock = halfMove.halfMoveClock();
       if (halfMoveClock > maxHalfMoveClock) {
         maxHalfMoveClock = halfMoveClock;
@@ -271,14 +271,14 @@ public final class Reporter {
     final StringBuilder mainSection = new StringBuilder();
     mainSection.append(Message.getString(key));
     mainSection.append(":");
-    output.add(NonNullWrapperCommon.toString(mainSection));
+    output.add(Nulls.toString(mainSection));
   }
 
   private static void addFirstMainSection(List<String> output, String key, String placeHolder) {
     final StringBuilder mainSection = new StringBuilder();
     mainSection.append(Message.getString(key, placeHolder));
     mainSection.append(":");
-    output.add(NonNullWrapperCommon.toString(mainSection));
+    output.add(Nulls.toString(mainSection));
   }
 
   private static void addMainSection(List<String> output, String key) {

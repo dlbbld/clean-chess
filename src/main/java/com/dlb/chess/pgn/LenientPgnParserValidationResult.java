@@ -3,7 +3,7 @@ package com.dlb.chess.pgn;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.ForgivenItem;
 import com.dlb.chess.san.SanValidationProblem;
 import com.google.common.collect.ImmutableList;
@@ -20,7 +20,7 @@ public record LenientPgnParserValidationResult(@NonNull LenientPgnParserValidati
     @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItems) {
 
   public LenientPgnParserValidationResult {
-    sanForgivenItems = NonNullWrapperCommon.copyOfList(sanForgivenItems);
+    sanForgivenItems = Nulls.copyOfList(sanForgivenItems);
   }
 
   public boolean isValid() {

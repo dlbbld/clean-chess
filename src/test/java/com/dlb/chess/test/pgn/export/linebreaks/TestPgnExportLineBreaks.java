@@ -7,7 +7,7 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
@@ -17,12 +17,12 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class TestPgnExportLineBreaks {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineBreaks.class);
+  private static final Logger logger = Nulls.getLogger(TestPgnExportLineBreaks.class);
 
-  private static final Path TEST_SOURCE_FILE_PATH = NonNullWrapperCommon
+  private static final Path TEST_SOURCE_FILE_PATH = Nulls
       .pathResolve(PgnTestConstants.PGN_EXPORT_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, "01_linux.pgn");
 
-  private static final Path TEST_DESTINATION_FILE_PATH = NonNullWrapperCommon
+  private static final Path TEST_DESTINATION_FILE_PATH = Nulls
       .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "test_write_line_breaks.pgn");
 
   @SuppressWarnings("static-method")

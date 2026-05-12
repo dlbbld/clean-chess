@@ -3,7 +3,7 @@ package com.dlb.chess.test.pgn.parser;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.StrictPgnParser;
 
 /**
@@ -18,7 +18,7 @@ import com.dlb.chess.pgn.StrictPgnParser;
  */
 class TestStrictPgnParserHalfMoveClockFromFen extends AbstractTestPgnParserHalfMoveClockFromFen {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestStrictPgnParserHalfMoveClockFromFen.class);
+  private static final Logger logger = Nulls.getLogger(TestStrictPgnParserHalfMoveClockFromFen.class);
 
   @SuppressWarnings("static-method")
   @Test

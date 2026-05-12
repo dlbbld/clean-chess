@@ -7,7 +7,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.HalfMoveListListComparator;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
@@ -55,14 +55,14 @@ public abstract class RepetitionUtility {
 
     // we use the same index for moves and position on purpose
     for (var i = performedLegalMoveList.size() - 1; i >= 0; i--) {
-      final LegalMove lastLegalMove = NonNullWrapperCommon.get(performedLegalMoveList, i);
+      final LegalMove lastLegalMove = Nulls.get(performedLegalMoveList, i);
       if (BasicChessUtility.calculateIsResetHalfMoveClock(lastLegalMove)) {
         // if pawn move or capture the positions before cannot equal the current position
         // this is a property of the chess game with a basic mathematical proof
         // this is used often and increases performance
         return countRepetition;
       }
-      final DynamicPosition previousDynamicPosition = NonNullWrapperCommon.get(dynamicPositionList, i);
+      final DynamicPosition previousDynamicPosition = Nulls.get(dynamicPositionList, i);
       if (equals(dynamicPosition, previousDynamicPosition)) {
         countRepetition++;
       }

@@ -3,7 +3,7 @@ package com.dlb.chess.pgn;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
 abstract class PgnLineWrapper {
@@ -21,18 +21,18 @@ abstract class PgnLineWrapper {
     }
     final List<String> result = new ArrayList<>();
     StringBuilder wrappedLine = new StringBuilder();
-    wrappedLine.append(NonNullWrapperCommon.get(atoms, 0));
+    wrappedLine.append(Nulls.get(atoms, 0));
     for (var i = 1; i < atoms.size(); i++) {
-      final String atom = NonNullWrapperCommon.get(atoms, i);
+      final String atom = Nulls.get(atoms, i);
       if (wrappedLine.length() + 1 + atom.length() <= lineLength) {
         wrappedLine.append(" ").append(atom);
       } else {
-        result.add(NonNullWrapperCommon.toString(wrappedLine));
+        result.add(Nulls.toString(wrappedLine));
         wrappedLine = new StringBuilder();
         wrappedLine.append(atom);
       }
     }
-    result.add(NonNullWrapperCommon.toString(wrappedLine));
+    result.add(Nulls.toString(wrappedLine));
     return result;
   }
 
@@ -57,11 +57,11 @@ abstract class PgnLineWrapper {
           j++;
         }
         if (j < len) {
-          atoms.add(NonNullWrapperCommon.substring(line, i, j + 1));
+          atoms.add(Nulls.substring(line, i, j + 1));
           i = j + 1;
         } else {
           // Defensive — PgnCreate emits balanced braces, so unreachable in practice.
-          atoms.add(NonNullWrapperCommon.substring(line, i));
+          atoms.add(Nulls.substring(line, i));
           i = len;
         }
         continue;
@@ -70,7 +70,7 @@ abstract class PgnLineWrapper {
       while (j < len && line.charAt(j) != ' ' && line.charAt(j) != '{') {
         j++;
       }
-      atoms.add(NonNullWrapperCommon.substring(line, i, j));
+      atoms.add(Nulls.substring(line, i, j));
       i = j;
     }
     return atoms;

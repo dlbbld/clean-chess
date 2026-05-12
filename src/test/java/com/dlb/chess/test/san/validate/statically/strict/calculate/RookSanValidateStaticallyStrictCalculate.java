@@ -3,7 +3,7 @@ package com.dlb.chess.test.san.validate.statically.strict.calculate;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.enums.RookSanValidateStaticallyStrict;
@@ -20,7 +20,7 @@ public class RookSanValidateStaticallyStrictCalculate extends AbstractSanValidat
       populateMap(sanValidateMap, model, ROOK);
     }
 
-    return NonNullWrapperCommon.copyOfMap(sanValidateMap);
+    return Nulls.copyOfMap(sanValidateMap);
   }
 
 }

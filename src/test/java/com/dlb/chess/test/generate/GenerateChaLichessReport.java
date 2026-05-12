@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -17,7 +17,7 @@ import com.dlb.chess.test.winnable.enums.Winnable;
 
 public class GenerateChaLichessReport {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateChaLichessReport.class);
+  private static final Logger logger = Nulls.getLogger(GenerateChaLichessReport.class);
 
   public static void main(String[] args) throws Exception {
     generate(CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE));

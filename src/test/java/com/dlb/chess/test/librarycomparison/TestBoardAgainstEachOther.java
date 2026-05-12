@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.CommonTestUtility;
 import com.dlb.chess.board.LibraryCarlosBoard;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -21,7 +21,7 @@ class TestBoardAgainstEachOther {
   // Leave empty to test all games, put a game name to only test this game.
   // private static final String ONLY_TEST_GAME = "threefold_castling_white_both_sides_lost";
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBoardAgainstEachOther.class);
+  private static final Logger logger = Nulls.getLogger(TestBoardAgainstEachOther.class);
 
   @SuppressWarnings("static-method")
   @Test

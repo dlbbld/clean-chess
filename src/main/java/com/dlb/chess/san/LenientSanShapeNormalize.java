@@ -9,7 +9,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.messages.Message;
 
@@ -47,8 +47,8 @@ final class LenientSanShapeNormalize {
 
     final var lastChar = text.charAt(text.length() - 1);
     final var hasTerminalMarker = lastChar == '+' || lastChar == '#';
-    final var terminalMarker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
-    var body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
+    final var terminalMarker = hasTerminalMarker ? Nulls.valueOf(lastChar) : "";
+    var body = hasTerminalMarker ? Nulls.substring(text, 0, text.length() - 1) : text;
 
     body = stripExplicitPawnLetter(body, codes);
     // Case fixes run early so downstream steps (UCI/LAN translation, pawn-missing-x, promotion-equals)
@@ -67,8 +67,8 @@ final class LenientSanShapeNormalize {
       List<LenientSanValidationProblem> codes) {
     final var lastChar = text.charAt(text.length() - 1);
     final var hasTerminalMarker = lastChar == '+' || lastChar == '#';
-    final var marker = hasTerminalMarker ? NonNullWrapperCommon.valueOf(lastChar) : "";
-    final var body = hasTerminalMarker ? NonNullWrapperCommon.substring(text, 0, text.length() - 1) : text;
+    final var marker = hasTerminalMarker ? Nulls.valueOf(lastChar) : "";
+    final var body = hasTerminalMarker ? Nulls.substring(text, 0, text.length() - 1) : text;
 
     // Classic O-O / 0-0 / mixed forms. Three or five characters with hyphens and zero-or-O at every other position.
     if (matchesCastlingZeroOPattern(body)) {
@@ -81,7 +81,7 @@ final class LenientSanShapeNormalize {
       }
       if (hasZero) {
         codes.add(LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING);
-        return NonNullWrapperCommon.replace(body, '0', 'O') + marker;
+        return Nulls.replace(body, '0', 'O') + marker;
       }
       // All-O: already canonical (or canonical with marker) â€” let strict handle it.
       return text;
@@ -154,7 +154,7 @@ final class LenientSanShapeNormalize {
 
   private static String handleLanOrUci(String body, Board board, List<LenientSanValidationProblem> codes) {
     if (body.indexOf('-') >= 0) {
-      final String dehyphenated = NonNullWrapperCommon.replace(body, "-", "");
+      final String dehyphenated = Nulls.replace(body, "-", "");
       codes.add(LenientSanValidationProblem.LONG_ALGEBRAIC_NOTATION);
       final var translated = tryTranslateUciShape(dehyphenated, board);
       return translated != null ? translated : dehyphenated;
@@ -214,7 +214,7 @@ final class LenientSanShapeNormalize {
       out.append(body.charAt(0)).append(body.charAt(1));
       out.append(body.charAt(2)).append(body.charAt(3));
     }
-    return NonNullWrapperCommon.toString(out);
+    return Nulls.toString(out);
   }
 
   // --- Body transforms ---
@@ -224,7 +224,7 @@ final class LenientSanShapeNormalize {
       return body;
     }
     codes.add(LenientSanValidationProblem.EXPLICIT_PAWN_LETTER);
-    return NonNullWrapperCommon.substring(body, 1);
+    return Nulls.substring(body, 1);
   }
 
   private static String insertMissingPromotionEquals(String body, List<LenientSanValidationProblem> codes) {
@@ -241,7 +241,7 @@ final class LenientSanShapeNormalize {
       return body;
     }
     codes.add(LenientSanValidationProblem.MISSING_PROMOTION_EQUALS);
-    return NonNullWrapperCommon.substring(body, 0, len - 1) + "=" + last;
+    return Nulls.substring(body, 0, len - 1) + "=" + last;
   }
 
   private static String applyCaseFixups(String body, List<LenientSanValidationProblem> codes) {
@@ -258,7 +258,7 @@ final class LenientSanShapeNormalize {
       return body;
     }
     codes.add(LenientSanValidationProblem.UPPERCASE_CAPTURE_MARKER);
-    return NonNullWrapperCommon.replace(body, 'X', 'x');
+    return Nulls.replace(body, 'X', 'x');
   }
 
   private static String caseFixLowercasePromotionPiece(String body, List<LenientSanValidationProblem> codes) {
@@ -269,7 +269,7 @@ final class LenientSanShapeNormalize {
     final var piece = body.charAt(eq + 1);
     if (piece == 'r' || piece == 'n' || piece == 'b' || piece == 'q') {
       codes.add(LenientSanValidationProblem.LOWERCASE_PROMOTION_PIECE);
-      return NonNullWrapperCommon.substring(body, 0, eq + 1) + Character.toUpperCase(piece);
+      return Nulls.substring(body, 0, eq + 1) + Character.toUpperCase(piece);
     }
     return body;
   }
@@ -281,7 +281,7 @@ final class LenientSanShapeNormalize {
     final var first = body.charAt(0);
     if (first == 'n' || first == 'r' || first == 'q' || first == 'k') {
       codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
-      return Character.toUpperCase(first) + NonNullWrapperCommon.substring(body, 1);
+      return Character.toUpperCase(first) + Nulls.substring(body, 1);
     }
     if (first == 'b') {
       // Lowercase 'b' is canonically a file letter (pawn move from b-file) or the file leader of a UCI / LAN
@@ -295,12 +295,12 @@ final class LenientSanShapeNormalize {
       // lowercase bishop capture (e.g. "bxf7" â€” bishop on c4 captures on f7).
       if (body.length() >= 2 && isFileLetterAnyCase(body.charAt(1))) {
         codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
-        return "B" + NonNullWrapperCommon.substring(body, 1);
+        return "B" + Nulls.substring(body, 1);
       }
       if (body.length() >= 4 && body.charAt(1) == 'x' && isFileLetterAnyCase(body.charAt(2))
           && !isAdjacentFile('b', Character.toLowerCase(body.charAt(2)))) {
         codes.add(LenientSanValidationProblem.LOWERCASE_PIECE_LETTER);
-        return "B" + NonNullWrapperCommon.substring(body, 1);
+        return "B" + Nulls.substring(body, 1);
       }
     }
     return body;
@@ -341,7 +341,7 @@ final class LenientSanShapeNormalize {
     }
     if (changed) {
       codes.add(LenientSanValidationProblem.UPPERCASE_FILE_LETTER);
-      return NonNullWrapperCommon.toString(out);
+      return Nulls.toString(out);
     }
     return body;
   }
@@ -393,17 +393,17 @@ final class LenientSanShapeNormalize {
     if (body.length() == 3 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
         && isRankDigit(body.charAt(2))) {
       codes.add(LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
-      return body.charAt(0) + "x" + NonNullWrapperCommon.substring(body, 1);
+      return body.charAt(0) + "x" + Nulls.substring(body, 1);
     }
     if (body.length() == 4 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
         && (body.charAt(2) == '1' || body.charAt(2) == '8') && isPromotionPieceLetterAnyCase(body.charAt(3))) {
       codes.add(LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
-      return body.charAt(0) + "x" + NonNullWrapperCommon.substring(body, 1);
+      return body.charAt(0) + "x" + Nulls.substring(body, 1);
     }
     if (body.length() == 5 && isFileLetter(body.charAt(0)) && isFileLetter(body.charAt(1))
         && isRankDigit(body.charAt(2)) && body.charAt(3) == '=' && isPromotionPieceLetterAnyCase(body.charAt(4))) {
       codes.add(LenientSanValidationProblem.MISSING_CAPTURE_MARKER);
-      return body.charAt(0) + "x" + NonNullWrapperCommon.substring(body, 1);
+      return body.charAt(0) + "x" + Nulls.substring(body, 1);
     }
     return body;
   }
@@ -428,7 +428,7 @@ final class LenientSanShapeNormalize {
 
   private static Square parseSquare(char fileLetter, char rankDigit) {
     try {
-      return Square.valueOf(NonNullWrapperCommon.toUpperCase("" + fileLetter + rankDigit));
+      return Square.valueOf(Nulls.toUpperCase("" + fileLetter + rankDigit));
     } catch (final IllegalArgumentException e) {
       throw new ProgrammingMistakeException("Square.valueOf failed for validated file/rank chars", e);
     }

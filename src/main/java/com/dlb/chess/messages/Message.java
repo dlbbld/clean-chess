@@ -3,7 +3,7 @@ package com.dlb.chess.messages;
 import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
@@ -18,7 +18,7 @@ public class Message {
 
   @SuppressWarnings("null")
   public static String getString(String key) {
-    return NonNullWrapperCommon.normalizeSpace(RESOURCE_BUNDLE.getString(key));
+    return Nulls.normalizeSpace(RESOURCE_BUNDLE.getString(key));
   }
 
   public static String getString(String key, String arg1) {
@@ -48,7 +48,7 @@ public class Message {
     if (messageWithWildcardsSubstituted == null) {
       throw new ProgrammingMistakeException("Assuming the method never returns null");
     }
-    return NonNullWrapperCommon.normalizeSpace(messageWithWildcardsSubstituted);
+    return Nulls.normalizeSpace(messageWithWildcardsSubstituted);
   }
 
 }

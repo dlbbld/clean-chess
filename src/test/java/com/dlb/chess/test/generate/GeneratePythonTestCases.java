@@ -9,7 +9,7 @@ import java.util.Set;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.RepetitionUtility;
@@ -24,14 +24,14 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class GeneratePythonTestCases implements EnumConstants {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePythonTestCases.class);
+  private static final Logger logger = Nulls.getLogger(GeneratePythonTestCases.class);
 
   private static final int PRINT_MOVES_INTERVAL = 100;
   private static final int PRINT_GENERATED_LINES_INTERVAL = 1000;
 
   private static final int WRITE_LINE_INTERVAL = 100000;
-  private static final Path PYTHON_SCRIPT = NonNullWrapperCommon.pathResolve(
-      NonNullWrapperCommon.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
+  private static final Path PYTHON_SCRIPT = Nulls.pathResolve(
+      Nulls.pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "../python-chess"),
       "test_play_game.py");
 
   public static void main(String[] args) throws Exception {

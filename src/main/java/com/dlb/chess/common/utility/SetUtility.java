@@ -3,7 +3,7 @@ package com.dlb.chess.common.utility;
 import java.util.ArrayList;
 import java.util.Set;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 public abstract class SetUtility {
 
@@ -11,7 +11,7 @@ public abstract class SetUtility {
     if (set.size() != 1) {
       throw new IllegalArgumentException("Expected exactly one element but found " + set.size());
     }
-    return NonNullWrapperCommon.getFirst(new ArrayList<>(set));
+    return Nulls.getFirst(new ArrayList<>(set));
   }
 
 }

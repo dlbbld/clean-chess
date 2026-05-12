@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.board.HalfMoveUtility;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.LegalMove;
@@ -19,7 +19,7 @@ class ThreefoldClaimAheadPrint {
       final StringBuilder line = new StringBuilder();
 
       // we designed the list to be not empty
-      final ClaimAhead claimAheadFirst = NonNullWrapperCommon.getFirst(claimAheadList);
+      final ClaimAhead claimAheadFirst = Nulls.getFirst(claimAheadList);
       final LegalMove legalMoveFirst = claimAheadFirst.legalMove();
       final String fullMoveNumber = HalfMoveUtility
           .calculateFullMoveNumberInitialWithSpace(claimAheadFirst.fullMoveNumber(), legalMoveFirst.havingMove());
@@ -33,7 +33,7 @@ class ThreefoldClaimAheadPrint {
       final String sanList = BasicUtility.calculateCommaSeparatedList(claimAheadSanList);
       line.append(sanList);
 
-      result.add(NonNullWrapperCommon.toString(line));
+      result.add(Nulls.toString(line));
     }
 
     return result;

@@ -4,7 +4,7 @@ import java.util.EnumMap;
 import java.util.Set;
 
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -17,7 +17,7 @@ public class KnightEmptyBoardSquares extends AbstractEmptyBoardSquares implement
   private static final ImmutableMap<Square, ImmutableSet<Square>> KNIGHT_SQUARES_MAP;
 
   static {
-    final EnumMap<Square, ImmutableSet<Square>> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, ImmutableSet<Square>> map = Nulls.newEnumMap(Square.class);
     for (final Square from : Square.REAL) {
       final int fromFile = from.getFile().getNumber();
       final int fromRank = from.getRank().getNumber();
@@ -31,12 +31,12 @@ public class KnightEmptyBoardSquares extends AbstractEmptyBoardSquares implement
       }
       map.put(from, builder.build());
     }
-    KNIGHT_SQUARES_MAP = NonNullWrapperCommon.copyOfMap(map);
+    KNIGHT_SQUARES_MAP = Nulls.copyOfMap(map);
     ValidateMoveNumberUtility.validateMapOfSet(KNIGHT_SQUARES_MAP, 336);
   }
 
   public static Set<Square> getKnightSquares(Square fromSquare) {
-    return NonNullWrapperCommon.get(KNIGHT_SQUARES_MAP, fromSquare);
+    return Nulls.get(KNIGHT_SQUARES_MAP, fromSquare);
   }
 
 }

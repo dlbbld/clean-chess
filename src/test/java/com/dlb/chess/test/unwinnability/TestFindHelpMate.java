@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -21,7 +21,7 @@ import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestFindHelpMate {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFindHelpMate.class);
+  private static final Logger logger = Nulls.getLogger(TestFindHelpMate.class);
 
   private static final boolean IS_START_FROM_PGN_FILE = true;
   private static final String START_FROM_PGN_FILE_NAME = "wuHnMP2q.pgn";

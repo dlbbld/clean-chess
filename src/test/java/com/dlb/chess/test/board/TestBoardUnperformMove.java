@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -52,7 +52,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
  */
 class TestBoardUnperformMove {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBoardUnperformMove.class);
+  private static final Logger logger = Nulls.getLogger(TestBoardUnperformMove.class);
 
   @SuppressWarnings("static-method")
   @Test

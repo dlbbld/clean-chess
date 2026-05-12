@@ -7,17 +7,17 @@ import java.nio.file.Path;
 import java.util.List;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 
 public class PgnWriter {
 
   public static void writePgnFile(PgnFile pgnFile, String pgnFilePath) {
-    writePgnFile(pgnFile, NonNullWrapperCommon.pathOf(pgnFilePath));
+    writePgnFile(pgnFile, Nulls.pathOf(pgnFilePath));
   }
 
   public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName) {
-    final Path filePath = NonNullWrapperCommon.pathResolve(folderPath, pgnFileName);
+    final Path filePath = Nulls.pathResolve(folderPath, pgnFileName);
     writePgnFile(pgnFile, filePath);
   }
 

@@ -10,13 +10,13 @@ import java.util.Scanner;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ChessApiRuntimeException;
 import com.dlb.chess.common.utility.BasicUtility;
 
 public final class MultiplePgnSplitUtility {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(MultiplePgnSplitUtility.class);
+  private static final Logger logger = Nulls.getLogger(MultiplePgnSplitUtility.class);
 
   private MultiplePgnSplitUtility() {
   }
@@ -40,7 +40,7 @@ public final class MultiplePgnSplitUtility {
     }
     try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8)) {
       while (myReader.hasNextLine()) {
-        final String line = NonNullWrapperCommon.nextLine(myReader);
+        final String line = Nulls.nextLine(myReader);
 
         if (line.length() == 0) {
           blankLineCounter++;
@@ -92,6 +92,6 @@ public final class MultiplePgnSplitUtility {
     while (padded.length() < maxDigits) {
       padded.insert(0, "0");
     }
-    return NonNullWrapperCommon.toString(padded);
+    return Nulls.toString(padded);
   }
 }

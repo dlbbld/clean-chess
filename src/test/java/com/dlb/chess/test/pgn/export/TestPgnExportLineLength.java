@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.common.utility.FileUtility;
@@ -19,10 +19,10 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestPgnExportLineLength {
 
-  private static final Path TEST_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path TEST_FOLDER_PATH = Nulls
       .pathResolve(PgnTestConstants.PGN_EXPORT_TEST_ROOT_FOLDER_PATH, "lineLength");
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnExportLineLength.class);
+  private static final Logger logger = Nulls.getLogger(TestPgnExportLineLength.class);
 
   @SuppressWarnings("static-method")
   @Test

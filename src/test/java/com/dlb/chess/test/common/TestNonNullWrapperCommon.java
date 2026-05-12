@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 class TestNonNullWrapperCommon {
 
@@ -20,7 +20,7 @@ class TestNonNullWrapperCommon {
         """;
 
     final String[] expected = { "line 1", "", "line 3", "" };
-    final String[] actual = NonNullWrapperCommon.split(pgn, "\\n");
+    final String[] actual = Nulls.split(pgn, "\\n");
 
     assertArrayEquals(expected, actual);
   }
@@ -31,11 +31,11 @@ class TestNonNullWrapperCommon {
 
     final var expected = "The knight is good in the attack.";
 
-    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("  The knight is good in the attack."));
-    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("The knight is good in the attack.  "));
-    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("  The knight is good in the attack.    "));
-    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("The knight is   good    in  the attack."));
-    assertEquals(expected, NonNullWrapperCommon.normalizeSpace("   The   knight  is good in   the  attack.   "));
+    assertEquals(expected, Nulls.normalizeSpace("  The knight is good in the attack."));
+    assertEquals(expected, Nulls.normalizeSpace("The knight is good in the attack.  "));
+    assertEquals(expected, Nulls.normalizeSpace("  The knight is good in the attack.    "));
+    assertEquals(expected, Nulls.normalizeSpace("The knight is   good    in  the attack."));
+    assertEquals(expected, Nulls.normalizeSpace("   The   knight  is good in   the  attack.   "));
   }
 
 }

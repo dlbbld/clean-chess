@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
 import com.dlb.chess.messages.Message;
 
@@ -32,7 +32,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     }
 
     throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_WRONG_SECOND_CHARACTER, Message
-        .getString("validation.san.format.pawn.wrongSecondCharacter", NonNullWrapperCommon.toString(secondChar)));
+        .getString("validation.san.format.pawn.wrongSecondCharacter", Nulls.toString(secondChar)));
   }
 
   private static SanParse parsePawnForwardMove(final String core, final SanTerminalMarker sanTerminalMarker) {
@@ -70,7 +70,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     if (!isPromotionSymbol(thirdChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_SYMBOL,
           Message.getString("validation.san.format.pawn.forward.promotion.wrongPromotionSymbol",
-              NonNullWrapperCommon.toString(thirdChar)));
+              Nulls.toString(thirdChar)));
     }
 
     // no promotion piece
@@ -85,7 +85,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     if (!NotationPromotionPiece.exists(fourthChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_FORWARD_PROMOTION_WRONG_PROMOTION_PIECE,
           Message.getString("validation.san.format.pawn.forward.promotion.wrongPromotionPiece",
-              NonNullWrapperCommon.toString(fourthChar)));
+              Nulls.toString(fourthChar)));
     }
 
     // too long
@@ -116,7 +116,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     // file check
     if (!SanValidateFormat.isFileLetter(thirdChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_FILE,
-          Message.getString("validation.san.format.pawn.capture.wrongFile", NonNullWrapperCommon.toString(thirdChar)));
+          Message.getString("validation.san.format.pawn.capture.wrongFile", Nulls.toString(thirdChar)));
     }
 
     // too short
@@ -130,7 +130,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     // rank check
     if (!SanValidateFormat.isRankDigit(fourthChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_WRONG_RANK,
-          Message.getString("validation.san.format.pawn.capture.wrongRank", NonNullWrapperCommon.toString(fourthChar)));
+          Message.getString("validation.san.format.pawn.capture.wrongRank", Nulls.toString(fourthChar)));
     }
 
     if (!isAnyPromotionRank(fourthChar)) {
@@ -163,7 +163,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     if (!isPromotionSymbol(fifthChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_SYMBOL,
           Message.getString("validation.san.format.pawn.capture.promotion.wrongPromotionSymbol",
-              NonNullWrapperCommon.toString(fifthChar)));
+              Nulls.toString(fifthChar)));
     }
 
     // no promotion piece
@@ -178,7 +178,7 @@ abstract class SanValidateFormatPawn extends AbstractSan {
     if (!NotationPromotionPiece.exists(sixthChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_PAWN_CAPTURE_PROMOTION_WRONG_PROMOTION_PIECE,
           Message.getString("validation.san.format.pawn.capture.promotion.wrongPromotionPiece",
-              NonNullWrapperCommon.toString(sixthChar)));
+              Nulls.toString(sixthChar)));
     }
 
     // too long

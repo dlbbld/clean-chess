@@ -7,11 +7,11 @@ import java.nio.file.Path;
 
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 public class FileComparison {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(FileComparison.class);
+  private static final Logger logger = Nulls.getLogger(FileComparison.class);
 
   // problem PGN files in Eclipse suddenly have windows line breaks instead of unix line breaks
   @SuppressWarnings("null")
@@ -30,7 +30,7 @@ public class FileComparison {
   }
 
   private static String convertWindowsToUnixLineEndings(String text) {
-    return NonNullWrapperCommon.replace(text, "\r\n", "\n");
+    return Nulls.replace(text, "\r\n", "\n");
   }
 
   public static boolean check(Path pgnFileExpectedPath, Path pgnFileActualPath) {

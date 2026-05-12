@@ -2,7 +2,7 @@ package com.dlb.chess.board.enums;
 
 import java.util.EnumMap;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableList;
@@ -30,7 +30,7 @@ public enum File {
 
   File(char letter, int number, boolean isBorderFile) {
     this.letter = letter;
-    this.letterString = NonNullWrapperCommon.valueOf(letter);
+    this.letterString = Nulls.valueOf(letter);
     this.number = number;
     this.isBorderFile = isBorderFile;
   }
@@ -90,10 +90,10 @@ public enum File {
   // ---------------------------------------------------------------------------------------------
 
   private static EnumMap<Side, EnumMap<File, File>> buildOffsetTable(int offsetForWhite) {
-    final EnumMap<Side, EnumMap<File, File>> result = NonNullWrapperCommon.newEnumMap(Side.class);
+    final EnumMap<Side, EnumMap<File, File>> result = Nulls.newEnumMap(Side.class);
     for (final Side side : Side.REAL) {
       final int offset = side == Side.WHITE ? offsetForWhite : -offsetForWhite;
-      final EnumMap<File, File> sideMap = NonNullWrapperCommon.newEnumMap(File.class);
+      final EnumMap<File, File> sideMap = Nulls.newEnumMap(File.class);
       for (final File source : REAL) {
         final int targetNumber = source.getNumber() + offset;
         if (targetNumber >= 1 && targetNumber <= 8) {
@@ -121,36 +121,36 @@ public enum File {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(LEFT_FILE, havingMove).containsKey(file);
+    return Nulls.get(LEFT_FILE, havingMove).containsKey(file);
   }
 
   public static File calculateLeftFile(Side havingMove, File file) {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
-    final EnumMap<File, File> sideMap = NonNullWrapperCommon.get(LEFT_FILE, havingMove);
+    final EnumMap<File, File> sideMap = Nulls.get(LEFT_FILE, havingMove);
     if (!sideMap.containsKey(file)) {
       throw new IllegalArgumentException("No left file");
     }
-    return NonNullWrapperCommon.get(sideMap, file);
+    return Nulls.get(sideMap, file);
   }
 
   public static boolean calculateHasRightFile(Side havingMove, File file) {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(RIGHT_FILE, havingMove).containsKey(file);
+    return Nulls.get(RIGHT_FILE, havingMove).containsKey(file);
   }
 
   public static File calculateRightFile(Side havingMove, File file) {
     if (havingMove == Side.NONE || file == NONE) {
       throw new IllegalArgumentException();
     }
-    final EnumMap<File, File> sideMap = NonNullWrapperCommon.get(RIGHT_FILE, havingMove);
+    final EnumMap<File, File> sideMap = Nulls.get(RIGHT_FILE, havingMove);
     if (!sideMap.containsKey(file)) {
       throw new IllegalArgumentException("No right file");
     }
-    return NonNullWrapperCommon.get(sideMap, file);
+    return Nulls.get(sideMap, file);
   }
 
   public static boolean calculateHasLeftLeftFile(Side havingMove, File file) {

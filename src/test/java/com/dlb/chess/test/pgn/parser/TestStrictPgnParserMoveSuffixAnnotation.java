@@ -9,7 +9,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -19,14 +19,14 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserMoveSuffixAnnotation {
 
-  private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_CUSTOM_TEST_FOLDER_PATH = Nulls
       .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "moveSuffixAnnotation");
 
   // -------------------------------------------------------------------------------------------------
   // Move-suffix annotation — exception and success
   // -------------------------------------------------------------------------------------------------
 
-  private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH = Nulls
       .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationOnly/exception");
 
   @SuppressWarnings("static-method")
@@ -54,15 +54,15 @@ class TestStrictPgnParserMoveSuffixAnnotation {
     assertTrue(isException);
   }
 
-  private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH = Nulls
       .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationOnly/success");
 
   @SuppressWarnings("static-method")
   @Test
   void testMoveSuffixAnnotationSuccess() {
-    checkMoveSuffixAnnotationSuccess("01_example.pgn", NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER,
+    checkMoveSuffixAnnotationSuccess("01_example.pgn", Nulls.asList(MoveSuffixAnnotation.BLUNDER,
         MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.BRILLIANT_MOVE));
-    checkMoveSuffixAnnotationSuccess("02_example.pgn", NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER,
+    checkMoveSuffixAnnotationSuccess("02_example.pgn", Nulls.asList(MoveSuffixAnnotation.BLUNDER,
         MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.GOOD_MOVE));
   }
 
@@ -77,7 +77,7 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   // Combined (SAN + suffix + commentary) — exception (non-commentary subset) and success
   // -------------------------------------------------------------------------------------------------
 
-  private static final Path PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH = Nulls
       .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/exception");
 
   @SuppressWarnings("static-method")
@@ -98,21 +98,21 @@ class TestStrictPgnParserMoveSuffixAnnotation {
     assertTrue(isException);
   }
 
-  private static final Path PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH = Nulls
       .pathResolve(PGN_CUSTOM_TEST_FOLDER_PATH, "moveSuffixAnnotationAndCommentary/success");
 
   @SuppressWarnings("static-method")
   @Test
   void testCombinedSuccess() {
     // SAN + suffix + commentary together. Commentary alone is covered by TestCommentaryStrict.
-    checkCombinedSuccess("01_example.pgn", "pregame commentary", NonNullWrapperCommon.asList("e4", "d5", "d4"),
-        NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
+    checkCombinedSuccess("01_example.pgn", "pregame commentary", Nulls.asList("e4", "d5", "d4"),
+        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
             MoveSuffixAnnotation.BRILLIANT_MOVE),
-        NonNullWrapperCommon.asList("commentWhite1", "commentBlack", "commentWhite2"));
-    checkCombinedSuccess("02_example.pgn", "pregame commentary", NonNullWrapperCommon.asList("d5", "a3", "Qd6"),
-        NonNullWrapperCommon.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
+        Nulls.asList("commentWhite1", "commentBlack", "commentWhite2"));
+    checkCombinedSuccess("02_example.pgn", "pregame commentary", Nulls.asList("d5", "a3", "Qd6"),
+        Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE,
             MoveSuffixAnnotation.BRILLIANT_MOVE),
-        NonNullWrapperCommon.asList("commentBlack1", "commentWhite", "commentBlack2"));
+        Nulls.asList("commentBlack1", "commentWhite", "commentBlack2"));
   }
 
   private static void checkCombinedSuccess(String pgnFileName, String pregameCommentaryExpected,

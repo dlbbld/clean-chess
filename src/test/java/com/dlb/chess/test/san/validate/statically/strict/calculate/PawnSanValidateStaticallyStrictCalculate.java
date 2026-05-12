@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.test.san.model.SanValidationFromTo;
@@ -30,12 +30,12 @@ public class PawnSanValidateStaticallyStrictCalculate extends AbstractSanValidat
       final var toSquare = switch (parse.length()) {
         case 3 -> {
           fromFile = File.NONE;
-          yield Square.calculate(NonNullWrapperCommon.substring(parse, 1));
+          yield Square.calculate(Nulls.substring(parse, 1));
         }
         case 4 -> {
           final var fileLetter = parse.charAt(1);
           fromFile = File.calculateFile(fileLetter);
-          yield Square.calculate(NonNullWrapperCommon.substring(parse, 2));
+          yield Square.calculate(Nulls.substring(parse, 2));
         }
         default -> throw new ProgrammingMistakeException(
             "The length of the " + PAWN.getName() + " enum for " + side.getName() + " does not meet the expectation");
@@ -49,7 +49,7 @@ public class PawnSanValidateStaticallyStrictCalculate extends AbstractSanValidat
       }
     }
 
-    return NonNullWrapperCommon.copyOfMap(sanValidateMap);
+    return Nulls.copyOfMap(sanValidateMap);
   }
 
   private static List<String> calculateEnumNameList(Side side) {

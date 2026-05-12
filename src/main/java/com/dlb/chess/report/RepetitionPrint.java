@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import com.dlb.chess.board.HalfMoveUtility;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.HalfMove;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.messages.Message;
@@ -55,7 +55,7 @@ class RepetitionPrint {
     result.append(repetitionMove.fold());
     result.append(")");
 
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
   private static List<RepetitionMove> calculateOutputRepetitionChronlogicallyModelList(

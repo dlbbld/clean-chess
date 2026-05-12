@@ -12,7 +12,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.fen.FenParserRaw;
@@ -29,7 +29,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private static final boolean IS_DEBUG = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(FindHelpmateExhaust.class);
+  private static final Logger logger = Nulls.getLogger(FindHelpmateExhaust.class);
 
   // empirically enough
   private static final int LOCAL_NODES_BOUND = 10000;
@@ -221,7 +221,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   private boolean calculateIsInTranspositionTableWithEnoughDepth(String cacheKey, int movesLeft) {
     if (transpositionMap.containsKey(cacheKey)) {
-      final int storedDepth = NonNullWrapperCommon.get(transpositionMap, cacheKey);
+      final int storedDepth = Nulls.get(transpositionMap, cacheKey);
       return storedDepth >= movesLeft;
     }
     return false;
@@ -323,7 +323,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     fenSquareErased.append(fenRaw.fullMoveNumber());
 
-    return NonNullWrapperCommon.toString(fenSquareErased);
+    return Nulls.toString(fenSquareErased);
   }
 
   private static String calculateCacheKey(Board board) {
@@ -345,7 +345,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
       fenSquareErased.append(fenRaw.enPassantCaptureTargetSquare());
     }
 
-    return NonNullWrapperCommon.toString(fenSquareErased);
+    return Nulls.toString(fenSquareErased);
   }
 
   private static boolean calculateIsEraseEnPassantCaptureTargetSquare(Board board) {

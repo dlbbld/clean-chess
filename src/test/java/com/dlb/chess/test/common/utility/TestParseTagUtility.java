@@ -8,7 +8,7 @@ import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
@@ -203,7 +203,7 @@ class TestParseTagUtility {
       }
     }
     sb.append('\n').append("*").append('\n').append('\n');
-    return NonNullWrapperCommon.toString(sb);
+    return Nulls.toString(sb);
   }
 
   /**
@@ -221,7 +221,7 @@ class TestParseTagUtility {
     if (space == -1) {
       return "";
     }
-    return NonNullWrapperCommon.substring(tagLine, afterOpen, space);
+    return Nulls.substring(tagLine, afterOpen, space);
   }
 
   private static Tag findTagByName(PgnFile file, String name) {
@@ -239,6 +239,6 @@ class TestParseTagUtility {
     while (sb.length() < length) {
       sb.append((char) ('0' + sb.length() % 10));
     }
-    return NonNullWrapperCommon.substring(sb, 0, length);
+    return Nulls.substring(sb, 0, length);
   }
 }

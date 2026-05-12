@@ -15,7 +15,7 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.Nullable;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
@@ -42,7 +42,7 @@ import com.dlb.chess.test.RestrictTestConstants;
  */
 class TestLegacyPgnParsePlaysBeyondAudit {
 
-  private static final Path LEGACY_FOLDER = NonNullWrapperCommon.pathResolve(
+  private static final Path LEGACY_FOLDER = Nulls.pathResolve(
       ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/legacy/common/beyond");
 
   private record Expected(StrictPgnParserValidationProblem problem, SanValidationProblem sanProblem,
@@ -69,15 +69,15 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     final List<String> failures = new ArrayList<>();
     var totalFiles = 0;
 
-    for (final Map.Entry<String, Expected> entry : NonNullWrapperCommon.entrySet(EXPECTED)) {
+    for (final Map.Entry<String, Expected> entry : Nulls.entrySet(EXPECTED)) {
       totalFiles++;
-      final String relativePath = NonNullWrapperCommon.getKey(entry);
-      final Expected expected = NonNullWrapperCommon.getValue(entry);
+      final String relativePath = Nulls.getKey(entry);
+      final Expected expected = Nulls.getValue(entry);
 
       final var slash = relativePath.lastIndexOf('/');
-      final var subfolder = NonNullWrapperCommon.substring(relativePath, 0, slash);
-      final var fileName = NonNullWrapperCommon.substring(relativePath, slash + 1);
-      final var folderPath = NonNullWrapperCommon.pathResolve(LEGACY_FOLDER, subfolder);
+      final var subfolder = Nulls.substring(relativePath, 0, slash);
+      final var fileName = Nulls.substring(relativePath, slash + 1);
+      final var folderPath = Nulls.pathResolve(LEGACY_FOLDER, subfolder);
 
       try {
         StrictPgnParser.parse(folderPath, fileName);
@@ -276,6 +276,6 @@ class TestLegacyPgnParsePlaysBeyondAudit {
     m.put("wikipedia/threefold/wikipedia_threefold_4_0_1_pest_paris_six_fold.pgn",
         sanGameEnded(FIVE_FOLD_REPETITION_RULE));
 
-    return NonNullWrapperCommon.copyOfMap(m);
+    return Nulls.copyOfMap(m);
   }
 }

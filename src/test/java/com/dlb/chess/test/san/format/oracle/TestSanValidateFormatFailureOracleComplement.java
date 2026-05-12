@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.SanValidationException;
 import com.dlb.chess.test.RestrictTestConstants;
@@ -49,7 +49,7 @@ class TestSanValidateFormatFailureOracleComplement {
    * Castling moves emitted as-is. They use characters ({@code O}, {@code -}) that are outside the combinatoric
    * {@link #ALPHABET}, so we handle them as literal extras rather than polluting the alphabet.
    */
-  private static final Set<String> CASTLING_MOVES = NonNullWrapperCommon.setOf("O-O", "O-O-O");
+  private static final Set<String> CASTLING_MOVES = Nulls.setOf("O-O", "O-O-O");
 
   /** How often to print a progress line to stdout. */
   private static final int PRINT_INTERVAL = 100_000;
@@ -116,7 +116,7 @@ class TestSanValidateFormatFailureOracleComplement {
   void testFailureOracleComplement() {
     assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST);
 
-    final Set<String> validSanSet = NonNullWrapperCommon.keySet(SanValidateStaticallyFormat.getSanValidationMap());
+    final Set<String> validSanSet = Nulls.keySet(SanValidateStaticallyFormat.getSanValidationMap());
     final var startTime = System.currentTimeMillis();
 
     // Single-element array: the idiomatic Java way to hold a mutable long counter
@@ -140,7 +140,7 @@ class TestSanValidateFormatFailureOracleComplement {
   @Test
   void testGeneratorCoversStaticMap() {
     final Set<String> missing = new HashSet<>();
-    for (final String san : NonNullWrapperCommon.keySet(SanValidateStaticallyFormat.getSanValidationMap())) {
+    for (final String san : Nulls.keySet(SanValidateStaticallyFormat.getSanValidationMap())) {
       if (isInGeneratorScope(san)) {
         missing.add(san);
       }

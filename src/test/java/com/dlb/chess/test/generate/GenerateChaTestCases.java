@@ -11,7 +11,7 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
@@ -25,9 +25,9 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 public class GenerateChaTestCases implements EnumConstants {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateChaTestCases.class);
+  private static final Logger logger = Nulls.getLogger(GenerateChaTestCases.class);
 
-  private static final Path LIST_FOR_CHA_FILE_PATH = NonNullWrapperCommon
+  private static final Path LIST_FOR_CHA_FILE_PATH = Nulls
       .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "list_cha_2.txt");
 
   public static void main(String[] args) throws Exception {
@@ -117,7 +117,7 @@ public class GenerateChaTestCases implements EnumConstants {
     line.append(";");
     line.append(isToReplyInsufficientMaterial);
 
-    return NonNullWrapperCommon.toString(line);
+    return Nulls.toString(line);
   }
 
 }

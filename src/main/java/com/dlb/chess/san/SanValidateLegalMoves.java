@@ -14,7 +14,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -260,7 +260,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+            fromSquare, Nulls.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -306,7 +306,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
           enPassantCaptureTargetSquare, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+            fromSquare, Nulls.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -423,7 +423,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+            fromSquare, Nulls.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -462,7 +462,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+            fromSquare, Nulls.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -491,7 +491,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
           Square.NONE, havingMove, fromSquare);
       if (potentialToSquares.contains(toSquare)) {
         final LegalMoveCalculation calc = AbstractLegalMoves.calculateLegalMoveCalculation(staticPosition, havingMove,
-            fromSquare, NonNullWrapperCommon.setOf(toSquare));
+            fromSquare, Nulls.setOf(toSquare));
         allPseudoLegal.addAll(calc.pseudoLegalMoveSet());
       }
     }
@@ -588,7 +588,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       }
       throw new SanValidationException(SanValidationProblem.NOT_REACHABLE_RNBQ_RANK_MULTIPLE,
           Message.getString("validation.san.notReachable.rnbq.rank.multiple", pieceType.getName(),
-              NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
+              Nulls.valueOf(fromRank.getNumber()), toSquare.getName()));
     }
 
     final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(fromRank, legalMovesCandidates);
@@ -610,11 +610,11 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       if (reason == KingSafetyCheck.NON_KING_LEFT_IN_CHECK) {
         throw new SanValidationException(SanValidationProblem.KING_LEFT_IN_CHECK_RNBQ_RANK_MULTIPLE,
             Message.getString("validation.san.kingLeftInCheck.rnbq.rank.multiple", pieceType.getName(),
-                NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
+                Nulls.valueOf(fromRank.getNumber()), toSquare.getName()));
       }
       throw new SanValidationException(SanValidationProblem.KING_EXPOSED_TO_CHECK_RNBQ_RANK_MULTIPLE,
           Message.getString("validation.san.kingExposedToCheck.rnbq.rank.multiple", pieceType.getName(),
-              NonNullWrapperCommon.valueOf(fromRank.getNumber()), toSquare.getName()));
+              Nulls.valueOf(fromRank.getNumber()), toSquare.getName()));
     }
 
     if (legalMovesCandidates.size() == 1) {
@@ -628,7 +628,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       }
       throw new SanValidationException(SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_FILE_REQUIRED,
           Message.getString("validation.san.insufficientlySpecified.rnbq.rank.fileRequired", pieceType.getName(),
-              NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
+              Nulls.valueOf(sanConversion.fromRank().getNumber()), toSquare.getName()));
     }
 
     if (numberOfLegalMovesFromSameRank >= 2) {
@@ -640,7 +640,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       throw new SanValidationException(
           SanValidationProblem.INSUFFICIENTLY_SPECIFIED_RNBQ_RANK_EITHER_FILE_OR_SQUARE_REQUIRED,
           Message.getString("validation.san.insufficientlySpecified.rnbq.rank.eitherFileOrSquareRequired",
-              pieceType.getName(), NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber()),
+              pieceType.getName(), Nulls.valueOf(sanConversion.fromRank().getNumber()),
               toSquare.getName()));
     }
 

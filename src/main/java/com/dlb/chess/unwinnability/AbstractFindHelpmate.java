@@ -6,14 +6,14 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.PgnCreate;
 
 abstract class AbstractFindHelpmate {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(AbstractFindHelpmate.class);
+  private static final Logger logger = Nulls.getLogger(AbstractFindHelpmate.class);
 
   private static final boolean IS_DEBUG = false;
 

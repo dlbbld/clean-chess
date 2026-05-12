@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.messages.Message;
 
@@ -38,7 +38,7 @@ public abstract class SanValidateFormat extends AbstractSan {
 
     if (core.isEmpty()) {
       throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
-          Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(last)));
+          Message.getString("validation.san.format.firstCharacter", Nulls.toString(last)));
     }
 
     final var first = core.charAt(0);
@@ -57,7 +57,7 @@ public abstract class SanValidateFormat extends AbstractSan {
       return SanValidateFormatRnbq.parseRnbqMove(core, sanTerminalMarker);
     }
     throw new SanValidationException(SanValidationProblem.FORMAT_FIRST_CHARACTER,
-        Message.getString("validation.san.format.firstCharacter", NonNullWrapperCommon.toString(first)));
+        Message.getString("validation.san.format.firstCharacter", Nulls.toString(first)));
   }
 
   private static SanTerminalMarker parseSanTerminalMarker(final char last) {

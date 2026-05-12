@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
@@ -22,7 +22,7 @@ import com.dlb.chess.test.ConfigurationTestConstants;
 @SuppressWarnings("null") // JUnit Assertions methods lack JDT null annotations
 class TestStrictPgnParserBeyondTermination {
 
-  private static final Path BEYOND_FOLDER = NonNullWrapperCommon
+  private static final Path BEYOND_FOLDER = Nulls
       .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/resources/pgnParser/common/beyond");
 
   @SuppressWarnings("static-method")

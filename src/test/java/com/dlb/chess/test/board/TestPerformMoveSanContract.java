@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -51,7 +51,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
  */
 class TestPerformMoveSanContract {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPerformMoveSanContract.class);
+  private static final Logger logger = Nulls.getLogger(TestPerformMoveSanContract.class);
 
   @SuppressWarnings("static-method")
   @Test

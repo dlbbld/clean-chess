@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.report.Report;
@@ -90,7 +90,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
 
     result.append("));");
 
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
 }

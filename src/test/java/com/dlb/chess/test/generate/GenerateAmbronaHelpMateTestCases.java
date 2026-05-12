@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.HalfMove;
@@ -37,10 +37,10 @@ public class GenerateAmbronaHelpMateTestCases {
 
   private static final boolean IS_CREATE_UCI_REQUIRED = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateAmbronaHelpMateTestCases.class);
+  private static final Logger logger = Nulls.getLogger(GenerateAmbronaHelpMateTestCases.class);
 
   private static final String OUTPUT_FOLDER_NAME = "lichessHelpmate";
-  private static final Path OUTPUT_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path OUTPUT_FOLDER_PATH = Nulls
       .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, OUTPUT_FOLDER_NAME);
 
   public static void main(String[] args) throws Exception {

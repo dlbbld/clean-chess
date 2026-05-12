@@ -11,7 +11,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.model.UciMove;
@@ -44,8 +44,8 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
     addPromotionMoves(uciMoveList, uciMoveTextLookup, Side.WHITE);
     addPromotionMoves(uciMoveList, uciMoveTextLookup, Side.BLACK);
 
-    UCI_MOVE_LIST = NonNullWrapperCommon.copyOfList(uciMoveList);
-    UCI_MOVE_TEXT_LOOKUP = NonNullWrapperCommon.copyOfMap(uciMoveTextLookup);
+    UCI_MOVE_LIST = Nulls.copyOfList(uciMoveList);
+    UCI_MOVE_TEXT_LOOKUP = Nulls.copyOfMap(uciMoveTextLookup);
   }
 
   static boolean exists(String text) {
@@ -56,7 +56,7 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
     if (!exists(uciMoveStr)) {
       throw new IllegalArgumentException("No such UCI move exists");
     }
-    return NonNullWrapperCommon.get(UCI_MOVE_TEXT_LOOKUP, uciMoveStr);
+    return Nulls.get(UCI_MOVE_TEXT_LOOKUP, uciMoveStr);
   }
 
   public static List<UciMove> getUciMoveList() {
@@ -105,6 +105,6 @@ public abstract class UciMoveValidationUtility implements EnumConstants {
           .toLowerCase(promotionPieceType.getPieceType().getLetter());
       uciMove.append(promotionPieceTypeLetterLowerCase);
     }
-    return NonNullWrapperCommon.toString(uciMove);
+    return Nulls.toString(uciMove);
   }
 }

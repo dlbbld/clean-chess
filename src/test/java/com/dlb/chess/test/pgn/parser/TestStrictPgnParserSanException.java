@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
@@ -15,7 +15,7 @@ import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserSanException extends AbstractTestStrictPgnParserException {
-  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_TEST_FOLDER_PATH = Nulls
       .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/san");
 
   @SuppressWarnings("static-method")

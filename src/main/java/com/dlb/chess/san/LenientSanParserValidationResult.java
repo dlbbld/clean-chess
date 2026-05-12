@@ -2,7 +2,7 @@ package com.dlb.chess.san;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.google.common.collect.ImmutableList;
 
@@ -15,6 +15,6 @@ public record LenientSanParserValidationResult(@NonNull MoveSpecification moveSp
     @NonNull ImmutableList<@NonNull ForgivenItem> forgivenItems) {
 
   public LenientSanParserValidationResult {
-    forgivenItems = NonNullWrapperCommon.copyOfList(forgivenItems);
+    forgivenItems = Nulls.copyOfList(forgivenItems);
   }
 }

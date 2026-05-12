@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
@@ -14,7 +14,7 @@ public class PrintSinglePgnReportRepresentation extends AbstractPgnReportTest {
 
   private static final String PGN_FILE_NAME = "various_gundavaa_tari_2022.pgn";
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(PrintSinglePgnReportRepresentation.class);
+  private static final Logger logger = Nulls.getLogger(PrintSinglePgnReportRepresentation.class);
 
   public static void main(String[] args) throws Exception {
 

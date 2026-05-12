@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicUtility;
@@ -72,7 +72,7 @@ public final class LenientSanParser {
     for (final LenientSanValidationProblem code : codes) {
       items.add(new ForgivenItem(code, text, canonicalSan));
     }
-    return new LenientSanParserValidationResult(moveSpecification, NonNullWrapperCommon.copyOfList(items));
+    return new LenientSanParserValidationResult(moveSpecification, Nulls.copyOfList(items));
   }
 
   /**
@@ -121,6 +121,6 @@ public final class LenientSanParser {
     for (final LenientSanValidationProblem code : codes) {
       items.add(new ForgivenItem(code, text, text));
     }
-    return NonNullWrapperCommon.copyOfList(items);
+    return Nulls.copyOfList(items);
   }
 }

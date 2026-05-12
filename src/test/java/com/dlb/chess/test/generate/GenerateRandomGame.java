@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
@@ -43,7 +43,7 @@ public class GenerateRandomGame {
     while (numberOfMoveOptions != 0) {
       if (numberOfMoveOptions != 0) {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
-        final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
+        final MoveSpecification moveSpecification = Nulls.get(moveOptionList, randomMoveNumberIndex);
         board.move(moveSpecification);
         numberOfHalfMovesPerformed++;
         if (numberOfHalfMovesPerformed == 1 || numberOfHalfMovesPerformed % 100 == 0) {
@@ -163,7 +163,7 @@ public class GenerateRandomGame {
     while (numberOfMoveOptions != 0) {
       if (numberOfMoveOptions != 0) {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
-        final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
+        final MoveSpecification moveSpecification = Nulls.get(moveOptionList, randomMoveNumberIndex);
         board.move(moveSpecification);
         numberOfHalfMovesPerformed++;
         if (numberOfHalfMovesPerformed == 1 || numberOfHalfMovesPerformed % 100 == 0) {
@@ -203,7 +203,7 @@ public class GenerateRandomGame {
     while (numberOfMoveOptions != 0) {
       if (numberOfMoveOptions != 0) {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
-        final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
+        final MoveSpecification moveSpecification = Nulls.get(moveOptionList, randomMoveNumberIndex);
         board.move(moveSpecification);
         if (!isFiftyReached && board.isFiftyMove()) {
           isFiftyReached = true;
@@ -273,7 +273,7 @@ public class GenerateRandomGame {
     while (numberOfMoveOptions != 0) {
       {
         final var randomMoveNumberIndex = RandomUtility.calculateRandomNumber(0, numberOfMoveOptions - 1);
-        final MoveSpecification moveSpecification = NonNullWrapperCommon.get(moveOptionList, randomMoveNumberIndex);
+        final MoveSpecification moveSpecification = Nulls.get(moveOptionList, randomMoveNumberIndex);
         board.move(moveSpecification);
         if (!isRepetitionReached && board.getRepetitionCount() == 2) {
           isRepetitionReached = true;
@@ -327,7 +327,7 @@ public class GenerateRandomGame {
   private static String calculateMoveList(List<HalfMove> halfMoveList) {
     final StringBuilder moveList = new StringBuilder();
     for (var i = 0; i < halfMoveList.size(); i++) {
-      final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
+      final HalfMove halfMove = Nulls.get(halfMoveList, i);
       // after black move if following white move
       if (i > 0 && i % 2 == 0) {
         moveList.append(" ");
@@ -342,7 +342,7 @@ public class GenerateRandomGame {
       moveList.append(halfMove.san());
     }
 
-    return NonNullWrapperCommon.toString(moveList);
+    return Nulls.toString(moveList);
 
   }
 

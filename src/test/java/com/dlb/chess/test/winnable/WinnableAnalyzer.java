@@ -5,7 +5,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicChessUtility;
@@ -17,7 +17,7 @@ public class WinnableAnalyzer {
 
   public static final int MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE = 10;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableAnalyzer.class);
+  private static final Logger logger = Nulls.getLogger(WinnableAnalyzer.class);
 
   // TODO test cases
   // ambrona_10.pgn

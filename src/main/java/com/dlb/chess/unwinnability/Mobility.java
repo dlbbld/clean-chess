@@ -13,7 +13,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 
@@ -22,7 +22,7 @@ class Mobility {
 
   private static final boolean IS_DEBUG = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(Mobility.class);
+  private static final Logger logger = Nulls.getLogger(Mobility.class);
 
   // Inputs: a position
   // Output: mobility solution {MP!s}P in pos,s in S

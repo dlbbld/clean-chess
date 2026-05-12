@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -26,7 +26,7 @@ public class PawnDiagonalSquares implements EnumConstants {
   // The 0-2 diagonal capture squares reachable from each pawn position. Pawns only exist on ranks 2-7.
   private static ImmutableMap<Square, ImmutableSet<Square>> build(Side side) {
     final int rankOffset = side == Side.WHITE ? 1 : -1;
-    final EnumMap<Square, ImmutableSet<Square>> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, ImmutableSet<Square>> map = Nulls.newEnumMap(Square.class);
     for (final Square from : Square.REAL) {
       final int fromFile = from.getFile().getNumber();
       final int fromRank = from.getRank().getNumber();
@@ -48,13 +48,13 @@ public class PawnDiagonalSquares implements EnumConstants {
       }
       map.put(from, builder.build());
     }
-    return NonNullWrapperCommon.copyOfMap(map);
+    return Nulls.copyOfMap(map);
   }
 
   public static Set<Square> getPawnDiagonalSquares(Side havingMove, Square fromSquare) {
     return switch (havingMove) {
-      case BLACK -> NonNullWrapperCommon.get(PAWN_BLACK_SQUARES_MAP, fromSquare);
-      case WHITE -> NonNullWrapperCommon.get(PAWN_WHITE_SQUARES_MAP, fromSquare);
+      case BLACK -> Nulls.get(PAWN_BLACK_SQUARES_MAP, fromSquare);
+      case WHITE -> Nulls.get(PAWN_WHITE_SQUARES_MAP, fromSquare);
       case NONE -> throw new IllegalArgumentException();
     };
   }

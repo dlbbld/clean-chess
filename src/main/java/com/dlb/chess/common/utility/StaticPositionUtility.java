@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.model.UpdateSquare;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -67,7 +67,7 @@ public abstract class StaticPositionUtility implements EnumConstants {
         piecePlacement.append("/");
       }
     }
-    return NonNullWrapperCommon.toString(piecePlacement);
+    return Nulls.toString(piecePlacement);
   }
 
   public static boolean calculateIsKingAttackedAfterMove(StaticPosition staticPosition, Side havingMove,

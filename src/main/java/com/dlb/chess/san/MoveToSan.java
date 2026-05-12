@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -73,7 +73,7 @@ public class MoveToSan extends AbstractSan {
     }
 
     sanTerminalMarker.append(buildSan);
-    return NonNullWrapperCommon.toString(buildSan);
+    return Nulls.toString(buildSan);
   }
 
   private static String calculateSanLastMoveNonCastling(LegalMove lastMove,
@@ -159,7 +159,7 @@ public class MoveToSan extends AbstractSan {
         throw new IllegalArgumentException();
     }
     sanTerminalMarker.append(buildSan);
-    return NonNullWrapperCommon.toString(buildSan);
+    return Nulls.toString(buildSan);
   }
 
   // semantics for moving piece: for castling the moving piece is none! so the castling is not returned here when

@@ -8,14 +8,14 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserFromInitialPosition {
-  private static final Path PGN_TEST_FOLDER_PATH = NonNullWrapperCommon
+  private static final Path PGN_TEST_FOLDER_PATH = Nulls
       .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "fromInitialPosition");
 
   @SuppressWarnings("static-method")

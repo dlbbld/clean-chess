@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
@@ -16,7 +16,7 @@ import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnabilityFullAgainstWinnability {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFullAgainstWinnability.class);
+  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityFullAgainstWinnability.class);
 
   @SuppressWarnings("static-method")
   // TODO test cases

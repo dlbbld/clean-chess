@@ -3,7 +3,7 @@ package com.dlb.chess.test.pgn.report;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -20,7 +20,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
  */
 class TestPgnReportAgainstTestCase extends AbstractPgnReportTest {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnReportAgainstTestCase.class);
+  private static final Logger logger = Nulls.getLogger(TestPgnReportAgainstTestCase.class);
 
   /** Cap on files tested per category when the smoke restriction is active. */
   private static final int MAX_FILES_PER_FOLDER = 2;

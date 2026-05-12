@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.model.LegalMove;
 
 //Figure 9 Main routine for deciding chess unwinnability. It is based on our semi-static
@@ -36,7 +36,7 @@ public class UnwinnableFullAnalyzer {
     var totalForcedMoves = 0;
     while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
       isCanUseMobilitySolution = false;
-      final LegalMove onlyLegalMove = NonNullWrapperCommon.getFirst(new ArrayList<>(board.getLegalMoveSet()));
+      final LegalMove onlyLegalMove = Nulls.getFirst(new ArrayList<>(board.getLegalMoveSet()));
       board.move(onlyLegalMove.moveSpecification());
       isForcedMove = board.getLegalMoveSet().size() == 1;
       isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();

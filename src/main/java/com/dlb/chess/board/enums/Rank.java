@@ -2,7 +2,7 @@ package com.dlb.chess.board.enums;
 
 import java.util.EnumMap;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableList;
@@ -76,10 +76,10 @@ public enum Rank {
   // ---------------------------------------------------------------------------------------------
 
   private static EnumMap<Side, EnumMap<Rank, Rank>> buildOffsetTable(int offsetForWhite) {
-    final EnumMap<Side, EnumMap<Rank, Rank>> result = NonNullWrapperCommon.newEnumMap(Side.class);
+    final EnumMap<Side, EnumMap<Rank, Rank>> result = Nulls.newEnumMap(Side.class);
     for (final Side side : Side.REAL) {
       final int offset = side == Side.WHITE ? offsetForWhite : -offsetForWhite;
-      final EnumMap<Rank, Rank> sideMap = NonNullWrapperCommon.newEnumMap(Rank.class);
+      final EnumMap<Rank, Rank> sideMap = Nulls.newEnumMap(Rank.class);
       for (final Rank source : REAL) {
         final int targetNumber = source.getNumber() + offset;
         if (targetNumber >= 1 && targetNumber <= 8) {
@@ -107,36 +107,36 @@ public enum Rank {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(PREVIOUS_RANK, havingMove).containsKey(rank);
+    return Nulls.get(PREVIOUS_RANK, havingMove).containsKey(rank);
   }
 
   public static Rank calculatePreviousRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-    final EnumMap<Rank, Rank> sideMap = NonNullWrapperCommon.get(PREVIOUS_RANK, havingMove);
+    final EnumMap<Rank, Rank> sideMap = Nulls.get(PREVIOUS_RANK, havingMove);
     if (!sideMap.containsKey(rank)) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(sideMap, rank);
+    return Nulls.get(sideMap, rank);
   }
 
   public static boolean calculateHasNextRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(NEXT_RANK, havingMove).containsKey(rank);
+    return Nulls.get(NEXT_RANK, havingMove).containsKey(rank);
   }
 
   public static Rank calculateNextRank(Side havingMove, Rank rank) {
     if (havingMove == Side.NONE || rank == NONE) {
       throw new IllegalArgumentException();
     }
-    final EnumMap<Rank, Rank> sideMap = NonNullWrapperCommon.get(NEXT_RANK, havingMove);
+    final EnumMap<Rank, Rank> sideMap = Nulls.get(NEXT_RANK, havingMove);
     if (!sideMap.containsKey(rank)) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(sideMap, rank);
+    return Nulls.get(sideMap, rank);
   }
 
   public static boolean calculateHasPreviousPreviousRank(Side havingMove, Rank rank) {

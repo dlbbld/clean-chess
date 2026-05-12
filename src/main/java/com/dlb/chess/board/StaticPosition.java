@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.model.UpdateSquare;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.FenPieceSymbol;
 
@@ -122,7 +122,7 @@ public record StaticPosition(Piece a8, Piece b8, Piece c8, Piece d8, Piece e8, P
     output.append(calculateSquareLetter(h1));
     output.append("\n");
 
-    return NonNullWrapperCommon.toString(output);
+    return Nulls.toString(output);
   }
 
   private static char calculateSquareLetter(Piece piece) {

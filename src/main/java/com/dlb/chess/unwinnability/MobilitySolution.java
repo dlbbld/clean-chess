@@ -12,7 +12,7 @@ import java.util.TreeSet;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.GeneralUtility;
 
@@ -23,10 +23,10 @@ class MobilitySolution {
   public void put(PiecePlacement piecePlacement, Square toSquare, VariableState mobility) {
     EnumMap<Square, VariableState> enumMap;
     if (!mobilityMap.containsKey(piecePlacement)) {
-      enumMap = NonNullWrapperCommon.newEnumMap(Square.class);
+      enumMap = Nulls.newEnumMap(Square.class);
       mobilityMap.put(piecePlacement, enumMap);
     } else {
-      enumMap = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
+      enumMap = Nulls.get(mobilityMap, piecePlacement);
     }
 
     enumMap.put(toSquare, mobility);
@@ -37,12 +37,12 @@ class MobilitySolution {
       throw new IllegalArgumentException("Value is not set for piece placement " + piecePlacement);
     }
 
-    final Map<Square, VariableState> map = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
+    final Map<Square, VariableState> map = Nulls.get(mobilityMap, piecePlacement);
     if (!map.containsKey(toSquare)) {
       throw new IllegalArgumentException("Value is not set for square " + toSquare);
     }
 
-    return NonNullWrapperCommon.get(map, toSquare);
+    return Nulls.get(map, toSquare);
   }
 
   public int calculateVariableCountSetToOne() {
@@ -63,10 +63,10 @@ class MobilitySolution {
     if (!mobilityMap.containsKey(piecePlacement)) {
       throw new IllegalArgumentException("No such piece placement");
     }
-    final Map<Square, VariableState> map = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
+    final Map<Square, VariableState> map = Nulls.get(mobilityMap, piecePlacement);
 
     for (final Square squareCandidate : map.keySet()) {
-      if (NonNullWrapperCommon.get(map, squareCandidate) == VariableState.ONE) {
+      if (Nulls.get(map, squareCandidate) == VariableState.ONE) {
         squareSet.add(squareCandidate);
       }
     }
@@ -75,14 +75,14 @@ class MobilitySolution {
 
   private List<MobilitySolutionVariable> calculateEntries(VariableState mobility) {
     final List<MobilitySolutionVariable> result = new ArrayList<>();
-    for (final @NonNull Entry<PiecePlacement, EnumMap<Square, VariableState>> mapEntryMap : NonNullWrapperCommon
+    for (final @NonNull Entry<PiecePlacement, EnumMap<Square, VariableState>> mapEntryMap : Nulls
         .entrySet(mobilityMap)) {
-      final EnumMap<Square, VariableState> mapEntry = NonNullWrapperCommon.get(mobilityMap,
-          NonNullWrapperCommon.getKey(mapEntryMap));
+      final EnumMap<Square, VariableState> mapEntry = Nulls.get(mobilityMap,
+          Nulls.getKey(mapEntryMap));
       for (final Entry<Square, VariableState> entry : mapEntry.entrySet()) {
         if (entry.getValue() == mobility) {
-          result.add(new MobilitySolutionVariable(NonNullWrapperCommon.getKey(mapEntryMap),
-              NonNullWrapperCommon.getKey(entry)));
+          result.add(new MobilitySolutionVariable(Nulls.getKey(mapEntryMap),
+              Nulls.getKey(entry)));
         }
       }
     }
@@ -103,10 +103,10 @@ class MobilitySolution {
     lineList.add("Mobility:");
 
     for (final PiecePlacement piecePlacement : new TreeSet<>(mobilityMap.keySet())) {
-      final Map<Square, VariableState> valuePlacement = NonNullWrapperCommon.get(mobilityMap, piecePlacement);
+      final Map<Square, VariableState> valuePlacement = Nulls.get(mobilityMap, piecePlacement);
       final Set<Square> reachable = new TreeSet<>();
       for (final Square square : valuePlacement.keySet()) {
-        final VariableState stateSquare = NonNullWrapperCommon.get(valuePlacement, square);
+        final VariableState stateSquare = Nulls.get(valuePlacement, square);
         if (stateSquare == VariableState.ONE) {
           reachable.add(square);
         }

@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -26,7 +26,7 @@ class TestLenientPgnParserAgainstEachOther {
   // Leave empty to test all games, put a game name to only test this game.
   // private static final String ONLY_TEST_GAME = "threefold_castling_white_both_sides_lost";
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLenientPgnParserAgainstEachOther.class);
+  private static final Logger logger = Nulls.getLogger(TestLenientPgnParserAgainstEachOther.class);
 
   @SuppressWarnings("static-method")
   @Test

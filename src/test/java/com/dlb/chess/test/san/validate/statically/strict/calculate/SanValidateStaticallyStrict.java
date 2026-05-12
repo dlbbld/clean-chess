@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.san.SanParse;
 import com.google.common.collect.ImmutableMap;
@@ -32,11 +32,11 @@ public class SanValidateStaticallyStrict implements EnumConstants {
 
     final Map<String, SanParse> sanValidationWhiteMap = new TreeMap<>(sanValidationAllMap);
     sanValidationWhiteMap.putAll(PawnSanValidateStaticallyStrictCalculate.calculateSanMap(WHITE));
-    SAN_VALIDATION_WHITE_MAP = NonNullWrapperCommon.copyOfMap(sanValidationWhiteMap);
+    SAN_VALIDATION_WHITE_MAP = Nulls.copyOfMap(sanValidationWhiteMap);
 
     final Map<String, SanParse> sanValidationBlackMap = new TreeMap<>(sanValidationAllMap);
     sanValidationBlackMap.putAll(PawnSanValidateStaticallyStrictCalculate.calculateSanMap(BLACK));
-    SAN_VALIDATION_BLACK_MAP = NonNullWrapperCommon.copyOfMap(sanValidationBlackMap);
+    SAN_VALIDATION_BLACK_MAP = Nulls.copyOfMap(sanValidationBlackMap);
   }
 
   public static ImmutableMap<String, SanParse> getSanValidationWhiteMap() {
@@ -61,8 +61,8 @@ public class SanValidateStaticallyStrict implements EnumConstants {
       throw new IllegalArgumentException("The SAN does not exist");
     }
     return switch (side) {
-      case WHITE -> NonNullWrapperCommon.get(SAN_VALIDATION_WHITE_MAP, san);
-      case BLACK -> NonNullWrapperCommon.get(SAN_VALIDATION_BLACK_MAP, san);
+      case WHITE -> Nulls.get(SAN_VALIDATION_WHITE_MAP, san);
+      case BLACK -> Nulls.get(SAN_VALIDATION_BLACK_MAP, san);
       case NONE -> throw new IllegalArgumentException();
       default -> throw new IllegalArgumentException();
     };

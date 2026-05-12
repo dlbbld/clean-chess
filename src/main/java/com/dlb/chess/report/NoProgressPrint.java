@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.board.HalfMoveUtility;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
 
 class NoProgressPrint {
@@ -23,7 +23,7 @@ class NoProgressPrint {
     }
     final List<String> result = new ArrayList<>();
     for (var i = 0; i < list.size(); i++) {
-      final NoProgressHalfMove listItem = NonNullWrapperCommon.get(list, i);
+      final NoProgressHalfMove listItem = Nulls.get(list, i);
       result.add(calculateOutputNoProgressMoveIncludingSequenceLength(listItem));
     }
     return BasicUtility.calculateSpaceSeparatedList(result);

@@ -6,7 +6,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
@@ -17,15 +17,15 @@ public abstract class ImmutableUtility implements EnumConstants {
 
   static {
     final List<Square> list = new ArrayList<>();
-    final EnumSet<Square> enumSet = NonNullWrapperCommon.newEnumSet(list, Square.class);
-    EMPTY_UNMODIFIABLE_SET = NonNullWrapperCommon.copyOfSet(enumSet);
+    final EnumSet<Square> enumSet = Nulls.newEnumSet(list, Square.class);
+    EMPTY_UNMODIFIABLE_SET = Nulls.copyOfSet(enumSet);
   }
 
   private static final ImmutableList<Square> EMPTY_UNMODIFIABLE_LIST_SQUARE;
 
   static {
     final List<Square> list = new ArrayList<>();
-    EMPTY_UNMODIFIABLE_LIST_SQUARE = NonNullWrapperCommon.copyOfList(list);
+    EMPTY_UNMODIFIABLE_LIST_SQUARE = Nulls.copyOfList(list);
   }
 
   public static ImmutableSet<Square> constructSet(Square... squareArray) {
@@ -35,8 +35,8 @@ public abstract class ImmutableUtility implements EnumConstants {
     // the array is not constructed as null
     @SuppressWarnings("null") final List<Square> list = Arrays.asList(squareArray);
     // the enum set is not constructed as null
-    @SuppressWarnings("null") final EnumSet<Square> enumSet = NonNullWrapperCommon.newEnumSet(list, Square.class);
-    return NonNullWrapperCommon.copyOfSet(enumSet);
+    @SuppressWarnings("null") final EnumSet<Square> enumSet = Nulls.newEnumSet(list, Square.class);
+    return Nulls.copyOfSet(enumSet);
   }
 
   public static ImmutableList<Square> constructListSquare(Square... squareArray) {
@@ -44,8 +44,8 @@ public abstract class ImmutableUtility implements EnumConstants {
       return EMPTY_UNMODIFIABLE_LIST_SQUARE;
     }
     // the array is not constructed as null
-    @SuppressWarnings("null") final List<Square> list = NonNullWrapperCommon.asList(squareArray);
-    return NonNullWrapperCommon.copyOfList(list);
+    @SuppressWarnings("null") final List<Square> list = Nulls.asList(squareArray);
+    return Nulls.copyOfList(list);
   }
 
 }

@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.san.SanFormat;
 import com.dlb.chess.san.SanSymbol;
@@ -40,7 +40,7 @@ public class SanCalculate implements EnumConstants {
 
     sanTerminalMarker.append(san);
 
-    return NonNullWrapperCommon.toString(san);
+    return Nulls.toString(san);
   }
 
   public static SanFormat calculateSanFormat(boolean isCapture, File fromFile, Rank fromRank, PieceType movingPieceType,

@@ -8,7 +8,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.google.common.collect.ImmutableList;
@@ -55,7 +55,7 @@ public class FenConstants implements EnumConstants {
         "rnbqkbnr/pppppppp/8/8/8/5N2/PPPPPPPP/RNBQKB1R b KQkq - 1 1",
         "rnbqkbnr/pppppppp/8/8/8/7N/PPPPPPPP/RNBQKB1R b KQkq - 1 1");
 
-    POSSIBLE_FEN_AFTER_FIRST_HALF_MOVE = NonNullWrapperCommon.copyOfList(fenAfterFirstHalfMoveList);
+    POSSIBLE_FEN_AFTER_FIRST_HALF_MOVE = Nulls.copyOfList(fenAfterFirstHalfMoveList);
   }
 
 }

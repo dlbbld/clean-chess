@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.NonePointerException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableList;
@@ -197,11 +197,11 @@ public enum Square implements Comparable<Square> {
 
   private static EnumMap<Side, EnumMap<Square, Square>> buildOffsetTable(int fileOffsetForWhite,
       int rankOffsetForWhite) {
-    final EnumMap<Side, EnumMap<Square, Square>> result = NonNullWrapperCommon.newEnumMap(Side.class);
+    final EnumMap<Side, EnumMap<Square, Square>> result = Nulls.newEnumMap(Side.class);
     for (final Side side : Side.REAL) {
       final int fileOffset = side == Side.WHITE ? fileOffsetForWhite : -fileOffsetForWhite;
       final int rankOffset = side == Side.WHITE ? rankOffsetForWhite : -rankOffsetForWhite;
-      final EnumMap<Square, Square> sideMap = NonNullWrapperCommon.newEnumMap(Square.class);
+      final EnumMap<Square, Square> sideMap = Nulls.newEnumMap(Square.class);
       for (final Square source : REAL) {
         final int targetFile = source.getFile().getNumber() + fileOffset;
         final int targetRank = source.getRank().getNumber() + rankOffset;
@@ -227,18 +227,18 @@ public enum Square implements Comparable<Square> {
     if (havingMove == Side.NONE || square == NONE) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(table, havingMove).containsKey(square);
+    return Nulls.get(table, havingMove).containsKey(square);
   }
 
   private static Square getNeighbour(EnumMap<Side, EnumMap<Square, Square>> table, Side havingMove, Square square) {
     if (havingMove == Side.NONE || square == NONE) {
       throw new IllegalArgumentException();
     }
-    final EnumMap<Square, Square> sideMap = NonNullWrapperCommon.get(table, havingMove);
+    final EnumMap<Square, Square> sideMap = Nulls.get(table, havingMove);
     if (!sideMap.containsKey(square)) {
       throw new IllegalArgumentException();
     }
-    return NonNullWrapperCommon.get(sideMap, square);
+    return Nulls.get(sideMap, square);
   }
 
   public static boolean calculateIsRightMostFile(Square square, Side side) {
@@ -272,7 +272,7 @@ public enum Square implements Comparable<Square> {
   private static final ImmutableMap<Square, Square> WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER;
 
   static {
-    final EnumMap<Square, Square> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, Square> map = Nulls.newEnumMap(Square.class);
 
     map.put(A4, A3);
     map.put(B4, B3);
@@ -283,13 +283,13 @@ public enum Square implements Comparable<Square> {
     map.put(G4, G3);
     map.put(H4, H3);
 
-    WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER = NonNullWrapperCommon.immutableEnumMap(map);
+    WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER = Nulls.immutableEnumMap(map);
   }
 
   private static final ImmutableMap<Square, Square> BLACK_TWO_SQUARE_ADVANCE_TO_JUMP_OVER;
 
   static {
-    final EnumMap<Square, Square> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, Square> map = Nulls.newEnumMap(Square.class);
 
     map.put(A5, A6);
     map.put(B5, B6);
@@ -300,7 +300,7 @@ public enum Square implements Comparable<Square> {
     map.put(G5, G6);
     map.put(H5, H6);
 
-    BLACK_TWO_SQUARE_ADVANCE_TO_JUMP_OVER = NonNullWrapperCommon.immutableEnumMap(map);
+    BLACK_TWO_SQUARE_ADVANCE_TO_JUMP_OVER = Nulls.immutableEnumMap(map);
 
   }
 
@@ -310,12 +310,12 @@ public enum Square implements Comparable<Square> {
         if (!WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER.containsKey(pawnTwoAdvanceSquare)) {
           throw new IllegalArgumentException("The method only applies for pawn two square advance moves");
         }
-        return NonNullWrapperCommon.get(WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER, pawnTwoAdvanceSquare);
+        return Nulls.get(WHITE_TWO_SQUARE_ADVANCE_TO_JUMP_OVER, pawnTwoAdvanceSquare);
       case BLACK:
         if (!BLACK_TWO_SQUARE_ADVANCE_TO_JUMP_OVER.containsKey(pawnTwoAdvanceSquare)) {
           throw new IllegalArgumentException("The method only applies for pawn two square advance moves");
         }
-        return NonNullWrapperCommon.get(BLACK_TWO_SQUARE_ADVANCE_TO_JUMP_OVER, pawnTwoAdvanceSquare);
+        return Nulls.get(BLACK_TWO_SQUARE_ADVANCE_TO_JUMP_OVER, pawnTwoAdvanceSquare);
       case NONE:
       default:
         throw new IllegalArgumentException();
@@ -428,11 +428,11 @@ public enum Square implements Comparable<Square> {
   static {
     final List<ImmutableList<Square>> whiteListList = new ArrayList<>();
     initializeWhite(whiteListList);
-    WHITE_PAWN_TWO_SQUARE_ADVANCE = NonNullWrapperCommon.copyOfList(whiteListList);
+    WHITE_PAWN_TWO_SQUARE_ADVANCE = Nulls.copyOfList(whiteListList);
 
     final List<ImmutableList<Square>> blackListList = new ArrayList<>();
     initializeBlack(blackListList);
-    BLACK_PAWN_TWO_SQUARE_ADVANCE = NonNullWrapperCommon.copyOfList(blackListList);
+    BLACK_PAWN_TWO_SQUARE_ADVANCE = Nulls.copyOfList(blackListList);
   }
 
   private static void initializeWhite(List<ImmutableList<Square>> listList) {

@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.EmptyBoardMove;
@@ -98,7 +98,7 @@ abstract class SanValidateMovementRnbq extends AbstractSan implements EnumConsta
       }
     }
 
-    final var rankText = NonNullWrapperCommon.valueOf(fromRank.getNumber());
+    final var rankText = Nulls.valueOf(fromRank.getNumber());
     switch (movingPieceType) {
       case ROOK -> throw new SanValidationException(SanValidationProblem.MOVEMENT_RNBQ_FROM_RANK,
           Message.getString("validation.san.movement.rnbq.from.rank.rook", rankText, toSquare.getName()));

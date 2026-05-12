@@ -5,7 +5,7 @@ import java.util.Set;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -27,7 +27,7 @@ class PawnTwoAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares implemen
   private static ImmutableMap<Square, ImmutableSet<Square>> build(Side side) {
     final int startRank = side == Side.WHITE ? 2 : 7;
     final int targetRank = side == Side.WHITE ? 4 : 5;
-    final EnumMap<Square, ImmutableSet<Square>> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, ImmutableSet<Square>> map = Nulls.newEnumMap(Square.class);
     for (final Square from : Square.REAL) {
       if (from.getRank().getNumber() == startRank) {
         map.put(from, ImmutableSet.of(Square.calculate(from.getFile().getNumber(), targetRank)));
@@ -35,13 +35,13 @@ class PawnTwoAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares implemen
         map.put(from, ImmutableSet.of());
       }
     }
-    return NonNullWrapperCommon.copyOfMap(map);
+    return Nulls.copyOfMap(map);
   }
 
   public static Set<Square> getPawnSquares(Side havingMove, Square fromSquare) {
     return switch (havingMove) {
-      case BLACK -> NonNullWrapperCommon.get(PAWN_BLACK_SQUARES_MAP, fromSquare);
-      case WHITE -> NonNullWrapperCommon.get(PAWN_WHITE_SQUARES_MAP, fromSquare);
+      case BLACK -> Nulls.get(PAWN_BLACK_SQUARES_MAP, fromSquare);
+      case WHITE -> Nulls.get(PAWN_WHITE_SQUARES_MAP, fromSquare);
       case NONE -> throw new IllegalArgumentException();
     };
   }

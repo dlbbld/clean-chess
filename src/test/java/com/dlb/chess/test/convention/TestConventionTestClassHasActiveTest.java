@@ -9,7 +9,7 @@ import java.util.regex.Pattern;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.common.utility.FileUtility;
 
@@ -40,14 +40,14 @@ import com.dlb.chess.test.common.utility.FileUtility;
  */
 class TestConventionTestClassHasActiveTest {
 
-  private static final Path TEST_JAVA_ROOT = NonNullWrapperCommon
+  private static final Path TEST_JAVA_ROOT = Nulls
       .pathResolve(ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH, "src/test/java");
 
   private static final String REQUIRED_NAME_PREFIX = "Test";
 
   // Matches @Test, @ParameterizedTest, @RepeatedTest, @TestTemplate, @TestFactory. Any of these
   // makes a class runnable as a JUnit test.
-  private static final Pattern TEST_ANNOTATION = NonNullWrapperCommon
+  private static final Pattern TEST_ANNOTATION = Nulls
       .compile("@(?:Test|ParameterizedTest|RepeatedTest|TestTemplate|TestFactory)\\b");
 
   @SuppressWarnings("static-method")
@@ -56,14 +56,14 @@ class TestConventionTestClassHasActiveTest {
     final List<String> violations = new ArrayList<>();
 
     for (final Path p : FileUtility.listAllFilesRecursively(TEST_JAVA_ROOT)) {
-      if (!NonNullWrapperCommon.toString(p).endsWith(".java")
-          || !NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
+      if (!Nulls.toString(p).endsWith(".java")
+          || !Nulls.toString(Nulls.getFileName(p)).startsWith(REQUIRED_NAME_PREFIX)) {
         continue;
       }
       final String contents = FileUtility.readFileAsString(p);
       if (!TEST_ANNOTATION.matcher(contents).find()) {
-        violations.add(NonNullWrapperCommon
-            .replace(NonNullWrapperCommon.toString(NonNullWrapperCommon.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
+        violations.add(Nulls
+            .replace(Nulls.toString(Nulls.pathRelativize(TEST_JAVA_ROOT, p)), '\\', '/'));
       }
     }
 

@@ -9,7 +9,7 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.report.CheckmateOrStalemate;
@@ -23,7 +23,7 @@ import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 public class CreatePgnTestCases {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(CreatePgnTestCases.class);
+  private static final Logger logger = Nulls.getLogger(CreatePgnTestCases.class);
 
   private static PgnFileTestCaseList calculateTestCaseList(PgnTest pgnTest) {
 
@@ -115,7 +115,7 @@ public class CreatePgnTestCases {
     };
   }
 
-  private static final EnumMap<PgnTest, PgnFileTestCaseList> allTestCaseListMap = NonNullWrapperCommon
+  private static final EnumMap<PgnTest, PgnFileTestCaseList> allTestCaseListMap = Nulls
       .newEnumMap(PgnTest.class);
 
   private static final List<PgnFileTestCaseList> allTestCaseListList = new ArrayList<>();
@@ -173,7 +173,7 @@ public class CreatePgnTestCases {
       if (!allTestCaseListMap.containsKey(pgnTest)) {
         throw new ProgrammingMistakeException("The test list was not constructed correctly");
       }
-      resultListList.add(NonNullWrapperCommon.get(allTestCaseListMap, pgnTest));
+      resultListList.add(Nulls.get(allTestCaseListMap, pgnTest));
     }
     return resultListList;
   }
@@ -296,7 +296,7 @@ public class CreatePgnTestCases {
   private static PgnFileTestCaseList filterBucket(PgnTest pgnTest, String... wantedFileNames) {
     final Set<String> wanted = new TreeSet<>();
     for (var i = 0; i < wantedFileNames.length; i++) {
-      wanted.add(NonNullWrapperCommon.get(wantedFileNames, i));
+      wanted.add(Nulls.get(wantedFileNames, i));
     }
     final List<PgnFileTestCase> filtered = new ArrayList<>();
     final Set<String> found = new TreeSet<>();

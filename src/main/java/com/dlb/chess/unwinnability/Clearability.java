@@ -9,7 +9,7 @@ import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
 
 class Clearability {
@@ -24,7 +24,7 @@ class Clearability {
     if (!clearabilityMap.containsKey(piecePlacement)) {
       throw new IllegalArgumentException("Value is not set for piece placement " + piecePlacement);
     }
-    return NonNullWrapperCommon.get(clearabilityMap, piecePlacement);
+    return Nulls.get(clearabilityMap, piecePlacement);
   }
 
   public int calculateVariableCountSetToOne() {
@@ -45,7 +45,7 @@ class Clearability {
     final List<PiecePlacement> result = new ArrayList<>();
     for (final Entry<PiecePlacement, VariableState> entry : clearabilityMap.entrySet()) {
       if (entry.getValue() == variableState) {
-        result.add(NonNullWrapperCommon.getKey(entry));
+        result.add(Nulls.getKey(entry));
       }
     }
     return result;
@@ -60,7 +60,7 @@ class Clearability {
 
     // TreeSet for ordering
     for (final PiecePlacement piecePlacement : new TreeSet<>(clearabilityMap.keySet())) {
-      final VariableState variableState = NonNullWrapperCommon.get(clearabilityMap, piecePlacement);
+      final VariableState variableState = Nulls.get(clearabilityMap, piecePlacement);
       final var pieceDescription = new StringBuilder();
       pieceDescription.append(piecePlacement.toString());
       pieceDescription.append(": ");

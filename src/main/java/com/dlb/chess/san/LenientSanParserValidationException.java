@@ -3,7 +3,7 @@ package com.dlb.chess.san;
 import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.UsageException;
 import com.google.common.collect.ImmutableList;
@@ -40,7 +40,7 @@ public class LenientSanParserValidationException extends UsageException {
     this.originalText = originalText;
     this.underlyingSanValidationProblem = underlyingSanValidationProblem;
     this.gameStatus = gameStatus;
-    this.forgivenItemsAccumulated = NonNullWrapperCommon.copyOfList(forgivenItemsAccumulated);
+    this.forgivenItemsAccumulated = Nulls.copyOfList(forgivenItemsAccumulated);
   }
 
   public String getOriginalText() {

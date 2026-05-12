@@ -7,7 +7,7 @@ import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.san.ForgivenItem;
@@ -22,7 +22,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 @SuppressWarnings("static-method")
 class TestLenientPgnParserSanForgivenItems {
 
-  private static final Path FOLDER = NonNullWrapperCommon
+  private static final Path FOLDER = Nulls
       .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "sanForgivenItems");
 
   @Test
@@ -146,7 +146,7 @@ class TestLenientPgnParserSanForgivenItems {
         "Expected valid lenient parse of " + fixtureFileName + " but got: " + result.message());
     assertEquals(1, result.sanForgivenItems().size(),
         "Expected exactly one forgiven item in " + fixtureFileName + " but got: " + result.sanForgivenItems());
-    final ForgivenItem item = NonNullWrapperCommon.get(result.sanForgivenItems(), 0);
+    final ForgivenItem item = Nulls.get(result.sanForgivenItems(), 0);
     assertEquals(expectedCode, item.code(),
         "Expected forgiven code " + expectedCode + " in " + fixtureFileName + " but got: " + item.code());
   }

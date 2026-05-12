@@ -8,7 +8,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.StaticPositionUtility;
@@ -17,7 +17,7 @@ import com.dlb.chess.test.common.utility.FenUtility;
 
 public class GeneratePiecePositions {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePiecePositions.class);
+  private static final Logger logger = Nulls.getLogger(GeneratePiecePositions.class);
 
   // Current generated counts:
   // K vs K:

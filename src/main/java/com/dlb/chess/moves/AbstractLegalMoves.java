@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.StaticPositionUtility;
@@ -34,7 +34,7 @@ public abstract class AbstractLegalMoves implements EnumConstants {
 
   public static ImmutableSet<LegalMove> calculateLegalMoves(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight, final Square enPassantCaptureTargetSquare) {
-    return NonNullWrapperCommon.copyOfSet(
+    return Nulls.copyOfSet(
         calculateLegalMovesBottomUp(staticPosition, havingMove, castlingRight, enPassantCaptureTargetSquare));
   }
 
@@ -108,8 +108,8 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     } else {
       pseudoLegalKingSafety = KingSafetyCheck.NON_KING_EXPOSED_TO_CHECK;
     }
-    return new LegalMoveCalculation(NonNullWrapperCommon.copyOfSet(legalMoveSet),
-        NonNullWrapperCommon.copyOfSet(pseudoLegalMoveSet), pseudoLegalKingSafety);
+    return new LegalMoveCalculation(Nulls.copyOfSet(legalMoveSet),
+        Nulls.copyOfSet(pseudoLegalMoveSet), pseudoLegalKingSafety);
   }
 
 }

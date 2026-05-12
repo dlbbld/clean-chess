@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 abstract class PositionIdentifierUtility {
 
@@ -17,7 +17,7 @@ abstract class PositionIdentifierUtility {
 
     final StringBuilder result = new StringBuilder();
     for (var i = 0; i < representationList.size(); i++) {
-      final int representation = NonNullWrapperCommon.get(representationList, i);
+      final int representation = Nulls.get(representationList, i);
       final int representationAdaptedForLastDigit;
       if (i == representationList.size() - 1) {
         representationAdaptedForLastDigit = representation + 1;
@@ -27,7 +27,7 @@ abstract class PositionIdentifierUtility {
       final var letter = (char) (ASCII_TABLE_BEFORE_UPPER_CASE_A_NUMBER + representationAdaptedForLastDigit);
       result.append(letter);
     }
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
   public static List<Integer> calculateRepresentation(int number, int base) {

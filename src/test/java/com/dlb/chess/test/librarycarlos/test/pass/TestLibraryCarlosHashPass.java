@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.test.common.exceptions.SetupException;
@@ -21,7 +21,7 @@ import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
 class TestLibraryCarlosHashPass {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosHashPass.class);
+  private static final Logger logger = Nulls.getLogger(TestLibraryCarlosHashPass.class);
 
   private static final int SHOW_COMPLETION_PROGRESS_NUMBER_OF_PROCESSED_FILES = 1;
 
@@ -54,7 +54,7 @@ class TestLibraryCarlosHashPass {
         throw new ProgrammingMistakeException("Wrong assumption about API behaviour");
       }
       try {
-        final String absolutePath = NonNullWrapperCommon.getAbsolutePath(file);
+        final String absolutePath = Nulls.getAbsolutePath(file);
         testBoardHashKeyConsistency(absolutePath);
       } finally {
         numberOfFilesProcessed++;

@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
@@ -58,11 +58,11 @@ public final class LenientPgnParser {
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
+    return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static PgnFile parse(String pgnFilePath) {
-    return parse(NonNullWrapperCommon.pathOf(pgnFilePath));
+    return parse(Nulls.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -75,15 +75,15 @@ public final class LenientPgnParser {
     for (final String line : lines) {
       builder.append(line).append('\n');
     }
-    return NonNullWrapperCommon.toString(builder);
+    return Nulls.toString(builder);
   }
 
   public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
+    return validate(Nulls.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static LenientPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(NonNullWrapperCommon.pathOf(pgnFilePath));
+    return validate(Nulls.pathOf(pgnFilePath));
   }
 
   public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
@@ -110,7 +110,7 @@ public final class LenientPgnParser {
     try {
       final PgnFile pgnFile = parser.parseInternal();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK",
-          pgnFile, NonNullWrapperCommon.copyOfList(parser.sanForgivenItemsAccumulator));
+          pgnFile, Nulls.copyOfList(parser.sanForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       final String message = BasicUtility.getMessage(e);
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
@@ -131,7 +131,7 @@ public final class LenientPgnParser {
 
   private static String stripUtf8Bom(String source) {
     if (!source.isEmpty() && source.charAt(0) == '\uFEFF') {
-      return NonNullWrapperCommon.substring(source, 1);
+      return Nulls.substring(source, 1);
     }
     return source;
   }
@@ -169,8 +169,8 @@ public final class LenientPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), startFen, movetext.pregameCommentary(),
-        NonNullWrapperCommon.copyOfList(canonicalHalfMoveList));
+    return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+        Nulls.copyOfList(canonicalHalfMoveList));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -268,10 +268,10 @@ public final class LenientPgnParser {
   private static void validateUniqueTagNames(List<Tag> tagList) {
     for (var i = 0; i < tagList.size(); i++) {
       for (var j = i + 1; j < tagList.size(); j++) {
-        if (NonNullWrapperCommon.get(tagList, i).name().equals(NonNullWrapperCommon.get(tagList, j).name())) {
+        if (Nulls.get(tagList, i).name().equals(Nulls.get(tagList, j).name())) {
           throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
               SanValidationProblem.NONE, "The tag name must be unique. The tag name \""
-                  + NonNullWrapperCommon.get(tagList, i).name() + "\" was used more than once.");
+                  + Nulls.get(tagList, i).name() + "\" was used more than once.");
         }
       }
     }
@@ -362,7 +362,7 @@ public final class LenientPgnParser {
         final PgnToken suffixToken = tokenizer.next();
         final MoveSuffixAnnotation suffix = parseMoveSuffix(suffixToken.text());
         final var last = halfMoves.size() - 1;
-        final PgnHalfMove previous = NonNullWrapperCommon.get(halfMoves, last);
+        final PgnHalfMove previous = Nulls.get(halfMoves, last);
         halfMoves.set(last, new PgnHalfMove(previous.san(), suffix, previous.commentary()));
         continue;
       }
@@ -377,7 +377,7 @@ public final class LenientPgnParser {
         if (isBraceToken(tokenizer.peek().type())) {
           final var commentary = consumeCommentaryOrThrow();
           final var last = halfMoves.size() - 1;
-          final PgnHalfMove previous = NonNullWrapperCommon.get(halfMoves, last);
+          final PgnHalfMove previous = Nulls.get(halfMoves, last);
           halfMoves.set(last, new PgnHalfMove(previous.san(), previous.moveSuffixAnnotation(), commentary));
         }
         continue;
@@ -459,7 +459,7 @@ public final class LenientPgnParser {
       tokenizer.next();
     }
 
-    final String san = NonNullWrapperCommon.toString(sanBuilder);
+    final String san = Nulls.toString(sanBuilder);
     validateSanCharacters(san);
     validateSanLength(san);
 
@@ -694,7 +694,7 @@ public final class LenientPgnParser {
         final SanValidationProblem underlying = e.getUnderlyingSanValidationProblem();
         throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.SAN,
             underlying == null ? SanValidationProblem.UNKNOWN_ERROR : underlying, message, e.getGameStatus(),
-            NonNullWrapperCommon.copyOfList(sanForgivenItemsAccumulator));
+            Nulls.copyOfList(sanForgivenItemsAccumulator));
       }
     }
     return canonicalList;

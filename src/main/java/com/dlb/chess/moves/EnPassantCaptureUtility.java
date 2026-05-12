@@ -11,7 +11,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.model.UpdateSquare;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
@@ -40,7 +40,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     list.add(constructListSquare(F5, E6));
     list.add(constructListSquare(G5, F6));
     list.add(constructListSquare(H5, G6));
-    WHITE_EN_PASSANT_CAPTURE_FROM_TO = NonNullWrapperCommon.copyOfList(list);
+    WHITE_EN_PASSANT_CAPTURE_FROM_TO = Nulls.copyOfList(list);
 
   }
 
@@ -64,7 +64,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     list.add(constructListSquare(G4, F3));
     list.add(constructListSquare(H4, G3));
 
-    BLACK_EN_PASSANT_CAPTURE_FROM_TO = NonNullWrapperCommon.copyOfList(list);
+    BLACK_EN_PASSANT_CAPTURE_FROM_TO = Nulls.copyOfList(list);
   }
 
   private static final ImmutableMap<Square, Square> WHITE_EN_PASSANT_CAPTURE_TO_CAPTURE;
@@ -81,13 +81,13 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     map.put(G6, G5);
     map.put(H6, H5);
 
-    WHITE_EN_PASSANT_CAPTURE_TO_CAPTURE = NonNullWrapperCommon.immutableEnumMap(map);
+    WHITE_EN_PASSANT_CAPTURE_TO_CAPTURE = Nulls.immutableEnumMap(map);
   }
 
   private static final ImmutableMap<Square, Square> BLACK_EN_PASSANT_CAPTURE_TO_CAPTURE;
 
   static {
-    final EnumMap<Square, Square> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, Square> map = Nulls.newEnumMap(Square.class);
 
     map.put(A3, A4);
     map.put(B3, B4);
@@ -98,13 +98,13 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     map.put(G3, G4);
     map.put(H3, H4);
 
-    BLACK_EN_PASSANT_CAPTURE_TO_CAPTURE = NonNullWrapperCommon.immutableEnumMap(map);
+    BLACK_EN_PASSANT_CAPTURE_TO_CAPTURE = Nulls.immutableEnumMap(map);
   }
 
   private static final ImmutableMap<Square, Square> WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO;
 
   static {
-    final EnumMap<Square, Square> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, Square> map = Nulls.newEnumMap(Square.class);
 
     map.put(A4, A3);
     map.put(B4, B3);
@@ -115,13 +115,13 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     map.put(G4, G3);
     map.put(H4, H3);
 
-    WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO = NonNullWrapperCommon.immutableEnumMap(map);
+    WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO = Nulls.immutableEnumMap(map);
   }
 
   private static final ImmutableMap<Square, Square> BLACK_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO;
 
   static {
-    final EnumMap<Square, Square> map = NonNullWrapperCommon.newEnumMap(Square.class);
+    final EnumMap<Square, Square> map = Nulls.newEnumMap(Square.class);
 
     map.put(A5, A6);
     map.put(B5, B6);
@@ -132,7 +132,7 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
     map.put(G5, G6);
     map.put(H5, H6);
 
-    BLACK_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO = NonNullWrapperCommon.immutableEnumMap(map);
+    BLACK_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO = Nulls.immutableEnumMap(map);
 
   }
 
@@ -205,12 +205,12 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
         if (!WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO.containsKey(move.toSquare())) {
           throw new IllegalArgumentException("The method only applies for en passant moves");
         }
-        return NonNullWrapperCommon.get(WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO, move.toSquare());
+        return Nulls.get(WHITE_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO, move.toSquare());
       case BLACK:
         if (!BLACK_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO.containsKey(move.toSquare())) {
           throw new IllegalArgumentException("The method only applies for en passant moves");
         }
-        return NonNullWrapperCommon.get(BLACK_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO, move.toSquare());
+        return Nulls.get(BLACK_TWO_SQUARE_ADVANCE_TO_EN_PASSANT_CAPTURE_TO, move.toSquare());
       case NONE:
       default:
         throw new IllegalArgumentException();
@@ -267,12 +267,12 @@ public abstract class EnPassantCaptureUtility implements EnumConstants {
         if (!WHITE_EN_PASSANT_CAPTURE_TO_CAPTURE.containsKey(square)) {
           throw new IllegalArgumentException("Please provide the target square of an en passant capture");
         }
-        return NonNullWrapperCommon.get(WHITE_EN_PASSANT_CAPTURE_TO_CAPTURE, square);
+        return Nulls.get(WHITE_EN_PASSANT_CAPTURE_TO_CAPTURE, square);
       case BLACK:
         if (!BLACK_EN_PASSANT_CAPTURE_TO_CAPTURE.containsKey(square)) {
           throw new IllegalArgumentException("Please provide the target square of an en passant capture");
         }
-        return NonNullWrapperCommon.get(BLACK_EN_PASSANT_CAPTURE_TO_CAPTURE, square);
+        return Nulls.get(BLACK_EN_PASSANT_CAPTURE_TO_CAPTURE, square);
       case NONE:
       default:
         throw new IllegalArgumentException();
