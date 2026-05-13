@@ -2,7 +2,6 @@ package com.dlb.chess.pgn;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -134,7 +133,6 @@ public final class StrictPgnParser {
 
     final List<Tag> tagList = parseTagSection();
     validateUniqueTagNames(tagList);
-    validateSevenTagRoster(tagList);
 
     final ResultTagValue resultTagValue = validateResultTagValue(tagList);
     final SetUpTagValue setUpTagValue = validateTagSetUpValue(tagList);
@@ -146,11 +144,8 @@ public final class StrictPgnParser {
 
     validateBoardPerLastMove(startFen, movetext.halfMoveList());
 
-    removeFenIfInitial(tagList, startFen);
-    Collections.sort(tagList);
-
     return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
-        Nulls.copyOfList(movetext.halfMoveList()));
+        Nulls.copyOfList(movetext.halfMoveList()), resultTagValue);
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -271,21 +266,14 @@ public final class StrictPgnParser {
     }
   }
 
-  private static void validateSevenTagRoster(List<Tag> tagList) {
-    for (final StandardTag expected : TagUtility.SEVEN_TAG_ROSTER_TAG_LIST) {
-      if (!TagUtility.existsTag(tagList, expected)) {
-        throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_NOT_ALL_REQUIRED_TAGS_SET,
-            SanValidationProblem.NONE,
-            "Not all tags from the seven tag roster (" + TagUtility.calculateSevenTagRosterDescription()
-                + ") are set. The first not found tag is \"" + expected.getName() + "\".");
-      }
-    }
-  }
-
   private static ResultTagValue validateResultTagValue(List<Tag> tagList) {
     if (!TagUtility.hasResult(tagList)) {
-      throw new ProgrammingMistakeException(
-          "At this point the result tag must be present â€” seven-tag roster was validated.");
+      throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_RESULT_MISSING,
+          SanValidationProblem.NONE, "The " + StandardTag.RESULT.getName()
+              + " tag is required. PGN spec section 8.1.1 archival storage requires the full seven tag roster, but the"
+              + " strict parser only enforces the semantic essentials: a Result tag (whose value must match the"
+              + " termination marker) and the SetUp/FEN coupling. Other roster tags are archival-storage concerns"
+              + " only.");
     }
     final String value = TagUtility.readResult(tagList);
     if (!ResultTagValue.exists(value)) {
@@ -653,17 +641,6 @@ public final class StrictPgnParser {
   private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
     final var startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
     return FenParserAdvanced.parseFenAdvanced(startFenStr);
-  }
-
-  private static void removeFenIfInitial(List<Tag> tagList, Fen startFen) {
-    if (startFen.equals(FenConstants.FEN_INITIAL)) {
-      if (TagUtility.hasFen(tagList)) {
-        TagUtility.removeFenTag(tagList);
-      }
-      if (TagUtility.hasSetUp(tagList)) {
-        TagUtility.removeSetUpTag(tagList);
-      }
-    }
   }
 
   // -------------------------------------------------------------------------------------------------

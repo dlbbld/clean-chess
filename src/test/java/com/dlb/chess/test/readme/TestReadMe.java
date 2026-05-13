@@ -23,6 +23,7 @@ import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.PgnFileUtility;
 import com.dlb.chess.pgn.PgnWriter;
+import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
@@ -153,7 +154,10 @@ class TestReadMe {
     final PgnFile pgnFile = PgnCreate.createPgnFile(sourceBoard);
     final Path filePath = Nulls.pathResolve(tempDir, "myFile.pgn");
 
-    PgnWriter.writePgnFile(pgnFile, filePath);
+    // Archival mode for the write: createPgnFile(Board) carries no tags by design (no caller-provided input to
+    // preserve), so a SEMANTIC write would produce a tag-less PGN that strict parsing rejects. Round-tripping
+    // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
+    PgnWriter.writePgnFile(pgnFile, filePath, WriteMode.ARCHIVAL);
 
     final Board lenientBoard = PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
     final Board strictBoard = PgnFileUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
@@ -197,7 +201,10 @@ class TestReadMe {
         """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final String exported = PgnCreate.createPgnFileString(pgnFile);
+    // Archival mode produces a strict-spec-compliant export from the deficient lenient input: fills the missing
+    // STR placeholders, synthesises a Result tag, emits the termination marker. The README example is exactly
+    // the lenient-input + archival-output flow.
+    final String exported = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
 
     assertTrue(exported.contains("[Event \"Spring Classic\"]"));
     assertTrue(exported.contains("[White \"John Doe\"]"));
@@ -270,20 +277,36 @@ class TestReadMe {
 
   @Test
   @SuppressWarnings("static-method")
-  void strictParserRejectsMissingSevenTagRoster() {
+  void strictParserAcceptsPartialSevenTagRoster() {
+    // PGN spec section 8.1.1 makes the Seven Tag Roster an archival-storage concern only. Strict parsing requires
+    // the Result tag (so its value can match the termination marker) but accepts a PGN that omits other roster
+    // entries. Archival output is opt-in via WriteMode.ARCHIVAL on PgnWriter.
+    final var pgn = """
+        [Event "Spring Classic"]
+        [Result "*"]
+
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
+
+        """;
+
+    assertTrue(StrictPgnParser.validateText(pgn).isValid());
+  }
+
+  @Test
+  @SuppressWarnings("static-method")
+  void strictParserRejectsMissingResultTag() {
     final var pgn = """
         [Event "Spring Classic"]
 
-        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
+        1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
 
         """;
 
     try {
       StrictPgnParser.parseText(pgn);
-      fail("Expected missing seven-tag roster to fail strict PGN parsing");
+      fail("Expected missing Result tag to fail strict PGN parsing");
     } catch (final StrictPgnParserValidationException e) {
-      assertEquals(StrictPgnParserValidationProblem.TAG_NOT_ALL_REQUIRED_TAGS_SET,
-          e.getStrictPgnParserValidationProblem());
+      assertEquals(StrictPgnParserValidationProblem.TAG_RESULT_MISSING, e.getStrictPgnParserValidationProblem());
     }
   }
 
@@ -291,7 +314,10 @@ class TestReadMe {
   @SuppressWarnings("static-method")
   void pgnCreationProducesParserValidExport() {
     final PgnFile pgnFile = PgnCreate.createPgnFile(createOpeningExampleBoard());
-    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile);
+    // Archival mode is the contract a Board-to-PGN consumer wants when round-tripping through strict parsing:
+    // semantic mode would produce a tag-less PGN (createPgnFile(Board) carries no tags by design), which strict
+    // parsing rejects for the missing Result tag.
+    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
 
     assertTrue(LenientPgnParser.validateText(pgnFileString).isValid());
     assertTrue(StrictPgnParser.validateText(pgnFileString).isValid());

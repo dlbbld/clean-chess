@@ -10,31 +10,68 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 
+/**
+ * Serialises a {@link PgnFile} (or a {@link Board}) to a PGN file on disk. All overloads default to
+ * {@link WriteMode#SEMANTIC} — honest preservation of what the parse model contains. Callers who need a PGN spec
+ * section 8.1.1-conformant artifact pass {@link WriteMode#ARCHIVAL} explicitly.
+ */
 public class PgnWriter {
+
+  // -------------------------------------------------------------------------------------------------
+  // PgnFile entry points — semantic default, explicit-mode overloads
+  // -------------------------------------------------------------------------------------------------
 
   public static void writePgnFile(PgnFile pgnFile, String pgnFilePath) {
     writePgnFile(pgnFile, Nulls.pathOf(pgnFilePath));
   }
 
+  public static void writePgnFile(PgnFile pgnFile, String pgnFilePath, WriteMode writeMode) {
+    writePgnFile(pgnFile, Nulls.pathOf(pgnFilePath), writeMode);
+  }
+
   public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName) {
-    final Path filePath = Nulls.pathResolve(folderPath, pgnFileName);
-    writePgnFile(pgnFile, filePath);
+    writePgnFile(pgnFile, Nulls.pathResolve(folderPath, pgnFileName));
+  }
+
+  public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName, WriteMode writeMode) {
+    writePgnFile(pgnFile, Nulls.pathResolve(folderPath, pgnFileName), writeMode);
   }
 
   public static void writePgnFile(PgnFile pgnFile, Path filePath) {
-    final List<String> fileLines = PgnCreate.createPgnFileLines(pgnFile);
+    writePgnFile(pgnFile, filePath, WriteMode.SEMANTIC);
+  }
+
+  public static void writePgnFile(PgnFile pgnFile, Path filePath, WriteMode writeMode) {
+    final List<String> fileLines = PgnCreate.createPgnFileLines(pgnFile, writeMode);
     writeLinesReplacing(filePath, fileLines);
   }
 
+  // -------------------------------------------------------------------------------------------------
+  // Board entry points — semantic default, explicit-mode overloads
+  // -------------------------------------------------------------------------------------------------
+
   public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName) {
+    writePgnFile(board, tagList, folderPath, pgnFileName, WriteMode.SEMANTIC);
+  }
+
+  public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName,
+      WriteMode writeMode) {
     final PgnFile pgnFile = PgnCreate.createPgnFile(board, tagList);
-    writePgnFile(pgnFile, folderPath, pgnFileName);
+    writePgnFile(pgnFile, folderPath, pgnFileName, writeMode);
   }
 
   public static void writePgnFile(Board board, Path folderPath, String pgnFileName) {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-    writePgnFile(pgnFile, folderPath, pgnFileName);
+    writePgnFile(board, folderPath, pgnFileName, WriteMode.SEMANTIC);
   }
+
+  public static void writePgnFile(Board board, Path folderPath, String pgnFileName, WriteMode writeMode) {
+    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    writePgnFile(pgnFile, folderPath, pgnFileName, writeMode);
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // File I/O
+  // -------------------------------------------------------------------------------------------------
 
   private static void writeLinesReplacing(Path filePath, List<String> lineList) {
     try {

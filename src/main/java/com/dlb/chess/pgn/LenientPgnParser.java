@@ -2,7 +2,6 @@ package com.dlb.chess.pgn;
 
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.jdt.annotation.NonNull;
@@ -26,8 +25,11 @@ import com.dlb.chess.san.SanValidationProblem;
 
 /**
  * Lenient PGN parser. Permissive inter-token rules: any whitespace separates tokens, move-number indicators are
- * consumed and ignored, termination marker is optional, space before suffixes is tolerated, missing seven-tag-roster
- * entries are patched with placeholders. Independent validation pipeline from {@link StrictPgnParser}.
+ * consumed and ignored, termination marker is optional, space before suffixes is tolerated. Tag-list contents are
+ * preserved as given (missing seven-tag-roster entries, FEN without SetUp, Result tag absent, redundant
+ * initial-position FEN/SetUp) — no fabrication into the parse model. Tag-level deviations surface via
+ * {@code tagForgivenItems} on the validation result; archival output is opt-in via {@code WriteMode.ARCHIVAL} on
+ * {@code PgnWriter}. Independent validation pipeline from {@link StrictPgnParser}.
  */
 public final class LenientPgnParser {
 
@@ -39,6 +41,7 @@ public final class LenientPgnParser {
   private final String source;
   private final PgnTokenizer tokenizer;
   private final List<ForgivenItem> sanForgivenItemsAccumulator = new ArrayList<>();
+  private final List<ForgivenTagItem> tagForgivenItemsAccumulator = new ArrayList<>();
 
   private LenientPgnParser(String source) {
     this.source = NewlineNormalization.toLf(stripUtf8Bom(source));
@@ -92,7 +95,8 @@ public final class LenientPgnParser {
       parser = new LenientPgnParser(PgnFileReader.readPgnFile(pgnFilePath));
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ForgivenItem.EMPTY_LIST);
+          SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ForgivenItem.EMPTY_LIST,
+          ForgivenTagItem.EMPTY_LIST);
     }
     return runValidation(parser);
   }
@@ -110,15 +114,16 @@ public final class LenientPgnParser {
     try {
       final PgnFile pgnFile = parser.parseInternal();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK",
-          pgnFile, Nulls.copyOfList(parser.sanForgivenItemsAccumulator));
+          pgnFile, Nulls.copyOfList(parser.sanForgivenItemsAccumulator),
+          Nulls.copyOfList(parser.tagForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       final String message = BasicUtility.getMessage(e);
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
-          message, null, e.getSanForgivenItemsAccumulated());
+          message, null, e.getSanForgivenItemsAccumulated(), e.getTagForgivenItemsAccumulated());
     } catch (final RuntimeException e) {
       final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
-          SanValidationProblem.NONE, message, null, ForgivenItem.EMPTY_LIST);
+          SanValidationProblem.NONE, message, null, ForgivenItem.EMPTY_LIST, ForgivenTagItem.EMPTY_LIST);
     }
   }
 
@@ -151,26 +156,26 @@ public final class LenientPgnParser {
     final MovetextOutcome movetext = parseMovetext();
     expectOnlyTrailingContentUntilEof();
 
-    final ResultTagValue resultTagValue = reconcileResult(tagList, movetext.terminationResult());
-    fixTagListForResultIfRequired(tagList, resultTagValue);
+    validateResultConsistency(tagList, movetext.terminationResult());
 
     validateTagSetUpValue(tagList);
-    // Lenient policy: presence of the FEN tag drives the setup-from-position decision; a stale SetUp without FEN
-    // is dropped by the fix-up below.
+    // Lenient policy: presence of the FEN tag drives the setup-from-position decision. SetUp/FEN coupling
+    // deviations are preserved in the tag list as-given; they surface as tag-level forgiven items below.
     final var isStartFromPosition = TagUtility.hasFen(tagList);
-    fixTagListForSetUpIfRequired(tagList, isStartFromPosition);
 
     final Fen startFen = calculateStartFen(tagList, isStartFromPosition);
 
+    // Tag-level forgiveness reporting. Populated before movetext replay so the diagnostics survive a SAN-level
+    // failure (the exception path carries the accumulator). The parse model is preserved as given; this pass only
+    // populates the diagnostic accumulator that surfaces on the validation result.
+    recordMissingStrTagItems(tagList);
+    recordResultAndTerminationMarkerItems(tagList, movetext.terminationResult());
+    recordSetUpFenCouplingItems(tagList, startFen);
+
     final List<PgnHalfMove> canonicalHalfMoveList = replayBoardCanonicalizing(startFen, movetext.halfMoveList());
 
-    fixTagListForMissingSevenTagRosterTags(tagList);
-
-    removeFenIfInitial(tagList, startFen);
-    Collections.sort(tagList);
-
     return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
-        Nulls.copyOfList(canonicalHalfMoveList));
+        Nulls.copyOfList(canonicalHalfMoveList), movetext.terminationResult());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -590,46 +595,96 @@ public final class LenientPgnParser {
   }
 
   // -------------------------------------------------------------------------------------------------
-  // Tag fix-ups
+  // Tag consistency checks
   // -------------------------------------------------------------------------------------------------
 
-  private static ResultTagValue reconcileResult(List<Tag> tagList, @Nullable ResultTagValue terminationResult) {
+  /**
+   * Validates that the Result tag value (if present) matches the movetext termination marker (if present). This is the
+   * only result-related cross-check the lenient parser performs; both signals are preserved independently on the parse
+   * model (Result tag on the tag list, termination marker on {@link PgnFile#terminationMarker}).
+   */
+  private static void validateResultConsistency(List<Tag> tagList, @Nullable ResultTagValue terminationResult) {
+    if (!TagUtility.hasResult(tagList) || terminationResult == null) {
+      return;
+    }
+    final ResultTagValue fromTag = ResultTagValue.calculate(TagUtility.readResult(tagList));
+    if (terminationResult != fromTag) {
+      throw new LenientPgnParserValidationException(
+          LenientPgnParserValidationProblem.TAG_RESULT_BOTH_SET_BUT_DIFFERENT, SanValidationProblem.NONE,
+          "The result in the result tag and in the movetext must be the same. The result \"" + fromTag.getValue()
+              + "\" was specified in the result tag, the result \"" + terminationResult.getValue()
+              + "\" was specified in the movetext");
+    }
+  }
+
+  // -------------------------------------------------------------------------------------------------
+  // Tag-level forgiveness reporting
+  // -------------------------------------------------------------------------------------------------
+
+  /**
+   * One {@link ForgivenTagItemCode#STR_TAG_MISSING} item per missing Seven Tag Roster entry, excluding Result
+   * (Result has dedicated codes that also account for the termination-marker interaction).
+   */
+  private void recordMissingStrTagItems(List<Tag> tagList) {
+    for (final StandardTag standardTag : TagUtility.SEVEN_TAG_ROSTER_TAG_LIST) {
+      if (standardTag == StandardTag.RESULT) {
+        continue;
+      }
+      if (!TagUtility.existsTag(tagList, standardTag)) {
+        tagForgivenItemsAccumulator
+            .add(new ForgivenTagItem(ForgivenTagItemCode.STR_TAG_MISSING, standardTag.getName(), ""));
+      }
+    }
+  }
+
+  /**
+   * Result tag and termination-marker interaction. Emits {@code RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT}
+   * when only the marker was given (with the marker value on {@code detail}), or
+   * {@code RESULT_TAG_AND_TERMINATION_MARKER_BOTH_MISSING} when neither was given. When the Result tag is present,
+   * nothing is recorded — the value is already in the tag list (and {@link #validateResultConsistency} has already
+   * cross-checked it against the marker if both are present).
+   */
+  private void recordResultAndTerminationMarkerItems(List<Tag> tagList, @Nullable ResultTagValue terminationResult) {
     if (TagUtility.hasResult(tagList)) {
-      final ResultTagValue fromTag = ResultTagValue.calculate(TagUtility.readResult(tagList));
-      if (terminationResult != null && terminationResult != fromTag) {
-        throw new LenientPgnParserValidationException(
-            LenientPgnParserValidationProblem.TAG_RESULT_BOTH_SET_BUT_DIFFERENT, SanValidationProblem.NONE,
-            "The result in the result tag and in the movetext must be the same. The result \"" + fromTag.getValue()
-                + "\" was specified in the result tag, the result \"" + terminationResult.getValue()
-                + "\" was specified in the movetext");
-      }
-      return fromTag;
+      return;
     }
-    return terminationResult != null ? terminationResult : ResultTagValue.ONGOING;
-  }
-
-  private static void fixTagListForResultIfRequired(List<Tag> tagList, ResultTagValue resultTagValue) {
-    if (!TagUtility.hasResult(tagList)) {
-      tagList.add(new Tag(StandardTag.RESULT.getName(), resultTagValue.getValue()));
+    if (terminationResult != null) {
+      tagForgivenItemsAccumulator.add(new ForgivenTagItem(
+          ForgivenTagItemCode.RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT, StandardTag.RESULT.getName(),
+          terminationResult.getValue()));
+    } else {
+      tagForgivenItemsAccumulator.add(new ForgivenTagItem(
+          ForgivenTagItemCode.RESULT_TAG_AND_TERMINATION_MARKER_BOTH_MISSING, StandardTag.RESULT.getName(), ""));
     }
   }
 
-  private static void fixTagListForSetUpIfRequired(List<Tag> tagList, boolean isStartFromPosition) {
-    if (isStartFromPosition) {
-      if (!TagUtility.hasSetUp(tagList)) {
-        tagList.add(new Tag(StandardTag.SET_UP.getName(), SetUpTagValue.START_FROM_SETUP_POSITION.getValue()));
-      }
-    } else if (TagUtility.hasSetUp(tagList)) {
-      TagUtility.removeTag(tagList, StandardTag.SET_UP);
+  /**
+   * SetUp/FEN coupling and redundancy. Three deviations possible:
+   * <ul>
+   *   <li>FEN present, SetUp absent: {@code SETUP_TAG_MISSING_BUT_FEN_PRESENT}.</li>
+   *   <li>SetUp present, FEN absent: {@code SETUP_TAG_PRESENT_BUT_FEN_MISSING}.</li>
+   *   <li>FEN present and describes the initial position (redundant signal):
+   *       {@code REDUNDANT_FEN_AND_SETUP_FOR_INITIAL_POSITION}.</li>
+   * </ul>
+   * The first two cases are exclusive of each other. The third can fire alongside neither, since it requires FEN
+   * presence — when it fires, the SetUp tag may or may not be present (both shapes are equally redundant).
+   */
+  private void recordSetUpFenCouplingItems(List<Tag> tagList, Fen startFen) {
+    final boolean hasFen = TagUtility.hasFen(tagList);
+    final boolean hasSetUp = TagUtility.hasSetUp(tagList);
+    if (hasFen && !hasSetUp) {
+      tagForgivenItemsAccumulator
+          .add(new ForgivenTagItem(ForgivenTagItemCode.SETUP_TAG_MISSING_BUT_FEN_PRESENT, StandardTag.SET_UP.getName(),
+              ""));
+    } else if (!hasFen && hasSetUp) {
+      tagForgivenItemsAccumulator
+          .add(new ForgivenTagItem(ForgivenTagItemCode.SETUP_TAG_PRESENT_BUT_FEN_MISSING, StandardTag.FEN.getName(),
+              ""));
     }
-  }
-
-  private static void fixTagListForMissingSevenTagRosterTags(List<Tag> tagList) {
-    for (final StandardTag standardTag : StandardTag.values()) {
-      if (standardTag.getIsSevenTagRosterTag() && !TagUtility.existsTag(tagList, standardTag)) {
-        final Tag placeHolderTag = TagPlaceHolderUtility.getPlaceHolderTag(standardTag);
-        tagList.add(placeHolderTag);
-      }
+    if (hasFen && startFen.equals(FenConstants.FEN_INITIAL)) {
+      tagForgivenItemsAccumulator
+          .add(new ForgivenTagItem(ForgivenTagItemCode.REDUNDANT_FEN_AND_SETUP_FOR_INITIAL_POSITION,
+              StandardTag.FEN.getName(), ""));
     }
   }
 
@@ -694,7 +749,7 @@ public final class LenientPgnParser {
         final SanValidationProblem underlying = e.getUnderlyingSanValidationProblem();
         throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.SAN,
             underlying == null ? SanValidationProblem.UNKNOWN_ERROR : underlying, message, e.getGameStatus(),
-            Nulls.copyOfList(sanForgivenItemsAccumulator));
+            Nulls.copyOfList(sanForgivenItemsAccumulator), Nulls.copyOfList(tagForgivenItemsAccumulator));
       }
     }
     return canonicalList;
@@ -703,17 +758,6 @@ public final class LenientPgnParser {
   private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
     final var startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
     return FenParserAdvanced.parseFenAdvanced(startFenStr);
-  }
-
-  private static void removeFenIfInitial(List<Tag> tagList, Fen startFen) {
-    if (startFen.equals(FenConstants.FEN_INITIAL)) {
-      if (TagUtility.hasFen(tagList)) {
-        TagUtility.removeFenTag(tagList);
-      }
-      if (TagUtility.hasSetUp(tagList)) {
-        TagUtility.removeSetUpTag(tagList);
-      }
-    }
   }
 
   // -------------------------------------------------------------------------------------------------

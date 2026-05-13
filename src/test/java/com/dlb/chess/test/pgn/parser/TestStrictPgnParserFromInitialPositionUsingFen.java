@@ -1,7 +1,5 @@
 package com.dlb.chess.test.pgn.parser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
@@ -22,15 +20,15 @@ class TestStrictPgnParserFromInitialPositionUsingFen extends AbstractTestLenient
 
     {
       final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_example.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "02_example.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "02_example.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
   }
 

@@ -1,7 +1,5 @@
 package com.dlb.chess.test.pgn.parser;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.nio.file.Path;
 
 import org.junit.jupiter.api.Test;
@@ -23,19 +21,19 @@ class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParse
 
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_white_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "02_white_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "03_white_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "04_white_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
   }
 
@@ -48,19 +46,19 @@ class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParse
 
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "05_black_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "06_black_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "07_black_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "08_black_start.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
   }
 

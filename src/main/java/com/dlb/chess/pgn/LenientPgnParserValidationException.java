@@ -31,9 +31,17 @@ public class LenientPgnParserValidationException extends UsageException {
    */
   private final @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated;
 
+  /**
+   * Tag-level forgiven items accumulated before the failure point. Tag-level forgiveness happens after tag parsing
+   * and before movetext replay, so this list is empty for any failure that originated in the tag section itself, and
+   * fully-populated for any failure that originated downstream (in the movetext).
+   */
+  private final @NonNull ImmutableList<@NonNull ForgivenTagItem> tagForgivenItemsAccumulated;
+
   public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message) {
-    this(lenientPgnParserValidationProblem, sanValidationProblem, message, null, ImmutableList.of());
+    this(lenientPgnParserValidationProblem, sanValidationProblem, message, null, ImmutableList.of(),
+        ImmutableList.of());
   }
 
   /**
@@ -43,21 +51,25 @@ public class LenientPgnParserValidationException extends UsageException {
    */
   public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message, @Nullable GameStatus gameStatus) {
-    this(lenientPgnParserValidationProblem, sanValidationProblem, message, gameStatus, ImmutableList.of());
+    this(lenientPgnParserValidationProblem, sanValidationProblem, message, gameStatus, ImmutableList.of(),
+        ImmutableList.of());
   }
 
   /**
    * Constructor used when the failure occurs during movetext replay and SAN-level forgiven items have already been
-   * accumulated for earlier moves. Carries those items so callers can see partial diagnostic data on failure.
+   * accumulated for earlier moves. Carries the accumulated SAN-level and tag-level items so callers can see partial
+   * diagnostic data on failure.
    */
   public LenientPgnParserValidationException(LenientPgnParserValidationProblem lenientPgnParserValidationProblem,
       SanValidationProblem sanValidationProblem, String message, @Nullable GameStatus gameStatus,
-      @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated) {
+      @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated,
+      @NonNull ImmutableList<@NonNull ForgivenTagItem> tagForgivenItemsAccumulated) {
     super(message);
     this.lenientPgnParserValidationProblem = lenientPgnParserValidationProblem;
     this.sanValidationProblem = sanValidationProblem;
     this.gameStatus = gameStatus;
     this.sanForgivenItemsAccumulated = Nulls.copyOfList(sanForgivenItemsAccumulated);
+    this.tagForgivenItemsAccumulated = Nulls.copyOfList(tagForgivenItemsAccumulated);
   }
 
   public LenientPgnParserValidationProblem getLenientPgnParserValidationProblem() {
@@ -78,6 +90,10 @@ public class LenientPgnParserValidationException extends UsageException {
 
   public @NonNull ImmutableList<@NonNull ForgivenItem> getSanForgivenItemsAccumulated() {
     return sanForgivenItemsAccumulated;
+  }
+
+  public @NonNull ImmutableList<@NonNull ForgivenTagItem> getTagForgivenItemsAccumulated() {
+    return tagForgivenItemsAccumulated;
   }
 
 }

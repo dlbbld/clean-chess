@@ -11,6 +11,7 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.WriteMode;
 
 class TestPgnExportPreview {
 
@@ -22,7 +23,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "?"]
+          [Date "????.??.??"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -36,7 +37,7 @@ class TestPgnExportPreview {
       actualLineList.add("e4 e5 Nf3 Nc6");
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -46,7 +47,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "?"]
+          [Date "????.??.??"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -62,7 +63,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -72,7 +73,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "Zuerich Open"]
           [Site "?"]
-          [Date "?"]
+          [Date "????.??.??"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -89,7 +90,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -118,7 +119,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -133,7 +134,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "?"]
+          [Date "????.??.??"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -152,7 +153,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -162,7 +163,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "?"]
+          [Date "????.??.??"]
           [Round "?"]
           [White "Donald Duck"]
           [Black "Mickey Mouse"]
@@ -183,7 +184,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -198,7 +199,7 @@ class TestPgnExportPreview {
       final var expected = """
           [Event "?"]
           [Site "?"]
-          [Date "?"]
+          [Date "????.??.??"]
           [Round "?"]
           [White "?"]
           [Black "?"]
@@ -218,7 +219,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);
@@ -249,7 +250,7 @@ class TestPgnExportPreview {
       final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
       final PgnFile pgnFile = LenientPgnParser.parse(actualLineList);
 
-      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile);
+      final List<String> expectedLineList = PgnCreate.createPgnFileLines(pgnFile, WriteMode.ARCHIVAL);
       final String actual = convertToTextBlock(expectedLineList);
 
       assertEquals(expected, actual);

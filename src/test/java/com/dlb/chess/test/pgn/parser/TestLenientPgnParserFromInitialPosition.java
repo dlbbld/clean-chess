@@ -70,18 +70,18 @@ class TestLenientPgnParserFromInitialPosition extends AbstractTestLenientPgnPars
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "11_result_incomplete_missing_tag.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "12_result_incomplete_missing_termination_marker.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
 
     }
     {
       final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "13_result_incomplete_missing_tag_missing_termination_marker.pgn");
-      assertEquals(expected, actual);
+      assertEqualsArchival(expected, actual);
     }
   }
 
