@@ -71,7 +71,7 @@ class TestPgnRoundTripEdgeCases {
         """;
     final LenientPgnParserValidationResult parseResult = LenientPgnParser.validateText(pgn);
     assertTrue(parseResult.isValid(), () -> "expected valid; got: " + parseResult.message());
-    final PgnFile parsed = parseResult.pgnFile();
+    final PgnFile parsed = pgnFileOf(parseResult);
 
     // Should not throw on an empty movetext.
     final String exported = PgnCreate.createPgnFileString(parsed, WriteMode.SEMANTIC);
@@ -79,9 +79,24 @@ class TestPgnRoundTripEdgeCases {
     // Re-parsing the exported PGN must succeed and yield the same tag set + same empty movetext signal.
     final LenientPgnParserValidationResult reparseResult = LenientPgnParser.validateText(exported);
     assertTrue(reparseResult.isValid(), () -> "expected valid re-parse; got: " + reparseResult.message());
-    final PgnFile reparsed = reparseResult.pgnFile();
+    final PgnFile reparsed = pgnFileOf(reparseResult);
     assertEquals(parsed.tagList(), reparsed.tagList());
     assertTrue(reparsed.halfMoveList().isEmpty());
     assertEquals(null, reparsed.terminationMarker());
+  }
+
+  /**
+   * Extracts the {@link PgnFile} from a successful validation result, asserting non-null. Gives the JDT
+   * null-flow analysis the narrowed type it needs at the use site — {@code LenientPgnParserValidationResult
+   * .pgnFile()} is declared {@code @Nullable} (it carries {@code null} on failure), and JDT does not infer
+   * non-null from {@code isValid()} alone.
+   */
+  private static PgnFile pgnFileOf(LenientPgnParserValidationResult result) {
+    final PgnFile pgnFile = result.pgnFile();
+    if (pgnFile == null) {
+      throw new AssertionError("Expected a non-null PgnFile on the lenient PGN validation result; problem="
+          + result.problemParser() + ", message=" + result.message());
+    }
+    return pgnFile;
   }
 }
