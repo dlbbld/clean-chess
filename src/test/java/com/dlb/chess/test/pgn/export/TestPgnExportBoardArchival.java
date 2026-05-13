@@ -10,6 +10,7 @@ import org.eclipse.jdt.annotation.NonNull;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.ResultTagValue;
@@ -155,7 +156,10 @@ class TestPgnExportBoardArchival {
     boardWonByWhite.moveStrict("Qxf7#");
     assertTrue(boardWonByWhite.isCheckmate());
 
-    final List<Tag> contradictoryTagList = List.of(new Tag(StandardTag.RESULT.getName(), "0-1"));
+    // Nulls.copyOfList wraps List.of with the @NonNull-annotated immutable list shape JDT requires for the
+    // {@code createPgnFile(Board, List<Tag>)} parameter.
+    final List<Tag> contradictoryTagList = Nulls
+        .copyOfList(java.util.Collections.singletonList(new Tag(StandardTag.RESULT.getName(), "0-1")));
     assertThrows(IllegalArgumentException.class, () -> PgnCreate.createPgnFile(boardWonByWhite, contradictoryTagList));
   }
 }

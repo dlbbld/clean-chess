@@ -14,6 +14,7 @@ import com.dlb.chess.fen.LenientFenParser;
 import com.dlb.chess.fen.LenientFenParserValidationProblem;
 import com.dlb.chess.fen.LenientFenParserValidationResult;
 import com.dlb.chess.fen.constants.FenConstants;
+import com.dlb.chess.fen.model.Fen;
 import com.google.common.collect.ImmutableList;
 
 /**
@@ -23,7 +24,7 @@ import com.google.common.collect.ImmutableList;
  * forgiven items on already-canonical input; the {@code testAdvancedInvalid*} case asserts that a semantically
  * invalid position (king missing) still fails — the lenient layer only forgives syntactic deviations.
  */
-@SuppressWarnings({ "static-method", "null" })
+@SuppressWarnings("static-method")
 class TestLenientFenParser {
 
   private static final String INITIAL_CANONICAL = FenConstants.FEN_INITIAL_STR;
@@ -33,7 +34,7 @@ class TestLenientFenParser {
     final LenientFenParserValidationResult result = LenientFenParser.validateText(INITIAL_CANONICAL);
     assertTrue(result.isValid());
     assertTrue(result.forgivenItems().isEmpty());
-    assertEquals(INITIAL_CANONICAL, result.fen().fen());
+    assertEquals(INITIAL_CANONICAL, fenOf(result).fen());
   }
 
   @Test
@@ -143,8 +144,8 @@ class TestLenientFenParser {
     assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
     assertTrue(containsCode(result.forgivenItems(),
         ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER));
-    assertEquals(20, result.fen().fullMoveNumber());
-    assertEquals(15, result.fen().halfMoveClock());
+    assertEquals(20, fenOf(result).fullMoveNumber());
+    assertEquals(15, fenOf(result).halfMoveClock());
   }
 
   @Test
@@ -161,7 +162,7 @@ class TestLenientFenParser {
     assertTrue(containsCode(items, ForgivenFenItemCode.CASTLING_NON_CANONICAL_ORDER));
     assertTrue(containsCode(items, ForgivenFenItemCode.EN_PASSANT_NON_STANDARD_DASH));
     assertTrue(containsCode(items, ForgivenFenItemCode.MISSING_FULLMOVE_NUMBER));
-    assertEquals(INITIAL_CANONICAL, result.fen().fen());
+    assertEquals(INITIAL_CANONICAL, fenOf(result).fen());
   }
 
   @Test
@@ -176,8 +177,8 @@ class TestLenientFenParser {
     assertTrue(containsCode(items, ForgivenFenItemCode.TAB_OR_NEWLINE_AS_SEPARATOR));
     assertTrue(containsCode(items, ForgivenFenItemCode.MISSING_HALFMOVE_AND_FULLMOVE));
     // Counters defaulted as documented: halfMoveClock = 0, fullMoveNumber = 1.
-    assertEquals(0, result.fen().halfMoveClock());
-    assertEquals(1, result.fen().fullMoveNumber());
+    assertEquals(0, fenOf(result).halfMoveClock());
+    assertEquals(1, fenOf(result).fullMoveNumber());
   }
 
   @Test
@@ -201,12 +202,28 @@ class TestLenientFenParser {
     final LenientFenParserValidationResult result = LenientFenParser.validateText(deviating);
     assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
     assertTrue(containsCode(result.forgivenItems(), ForgivenFenItemCode.TRAILING_WHITESPACE));
-    assertEquals(INITIAL_CANONICAL, result.fen().fen());
+    assertEquals(INITIAL_CANONICAL, fenOf(result).fen());
   }
 
   // -------------------------------------------------------------------------------------------------
   // Helpers
   // -------------------------------------------------------------------------------------------------
+
+  /**
+   * Extracts the {@link Fen} from a successful validation result, asserting non-null. Gives the JDT null-flow
+   * analysis the narrowed type it needs at the use site (class-level {@code @SuppressWarnings("null")} covers
+   * "Null type safety" warnings but does not always propagate into "Potential null pointer access" errors
+   * inside method bodies).
+   */
+  private static Fen fenOf(LenientFenParserValidationResult result) {
+    final Fen fen = result.fen();
+    if (fen == null) {
+      throw new AssertionError(
+          "Expected a non-null Fen on the lenient FEN validation result; problem=" + result.problem()
+              + ", message=" + result.message());
+    }
+    return fen;
+  }
 
   private static void assertExactlyOneCode(String input, ForgivenFenItemCode expectedCode) {
     final LenientFenParserValidationResult result = LenientFenParser.validateText(input);
