@@ -3,7 +3,6 @@ package com.dlb.chess.fen;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.FenAdvancedValidationProblem;
 import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
@@ -101,25 +100,27 @@ public final class LenientFenParser {
   }
 
   /**
-   * Rebuilds the normalised FEN with {@code fullMoveNumber} bumped up to the minimum value consistent with the
-   * stated {@code halfMoveClock} and {@code havingMove}. Records the substitution on the accumulator. Called
-   * only after {@link FenParserAdvanced} has flagged
-   * {@link FenAdvancedValidationProblem#INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER}, so the
-   * input is known to have six well-formed fields with parseable integer counters and a valid side-to-move
-   * letter.
+   * Rebuilds the normalised FEN with {@code fullMoveNumber} bumped up well above the minimum value consistent with
+   * the stated {@code halfMoveClock}. The bump targets a generous reserve rather than the strict minimum: the new
+   * value is {@code halfMoveClock} rounded up to the next multiple of ten (so {@code halfMoveClock = 15} yields
+   * {@code fullMoveNumber = 20}, well above the strict-minimum of 9). The reserve makes the auto-corrected value
+   * visibly approximate — a consumer looking at the FEN sees a round-numbered placeholder that signals "the
+   * fullMoveNumber here was reconstructed, not measured." Called only after {@link FenParserAdvanced} has flagged
+   * {@link FenAdvancedValidationProblem#INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER}, so the input
+   * is known to have six well-formed fields with parseable integer counters and a valid side-to-move letter.
    */
   private static String autoCorrectHalfMoveClockInconsistency(String canonical,
       List<ForgivenFenItem> accumulator) {
     final String[] fields = canonical.split(" ");
     final int halfMoveClock = Integer.parseInt(fields[4]);
-    final Side havingMove = fields[1].equals("b") ? Side.BLACK : Side.WHITE;
-    // Minimum fullMoveNumber that satisfies halfMoveClock <= 2 * (fullMoveNumber - 1) + (havingMove == BLACK ? 1 : 0).
-    // For white: fmn >= halfMoveClock/2 + 1 (with ceiling).
-    // For black: fmn >= (halfMoveClock - 1)/2 + 1 (with ceiling).
-    final int minimumFullMoveNumber = havingMove == Side.BLACK ? halfMoveClock / 2 + 1
-        : (halfMoveClock + 1) / 2 + 1;
+    // Round up to the next multiple of ten strictly greater than halfMoveClock. For halfMoveClock = 15 the result
+    // is 20; for halfMoveClock = 20 it is 30. Always at least 10 (when halfMoveClock = 0, though that case never
+    // triggers a violation). The strict-minimum value would be ((halfMoveClock + 1) / 2 + 1) for white-to-move
+    // and (halfMoveClock / 2 + 1) for black-to-move; the reserve value is always strictly greater than that
+    // minimum, satisfying the consistency check with room to spare.
+    final int reserveFullMoveNumber = (halfMoveClock / 10 + 1) * 10;
     final String oldFullMoveNumber = fields[5];
-    fields[5] = Integer.toString(minimumFullMoveNumber);
+    fields[5] = Integer.toString(reserveFullMoveNumber);
     final String corrected = String.join(" ", fields);
     accumulator.add(new ForgivenFenItem(ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER,
         oldFullMoveNumber, Nulls.toString(fields[5])));

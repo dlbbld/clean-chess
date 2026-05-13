@@ -2760,9 +2760,9 @@ public class CreatePgnTestCases {
         73, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         // FEN tag in the PGN reads "... 2 1" (speculative fullMoveNumber placeholder). Lenient FEN auto-corrects
-        // fullMoveNumber up to the minimum consistent value (2 for halfMoveClock=2 white-to-move), so the final
-        // FEN's fullMoveNumber is one higher than under the old strict-FEN-on-tag behaviour.
-        "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 46"));
+        // fullMoveNumber up to halfMoveClock rounded up to the next multiple of ten (10 for halfMoveClock=2), a
+        // round-numbered placeholder that signals a reconstructed value rather than a measured one.
+        "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 54"));
 
     // repetition after promotion
     list.add(new PgnFileTestCase("various_keres_fischer_1962.pgn", "", "", 20, 17, CheckmateOrStalemate.NA, 1,

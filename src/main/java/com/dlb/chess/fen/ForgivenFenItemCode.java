@@ -56,8 +56,10 @@ public enum ForgivenFenItemCode {
   /**
    * Half-move clock and full-move number are inconsistent: a FEN like {@code ... 15 1} claims 15 half-moves have
    * been played but the full-move counter is still at 1. Physically impossible in a single chess game. The
-   * lenient parser auto-corrects by bumping {@code fullMoveNumber} up to the minimum value consistent with the
-   * given {@code halfMoveClock} and {@code havingMove}. Strict parsing rejects (see
+   * lenient parser auto-corrects by bumping {@code fullMoveNumber} up to {@code halfMoveClock} rounded up to the
+   * next multiple of ten — {@code halfMoveClock = 15} gives {@code fullMoveNumber = 20}, {@code halfMoveClock = 2}
+   * gives {@code fullMoveNumber = 10}. The round-numbered result is well above the strict minimum and signals to
+   * a reader that the value was reconstructed rather than measured. Strict parsing rejects (see
    * {@code FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER}).
    */
   HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER,

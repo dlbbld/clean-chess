@@ -134,14 +134,16 @@ class TestLenientFenParser {
 
   @Test
   void test15_halfMoveClockInconsistentWithFullMoveNumber() {
-    // halfMoveClock=15, fullMoveNumber=1, white-to-move: physically impossible (max=0). Lenient parser bumps
-    // fullMoveNumber up to the minimum consistent value (9 for halfMoveClock=15 white-to-move).
+    // halfMoveClock=15, fullMoveNumber=1, white-to-move: physically impossible (max half-moves at move 1 = 0).
+    // Lenient parser bumps fullMoveNumber up to halfMoveClock rounded up to the next multiple of 10 (20 here),
+    // a generous reserve over the strict minimum of 9 — the round-numbered placeholder signals a reconstructed
+    // value rather than a measured one.
     final String deviating = "8/8/8/8/8/8/8/4K2k w - - 15 1";
     final LenientFenParserValidationResult result = LenientFenParser.validateText(deviating);
     assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
     assertTrue(containsCode(result.forgivenItems(),
         ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER));
-    assertEquals(9, result.fen().fullMoveNumber());
+    assertEquals(20, result.fen().fullMoveNumber());
     assertEquals(15, result.fen().halfMoveClock());
   }
 
