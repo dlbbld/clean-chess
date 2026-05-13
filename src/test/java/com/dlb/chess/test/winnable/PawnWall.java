@@ -569,10 +569,10 @@ public class PawnWall {
     visited.add(bishopSquare);
 
     while (!queue.isEmpty()) {
-      final Square current = queue.poll();
+      @SuppressWarnings("null") final Square current = queue.poll();
       for (final int[] dir : BISHOP_DIAGONALS) {
-        int file = current.getFile().getNumber();
-        int rank = current.getRank().getNumber();
+        var file = current.getFile().getNumber();
+        var rank = current.getRank().getNumber();
         while (true) {
           file += dir[0];
           rank += dir[1];
@@ -586,12 +586,11 @@ public class PawnWall {
             if (visited.add(next)) {
               queue.add(next);
             }
-          } else if (pieceOnNext.getSide() != side) {
-            // opponent piece — bishop can capture (terminal); ray stops here
-            reachable.add(next);
-            break;
           } else {
-            // own piece — bishop is blocked, this square is NOT reachable
+            if (pieceOnNext.getSide() != side) {
+              // opponent piece — bishop can capture (terminal); ray stops here
+              reachable.add(next);
+            }
             break;
           }
         }

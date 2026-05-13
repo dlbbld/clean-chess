@@ -20,10 +20,10 @@ import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.pgn.WriteMode;
 
 /**
- * The {@link PgnCreate#createPgnFile(Board)} path produces a minimal honest model — no STR fabrication. Archival
- * export ({@link WriteMode#ARCHIVAL}) is the opt-in path that fills the Seven Tag Roster, synthesises a Result tag
- * from the termination marker, and emits PGN spec section 8.1.1-conformant output. This test exercises that
- * archival path on Board-derived inputs.
+ * The {@link PgnCreate#createPgnFile(Board)} path produces a minimal honest model — no STR fabrication. Archival export
+ * ({@link WriteMode#ARCHIVAL}) is the opt-in path that fills the Seven Tag Roster, synthesises a Result tag from the
+ * termination marker, and emits PGN spec section 8.1.1-conformant output. This test exercises that archival path on
+ * Board-derived inputs.
  */
 class TestPgnExportBoardArchival {
 
@@ -84,7 +84,7 @@ class TestPgnExportBoardArchival {
   void boardFromNonInitialPositionArchivalEmitsSetUpAndFen() {
     // Caller passes a tagList already containing FEN+SetUp for a custom starting position, then makes moves on
     // the board. Archival export must preserve the position-encoding tags.
-    final String customFen = "r1b2r2/pp1pk1pp/8/7q/3pP1n1/5N1P/PPQ2PP1/3R1RK1 w - - 0 17";
+    final var customFen = "r1b2r2/pp1pk1pp/8/7q/3pP1n1/5N1P/PPQ2PP1/3R1RK1 w - - 0 17";
     final Board board = new Board(customFen);
     board.moveStrict("Qa4");
 
@@ -111,8 +111,8 @@ class TestPgnExportBoardArchival {
 
     final String archivalOutput = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
 
-    final int eventIdx = archivalOutput.indexOf("[" + StandardTag.EVENT.getName() + " ");
-    final int resultIdx = archivalOutput.indexOf("[" + StandardTag.RESULT.getName() + " ");
+    final var eventIdx = archivalOutput.indexOf("[" + StandardTag.EVENT.getName() + " ");
+    final var resultIdx = archivalOutput.indexOf("[" + StandardTag.RESULT.getName() + " ");
 
     assertTrue(eventIdx >= 0);
     assertTrue(resultIdx > eventIdx);
@@ -135,7 +135,7 @@ class TestPgnExportBoardArchival {
     assertTrue(semanticOutput.contains("*"));
 
     // And the tagList check that no fabrication slipped into the model on this path.
-    assertTrue(TagUtility.calculateIsContainsAllSevenTagRosterTags(pgnFile.tagList()) == false);
+    assertTrue(!TagUtility.calculateIsContainsAllSevenTagRosterTags(pgnFile.tagList()));
   }
 
   @SuppressWarnings("static-method")
@@ -158,7 +158,7 @@ class TestPgnExportBoardArchival {
 
     // Nulls.copyOfList wraps List.of with the @NonNull-annotated immutable list shape JDT requires for the
     // {@code createPgnFile(Board, List<Tag>)} parameter.
-    final List<Tag> contradictoryTagList = Nulls
+    @SuppressWarnings("null") final List<Tag> contradictoryTagList = Nulls
         .copyOfList(java.util.Collections.singletonList(new Tag(StandardTag.RESULT.getName(), "0-1")));
     assertThrows(IllegalArgumentException.class, () -> PgnCreate.createPgnFile(boardWonByWhite, contradictoryTagList));
   }
