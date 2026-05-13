@@ -21,7 +21,7 @@ import com.google.common.collect.ImmutableList;
 class TestLenientPgnParserTagForgivenItems {
 
   @Test
-  void strTagMissing_emitsOneItemPerMissingStrTagExceptResult() {
+  void test01_strTagMissingEmitsOneItemPerMissingStrTagExceptResult() {
     // Only Result + Event provided; Site/Date/Round/White/Black are missing. Result has its own dedicated codes
     // and is never emitted by STR_TAG_MISSING. So we expect five items.
     final var pgn = """
@@ -42,7 +42,7 @@ class TestLenientPgnParserTagForgivenItems {
   }
 
   @Test
-  void resultTagMissingButTerminationMarkerPresent_emitsCodeWithMarkerValueInDetail() {
+  void test02_resultTagMissingButTerminationMarkerPresentEmitsCodeWithMarkerValueInDetail() {
     final var pgn = """
         [Event "?"]
         [Site "?"]
@@ -61,7 +61,7 @@ class TestLenientPgnParserTagForgivenItems {
   }
 
   @Test
-  void resultAndTerminationMarkerBothMissing_emitsCode() {
+  void test03_resultAndTerminationMarkerBothMissingEmitsCode() {
     final var pgn = """
         [Event "?"]
         [Site "?"]
@@ -80,7 +80,7 @@ class TestLenientPgnParserTagForgivenItems {
   }
 
   @Test
-  void setUpTagMissingButFenPresent_emitsCode() {
+  void test04_setUpTagMissingButFenPresentEmitsCode() {
     final var pgn = """
         [Event "?"]
         [Site "?"]
@@ -100,7 +100,7 @@ class TestLenientPgnParserTagForgivenItems {
   }
 
   @Test
-  void setUpTagPresentButFenMissing_emitsCode() {
+  void test05_setUpTagPresentButFenMissingEmitsCode() {
     final var pgn = """
         [Event "?"]
         [Site "?"]
@@ -120,7 +120,7 @@ class TestLenientPgnParserTagForgivenItems {
   }
 
   @Test
-  void redundantFenAndSetUpForInitialPosition_emitsCode() {
+  void test06_redundantFenAndSetUpForInitialPositionEmitsCode() {
     // FEN value describes the initial position; the FEN+SetUp pair is redundant since the initial position is the
     // implicit default. The parse model preserves the tags; archival-mode export drops them.
     final var pgn = """
@@ -144,7 +144,7 @@ class TestLenientPgnParserTagForgivenItems {
   }
 
   @Test
-  void canonicalInput_emitsNoTagForgivenItems() {
+  void test07_canonicalInputEmitsNoTagForgivenItems() {
     final var pgn = """
         [Event "Spring Classic"]
         [Site "Somewhere"]

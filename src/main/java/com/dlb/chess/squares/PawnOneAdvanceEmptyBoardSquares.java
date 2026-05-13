@@ -24,6 +24,7 @@ class PawnOneAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares implemen
   }
 
   // Pawns only exist on ranks 2-7. From those, one advance towards the player's promotion rank.
+  @SuppressWarnings("null")
   private static ImmutableMap<Square, ImmutableSet<Square>> build(Side side) {
     final int rankOffset = side == Side.WHITE ? 1 : -1;
     final EnumMap<Square, ImmutableSet<Square>> map = Nulls.newEnumMap(Square.class);

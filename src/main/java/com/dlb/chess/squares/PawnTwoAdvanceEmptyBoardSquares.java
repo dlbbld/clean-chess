@@ -24,6 +24,7 @@ class PawnTwoAdvanceEmptyBoardSquares extends AbstractEmptyBoardSquares implemen
   }
 
   // Two-square advance is only available from the player's starting rank (2 for white, 7 for black).
+  @SuppressWarnings("null")
   private static ImmutableMap<Square, ImmutableSet<Square>> build(Side side) {
     final int startRank = side == Side.WHITE ? 2 : 7;
     final int targetRank = side == Side.WHITE ? 4 : 5;

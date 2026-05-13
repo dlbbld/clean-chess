@@ -1,6 +1,5 @@
 package com.dlb.chess.test.pgn.export;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -80,7 +79,7 @@ class TestPgnExportBoardArchival {
 
   @SuppressWarnings("static-method")
   @Test
-  void boardFromNonInitialPosition_archivalEmitsSetUpAndFen() {
+  void boardFromNonInitialPositionArchivalEmitsSetUpAndFen() {
     // Caller passes a tagList already containing FEN+SetUp for a custom starting position, then makes moves on
     // the board. Archival export must preserve the position-encoding tags.
     final String customFen = "r1b2r2/pp1pk1pp/8/7q/3pP1n1/5N1P/PPQ2PP1/3R1RK1 w - - 0 17";

@@ -618,10 +618,6 @@ public class PawnWall {
     return false;
   }
 
-  private static boolean isOwnPiece(Side side, Piece pieceOnSquare) {
-    return pieceOnSquare != Piece.NONE && pieceOnSquare.getSide() == side;
-  }
-
   private static List<Square> leftmostFile(Side side) {
     return switch (side) {
       case WHITE -> LEFTMOST_FILE_WHITE;
