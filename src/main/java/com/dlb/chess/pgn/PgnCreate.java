@@ -83,8 +83,14 @@ public class PgnCreate {
       movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + moves + terminationSuffix;
     }
 
-    fileLines
-        .addAll(PgnLineWrapper.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
+    // Lenient parses can produce a PgnFile with no pregame commentary, no half-moves, and no termination marker
+    // (a tags-only PGN). The movetext string is then empty; PgnLineWrapper rejects empty input, so skip the
+    // wrap call and leave the movetext section blank. The output stays structurally well-formed (tag section,
+    // separator, trailing blank) and re-parses cleanly under the lenient parser.
+    if (!movetextIncludingPreGameCommentary.isEmpty()) {
+      fileLines
+          .addAll(PgnLineWrapper.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
+    }
     // Trailing blank line per the strict format.
     fileLines.add("");
 
@@ -126,9 +132,20 @@ public class PgnCreate {
   private static String calculateTagEntry(Tag tag) {
     final StringBuilder result = new StringBuilder();
     result.append("[").append(tag.name()).append(" ");
-    result.append("\"").append(tag.value()).append("\"");
+    result.append("\"").append(escapeTagValue(tag.value())).append("\"");
     result.append("]");
     return Nulls.toString(result);
+  }
+
+  /**
+   * Inverse of the tokeniser's tag-string unescape (see {@code PgnTokenizer.readTagValueString}). PGN spec section
+   * 8.1.2 defines two escapes inside a string token: a backslash represents a literal backslash and a backslash
+   * followed by a quote represents a literal quote. Other characters do not require escaping. Order matters —
+   * backslash must be doubled before quotes are escaped, otherwise the backslash introduced by quote-escaping
+   * would itself be re-escaped.
+   */
+  private static String escapeTagValue(String value) {
+    return Nulls.replace(Nulls.replace(value, "\\", "\\\\"), "\"", "\\\"");
   }
 
   private static String calculateMovetextWithoutGameTerminationMarker(int fullMoveNumber, Side havingMove,
