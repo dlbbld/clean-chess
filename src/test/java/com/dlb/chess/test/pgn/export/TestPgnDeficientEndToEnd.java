@@ -16,22 +16,22 @@ import com.dlb.chess.pgn.WriteMode;
 
 /**
  * The headline end-to-end deficient-PGN fixture called out in {@code tasks.md} for this release: a single PGN
- * exercising several lenient-tolerated deviations simultaneously, then asserted under both
- * {@link WriteMode#SEMANTIC} (the parse model echoed, no fabricated tags) and {@link WriteMode#ARCHIVAL} (the
- * canonical spec section 8.1.1-conformant artifact). Covers the semantic-preservation contract that the
- * archival-equivalence helper in {@code AbstractTestLenientPgnParser} does not directly verify.
+ * exercising several lenient-tolerated deviations simultaneously, then asserted under both {@link WriteMode#SEMANTIC}
+ * (the parse model echoed, no fabricated tags) and {@link WriteMode#ARCHIVAL} (the canonical spec section
+ * 8.1.1-conformant artifact). Covers the semantic-preservation contract that the archival-equivalence helper in
+ * {@code AbstractTestLenientPgnParser} does not directly verify.
  */
-@SuppressWarnings({ "static-method", "null" })
+@SuppressWarnings({ "static-method" })
 class TestPgnDeficientEndToEnd {
 
   /**
-   * Deviations exercised:
+   * Deviations exercised. All below:
    * <ul>
-   *   <li>Missing STR tags ({@code Site}, {@code Date}, {@code Round}, {@code Black}, {@code Result}).</li>
-   *   <li>Odd whitespace inside the {@code [Event]} tag brackets.</li>
-   *   <li>FEN tag present without a SetUp tag.</li>
-   *   <li>Lenient SAN: long-algebraic {@code Qc2-a4} (white queen on c2 in the starting FEN).</li>
-   *   <li>Bogus check suffix: {@code Ra8+} when the move does not actually give check.</li>
+   * <li>Missing STR tags ({@code Site}, {@code Date}, {@code Round}, {@code Black}, {@code Result}).</li>
+   * <li>Odd whitespace inside the {@code [Event]} tag brackets.</li>
+   * <li>FEN tag present without a SetUp tag.</li>
+   * <li>Lenient SAN: long-algebraic {@code Qc2-a4} (white queen on c2 in the starting FEN).</li>
+   * <li>Bogus check suffix: {@code Ra8+} when the move does not actually give check.</li>
    * </ul>
    */
   private static final String DEFICIENT_PGN = """

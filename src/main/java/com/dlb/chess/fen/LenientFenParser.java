@@ -1,6 +1,7 @@
 package com.dlb.chess.fen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import com.dlb.chess.common.Nulls;
@@ -10,24 +11,25 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.fen.model.Fen;
 
 /**
- * Lenient FEN parser. Applies a purely syntactic-tolerance normalisation pass (whitespace, casing, missing
- * trailing counters, non-canonical castling order, non-ASCII dashes, trailing garbage) then delegates to
+ * Lenient FEN parser. Applies a purely syntactic-tolerance normalisation pass (whitespace, casing, missing trailing
+ * counters, non-canonical castling order, non-ASCII dashes, trailing garbage) then delegates to
  * {@link FenParserAdvanced} for the structural and rule-consistency checks. Every transformation applied during
  * normalisation surfaces as a {@link ForgivenFenItem} on the result.
  *
- * <p>The lenient layer does <b>not</b> weaken any of the strict semantic invariants — a FEN with a missing king,
- * a pawn on rank 1, an impossible double-check, or castling rights that contradict the piece placement still
- * fails. Strict-vs-lenient is a syntactic axis; raw-vs-advanced is a semantic axis. The lenient layer operates on
- * the syntactic axis only and reuses the strict semantic pipeline for everything else.
+ * <p>
+ * The lenient layer does <b>not</b> weaken any of the strict semantic invariants — a FEN with a missing king, a pawn on
+ * rank 1, an impossible double-check, or castling rights that contradict the piece placement still fails.
+ * Strict-vs-lenient is a syntactic axis; raw-vs-advanced is a semantic axis. The lenient layer operates on the
+ * syntactic axis only and reuses the strict semantic pipeline for everything else.
  *
- * <p>Two entry points:
+ * <p>
+ * Two entry points:
  * <ul>
- *   <li>{@link #parseText(String)} — returns the parsed {@link Fen} on success, throws
- *       {@link LenientFenParserValidationException} on failure (with the accumulated forgiven items carried on the
- *       exception so callers can still see diagnostics).</li>
- *   <li>{@link #validateText(String)} — returns a {@link LenientFenParserValidationResult} that never throws;
- *       carries the parsed {@code Fen} (or {@code null} on failure), the typed problem categorisation, and the
- *       forgiven-items list.</li>
+ * <li>{@link #parseText(String)} — returns the parsed {@link Fen} on success, throws
+ * {@link LenientFenParserValidationException} on failure (with the accumulated forgiven items carried on the exception
+ * so callers can still see diagnostics).</li>
+ * <li>{@link #validateText(String)} — returns a {@link LenientFenParserValidationResult} that never throws; carries the
+ * parsed {@code Fen} (or {@code null} on failure), the typed problem categorisation, and the forgiven-items list.</li>
  * </ul>
  */
 @SuppressWarnings("null")
@@ -41,9 +43,9 @@ public final class LenientFenParser {
   // -------------------------------------------------------------------------------------------------
 
   /**
-   * Parses {@code fen} leniently and returns the result. Throws {@link LenientFenParserValidationException} when
-   * the input cannot be recovered or fails the strict semantic checks; the exception carries the typed problem
-   * plus the forgiven items accumulated before the failure point.
+   * Parses {@code fen} leniently and returns the result. Throws {@link LenientFenParserValidationException} when the
+   * input cannot be recovered or fails the strict semantic checks; the exception carries the typed problem plus the
+   * forgiven items accumulated before the failure point.
    */
   public static Fen parseText(String fen) {
     final List<ForgivenFenItem> accumulator = new ArrayList<>();
@@ -51,9 +53,8 @@ public final class LenientFenParser {
   }
 
   /**
-   * Like {@link #parseText(String)} but returns a structured result instead of throwing. The result also carries
-   * the parsed {@link Fen} (on success) and the list of forgiven items the lenient layer applied during
-   * normalisation.
+   * Like {@link #parseText(String)} but returns a structured result instead of throwing. The result also carries the
+   * parsed {@link Fen} (on success) and the list of forgiven items the lenient layer applied during normalisation.
    */
   public static LenientFenParserValidationResult validateText(String fen) {
     final List<ForgivenFenItem> accumulator = new ArrayList<>();
@@ -63,10 +64,9 @@ public final class LenientFenParser {
           FenAdvancedValidationProblem.SUCCESS, "OK", parsedFen, Nulls.copyOfList(accumulator));
     } catch (final LenientFenParserValidationException e) {
       return new LenientFenParserValidationResult(e.getLenientFenParserValidationProblem(),
-          e.getFenAdvancedValidationProblem(), BasicUtility.getMessage(e), null,
-          e.getForgivenItemsAccumulated());
+          e.getFenAdvancedValidationProblem(), BasicUtility.getMessage(e), null, e.getForgivenItemsAccumulated());
     } catch (final RuntimeException e) {
-      final String message = "An unexpected error occurred during lenient FEN validation. Reason: "
+      final var message = "An unexpected error occurred during lenient FEN validation. Reason: "
           + (e.getMessage() == null ? "" : e.getMessage());
       return new LenientFenParserValidationResult(LenientFenParserValidationProblem.UNKNOWN_ERROR,
           FenAdvancedValidationProblem.SUCCESS, message, null, ForgivenFenItem.EMPTY_LIST);
@@ -75,17 +75,17 @@ public final class LenientFenParser {
 
   /**
    * Shared internal pipeline: normalise then delegate, with a single auto-correction retry for the
-   * half-move-clock-vs-full-move-number consistency check (the only strict invariant the lenient layer
-   * recovers from). The accumulator is populated by both successful and failed paths so the exception (and the
-   * validation result derived from it) carries every transformation that fired before the failure point.
+   * half-move-clock-vs-full-move-number consistency check (the only strict invariant the lenient layer recovers from).
+   * The accumulator is populated by both successful and failed paths so the exception (and the validation result
+   * derived from it) carries every transformation that fired before the failure point.
    */
   private static Fen parseInternal(String fen, List<ForgivenFenItem> accumulator) {
     final String canonical = normalise(fen, accumulator);
     try {
       return FenParserAdvanced.parseFenAdvanced(canonical);
     } catch (final FenAdvancedValidationException e) {
-      if (e.getFenAdvancedValidationProblem()
-          == FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER) {
+      if (e
+          .getFenAdvancedValidationProblem() == FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER) {
         final String corrected = autoCorrectHalfMoveClockInconsistency(canonical, accumulator);
         try {
           return FenParserAdvanced.parseFenAdvanced(corrected);
@@ -101,28 +101,27 @@ public final class LenientFenParser {
   }
 
   /**
-   * Rebuilds the normalised FEN with {@code fullMoveNumber} bumped up well above the minimum value consistent with
-   * the stated {@code halfMoveClock}. The bump targets a generous reserve rather than the strict minimum: the new
-   * value is {@code halfMoveClock} rounded up to the next multiple of ten (so {@code halfMoveClock = 15} yields
+   * Rebuilds the normalised FEN with {@code fullMoveNumber} bumped up well above the minimum value consistent with the
+   * stated {@code halfMoveClock}. The bump targets a generous reserve rather than the strict minimum: the new value is
+   * {@code halfMoveClock} rounded up to the next multiple of ten (so {@code halfMoveClock = 15} yields
    * {@code fullMoveNumber = 20}, well above the strict-minimum of 9). The reserve makes the auto-corrected value
    * visibly approximate — a consumer looking at the FEN sees a round-numbered placeholder that signals "the
    * fullMoveNumber here was reconstructed, not measured." Called only after {@link FenParserAdvanced} has flagged
-   * {@link FenAdvancedValidationProblem#INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER}, so the input
-   * is known to have six well-formed fields with parseable integer counters and a valid side-to-move letter.
+   * {@link FenAdvancedValidationProblem#INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER}, so the input is
+   * known to have six well-formed fields with parseable integer counters and a valid side-to-move letter.
    */
-  private static String autoCorrectHalfMoveClockInconsistency(String canonical,
-      List<ForgivenFenItem> accumulator) {
-    final String[] fields = canonical.split(" ");
-    final int halfMoveClock = Integer.parseInt(fields[4]);
+  private static String autoCorrectHalfMoveClockInconsistency(String canonical, List<ForgivenFenItem> accumulator) {
+    final var fields = canonical.split(" ");
+    final var halfMoveClock = Integer.parseInt(fields[4]);
     // Round up to the next multiple of ten strictly greater than halfMoveClock. For halfMoveClock = 15 the result
     // is 20; for halfMoveClock = 20 it is 30. Always at least 10 (when halfMoveClock = 0, though that case never
     // triggers a violation). The strict-minimum value would be ((halfMoveClock + 1) / 2 + 1) for white-to-move
     // and (halfMoveClock / 2 + 1) for black-to-move; the reserve value is always strictly greater than that
     // minimum, satisfying the consistency check with room to spare.
-    final int reserveFullMoveNumber = (halfMoveClock / 10 + 1) * 10;
-    final String oldFullMoveNumber = fields[5];
+    final var reserveFullMoveNumber = (halfMoveClock / 10 + 1) * 10;
+    final var oldFullMoveNumber = fields[5];
     fields[5] = Integer.toString(reserveFullMoveNumber);
-    final String corrected = String.join(" ", fields);
+    final var corrected = String.join(" ", fields);
     accumulator.add(new ForgivenFenItem(ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER,
         oldFullMoveNumber, Nulls.toString(fields[5])));
     return Nulls.toString(corrected);
@@ -134,10 +133,10 @@ public final class LenientFenParser {
 
   /**
    * Applies the lenient normalisation transforms in order, recording each as a {@link ForgivenFenItem} on the
-   * accumulator. Returns the canonical six-field FEN string ready for {@link FenParserRaw} /
-   * {@link FenParserAdvanced}. Throws {@link LenientFenParserValidationException} with
-   * {@link LenientFenParserValidationProblem#UNRECOVERABLE} when the input has fewer than four fields after
-   * normalisation (cannot recover to a FEN with a defaulted halfmove/fullmove pair).
+   * accumulator. Returns the canonical six-field FEN string ready for {@link FenParserRaw} / {@link FenParserAdvanced}.
+   * Throws {@link LenientFenParserValidationException} with {@link LenientFenParserValidationProblem#UNRECOVERABLE}
+   * when the input has fewer than four fields after normalisation (cannot recover to a FEN with a defaulted
+   * halfmove/fullmove pair).
    */
   private static String normalise(String fen, List<ForgivenFenItem> accumulator) {
     String working = fen;
@@ -167,9 +166,9 @@ public final class LenientFenParser {
     // 4. Collapse multi-space runs to single space.
     if (working.contains("  ")) {
       final StringBuilder collapsed = new StringBuilder(working.length());
-      boolean prevWasSpace = false;
-      for (int i = 0; i < working.length(); i++) {
-        final char c = working.charAt(i);
+      var prevWasSpace = false;
+      for (var i = 0; i < working.length(); i++) {
+        final var c = working.charAt(i);
         if (c == ' ') {
           if (!prevWasSpace) {
             collapsed.append(c);
@@ -185,7 +184,7 @@ public final class LenientFenParser {
     }
 
     // 5. Split into fields.
-    final String[] fieldsArray = working.isEmpty() ? new String[0] : working.split(" ");
+    final var fieldsArray = working.isEmpty() ? new String[0] : working.split(" ");
     if (fieldsArray.length < 4) {
       throw new LenientFenParserValidationException(LenientFenParserValidationProblem.UNRECOVERABLE,
           "The input has " + fieldsArray.length + " whitespace-separated fields; a FEN needs at least four (piece"
@@ -194,15 +193,13 @@ public final class LenientFenParser {
 
     // 6. Trim trailing garbage past field 6.
     final List<String> fields = new ArrayList<>();
-    for (int i = 0; i < fieldsArray.length; i++) {
-      fields.add(fieldsArray[i]);
-    }
+    Collections.addAll(fields, fieldsArray);
     if (fields.size() > 6) {
-      final List<String> dropped = fields.subList(6, fields.size());
-      final String droppedJoined = String.join(" ", dropped);
+      final var dropped = fields.subList(6, fields.size());
+      final var droppedJoined = String.join(" ", dropped);
       // Single TRAILING_GARBAGE_TOKEN item carrying the joined drop in `original`.
-      accumulator.add(new ForgivenFenItem(ForgivenFenItemCode.TRAILING_GARBAGE_TOKEN,
-          Nulls.toString(droppedJoined), ""));
+      accumulator
+          .add(new ForgivenFenItem(ForgivenFenItemCode.TRAILING_GARBAGE_TOKEN, Nulls.toString(droppedJoined), ""));
       while (fields.size() > 6) {
         fields.remove(fields.size() - 1);
       }
@@ -228,8 +225,8 @@ public final class LenientFenParser {
 
   private static void normaliseSideToMove(List<String> fields, List<ForgivenFenItem> accumulator) {
     final String field = Nulls.get(fields, 1);
-    if (field.equals("W") || field.equals("B")) {
-      final String canonical = field.toLowerCase(java.util.Locale.ROOT);
+    if ("W".equals(field) || "B".equals(field)) {
+      final var canonical = field.toLowerCase(java.util.Locale.ROOT);
       fields.set(1, canonical);
       accumulator.add(new ForgivenFenItem(ForgivenFenItemCode.UPPERCASE_SIDE_TO_MOVE, field, canonical));
     }
@@ -237,21 +234,29 @@ public final class LenientFenParser {
 
   private static void normaliseCastlingRights(List<String> fields, List<ForgivenFenItem> accumulator) {
     final String field = Nulls.get(fields, 2);
-    if (field.equals("-") || field.isEmpty()) {
+    if ("-".equals(field) || field.isEmpty()) {
       return;
     }
     // Field must contain only letters from {K, Q, k, q}, each at most once. The lenient layer normalises ORDER
     // but does not collapse DUPLICATES — a field like "KKKQkq" is a transcription error, not a recognised
     // deviation pattern, and is left for the strict parser to reject as INVALID_CASTLING_RIGHT_RANGE.
-    int seen = 0;
-    for (int i = 0; i < field.length(); i++) {
-      final char c = field.charAt(i);
+    var seen = 0;
+    for (var i = 0; i < field.length(); i++) {
+      final var c = field.charAt(i);
       final int bit;
       switch (c) {
-        case 'K': bit = 1; break;
-        case 'Q': bit = 2; break;
-        case 'k': bit = 4; break;
-        case 'q': bit = 8; break;
+        case 'K':
+          bit = 1;
+          break;
+        case 'Q':
+          bit = 2;
+          break;
+        case 'k':
+          bit = 4;
+          break;
+        case 'q':
+          bit = 8;
+          break;
         default:
           // Unknown character; let raw parser reject this.
           return;
@@ -262,10 +267,10 @@ public final class LenientFenParser {
       }
       seen |= bit;
     }
-    final boolean hasK = field.indexOf('K') >= 0;
-    final boolean hasQ = field.indexOf('Q') >= 0;
-    final boolean haslowerK = field.indexOf('k') >= 0;
-    final boolean haslowerQ = field.indexOf('q') >= 0;
+    final var hasK = field.indexOf('K') >= 0;
+    final var hasQ = field.indexOf('Q') >= 0;
+    final var haslowerK = field.indexOf('k') >= 0;
+    final var haslowerQ = field.indexOf('q') >= 0;
     final StringBuilder canonical = new StringBuilder();
     if (hasK) {
       canonical.append('K');
@@ -293,7 +298,7 @@ public final class LenientFenParser {
     // character that is one of the known dash code points. (We do not strip dashes mid-square because that would
     // never match a chess square anyway.)
     if (field.length() == 1 && isNonStandardDash(field.charAt(0))) {
-      final String original = field;
+      final var original = field;
       field = "-";
       fields.set(3, field);
       accumulator.add(new ForgivenFenItem(ForgivenFenItemCode.EN_PASSANT_NON_STANDARD_DASH, original, field));
@@ -302,11 +307,11 @@ public final class LenientFenParser {
 
     // Uppercase target square (e.g. "E3"): lowercase the file letter. The rank digit is unaffected.
     if (field.length() == 2) {
-      final char file = field.charAt(0);
+      final var file = field.charAt(0);
       if (file >= 'A' && file <= 'H') {
-        final String original = field;
-        final char rank = field.charAt(1);
-        final String canonical = "" + (char) (file - 'A' + 'a') + rank;
+        final var original = field;
+        final var rank = field.charAt(1);
+        final var canonical = "" + (char) (file - 'A' + 'a') + rank;
         fields.set(3, canonical);
         accumulator.add(new ForgivenFenItem(ForgivenFenItemCode.EN_PASSANT_UPPERCASE, original, canonical));
       }
@@ -314,13 +319,12 @@ public final class LenientFenParser {
   }
 
   /**
-   * Conservative recognition of Unicode dashes that show up in real-world FEN exports where the producer
-   * intended an ASCII hyphen. Listed code points cover the dash family most likely to appear: em-dash, en-dash,
-   * hyphen, non-breaking hyphen, figure dash, horizontal bar, minus sign, fullwidth hyphen-minus.
+   * Conservative recognition of Unicode dashes that show up in real-world FEN exports where the producer intended an
+   * ASCII hyphen. Listed code points cover the dash family most likely to appear: em-dash, en-dash, hyphen,
+   * non-breaking hyphen, figure dash, horizontal bar, minus sign, fullwidth hyphen-minus.
    */
   private static boolean isNonStandardDash(char c) {
-    return c == '‐' || c == '‑' || c == '‒' || c == '–' || c == '—' || c == '―'
-        || c == '−' || c == '－';
+    return c == '‐' || c == '‑' || c == '‒' || c == '–' || c == '—' || c == '―' || c == '−' || c == '－';
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -343,7 +347,7 @@ public final class LenientFenParser {
    * True iff {@code s} contains any character from {@code charsToMatch}.
    */
   private static boolean containsAny(String s, String charsToMatch) {
-    for (int i = 0; i < s.length(); i++) {
+    for (var i = 0; i < s.length(); i++) {
       if (charsToMatch.indexOf(s.charAt(i)) >= 0) {
         return true;
       }

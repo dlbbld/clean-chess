@@ -182,7 +182,7 @@ class TestLenientFenParser {
   }
 
   @Test
-  void test_castlingDuplicateRightsNotForgiven() {
+  void test00_castlingDuplicateRightsNotForgiven() {
     // Castling field "KKKQkq" has a duplicated 'K'. The lenient layer normalises ORDER (e.g. "qkQK" -> "KQkq")
     // but does not collapse DUPLICATES — that crosses the line from syntactic tolerance into silent
     // typo-correction. The strict parser rejects with INVALID_CASTLING_RIGHT_RANGE.
