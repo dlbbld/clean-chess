@@ -181,6 +181,19 @@ class TestLenientFenParser {
   }
 
   @Test
+  void test_castlingDuplicateRightsNotForgiven() {
+    // Castling field "KKKQkq" has a duplicated 'K'. The lenient layer normalises ORDER (e.g. "qkQK" -> "KQkq")
+    // but does not collapse DUPLICATES — that crosses the line from syntactic tolerance into silent
+    // typo-correction. The strict parser rejects with INVALID_CASTLING_RIGHT_RANGE.
+    final String deviating = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KKKQkq - 0 1";
+    final LenientFenParserValidationResult result = LenientFenParser.validateText(deviating);
+    assertFalse(result.isValid());
+    assertEquals(LenientFenParserValidationProblem.ADVANCED_INVALID, result.problem());
+    assertEquals(FenAdvancedValidationProblem.INVALID_CASTLING_RIGHT_RANGE, result.fenAdvancedValidationProblem());
+    assertNull(result.fen());
+  }
+
+  @Test
   void test18_chessComOrLichessExportStyleWithTrailingNewline() {
     // Pattern from web-UI clipboard exports: trailing newline (sometimes \r\n) and otherwise canonical FEN.
     // Mirrors the "I copied a FEN from a web UI and there's a stray newline" complaint pattern.

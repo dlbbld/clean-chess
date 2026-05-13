@@ -240,13 +240,27 @@ public final class LenientFenParser {
     if (field.equals("-") || field.isEmpty()) {
       return;
     }
-    // Field must contain only letters from {K, Q, k, q}. If it does and is in canonical order, no change.
+    // Field must contain only letters from {K, Q, k, q}, each at most once. The lenient layer normalises ORDER
+    // but does not collapse DUPLICATES — a field like "KKKQkq" is a transcription error, not a recognised
+    // deviation pattern, and is left for the strict parser to reject as INVALID_CASTLING_RIGHT_RANGE.
+    int seen = 0;
     for (int i = 0; i < field.length(); i++) {
       final char c = field.charAt(i);
-      if (c != 'K' && c != 'Q' && c != 'k' && c != 'q') {
-        // Unknown character; let raw parser reject this.
+      final int bit;
+      switch (c) {
+        case 'K': bit = 1; break;
+        case 'Q': bit = 2; break;
+        case 'k': bit = 4; break;
+        case 'q': bit = 8; break;
+        default:
+          // Unknown character; let raw parser reject this.
+          return;
+      }
+      if ((seen & bit) != 0) {
+        // Duplicate character; let raw parser reject this.
         return;
       }
+      seen |= bit;
     }
     final boolean hasK = field.indexOf('K') >= 0;
     final boolean hasQ = field.indexOf('Q') >= 0;

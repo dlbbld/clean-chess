@@ -1,6 +1,7 @@
 package com.dlb.chess.test.pgn.export;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -134,5 +135,27 @@ class TestPgnExportBoardArchival {
 
     // And the tagList check that no fabrication slipped into the model on this path.
     assertTrue(TagUtility.calculateIsContainsAllSevenTagRosterTags(pgnFile.tagList()) == false);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void callerSuppliedResultTagDisagreeingWithBoardThrows() {
+    // The PgnFile invariant: when a Result tag is present in tagList AND terminationMarker is non-null, the
+    // two must agree. The Board-to-PgnFile path derives terminationMarker from the board's game status; if the
+    // caller supplies a Result tag with a different value, the compact constructor of PgnFile catches the
+    // inconsistency and throws — rather than silently producing a model that archival export would then have
+    // to choose between when emitting the Result tag vs the termination marker.
+    final Board boardWonByWhite = new Board();
+    boardWonByWhite.moveStrict("e4");
+    boardWonByWhite.moveStrict("e5");
+    boardWonByWhite.moveStrict("Bc4");
+    boardWonByWhite.moveStrict("Nc6");
+    boardWonByWhite.moveStrict("Qh5");
+    boardWonByWhite.moveStrict("h6");
+    boardWonByWhite.moveStrict("Qxf7#");
+    assertTrue(boardWonByWhite.isCheckmate());
+
+    final List<Tag> contradictoryTagList = List.of(new Tag(StandardTag.RESULT.getName(), "0-1"));
+    assertThrows(IllegalArgumentException.class, () -> PgnCreate.createPgnFile(boardWonByWhite, contradictoryTagList));
   }
 }

@@ -120,6 +120,15 @@ public final class LenientPgnParser {
       final String message = BasicUtility.getMessage(e);
       return new LenientPgnParserValidationResult(e.getLenientPgnParserValidationProblem(), e.getSanValidationProblem(),
           message, null, e.getSanForgivenItemsAccumulated(), e.getTagForgivenItemsAccumulated());
+    } catch (final com.dlb.chess.fen.LenientFenParserValidationException e) {
+      // The FEN tag in the PGN failed lenient FEN parsing (either unrecoverable input or strict-semantic
+      // rejection by FenParserAdvanced). Surface as a typed PGN problem rather than leaking the FEN exception
+      // type through the generic RuntimeException path. The tag-level forgiven items accumulated up to the
+      // FEN-tag parse point are carried so callers retain partial diagnostic context.
+      final String message = "The PGN FEN tag is invalid. Reason: " + BasicUtility.getMessage(e);
+      return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.FEN_TAG_INVALID,
+          SanValidationProblem.NONE, message, null, Nulls.copyOfList(parser.sanForgivenItemsAccumulator),
+          Nulls.copyOfList(parser.tagForgivenItemsAccumulator));
     } catch (final RuntimeException e) {
       final String message = unexpectedValidationErrorMessage(e);
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
