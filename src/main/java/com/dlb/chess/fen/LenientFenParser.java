@@ -30,6 +30,7 @@ import com.dlb.chess.fen.model.Fen;
  *       forgiven-items list.</li>
  * </ul>
  */
+@SuppressWarnings("null")
 public final class LenientFenParser {
 
   private LenientFenParser() {
@@ -324,7 +325,9 @@ public final class LenientFenParser {
     return Nulls.toString(s.stripTrailing());
   }
 
-  /** True iff {@code s} contains any character from {@code charsToMatch}. */
+  /**
+   * True iff {@code s} contains any character from {@code charsToMatch}.
+   */
   private static boolean containsAny(String s, String charsToMatch) {
     for (int i = 0; i < s.length(); i++) {
       if (charsToMatch.indexOf(s.charAt(i)) >= 0) {

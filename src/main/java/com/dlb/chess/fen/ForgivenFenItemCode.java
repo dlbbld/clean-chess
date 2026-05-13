@@ -32,7 +32,9 @@ public enum ForgivenFenItemCode {
    */
   MISSING_FULLMOVE_NUMBER,
 
-  /** Side-to-move letter in uppercase ({@code W} or {@code B}) normalised to lowercase. */
+  /**
+   * Side-to-move letter in uppercase ({@code W} or {@code B}) normalised to lowercase.
+   */
   UPPERCASE_SIDE_TO_MOVE,
 
   /**
@@ -41,10 +43,14 @@ public enum ForgivenFenItemCode {
    */
   CASTLING_NON_CANONICAL_ORDER,
 
-  /** En-passant target field uses a non-ASCII dash (em-dash, en-dash, etc.) instead of {@code -}. Normalised. */
+  /**
+   * En-passant target field uses a non-ASCII dash (em-dash, en-dash, etc.) instead of {@code -}. Normalised.
+   */
   EN_PASSANT_NON_STANDARD_DASH,
 
-  /** En-passant target square in uppercase (e.g. {@code E3}) normalised to lowercase. */
+  /**
+   * En-passant target square in uppercase (e.g. {@code E3}) normalised to lowercase.
+   */
   EN_PASSANT_UPPERCASE,
 
   /**

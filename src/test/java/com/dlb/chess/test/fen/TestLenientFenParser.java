@@ -23,7 +23,7 @@ import com.google.common.collect.ImmutableList;
  * forgiven items on already-canonical input; the {@code testAdvancedInvalid*} case asserts that a semantically
  * invalid position (king missing) still fails — the lenient layer only forgives syntactic deviations.
  */
-@SuppressWarnings("static-method")
+@SuppressWarnings({ "static-method", "null" })
 class TestLenientFenParser {
 
   private static final String INITIAL_CANONICAL = FenConstants.FEN_INITIAL_STR;
