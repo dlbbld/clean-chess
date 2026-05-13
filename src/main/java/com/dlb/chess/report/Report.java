@@ -10,8 +10,8 @@ import com.dlb.chess.common.model.HalfMove;
 /**
  * Result of analyzing a fully-replayed game. Note that under the strict move-validation pipeline a game cannot continue
  * past automatic FIDE terminations (fivefold, 75-move, etc.), so the "continued past" diagnostics that previously lived
- * here have moved to {@link com.dlb.chess.pgn.diagnostic.GameContinuationScanner}, which operates on raw halfmove
- * sequences for corpus-mining use cases.
+ * here are no longer reported. Corpus-mining over raw halfmove sequences past automatic terminations would belong in a
+ * standalone utility outside the strict pipeline.
  */
 public record Report(Side havingMove, List<HalfMove> halfMoveList, List<List<HalfMove>> repetitionListList,
     List<List<NoProgressHalfMove>> noProgressMoveListList, boolean hasThreefoldRepetition,

@@ -46,9 +46,8 @@
  *
  * <p>
  * Detection of games whose recorded halfmove sequence continued past one of the path-dependent automatic terminations
- * (5-fold, 75-move) — useful for corpus mining over historical PGN databases — is provided as a standalone utility in
- * {@link com.dlb.chess.pgn.diagnostic.GameContinuationScanner}, which operates on raw halfmove data outside the strict
- * pipeline.
+ * (5-fold, 75-move) — useful for corpus mining over historical PGN databases — is not currently provided as part of the
+ * public API; it would belong in a standalone utility outside the strict pipeline.
  */
 @NonNullByDefault
 package com.dlb.chess.board;

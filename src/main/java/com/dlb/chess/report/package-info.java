@@ -18,8 +18,7 @@
  * would create a threefold position the side could claim before playing it") — the latter is the missed-claim feature.
  *
  * <p>
- * Output formatting helpers live in {@link com.dlb.chess.report.print}; the data records in
- * {@link com.dlb.chess.report.model}.
+ * Output formatting helpers and data records both live in this package.
  */
 @NonNullByDefault
 package com.dlb.chess.report;

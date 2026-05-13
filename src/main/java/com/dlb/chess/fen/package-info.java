@@ -2,7 +2,7 @@
  * FEN (Forsyth–Edwards Notation) parsing, validation, and generation. Two parser entry points:
  *
  * <ul>
- * <li>{@link com.dlb.chess.fen.FenParser} — basic structural parsing. Validates the six FEN fields (placement, side to
+ * <li>{@link com.dlb.chess.fen.FenParserRaw} — basic structural parsing. Validates the six FEN fields (placement, side to
  * move, castling rights, en-passant target, halfmove clock, fullmove number) for syntactic correctness only.</li>
  * <li>{@link com.dlb.chess.fen.FenParserAdvanced} — basic parsing plus advanced structural and rule-consistency
  * validation. Beyond field syntax it enforces:

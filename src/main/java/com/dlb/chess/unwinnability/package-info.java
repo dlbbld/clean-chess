@@ -12,18 +12,18 @@
  * <h2>Two variants</h2>
  *
  * <ul>
- * <li><strong>Quick</strong> ({@link com.dlb.chess.unwinnability.quick.UnwinnableQuickAnalyzer}) — microsecond-scale,
+ * <li><strong>Quick</strong> ({@link com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer}) — microsecond-scale,
  * structural, three-valued: {@code WINNABLE}, {@code UNWINNABLE}, {@code POSSIBLY_WINNABLE}. The third value is a
  * deliberate honesty signal — the quick algorithm is sound but not complete.</li>
- * <li><strong>Full</strong> ({@link com.dlb.chess.unwinnability.full.UnwinnableFullAnalyzer}) — deep search,
+ * <li><strong>Full</strong> ({@link com.dlb.chess.unwinnability.UnwinnableFullAnalyzer}) — deep search,
  * three-valued: {@code WINNABLE}, {@code UNWINNABLE}, {@code UNDETERMINED}. The undetermined case is bounded by a
  * 500&nbsp;000-position limit; most positions resolve well below it.</li>
  * </ul>
  *
  * <p>
  * Dead-position detection is the symmetric notion with analogous three-valued returns
- * ({@link com.dlb.chess.unwinnability.quick.enums.DeadPositionQuick},
- * {@link com.dlb.chess.unwinnability.full.enums.DeadPositionFull}).
+ * ({@link com.dlb.chess.unwinnability.DeadPositionQuick},
+ * {@link com.dlb.chess.unwinnability.DeadPositionFull}).
  *
  * <h2>Opt-in by design</h2>
  *

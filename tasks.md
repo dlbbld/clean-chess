@@ -32,7 +32,7 @@ Auto-generated 1984-line enum, ~111 KB class file — the single largest `.class
 
 ### Broken Javadoc link in `fen/package-info.java`
 Links to `com.dlb.chess.fen.FenParser` which does not exist. `mvn javadoc:jar` succeeds only because `<doclint>none</doclint>` in pom.xml; the warning is still emitted. Real target is `FenParserRaw` + `FenParserAdvanced`.
-- [ ] Fix the link
+- [x] Fix the link (+ 14 other broken `{@link}` refs uncovered when doclint was tightened to `all,-missing`; javadoc now clean)
 
 ### CHA / unwinnability wording teaches the wrong mental model
 README and `unwinnability/package-info.java` use "worst play / worst-case play by the opponent." In game-theory English, "worst-case opponent" reads like *best defensive play*, but CHA / winnability is the opposite: whether any legal continuation can lead to mate (cooperative / helpmate-style existence). Worth fixing because it is the flagship concept.

@@ -9,8 +9,8 @@
  * <li>{@link com.dlb.chess.enums.MovementCheck} — outcome of a chess-rules movement check (the move-shape question:
  * does this piece move this way at all?), produced by {@link com.dlb.chess.analyze.ChessRuleAnalyzer}.</li>
  * <li>{@link com.dlb.chess.enums.KingSafetyCheck} — outcome of a king-attack-after-move check.</li>
- * <li>{@link com.dlb.chess.enums.MoveSuffixAnnotation} / {@link com.dlb.chess.enums.MoveSuffixAnnotationLetter} — PGN
- * suffix annotations ({@code !}, {@code ?}, {@code !!}, {@code ??}, {@code !?}, {@code ?!}).</li>
+ * <li>{@link com.dlb.chess.enums.MoveSuffixAnnotation} — PGN suffix annotations ({@code !}, {@code ?}, {@code !!},
+ * {@code ??}, {@code !?}, {@code ?!}).</li>
  * <li>{@link com.dlb.chess.enums.SquareOccupation} — three-valued square occupancy (empty / own piece / opponent piece)
  * relative to a side.</li>
  * <li>{@link com.dlb.chess.enums.CastlingCheck} — outcome of a castling-precondition check.</li>

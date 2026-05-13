@@ -20,8 +20,7 @@
  * long algebraic notation.
  *
  * <p>
- * Format-level checks live in {@link com.dlb.chess.san.format}; movement-level (legal-move, king-safety) checks live in
- * {@link com.dlb.chess.san.movement}.
+ * Format-level checks and movement-level (legal-move, king-safety) checks both live in this package.
  */
 @NonNullByDefault
 package com.dlb.chess.san;

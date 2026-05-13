@@ -116,18 +116,20 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<version>3.11.2</version>
+				<!--
+					Javadoc is NOT bound to the package phase. Regular edit-compile cycles
+					(mvn test-compile, mvn package -DskipTests) stay fast and Java-only.
+					Run javadoc explicitly when touching public docs / API signatures:
+						mvn javadoc:javadoc        # validate only
+						mvn javadoc:jar            # produce the javadoc jar
+					Strict doclint below makes broken @link references fail the build when
+					javadoc is invoked, so the gate is sharp but opt-in.
+				-->
 				<configuration>
 					<source>17</source>
-					<doclint>none</doclint>
+					<doclint>all,-missing</doclint>
+					<failOnError>true</failOnError>
 				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>

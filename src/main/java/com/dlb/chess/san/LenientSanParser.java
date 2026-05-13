@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableSet;
  * uniquely identify a legal move and the deviation matches a supported tolerance category.
  *
  * <p>
- * See {@link com.dlb.chess.san.lenient package-level Javadoc} for the strategy. The two public methods are:
+ * See {@link com.dlb.chess.san the package-level Javadoc} for the strategy. The two public methods are:
  * <ul>
  * <li>{@link #parseText(String, Board)} â€” full parse, returns the resolved move plus the list of forgiven items.
  * <li>{@link #validateText(String, Board)} â€” discards the result, throws on rejection. Convenience for callers that
