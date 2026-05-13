@@ -46,25 +46,25 @@ The principle: **parse preserves, validation reports, archival export normalises
 - **Dropped:** the seven-tag-roster mandate. `Event`, `Site`, `Date`, `Round`, `White`, `Black` are archival-storage concerns only.
 
 #### Action items
-- [ ] Add `terminationMarker: Optional<ResultTagValue>` (or null-allowed equivalent) field to `PgnFile` so the movetext signal stays separate from the header signal
-- [ ] Both parsers stop normalising the tag list: drop `Collections.sort(tagList)` and `removeFenIfInitial` from `LenientPgnParser.parseInternal` and `StrictPgnParser.parseInternal`
-- [ ] Lenient parser stops fabricating: drop `fixTagListForMissingSevenTagRosterTags`, `fixTagListForResultIfRequired`, `fixTagListForSetUpIfRequired`
-- [ ] `reconcileResult` keeps its consistency check (Result tag value vs termination marker value must match if both present) but stops mutating the tag list; the marker is captured on `PgnFile.terminationMarker`
-- [ ] Strict parser: drop `validateSevenTagRoster` (the STR mandate). Keep `validateResultTagValue` (Result still required at strict level) and `validateTagSetUpValue` (SetUp/FEN coupling)
-- [ ] Strict parser: refine the `TAG_NOT_ALL_REQUIRED_TAGS_SET` error code — either rename to `TAG_RESULT_MISSING` (since Result is now the only required STR tag at strict level) or repurpose with a narrower message
-- [ ] Introduce `ForgivenTagItem` record + `ForgivenTagItemCode` enum + `tagForgivenItems()` channel on `LenientPgnParserValidationResult`, mirroring the existing `sanForgivenItems()` shape
-- [ ] Lenient parser emits tag-level forgiven items: `STR_TAG_MISSING` (one per missing STR tag), `RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT`, `RESULT_TAG_AND_TERMINATION_MARKER_BOTH_MISSING`, `SETUP_TAG_MISSING_BUT_FEN_PRESENT`, `SETUP_TAG_PRESENT_BUT_FEN_MISSING`, `FEN_AND_SETUP_DESCRIBE_INITIAL_POSITION` — sharpen the list during implementation
-- [ ] Introduce `WriteMode { SEMANTIC, ARCHIVAL }` and `PgnWriter` overloads: `writePgnFile(PgnFile, Path)` defaults to SEMANTIC; `writePgnFile(PgnFile, Path, WriteMode)` explicit; same shape for `(Board, …)` overloads
-- [ ] Archival export helper: STR fill, `SetUp "1"` fill, Result tag fill from termination marker, tag sort, drop `FEN`/`SetUp` if they describe initial position; reference PGN spec §8.1.1 in the helper's class javadoc
-- [ ] Semantic export path: emit tags in input order, omit termination marker if `terminationMarker.isEmpty()`, normalise tag-bracket whitespace, canonical SAN (already canonicalised at parse time)
-- [ ] `PgnCreate.createPgnFile(Board)` produces a `PgnFile` with no STR fabrication (empty tag list aside from `FEN` if non-initial); `terminationMarker` set from the board's game-status-derived result; STR fabrication moves to the archival export helper
-- [ ] Audit production callers for "result is `*`?" checks (`ResultTagValue.ONGOING` has 2 src/main hits today — small surface): distinguish "Result tag absent" from "ongoing"
-- [ ] Delete `TagPlaceHolderUtility` or move it into the archival-export helper, whichever leaves cleaner code
-- [ ] Document the contract in `specification.md`: four-jobs table (parse / validate / archival export / semantic export), cite PGN spec §8.1.1 when defining ARCHIVAL, note that text-preserving export is out of scope, document the strict parser's revised mandate (Result + SetUp/FEN coupling required; STR not required)
-- [ ] Test fixtures: a "deficient" PGN (missing STR, no Result tag, `FEN` without `SetUp`, weird whitespace, `e2-e4`-style moves, bogus check suffixes). Semantic export → equals the same input with normalised whitespace and canonical SAN, **no fabricated tags**. Archival export → equals a fully spec-compliant form with STR filled, `SetUp "1"` added, `Result "*"` synthesised, canonical SAN
-- [ ] Test fixtures: a strict-but-non-archival PGN (Result + a couple of extras, no STR) — must parse cleanly through `StrictPgnParser`
-- [ ] `TestPgnExportBoard.checkTags` rewritten: drop STR-presence assertions (they were testing the fabrication, not anything chess-meaningful); add a parallel `TestPgnExportBoardArchival` if a dedicated archival-fill test is wanted
-- [ ] `CHANGELOG.md` entry under the next release
+- [x] Add `terminationMarker: Optional<ResultTagValue>` (or null-allowed equivalent) field to `PgnFile` so the movetext signal stays separate from the header signal
+- [x] Both parsers stop normalising the tag list: drop `Collections.sort(tagList)` and `removeFenIfInitial` from `LenientPgnParser.parseInternal` and `StrictPgnParser.parseInternal`
+- [x] Lenient parser stops fabricating: drop `fixTagListForMissingSevenTagRosterTags`, `fixTagListForResultIfRequired`, `fixTagListForSetUpIfRequired`
+- [x] `reconcileResult` keeps its consistency check (Result tag value vs termination marker value must match if both present) but stops mutating the tag list; the marker is captured on `PgnFile.terminationMarker`
+- [x] Strict parser: drop `validateSevenTagRoster` (the STR mandate). Keep `validateResultTagValue` (Result still required at strict level) and `validateTagSetUpValue` (SetUp/FEN coupling)
+- [x] Strict parser: refine the `TAG_NOT_ALL_REQUIRED_TAGS_SET` error code — either rename to `TAG_RESULT_MISSING` (since Result is now the only required STR tag at strict level) or repurpose with a narrower message
+- [x] Introduce `ForgivenTagItem` record + `ForgivenTagItemCode` enum + `tagForgivenItems()` channel on `LenientPgnParserValidationResult`, mirroring the existing `sanForgivenItems()` shape
+- [x] Lenient parser emits tag-level forgiven items: `STR_TAG_MISSING` (one per missing STR tag), `RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT`, `RESULT_TAG_AND_TERMINATION_MARKER_BOTH_MISSING`, `SETUP_TAG_MISSING_BUT_FEN_PRESENT`, `SETUP_TAG_PRESENT_BUT_FEN_MISSING`, `FEN_AND_SETUP_DESCRIBE_INITIAL_POSITION` — sharpen the list during implementation
+- [x] Introduce `WriteMode { SEMANTIC, ARCHIVAL }` and `PgnWriter` overloads: `writePgnFile(PgnFile, Path)` defaults to SEMANTIC; `writePgnFile(PgnFile, Path, WriteMode)` explicit; same shape for `(Board, …)` overloads
+- [x] Archival export helper: STR fill, `SetUp "1"` fill, Result tag fill from termination marker, tag sort, drop `FEN`/`SetUp` if they describe initial position; reference PGN spec §8.1.1 in the helper's class javadoc
+- [x] Semantic export path: emit tags in input order, omit termination marker if `terminationMarker.isEmpty()`, normalise tag-bracket whitespace, canonical SAN (already canonicalised at parse time)
+- [x] `PgnCreate.createPgnFile(Board)` produces a `PgnFile` with no STR fabrication (empty tag list aside from `FEN` if non-initial); `terminationMarker` set from the board's game-status-derived result; STR fabrication moves to the archival export helper
+- [x] Audit production callers for "result is `*`?" checks (`ResultTagValue.ONGOING` has 2 src/main hits today — small surface): distinguish "Result tag absent" from "ongoing"
+- [x] Delete `TagPlaceHolderUtility` or move it into the archival-export helper, whichever leaves cleaner code
+- [x] Document the contract in `specification.md`: four-jobs table (parse / validate / archival export / semantic export), cite PGN spec §8.1.1 when defining ARCHIVAL, note that text-preserving export is out of scope, document the strict parser's revised mandate (Result + SetUp/FEN coupling required; STR not required)
+- [x] Test fixtures: a "deficient" PGN (missing STR, no Result tag, `FEN` without `SetUp`, weird whitespace, `e2-e4`-style moves, bogus check suffixes). Semantic export → equals the same input with normalised whitespace and canonical SAN, **no fabricated tags**. Archival export → equals a fully spec-compliant form with STR filled, `SetUp "1"` added, `Result "*"` synthesised, canonical SAN
+- [x] Test fixtures: a strict-but-non-archival PGN (Result + a couple of extras, no STR) — must parse cleanly through `StrictPgnParser`
+- [x] `TestPgnExportBoard.checkTags` rewritten: drop STR-presence assertions (they were testing the fabrication, not anything chess-meaningful); add a parallel `TestPgnExportBoardArchival` if a dedicated archival-fill test is wanted
+- [x] `CHANGELOG.md` entry under the next release
 
 #### Notes for whoever picks this up
 - The `LenientPgnParserValidationResult.sanForgivenItems()` channel is the right pattern for SAN-level forgiven items. The same pattern is extended with `tagForgivenItems()` so consumers can see which tag-level deviations the lenient parser accepted.
@@ -121,15 +121,15 @@ public class LenientFenParserValidationException extends UsageException { ... }
 Plus `Board.fromFenLenient(String)` (or `new Board(String, FenStrictness)`) for the consumer-facing opt-in. `new Board(String)` stays strict — same call-site discipline as `performMove` vs `performMoveLenient`.
 
 #### Action items
-- [ ] Settle the diagnostic taxonomy with the arbiter lens — add/remove codes based on real-world FEN deviations
-- [ ] Define `ForgivenFenItemCode` enum + `ForgivenFenItem` record + `LenientFenParserValidationResult` record
-- [ ] Implement `LenientFenParser` as a normaliser that produces a canonical FEN string + forgiven items list, then delegates to `FenParserRaw` (and optionally `FenParserAdvanced`)
-- [ ] `LenientFenParser.parseText` vs `validateText`: same pipeline, payload vs diagnostics-only
-- [ ] `LenientFenParserValidationException extends UsageException` for unrecoverable input
-- [ ] `Board` opt-in entry point for lenient FEN; `new Board(String)` stays strict
-- [ ] Decide: does `LenientPgnParser` use lenient FEN when reading the `FEN`/`SetUp` PGN tag, or stay strict on the tag? Lean: lenient, for consistency with movetext leniency
-- [ ] One test fixture per forgiven code; one end-to-end "deficient FEN" fixture; round-trip test (lenient parse → canonical FEN → strict parse) for each
-- [ ] Document the contract in `specification.md` — explicit table of strict-vs-lenient × raw-vs-advanced
+- [x] Settle the diagnostic taxonomy with the arbiter lens — add/remove codes based on real-world FEN deviations
+- [x] Define `ForgivenFenItemCode` enum + `ForgivenFenItem` record + `LenientFenParserValidationResult` record
+- [x] Implement `LenientFenParser` as a normaliser that produces a canonical FEN string + forgiven items list, then delegates to `FenParserRaw` (and optionally `FenParserAdvanced`)
+- [x] `LenientFenParser.parseText` vs `validateText`: same pipeline, payload vs diagnostics-only
+- [x] `LenientFenParserValidationException extends UsageException` for unrecoverable input
+- [x] `Board` opt-in entry point for lenient FEN; `new Board(String)` stays strict
+- [x] Decide: does `LenientPgnParser` use lenient FEN when reading the `FEN`/`SetUp` PGN tag, or stay strict on the tag? Lean: lenient, for consistency with movetext leniency
+- [x] One test fixture per forgiven code; one end-to-end "deficient FEN" fixture; round-trip test (lenient parse → canonical FEN → strict parse) for each
+- [x] Document the contract in `specification.md` — explicit table of strict-vs-lenient × raw-vs-advanced
 - [ ] Update README "Lenient PGN parser" framing — the project now has lenient parsers for all three input languages
 
 #### Open design questions
@@ -138,8 +138,8 @@ Plus `Board.fromFenLenient(String)` (or `new Board(String, FenStrictness)`) for 
 
 ### FEN parser tier audit
 Two FEN parsers exist in main: `FenParserRaw` (lexical only, one regex) and `FenParserAdvanced` (structural + rule-consistency). Boundaries were unclear and the docs overclaimed what each tier proves (the "no real game could reach" wording was softened in 6.0.0, but the tier contracts are still not written down precisely). A third class, `FenParserAdvancedFurther`, lives under `src/test` (not main) and runs only via its own test class — its disposition is captured as the closing task below.
-- [ ] Audit `FenParserRaw` and `FenParserAdvanced` — list what each actually validates vs what its package-level docs claim
-- [ ] Document each tier's contract precisely in `specification.md` (the strict-vs-lenient × raw-vs-advanced table from the lenient-FEN section is the right home — extend it with the per-tier contract column)
+- [x] Audit `FenParserRaw` and `FenParserAdvanced` — list what each actually validates vs what its package-level docs claim
+- [x] Document each tier's contract precisely in `specification.md` (the strict-vs-lenient × raw-vs-advanced table from the lenient-FEN section is the right home — extend it with the per-tier contract column)
 
 ### Promote `FenParserAdvancedFurther` consistency check into strict, drop the class
 The test-only `FenParserAdvancedFurther` enforces two semantic invariants on a `Fen`:
@@ -148,11 +148,15 @@ The test-only `FenParserAdvancedFurther` enforces two semantic invariants on a `
 
 The class was kept out of main because of the second branch's practical incompatibility with real-world exporters. With the lenient FEN parser landing alongside (preceding task), the resolution becomes clean: **strict enforces, lenient auto-corrects**.
 
-- [ ] Fold the half-move-clock-vs-full-move-number consistency check into `FenParserAdvanced` — it belongs with the other structural invariants (no impossible checks, no pawn on rank 1/8, castling rights consistent with piece placement, etc.)
-- [ ] Decide on branch 2 (`fullMoveNumber == 1` constraint): probably **drop** — too many real-world FEN exporters emit `fullMoveNumber = 1` for non-initial positions for this to be a productive strict rejection. Document the decision either way in `specification.md`.
-- [ ] Lenient FEN parser forgives the consistency-check failure: auto-correct `fullMoveNumber` up to `ceil(halfMoveClock / 2) + 1` (the minimum consistent value), surface as `HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER` (or similarly named) forgiven item
-- [ ] Delete `src/test/java/com/dlb/chess/test/fen/FenParserAdvancedFurther.java`, `TestFenParserAdvancedFurther.java`, `FenAdvancedFurtherValidationProblem.java`, `FenAdvancedFurtherValidationException.java`. The covered test cases migrate to `TestFenParserAdvanced` (for the consistency check) and to the lenient FEN test suite (for the forgiveness)
-- [ ] CHANGELOG: note the strict-parser invariant gain and the now-impossible "fullMoveNumber=1 + non-initial" position no longer being rejected at any level
+- [x] Fold the half-move-clock-vs-full-move-number consistency check into `FenParserAdvanced` — it belongs with the other structural invariants (no impossible checks, no pawn on rank 1/8, castling rights consistent with piece placement, etc.)
+- [x] Decide on branch 2 (`fullMoveNumber == 1` constraint): **dropped** — too many real-world FEN exporters emit `fullMoveNumber = 1` for non-initial positions for this to be a productive strict rejection. *(Not yet documented in `specification.md` — see follow-up below.)*
+- [x] Lenient FEN parser forgives the consistency-check failure: auto-correct `fullMoveNumber` up to `ceil(halfMoveClock / 2) + 1` (the minimum consistent value), surface as `HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER` (or similarly named) forgiven item *(actually implemented with a reserve formula — `halfMoveClock` rounded up to the next multiple of ten — rather than the strict minimum, signalling a reconstructed placeholder)*
+- [x] Delete `src/test/java/com/dlb/chess/test/fen/FenParserAdvancedFurther.java`, `TestFenParserAdvancedFurther.java`, `FenAdvancedFurtherValidationProblem.java`, `FenAdvancedFurtherValidationException.java`. The covered test cases migrate to `TestFenParserAdvanced` (for the consistency check) and to the lenient FEN test suite (for the forgiveness)
+- [x] CHANGELOG: note the strict-parser invariant gain and the now-impossible "fullMoveNumber=1 + non-initial" position no longer being rejected at any level
+
+##### Pre-tag follow-ups (docs-only)
+- [ ] `specification.md` — note explicitly that the `FenParserAdvancedFurther` branch 2 (`fullMoveNumber == 1 ⇒ initial-or-after-first-move position`) was dropped entirely; only the half-move-clock consistency check moved into `FenParserAdvanced`.
+- [ ] `README.md` — update the "Lenient PGN parser" framing to reflect that the project now has lenient parsers for all three input languages (SAN, PGN, FEN). Add a short pointer to `Board.fromFenLenient(String)`.
 
 ## Future release — Auto-CHA (DeepSquare moment)
 
