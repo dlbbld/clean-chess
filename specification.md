@@ -98,7 +98,7 @@ Both variants are **opt-in**. clean-chess does not invoke CHA automatically when
 
 - **SAN** — two pipelines: **strict** (canonical SAN only; reached from `Board.moveStrict(String)` and from the PGN-driven path) and **lenient** (accepts a defined set of forgivable deviations from canonical; reached from `Board.moveLenient(String)`). See §3.3.1 for the lenient taxonomy and algorithm.
 - **FEN** — basic parsing validates structure; *advanced* parsing additionally validates position legality (no impossible double-checks, achievable pawn structure, castling rights consistent with rooks-and-king positions, etc.). `Board(String fen)` uses the advanced variant, so a `Board` cannot be constructed from a position no real game could reach.
-- **PGN** — two parsers: **strict** (round-trip-canonical reference, enforces export-format invariants) and **lenient** (tolerates real-world PGN — spaced move-number indicators, missing seven-tag-roster entries, optional termination markers, extra whitespace). Both produce the same `PgnFile` model. The exporter (`PgnCreate`) aims for byte-stable round-trip with the strict parser. The two-parser split is deliberate: a single parser with a "strictness flag" inevitably grows conditional branches that obscure both rule sets — splitting keeps each parser readable and lets the two evolve independently.
+- **PGN** — two parsers, both **preserving input as given**: **strict** (enforces the spec's import-format syntax, plus the semantic essentials: Result tag presence, SetUp/FEN coupling) and **lenient** (tolerates real-world PGN — spaced move-number indicators, missing seven-tag-roster entries, optional termination markers, extra whitespace). Both produce the same `PgnFile` model; neither normalises the tag list. The exporter has two modes: **semantic** (the default, emits the parse model as-given) and **archival** (PGN spec §8.1.1-conformant output, opt-in via `WriteMode.ARCHIVAL`). See §3.3.2 for the parse/validate/export contract. The two-parser split is deliberate: a single parser with a "strictness flag" inevitably grows conditional branches that obscure both rule sets — splitting keeps each parser readable and lets the two evolve independently.
 
 #### 3.3.1 Lenient SAN
 
@@ -146,6 +146,23 @@ Codes are not collapsed: each distinguishable deviation has its own code, and a 
 - **Game already terminated** — top-of-pipeline guard before the lenient layer engages, identical to strict; once a FIDE-automatic termination is reached no further moves are accepted, lenient or otherwise.
 
 The strict pipeline remains the single source of chess-validation truth. Lenient is a thin input-shape transformation layer that reuses strict for everything else.
+
+#### 3.3.2 PGN parse model and write modes
+
+PGN handling is structured around four separable jobs:
+
+| Job | What it does | Where it lives |
+|---|---|---|
+| **Parse** | Reads PGN text into a `PgnFile`. Preserves what the source contained — tag presence/absence, tag order, FEN without SetUp, missing Result, redundant initial-position FEN/SetUp, unknown tags. No fabrication into the model. | `StrictPgnParser`, `LenientPgnParser` |
+| **Validation reporting** | Surfaces tolerated deviations as typed diagnostics. SAN-level deviations on `sanForgivenItems`; tag-level deviations on `tagForgivenItems` (missing STR, Result tag absent, SetUp/FEN coupling, redundant initial FEN). | `LenientPgnParserValidationResult` |
+| **Semantic export** | Emits the parse model as-given. Same tags, same values, same order, same Result presence/absence, same termination-marker presence/absence — no invented content. Formatting trivia is normalised (single-space tag brackets, standard line wrapping). Movetext SAN is canonical (canonicalised at parse time). The default. | `WriteMode.SEMANTIC` |
+| **Archival export** | Produces a PGN spec §8.1.1-conformant artifact. The model is run through `PgnArchivalNormalization` first: missing STR entries filled with spec-defined placeholders (`?` for most, `????.??.??` for Date per §8.1.1.3, `*` for Result per §8.1.1.7), SetUp/FEN coupling enforced, redundant initial-position FEN/SetUp dropped, Result tag synthesised from the termination marker, tags sorted into canonical order. Opt-in. | `WriteMode.ARCHIVAL` |
+
+**Strict parser — semantic essentials.** Strict parsing enforces the spec's import-format syntax (single-space-separated tokens, no leading/trailing whitespace per line, etc., unchanged) plus two semantic essentials: the **Result tag must be present** (its value must match the termination marker), and the **SetUp/FEN coupling** must hold (`SetUp "1"` ⇒ FEN present; FEN present ⇒ `SetUp "1"`). The full Seven Tag Roster is **not** a strict-parser mandate: PGN spec §8.1.1 introduces STR as required *"for archival storage of PGN data,"* not for general spec-compliant PGN. A four-tag PGN (Result + a few extras) parses through `StrictPgnParser` cleanly.
+
+**Honest preservation by default.** The principle: parse preserves, validation reports, semantic export echoes, archival export normalises and fills. The library's default posture is honest preservation; archival storage is a mode the caller asks for, not a tax the parser levies. A lenient `parse → semantic-write` round-trips the meaning of the input (tag presence/absence, Result presence/absence, FEN-without-SetUp) while normalising formatting and move spelling — what is intentionally not preserved is the source bytes themselves (whitespace inside tag brackets, original SAN spelling). Source-text-preserving export would be a separate library mode if ever needed; it is out of scope.
+
+**`createPgnFile(Board)`.** The Board → `PgnFile` factory produces the minimal honest shape — empty `tagList` for an initial-position board, `[SetUp, FEN]` for a non-initial position, `terminationMarker` derived from the board's game-status. STR fabrication does **not** happen here; archival export is the only path that fills the roster.
 
 ---
 
@@ -203,7 +220,7 @@ clean-chess follows the same convention: `PgnFile.pregameCommentary()` carries a
 
 ### 5.3 Conformance for everything else
 
-The rest of the library's PGN handling follows the specification: brace-grammar rules, move-number indicators, inner-brace-as-content, seven-tag-roster requirements, FIDE game-termination markers, the strict-vs-import format split. The PGN standard already documents the *what*; the code is the authoritative *how*.
+The rest of the library's PGN handling follows the specification: brace-grammar rules, move-number indicators, inner-brace-as-content, FIDE game-termination markers, the strict-vs-import format split. The Seven Tag Roster is treated as a §8.1.1 archival-storage concern — required by archival output (`WriteMode.ARCHIVAL`), not by general spec-compliant parsing; see §3.3.2 for the contract. The PGN standard already documents the *what*; the code is the authoritative *how*.
 
 ---
 
