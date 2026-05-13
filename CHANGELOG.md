@@ -16,7 +16,9 @@ Technical-cleanup release. No new features. The model is tighter, generator-prin
 - Large generated enums replaced with computed lookups: `UciValidateHelper` (1984 lines) and the seven SAN-validator strict enums (5105 lines combined).
 - Pawn-wall classifier: bishop-reachability now BFS-correct (closes a previously-known false negative). The known false-positive class is documented in [pawn-wall-soundness.md](pawn-wall-soundness.md) and deferred to the DeepSquare release.
 - FEN-validation documentation no longer overclaims "no real game could reach"; reframed as structural and rule-consistency validation.
+- CHA / unwinnability documentation reframed: README and `unwinnability/package-info.java` now describe unwinnability as "no legal sequence can end with that side giving checkmate, even if the opponent cooperates" (replacing the misleading "worst-case play" framing). Same pass corrects the README's "CHA full is 100% accurate" to align with the documented `UNDETERMINED` outcome.
 - `NonNullWrapperCommon` renamed to `Nulls` (pervasively used; short name was overdue).
+- Javadoc tightened: `doclint=all,-missing` with `failOnError=true`. Opt-in (not bound to `mvn package`) — run explicitly via `mvn javadoc:javadoc` or `mvn javadoc:jar`. 15 broken `{@link}` references uncovered when the gate was turned on are fixed; the published javadoc now builds clean.
 
 ### Breaking
 - `LegalMove` constructor: `LegalMoveKind` is now mandatory; the three-argument form is removed.
