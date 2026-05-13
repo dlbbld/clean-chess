@@ -4,7 +4,7 @@ Releases from 3.3 onward. Earlier history is in git tags only.
 
 ## [Unreleased]
 
-## [5.1.0] - 2026-05-13
+## [6.0.0] - 2026-05-13
 
 Technical-cleanup release. No new features. The model is tighter, generator-printed code is gone, a research-only dual code path is retired, and one pawn-wall bug is fixed (with the known remaining false-positive class scoped to the DeepSquare release).
 
