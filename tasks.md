@@ -6,12 +6,6 @@ Order within each section is the source of truth. Completed tasks move to **Done
 
 ## Current release — current backlog
 
-### FEN parser tier audit and rename
-Three FEN parsers exist: `FenParserRaw`, `FenParserAdvanced`, `FenParserAdvancedFurther`. The third is largely unused. Boundaries between the three are unclear and the docs overclaim what each tier proves (see "FEN-validation documentation overclaims" below).
-- [ ] Audit each tier — what each parser actually validates vs what its docs claim
-- [ ] Document each tier's contract precisely in `specification.md`
-- [ ] Decide: keep three tiers, collapse `AdvancedFurther` into `Advanced`, or drop it
-
 ### Move FEN-letter parsing off `Side` and `BasicChessUtility` onto the FEN parser
 Layering violation surfaced by the API-surface audit. `Side.calculate(String)` parses the FEN single-letter side indicator (`"w"` / `"b"`) into a `Side` enum value — but FEN-syntax knowledge does not belong on the chess-rules `Side` enum. The same parsing also appears, redundantly, on `BasicChessUtility.calculateSideHavingMoveForSide(String)`. Both should be deleted; their logic belongs in `FenParserRaw` / `FenParserAdvanced` (wherever the rest of FEN field parsing lives).
 
@@ -42,11 +36,11 @@ Links to `com.dlb.chess.fen.FenParser` which does not exist. `mvn javadoc:jar` s
 
 ### CHA / unwinnability wording teaches the wrong mental model
 README and `unwinnability/package-info.java` use "worst play / worst-case play by the opponent." In game-theory English, "worst-case opponent" reads like *best defensive play*, but CHA / winnability is the opposite: whether any legal continuation can lead to mate (cooperative / helpmate-style existence). Worth fixing because it is the flagship concept.
-- [ ] Rewrite around "no legal sequence exists, even with the opponent's cooperation" or "no theoretical mating sequence exists under any legal continuation"
+- [x] Rewrite around "no legal sequence exists, even with the opponent's cooperation" or "no theoretical mating sequence exists under any legal continuation"
 
 ### README inconsistency — CHA full "100% accurate" vs `UNDETERMINED`
 README says CHA full is "slower but 100% accurate," then a few lines down documents the `UNDETERMINED` outcome (and again later in the doc).
-- [ ] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
+- [x] Reword to "complete when it returns WINNABLE / UNWINNABLE; bounded search may return UNDETERMINED"
 
 ### Remove the `EnPassantCaptureRuleThreefold` dual-path
 The `EnPassantCaptureRuleThreefold` enum (`DO_IGNORE` / `DO_NOT_IGNORE`) drives a second, parallel repetition-tracking code path that ignores en passant availability when comparing dynamic positions. It was added as a research tool: in FIDE rules, two positions with the same piece arrangement but different en-passant availability are *not* the same position for threefold-repetition purposes — but chess.com (and other platforms) implemented the lazy "visual repetition" rule and don't check en-passant availability. The dual path made it easy to find PGN games where the two interpretations diverge, producing examples to demonstrate the platform-side bug.
@@ -59,19 +53,6 @@ That research goal is no longer load-bearing for the library. The dual code path
 - [x] Drop the dual-path test fixtures, reports, and representation code in `com.dlb.chess.test.report.representation.*`
 - [x] Strip the explanatory paragraph in `RepetitionUtility`'s class-level Javadoc about "two different ways" of counting repetition
 - [x] Verify `git grep -i "ignoring en passant"` (or similar phrasing) returns zero hits afterwards
-
-### Replace `EnumConstants` constant interface
-`com.dlb.chess.common.constants.EnumConstants` is a `public interface` whose only purpose is to expose ~90 `public static final` aliases for `Square.*`, `Side.*`, `Piece.*`, `PieceType.*`, `Rank.*`, `File.*` so implementing classes inherit them unqualified. This is the classic "constant interface" anti-pattern (Effective Java item 22): interfaces should describe a contract/behavior, not be a convenience-inheritance vehicle for constants. The mechanism reads as beginner Java and leaks an internal vocabulary choice into the public type surface — `ChessBoard extends EnumConstants` is the clearest symptom (the chess contract has nothing to do with how implementers prefer to spell `Square.E4`). Used by 43 files under `src/main` plus tests.
-
-Replacement strategy options, depending on intended audience:
-- public-API constants: `public final class EnumConstants` with `public static final` fields and a private constructor (callers `import static`)
-- internal-only: make package-private and split closer to where they belong (domain-grouped, e.g. `BoardSquares`, `PieceLetters`)
-- derived enum collections: prefer local `EnumSet` / `ImmutableSet` factories in the utility that needs them, or dedicated package-private constants classes by domain
-
-- [ ] Pick a replacement strategy (default lean: package-private utility class with `import static`, since the constants are internal vocabulary and the audit reduces public surface anyway)
-- [ ] Drop `extends EnumConstants` from `ChessBoard` regardless of strategy — the interface should not carry constants
-- [ ] Convert the 43 src/main call sites + tests to static imports
-- [ ] Folds naturally into the API-surface reduction release; treat as a cleanup target there
 
 ### Profound-level square geometry — promote single-step calculations to lookup tables
 The codebase already uses lookup tables for the geometry that matters — `OrthogonalRange`, `DiagonalRange`, `KnightEmptyBoardSquares`, `BishopEmptyBoardSquares`, `RookEmptyBoardSquares`, `DiagonalLineUtility`. Single-step instance-style methods on `Square` (`calculateLeftSquare`, `calculateLeftDiagonalSquare`, `calculateAheadSquare`, etc.) and `File` / `Rank` are the calculate-on-demand holdouts in an otherwise table-based codebase. The "calculate" form has a deeper testing problem: any independent test implementation faces a definitional regress ("left of E4 from White is D4 — but what does *left* mean if not what `calculateLeft` returns?"), which is how `Square.calculateIsLeftDiagonalSquare` ended up as a tautological method that tested itself against itself.
@@ -120,16 +101,6 @@ While in the neighbourhood, also delete the now-orphan generators in `src/test/j
 
 The principle (carried over from the `GenerateUciMove` deletion): once the runtime computation supersedes a one-shot
 generator that printed code, the generator is dead test code. Git keeps the history; the repo doesn't need to.
-
-### Records carry data, not behavior — sweep for violations
-The project rule (documented in `coding-conventions.md`): records carry data; domain logic that operates on them lives in dedicated utility / service classes. Permitted on a record: compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals` / `hashCode` / `toString`. Domain-operation methods are not.
-
-Surfaced by the unused-code-detector pass on `StaticPosition`: the record carries multiple non-data methods — `createChangedPosition` (three overloads), `isPawn`, `isOwnPawn`, `isOpponentPawn`, `isOwnKing`, `isOpponentKing`, almost certainly more. Some have only test callers (suggesting test scaffolding), some have production callers, one (`isOwnKing`) has zero callers anywhere.
-
-- [ ] Catalog every non-permitted member on `StaticPosition` and assign a disposition per member: delete (no callers anywhere), move to a test-side helper that **takes** a `StaticPosition` rather than duplicating it (test-only callers), or move to a `StaticPositionUtility` (production callers).
-- [ ] Sweep every record under `src/main/java` for the same pattern. Records to check include at least `Fen`, `Tag`, `PgnFile`, `LegalMove`, `MoveSpecification`, `StaticPosition`, plus any other top-level `record` declarations under `src/main`.
-- [ ] Apply the dispositions; verify only the permitted member shapes remain on each record.
-- [ ] Naturally folds into the API-surface reduction release, since most "move to utility" relocations open the door to making the utility itself package-private.
 
 ### Rename `NonNullWrapperCommon` to `Nulls`
 The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes through it), and `NonNullWrapperCommon` is too long for something so frequent. `Nulls` is short, pronounceable, says the domain (this utility exists because of nullness handling), and discoverable in the IDE. Rejected alternatives: `NNVC` (cryptic codeword), `Safe` / `Checked` (vague), `NonNulls` (awkward plural).
@@ -250,6 +221,12 @@ Plus `Board.fromFenLenient(String)` (or `new Board(String, FenStrictness)`) for 
 #### Open design questions
 - Castling normalisation scope — KQkq-ordering deviations only, or also X-FEN / Shredder-FEN (Chess960) castling notation? Lean: KQkq-ordering only; X-FEN is a separate feature.
 - Order of forgiven items in the result — left-to-right (token position) or grouped by code? PGN does left-to-right; mirror.
+
+### FEN parser tier audit and rename
+Three FEN parsers exist: `FenParserRaw`, `FenParserAdvanced`, `FenParserAdvancedFurther`. The third is largely unused. Boundaries between the three are unclear and the docs overclaim what each tier proves (see "FEN-validation documentation overclaims" — addressed in 6.0.0).
+- [ ] Audit each tier — what each parser actually validates vs what its docs claim
+- [ ] Document each tier's contract precisely in `specification.md`
+- [ ] Decide: keep three tiers, collapse `AdvancedFurther` into `Advanced`, or drop it
 
 ## Future release — Auto-CHA (DeepSquare moment)
 
@@ -384,6 +361,34 @@ Whatever ships in the first Central artifact is in the public record forever. Re
 
 Items here are not assigned to any release. Captured so they don't get lost; revisit if/when scope or motivation aligns.
 
+### Records carry data, not behavior — sweep for violations
+The project rule (documented in `coding-conventions.md`): records carry data; domain logic that operates on them lives in dedicated utility / service classes. Permitted on a record: compact-constructor validation, `Comparable` when ordering is intrinsic, and language-provided `equals` / `hashCode` / `toString`. Domain-operation methods are not.
+
+Surfaced by the unused-code-detector pass on `StaticPosition`: the record carries multiple non-data methods — `createChangedPosition` (three overloads), `isPawn`, `isOwnPawn`, `isOpponentPawn`, `isOwnKing`, `isOpponentKing`, almost certainly more. Some have only test callers (suggesting test scaffolding), some have production callers, one (`isOwnKing`) has zero callers anywhere.
+
+- [ ] Catalog every non-permitted member on `StaticPosition` and assign a disposition per member: delete (no callers anywhere), move to a test-side helper that **takes** a `StaticPosition` rather than duplicating it (test-only callers), or move to a `StaticPositionUtility` (production callers).
+- [ ] Sweep every record under `src/main/java` for the same pattern. Records to check include at least `Fen`, `Tag`, `PgnFile`, `LegalMove`, `MoveSpecification`, `StaticPosition`, plus any other top-level `record` declarations under `src/main`.
+- [ ] Apply the dispositions; verify only the permitted member shapes remain on each record.
+- [ ] Naturally folds into the API-surface reduction release, since most "move to utility" relocations open the door to making the utility itself package-private.
+
+---
+
+## Obsolete
+
+Items deemed no longer worth pursuing. Captured so the decision is visible.
+
+### Replace `EnumConstants` constant interface
+`com.dlb.chess.common.constants.EnumConstants` is a `public interface` whose only purpose is to expose ~90 `public static final` aliases for `Square.*`, `Side.*`, `Piece.*`, `PieceType.*`, `Rank.*`, `File.*` so implementing classes inherit them unqualified. This is the classic "constant interface" anti-pattern (Effective Java item 22): interfaces should describe a contract/behavior, not be a convenience-inheritance vehicle for constants. The mechanism reads as beginner Java and leaks an internal vocabulary choice into the public type surface — `ChessBoard extends EnumConstants` is the clearest symptom (the chess contract has nothing to do with how implementers prefer to spell `Square.E4`). Used by 43 files under `src/main` plus tests.
+
+Replacement strategy options, depending on intended audience:
+- public-API constants: `public final class EnumConstants` with `public static final` fields and a private constructor (callers `import static`)
+- internal-only: make package-private and split closer to where they belong (domain-grouped, e.g. `BoardSquares`, `PieceLetters`)
+- derived enum collections: prefer local `EnumSet` / `ImmutableSet` factories in the utility that needs them, or dedicated package-private constants classes by domain
+
+- [ ] Pick a replacement strategy (default lean: package-private utility class with `import static`, since the constants are internal vocabulary and the audit reduces public surface anyway)
+- [ ] Drop `extends EnumConstants` from `ChessBoard` regardless of strategy — the interface should not carry constants
+- [ ] Convert the 43 src/main call sites + tests to static imports
+- [ ] Folds naturally into the API-surface reduction release; treat as a cleanup target there
 
 ---
 
