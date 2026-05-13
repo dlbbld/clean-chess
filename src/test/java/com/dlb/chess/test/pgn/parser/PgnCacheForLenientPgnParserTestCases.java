@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
@@ -15,7 +15,7 @@ public class PgnCacheForLenientPgnParserTestCases {
   private static final Map<String, PgnFile> PGN_CACHE = new HashMap<>();
 
   public static PgnFile getPgn(Path pgnFolderPath, String pgnFileName) {
-    final Path pgnFilePath = NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName);
+    final Path pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
     if (PgnTest.existsFolderPath(pgnFolderPath)) {
       @SuppressWarnings("null") final @NonNull String key = pgnFilePath.toAbsolutePath().toString();
       if (PGN_CACHE.containsKey(key)) {

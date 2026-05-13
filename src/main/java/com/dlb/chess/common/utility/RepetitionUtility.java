@@ -7,8 +7,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.HalfMoveListListComparator;
-import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
@@ -17,37 +16,12 @@ import com.dlb.chess.model.LegalMove;
 public abstract class RepetitionUtility {
 
   /**
-   * We do not override equals because we need conditional equals method which we realize by always comparing explicitly
-   * in the code when used and not using counts on set etc., which would use a non conditional comparions. This is
-   * needed to count the repetition in two different ways (one as it should be, not ignoring the en passant condition,
-   * one as it shouldn't be, ignoring the en passant condition, for finally finding such games where ignoring the
-   * condition would have made a difference.
+   * Two dynamic positions are equal for FIDE threefold-repetition purposes when the static position, side to move,
+   * castling rights, and en-passant availability all match. We do not override {@code equals} on
+   * {@link DynamicPosition} because elsewhere positions are compared by piece-arrangement only; this method is the
+   * authoritative repetition-comparison.
    */
-  private static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj,
-      EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    return switch (enPassantCaptureRule) {
-      case DO_IGNORE -> equalsIgnoringEnPassantCapture(dynamicPosition, obj);
-      case DO_NOT_IGNORE -> equalsNotIgnoringEnPassantCapture(dynamicPosition, obj);
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  private static boolean equalsIgnoringEnPassantCapture(DynamicPosition dynamicPosition, @Nullable Object obj) {
-    if (dynamicPosition == obj) {
-      return true;
-    }
-    if (obj == null || dynamicPosition.getClass() != obj.getClass()) {
-      return false;
-    }
-    final var other = (DynamicPosition) obj;
-    return dynamicPosition.castlingRightWhite().equals(other.castlingRightWhite())
-        && dynamicPosition.castlingRightBlack().equals(other.castlingRightBlack())
-        // && dynamicPosition.isEnPassantCapturePossible() == other.isEnPassantCapturePossible()
-        && dynamicPosition.havingMove() == other.havingMove()
-        && dynamicPosition.staticPosition().equals(other.staticPosition());
-  }
-
-  private static boolean equalsNotIgnoringEnPassantCapture(DynamicPosition dynamicPosition, @Nullable Object obj) {
+  private static boolean equals(DynamicPosition dynamicPosition, @Nullable Object obj) {
     if (dynamicPosition == obj) {
       return true;
     }
@@ -62,17 +36,12 @@ public abstract class RepetitionUtility {
         && dynamicPosition.staticPosition().equals(other.staticPosition());
   }
 
-  public static int getCountRepetition(HalfMove halfMove, EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    return switch (enPassantCaptureRule) {
-      case DO_NOT_IGNORE -> halfMove.countRepetition();
-      case DO_IGNORE -> halfMove.countRepetitionIgnoringEnPassantCapture();
-      default -> throw new IllegalArgumentException();
-    };
+  public static int getCountRepetition(HalfMove halfMove) {
+    return halfMove.countRepetition();
   }
 
   public static int calculateCountRepetition(List<LegalMove> performedLegalMoveList,
-      List<DynamicPosition> dynamicPositionList, DynamicPosition dynamicPosition,
-      EnPassantCaptureRuleThreefold enPassantCaptureRule) {
+      List<DynamicPosition> dynamicPositionList, DynamicPosition dynamicPosition) {
 
     if (performedLegalMoveList.isEmpty()) {
       throw new ProgrammingMistakeException("Not to be called for no moves played");
@@ -86,16 +55,15 @@ public abstract class RepetitionUtility {
 
     // we use the same index for moves and position on purpose
     for (var i = performedLegalMoveList.size() - 1; i >= 0; i--) {
-      final LegalMove lastLegalMove = NonNullWrapperCommon.get(performedLegalMoveList, i);
+      final LegalMove lastLegalMove = Nulls.get(performedLegalMoveList, i);
       if (BasicChessUtility.calculateIsResetHalfMoveClock(lastLegalMove)) {
         // if pawn move or capture the positions before cannot equal the current position
         // this is a property of the chess game with a basic mathematical proof
         // this is used often and increases performance
         return countRepetition;
       }
-      final DynamicPosition previousDynamicPosition = NonNullWrapperCommon.get(dynamicPositionList, i);
-      final var isEqual = equals(dynamicPosition, previousDynamicPosition, enPassantCaptureRule);
-      if (isEqual) {
+      final DynamicPosition previousDynamicPosition = Nulls.get(dynamicPositionList, i);
+      if (equals(dynamicPosition, previousDynamicPosition)) {
         countRepetition++;
       }
     }
@@ -106,27 +74,24 @@ public abstract class RepetitionUtility {
   }
 
   public static List<List<HalfMove>> calculateRepetitionListList(List<HalfMove> halfMoveList,
-      int countRepetitionThreshold, EnPassantCaptureRuleThreefold enPassantCaptureRule) {
+      int countRepetitionThreshold) {
 
     final List<List<HalfMove>> list = new ArrayList<>();
     final List<DynamicPosition> processed = new ArrayList<>();
     for (final HalfMove searchHalfMoveThreeFold : halfMoveList) {
       // we iterate over the move list
       final DynamicPosition searchDynamicPositionThreeFold = searchHalfMoveThreeFold.dynamicPosition();
-      if (calculateIsContained(processed, searchDynamicPositionThreeFold, enPassantCaptureRule)) {
+      if (calculateIsContained(processed, searchDynamicPositionThreeFold)) {
         continue;
       }
-      final var countRepetition = getCountRepetition(searchHalfMoveThreeFold, enPassantCaptureRule);
+      final var countRepetition = getCountRepetition(searchHalfMoveThreeFold);
 
       if (countRepetition == countRepetitionThreshold) {
         // if we found a half move which is equal or above the required count, we sample all previous half-moves with
-        // the
-        // same dynamic position
+        // the same dynamic position
         final List<HalfMove> halfMoveSameDynamicPositionList = new ArrayList<>();
         for (final HalfMove searchHalfMoveSameDynamicPosition : halfMoveList) {
-          final var isEqual = equals(searchDynamicPositionThreeFold,
-              searchHalfMoveSameDynamicPosition.dynamicPosition(), enPassantCaptureRule);
-          if (isEqual) {
+          if (equals(searchDynamicPositionThreeFold, searchHalfMoveSameDynamicPosition.dynamicPosition())) {
             halfMoveSameDynamicPositionList.add(searchHalfMoveSameDynamicPosition);
           }
         }
@@ -140,10 +105,9 @@ public abstract class RepetitionUtility {
   }
 
   private static boolean calculateIsContained(List<DynamicPosition> processedDynamicPositionList,
-      DynamicPosition position, EnPassantCaptureRuleThreefold enPassantCaptureRule) {
+      DynamicPosition position) {
     for (final DynamicPosition processedDynamicPosition : processedDynamicPositionList) {
-      final var isEqual = equals(processedDynamicPosition, position, enPassantCaptureRule);
-      if (isEqual) {
+      if (equals(processedDynamicPosition, position)) {
         return true;
       }
     }

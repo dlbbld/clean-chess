@@ -7,8 +7,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.common.Nulls;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.MoveBackup;
 import com.github.bhlangonijr.chesslib.Square;
@@ -29,14 +29,14 @@ class TestLibraryCarlosSanCalculationPass {
     final MoveList moveList = new MoveList();
     moveList.addAll(calculateMoveList(board));
     final var sanArray = moveList.toSanArray();
-    @SuppressWarnings("null") final var last = NonNullWrapperCommon.getLast(sanArray);
+    @SuppressWarnings("null") final var last = Nulls.getLast(sanArray);
     return last;
   }
 
   private static List<Move> calculateMoveList(Board board) {
     final List<Move> result = new ArrayList<>();
-    for (final MoveBackup moveBackup : NonNullWrapperLibraryCarlos.getBackup(board)) {
-      result.add(NonNullWrapperLibraryCarlos.getMove(moveBackup));
+    for (final MoveBackup moveBackup : NullsCarlos.getBackup(board)) {
+      result.add(NullsCarlos.getMove(moveBackup));
     }
     return result;
   }

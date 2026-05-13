@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.messages.Message;
 
 /**
@@ -46,7 +46,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
     if (!SanValidateFormat.isFileLetter(secondChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_FILE,
           Message.getString("validation.san.format.king.nonCastling.nonCapture.wrongDestinationFile",
-              NonNullWrapperCommon.toString(secondChar)));
+              Nulls.toString(secondChar)));
     }
 
     // K[file]... Ã¢â‚¬â€ non-capturing path continues with the destination rank
@@ -70,7 +70,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
     if (!SanValidateFormat.isRankDigit(thirdChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_NON_CAPTURE_WRONG_DESTINATION_RANK,
           Message.getString("validation.san.format.king.nonCastling.nonCapture.wrongDestinationRank",
-              NonNullWrapperCommon.toString(thirdChar)));
+              Nulls.toString(thirdChar)));
     }
 
     // K[file][rank] Ã¢â‚¬â€ valid destination, length 3 expected
@@ -102,7 +102,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
     if (!SanValidateFormat.isFileLetter(thirdChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_WRONG_DESTINATION_FILE,
           Message.getString("validation.san.format.king.nonCastling.capture.wrongDestinationFile",
-              NonNullWrapperCommon.toString(thirdChar)));
+              Nulls.toString(thirdChar)));
     }
 
     // Fourth character (destination rank)
@@ -116,7 +116,7 @@ abstract class SanValidateFormatKing extends AbstractSan {
     if (!SanValidateFormat.isRankDigit(fourthChar)) {
       throw new SanValidationException(SanValidationProblem.FORMAT_KING_NON_CASTLING_CAPTURE_WRONG_DESTINATION_RANK,
           Message.getString("validation.san.format.king.nonCastling.capture.wrongDestinationRank",
-              NonNullWrapperCommon.toString(fourthChar)));
+              Nulls.toString(fourthChar)));
     }
 
     // Valid Kx[file][rank] Ã¢â‚¬â€ length 4 expected

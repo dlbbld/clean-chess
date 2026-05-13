@@ -2,7 +2,7 @@ package com.dlb.chess.test.librarycomparison.utility;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Square;
 
@@ -29,6 +29,6 @@ public class BoardConversionUtitlity {
   }
 
   private static Piece convert(Board board, Square square) {
-    return EnumConversionUtility.convertPiece(NonNullWrapperLibraryCarlos.getPiece(board, square));
+    return EnumConversionUtility.convertPiece(NullsCarlos.getPiece(board, square));
   }
 }

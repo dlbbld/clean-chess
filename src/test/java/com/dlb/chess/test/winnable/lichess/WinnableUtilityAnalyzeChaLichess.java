@@ -13,7 +13,7 @@ import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.SetUtility;
@@ -38,7 +38,7 @@ public class WinnableUtilityAnalyzeChaLichess {
 
   private static final boolean IS_DEBUG = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(WinnableUtilityAnalyzeChaLichess.class);
+  private static final Logger logger = Nulls.getLogger(WinnableUtilityAnalyzeChaLichess.class);
 
   private static final ImmutableSet<GameStatusAnalysis> GAME_DRAW_SET;
   private static final ImmutableSet<GameStatusAnalysis> GAME_WHITE_UNWINNABLE_SET;
@@ -46,34 +46,31 @@ public class WinnableUtilityAnalyzeChaLichess {
 
   static {
     {
-      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.add(GameStatusAnalysis.STALEMATE);
       set.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_BOTH);
       set.add(GameStatusAnalysis.FIVE_FOLD_REPETITION_RULE);
       set.add(GameStatusAnalysis.SEVENTY_FIVE_MOVE_RULE);
-      GAME_DRAW_SET = NonNullWrapperCommon.copyOfSet(set);
+      GAME_DRAW_SET = Nulls.copyOfSet(set);
     }
 
     {
-      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.addAll(GAME_DRAW_SET);
       set.add(GameStatusAnalysis.BLACK_DELIVERS_CHECKMATE);
       set.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_WHITE_ONLY);
-      GAME_WHITE_UNWINNABLE_SET = NonNullWrapperCommon.copyOfSet(set);
+      GAME_WHITE_UNWINNABLE_SET = Nulls.copyOfSet(set);
     }
 
     {
-      final EnumSet<GameStatusAnalysis> set = NonNullWrapperCommon.newEnumSet(new ArrayList<>(),
-          GameStatusAnalysis.class);
+      final EnumSet<GameStatusAnalysis> set = Nulls.newEnumSet(new ArrayList<>(), GameStatusAnalysis.class);
 
       set.addAll(GAME_DRAW_SET);
       set.add(GameStatusAnalysis.WHITE_DELIVERS_CHECKMATE);
       set.add(GameStatusAnalysis.INSUFFICIENT_MATERIAL_BLACK_ONLY);
-      GAME_BLACK_UNWINNABLE_SET = NonNullWrapperCommon.copyOfSet(set);
+      GAME_BLACK_UNWINNABLE_SET = Nulls.copyOfSet(set);
     }
   }
 

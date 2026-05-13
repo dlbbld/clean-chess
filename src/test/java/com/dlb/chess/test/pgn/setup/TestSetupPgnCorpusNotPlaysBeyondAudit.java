@@ -9,7 +9,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -31,7 +31,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  */
 class TestSetupPgnCorpusNotPlaysBeyondAudit {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestSetupPgnCorpusNotPlaysBeyondAudit.class);
+  private static final Logger logger = Nulls.getLogger(TestSetupPgnCorpusNotPlaysBeyondAudit.class);
 
   @SuppressWarnings("static-method")
   @Test

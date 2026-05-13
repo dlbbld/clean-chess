@@ -8,7 +8,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -20,10 +20,10 @@ import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 
 public abstract class GeneratePgnInformationUtility {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GeneratePgnInformationUtility.class);
+  private static final Logger logger = Nulls.getLogger(GeneratePgnInformationUtility.class);
 
   public static void main(String[] args) throws Exception {
-    createInformation(NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "candidates"),
+    createInformation(Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "candidates"),
         ConfigurationConstants.TEMP_FOLDER_PATH, "candidates_information.txt");
   }
 
@@ -49,7 +49,7 @@ public abstract class GeneratePgnInformationUtility {
     headerLine.append("Site").append(";");
     headerLine.append("Event").append(";");
     headerLine.append("Result");
-    lineList.add(NonNullWrapperCommon.toString(headerLine));
+    lineList.add(Nulls.toString(headerLine));
 
     for (final File file : filesList) {
       if (file == null) {
@@ -78,7 +78,7 @@ public abstract class GeneratePgnInformationUtility {
       final String result = TagUtility.calculateTagValue(pgnFile, StandardTag.RESULT);
       newLine.append(result);
 
-      lineList.add(NonNullWrapperCommon.toString(newLine));
+      lineList.add(Nulls.toString(newLine));
     }
 
     FileUtility.deleteFile(outputFolderPath, outputFileName);

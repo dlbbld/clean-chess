@@ -8,14 +8,15 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
+import com.dlb.chess.fen.FenSideSymbol;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public class LichessCheckFen extends AbstractLichessCheckFen {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckFen.class);
+  private static final Logger logger = Nulls.getLogger(LichessCheckFen.class);
 
   public static void main(String[] args) {
     checkFen();
@@ -27,8 +28,8 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
       throw new IllegalArgumentException("\"" + FEN_FOLDER_PATH + "\" directory does not exist");
     }
 
-    final var fenFilePathIn = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_IN);
-    final Path fenFilePathOut = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT);
+    final var fenFilePathIn = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_IN);
+    final Path fenFilePathOut = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT);
 
     boolean isResumeFromLichessGameId;
     String lastProcessedLichessGameId;
@@ -38,7 +39,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
     } else {
       isResumeFromLichessGameId = true;
       final List<String> fenFileListProcessed = FileUtility.readFileLines(fenFilePathOut);
-      final String lastLine = NonNullWrapperCommon.getLast(fenFileListProcessed);
+      final String lastLine = Nulls.getLast(fenFileListProcessed);
       final var lastLineArr = lastLine.split(";");
       // fen;lichessGameId;mode;result;duration
       final var lichessGameId = lastLineArr[1];
@@ -63,7 +64,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
     for (final String line : fenFileListIn) {
 
       final var sepPos = line.lastIndexOf(" ");
-      final var fen = NonNullWrapperCommon.substring(line, 0, sepPos);
+      final var fen = Nulls.substring(line, 0, sepPos);
       final var lichessGameId = line.substring(sepPos + 1);
 
       if (isStartAnalysis) {
@@ -77,11 +78,11 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
         outputLine.append(fen).append(";");
         outputLine.append(lichessGameId).append(";");
         outputLine.append("quick").append(";");
-        outputLine.append(testingSide.getFenLetter()).append(";");
+        outputLine.append(FenSideSymbol.calculate(testingSide).sideLetter()).append(";");
         outputLine.append(unwinnableQuick.getIdentifier()).append(";");
         outputLine.append(durationMilliSeconds);
 
-        final String outputLineStr = NonNullWrapperCommon.toString(outputLine);
+        final String outputLineStr = Nulls.toString(outputLine);
 
         FileUtility.appendFile(fenFilePathOut, outputLineStr);
 

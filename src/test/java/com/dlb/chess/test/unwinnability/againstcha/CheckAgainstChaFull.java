@@ -8,9 +8,10 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.utility.BasicUtility;
+import com.dlb.chess.fen.FenSideSymbol;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
@@ -28,14 +29,13 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
   // 8/6bk/8/1Q6/3P4/8/PP3PPP/3R2K1 b - - 0 36;eSHrCMEQ;full;b;undetermined;
   // 60'000 positions in 7 hours, about 0.4 seconds per position
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(CheckAgainstChaFull.class);
+  private static final Logger logger = Nulls.getLogger(CheckAgainstChaFull.class);
 
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final Path CHA_FULL_RESULT = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path CHA_FULL_RESULT = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "chaFullResult.txt");
   // format: fen;lichessGameId;mode;side;result;mateLine
-  private static final Path MINE_OUT = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
-      "mineFullResult.txt");
+  private static final Path MINE_OUT = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "mineFullResult.txt");
 
   public static void main(String[] args) throws Exception {
     checkMineFullAgainstChaFull();
@@ -84,8 +84,8 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
     if (mineFullResultList.size() > 0) {
       final var lastProcessedIndex = mineFullResultList.size() - 1;
 
-      final UnwinnabilityFullRead lastChaResult = NonNullWrapperCommon.get(chaFullResultList, lastProcessedIndex);
-      final UnwinnabilityFullRead lastMineResult = NonNullWrapperCommon.get(mineFullResultList, lastProcessedIndex);
+      final UnwinnabilityFullRead lastChaResult = Nulls.get(chaFullResultList, lastProcessedIndex);
+      final UnwinnabilityFullRead lastMineResult = Nulls.get(mineFullResultList, lastProcessedIndex);
 
       if (lastChaResult.fen() == lastMineResult.fen()
           || !lastChaResult.lichessGameId().equals(lastMineResult.lichessGameId())) {
@@ -100,7 +100,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
     for (var i = startIndex; i < chaFullResultList.size(); i++) {
       testCounter++;
 
-      final UnwinnabilityFullRead fullChaResult = NonNullWrapperCommon.get(chaFullResultList, i);
+      final UnwinnabilityFullRead fullChaResult = Nulls.get(chaFullResultList, i);
 
       final Board board = new Board(fullChaResult.fen());
       final UnwinnableFullAnalysis fullMineResult = UnwinnableFullAnalyzer.unwinnableFull(board,
@@ -110,12 +110,12 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
       mineOut.append(fullChaResult.fen().fen()).append(";");
       mineOut.append(fullChaResult.lichessGameId()).append(";");
       mineOut.append(UnwinnabilityMode.FULL.getIdentifier()).append(";");
-      mineOut.append(fullChaResult.winner().getFenLetter()).append(";");
+      mineOut.append(FenSideSymbol.calculate(fullChaResult.winner()).sideLetter()).append(";");
       mineOut.append(fullMineResult.unwinnableFull().getIdentifier()).append(";");
       final String mateLine = uciMoveSequence(fullMineResult.mateLine());
       mineOut.append(mateLine);
 
-      final String mineOutStr = NonNullWrapperCommon.toString(mineOut);
+      final String mineOutStr = Nulls.toString(mineOut);
 
       FileUtility.appendFile(MINE_OUT, mineOutStr);
 

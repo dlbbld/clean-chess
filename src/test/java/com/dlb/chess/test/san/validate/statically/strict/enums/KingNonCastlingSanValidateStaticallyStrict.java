@@ -1,68 +1,30 @@
 package com.dlb.chess.test.san.validate.statically.strict.enums;
 
-public enum KingNonCastlingSanValidateStaticallyStrict {
-  KA1,
-  KB1,
-  KC1,
-  KD1,
-  KE1,
-  KF1,
-  KG1,
-  KH1,
-  KA2,
-  KB2,
-  KC2,
-  KD2,
-  KE2,
-  KF2,
-  KG2,
-  KH2,
-  KA3,
-  KB3,
-  KC3,
-  KD3,
-  KE3,
-  KF3,
-  KG3,
-  KH3,
-  KA4,
-  KB4,
-  KC4,
-  KD4,
-  KE4,
-  KF4,
-  KG4,
-  KH4,
-  KA5,
-  KB5,
-  KC5,
-  KD5,
-  KE5,
-  KF5,
-  KG5,
-  KH5,
-  KA6,
-  KB6,
-  KC6,
-  KD6,
-  KE6,
-  KF6,
-  KG6,
-  KH6,
-  KA7,
-  KB7,
-  KC7,
-  KD7,
-  KE7,
-  KF7,
-  KG7,
-  KH7,
-  KA8,
-  KB8,
-  KC8,
-  KD8,
-  KE8,
-  KF8,
-  KG8,
-  KH8,
+import static com.dlb.chess.test.san.validate.statically.strict.enums.SanValidateStaticallyStrictHelpers.appendOnlyMove;
+
+import java.util.Set;
+import java.util.TreeSet;
+
+import com.dlb.chess.board.enums.PieceType;
+import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.model.EmptyBoardMove;
+import com.dlb.chess.squares.AbstractEmptyBoardSquares;
+import com.google.common.collect.ImmutableSet;
+
+public abstract class KingNonCastlingSanValidateStaticallyStrict {
+
+  public static final ImmutableSet<String> VALUES;
+
+  static {
+    final Set<String> set = new TreeSet<>();
+    for (final Square toSquare : Square.REAL) {
+      final Set<EmptyBoardMove> moves = AbstractEmptyBoardSquares.calculateNonPawnEmptyBoardMovesTo(PieceType.KING,
+          toSquare);
+      for (final EmptyBoardMove move : moves) {
+        appendOnlyMove(set, move.toSquare(), PieceType.KING);
+      }
+    }
+    VALUES = ImmutableSet.copyOf(set);
+  }
+
 }

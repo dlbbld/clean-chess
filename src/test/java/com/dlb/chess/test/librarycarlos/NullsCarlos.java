@@ -15,9 +15,9 @@ import com.github.bhlangonijr.chesslib.move.Move;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
 // where the underlying API is checked to return non null
-public class NonNullWrapperLibraryCarlos {
+public class NullsCarlos {
 
-  private NonNullWrapperLibraryCarlos() {
+  private NullsCarlos() {
   }
 
   private static <E> E checkResult(@Nullable E result) {

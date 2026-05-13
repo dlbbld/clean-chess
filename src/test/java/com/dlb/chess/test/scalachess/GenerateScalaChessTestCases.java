@@ -9,7 +9,7 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
@@ -50,13 +50,13 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
   private static final String GAME_TO_OR_FROM_PGN_FILE_NAME = "insufficient_material_KBbBb_K.pgn";
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(GenerateScalaChessTestCases.class);
+  private static final Logger logger = Nulls.getLogger(GenerateScalaChessTestCases.class);
 
   private static final int PRINT_MOVES_INTERVAL = 100;
   private static final int PRINT_GENERATED_LINES_INTERVAL = 1000;
 
   private static final int WRITE_LINE_INTERVAL = 100000;
-  private static final Path SCALA_SCRIPT = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path SCALA_SCRIPT = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "TestDaniAgainstScalaChess.scala");
 
   public static void main(String[] args) throws Exception {
@@ -137,7 +137,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
         final Board boardPlayAlong = new Board();
         final List<HalfMove> halfMoveList = report.halfMoveList();
         for (var i = 0; i < halfMoveList.size(); i++) {
-          final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
+          final HalfMove halfMove = Nulls.get(halfMoveList, i);
 
           boardPlayAlong.move(halfMove.moveSpecification());
           final var isMadeByWhite = halfMove.havingMove().getIsWhite();
@@ -159,7 +159,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
           arguments.append(", ");
           arguments.append("uciAdaptedList");
 
-          final String argumentsStr = NonNullWrapperCommon.toString(arguments);
+          final String argumentsStr = Nulls.toString(arguments);
           processScalaChessCodeLine("    testAll(" + argumentsStr + ")", counterList, codeLineList);
 
           if (codeLineList.size() >= WRITE_LINE_INTERVAL) {
@@ -229,7 +229,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   private static List<String> generateScalaMoveList(List<HalfMove> halfMoveList, int endIndex) {
     final List<String> scalaMoveList = new ArrayList<>();
     for (var i = 0; i <= endIndex; i++) {
-      final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
+      final HalfMove halfMove = Nulls.get(halfMoveList, i);
       final String description = calculateScalaMove(halfMove.havingMove(), halfMove.moveSpecification());
       scalaMoveList.add(description);
     }
@@ -249,7 +249,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   protected static String generateUciForScalaList(List<HalfMove> halfMoveList, int endIndex) {
     final List<String> sanQuotedMoveList = new ArrayList<>();
     for (var i = 0; i <= endIndex; i++) {
-      final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
+      final HalfMove halfMove = Nulls.get(halfMoveList, i);
       final String uciAdapted = convertMoveSpecificationToUciForScala(halfMove.havingMove(),
           halfMove.moveSpecification());
       sanQuotedMoveList.add("\"" + uciAdapted + "\"");
@@ -267,11 +267,11 @@ public class GenerateScalaChessTestCases implements EnumConstants {
 
     final List<String> scalaMoveListWithTrailingComma = new ArrayList<>();
     for (var i = 0; i <= endIndex - 1; i++) {
-      final var description = NonNullWrapperCommon.get(scalaMoveList, i) + ",";
+      final var description = Nulls.get(scalaMoveList, i) + ",";
       scalaMoveListWithTrailingComma.add(description);
     }
     // last entry gets no trailing comma
-    final var lastDescription = NonNullWrapperCommon.get(scalaMoveList, endIndex) + ",";
+    final var lastDescription = Nulls.get(scalaMoveList, endIndex) + ",";
     scalaMoveListWithTrailingComma.add(lastDescription);
     return scalaMoveListWithTrailingComma;
   }
@@ -285,7 +285,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
     result.append(", ");
     result.append(calculateScalaMovePromotionPiece(moveSpecification));
     result.append(")");
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
   private static Square calculateScalaMoveFrom(Side havingMove, MoveSpecification moveSpecification) {

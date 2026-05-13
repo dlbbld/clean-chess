@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -138,7 +138,7 @@ abstract class NoProgressMoveUtility {
   private static NoProgressHalfMove calculateNoProgressHalfMovePerformed(Side havingMoveInitial,
       List<HalfMove> halfMoveList, int performedIndex, int sequenceLength) {
 
-    final HalfMove firstHalfMove = NonNullWrapperCommon.get(halfMoveList, performedIndex);
+    final HalfMove firstHalfMove = Nulls.get(halfMoveList, performedIndex);
 
     final var performedHalfMoveCount = performedIndex + 1;
     final var fullMoveNumber = firstHalfMove.fullMoveNumber();
@@ -194,7 +194,7 @@ abstract class NoProgressMoveUtility {
         // i = 251.
         continue;
       }
-      final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, i);
+      final HalfMove halfMove = Nulls.get(halfMoveList, i);
       final var halfMoveClock = halfMove.halfMoveClock();
       // we are only interested in sequences of length starting from required length
       // for fifty-move rule
@@ -204,7 +204,7 @@ abstract class NoProgressMoveUtility {
         // we check the first move of the sequence if in the PGN
         // the first move can not be in the PGN if starting from non initial position
         if (beginPerformedIndex >= 0) {
-          final HalfMove beginHalfMove = NonNullWrapperCommon.get(halfMoveList, beginPerformedIndex);
+          final HalfMove beginHalfMove = Nulls.get(halfMoveList, beginPerformedIndex);
           final var beginSequenceLength = beginHalfMove.halfMoveClock();
           if (beginSequenceLength != 1) {
             throw new ProgrammingMistakeException();
@@ -214,7 +214,7 @@ abstract class NoProgressMoveUtility {
         // it's easiest to calculate the end index here
         // it' not so nice for we do not follow the loop
         endPerformedIndex = calculateEndIndexSequence(halfMoveList, i);
-        final HalfMove endHalfMove = NonNullWrapperCommon.get(halfMoveList, endPerformedIndex);
+        final HalfMove endHalfMove = Nulls.get(halfMoveList, endPerformedIndex);
         final var halfMoveClockEnd = endHalfMove.halfMoveClock();
         final NoProgressIndex sequence = new NoProgressIndex(beginPerformedIndex, endPerformedIndex, halfMoveClockEnd);
 
@@ -230,7 +230,7 @@ abstract class NoProgressMoveUtility {
       return index;
     }
     for (var j = index + 1; j <= maxIndex; j++) {
-      final HalfMove halfMove = NonNullWrapperCommon.get(halfMoveList, j);
+      final HalfMove halfMove = Nulls.get(halfMoveList, j);
       if (Reporter.calculateIsHalfMoveTerminatesNoProgressSequence(halfMove)) {
         return j - 1;
       }
@@ -242,7 +242,7 @@ abstract class NoProgressMoveUtility {
     if (halfMoveList.isEmpty()) {
       return true;
     }
-    final HalfMove firstHalfMove = NonNullWrapperCommon.get(halfMoveList, 0);
+    final HalfMove firstHalfMove = Nulls.get(halfMoveList, 0);
     // first half move is a pawn move or capture
     // we must calculate the indexes using the FEN only as the half move clock was
     // reset at the first half-move, so by

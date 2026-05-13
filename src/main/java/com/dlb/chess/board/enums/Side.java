@@ -7,9 +7,9 @@ import com.google.common.collect.ImmutableList;
 
 public enum Side {
 
-  WHITE(true, false, Message.getString("color.white.name"), "w"),
-  BLACK(false, true, Message.getString("color.black.name"), "b"),
-  NONE(false, false, "", " ");
+  WHITE(true, false, Message.getString("color.white.name")),
+  BLACK(false, true, Message.getString("color.black.name")),
+  NONE(false, false, "");
 
   @SuppressWarnings("null")
   public static final ImmutableList<Side> REAL = ImmutableList.of(WHITE, BLACK);
@@ -17,13 +17,11 @@ public enum Side {
   private final boolean isWhite;
   private final boolean isBlack;
   private final String name;
-  private final String fenLetter;
 
-  Side(boolean isWhite, boolean isBlack, String name, String fenLetter) {
+  Side(boolean isWhite, boolean isBlack, String name) {
     this.isWhite = isWhite;
     this.isBlack = isBlack;
     this.name = name;
-    this.fenLetter = fenLetter;
   }
 
   public boolean getIsWhite() {
@@ -41,11 +39,6 @@ public enum Side {
     return name;
   }
 
-  public String getFenLetter() {
-    check();
-    return fenLetter;
-  }
-
   // cannot define in constructor as cannot reference an enum befor it is defined
   public Side getOppositeSide() {
     return switch (this) {
@@ -60,28 +53,6 @@ public enum Side {
     if (this == NONE) {
       throw new NonePointerException();
     }
-  }
-
-  public static boolean exists(String fenLetter) {
-    for (final Side side : REAL) {
-      if (side.getFenLetter().equals(fenLetter)) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  public static Side calculate(String fenLetter) {
-    if (!exists(fenLetter)) {
-      throw new IllegalArgumentException("No piece for this letter exists");
-    }
-    for (final Side side : REAL) {
-      if (side.getFenLetter().equals(fenLetter)) {
-        return side;
-      }
-    }
-    // not possible to come here
-    throw new ProgrammingMistakeException();
   }
 
 }

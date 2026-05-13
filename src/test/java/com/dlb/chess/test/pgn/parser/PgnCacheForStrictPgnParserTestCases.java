@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.StrictPgnParser;
 
@@ -21,7 +21,7 @@ public class PgnCacheForStrictPgnParserTestCases {
     }
 
     // Construct the full path to the PGN file
-    final var pgnFilePath = NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName);
+    final var pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
 
     // Convert to a canonical String for cache lookups
     @SuppressWarnings("null") final @NonNull String key = pgnFilePath.toAbsolutePath().toString();

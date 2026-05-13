@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.google.common.collect.ImmutableList;
@@ -17,7 +17,7 @@ public abstract class TagUtility {
   private static final String TAG_PATTERN = "\\[([\\w]+) \"([^\"]*)\"\\]";
 
   @SuppressWarnings("null")
-  public static final ImmutableList<StandardTag> SEVEN_TAG_ROSTER_TAG_LIST = NonNullWrapperCommon
+  public static final ImmutableList<StandardTag> SEVEN_TAG_ROSTER_TAG_LIST = Nulls
       .copyOfList(Arrays.asList(StandardTag.EVENT, StandardTag.SITE, StandardTag.DATE, StandardTag.ROUND,
           StandardTag.WHITE, StandardTag.BLACK, StandardTag.RESULT));
 

@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -19,7 +19,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestFenRoundtripPgn.class);
+  private static final Logger logger = Nulls.getLogger(TestFenRoundtripPgn.class);
 
   @SuppressWarnings("static-method")
   @Test

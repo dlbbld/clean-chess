@@ -7,14 +7,14 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class TestLenientPgnParserUtf8 {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLenientPgnParserUtf8.class);
+  private static final Logger logger = Nulls.getLogger(TestLenientPgnParserUtf8.class);
 
   @SuppressWarnings("static-method")
   @Test
@@ -147,8 +147,7 @@ public class TestLenientPgnParserUtf8 {
     logger.info(pgn);
 
     final PgnFile pgnFileExpected = LenientPgnParser.parseText(pgn);
-    final Path filePath = NonNullWrapperCommon
-        .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH, fileName);
+    final Path filePath = Nulls.pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH, fileName);
     final PgnFile pgnFileActual = LenientPgnParser.parse(filePath);
 
     assertEquals(pgnFileExpected, pgnFileActual);

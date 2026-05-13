@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.pgn.PgnFile;
@@ -20,7 +20,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestInsufficientMaterial implements EnumConstants {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestInsufficientMaterial.class);
+  private static final Logger logger = Nulls.getLogger(TestInsufficientMaterial.class);
 
   @SuppressWarnings("static-method")
   @Test

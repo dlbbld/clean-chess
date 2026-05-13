@@ -16,7 +16,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
@@ -32,8 +32,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
-  private static final Logger logger = NonNullWrapperCommon
-      .getLogger(TestLegalMovesAgainstCreatedUsingValidation.class);
+  private static final Logger logger = Nulls.getLogger(TestLegalMovesAgainstCreatedUsingValidation.class);
 
   @SuppressWarnings("static-method")
   @Test

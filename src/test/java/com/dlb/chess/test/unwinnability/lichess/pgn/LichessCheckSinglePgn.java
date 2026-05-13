@@ -6,7 +6,7 @@ import java.nio.file.Path;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -16,9 +16,9 @@ import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 
 public class LichessCheckSinglePgn extends AbstractLichessCheck {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckSinglePgn.class);
+  private static final Logger logger = Nulls.getLogger(LichessCheckSinglePgn.class);
 
-  private static final Path PGN_FOLDER_PATH = NonNullWrapperCommon.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path PGN_FOLDER_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "lichess/split");
 
   public static void main(String[] args) {
@@ -50,7 +50,7 @@ public class LichessCheckSinglePgn extends AbstractLichessCheck {
       final PgnFile pgnFile;
 
       try {
-        pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pngOutFolderPath, NonNullWrapperCommon.getName(file));
+        pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pngOutFolderPath, Nulls.getName(file));
         if (calculateIsTimeForfeitCandidate(pgnFile)) {
           if (calculateIsIncorrectResult(pgnFile)) {
             final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");

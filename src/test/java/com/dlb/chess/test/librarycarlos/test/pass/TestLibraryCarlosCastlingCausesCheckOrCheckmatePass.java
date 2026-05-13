@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 
 class TestLibraryCarlosCastlingCausesCheckOrCheckmatePass {
@@ -18,7 +18,7 @@ class TestLibraryCarlosCastlingCausesCheckOrCheckmatePass {
     moveList.loadFromSan(san);
     final var moveListSan = moveList.toSanArray();
     assertNotNull(moveListSan);
-    final var sanGeneratedLastMove = NonNullWrapperCommon.getLast(moveListSan);
+    final var sanGeneratedLastMove = Nulls.getLast(moveListSan);
     assertEquals("O-O+", sanGeneratedLastMove);
   }
 
@@ -33,7 +33,7 @@ class TestLibraryCarlosCastlingCausesCheckOrCheckmatePass {
     moveList.loadFromSan(san);
     final var moveListSan = moveList.toSanArray();
     assertNotNull(moveListSan);
-    final var sanGeneratedLastMove = NonNullWrapperCommon.getLast(moveListSan);
+    final var sanGeneratedLastMove = Nulls.getLast(moveListSan);
     assertEquals("O-O-O#", sanGeneratedLastMove);
 
   }

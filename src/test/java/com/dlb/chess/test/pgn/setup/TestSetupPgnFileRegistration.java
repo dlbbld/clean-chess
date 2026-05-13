@@ -8,7 +8,7 @@ import java.util.TreeSet;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -70,10 +70,10 @@ class TestSetupPgnFileRegistration {
   private static Set<String> collectPgnFileNamesOnDisk() {
     final Set<String> names = new TreeSet<>();
     for (final Path p : FileUtility.listAllFilesRecursively(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
-      if (!NonNullWrapperCommon.toString(p).endsWith(".pgn")) {
+      if (!Nulls.toString(p).endsWith(".pgn")) {
         continue;
       }
-      names.add(NonNullWrapperCommon.toString(NonNullWrapperCommon.getFileName(p)));
+      names.add(Nulls.toString(Nulls.getFileName(p)));
     }
     return names;
   }

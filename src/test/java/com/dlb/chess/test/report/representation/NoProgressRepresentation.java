@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.board.HalfMoveUtility;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.report.NoProgressHalfMove;
 
@@ -15,7 +15,7 @@ public class NoProgressRepresentation {
     for (final List<NoProgressHalfMove> list : listList) {
       resultList.add(calculateRepresentationNoProgressMoveList(list));
     }
-    return NonNullWrapperCommon.join("; ", resultList);
+    return Nulls.join("; ", resultList);
   }
 
   private static String calculateRepresentationNoProgressMoveList(List<NoProgressHalfMove> list) {
@@ -24,7 +24,7 @@ public class NoProgressRepresentation {
     }
     final List<String> result = new ArrayList<>();
     for (var i = 0; i < list.size(); i++) {
-      final NoProgressHalfMove listItem = NonNullWrapperCommon.get(list, i);
+      final NoProgressHalfMove listItem = Nulls.get(list, i);
       result.add(calculateRepresentationNoProgressMoveIncludingSequenceLength(listItem));
     }
     return BasicUtility.calculateSpaceSeparatedList(result);

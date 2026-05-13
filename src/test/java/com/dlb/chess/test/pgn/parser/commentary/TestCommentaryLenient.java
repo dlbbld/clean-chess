@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
@@ -83,7 +83,7 @@ class TestCommentaryLenient {
   @Test
   void v02_trailingCommentaryAfterWhiteMove() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {good opening} e5 *\n\n");
-    assertEquals("good opening", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("good opening", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -91,7 +91,7 @@ class TestCommentaryLenient {
   void v03_trailingCommentaryAfterBlackMove() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 e5 {symmetric} 2. Nf3 Nc6 *\n\n");
-    assertEquals("symmetric", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
+    assertEquals("symmetric", Nulls.get(file.halfMoveList(), 1).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -99,10 +99,10 @@ class TestCommentaryLenient {
   void v04_commentaryAfterEveryHalfMove() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {a} e5 {b} 2. Nf3 {c} Nc6 {d} *\n\n");
-    assertEquals("a", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
-    assertEquals("b", NonNullWrapperCommon.get(file.halfMoveList(), 1).commentary().value());
-    assertEquals("c", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
-    assertEquals("d", NonNullWrapperCommon.get(file.halfMoveList(), 3).commentary().value());
+    assertEquals("a", Nulls.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("b", Nulls.get(file.halfMoveList(), 1).commentary().value());
+    assertEquals("c", Nulls.get(file.halfMoveList(), 2).commentary().value());
+    assertEquals("d", Nulls.get(file.halfMoveList(), 3).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -111,14 +111,14 @@ class TestCommentaryLenient {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro} 1. e4 {after-1-white} e5 *\n\n");
     assertEquals("intro", file.pregameCommentary().value());
-    assertEquals("after-1-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("after-1-white", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v06_emptyCommentary() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {} e5 *\n\n");
-    assertEquals("", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -126,7 +126,7 @@ class TestCommentaryLenient {
   void v07_commentaryWithPunctuationButNoBraces() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 {special chars !? + # - / .} e5 *\n\n");
-    assertEquals("special chars !? + # - / .", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("special chars !? + # - / .", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   /**
@@ -138,16 +138,16 @@ class TestCommentaryLenient {
   @Test
   void v08_multilineCommentaryPreservedVerbatim() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {line one\nline two} e5 *\n\n");
-    assertEquals("line one\nline two", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("line one\nline two", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void v09_commentaryAfterSuffixAnnotation() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4!? {spicy} e5 *\n\n");
-    assertEquals("spicy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("spicy", Nulls.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
-        NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
+        Nulls.get(file.halfMoveList(), 0).moveSuffixAnnotation());
   }
 
   @SuppressWarnings("static-method")
@@ -191,14 +191,14 @@ class TestCommentaryLenient {
   @Test
   void t003_openBraceInTrailingCommentaryIsContent() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {outer {inner} e5 *\n\n");
-    assertEquals("outer {inner", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("outer {inner", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void t003_openBraceImmediatelyAtStartOfContent() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {{nested right away} e5 *\n\n");
-    assertEquals("{nested right away", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("{nested right away", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -299,7 +299,7 @@ class TestCommentaryLenient {
   @Test
   void tabInMoveCommentaryIsPreservedVerbatim() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\tb} e5 *\n\n");
-    assertEquals("a\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\tb", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -307,21 +307,21 @@ class TestCommentaryLenient {
   void carriageReturnInMoveCommentaryIsNormalisedToLf() {
     // T-005: lone CR → LF at parser input.
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\rb} e5 *\n\n");
-    assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\nb", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void crlfInMoveCommentaryIsNormalisedToLf() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\r\nb} e5 *\n\n");
-    assertEquals("a\nb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\nb", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void consecutiveTabsArePreservedVerbatim() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a\t\tb} e5 *\n\n");
-    assertEquals("a\t\tb", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a\t\tb", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -335,7 +335,7 @@ class TestCommentaryLenient {
   @Test
   void doubleSpacesInSourceArePreservedAsIs() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {a  b} e5 *\n\n");
-    assertEquals("a  b", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("a  b", Nulls.get(file.halfMoveList(), 0).commentary().value());
   }
 
   @SuppressWarnings("static-method")
@@ -354,16 +354,16 @@ class TestCommentaryLenient {
   @Test
   void t002_acceptCanonicalMoveNumberAfterCommentaryOnWhite() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {after-white} 1... e5 *\n\n");
-    assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
-    assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
+    assertEquals("after-white", Nulls.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("e5", Nulls.get(file.halfMoveList(), 1).san());
   }
 
   @SuppressWarnings("static-method")
   @Test
   void t002_acceptMissingMoveNumberAfterCommentaryOnWhite() {
     final PgnFile file = LenientPgnParser.parseText(PgnTestHelper.header("*") + "1. e4 {after-white} e5 *\n\n");
-    assertEquals("after-white", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
-    assertEquals("e5", NonNullWrapperCommon.get(file.halfMoveList(), 1).san());
+    assertEquals("after-white", Nulls.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("e5", Nulls.get(file.halfMoveList(), 1).san());
   }
 
   @SuppressWarnings("static-method")
@@ -371,8 +371,8 @@ class TestCommentaryLenient {
   void t002_acceptMissingMoveNumberAfterCommentaryAtHigherFullMoveNumber() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 {after-white-2} Nc6 *\n\n");
-    assertEquals("after-white-2", NonNullWrapperCommon.get(file.halfMoveList(), 2).commentary().value());
-    assertEquals("Nc6", NonNullWrapperCommon.get(file.halfMoveList(), 3).san());
+    assertEquals("after-white-2", Nulls.get(file.halfMoveList(), 2).commentary().value());
+    assertEquals("Nc6", Nulls.get(file.halfMoveList(), 3).san());
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -396,9 +396,9 @@ class TestCommentaryLenient {
   void v11_commentaryWithLinebreaks() {
     final PgnFile file = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "1. e4!? {spicy\n" + "groovy}" + " e5 *\n\n");
-    assertEquals("spicy\ngroovy", NonNullWrapperCommon.get(file.halfMoveList(), 0).commentary().value());
+    assertEquals("spicy\ngroovy", Nulls.get(file.halfMoveList(), 0).commentary().value());
     assertEquals(com.dlb.chess.enums.MoveSuffixAnnotation.INTERESTING_MOVE,
-        NonNullWrapperCommon.get(file.halfMoveList(), 0).moveSuffixAnnotation());
+        Nulls.get(file.halfMoveList(), 0).moveSuffixAnnotation());
   }
 
 }

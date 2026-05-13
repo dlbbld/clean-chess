@@ -1,7 +1,7 @@
 package com.dlb.chess.san;
 
 import com.dlb.chess.board.enums.Piece;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
@@ -62,6 +62,6 @@ public class MoveToLan extends AbstractSan {
     }
     sanTerminalMarker.append(buildSan);
 
-    return NonNullWrapperCommon.toString(buildSan);
+    return Nulls.toString(buildSan);
   }
 }

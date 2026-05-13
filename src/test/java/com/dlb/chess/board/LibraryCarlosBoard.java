@@ -12,10 +12,9 @@ import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.model.HalfMove;
@@ -24,10 +23,11 @@ import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
 import com.dlb.chess.san.SanSymbol;
 import com.dlb.chess.san.SanTerminalMarker;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.dlb.chess.test.librarycarlos.utility.MoveConversionUtility;
 import com.dlb.chess.test.librarycomparison.utility.BoardConversionUtitlity;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
@@ -86,8 +86,8 @@ public class LibraryCarlosBoard {
   private MoveSpecification calculateLastMoveSpecification() {
     final var moveBackup = board.getBackup().getLast();
     @SuppressWarnings("null") @NonNull final Move move = moveBackup.getMove();
-    final var havingMove = NonNullWrapperLibraryCarlos.getSideToMove(moveBackup);
-    final com.github.bhlangonijr.chesslib.Square fromSquare = NonNullWrapperLibraryCarlos.getFrom(move);
+    final var havingMove = NullsCarlos.getSideToMove(moveBackup);
+    final com.github.bhlangonijr.chesslib.Square fromSquare = NullsCarlos.getFrom(move);
     com.github.bhlangonijr.chesslib.Piece movingPiece;
     if (moveBackup.isCastleMove()) {
       movingPiece = switch (havingMove) {
@@ -96,7 +96,7 @@ public class LibraryCarlosBoard {
         default -> throw new IllegalArgumentException();
       };
     } else {
-      movingPiece = NonNullWrapperLibraryCarlos.getPiece(this.board, fromSquare);
+      movingPiece = NullsCarlos.getPiece(this.board, fromSquare);
     }
     return MoveConversionUtility.convertMove(move, movingPiece);
   }
@@ -104,7 +104,7 @@ public class LibraryCarlosBoard {
   private void populateMoveHistory(MoveSpecification moveSpecification) {
     performedHalfMoveCount++;
 
-    final MoveBackup moveBackup = NonNullWrapperLibraryCarlos.getLast(this.board);
+    final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
@@ -194,7 +194,7 @@ public class LibraryCarlosBoard {
   }
 
   public String getFen() {
-    return NonNullWrapperLibraryCarlos.getFen(this.board);
+    return NullsCarlos.getFen(this.board);
   }
 
   @SuppressWarnings("static-method")
@@ -208,7 +208,7 @@ public class LibraryCarlosBoard {
       throw new IllegalStateException("There is no last move");
     }
 
-    final MoveBackup lastMoveBackup = NonNullWrapperLibraryCarlos.getLast(board);
+    final MoveBackup lastMoveBackup = NullsCarlos.getLast(board);
     final var sanTest = lastMoveBackup.getMove().getSan();
     if (sanTest != null) {
       return sanTest;
@@ -218,7 +218,7 @@ public class LibraryCarlosBoard {
     moveList.addAll(calculateMoveList(this.board));
     try {
       final var sanArray = moveList.toSanArray();
-      @SuppressWarnings("null") final var last = NonNullWrapperCommon.getLast(sanArray);
+      @SuppressWarnings("null") final var last = Nulls.getLast(sanArray);
       return last;
     } catch (final MoveConversionException e) {
       throw new RuntimeException("San generation in Carlos's API failed", e);
@@ -227,8 +227,8 @@ public class LibraryCarlosBoard {
 
   private static List<Move> calculateMoveList(Board board) {
     final List<Move> result = new ArrayList<>();
-    for (final MoveBackup moveBackup : NonNullWrapperLibraryCarlos.getBackup(board)) {
-      result.add(NonNullWrapperLibraryCarlos.getMove(moveBackup));
+    for (final MoveBackup moveBackup : NullsCarlos.getBackup(board)) {
+      result.add(NullsCarlos.getMove(moveBackup));
     }
     return result;
   }
@@ -237,9 +237,9 @@ public class LibraryCarlosBoard {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
     }
-    final MoveBackup moveBackup = NonNullWrapperLibraryCarlos.getLast(this.board);
-    final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
-    final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup);
+    final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
+    final Move move = NullsCarlos.getMove(moveBackup);
+    final com.github.bhlangonijr.chesslib.Piece movingPiece = NullsCarlos.getMovingPiece(moveBackup);
 
     if ((movingPiece == com.github.bhlangonijr.chesslib.Piece.WHITE_KING
         || movingPiece == com.github.bhlangonijr.chesslib.Piece.BLACK_KING) && board.getContext().isCastleMove(move)) {
@@ -275,18 +275,18 @@ public class LibraryCarlosBoard {
     final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck(), isCheckmate());
     sanTerminalMarker.append(lan);
 
-    return NonNullWrapperCommon.toString(lan);
+    return Nulls.toString(lan);
   }
 
   public Piece getMovingPiece() {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
     }
-    final MoveBackup moveBackup = NonNullWrapperLibraryCarlos.getLast(this.board);
+    final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     if (moveBackup.isCastleMove()) {
       return Piece.NONE;
     }
-    final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup);
+    final com.github.bhlangonijr.chesslib.Piece movingPiece = NullsCarlos.getMovingPiece(moveBackup);
     return EnumConversionUtility.convertToMyPiece(movingPiece);
   }
 
@@ -294,7 +294,7 @@ public class LibraryCarlosBoard {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
     }
-    final MoveBackup moveBackup = NonNullWrapperLibraryCarlos.getLast(this.board);
+    final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     return moveBackup.getCapturedPiece() != com.github.bhlangonijr.chesslib.Piece.NONE;
   }
 
@@ -308,7 +308,7 @@ public class LibraryCarlosBoard {
     if (board.getBackup().isEmpty()) {
       throw new IllegalStateException("There is no last move");
     }
-    final MoveBackup moveBackup = NonNullWrapperLibraryCarlos.getLast(this.board);
+    final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     return moveBackup.getMoveCounter();
   }
 
@@ -329,7 +329,7 @@ public class LibraryCarlosBoard {
   }
 
   public Side getHavingMove() {
-    return EnumConversionUtility.convertToMySide(NonNullWrapperLibraryCarlos.getSideToMove(this.board));
+    return EnumConversionUtility.convertToMySide(NullsCarlos.getSideToMove(this.board));
   }
 
   public StaticPosition getStaticPosition() {
@@ -371,19 +371,19 @@ public class LibraryCarlosBoard {
   }
 
   public ImmutableList<DynamicPosition> getDynamicPositionList() {
-    return NonNullWrapperCommon.copyOfList(dynamicPositionList);
+    return Nulls.copyOfList(dynamicPositionList);
   }
 
   public ImmutableList<HalfMove> getHalfMoveList() {
-    return NonNullWrapperCommon.copyOfList(halfMoveList);
+    return Nulls.copyOfList(halfMoveList);
   }
 
   public DynamicPosition getDynamicPosition() {
-    return NonNullWrapperCommon.getLast(dynamicPositionList);
+    return Nulls.getLast(dynamicPositionList);
   }
 
   public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
-    return NonNullWrapperCommon.copyOfSet(generateMoveSpecificationSet(this.board));
+    return Nulls.copyOfSet(generateMoveSpecificationSet(this.board));
   }
 
   // the API does not return null
@@ -427,8 +427,8 @@ public class LibraryCarlosBoard {
   }
 
   private static MoveSpecification convertMove(Board board, Move move) {
-    final com.github.bhlangonijr.chesslib.Square fromSquare = NonNullWrapperLibraryCarlos.getFrom(move);
-    final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperLibraryCarlos.getPiece(board, fromSquare);
+    final com.github.bhlangonijr.chesslib.Square fromSquare = NullsCarlos.getFrom(move);
+    final com.github.bhlangonijr.chesslib.Piece movingPiece = NullsCarlos.getPiece(board, fromSquare);
     return MoveConversionUtility.convertMove(move, movingPiece);
   }
 
@@ -437,13 +437,12 @@ public class LibraryCarlosBoard {
 
     final Set<LegalMove> result = new TreeSet<>();
     for (final MoveBackup moveBackup : moveBackupList) {
-      final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
+      final Move move = NullsCarlos.getMove(moveBackup);
       final MoveSpecification moveSpecification = convertMove(board, move);
-      final Piece movingPiece = EnumConversionUtility
-          .convertPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
-      final Piece pieceCaptured = EnumConversionUtility
-          .convertPiece(NonNullWrapperLibraryCarlos.getCapturedPiece(moveBackup));
-      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+      final Piece movingPiece = EnumConversionUtility.convertPiece(NullsCarlos.getMovingPiece(moveBackup));
+      final Piece pieceCaptured = EnumConversionUtility.convertPiece(NullsCarlos.getCapturedPiece(moveBackup));
+      final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured,
+          calculateKind(moveBackup));
       result.add(legalMove);
     }
     return result;
@@ -454,15 +453,39 @@ public class LibraryCarlosBoard {
   }
 
   public LegalMove getLastMove() {
-    return NonNullWrapperCommon.getLast(performedLegalMoveList);
+    return Nulls.getLast(performedLegalMoveList);
   }
 
   private static LegalMove calculateLegalMove(MoveSpecification moveSpecification, MoveBackup moveBackup) {
-    final Piece movingPiece = EnumConversionUtility
-        .convertToMyPiece(NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup));
-    final Piece pieceCaptured = EnumConversionUtility
-        .convertToMyPiece(NonNullWrapperLibraryCarlos.getCapturedPiece(moveBackup));
-    return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+    final Piece movingPiece = EnumConversionUtility.convertToMyPiece(NullsCarlos.getMovingPiece(moveBackup));
+    final Piece pieceCaptured = EnumConversionUtility.convertToMyPiece(NullsCarlos.getCapturedPiece(moveBackup));
+    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, calculateKind(moveBackup));
+  }
+
+  private static LegalMoveKind calculateKind(MoveBackup moveBackup) {
+    if (moveBackup.isCastleMove()) {
+      return LegalMoveKind.CASTLING;
+    }
+    if (moveBackup.isEnPassantMove()) {
+      return LegalMoveKind.EN_PASSANT_CAPTURE;
+    }
+    if (calculateIsPromotion(moveBackup)) {
+      return LegalMoveKind.PROMOTION;
+    }
+    if (calculateIsPawnTwoSquareAdvance(moveBackup)) {
+      return LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE;
+    }
+    return LegalMoveKind.NORMAL;
+  }
+
+  private static boolean calculateIsPawnTwoSquareAdvance(MoveBackup moveBackup) {
+    if (!calculateIsPawnMove(moveBackup)) {
+      return false;
+    }
+    final Move move = NullsCarlos.getMove(moveBackup);
+    final int fromRank = move.getFrom().getRank().ordinal();
+    final int toRank = move.getTo().getRank().ordinal();
+    return Math.abs(fromRank - toRank) == 2;
   }
 
   public Square getEnPassantCaptureTargetSquare() {
@@ -471,22 +494,22 @@ public class LibraryCarlosBoard {
 
   public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
     final List<MoveSpecification> moveSpecificationList = new ArrayList<>();
-    for (final MoveBackup moveBackup : NonNullWrapperLibraryCarlos.getBackup(this.board)) {
+    for (final MoveBackup moveBackup : NullsCarlos.getBackup(this.board)) {
 
-      final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
-      final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup);
+      final Move move = NullsCarlos.getMove(moveBackup);
+      final com.github.bhlangonijr.chesslib.Piece movingPiece = NullsCarlos.getMovingPiece(moveBackup);
 
       moveSpecificationList.add(MoveConversionUtility.convertMove(move, movingPiece));
     }
-    return NonNullWrapperCommon.copyOfList(moveSpecificationList);
+    return Nulls.copyOfList(moveSpecificationList);
   }
 
   public ImmutableSet<LegalMove> getLegalMoveSet() {
-    return NonNullWrapperCommon.copyOfSet(generateLegalMoveSet(this.board));
+    return Nulls.copyOfSet(generateLegalMoveSet(this.board));
   }
 
   private static boolean calculateIsPawnMove(MoveBackup moveBackup) {
-    final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup);
+    final com.github.bhlangonijr.chesslib.Piece movingPiece = NullsCarlos.getMovingPiece(moveBackup);
 
     return movingPiece == com.github.bhlangonijr.chesslib.Piece.WHITE_PAWN
         || movingPiece == com.github.bhlangonijr.chesslib.Piece.BLACK_PAWN;
@@ -496,8 +519,8 @@ public class LibraryCarlosBoard {
     if (!calculateIsPawnMove(moveBackup)) {
       return false;
     }
-    final Move move = NonNullWrapperLibraryCarlos.getMove(moveBackup);
-    final com.github.bhlangonijr.chesslib.Piece movingPiece = NonNullWrapperLibraryCarlos.getMovingPiece(moveBackup);
+    final Move move = NullsCarlos.getMove(moveBackup);
+    final com.github.bhlangonijr.chesslib.Piece movingPiece = NullsCarlos.getMovingPiece(moveBackup);
 
     return switch (movingPiece.getPieceSide()) {
       case WHITE -> switch (move.getTo().getRank()) {
@@ -550,7 +573,7 @@ public class LibraryCarlosBoard {
   }
 
   public ImmutableList<LegalMove> getPerformedLegalMoveList() {
-    return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
+    return Nulls.copyOfList(performedLegalMoveList);
   }
 
   // ===== Methods previously inherited as `default` from the (now-removed) ChessBoard interface =====
@@ -577,7 +600,7 @@ public class LibraryCarlosBoard {
       result.add(getSan());
       this.unmove();
     }
-    return NonNullWrapperCommon.copyOfSet(result);
+    return Nulls.copyOfSet(result);
   }
 
   private HalfMove buildHalfMove(MoveSpecification moveSpecification) {
@@ -588,13 +611,9 @@ public class LibraryCarlosBoard {
     final String fen = getFen();
     final var isCapture = isCapture();
     final var countRepetition = getRepetitionCount();
-    final List<DynamicPosition> currentDynamicPositionList = getDynamicPositionList();
     final DynamicPosition dynamicPosition = getDynamicPosition();
-    final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        getPerformedLegalMoveList(), currentDynamicPositionList, dynamicPosition,
-        EnPassantCaptureRuleThreefold.DO_IGNORE);
     final Piece movingPiece = getMovingPiece();
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
-        countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);
+        countRepetition, getSan(), movingPiece, moveSpecification);
   }
 }

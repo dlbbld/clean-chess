@@ -12,13 +12,13 @@ import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(LichessReportCheckFen.class);
+  private static final Logger logger = Nulls.getLogger(LichessReportCheckFen.class);
 
   private static final String FEN_FILE_NAME_AMBRONA_RESULT_QUICK = "lichess-ambrona-out-quick.txt";
   private static final String FEN_FILE_NAME_MINE_RESULT_QUICK = "lichess-mine-out-quick-2.txt";
@@ -33,12 +33,10 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
   private static void reportDifferencesQuick() throws IOException {
 
-    final var fenFilePathAmbronaResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH,
-        FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
-    final var fenFilePathMineResult = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH,
-        FEN_FILE_NAME_MINE_RESULT_QUICK);
+    final var fenFilePathAmbronaResult = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_AMBRONA_RESULT_QUICK);
+    final var fenFilePathMineResult = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_MINE_RESULT_QUICK);
 
-    final var fenFilePathCompareQuick = NonNullWrapperCommon.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_COMPARE_QUICK);
+    final var fenFilePathCompareQuick = Nulls.pathResolve(FEN_FOLDER_PATH, FEN_FILE_NAME_COMPARE_QUICK);
 
     FileUtility.writeFile(fenFilePathCompareQuick, FEN_FILE_COMPARE_QUICK_HEADER);
 
@@ -55,8 +53,8 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
         PrintWriter printWriterReport = new PrintWriter(writerReport)) {
       while (readerAmbrona.hasNextLine()) {
         counterAll++;
-        final String lineAmbrona = NonNullWrapperCommon.nextLine(readerAmbrona);
-        final String lineMine = NonNullWrapperCommon.nextLine(readerMine);
+        final String lineAmbrona = Nulls.nextLine(readerAmbrona);
+        final String lineMine = Nulls.nextLine(readerMine);
 
         final var lineAmbronaArr = lineAmbrona.split(";");
         final var ambronaFen = lineAmbronaArr[0];
@@ -89,7 +87,7 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
           outputLine.append(ambronaResult).append(";");
           outputLine.append(mineResult).append(";");
 
-          final String outputLineStr = NonNullWrapperCommon.toString(outputLine);
+          final String outputLineStr = Nulls.toString(outputLine);
           printWriterReport.println(outputLineStr);
           // logger.info(outputLineStr);
         }

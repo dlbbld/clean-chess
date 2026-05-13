@@ -5,17 +5,13 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.model.MoveSpecification;
 
-public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured,
-    EnPassantRole enPassantRole) implements Comparable<LegalMove>, EnumConstants {
+public record LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured, LegalMoveKind kind)
+    implements Comparable<LegalMove>, EnumConstants {
 
   public LegalMove {
     if (movingPiece == Piece.NONE) {
       throw new IllegalArgumentException("The moving piece cannot be the none piece");
     }
-  }
-
-  public LegalMove(MoveSpecification moveSpecification, Piece movingPiece, Piece pieceCaptured) {
-    this(moveSpecification, movingPiece, pieceCaptured, EnPassantRole.NONE);
   }
 
   public Side havingMove() {

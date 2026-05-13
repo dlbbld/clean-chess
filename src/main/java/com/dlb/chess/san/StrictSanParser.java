@@ -4,7 +4,7 @@ import java.util.Set;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
@@ -81,6 +81,6 @@ public class StrictSanParser extends AbstractSan {
       return;
     }
     throw new SanValidationException(SanValidationProblem.GAME_ALREADY_ENDED,
-        Message.getString("validation.san.gameAlreadyEnded", NonNullWrapperCommon.name(gameStatus)), gameStatus);
+        Message.getString("validation.san.gameAlreadyEnded", Nulls.name(gameStatus)), gameStatus);
   }
 }

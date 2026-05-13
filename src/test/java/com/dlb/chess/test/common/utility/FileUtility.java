@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNull;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
@@ -46,7 +46,7 @@ public abstract class FileUtility {
    * Reading a file linewise, without including linebreaks or adding spaces after a line break.
    */
   public static List<String> readFileLines(Path folderPath, String fileName) {
-    return readFileLines(NonNullWrapperCommon.pathResolve(folderPath, fileName));
+    return readFileLines(Nulls.pathResolve(folderPath, fileName));
   }
 
   public static List<String> readFileLines(Path filePath) {
@@ -64,7 +64,7 @@ public abstract class FileUtility {
 
     try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8)) {
       while (myReader.hasNextLine()) {
-        final String currentLine = NonNullWrapperCommon.nextLine(myReader);
+        final String currentLine = Nulls.nextLine(myReader);
         fileLines.add(currentLine);
       }
     } catch (final IOException ioe) {
@@ -75,14 +75,14 @@ public abstract class FileUtility {
   }
 
   public static void writeFile(Path folderPath, String fileName, List<String> lineList) {
-    writeFile(NonNullWrapperCommon.pathResolve(folderPath, fileName), lineList);
+    writeFile(Nulls.pathResolve(folderPath, fileName), lineList);
   }
 
   public static void writeFile(Path folderPath, String fileName, String line) {
     final List<String> lineList = new ArrayList<>();
     lineList.add(line);
 
-    writeFile(NonNullWrapperCommon.pathResolve(folderPath, fileName), lineList);
+    writeFile(Nulls.pathResolve(folderPath, fileName), lineList);
   }
 
   public static void writeFile(Path filePath, String line) {
@@ -147,7 +147,7 @@ public abstract class FileUtility {
   }
 
   public static boolean exists(Path folderPath, String fileName) {
-    return exists(NonNullWrapperCommon.pathResolve(folderPath, fileName));
+    return exists(Nulls.pathResolve(folderPath, fileName));
   }
 
   public static boolean exists(Path path) {
@@ -155,7 +155,7 @@ public abstract class FileUtility {
   }
 
   public static void deleteFile(Path folderPath, String fileName) {
-    deleteFile(NonNullWrapperCommon.pathResolve(folderPath, fileName));
+    deleteFile(Nulls.pathResolve(folderPath, fileName));
   }
 
   public static void deleteFile(Path path) {
@@ -227,7 +227,7 @@ public abstract class FileUtility {
       if (file == null) {
         throw new ProgrammingMistakeException("Wrong assumption about API behaviour");
       }
-      result.add(NonNullWrapperCommon.getName(file));
+      result.add(Nulls.getName(file));
     }
     return result;
   }

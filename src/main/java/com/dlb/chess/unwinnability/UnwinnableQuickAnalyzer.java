@@ -6,7 +6,7 @@ import java.util.List;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.model.LegalMove;
 
@@ -53,7 +53,7 @@ public class UnwinnableQuickAnalyzer {
       isForcedMove = board.getLegalMoveSet().size() == 1;
       if (isForcedMove) {
         final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-        final LegalMove legalMove = NonNullWrapperCommon.getFirst(legalMoveList);
+        final LegalMove legalMove = Nulls.getFirst(legalMoveList);
         board.move(legalMove.moveSpecification());
         isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
         countHalfmoves++;

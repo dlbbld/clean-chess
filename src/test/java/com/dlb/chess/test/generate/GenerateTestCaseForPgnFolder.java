@@ -3,7 +3,7 @@ package com.dlb.chess.test.generate;
 import java.io.File;
 import java.nio.file.Path;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -34,7 +34,7 @@ public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn
       if (file == null) {
         throw new ProgrammingMistakeException("Wrong assumption about API behaviour");
       }
-      final String pgnFileName = NonNullWrapperCommon.getName(file);
+      final String pgnFileName = Nulls.getName(file);
       if (!PgnExtensionUtility.hasPgnFileExtension(pgnFileName)) {
         throw new IllegalArgumentException(
             "All files in the folder must be valid PGN files and have the extension \"" + ChessConstants.PGN_EXTENSION

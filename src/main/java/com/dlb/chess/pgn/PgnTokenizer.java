@@ -2,7 +2,7 @@ package com.dlb.chess.pgn;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 /**
  * Pull-based PGN tokenizer. Emits tokens for every construct the grammar cares about; strict-specific inter-token
@@ -107,7 +107,7 @@ final class PgnTokenizer {
     if (first == '\r' && stream.peek() == '\n') {
       text.append((char) stream.read());
     }
-    return new PgnToken(PgnTokenType.NEWLINE, NonNullWrapperCommon.toString(text), line, column);
+    return new PgnToken(PgnTokenType.NEWLINE, Nulls.toString(text), line, column);
   }
 
   private PgnToken readSpaces(int line, int column) {
@@ -115,7 +115,7 @@ final class PgnTokenizer {
     while (stream.peek() == ' ' || stream.peek() == '\t') {
       text.append((char) stream.read());
     }
-    return new PgnToken(PgnTokenType.SPACES, NonNullWrapperCommon.toString(text), line, column);
+    return new PgnToken(PgnTokenType.SPACES, Nulls.toString(text), line, column);
   }
 
   private PgnToken readTagValueString(int line, int column) {
@@ -145,7 +145,7 @@ final class PgnTokenizer {
       text.append((char) stream.read());
     }
     return new PgnToken(terminated ? PgnTokenType.TAG_VALUE_STRING : PgnTokenType.TAG_VALUE_STRING_UNTERMINATED,
-        NonNullWrapperCommon.toString(text), line, column);
+        Nulls.toString(text), line, column);
   }
 
   private PgnToken readBraceComment(int line, int column) {
@@ -154,11 +154,11 @@ final class PgnTokenizer {
     while (true) {
       final var c = stream.peek();
       if (c == CHAR_EOF) {
-        return new PgnToken(PgnTokenType.BRACE_COMMENT_UNCLOSED, NonNullWrapperCommon.toString(text), line, column);
+        return new PgnToken(PgnTokenType.BRACE_COMMENT_UNCLOSED, Nulls.toString(text), line, column);
       }
       if (c == '}') {
         stream.read();
-        return new PgnToken(PgnTokenType.BRACE_COMMENT, NonNullWrapperCommon.toString(text), line, column);
+        return new PgnToken(PgnTokenType.BRACE_COMMENT, Nulls.toString(text), line, column);
       }
       // PGN spec §8.2.5: an inner `{` is content, not a nested-comment opener. Only `}` closes a comment.
       text.append((char) stream.read());
@@ -176,7 +176,7 @@ final class PgnTokenizer {
       }
       text.append((char) stream.read());
     }
-    return new PgnToken(PgnTokenType.MOVE_SUFFIX_ANNOTATION, NonNullWrapperCommon.toString(text), line, column);
+    return new PgnToken(PgnTokenType.MOVE_SUFFIX_ANNOTATION, Nulls.toString(text), line, column);
   }
 
   private PgnToken readDigitStarted(int line, int column) {
@@ -191,7 +191,7 @@ final class PgnTokenizer {
     if (next == '-' || next == '/') {
       return readTerminationAfterDigits(line, column, text);
     }
-    return new PgnToken(PgnTokenType.SYMBOL, NonNullWrapperCommon.toString(text), line, column);
+    return new PgnToken(PgnTokenType.SYMBOL, Nulls.toString(text), line, column);
   }
 
   private PgnToken readMoveNumberDots(int line, int column, StringBuilder digits) {
@@ -202,9 +202,9 @@ final class PgnTokenizer {
       dotCount++;
     }
     if (dotCount >= 3) {
-      return new PgnToken(PgnTokenType.MOVE_NUMBER_BLACK, NonNullWrapperCommon.toString(text), line, column);
+      return new PgnToken(PgnTokenType.MOVE_NUMBER_BLACK, Nulls.toString(text), line, column);
     }
-    return new PgnToken(PgnTokenType.MOVE_NUMBER_WHITE, NonNullWrapperCommon.toString(text), line, column);
+    return new PgnToken(PgnTokenType.MOVE_NUMBER_WHITE, Nulls.toString(text), line, column);
   }
 
   private PgnToken readTerminationAfterDigits(int line, int column, StringBuilder digits) {
@@ -216,7 +216,7 @@ final class PgnTokenizer {
       }
       text.append((char) stream.read());
     }
-    final String result = NonNullWrapperCommon.toString(text);
+    final String result = Nulls.toString(text);
     // Lenient castling with digit zero ("0-0", "0-0-0") matches the digits-and-hyphens shape but is a SAN move,
     // not a termination marker. The lenient SAN layer translates these to "O-O" / "O-O-O".
     if ("0-0".equals(result) || "0-0-0".equals(result)) {
@@ -238,7 +238,7 @@ final class PgnTokenizer {
       // Unrecognised single character — consume it so we always make progress. The parser surfaces the rejection.
       text.append((char) stream.read());
     }
-    return new PgnToken(PgnTokenType.SYMBOL, NonNullWrapperCommon.toString(text), line, column);
+    return new PgnToken(PgnTokenType.SYMBOL, Nulls.toString(text), line, column);
   }
 
   private static boolean isWordBreak(int c) {

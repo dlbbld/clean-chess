@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableList;
@@ -80,16 +80,16 @@ public abstract class DiagonalLineUtility implements EnumConstants {
   static {
     final List<ImmutableList<Square>> whiteDiagonals = new ArrayList<>();
     initializeWhiteDiagonals(whiteDiagonals);
-    WHITE_DIAGONALS = NonNullWrapperCommon.copyOfList(whiteDiagonals);
+    WHITE_DIAGONALS = Nulls.copyOfList(whiteDiagonals);
 
     final List<ImmutableList<Square>> blackDiagonals = new ArrayList<>();
     initializeBlackDiagonals(blackDiagonals);
-    BLACK_DIAGONALS = NonNullWrapperCommon.copyOfList(blackDiagonals);
+    BLACK_DIAGONALS = Nulls.copyOfList(blackDiagonals);
 
     final List<ImmutableList<Square>> allDiagonals = new ArrayList<>();
     allDiagonals.addAll(WHITE_DIAGONALS);
     allDiagonals.addAll(BLACK_DIAGONALS);
-    ALL_DIAGONALS = NonNullWrapperCommon.copyOfList(allDiagonals);
+    ALL_DIAGONALS = Nulls.copyOfList(allDiagonals);
   }
 
   private static void initializeWhiteDiagonals(List<ImmutableList<Square>> diagonals) {

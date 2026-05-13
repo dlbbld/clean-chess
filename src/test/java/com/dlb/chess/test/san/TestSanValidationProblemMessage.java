@@ -11,7 +11,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanValidationException;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.san.StrictSanParser;
@@ -34,9 +34,9 @@ import com.dlb.chess.san.StrictSanParser;
 class TestSanValidationProblemMessage {
 
   private static final Set<SanValidationProblem> checkedProblems = new TreeSet<>();
-  private static final Set<SanValidationProblem> FIXED_UNCHECKED_ENTRIES = NonNullWrapperCommon
+  private static final Set<SanValidationProblem> FIXED_UNCHECKED_ENTRIES = Nulls
       .setOf(SanValidationProblem.UNKNOWN_ERROR, SanValidationProblem.NONE);
-  private static final Set<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = NonNullWrapperCommon.setOf();
+  private static final Set<SanValidationProblem> TEMPORARILY_UNCHECKED_PROBLEMS = Nulls.setOf();
 
   /**
    * When {@code true}, each test asserts the exact full exception message (useful while messages.properties is being

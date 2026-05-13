@@ -1,4 +1,4 @@
-package com.dlb.chess.common.ucimove.utility.enums;
+package com.dlb.chess.board.enums;
 
 public enum AddSpace {
 

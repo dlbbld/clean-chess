@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
@@ -17,7 +17,7 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
 
   private static final boolean IS_DEBUG = false;
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(FindHelpMateInterrupt.class);
+  private static final Logger logger = Nulls.getLogger(FindHelpMateInterrupt.class);
 
   // Our quick algorithm is extremely light, requiring only a few microseconds on average per
   // position. It is also sound, but not complete. However, as we detail in Section 5, with an

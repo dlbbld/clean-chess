@@ -4,6 +4,33 @@ Releases from 3.3 onward. Earlier history is in git tags only.
 
 ## [Unreleased]
 
+## [6.0.0] - 2026-05-13
+
+Technical-cleanup release. No new features. The model is tighter, generator-printed code is gone, a research-only dual code path is retired, and one pawn-wall bug is fixed (with the known remaining false-positive class scoped to the DeepSquare release).
+
+### Notable
+- `LegalMove` now carries a `LegalMoveKind` category (`NORMAL` / `CASTLING` / `EN_PASSANT_CAPTURE` / `PAWN_TWO_SQUARE_ADVANCE` / `PROMOTION`). Consumers stop recomputing the category from `MoveSpecification` fields.
+- FEN single-letter vocabulary moved off chess-domain types into `FenSideSymbol` / `FenPieceSymbol`. The chess `Side` / `Piece` enums no longer know FEN syntax.
+- En-passant threefold-repetition research dual-path retired. The FIDE-correct path is the only path.
+- Square geometry consolidated to compact precomputed tables; ~thousand-line generated tables collapsed to small static initializers.
+- Large generated enums replaced with computed lookups: `UciValidateHelper` (1984 lines) and the seven SAN-validator strict enums (5105 lines combined).
+- Pawn-wall classifier: bishop-reachability now BFS-correct (closes a previously-known false negative). The known false-positive class is documented in [pawn-wall-soundness.md](pawn-wall-soundness.md) and deferred to the DeepSquare release.
+- FEN-validation documentation no longer overclaims "no real game could reach"; reframed as structural and rule-consistency validation.
+- CHA / unwinnability documentation reframed: README and `unwinnability/package-info.java` now describe unwinnability as "no legal sequence can end with that side giving checkmate, even if the opponent cooperates" (replacing the misleading "worst-case play" framing). Same pass corrects the README's "CHA full is 100% accurate" to align with the documented `UNDETERMINED` outcome.
+- `NonNullWrapperCommon` renamed to `Nulls` (pervasively used; short name was overdue).
+- Javadoc tightened: `doclint=all,-missing` with `failOnError=true`. Opt-in (not bound to `mvn package`) — run explicitly via `mvn javadoc:javadoc` or `mvn javadoc:jar`. 15 broken `{@link}` references uncovered when the gate was turned on are fixed; the published javadoc now builds clean.
+
+### Breaking
+- `LegalMove` constructor: `LegalMoveKind` is now mandatory; the three-argument form is removed.
+- `EnPassantRole` enum removed. Use `legalMove.kind() == LegalMoveKind.EN_PASSANT_CAPTURE` / `LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE`.
+- `EnPassantCaptureRuleThreefold` enum and the dual-path repetition fields on `Report` removed.
+- `UciValidateHelper` enum removed (internal).
+- `Side.calculate(String)`, `Side.getFenLetter()`, `Piece.getLetter()` removed — FEN-letter knowledge belongs to the FEN parser, not chess-domain types.
+- `NonNullWrapperCommon` class renamed to `Nulls`.
+
+### Migration
+For typical use (`Board`, the parsers, the reporters): none. The breaking surface is internal vocabulary plus a single record shape change.
+
 ## [5.0.0] - 2026-05-11
 
 Reduce public API surface release. No feature changes; the surface is narrowed to what was always intended — play chess correctly and report rule-true outcomes. Material arithmetic and other internal helpers that supported that intent are now internal.

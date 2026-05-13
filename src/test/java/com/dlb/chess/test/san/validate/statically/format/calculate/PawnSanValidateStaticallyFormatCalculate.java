@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.dlb.chess.board.enums.Rank;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +31,7 @@ public class PawnSanValidateStaticallyFormatCalculate extends AbstractSanValidat
       }
     }
 
-    return NonNullWrapperCommon.copyOfMap(sanValidateMap);
+    return Nulls.copyOfMap(sanValidateMap);
   }
 
   private static boolean isPromotionRank(SanValidationFromTo model) {

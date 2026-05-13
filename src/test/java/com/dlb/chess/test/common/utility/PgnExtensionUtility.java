@@ -1,6 +1,6 @@
 package com.dlb.chess.test.common.utility;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 
 public abstract class PgnExtensionUtility extends ChessConstants {
@@ -18,8 +18,7 @@ public abstract class PgnExtensionUtility extends ChessConstants {
       throw new IllegalArgumentException("File does not end with \"" + PGN_FILE_EXTENSION_INCLUDING_DOT + "\"");
     }
 
-    return NonNullWrapperCommon.substring(pgnFileName, 0,
-        pgnFileName.length() - PGN_FILE_EXTENSION_INCLUDING_DOT.length());
+    return Nulls.substring(pgnFileName, 0, pgnFileName.length() - PGN_FILE_EXTENSION_INCLUDING_DOT.length());
   }
 
 }

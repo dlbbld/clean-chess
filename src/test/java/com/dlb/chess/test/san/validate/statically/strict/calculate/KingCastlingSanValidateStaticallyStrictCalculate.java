@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.san.SanConversion;
 import com.dlb.chess.san.SanFormat;
@@ -24,7 +24,7 @@ public class KingCastlingSanValidateStaticallyStrictCalculate extends AbstractSa
     initializeKingSide(sanCastlingMap);
     initializeQueenSide(sanCastlingMap);
 
-    return NonNullWrapperCommon.copyOfMap(sanCastlingMap);
+    return Nulls.copyOfMap(sanCastlingMap);
   }
 
   private static void initializeKingSide(Map<String, SanParse> sanCastlingMap) {

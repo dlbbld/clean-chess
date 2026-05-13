@@ -6,7 +6,7 @@ import java.util.TreeMap;
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.enums.KingNonCastlingSanValidateStaticallyStrict;
@@ -18,20 +18,17 @@ public class KingNonCastlingSanValidateStaticallyStrictCalculate extends Abstrac
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final KingNonCastlingSanValidateStaticallyStrict sanEnum : KingNonCastlingSanValidateStaticallyStrict
-        .values()) {
-      final String enumName = NonNullWrapperCommon.name(sanEnum);
-
-      final String parse = NonNullWrapperCommon.toLowerCase(enumName);
+    for (final String enumName : KingNonCastlingSanValidateStaticallyStrict.VALUES) {
+      final String parse = Nulls.toLowerCase(enumName);
       final var fromFile = File.NONE;
       final var fromRank = Rank.NONE;
-      final Square toSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 1));
+      final Square toSquare = Square.calculate(Nulls.substring(parse, 1));
 
       final SanValidationFromTo model = new SanValidationFromTo(fromFile, fromRank, toSquare);
       populateMap(sanValidateMap, model, KING);
     }
 
-    return NonNullWrapperCommon.copyOfMap(sanValidateMap);
+    return Nulls.copyOfMap(sanValidateMap);
   }
 
 }

@@ -10,7 +10,7 @@ import java.util.Scanner;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.StrictPgnParser;
@@ -31,10 +31,10 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
   private static final int RESUME_FROM_PGN_NUMBER = 550000;
 
   // 2020 - March - 13.9 GB - 55,544,817 games
-  private static final Path MULTIPLE_PGN_FILE_PATH = NonNullWrapperCommon
-      .pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH, "lichess_db_standard_rated_2020-03.pgn");
+  private static final Path MULTIPLE_PGN_FILE_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+      "lichess_db_standard_rated_2020-03.pgn");
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(LichessCheckMultiplePgn.class);
+  private static final Logger logger = Nulls.getLogger(LichessCheckMultiplePgn.class);
 
   public static void main(String[] args) {
     doTheCheck(MULTIPLE_PGN_FILE_PATH);
@@ -60,7 +60,7 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
 
     try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
       while (myReader.hasNextLine()) {
-        final String line = NonNullWrapperCommon.nextLine(myReader);
+        final String line = Nulls.nextLine(myReader);
 
         if (line.length() == 0) {
           blankLineCounter++;

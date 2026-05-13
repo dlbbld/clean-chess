@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
@@ -262,10 +262,10 @@ class TestPgnExportPreview {
       result.append(line);
       result.append("\n");
     }
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
   private static List<String> convertFromTextBlock(String textBlock) {
-    return NonNullWrapperCommon.asList(NonNullWrapperCommon.split(textBlock, "\n"));
+    return Nulls.asList(Nulls.split(textBlock, "\n"));
   }
 }

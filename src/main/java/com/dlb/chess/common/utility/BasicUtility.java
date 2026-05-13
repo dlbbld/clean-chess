@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 public abstract class BasicUtility {
 
@@ -20,11 +20,11 @@ public abstract class BasicUtility {
   }
 
   public static String calculateCommaSeparatedList(List<String> list) {
-    return NonNullWrapperCommon.join(COMMA_SEPARATOR_LIST, list);
+    return Nulls.join(COMMA_SEPARATOR_LIST, list);
   }
 
   public static String calculateSpaceSeparatedList(List<String> list) {
-    return NonNullWrapperCommon.join(SPACE_SEPARATOR_LIST, list);
+    return Nulls.join(SPACE_SEPARATOR_LIST, list);
   }
 
   @SuppressWarnings("null")
@@ -37,7 +37,7 @@ public abstract class BasicUtility {
     if (set.size() != 1) {
       throw new IllegalArgumentException("The set must contain exactly one element");
     }
-    return NonNullWrapperCommon.getFirst(new ArrayList<>(set));
+    return Nulls.getFirst(new ArrayList<>(set));
   }
 
   public static <E> boolean calculateIsDisjoint(Set<E> firstSet, Set<E> secondSet) {
@@ -55,7 +55,7 @@ public abstract class BasicUtility {
   }
 
   public static String convertToString(List<String> list) {
-    return NonNullWrapperCommon.join("\n", list);
+    return Nulls.join("\n", list);
   }
 
   @SuppressWarnings("null")

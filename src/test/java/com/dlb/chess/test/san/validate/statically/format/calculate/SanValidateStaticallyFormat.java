@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import org.eclipse.jdt.annotation.Nullable;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.san.SanParse;
 import com.google.common.collect.ImmutableMap;
@@ -30,7 +30,7 @@ public class SanValidateStaticallyFormat implements EnumConstants {
 
     sanValidationAllMap.putAll(PawnSanValidateStaticallyFormatCalculate.calculateSanMap());
 
-    SAN_VALIDATE_MAP = NonNullWrapperCommon.copyOfMap(sanValidationAllMap);
+    SAN_VALIDATE_MAP = Nulls.copyOfMap(sanValidationAllMap);
   }
 
   public static boolean exists(String san) {
@@ -41,7 +41,7 @@ public class SanValidateStaticallyFormat implements EnumConstants {
     if (!exists(san)) {
       throw new IllegalArgumentException("The SAN does not exist");
     }
-    return NonNullWrapperCommon.get(SAN_VALIDATE_MAP, san);
+    return Nulls.get(SAN_VALIDATE_MAP, san);
   }
 
   // for performance reasons

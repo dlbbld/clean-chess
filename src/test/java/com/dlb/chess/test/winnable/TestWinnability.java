@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
@@ -20,7 +20,7 @@ import com.dlb.chess.unwinnability.UnwinnableQuick;
 
 class TestWinnability {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestWinnability.class);
+  private static final Logger logger = Nulls.getLogger(TestWinnability.class);
 
   @SuppressWarnings("static-method")
   @Test

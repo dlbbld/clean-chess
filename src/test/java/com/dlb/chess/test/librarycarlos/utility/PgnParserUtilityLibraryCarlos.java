@@ -2,8 +2,8 @@ package com.dlb.chess.test.librarycarlos.utility;
 
 import java.nio.file.Path;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.common.Nulls;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.github.bhlangonijr.chesslib.game.Game;
 import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
@@ -14,7 +14,7 @@ public class PgnParserUtilityLibraryCarlos {
 
   public static Game parse(Path pgnFolderPath, String pgnFileName) {
 
-    final Path pgnFilePath = NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName);
+    final Path pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
 
     final var pgnHolder = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
     try {
@@ -27,7 +27,7 @@ public class PgnParserUtilityLibraryCarlos {
       throw new IllegalArgumentException("The PGN must contain exactly one game");
     }
 
-    final Game game = NonNullWrapperLibraryCarlos.getGame(pgnHolder, 0);
+    final Game game = NullsCarlos.getGame(pgnHolder, 0);
     try {
       game.loadMoveText();
     } catch (final Exception e) {

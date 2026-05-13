@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.moves.CastlingUtility;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.move.Move;
 
@@ -56,13 +56,13 @@ public abstract class MoveConversionUtility {
   }
 
   private static MoveSpecification convertNonCastlingMove(Move move) {
-    final com.github.bhlangonijr.chesslib.Square from = NonNullWrapperLibraryCarlos.getFrom(move);
-    final com.github.bhlangonijr.chesslib.Square to = NonNullWrapperLibraryCarlos.getTo(move);
+    final com.github.bhlangonijr.chesslib.Square from = NullsCarlos.getFrom(move);
+    final com.github.bhlangonijr.chesslib.Square to = NullsCarlos.getTo(move);
 
     final Square fromSquare = EnumConversionUtility.convertToMySquare(from);
     final Square toSquare = EnumConversionUtility.convertToMySquare(to);
 
-    final com.github.bhlangonijr.chesslib.Piece promotion = NonNullWrapperLibraryCarlos.getPromotion(move);
+    final com.github.bhlangonijr.chesslib.Piece promotion = NullsCarlos.getPromotion(move);
 
     if (promotion != com.github.bhlangonijr.chesslib.Piece.NONE) {
       final PromotionPieceType promotionPieceType = EnumConversionUtility.convertToMyPromotionPieceType(promotion);

@@ -6,7 +6,7 @@ import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.messages.Message;
 
 abstract class SanValidatePieceExists extends AbstractSan {
@@ -61,7 +61,7 @@ abstract class SanValidatePieceExists extends AbstractSan {
             sanConversion.fromRank())) {
           throw new SanValidationException(SanValidationProblem.EXISTS_RNBQ_RANK,
               Message.getString("validation.san.exists.rnbq.rank", movingPieceType.getName(),
-                  NonNullWrapperCommon.valueOf(sanConversion.fromRank().getNumber())));
+                  Nulls.valueOf(sanConversion.fromRank().getNumber())));
         }
         break;
       case RNBQ_CAPTURING_SQUARE:

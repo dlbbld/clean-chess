@@ -7,7 +7,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
@@ -19,7 +19,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 
 class TestPgnImportAgainstExport {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestPgnImportAgainstExport.class);
+  private static final Logger logger = Nulls.getLogger(TestPgnImportAgainstExport.class);
 
   @SuppressWarnings({ "static-method" })
   @Test

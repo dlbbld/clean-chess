@@ -5,14 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class TestLenientPgnParserLineBreaks {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLenientPgnParserLineBreaks.class);
+  private static final Logger logger = Nulls.getLogger(TestLenientPgnParserLineBreaks.class);
 
   @SuppressWarnings("static-method")
   @Test

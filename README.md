@@ -40,7 +40,7 @@ Requires JDK 17 or later at runtime. Available via the [JitPack](https://jitpack
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>5.0.0</version>
+  <version>6.0.0</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    implementation 'com.github.dlbbld:clean-chess:5.0.0'
+    implementation 'com.github.dlbbld:clean-chess:6.0.0'
     ...
 }
 ```
@@ -224,15 +224,16 @@ and finally, the last halfmove in the series.
 # Unwinnability and dead position
 The library implements the [Chess Unwinnability Analyzer (CHA)](https://github.com/miguel-ambrona/D3-Chess). As such, everything here achieved is due to CHA. Also, all relevant examples below are from the [CHA](https://github.com/miguel-ambrona/D3-Chess), which elaborates on the subject in every aspect.
 
-A position is said to be unwinnable for a player if he has no theoretical mating possibilities, assuming the worst play of the opponent.
-If the position is unwinnable for both players, it's a dead position.
+A position is unwinnable for a player if there is no legal sequence that can end with that player giving checkmate,
+even if the opponent cooperates. If the position is unwinnable for both players, it's a dead position.
 
 > **Note:** Unwinnable-position detection (CHA algorithm) is not run automatically after every move. The reason is **bulk-processing usage**: the library is also designed to analyse many PGN games in batch, where a per-move CHA check would add significant cumulative cost. This is not a statement about the quick variant being slow — it runs in microsecond range and is fine for ordinary gameplay; the full variant is naturally heavier. Both can be triggered manually whenever the result is wanted, so games may continue in theoretically dead positions unless the check is invoked.
 
 ## Methods
 The library provides an implementation of CHA. So for both situations, there is a quick and a full method.
 
-The quick method is speedy by design but might miss some corrections. The full method is slower but 100% accurate.
+The quick method is speedy by design but might miss some corrections. The full method is slower and complete when it
+returns WINNABLE or UNWINNABLE; bounded search may return UNDETERMINED.
 
 ### Unwinnability
 The quick method has three return values:
@@ -301,7 +302,8 @@ White could have won.
 
 #### Common positions
 When there are still a lot of pieces on the board, so a mate is very likely, the quick algorithm says POSSIBLY_WINNABLE.
-It makes an educated guess only. The full algorithm calculates an actual mate and is accurate but much slower.
+It makes an educated guess only. In this example, the full algorithm calculates an actual mate; in harder positions,
+the bounded search may return UNDETERMINED.
 [Game](https://lichess.org/SCKpvJQX#57)
 
 ```java

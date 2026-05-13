@@ -7,7 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
 
 class TestBasicUtility {
@@ -82,7 +82,7 @@ class TestBasicUtility {
 
         line 3""";
 
-    final List<String> lines = NonNullWrapperCommon.asList("line 1", "", "line 3");
+    final List<String> lines = Nulls.asList("line 1", "", "line 3");
 
     final String actual = BasicUtility.convertToString(lines);
 

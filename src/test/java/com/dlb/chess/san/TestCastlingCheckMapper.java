@@ -8,7 +8,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.CastlingRightLoss;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.enums.CastlingCheck;
 
 /**
@@ -25,11 +25,11 @@ import com.dlb.chess.enums.CastlingCheck;
  */
 class TestCastlingCheckMapper {
 
-  private static final List<CastlingCheck> EXPECTED_CASTLING_CHECKS = NonNullWrapperCommon.listOf(
-      CastlingCheck.FINAL_NO_RIGHT, CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingCheck.TEMPORARY_KING_IN_CHECK,
+  private static final List<CastlingCheck> EXPECTED_CASTLING_CHECKS = Nulls.listOf(CastlingCheck.FINAL_NO_RIGHT,
+      CastlingCheck.TEMPORARY_SQUARES_NOT_EMPTY, CastlingCheck.TEMPORARY_KING_IN_CHECK,
       CastlingCheck.TEMPORARY_KING_TRAVELS_THROUGH_CHECK, CastlingCheck.TEMPORARY_KING_ENDS_IN_CHECK);
 
-  private static final List<SanValidationProblem> EXPECTED_KING_CASTLING_PROBLEMS = NonNullWrapperCommon.listOf(
+  private static final List<SanValidationProblem> EXPECTED_KING_CASTLING_PROBLEMS = Nulls.listOf(
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED,
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED,
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_CAPTURED,
@@ -43,11 +43,11 @@ class TestCastlingCheckMapper {
   /**
    * Provenance values of {@link CastlingRightLoss} that correspond to a FINAL_NO_RIGHT failure.
    */
-  private static final List<CastlingRightLoss> EXPECTED_FINAL_NO_RIGHT_PROVENANCES = NonNullWrapperCommon.listOf(
+  private static final List<CastlingRightLoss> EXPECTED_FINAL_NO_RIGHT_PROVENANCES = Nulls.listOf(
       CastlingRightLoss.KING_MOVED, CastlingRightLoss.ROOK_MOVED, CastlingRightLoss.ROOK_CAPTURED,
       CastlingRightLoss.CASTLED, CastlingRightLoss.UNKNOWN_FEN_IMPORT);
 
-  private static final List<SanValidationProblem> EXPECTED_FINAL_NO_RIGHT_PROBLEMS = NonNullWrapperCommon.listOf(
+  private static final List<SanValidationProblem> EXPECTED_FINAL_NO_RIGHT_PROBLEMS = Nulls.listOf(
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_KING_MOVED,
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_MOVED,
       SanValidationProblem.KING_CASTLING_FINAL_NO_RIGHT_ROOK_CAPTURED,
@@ -88,11 +88,9 @@ class TestCastlingCheckMapper {
   @Test
   void testFinalNoRightMappingMatchesProvenanceOrder() {
     for (var i = 0; i < EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size(); i++) {
-      assertEquals(NonNullWrapperCommon.get(EXPECTED_FINAL_NO_RIGHT_PROBLEMS, i),
-          CastlingCheckMapper.map(CastlingCheck.FINAL_NO_RIGHT,
-              NonNullWrapperCommon.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i)),
-          "FINAL_NO_RIGHT mapping mismatch for provenance "
-              + NonNullWrapperCommon.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i));
+      assertEquals(Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROBLEMS, i),
+          CastlingCheckMapper.map(CastlingCheck.FINAL_NO_RIGHT, Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i)),
+          "FINAL_NO_RIGHT mapping mismatch for provenance " + Nulls.get(EXPECTED_FINAL_NO_RIGHT_PROVENANCES, i));
     }
   }
 
@@ -103,8 +101,8 @@ class TestCastlingCheckMapper {
     final var temporaryStartIndex = EXPECTED_FINAL_NO_RIGHT_PROVENANCES.size();
     final var temporaryCastlingChecks = EXPECTED_CASTLING_CHECKS.subList(1, EXPECTED_CASTLING_CHECKS.size());
     for (var i = 0; i < temporaryCastlingChecks.size(); i++) {
-      assertEquals(NonNullWrapperCommon.get(EXPECTED_KING_CASTLING_PROBLEMS, temporaryStartIndex + i),
-          CastlingCheckMapper.map(NonNullWrapperCommon.get(temporaryCastlingChecks, i), CastlingRightLoss.NOT_LOST),
+      assertEquals(Nulls.get(EXPECTED_KING_CASTLING_PROBLEMS, temporaryStartIndex + i),
+          CastlingCheckMapper.map(Nulls.get(temporaryCastlingChecks, i), CastlingRightLoss.NOT_LOST),
           "TEMPORARY mapping mismatch at position " + i);
     }
   }

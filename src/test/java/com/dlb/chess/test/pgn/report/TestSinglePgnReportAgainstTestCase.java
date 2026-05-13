@@ -5,7 +5,7 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
@@ -15,7 +15,7 @@ class TestSinglePgnReportAgainstTestCase extends AbstractPgnReportTest {
 
   private static final String PGN_FILE_NAME = "various_pranav_savic_2021_incomplete_speculative_from_last_capture.pgn";
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestSinglePgnReportAgainstTestCase.class);
+  private static final Logger logger = Nulls.getLogger(TestSinglePgnReportAgainstTestCase.class);
 
   @SuppressWarnings("static-method")
   @Test

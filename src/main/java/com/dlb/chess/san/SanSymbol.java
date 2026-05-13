@@ -1,6 +1,6 @@
 package com.dlb.chess.san;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 
 public enum SanSymbol {
   CAPTURE('x'),
@@ -15,7 +15,7 @@ public enum SanSymbol {
 
   SanSymbol(char symbol) {
     this.symbol = symbol;
-    this.symbolString = NonNullWrapperCommon.valueOf(symbol);
+    this.symbolString = Nulls.valueOf(symbol);
   }
 
   public char getSymbol() {

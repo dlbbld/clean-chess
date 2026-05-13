@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.SquareType;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.dlb.chess.test.librarycomparison.utility.EnumConversionUtility;
 import com.github.bhlangonijr.chesslib.Bitboard;
 import com.github.bhlangonijr.chesslib.Board;
@@ -55,7 +55,7 @@ public abstract class LibraryCarlosImplementationUtility {
   }
 
   private static com.github.bhlangonijr.chesslib.Piece calculatePieceForLegalMove(Board board, Move legalMove) {
-    return NonNullWrapperLibraryCarlos.getPiece(board, NonNullWrapperLibraryCarlos.getFrom(legalMove));
+    return NullsCarlos.getPiece(board, NullsCarlos.getFrom(legalMove));
   }
 
   private static boolean calculateIsPawn(com.github.bhlangonijr.chesslib.Piece piece) {
@@ -89,15 +89,15 @@ public abstract class LibraryCarlosImplementationUtility {
   }
 
   static boolean calculateIsEnPassantCapturePossible(Board board) {
-    final List<MoveBackup> backup = NonNullWrapperLibraryCarlos.getBackup(board);
+    final List<MoveBackup> backup = NullsCarlos.getBackup(board);
     if (backup.isEmpty()) {
       return false;
     }
 
-    final MoveBackup moveBackupTwoSquareAdvance = NonNullWrapperLibraryCarlos.getLast(board);
-    final Move moveTwoSquareAdvance = NonNullWrapperLibraryCarlos.getMove(moveBackupTwoSquareAdvance);
+    final MoveBackup moveBackupTwoSquareAdvance = NullsCarlos.getLast(board);
+    final Move moveTwoSquareAdvance = NullsCarlos.getMove(moveBackupTwoSquareAdvance);
     if (LibraryCarlosImplementationUtility.calculateIsPawnInitialTwoSquaresAdvance(moveBackupTwoSquareAdvance)) {
-      final Square moveTwoSquareAdvanceTo = NonNullWrapperLibraryCarlos.getTo(moveTwoSquareAdvance);
+      final Square moveTwoSquareAdvanceTo = NullsCarlos.getTo(moveTwoSquareAdvance);
 
       final Square enPassantCaptureDestination = LibraryCarlosImplementationUtility
           .calculateEnPassantCaptureDestination(moveTwoSquareAdvanceTo);

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -23,7 +23,7 @@ import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnabilityFull {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestUnwinnabilityFull.class);
+  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityFull.class);
 
   @SuppressWarnings("static-method")
   @Test

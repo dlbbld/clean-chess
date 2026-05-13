@@ -13,6 +13,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.squares.PawnDiagonalSquares;
 
 class PawnCaptureNonEnPassantCaptureNonPromotionLegalMoves extends PawnLegalMoves {
@@ -32,7 +33,8 @@ class PawnCaptureNonEnPassantCaptureNonPromotionLegalMoves extends PawnLegalMove
 
           final Piece pieceCaptured = staticPosition.get(diagonalSquareTo);
           if (pieceCaptured.getPieceType() != PieceType.KING) {
-            final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+            final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured,
+                LegalMoveKind.NORMAL);
             legalMoveSet.add(legalMove);
           }
         }

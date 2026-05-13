@@ -27,9 +27,9 @@ import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
-public class NonNullWrapperCommon {
+public class Nulls {
 
-  private NonNullWrapperCommon() {
+  private Nulls() {
   }
 
   @NonNull

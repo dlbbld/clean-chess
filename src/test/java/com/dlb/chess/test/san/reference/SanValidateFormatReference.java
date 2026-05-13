@@ -5,7 +5,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.enums.NotationMovingPiece;
 import com.dlb.chess.common.enums.NotationPromotionPiece;
@@ -38,7 +38,7 @@ public abstract class SanValidateFormatReference {
 
   private static SanConversionCheck parseForSanFormat(final String san, final SanFormat sanFormat) {
 
-    final SanFormatProperties properties = NonNullWrapperCommon.get(SanFormatPropertiesMap.MAP, sanFormat);
+    final SanFormatProperties properties = Nulls.get(SanFormatPropertiesMap.MAP, sanFormat);
 
     // length
     final var formatLength = properties.length();

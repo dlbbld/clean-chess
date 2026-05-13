@@ -6,10 +6,10 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.github.bhlangonijr.chesslib.CastleRight;
 
 public abstract class EnumConversionUtility implements EnumConstants {
@@ -209,7 +209,7 @@ public abstract class EnumConversionUtility implements EnumConstants {
   }
 
   private static String getSquareName(com.github.bhlangonijr.chesslib.Square square) {
-    return NonNullWrapperCommon.toLowerCase(NonNullWrapperLibraryCarlos.name(square));
+    return Nulls.toLowerCase(NullsCarlos.name(square));
   }
 
   public static Piece convertPiece(com.github.bhlangonijr.chesslib.Piece piece) {

@@ -7,7 +7,7 @@ import java.util.Map.Entry;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.san.SanValidationException;
@@ -18,13 +18,11 @@ class TestSanValidateNonPositionRelatedSupersetStrict extends AbstractTestSanVal
   @SuppressWarnings("static-method")
   @Test
   void testStaticallySubsetRuntime() {
-    for (final Entry<String, SanParse> entry : NonNullWrapperCommon
-        .entrySet(SanValidateStaticallyStrict.getSanValidationWhiteMap())) {
-      checkStaticallySubsetRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry));
+    for (final Entry<String, SanParse> entry : Nulls.entrySet(SanValidateStaticallyStrict.getSanValidationWhiteMap())) {
+      checkStaticallySubsetRuntime(Nulls.getKey(entry), Nulls.getValue(entry));
     }
-    for (final Entry<String, SanParse> entry : NonNullWrapperCommon
-        .entrySet(SanValidateStaticallyStrict.getSanValidationBlackMap())) {
-      checkStaticallySubsetRuntime(NonNullWrapperCommon.getKey(entry), NonNullWrapperCommon.getValue(entry));
+    for (final Entry<String, SanParse> entry : Nulls.entrySet(SanValidateStaticallyStrict.getSanValidationBlackMap())) {
+      checkStaticallySubsetRuntime(Nulls.getKey(entry), Nulls.getValue(entry));
     }
   }
 

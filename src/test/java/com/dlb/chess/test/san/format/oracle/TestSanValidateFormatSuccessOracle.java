@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.san.SanValidateFormat;
 import com.dlb.chess.test.san.validate.statically.format.calculate.SanValidateStaticallyFormat;
@@ -31,9 +31,9 @@ class TestSanValidateFormatSuccessOracle {
     System.out.println("Oracle size: " + map.size() + ", build time: " + (tBuildEnd - tBuildStart) + " ms");
 
     final var tLoopStart = System.currentTimeMillis();
-    for (final Map.Entry<String, SanParse> entry : NonNullWrapperCommon.entrySet(map)) {
-      final String san = NonNullWrapperCommon.getKey(entry);
-      final SanParse expected = NonNullWrapperCommon.getValue(entry);
+    for (final Map.Entry<String, SanParse> entry : Nulls.entrySet(map)) {
+      final String san = Nulls.getKey(entry);
+      final SanParse expected = Nulls.getValue(entry);
       final SanParse actual = SanValidateFormat.validateFormat(san);
       assertEquals(expected, actual, "validateFormat result differs from static map for SAN: \"" + san + "\"");
     }

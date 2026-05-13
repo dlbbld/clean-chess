@@ -2,7 +2,7 @@ package com.dlb.chess.test.pgntest.enums;
 
 import java.nio.file.Path;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public enum PgnTest {
@@ -36,7 +36,6 @@ public enum PgnTest {
   BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK(true, "basic/insufficientMaterial/onlyBlack"),
   BASIC_INSUFFICIENT_MATERIAL_NONE(true, "basic/insufficientMaterial/none"),
   BASIC_THREEFOLD(true, "basic/threefold"),
-  BASIC_THREEFOLD_INITIAL_EP(true, "basic/threefoldInitialEnPassantCapture"),
   BASIC_FIFTY(true, "basic/fifty"),
   BASIC_FIVEFOLD(true, "basic/fivefold"),
   BASIC_SEVENTY_FIVE(true, "basic/seventyFive"),
@@ -112,7 +111,7 @@ public enum PgnTest {
   }
 
   public Path getFolderPath() {
-    return NonNullWrapperCommon.pathResolve(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH, folderPart);
+    return Nulls.pathResolve(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH, folderPart);
   }
 
   public boolean getIsBasicTest() {

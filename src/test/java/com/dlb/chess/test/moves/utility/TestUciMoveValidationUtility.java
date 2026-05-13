@@ -9,7 +9,7 @@ import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.model.UciMove;
 
-class TestUciMoveUtility {
+class TestUciMoveValidationUtility {
 
   @SuppressWarnings("static-method")
   @Test

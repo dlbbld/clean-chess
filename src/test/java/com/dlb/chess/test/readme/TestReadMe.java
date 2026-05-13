@@ -13,7 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.LenientPgnParserValidationException;
@@ -151,7 +151,7 @@ class TestReadMe {
   void pgnFileCanBeWrittenAndParsed(@TempDir Path tempDir) {
     final Board sourceBoard = createOpeningExampleBoard();
     final PgnFile pgnFile = PgnCreate.createPgnFile(sourceBoard);
-    final Path filePath = NonNullWrapperCommon.pathResolve(tempDir, "myFile.pgn");
+    final Path filePath = Nulls.pathResolve(tempDir, "myFile.pgn");
 
     PgnWriter.writePgnFile(pgnFile, filePath);
 
@@ -342,13 +342,13 @@ class TestReadMe {
     assertTrue(result.isValid());
     assertEquals(2, result.sanForgivenItems().size());
     assertEquals(com.dlb.chess.san.LenientSanValidationProblem.ZERO_INSTEAD_OF_O_CASTLING,
-        NonNullWrapperCommon.get(result.sanForgivenItems(), 0).code());
-    assertEquals("0-0", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).originalToken());
-    assertEquals("O-O", NonNullWrapperCommon.get(result.sanForgivenItems(), 0).canonicalSan());
+        Nulls.get(result.sanForgivenItems(), 0).code());
+    assertEquals("0-0", Nulls.get(result.sanForgivenItems(), 0).originalToken());
+    assertEquals("O-O", Nulls.get(result.sanForgivenItems(), 0).canonicalSan());
     assertEquals(com.dlb.chess.san.LenientSanValidationProblem.LOWERCASE_PIECE_LETTER,
-        NonNullWrapperCommon.get(result.sanForgivenItems(), 1).code());
-    assertEquals("nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).originalToken());
-    assertEquals("Nf6", NonNullWrapperCommon.get(result.sanForgivenItems(), 1).canonicalSan());
+        Nulls.get(result.sanForgivenItems(), 1).code());
+    assertEquals("nf6", Nulls.get(result.sanForgivenItems(), 1).originalToken());
+    assertEquals("Nf6", Nulls.get(result.sanForgivenItems(), 1).canonicalSan());
   }
 
   @Test

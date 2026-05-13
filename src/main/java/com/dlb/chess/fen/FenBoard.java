@@ -4,7 +4,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
@@ -90,7 +90,7 @@ public class FenBoard implements EnumConstants {
     // full move number (of next half move)
     fen.append(board.getFullMoveNumberForNextHalfMove());
 
-    return NonNullWrapperCommon.toString(fen);
+    return Nulls.toString(fen);
   }
 
 }

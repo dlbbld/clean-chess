@@ -6,7 +6,7 @@ import java.util.List;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.utility.BasicUtility;
@@ -20,7 +20,7 @@ import com.google.common.collect.ImmutableSet;
  * uniquely identify a legal move and the deviation matches a supported tolerance category.
  *
  * <p>
- * See {@link com.dlb.chess.san.lenient package-level Javadoc} for the strategy. The two public methods are:
+ * See {@link com.dlb.chess.san the package-level Javadoc} for the strategy. The two public methods are:
  * <ul>
  * <li>{@link #parseText(String, Board)} â€” full parse, returns the resolved move plus the list of forgiven items.
  * <li>{@link #validateText(String, Board)} â€” discards the result, throws on rejection. Convenience for callers that
@@ -72,7 +72,7 @@ public final class LenientSanParser {
     for (final LenientSanValidationProblem code : codes) {
       items.add(new ForgivenItem(code, text, canonicalSan));
     }
-    return new LenientSanParserValidationResult(moveSpecification, NonNullWrapperCommon.copyOfList(items));
+    return new LenientSanParserValidationResult(moveSpecification, Nulls.copyOfList(items));
   }
 
   /**
@@ -121,6 +121,6 @@ public final class LenientSanParser {
     for (final LenientSanValidationProblem code : codes) {
       items.add(new ForgivenItem(code, text, text));
     }
-    return NonNullWrapperCommon.copyOfList(items);
+    return Nulls.copyOfList(items);
   }
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.HalfMove;
@@ -68,7 +68,8 @@ public class PgnCreate {
           + resultTagValue.getValue();
     }
 
-    fileLines.addAll(PgnLineWrapper.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
+    fileLines
+        .addAll(PgnLineWrapper.calculateWrappedLines(movetextIncludingPreGameCommentary, PgnCreate.MAX_LINE_LENGTH));
     // Trailing blank line per the strict format.
     fileLines.add("");
 
@@ -129,7 +130,7 @@ public class PgnCreate {
     result.append("[").append(tag.name()).append(" ");
     result.append("\"").append(tag.value()).append("\"");
     result.append("]");
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
   private static String calculateMovetextWithoutGameTerminationMarker(int fullMoveNumber, Side havingMove,
@@ -176,15 +177,15 @@ public class PgnCreate {
       }
       currentHavingMove = currentHavingMove.getOppositeSide();
     }
-    return NonNullWrapperCommon.toString(result);
+    return Nulls.toString(result);
   }
 
   public static PgnFile createPgnFile(Board board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
-        NonNullWrapperCommon.copyOfList(halfMoveList));
+    return new PgnFile(Nulls.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
+        Nulls.copyOfList(halfMoveList));
   }
 
   public static PgnFile createPgnFile(Board board) {

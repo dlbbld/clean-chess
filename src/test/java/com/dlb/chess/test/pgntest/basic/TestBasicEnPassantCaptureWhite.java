@@ -7,7 +7,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -16,7 +16,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicEnPassantCaptureWhite extends AbstractTestBasic {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBasicEnPassantCaptureWhite.class);
+  private static final Logger logger = Nulls.getLogger(TestBasicEnPassantCaptureWhite.class);
 
   static {
     final List<String> pgnFileNameList = new ArrayList<>();

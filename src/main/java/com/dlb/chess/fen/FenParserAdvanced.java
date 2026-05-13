@@ -16,7 +16,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.board.model.UpdateSquare;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.BasicConstants;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.EnumConstants;
@@ -41,10 +41,6 @@ public class FenParserAdvanced implements EnumConstants {
   private static final String REG_EXP_RANK = "^[RNBQKPrnbqkp12345678]+$";
   @SuppressWarnings("null")
   private static final Pattern PATTERN_RANK = Pattern.compile(REG_EXP_RANK);
-
-  private static final String REG_EXP_SIDE = "^[wb]$";
-  @SuppressWarnings("null")
-  private static final Pattern PATTERN_SIDE = Pattern.compile(REG_EXP_SIDE);
 
   private FenParserAdvanced() {
   }
@@ -144,38 +140,23 @@ public class FenParserAdvanced implements EnumConstants {
       throw new ProgrammingMistakeException("The piece list construction is incorrect");
     }
 
-    return new StaticPosition(NonNullWrapperCommon.get(pieceList, 0), NonNullWrapperCommon.get(pieceList, 1),
-        NonNullWrapperCommon.get(pieceList, 2), NonNullWrapperCommon.get(pieceList, 3),
-        NonNullWrapperCommon.get(pieceList, 4), NonNullWrapperCommon.get(pieceList, 5),
-        NonNullWrapperCommon.get(pieceList, 6), NonNullWrapperCommon.get(pieceList, 7),
-        NonNullWrapperCommon.get(pieceList, 8), NonNullWrapperCommon.get(pieceList, 9),
-        NonNullWrapperCommon.get(pieceList, 10), NonNullWrapperCommon.get(pieceList, 11),
-        NonNullWrapperCommon.get(pieceList, 12), NonNullWrapperCommon.get(pieceList, 13),
-        NonNullWrapperCommon.get(pieceList, 14), NonNullWrapperCommon.get(pieceList, 15),
-        NonNullWrapperCommon.get(pieceList, 16), NonNullWrapperCommon.get(pieceList, 17),
-        NonNullWrapperCommon.get(pieceList, 18), NonNullWrapperCommon.get(pieceList, 19),
-        NonNullWrapperCommon.get(pieceList, 20), NonNullWrapperCommon.get(pieceList, 21),
-        NonNullWrapperCommon.get(pieceList, 22), NonNullWrapperCommon.get(pieceList, 23),
-        NonNullWrapperCommon.get(pieceList, 24), NonNullWrapperCommon.get(pieceList, 25),
-        NonNullWrapperCommon.get(pieceList, 26), NonNullWrapperCommon.get(pieceList, 27),
-        NonNullWrapperCommon.get(pieceList, 28), NonNullWrapperCommon.get(pieceList, 29),
-        NonNullWrapperCommon.get(pieceList, 30), NonNullWrapperCommon.get(pieceList, 31),
-        NonNullWrapperCommon.get(pieceList, 32), NonNullWrapperCommon.get(pieceList, 33),
-        NonNullWrapperCommon.get(pieceList, 34), NonNullWrapperCommon.get(pieceList, 35),
-        NonNullWrapperCommon.get(pieceList, 36), NonNullWrapperCommon.get(pieceList, 37),
-        NonNullWrapperCommon.get(pieceList, 38), NonNullWrapperCommon.get(pieceList, 39),
-        NonNullWrapperCommon.get(pieceList, 40), NonNullWrapperCommon.get(pieceList, 41),
-        NonNullWrapperCommon.get(pieceList, 42), NonNullWrapperCommon.get(pieceList, 43),
-        NonNullWrapperCommon.get(pieceList, 44), NonNullWrapperCommon.get(pieceList, 45),
-        NonNullWrapperCommon.get(pieceList, 46), NonNullWrapperCommon.get(pieceList, 47),
-        NonNullWrapperCommon.get(pieceList, 48), NonNullWrapperCommon.get(pieceList, 49),
-        NonNullWrapperCommon.get(pieceList, 50), NonNullWrapperCommon.get(pieceList, 51),
-        NonNullWrapperCommon.get(pieceList, 52), NonNullWrapperCommon.get(pieceList, 53),
-        NonNullWrapperCommon.get(pieceList, 54), NonNullWrapperCommon.get(pieceList, 55),
-        NonNullWrapperCommon.get(pieceList, 56), NonNullWrapperCommon.get(pieceList, 57),
-        NonNullWrapperCommon.get(pieceList, 58), NonNullWrapperCommon.get(pieceList, 59),
-        NonNullWrapperCommon.get(pieceList, 60), NonNullWrapperCommon.get(pieceList, 61),
-        NonNullWrapperCommon.get(pieceList, 62), NonNullWrapperCommon.get(pieceList, 63));
+    return new StaticPosition(Nulls.get(pieceList, 0), Nulls.get(pieceList, 1), Nulls.get(pieceList, 2),
+        Nulls.get(pieceList, 3), Nulls.get(pieceList, 4), Nulls.get(pieceList, 5), Nulls.get(pieceList, 6),
+        Nulls.get(pieceList, 7), Nulls.get(pieceList, 8), Nulls.get(pieceList, 9), Nulls.get(pieceList, 10),
+        Nulls.get(pieceList, 11), Nulls.get(pieceList, 12), Nulls.get(pieceList, 13), Nulls.get(pieceList, 14),
+        Nulls.get(pieceList, 15), Nulls.get(pieceList, 16), Nulls.get(pieceList, 17), Nulls.get(pieceList, 18),
+        Nulls.get(pieceList, 19), Nulls.get(pieceList, 20), Nulls.get(pieceList, 21), Nulls.get(pieceList, 22),
+        Nulls.get(pieceList, 23), Nulls.get(pieceList, 24), Nulls.get(pieceList, 25), Nulls.get(pieceList, 26),
+        Nulls.get(pieceList, 27), Nulls.get(pieceList, 28), Nulls.get(pieceList, 29), Nulls.get(pieceList, 30),
+        Nulls.get(pieceList, 31), Nulls.get(pieceList, 32), Nulls.get(pieceList, 33), Nulls.get(pieceList, 34),
+        Nulls.get(pieceList, 35), Nulls.get(pieceList, 36), Nulls.get(pieceList, 37), Nulls.get(pieceList, 38),
+        Nulls.get(pieceList, 39), Nulls.get(pieceList, 40), Nulls.get(pieceList, 41), Nulls.get(pieceList, 42),
+        Nulls.get(pieceList, 43), Nulls.get(pieceList, 44), Nulls.get(pieceList, 45), Nulls.get(pieceList, 46),
+        Nulls.get(pieceList, 47), Nulls.get(pieceList, 48), Nulls.get(pieceList, 49), Nulls.get(pieceList, 50),
+        Nulls.get(pieceList, 51), Nulls.get(pieceList, 52), Nulls.get(pieceList, 53), Nulls.get(pieceList, 54),
+        Nulls.get(pieceList, 55), Nulls.get(pieceList, 56), Nulls.get(pieceList, 57), Nulls.get(pieceList, 58),
+        Nulls.get(pieceList, 59), Nulls.get(pieceList, 60), Nulls.get(pieceList, 61), Nulls.get(pieceList, 62),
+        Nulls.get(pieceList, 63));
   }
 
   private static List<Piece> convertRankDescriptionEvaluatedToRank(List<String> rankDescriptionEvaluated) {
@@ -188,11 +169,11 @@ public class FenParserAdvanced implements EnumConstants {
         rankPieceList.add(Piece.NONE);
       } else {
         final var letterChar = letter.charAt(0);
-        if (!Piece.exists(letterChar)) {
+        if (!FenPieceSymbol.exists(letterChar)) {
           throw new ProgrammingMistakeException(
               "An unknown piece was found which was not filtered before by regular expression");
         }
-        final Piece piece = Piece.calculate(letterChar);
+        final Piece piece = FenPieceSymbol.calculate(letterChar).piece();
         rankPieceList.add(piece);
       }
     }
@@ -212,7 +193,7 @@ public class FenParserAdvanced implements EnumConstants {
     var countEvaluatedLength = 0;
 
     for (var i = 0; i < rankDescription.length(); i++) {
-      final String currentChar = NonNullWrapperCommon.substring(rankDescription, i, i + 1);
+      final String currentChar = Nulls.substring(rankDescription, i, i + 1);
       try {
         final var numberOfEmptyFields = Integer.parseInt(currentChar);
         countEvaluatedLength += numberOfEmptyFields;
@@ -238,18 +219,11 @@ public class FenParserAdvanced implements EnumConstants {
   }
 
   private static Side validateHavingMove(String havingMove) throws FenAdvancedValidationException {
-    final var matcher = PATTERN_SIDE.matcher(havingMove);
-    if (!matcher.find()) {
+    if (havingMove.length() != 1 || !FenSideSymbol.exists(havingMove.charAt(0))) {
       throw new FenAdvancedValidationException(FenAdvancedValidationProblem.INVALID_HAVING_MOVE_RANGE,
           "the having move part of \"" + havingMove + "\" is not valid");
     }
-    if ("w".equals(havingMove)) {
-      return WHITE;
-    }
-    if ("b".equals(havingMove)) {
-      return BLACK;
-    }
-    throw new ProgrammingMistakeException("Check the regular expression");
+    return FenSideSymbol.calculate(havingMove.charAt(0)).side();
   }
 
   private static CastlingRightBoth validateCastlingRightBoth(StaticPosition staticPosition, String castlingRightBothStr)
@@ -487,7 +461,7 @@ public class FenParserAdvanced implements EnumConstants {
     message.append(
         ", but castling as such is not possible, as the king and/or rock are not in their original positions anymore.");
 
-    return new FenAdvancedValidationException(parseFenCheck, NonNullWrapperCommon.toString(message));
+    return new FenAdvancedValidationException(parseFenCheck, Nulls.toString(message));
   }
 
   private static FenAdvancedValidationProblem calculateParseFenCheck(Side sideToCheck, CastlingRight castlingRight,

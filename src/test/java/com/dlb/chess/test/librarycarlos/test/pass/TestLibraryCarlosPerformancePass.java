@@ -8,8 +8,8 @@ import java.util.List;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.common.Nulls;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
@@ -20,7 +20,7 @@ import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
 class TestLibraryCarlosPerformancePass {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosPerformancePass.class);
+  private static final Logger logger = Nulls.getLogger(TestLibraryCarlosPerformancePass.class);
 
   private static final double LOAD_PGN_DURATION_MAX_MILLISECONDS = 1000.0;
 
@@ -28,7 +28,7 @@ class TestLibraryCarlosPerformancePass {
 
   private static final double PER_HALF_MOVE_MAX_MILLISECONDS = 0.5;
 
-  private static List<PgnTest> PGN_TEST_LIST = NonNullWrapperCommon.asList(PgnTest.MAX_MOVES);
+  private static List<PgnTest> PGN_TEST_LIST = Nulls.asList(PgnTest.MAX_MOVES);
 
   @SuppressWarnings("static-method")
   @Test
@@ -38,7 +38,7 @@ class TestLibraryCarlosPerformancePass {
       for (final PgnFileTestCase testCase : testCaseList.list()) {
         final String pgnFileName = testCase.pgnFileName();
         logger.info(pgnFileName);
-        final Path filePath = NonNullWrapperCommon.pathResolve(pgnTest.getFolderPath(), pgnFileName);
+        final Path filePath = Nulls.pathResolve(pgnTest.getFolderPath(), pgnFileName);
         final var pgn = new PgnHolder(filePath.toAbsolutePath().toString());
 
         final var millisecondsBeforeLoadPgn = System.currentTimeMillis();
@@ -49,7 +49,7 @@ class TestLibraryCarlosPerformancePass {
 
         logger.info("loadPgn duration seconds: {}", millisecondDurationLoadPgn / 1000);
 
-        final var game = NonNullWrapperCommon.getFirst(NonNullWrapperLibraryCarlos.getGames(pgn));
+        final var game = Nulls.getFirst(NullsCarlos.getGames(pgn));
         final var millisecondsBeforeLoadMoveText = System.currentTimeMillis();
         game.loadMoveText();
         final var millisecondDurationLoadMoveText = System.currentTimeMillis() - millisecondsBeforeLoadMoveText;

@@ -12,8 +12,6 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.constants.EnumConstants;
-import com.dlb.chess.test.generate.squares.GenerateEmptyBoardSquares;
-import com.dlb.chess.test.generate.squares.GeneratePawnMoveType;
 import com.google.common.collect.ImmutableList;
 
 class TestEmptyBoardSquares implements EnumConstants {
@@ -97,8 +95,6 @@ class TestEmptyBoardSquares implements EnumConstants {
   }
 
   private static void testRookSquares(Square testSquare, RookRange rookRange) {
-    assertEquals(GenerateEmptyBoardSquares.calculateRookSquares(testSquare), rookRange);
-
     final RookRange generatedRookMoves = RookEmptyBoardSquares.getRookSquares(testSquare);
     assertEquals(generatedRookMoves, rookRange);
   }
@@ -151,8 +147,6 @@ class TestEmptyBoardSquares implements EnumConstants {
       @SuppressWarnings("null") @NonNull final Square squareNonNull = square;
       resultList.add(squareNonNull);
     }
-    assertEquals(GenerateEmptyBoardSquares.calculateKnightSquares(testSquare), resultList);
-
     final Set<Square> generatedKnightMoves = KnightEmptyBoardSquares.getKnightSquares(testSquare);
     assertEquals(generatedKnightMoves, resultList);
   }
@@ -442,8 +436,6 @@ class TestEmptyBoardSquares implements EnumConstants {
   }
 
   private static void testBishopSquares(Square testSquare, BishopRange expectedRange) {
-    assertEquals(GenerateEmptyBoardSquares.calculateBishopSquares(testSquare), expectedRange);
-
     final BishopRange actualRange = BishopEmptyBoardSquares.getBishopSquares(testSquare);
     assertEquals(actualRange, expectedRange);
   }
@@ -533,8 +525,6 @@ class TestEmptyBoardSquares implements EnumConstants {
   }
 
   private static void testQueenSquares(Square testSquare, QueenRange range) {
-    assertEquals(GenerateEmptyBoardSquares.calculateQueenSquares(testSquare), range);
-
     final QueenRange generatedQueenMoves = QueenEmptyBoardSquares.getQueenSquares(testSquare);
     assertEquals(generatedQueenMoves, range);
   }
@@ -585,8 +575,6 @@ class TestEmptyBoardSquares implements EnumConstants {
       @SuppressWarnings("null") @NonNull final Square squareNonNull = square;
       resultList.add(squareNonNull);
     }
-    assertEquals(GenerateEmptyBoardSquares.calculateKingNonCastlingSquares(testSquare), resultList);
-
     final Set<Square> generatedKnightMoves = KingNonCastlingEmptyBoardSquares.getKingSquares(testSquare);
     assertEquals(generatedKnightMoves, resultList);
   }
@@ -636,9 +624,6 @@ class TestEmptyBoardSquares implements EnumConstants {
       @SuppressWarnings("null") @NonNull final Square squareNonNull = square;
       resultList.add(squareNonNull);
     }
-    assertEquals(GenerateEmptyBoardSquares.calculatePawnEmptyBoardSquares(havingMove, testSquare,
-        GeneratePawnMoveType.ANY_ADVANCE), resultList);
-
     final Set<Square> generatedPawnMoves = PawnAnyAdvanceEmptyBoardSquares.getPawnSquares(havingMove, testSquare);
     assertEquals(generatedPawnMoves, resultList);
 

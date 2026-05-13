@@ -10,8 +10,8 @@ import java.util.TreeSet;
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
-import com.dlb.chess.test.librarycarlos.NonNullWrapperLibraryCarlos;
+import com.dlb.chess.common.Nulls;
+import com.dlb.chess.test.librarycarlos.NullsCarlos;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
@@ -25,7 +25,7 @@ import com.github.bhlangonijr.chesslib.pgn.PgnHolder;
 
 class TestLibraryCarlosZobristBugPass {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestLibraryCarlosZobristBugPass.class);
+  private static final Logger logger = Nulls.getLogger(TestLibraryCarlosZobristBugPass.class);
 
   @SuppressWarnings("static-method")
   @Test
@@ -33,8 +33,7 @@ class TestLibraryCarlosZobristBugPass {
 
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.MAX_MOVES);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Path pgnFilePath = NonNullWrapperCommon.pathResolve(testCaseList.pgnTest().getFolderPath(),
-          testCase.pgnFileName());
+      final Path pgnFilePath = Nulls.pathResolve(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       logger.info(testCase.pgnFileName());
       testPrintingPosition(pgnFilePath);
       testWithoutPrintingPosition(pgnFilePath);
@@ -46,7 +45,7 @@ class TestLibraryCarlosZobristBugPass {
     final var pgn = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
 
     pgn.loadPgn();
-    final var game = NonNullWrapperCommon.getFirst(NonNullWrapperLibraryCarlos.getGames(pgn));
+    final var game = Nulls.getFirst(NullsCarlos.getGames(pgn));
     game.loadMoveText();
 
     final var moves = game.getHalfMoves();
@@ -76,7 +75,7 @@ class TestLibraryCarlosZobristBugPass {
 
     final PgnHolder pgn = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
     pgn.loadPgn();
-    final var game = NonNullWrapperCommon.getFirst(NonNullWrapperLibraryCarlos.getGames(pgn));
+    final var game = Nulls.getFirst(NullsCarlos.getGames(pgn));
     game.loadMoveText();
 
     final Board board = new Board();
@@ -112,7 +111,7 @@ class TestLibraryCarlosZobristBugPass {
 
     identifier.append(staticPosition);
 
-    return NonNullWrapperCommon.toString(identifier);
+    return Nulls.toString(identifier);
   }
 
   @SuppressWarnings("static-method")

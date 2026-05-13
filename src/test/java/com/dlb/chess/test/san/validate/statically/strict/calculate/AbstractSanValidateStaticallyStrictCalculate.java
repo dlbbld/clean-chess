@@ -7,7 +7,7 @@ import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.san.SanConversion;
@@ -28,7 +28,7 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
       case 3:
         fromFile = File.NONE;
         fromRank = Rank.NONE;
-        toSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 1));
+        toSquare = Square.calculate(Nulls.substring(parse, 1));
         break;
       case 4:
         final var checkLetter = parse.charAt(1);
@@ -44,13 +44,13 @@ public abstract class AbstractSanValidateStaticallyStrictCalculate implements En
           fromFile = File.NONE;
           fromRank = Rank.calculateRank(checkLetter);
         }
-        toSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 2));
+        toSquare = Square.calculate(Nulls.substring(parse, 2));
         break;
       case 5:
-        final Square fromSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 1, 3));
+        final Square fromSquare = Square.calculate(Nulls.substring(parse, 1, 3));
         fromFile = fromSquare.getFile();
         fromRank = fromSquare.getRank();
-        toSquare = Square.calculate(NonNullWrapperCommon.substring(parse, 3));
+        toSquare = Square.calculate(Nulls.substring(parse, 3));
         break;
       default:
         throw new ProgrammingMistakeException(

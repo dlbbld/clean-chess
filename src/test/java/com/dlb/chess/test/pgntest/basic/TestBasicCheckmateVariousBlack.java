@@ -4,7 +4,7 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -13,7 +13,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicCheckmateVariousBlack extends AbstractTestBasic {
 
-  private static final Logger logger = NonNullWrapperCommon.getLogger(TestBasicCheckmateVariousBlack.class);
+  private static final Logger logger = Nulls.getLogger(TestBasicCheckmateVariousBlack.class);
 
   @SuppressWarnings("static-method")
   @Test

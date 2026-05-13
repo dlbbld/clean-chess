@@ -15,10 +15,9 @@ import com.dlb.chess.board.enums.CastlingRightLoss;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
@@ -34,8 +33,8 @@ import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
-import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.moves.AbstractLegalMoves;
 import com.dlb.chess.moves.CastlingUtility;
 import com.dlb.chess.moves.EnPassantCaptureUtility;
@@ -70,8 +69,8 @@ import com.google.common.collect.ImmutableSet;
  *
  * <ul>
  * <li>{@link #Board()} â€” start at the initial position.</li>
- * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser, so
- * a {@code Board} cannot be constructed from a position no real game could reach.</li>
+ * <li>{@link #Board(String)} â€” start at the position given by a FEN string. Validated by the advanced FEN parser; see
+ * the {@code com.dlb.chess.fen} package documentation for the validation contract.</li>
  * <li>{@link #Board(Fen)} â€” start at a pre-parsed {@link Fen} value.</li>
  * </ul>
  *
@@ -224,9 +223,11 @@ public class Board {
   }
 
   /**
-   * Constructs a {@code Board} from a FEN string, validated by the advanced FEN parser. Rejects positions no real game
-   * could reach (impossible double-checks, halfmove clock above the 75-move-rule threshold, castling rights
-   * inconsistent with rooks-and-king positions, etc.).
+   * Constructs a {@code Board} from a FEN string, validated by the advanced FEN parser. Enforces structural and
+   * rule-consistency checks (piece counts within physical bounds, no pawns on rank 1 or 8, castling rights consistent
+   * with king/rook static positions, en-passant target consistent with the side to move, halfmove clock not above the
+   * 75-move-rule threshold of 150, etc.). Does not prove full game reachability — see the {@code com.dlb.chess.fen}
+   * package documentation for the full contract.
    */
   public Board(String fen) {
     this(FenParserAdvanced.parseFenAdvanced(fen));
@@ -309,10 +310,8 @@ public class Board {
 
   private boolean performMoveWithoutValidation(MoveSpecification moveSpecification) throws InvalidMoveException {
 
-    final CastlingRight beforeCastlingRightWhite = NonNullWrapperCommon.getLast(dynamicPositionList)
-        .castlingRightWhite();
-    final CastlingRight beforeCastlingRightBlack = NonNullWrapperCommon.getLast(dynamicPositionList)
-        .castlingRightBlack();
+    final CastlingRight beforeCastlingRightWhite = Nulls.getLast(dynamicPositionList).castlingRightWhite();
+    final CastlingRight beforeCastlingRightBlack = Nulls.getLast(dynamicPositionList).castlingRightBlack();
 
     final Side havingMove = this.getHavingMove();
     final LegalMove moveToPerform = calculateLegalMove(this.getStaticPosition(), havingMove, moveSpecification);
@@ -332,13 +331,13 @@ public class Board {
 
     // update castling loss reasons
     this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
-        NonNullWrapperCommon.getLast(whiteKingSideLossList), Side.WHITE, CastlingMove.KING_SIDE));
+        Nulls.getLast(whiteKingSideLossList), Side.WHITE, CastlingMove.KING_SIDE));
     this.whiteQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
-        NonNullWrapperCommon.getLast(whiteQueenSideLossList), Side.WHITE, CastlingMove.QUEEN_SIDE));
+        Nulls.getLast(whiteQueenSideLossList), Side.WHITE, CastlingMove.QUEEN_SIDE));
     this.blackKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
-        NonNullWrapperCommon.getLast(blackKingSideLossList), Side.BLACK, CastlingMove.KING_SIDE));
+        Nulls.getLast(blackKingSideLossList), Side.BLACK, CastlingMove.KING_SIDE));
     this.blackQueenSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
-        NonNullWrapperCommon.getLast(blackQueenSideLossList), Side.BLACK, CastlingMove.QUEEN_SIDE));
+        Nulls.getLast(blackQueenSideLossList), Side.BLACK, CastlingMove.QUEEN_SIDE));
 
     // now changing board class state, so performing the move!
     this.performedLegalMoveList.add(moveToPerform);
@@ -368,15 +367,15 @@ public class Board {
     this.dynamicPositionList.add(newDynamicPosition);
 
     // order of instructions dependency!! - must be after adding the move
-    final int lastHalfMoveClock = NonNullWrapperCommon.getLast(halfMoveClockList);
+    final int lastHalfMoveClock = Nulls.getLast(halfMoveClockList);
     this.halfMoveClockList.add(calculateNewHalfMoveClock(lastHalfMoveClock));
 
     // timely dependency - dynamic position list must be updated
     final var newRepetitionCount = RepetitionUtility.calculateCountRepetition(performedLegalMoveList,
-        dynamicPositionList, newDynamicPosition, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
+        dynamicPositionList, newDynamicPosition);
     this.repetitionCountList.add(newRepetitionCount);
 
-    final ImmutableSet<LegalMove> legalMoveSetBeforeLastHalfMoveSet = NonNullWrapperCommon.get(legalMoveSetList,
+    final ImmutableSet<LegalMove> legalMoveSetBeforeLastHalfMoveSet = Nulls.get(legalMoveSetList,
         legalMoveSetList.size() - 2);
 
     final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck, isCheckmate);
@@ -401,7 +400,7 @@ public class Board {
 
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       final Piece king = Piece.calculateKingPiece(havingMove);
-      return new LegalMove(moveSpecification, king, Piece.NONE);
+      return new LegalMove(moveSpecification, king, Piece.NONE, LegalMoveKind.CASTLING);
     }
 
     final Piece movingPiece = staticPosition.get(moveSpecification.fromSquare());
@@ -410,16 +409,17 @@ public class Board {
       final Square squareOfCapturedPawnForEnPassantCapture = EnPassantCaptureUtility
           .calculateSquareOfCapturedPawnForEnPassantCapture(havingMove, moveSpecification);
       final Piece pieceCaptured = staticPosition.get(squareOfCapturedPawnForEnPassantCapture);
-      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, EnPassantRole.EN_PASSANT_CAPTURE);
+      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, LegalMoveKind.EN_PASSANT_CAPTURE);
     }
     if (PromotionUtility.calculateIsPromotionNewMove(moveSpecification)) {
       final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-      return new LegalMove(moveSpecification, movingPiece, pieceCaptured);
+      return new LegalMove(moveSpecification, movingPiece, pieceCaptured, LegalMoveKind.PROMOTION);
     }
     final Piece pieceCaptured = staticPosition.get(moveSpecification.toSquare());
-    final var enPassantRole = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece,
-        moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE : EnPassantRole.NONE;
-    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
+    final var kind = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece, moveSpecification)
+        ? LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE
+        : LegalMoveKind.NORMAL;
+    return new LegalMove(moveSpecification, movingPiece, pieceCaptured, kind);
   }
 
   /**
@@ -458,11 +458,11 @@ public class Board {
     if (isFirstMove()) {
       throw new IllegalArgumentException("There is no last move");
     }
-    return NonNullWrapperCommon.getLast(this.performedLegalMoveList);
+    return Nulls.getLast(this.performedLegalMoveList);
   }
 
   public ImmutableSet<LegalMove> getLegalMoveSet() {
-    return NonNullWrapperCommon.getLast(legalMoveSetList);
+    return Nulls.getLast(legalMoveSetList);
   }
 
   public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
@@ -470,7 +470,7 @@ public class Board {
     for (final LegalMove legalMove : this.performedLegalMoveList) {
       moveSpecificationList.add(legalMove.moveSpecification());
     }
-    return NonNullWrapperCommon.copyOfList(moveSpecificationList);
+    return Nulls.copyOfList(moveSpecificationList);
   }
 
   private boolean calculateIsCapture() {
@@ -482,17 +482,17 @@ public class Board {
   }
 
   public boolean isCheck() {
-    return NonNullWrapperCommon.getLast(isCheckList);
+    return Nulls.getLast(isCheckList);
   }
 
   /** True iff the side to move is in check and has no legal move (FIDE 5.1.1). */
   public boolean isCheckmate() {
-    return NonNullWrapperCommon.getLast(isCheckmateList);
+    return Nulls.getLast(isCheckmateList);
   }
 
   /** True iff the side to move is not in check but has no legal move (FIDE 5.2.1). */
   public boolean isStalemate() {
-    return NonNullWrapperCommon.getLast(isStalemateList);
+    return Nulls.getLast(isStalemateList);
   }
 
   public boolean canClaimFiftyMoveRuleWithOwnMove() {
@@ -524,7 +524,7 @@ public class Board {
   }
 
   public int getHalfMoveClock() {
-    return NonNullWrapperCommon.getLast(halfMoveClockList);
+    return Nulls.getLast(halfMoveClockList);
   }
 
   private int calculateNewHalfMoveClock(int lastHalfMoveClock) {
@@ -536,7 +536,7 @@ public class Board {
   }
 
   public int getRepetitionCount() {
-    return NonNullWrapperCommon.getLast(repetitionCountList);
+    return Nulls.getLast(repetitionCountList);
   }
 
   public boolean isInsufficientMaterial() {
@@ -667,14 +667,14 @@ public class Board {
     if (isFirstMove()) {
       throw new IllegalStateException("There is no last move");
     }
-    return NonNullWrapperCommon.getLast(sanList);
+    return Nulls.getLast(sanList);
   }
 
   public String getLan() {
     if (isFirstMove()) {
       throw new IllegalStateException("There is no last move");
     }
-    return NonNullWrapperCommon.getLast(lanList);
+    return Nulls.getLast(lanList);
   }
 
   public Side getHavingMove() {
@@ -686,18 +686,18 @@ public class Board {
   }
 
   public StaticPosition getStaticPosition() {
-    return NonNullWrapperCommon.getLast(dynamicPositionList).staticPosition();
+    return Nulls.getLast(dynamicPositionList).staticPosition();
   }
 
   StaticPosition getStaticPositionBeforeLastMove() {
     if (isFirstMove()) {
       throw new ProgrammingMistakeException("The method cannot be called if no move was yet made");
     }
-    return NonNullWrapperCommon.get(dynamicPositionList, this.dynamicPositionList.size() - 2).staticPosition();
+    return Nulls.get(dynamicPositionList, this.dynamicPositionList.size() - 2).staticPosition();
   }
 
   public boolean isEnPassantCapturePossible() {
-    return NonNullWrapperCommon.getLast(dynamicPositionList).isEnPassantCapturePossible();
+    return Nulls.getLast(dynamicPositionList).isEnPassantCapturePossible();
   }
 
   private static boolean calculateIsEnPassantCapturePossible(Square enPassantCaptureTargetSquare, Side havingMove,
@@ -741,15 +741,15 @@ public class Board {
   }
 
   ImmutableList<DynamicPosition> getDynamicPositionList() {
-    return NonNullWrapperCommon.copyOfList(dynamicPositionList);
+    return Nulls.copyOfList(dynamicPositionList);
   }
 
   public ImmutableList<HalfMove> getHalfMoveList() {
-    return NonNullWrapperCommon.copyOfList(halfMoveList);
+    return Nulls.copyOfList(halfMoveList);
   }
 
   public DynamicPosition getDynamicPosition() {
-    return NonNullWrapperCommon.getLast(dynamicPositionList);
+    return Nulls.getLast(dynamicPositionList);
   }
 
   public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
@@ -757,7 +757,7 @@ public class Board {
     for (final LegalMove legalMove : this.getLegalMoveSet()) {
       result.add(legalMove.moveSpecification());
     }
-    return NonNullWrapperCommon.copyOfSet(result);
+    return Nulls.copyOfSet(result);
   }
 
   @Override
@@ -781,7 +781,7 @@ public class Board {
   }
 
   public ImmutableList<LegalMove> getPerformedLegalMoveList() {
-    return NonNullWrapperCommon.copyOfList(performedLegalMoveList);
+    return Nulls.copyOfList(performedLegalMoveList);
   }
 
   @Override
@@ -810,19 +810,19 @@ public class Board {
   }
 
   public CastlingRightLoss getWhiteKingSideLoss() {
-    return NonNullWrapperCommon.getLast(whiteKingSideLossList);
+    return Nulls.getLast(whiteKingSideLossList);
   }
 
   public CastlingRightLoss getWhiteQueenSideLoss() {
-    return NonNullWrapperCommon.getLast(whiteQueenSideLossList);
+    return Nulls.getLast(whiteQueenSideLossList);
   }
 
   public CastlingRightLoss getBlackKingSideLoss() {
-    return NonNullWrapperCommon.getLast(blackKingSideLossList);
+    return Nulls.getLast(blackKingSideLossList);
   }
 
   public CastlingRightLoss getBlackQueenSideLoss() {
-    return NonNullWrapperCommon.getLast(blackQueenSideLossList);
+    return Nulls.getLast(blackQueenSideLossList);
   }
 
   public CastlingRightLoss getCastlingRightLoss(Side side, CastlingMove castlingSide) {
@@ -933,7 +933,7 @@ public class Board {
       result.add(getSan());
       this.unmove();
     }
-    return NonNullWrapperCommon.copyOfSet(result);
+    return Nulls.copyOfSet(result);
   }
 
   public ImmutableSet<String> getLegalMovesUci() {
@@ -943,7 +943,7 @@ public class Board {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
       result.add(uci);
     }
-    return NonNullWrapperCommon.copyOfSet(result);
+    return Nulls.copyOfSet(result);
   }
 
   private HalfMove buildHalfMove(MoveSpecification moveSpecification) {
@@ -954,13 +954,10 @@ public class Board {
     final String fen = getFen();
     final var isCapture = isCapture();
     final var countRepetition = getRepetitionCount();
-    final List<DynamicPosition> currentDynamicPositionList = getDynamicPositionList();
     final DynamicPosition dynamicPosition = getDynamicPosition();
-    final var countRepetitionIgnoringEnPassantCapture = RepetitionUtility.calculateCountRepetition(
-        getPerformedLegalMoveList(), currentDynamicPositionList, dynamicPosition, EnPassantCaptureRuleThreefold.DO_IGNORE);
     final Piece movingPiece = getMovingPiece();
     return new HalfMove(index, halfMoveCount, fullMoveNumber, halfMoveClock, isCapture, fen, dynamicPosition,
-        countRepetition, countRepetitionIgnoringEnPassantCapture, getSan(), movingPiece, moveSpecification);
+        countRepetition, getSan(), movingPiece, moveSpecification);
   }
 
 }

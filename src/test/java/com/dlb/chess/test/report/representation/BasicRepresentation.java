@@ -3,18 +3,13 @@ package com.dlb.chess.test.report.representation;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dlb.chess.common.enums.EnPassantCaptureRuleThreefold;
 import com.dlb.chess.report.Report;
 
 public class BasicRepresentation {
 
   private static final String ATTRIBUTE_FEN = "FEN";
-  private static final String ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO = "Threefold ignoring en passant";
-  private static final String ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO = "Threefold";
-
-  private static final String ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE = "Sequence";
-  private static final String ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE = "Sequence";
-
+  private static final String ATTRIBUTE_THREEFOLD_YES_NO = "Threefold";
+  private static final String ATTRIBUTE_THREEFOLD_SEQUENCE = "Sequence";
   private static final String ATTRIBUTE_FIVEFOLD_YES_NO = "Fivefold";
 
   private static final String ATTRIBUTE_NO_PROGRESS_MOVE_RULE_YES_NO = "No progress rule";
@@ -35,9 +30,6 @@ public class BasicRepresentation {
     list.add("-----------------------------------------");
 
     list.add(calculateOutputFen(report));
-
-    list.add(calculateOutputThreefoldRepetitionInitialEnPassantCapture(report));
-    list.add(calculateOutputRepetitionInitialEnPassantCapture(report));
 
     list.add(calculateOutputThreefoldRepetition(report));
 
@@ -88,21 +80,17 @@ public class BasicRepresentation {
     return calculateOutput(ATTRIBUTE_FEN, report.fen());
   }
 
-  private static String calculateOutputThreefoldRepetitionInitialEnPassantCapture(Report report) {
-    return calculateOutput(ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_YES_NO,
-        report.hasThreefoldRepetitionInitialEnPassantCapture());
-  }
-
   private static String calculateOutputFivefoldRepetition(Report report) {
     return calculateOutput(ATTRIBUTE_FIVEFOLD_YES_NO, report.hasFivefoldRepetition());
   }
 
   private static String calculateOutputRepetition(Report report) {
-    return calculateOutputRepetitionType(report, EnPassantCaptureRuleThreefold.DO_NOT_IGNORE);
-  }
-
-  private static String calculateOutputRepetitionInitialEnPassantCapture(Report report) {
-    return calculateOutputRepetitionType(report, EnPassantCaptureRuleThreefold.DO_IGNORE);
+    if (report.repetitionListList().isEmpty()) {
+      return calculateOutput(ATTRIBUTE_THREEFOLD_SEQUENCE, ATTRIBUTE_VALUE_NA);
+    }
+    final String representation = RepetitionRepresentation
+        .calculateRepresentationRepetitionListList(report.repetitionListList());
+    return calculateOutput(ATTRIBUTE_THREEFOLD_SEQUENCE, representation);
   }
 
   private static String calculateOutputNoProgressMoveRule(Report report) {
@@ -120,32 +108,7 @@ public class BasicRepresentation {
   }
 
   private static String calculateOutputThreefoldRepetition(Report report) {
-    return calculateOutput(ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_YES_NO, report.hasThreefoldRepetition());
-  }
-
-  private static String calculateOutputRepetitionType(Report report,
-      EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    final String attributeName = calculateRepetitionAttributeSequence(enPassantCaptureRule);
-
-    final var repetitionList = switch (enPassantCaptureRule) {
-      case DO_IGNORE -> report.repetitionListListInitialEnPassantCapture();
-      case DO_NOT_IGNORE -> report.repetitionListList();
-      default -> throw new IllegalArgumentException();
-    };
-    if (repetitionList.isEmpty()) {
-      return calculateOutput(attributeName, BasicRepresentation.ATTRIBUTE_VALUE_NA);
-    }
-    final String representation = RepetitionRepresentation.calculateRepresentationRepetitionListList(repetitionList,
-        enPassantCaptureRule);
-    return calculateOutput(attributeName, representation);
-  }
-
-  private static String calculateRepetitionAttributeSequence(EnPassantCaptureRuleThreefold enPassantCaptureRule) {
-    return switch (enPassantCaptureRule) {
-      case DO_IGNORE -> ATTRIBUTE_THREEFOLD_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE;
-      case DO_NOT_IGNORE -> ATTRIBUTE_THREEFOLD_NOT_IGNORING_EN_PASSANT_CAPTURE_SEQUENCE;
-      default -> throw new IllegalArgumentException();
-    };
+    return calculateOutput(ATTRIBUTE_THREEFOLD_YES_NO, report.hasThreefoldRepetition());
   }
 
   private static String calculateOutput(String attributeName, String attributeValue) {

@@ -11,7 +11,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.HalfMoveUtility;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
@@ -57,11 +57,11 @@ public final class StrictPgnParser {
   }
 
   public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
+    return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static PgnFile parse(String pgnFilePath) {
-    return parse(NonNullWrapperCommon.pathOf(pgnFilePath));
+    return parse(Nulls.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -74,15 +74,15 @@ public final class StrictPgnParser {
     for (final String line : lines) {
       builder.append(line).append('\n');
     }
-    return NonNullWrapperCommon.toString(builder);
+    return Nulls.toString(builder);
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(NonNullWrapperCommon.pathResolve(pgnFolderPath, pgnFileName));
+    return validate(Nulls.pathResolve(pgnFolderPath, pgnFileName));
   }
 
   public static StrictPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(NonNullWrapperCommon.pathOf(pgnFilePath));
+    return validate(Nulls.pathOf(pgnFilePath));
   }
 
   public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
@@ -149,8 +149,8 @@ public final class StrictPgnParser {
     removeFenIfInitial(tagList, startFen);
     Collections.sort(tagList);
 
-    return new PgnFile(NonNullWrapperCommon.copyOfList(tagList), startFen, movetext.pregameCommentary(),
-        NonNullWrapperCommon.copyOfList(movetext.halfMoveList()));
+    return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+        Nulls.copyOfList(movetext.halfMoveList()));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -262,10 +262,10 @@ public final class StrictPgnParser {
   private static void validateUniqueTagNames(List<Tag> tagList) {
     for (var i = 0; i < tagList.size(); i++) {
       for (var j = i + 1; j < tagList.size(); j++) {
-        if (NonNullWrapperCommon.get(tagList, i).name().equals(NonNullWrapperCommon.get(tagList, j).name())) {
+        if (Nulls.get(tagList, i).name().equals(Nulls.get(tagList, j).name())) {
           throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE,
-              SanValidationProblem.NONE, "The tag name must be unique. The tag name \""
-                  + NonNullWrapperCommon.get(tagList, i).name() + "\" was used more than once.");
+              SanValidationProblem.NONE, "The tag name must be unique. The tag name \"" + Nulls.get(tagList, i).name()
+                  + "\" was used more than once.");
         }
       }
     }
@@ -602,7 +602,7 @@ public final class StrictPgnParser {
   private static void validateSanCharacters(String san) {
     for (var i = 0; i < san.length(); i++) {
       final var c = san.charAt(i);
-      if (!com.dlb.chess.board.enums.Piece.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
+      if (!com.dlb.chess.fen.FenPieceSymbol.exists(c) && !com.dlb.chess.board.enums.File.exists(c)
           && !com.dlb.chess.board.enums.Rank.exists(c) && !com.dlb.chess.san.SanSymbol.exists(c)) {
         throw movetextError(StrictPgnParserValidationProblem.MOVETEXT_SAN_CHARACTER_INVALID,
             "The movetext is invalid because a SAN contains an invalid character of \"" + c + "\".");

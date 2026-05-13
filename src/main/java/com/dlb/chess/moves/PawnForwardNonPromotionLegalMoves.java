@@ -10,8 +10,8 @@ import com.dlb.chess.board.enums.Rank;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.model.EnPassantRole;
 import com.dlb.chess.model.LegalMove;
+import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.squares.PawnPotentialToSquares;
 
 class PawnForwardNonPromotionLegalMoves extends PawnLegalMoves {
@@ -31,9 +31,10 @@ class PawnForwardNonPromotionLegalMoves extends PawnLegalMoves {
         final MoveSpecification moveSpecification = new MoveSpecification(fromSquare, toSquare);
         if (ChessRuleAnalyzer.isMoveKingSafe(staticPosition, havingMove, moveSpecification)) {
           final Piece pieceCaptured = staticPosition.get(toSquare);
-          final var enPassantRole = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece,
-              moveSpecification) ? EnPassantRole.TWO_SQUARE_ADVANCE : EnPassantRole.NONE;
-          final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured, enPassantRole);
+          final var kind = EnPassantCaptureUtility.calculateIsPawnTwoSquareAdvanceMove(movingPiece, moveSpecification)
+              ? LegalMoveKind.PAWN_TWO_SQUARE_ADVANCE
+              : LegalMoveKind.NORMAL;
+          final LegalMove legalMove = new LegalMove(moveSpecification, movingPiece, pieceCaptured, kind);
           legalMoveSet.add(legalMove);
         }
       }

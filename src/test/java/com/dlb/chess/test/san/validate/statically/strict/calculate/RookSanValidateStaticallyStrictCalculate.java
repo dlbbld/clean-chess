@@ -3,7 +3,7 @@ package com.dlb.chess.test.san.validate.statically.strict.calculate;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.dlb.chess.common.NonNullWrapperCommon;
+import com.dlb.chess.common.Nulls;
 import com.dlb.chess.san.SanParse;
 import com.dlb.chess.test.san.model.SanValidationFromTo;
 import com.dlb.chess.test.san.validate.statically.strict.enums.RookSanValidateStaticallyStrict;
@@ -15,13 +15,12 @@ public class RookSanValidateStaticallyStrictCalculate extends AbstractSanValidat
 
     final Map<String, SanParse> sanValidateMap = new TreeMap<>();
 
-    for (final RookSanValidateStaticallyStrict sanEnum : RookSanValidateStaticallyStrict.values()) {
-      final String enumName = NonNullWrapperCommon.name(sanEnum);
+    for (final String enumName : RookSanValidateStaticallyStrict.VALUES) {
       final SanValidationFromTo model = calculateFromFileXorRankTo(enumName, ROOK);
       populateMap(sanValidateMap, model, ROOK);
     }
 
-    return NonNullWrapperCommon.copyOfMap(sanValidateMap);
+    return Nulls.copyOfMap(sanValidateMap);
   }
 
 }
