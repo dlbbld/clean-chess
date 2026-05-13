@@ -193,6 +193,8 @@ FEN handling sits on two orthogonal axes — *strict vs lenient* (syntactic axis
 
 **`LenientPgnParser` routes the FEN tag through `LenientFenParser`.** Lenient PGN parsing accepts a deficient FEN tag (e.g. a "speculative-fullMoveNumber" position) for symmetry with movetext leniency; the FEN-level forgiveness is applied silently at the PGN-parser level. Strict PGN parsing reads the FEN tag through strict advanced parsing — a strict-parseable PGN must carry a strict-parseable FEN.
 
+**What is intentionally *not* a strict invariant.** A test-only class historically guarded a second rule alongside the half-move-clock-vs-full-move-number consistency: `fullMoveNumber == 1` had to mean the initial position (or, for black-to-move, one of the 20 after-first-half-move positions). That rule was dropped entirely when the consistency check was promoted into `FenParserAdvanced` — many real-world FEN exporters emit `fullMoveNumber = 1` as a placeholder for positions whose actual move number is unknown (chess.com / Lichess "speculative from last capture" exports, ChessBase legacy snapshots), and rejecting them at the strict level would be hostile to the libraries clean-chess interoperates with. The half-move-clock consistency check absorbs the only physically-impossible half of the historic rule; the placeholder-fullMoveNumber half is accepted at both strict and lenient levels.
+
 ---
 
 ## 4. Architecture

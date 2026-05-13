@@ -130,7 +130,7 @@ Plus `Board.fromFenLenient(String)` (or `new Board(String, FenStrictness)`) for 
 - [x] Decide: does `LenientPgnParser` use lenient FEN when reading the `FEN`/`SetUp` PGN tag, or stay strict on the tag? Lean: lenient, for consistency with movetext leniency
 - [x] One test fixture per forgiven code; one end-to-end "deficient FEN" fixture; round-trip test (lenient parse → canonical FEN → strict parse) for each
 - [x] Document the contract in `specification.md` — explicit table of strict-vs-lenient × raw-vs-advanced
-- [ ] Update README "Lenient PGN parser" framing — the project now has lenient parsers for all three input languages
+- [x] Update README "Lenient PGN parser" framing — the project now has lenient parsers for all three input languages
 
 #### Open design questions
 - Castling normalisation scope — KQkq-ordering deviations only, or also X-FEN / Shredder-FEN (Chess960) castling notation? Lean: KQkq-ordering only; X-FEN is a separate feature.
@@ -149,14 +149,14 @@ The test-only `FenParserAdvancedFurther` enforces two semantic invariants on a `
 The class was kept out of main because of the second branch's practical incompatibility with real-world exporters. With the lenient FEN parser landing alongside (preceding task), the resolution becomes clean: **strict enforces, lenient auto-corrects**.
 
 - [x] Fold the half-move-clock-vs-full-move-number consistency check into `FenParserAdvanced` — it belongs with the other structural invariants (no impossible checks, no pawn on rank 1/8, castling rights consistent with piece placement, etc.)
-- [x] Decide on branch 2 (`fullMoveNumber == 1` constraint): **dropped** — too many real-world FEN exporters emit `fullMoveNumber = 1` for non-initial positions for this to be a productive strict rejection. *(Not yet documented in `specification.md` — see follow-up below.)*
+- [x] Decide on branch 2 (`fullMoveNumber == 1` constraint): **dropped** — too many real-world FEN exporters emit `fullMoveNumber = 1` for non-initial positions for this to be a productive strict rejection. Documented in `specification.md` §3.3.3.
 - [x] Lenient FEN parser forgives the consistency-check failure: auto-correct `fullMoveNumber` up to `ceil(halfMoveClock / 2) + 1` (the minimum consistent value), surface as `HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER` (or similarly named) forgiven item *(actually implemented with a reserve formula — `halfMoveClock` rounded up to the next multiple of ten — rather than the strict minimum, signalling a reconstructed placeholder)*
 - [x] Delete `src/test/java/com/dlb/chess/test/fen/FenParserAdvancedFurther.java`, `TestFenParserAdvancedFurther.java`, `FenAdvancedFurtherValidationProblem.java`, `FenAdvancedFurtherValidationException.java`. The covered test cases migrate to `TestFenParserAdvanced` (for the consistency check) and to the lenient FEN test suite (for the forgiveness)
 - [x] CHANGELOG: note the strict-parser invariant gain and the now-impossible "fullMoveNumber=1 + non-initial" position no longer being rejected at any level
 
 ##### Pre-tag follow-ups (docs-only)
-- [ ] `specification.md` — note explicitly that the `FenParserAdvancedFurther` branch 2 (`fullMoveNumber == 1 ⇒ initial-or-after-first-move position`) was dropped entirely; only the half-move-clock consistency check moved into `FenParserAdvanced`.
-- [ ] `README.md` — update the "Lenient PGN parser" framing to reflect that the project now has lenient parsers for all three input languages (SAN, PGN, FEN). Add a short pointer to `Board.fromFenLenient(String)`.
+- [x] `specification.md` — note explicitly that the `FenParserAdvancedFurther` branch 2 (`fullMoveNumber == 1 ⇒ initial-or-after-first-move position`) was dropped entirely; only the half-move-clock consistency check moved into `FenParserAdvanced`.
+- [x] `README.md` — update the "Lenient PGN parser" framing to reflect that the project now has lenient parsers for all three input languages (SAN, PGN, FEN). Add a short pointer to `Board.fromFenLenient(String)`.
 
 ## Future release — Auto-CHA (DeepSquare moment)
 
