@@ -19,6 +19,7 @@ import com.dlb.chess.model.EmptyBoardMove;
 import com.dlb.chess.squares.AbstractEmptyBoardSquares;
 import com.google.common.collect.ImmutableSet;
 
+@SuppressWarnings("null")
 public abstract class RookSanValidateStaticallyStrict {
 
   public static final ImmutableSet<String> VALUES;

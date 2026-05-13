@@ -45,8 +45,10 @@ class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserExce
         StrictPgnParserValidationProblem.TAG_FORMAT_NOT_ENDING_WITH_RIGHT_SQUARE_BRACKET);
 
     checkException("14_tag_name_not_unique.pgn", StrictPgnParserValidationProblem.TAG_NAME_NOT_UNIQUE);
-    checkException("15_tag_not_all_required_tags_set.pgn",
-        StrictPgnParserValidationProblem.TAG_NOT_ALL_REQUIRED_TAGS_SET);
+    // 15: PGN spec section 8.1.1 makes the full Seven Tag Roster an archival-storage concern only. Strict parsing
+    // requires the Result tag specifically (so its value can match the termination marker); the rest of the roster
+    // is optional at the strict level. The fixture is missing only the Result tag.
+    checkException("15_tag_result_missing.pgn", StrictPgnParserValidationProblem.TAG_RESULT_MISSING);
 
     checkException("16_tag_result_value_invalid.pgn", StrictPgnParserValidationProblem.TAG_RESULT_VALUE_INVALID);
     checkException("17_tag_result_value_invalid.pgn", StrictPgnParserValidationProblem.TAG_RESULT_VALUE_INVALID);

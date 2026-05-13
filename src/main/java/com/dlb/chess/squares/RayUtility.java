@@ -9,6 +9,7 @@ import com.google.common.collect.ImmutableList;
  */
 abstract class RayUtility {
 
+  @SuppressWarnings("null")
   static ImmutableList<Square> ray(int fromFile, int fromRank, int fileDelta, int rankDelta) {
     final ImmutableList.Builder<Square> builder = ImmutableList.builder();
     int f = fromFile + fileDelta;

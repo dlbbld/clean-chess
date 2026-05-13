@@ -2,9 +2,24 @@ package com.dlb.chess.test.pgn.parser;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.WriteMode;
 
 public abstract class AbstractTestLenientPgnParser {
+
+  /**
+   * Asserts that two parse models are equivalent under archival normalisation — i.e. once both are fed through
+   * {@link WriteMode#ARCHIVAL} export they produce the same PGN string. Use this instead of full {@code PgnFile}
+   * equality when comparing a lenient-parsed deficient variant against its strict-parsed canonical reference: the
+   * parsers now preserve input as given, so direct equality fails wherever the inputs differ in tag presence,
+   * tag order, redundant FEN/SetUp, or termination-marker presence. Archival normalisation is the right lens for
+   * the invariant the original tests intended ("these variants are equivalent under spec section 8.1.1 form").
+   */
+  static void assertEqualsArchival(PgnFile expected, PgnFile actual) {
+    assertEquals(PgnCreate.createPgnFileString(expected, WriteMode.ARCHIVAL),
+        PgnCreate.createPgnFileString(actual, WriteMode.ARCHIVAL));
+  }
 
   static void assertEqualsButTagList(PgnFile expected, PgnFile actual) {
     assertEquals(expected.halfMoveList(), actual.halfMoveList());

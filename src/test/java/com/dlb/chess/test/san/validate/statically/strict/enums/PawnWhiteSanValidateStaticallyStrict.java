@@ -14,6 +14,7 @@ import com.dlb.chess.squares.AbstractEmptyBoardSquares;
 import com.dlb.chess.squares.PawnDiagonalSquares;
 import com.google.common.collect.ImmutableSet;
 
+@SuppressWarnings("null")
 public abstract class PawnWhiteSanValidateStaticallyStrict {
 
   public static final ImmutableSet<String> VALUES;

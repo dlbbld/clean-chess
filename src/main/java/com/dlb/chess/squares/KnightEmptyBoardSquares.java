@@ -9,6 +9,7 @@ import com.dlb.chess.common.constants.EnumConstants;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
+@SuppressWarnings("null")
 public class KnightEmptyBoardSquares extends AbstractEmptyBoardSquares implements EnumConstants {
 
   private static final int[][] KNIGHT_OFFSETS = { { 1, 2 }, { 1, -2 }, { -1, 2 }, { -1, -2 }, { 2, 1 }, { 2, -1 },

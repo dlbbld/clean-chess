@@ -396,10 +396,8 @@ class TestPawnWallUtility extends PawnWall {
     testHelperLichess("8/8/1k6/p1p1p1p1/P1P1P1Pb/7K/4B3/8 w - - 49 80", true); // blocked pawns with bishops
     testHelperLichess("8/8/p7/Pp1p1p1k/1P1P1Pp1/3b2P1/3K1B2/8 b - - 4 54", true); // blocked pawns with bishops
 
-    testHelperLichess("5k2/8/3p4/3p1p1p/p1pP1P1P/PpP2K2/1P5B/8 w - - 20 67", true); // blocked pawns with bishops;
-                                                                                    // bishop on h2 trapped by own
-                                                                                    // pawns, cannot reach any black
-                                                                                    // pawn
+    // blocked pawns with bishops; bishop on h2 trapped by own pawns, cannot reach any black pawn
+    testHelperLichess("5k2/8/3p4/3p1p1p/p1pP1P1P/PpP2K2/1P5B/8 w - - 20 67", true);
 
     // Known false positive — deferred to the Auto-CHA / DeepSquare release (see tasks.md). The bishop-reachability
     // check correctly determines no white bishop can capture any black pawn, so the local pawn-wall predicate fires.

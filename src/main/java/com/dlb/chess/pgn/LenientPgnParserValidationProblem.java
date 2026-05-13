@@ -16,5 +16,11 @@ public enum LenientPgnParserValidationProblem {
   MOVETEXT_COMMENTARY_NOT_ALLOWED_IN_SAN,
   MOVETEXT_CONTENT_AFTER_TERMINATION,
   EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
-  SAN
+  SAN,
+  /**
+   * The PGN's FEN tag value cannot be parsed even by the lenient FEN parser, or the resulting position fails
+   * strict semantic validation (missing king, impossible double-check, etc.). The PGN's structure is otherwise
+   * fine; the failure is in the position encoded by the FEN tag.
+   */
+  FEN_TAG_INVALID
 }

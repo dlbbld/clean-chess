@@ -24,6 +24,7 @@ public class PawnDiagonalSquares implements EnumConstants {
   }
 
   // The 0-2 diagonal capture squares reachable from each pawn position. Pawns only exist on ranks 2-7.
+  @SuppressWarnings("null")
   private static ImmutableMap<Square, ImmutableSet<Square>> build(Side side) {
     final int rankOffset = side == Side.WHITE ? 1 : -1;
     final EnumMap<Square, ImmutableSet<Square>> map = Nulls.newEnumMap(Square.class);

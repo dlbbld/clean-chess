@@ -9,7 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class TestLenientPgnParserUtf8 {
@@ -150,7 +152,11 @@ public class TestLenientPgnParserUtf8 {
     final Path filePath = Nulls.pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_UTF8_TEST_ROOT_FOLDER_PATH, fileName);
     final PgnFile pgnFileActual = LenientPgnParser.parse(filePath);
 
-    assertEquals(pgnFileExpected, pgnFileActual);
+    // Compare under archival normalisation: the two inputs differ in tag order (test2/test3 use
+    // intentionally-shuffled tag order to exercise lenient acceptance), which the parser preserves but archival
+    // export reconciles to canonical order.
+    assertEquals(PgnCreate.createPgnFileString(pgnFileExpected, WriteMode.ARCHIVAL),
+        PgnCreate.createPgnFileString(pgnFileActual, WriteMode.ARCHIVAL));
   }
 
 }

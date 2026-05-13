@@ -12,6 +12,7 @@ import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.PgnWriter;
+import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.test.FileComparison;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
@@ -75,7 +76,10 @@ public class TestPgnExportLineBreaks {
     logger.info(TEST_SOURCE_FILE_PATH.getFileName());
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    PgnWriter.writePgnFile(pgnFile, TEST_DESTINATION_FILE_PATH);
+    // Archival mode: the inline source uses a different tag order than the on-disk reference fixture (canonical
+    // sort order, ECO after BlackElo/EventDate). The lenient parser preserves input order; archival emission
+    // sorts into canonical order, matching the reference.
+    PgnWriter.writePgnFile(pgnFile, TEST_DESTINATION_FILE_PATH, WriteMode.ARCHIVAL);
 
     assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
   }
