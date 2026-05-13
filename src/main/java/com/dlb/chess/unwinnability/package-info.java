@@ -1,8 +1,8 @@
 /**
  * The library's flagship feature — a Java port of Miguel Ambrona's
  * <a href="https://github.com/miguel-ambrona/D3-Chess">Chess Unwinnability Analyzer (CHA)</a> (GPL v3). Decides whether
- * a position is <em>unwinnable for a side</em> — the side has no theoretical mating sequence assuming worst-case play
- * by the opponent — and the symmetric notion of a <em>dead position</em> (unwinnable for both sides).
+ * a position is <em>unwinnable for a side</em> — no legal sequence can end with that side giving checkmate, even if
+ * the opponent cooperates — and the symmetric notion of a <em>dead position</em> (unwinnable for both sides).
  *
  * <p>
  * Insufficient material covers the trivial cases (king-vs-king, king + minor vs king); positions like blocked pawn
