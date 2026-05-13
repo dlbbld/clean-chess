@@ -294,6 +294,25 @@ class TestFenParserAdvanced implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
+  void testParseFenExceptionHalfMoveClockTooBigRelativeToFullMoveNumber() {
+    // Half-move clock cannot exceed the maximum number of half-moves played by the start of the given
+    // full-move number. A FEN like "... 3 2 with white to move" claims 3 half-moves have been played but the
+    // counter is still on move 2 (max half-moves at start of move 2 for white = 2). Physical impossibility.
+    // White to move, max half-moves = 2 * (fullMoveNumber - 1).
+    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 3 2",
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
+    // Black to move, max half-moves = 2 * (fullMoveNumber - 1) + 1 = 3 for move 2.
+    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 4 2",
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
+    // Mid-range: hmc=20 on fullMoveNumber=10 white means 20 half-moves on move 10 white, max is 18.
+    checkParseFenException("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 20 10",
+        FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER);
+    // Boundary: hmc=2 on fullMoveNumber=2 white is valid (max = 2).
+    checkParseFenSuccess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 2 2");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testParseFenConverted() {
 
     final Fen actual = FenParserAdvanced.parseFenAdvanced(FenConstants.FEN_INITIAL_STR);

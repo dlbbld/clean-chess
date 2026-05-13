@@ -14,7 +14,7 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.PgnCommentaryValidationException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
-import com.dlb.chess.fen.FenParserAdvanced;
+import com.dlb.chess.fen.LenientFenParser;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
@@ -757,7 +757,11 @@ public final class LenientPgnParser {
 
   private static Fen calculateStartFen(List<Tag> tagList, boolean isStartFromPosition) {
     final var startFenStr = isStartFromPosition ? TagUtility.readFen(tagList) : FenConstants.FEN_INITIAL_STR;
-    return FenParserAdvanced.parseFenAdvanced(startFenStr);
+    // Lenient PGN parser routes the FEN tag through the lenient FEN parser too — symmetry with movetext leniency
+    // means deficient FEN tags (extra whitespace, missing counters, speculative fullMoveNumber on a non-initial
+    // position) parse cleanly. The lenient layer only forgives syntactic deviations; structural / rule-consistency
+    // violations still propagate as FenAdvancedValidationException via LenientFenParserValidationException.
+    return LenientFenParser.parseText(startFenStr);
   }
 
   // -------------------------------------------------------------------------------------------------

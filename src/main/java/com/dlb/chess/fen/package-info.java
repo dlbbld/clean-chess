@@ -1,9 +1,11 @@
 /**
- * FEN (Forsyth–Edwards Notation) parsing, validation, and generation. Two parser entry points:
+ * FEN (Forsyth–Edwards Notation) parsing, validation, and generation. Three parser entry points across the
+ * strict-vs-lenient (syntactic) and raw-vs-advanced (semantic) axes — see {@code specification.md} §3.3.3 for the
+ * contract table.
  *
  * <ul>
- * <li>{@link com.dlb.chess.fen.FenParserRaw} — basic structural parsing. Validates the six FEN fields (placement, side to
- * move, castling rights, en-passant target, halfmove clock, fullmove number) for syntactic correctness only.</li>
+ * <li>{@link com.dlb.chess.fen.FenParserRaw} — basic structural parsing. One regex: six non-empty
+ * space-separated fields. No semantic interpretation.</li>
  * <li>{@link com.dlb.chess.fen.FenParserAdvanced} — basic parsing plus advanced structural and rule-consistency
  * validation. Beyond field syntax it enforces:
  * <ul>
@@ -15,11 +17,20 @@
  * <li>en-passant target square consistent with the side to move and the adjacent pawn structure</li>
  * <li>halfmove clock not above the 75-move-rule threshold of 150 — a clock of exactly 150 is the legal terminal moment
  * and is accepted; only values strictly above 150 are rejected</li>
+ * <li>halfmove clock consistent with the fullmove number — {@code halfMoveClock <= 2 * (fullMoveNumber - 1) +
+ * (havingMove == BLACK ? 1 : 0)}; a FEN like {@code ... 15 1} (15 halfmoves on move 1) is physically impossible</li>
  * <li>fullmove number in the supported range</li>
  * </ul>
  * This is the variant {@link com.dlb.chess.board.Board#Board(String)} uses. It does not prove full game reachability —
  * a position passing these checks may still be unreachable from the initial position through any legal sequence;
  * structural and rule-consistency plausibility is the bar.</li>
+ * <li>{@link com.dlb.chess.fen.LenientFenParser} — purely syntactic-tolerance pre-pass. Normalises whitespace,
+ * casing, missing trailing counters, non-canonical castling order, non-ASCII dashes, and trailing garbage; also
+ * recovers from the strict halfmove-clock-vs-fullmove-number inconsistency by auto-correcting the fullmove number
+ * up to the minimum consistent value. After normalisation, delegates to {@code FenParserAdvanced} — strict
+ * semantic invariants are unchanged. Every transform that fires surfaces as a typed
+ * {@link com.dlb.chess.fen.ForgivenFenItem} on the {@link com.dlb.chess.fen.LenientFenParserValidationResult}.
+ * Reached from {@link com.dlb.chess.board.Board#fromFenLenient(String)}.</li>
  * </ul>
  *
  * <p>

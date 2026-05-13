@@ -30,6 +30,7 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.fen.FenBoard;
 import com.dlb.chess.fen.FenParserAdvanced;
+import com.dlb.chess.fen.LenientFenParser;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.CastlingRightBoth;
@@ -231,6 +232,21 @@ public class Board {
    */
   public Board(String fen) {
     this(FenParserAdvanced.parseFenAdvanced(fen));
+  }
+
+  /**
+   * Constructs a {@code Board} from a FEN string via {@link LenientFenParser}. The lenient layer applies a
+   * syntactic-tolerance pass (whitespace, casing, missing halfmove/fullmove counters, non-canonical castling order,
+   * non-ASCII dashes, trailing garbage) before delegating to {@link FenParserAdvanced}. Strict semantic invariants
+   * are unchanged: a FEN with a missing king, a pawn on rank 1, an impossible double-check, or castling rights that
+   * contradict the piece placement still fails. Callers who need to see the list of tolerated deviations should
+   * invoke {@link LenientFenParser#validateText(String)} directly.
+   *
+   * @throws com.dlb.chess.fen.LenientFenParserValidationException when the input cannot be recovered or fails the
+   *                                                               strict semantic checks
+   */
+  public static Board fromFenLenient(String fen) {
+    return new Board(LenientFenParser.parseText(fen));
   }
 
   public boolean isFirstMove() {
