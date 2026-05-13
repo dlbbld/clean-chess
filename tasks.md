@@ -136,11 +136,23 @@ Plus `Board.fromFenLenient(String)` (or `new Board(String, FenStrictness)`) for 
 - Castling normalisation scope — KQkq-ordering deviations only, or also X-FEN / Shredder-FEN (Chess960) castling notation? Lean: KQkq-ordering only; X-FEN is a separate feature.
 - Order of forgiven items in the result — left-to-right (token position) or grouped by code? PGN does left-to-right; mirror.
 
-### FEN parser tier audit and rename
-Three FEN parsers exist: `FenParserRaw`, `FenParserAdvanced`, `FenParserAdvancedFurther`. The third is largely unused. Boundaries between the three are unclear and the docs overclaim what each tier proves (see "FEN-validation documentation overclaims" — addressed in 6.0.0).
-- [ ] Audit each tier — what each parser actually validates vs what its docs claim
-- [ ] Document each tier's contract precisely in `specification.md`
-- [ ] Decide: keep three tiers, collapse `AdvancedFurther` into `Advanced`, or drop it
+### FEN parser tier audit
+Two FEN parsers exist in main: `FenParserRaw` (lexical only, one regex) and `FenParserAdvanced` (structural + rule-consistency). Boundaries were unclear and the docs overclaimed what each tier proves (the "no real game could reach" wording was softened in 6.0.0, but the tier contracts are still not written down precisely). A third class, `FenParserAdvancedFurther`, lives under `src/test` (not main) and runs only via its own test class — its disposition is captured as the closing task below.
+- [ ] Audit `FenParserRaw` and `FenParserAdvanced` — list what each actually validates vs what its package-level docs claim
+- [ ] Document each tier's contract precisely in `specification.md` (the strict-vs-lenient × raw-vs-advanced table from the lenient-FEN section is the right home — extend it with the per-tier contract column)
+
+### Promote `FenParserAdvancedFurther` consistency check into strict, drop the class
+The test-only `FenParserAdvancedFurther` enforces two semantic invariants on a `Fen`:
+1. **Half-move clock vs full-move number consistency** — `halfMoveClock <= 2 * (fullMoveNumber - 1) + (havingMove == BLACK ? 1 : 0)`. A FEN like `... 15 1` (15 half-moves played, claiming move 1) is genuinely impossible in a single chess game.
+2. **Full-move number = 1 ⇒ initial position (White) or one of the 20 after-first-half-move positions (Black)** — narrower, more debatable: many engines emit non-initial positions with `fullMoveNumber = 1` as a placeholder, which makes this branch unfriendly to real-world FEN.
+
+The class was kept out of main because of the second branch's practical incompatibility with real-world exporters. With the lenient FEN parser landing alongside (preceding task), the resolution becomes clean: **strict enforces, lenient auto-corrects**.
+
+- [ ] Fold the half-move-clock-vs-full-move-number consistency check into `FenParserAdvanced` — it belongs with the other structural invariants (no impossible checks, no pawn on rank 1/8, castling rights consistent with piece placement, etc.)
+- [ ] Decide on branch 2 (`fullMoveNumber == 1` constraint): probably **drop** — too many real-world FEN exporters emit `fullMoveNumber = 1` for non-initial positions for this to be a productive strict rejection. Document the decision either way in `specification.md`.
+- [ ] Lenient FEN parser forgives the consistency-check failure: auto-correct `fullMoveNumber` up to `ceil(halfMoveClock / 2) + 1` (the minimum consistent value), surface as `HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER` (or similarly named) forgiven item
+- [ ] Delete `src/test/java/com/dlb/chess/test/fen/FenParserAdvancedFurther.java`, `TestFenParserAdvancedFurther.java`, `FenAdvancedFurtherValidationProblem.java`, `FenAdvancedFurtherValidationException.java`. The covered test cases migrate to `TestFenParserAdvanced` (for the consistency check) and to the lenient FEN test suite (for the forgiveness)
+- [ ] CHANGELOG: note the strict-parser invariant gain and the now-impossible "fullMoveNumber=1 + non-initial" position no longer being rejected at any level
 
 ## Future release — Auto-CHA (DeepSquare moment)
 
