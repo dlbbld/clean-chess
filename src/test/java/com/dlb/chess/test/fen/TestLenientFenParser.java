@@ -164,6 +164,33 @@ class TestLenientFenParser {
     assertEquals(INITIAL_CANONICAL, result.fen().fen());
   }
 
+  @Test
+  void test17_stockfishUciStylePositionAfterFenPrint() {
+    // Pattern from Stockfish-style UCI position emitters: the `position fen ...` line frequently appears with
+    // a four-field FEN (no counters) and tab-padded fields when piped through `bestmove`/`info` interleaved
+    // output. Combination should pass cleanly with MISSING_HALFMOVE_AND_FULLMOVE plus TAB_OR_NEWLINE_AS_SEPARATOR.
+    final String deviating = "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R\tw\tKQkq\t-";
+    final LenientFenParserValidationResult result = LenientFenParser.validateText(deviating);
+    assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
+    final ImmutableList<ForgivenFenItem> items = result.forgivenItems();
+    assertTrue(containsCode(items, ForgivenFenItemCode.TAB_OR_NEWLINE_AS_SEPARATOR));
+    assertTrue(containsCode(items, ForgivenFenItemCode.MISSING_HALFMOVE_AND_FULLMOVE));
+    // Counters defaulted as documented: halfMoveClock = 0, fullMoveNumber = 1.
+    assertEquals(0, result.fen().halfMoveClock());
+    assertEquals(1, result.fen().fullMoveNumber());
+  }
+
+  @Test
+  void test18_chessComOrLichessExportStyleWithTrailingNewline() {
+    // Pattern from web-UI clipboard exports: trailing newline (sometimes \r\n) and otherwise canonical FEN.
+    // Mirrors the "I copied a FEN from a web UI and there's a stray newline" complaint pattern.
+    final String deviating = INITIAL_CANONICAL + "\n";
+    final LenientFenParserValidationResult result = LenientFenParser.validateText(deviating);
+    assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
+    assertTrue(containsCode(result.forgivenItems(), ForgivenFenItemCode.TRAILING_WHITESPACE));
+    assertEquals(INITIAL_CANONICAL, result.fen().fen());
+  }
+
   // -------------------------------------------------------------------------------------------------
   // Helpers
   // -------------------------------------------------------------------------------------------------
