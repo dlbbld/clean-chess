@@ -17,24 +17,24 @@ Layering violation surfaced by the API-surface audit. `Side.calculate(String)` p
 
 While in `FenParserAdvanced`, `validateHavingMove` currently checks for `w` or `b` via a regular expression — overkill for a two-character alphabet. A direct equality check that throws the advanced FEN validation exception on mismatch is the natural shape.
 
-- [ ] Move FEN-letter → `Side` parsing into the FEN parser layer; pick the right home (likely `FenParserRaw` since this is purely lexical)
-- [ ] Delete `Side.calculate(String)` from the `Side` enum
-- [ ] Delete `BasicChessUtility.calculateSideHavingMoveForSide(String)` (duplicate of the above)
-- [ ] Replace the regex in `FenParserAdvanced.validateHavingMove` with a direct equality check + advanced-FEN-validation throw
-- [ ] Update any test callers of the removed methods to go through the FEN parser instead
+- [x] Move FEN-letter → `Side` parsing into the FEN parser layer; pick the right home (likely `FenParserRaw` since this is purely lexical)
+- [x] Delete `Side.calculate(String)` from the `Side` enum
+- [x] Delete `BasicChessUtility.calculateSideHavingMoveForSide(String)` (duplicate of the above)
+- [x] Replace the regex in `FenParserAdvanced.validateHavingMove` with a direct equality check + advanced-FEN-validation throw
+- [x] Update any test callers of the removed methods to go through the FEN parser instead
 
 ### Replace `UciValidateHelper` enum with computed lookup
 Auto-generated 1984-line enum, ~111 KB class file — the single largest `.class` in the project (~7.75% of production bytecode, ~2.5× the next-largest class). The "~50%" framing in the earlier draft of this item was overstated. Used as a list-of-strings rather than as an enum; a generation loop in the static init of its only caller (`UciMoveValidationUtility`) replaces the 1984 lines of source with ~35 lines of generation logic.
-- [ ] Replace the enum with a computed in-memory lookup in `UciMoveValidationUtility`'s static init (the loop logic from the now-deletable `GenerateUciMove` test scaffold).
-- [ ] Drop the `UciValidateHelper` field from the `UciMove` record (zero external callers — verify with grep before removing).
-- [ ] Delete `GenerateUciMove` (one-shot code-template generator whose output is superseded by the runtime computation).
-- [ ] Verify production bytecode shrinks (expected ~10% reduction; not 50%).
+- [x] Replace the enum with a computed in-memory lookup in `UciMoveValidationUtility`'s static init (the loop logic from the now-deletable `GenerateUciMove` test scaffold).
+- [x] Drop the `UciValidateHelper` field from the `UciMove` record (zero external callers — verify with grep before removing).
+- [x] Delete `GenerateUciMove` (one-shot code-template generator whose output is superseded by the runtime computation).
+- [x] Verify production bytecode shrinks (expected ~10% reduction; not 50%).
 
 ### FEN-validation documentation overclaims
 `fen/package-info.java` and `Board.java` (class-level + constructor docs) say advanced FEN rejects positions "no real game could reach." The code does strong structural and rule-consistency checks but does not prove full game reachability. Also: package text says halfmove clock "at or above 150" while code accepts exactly 150.
-- [ ] Soften prose to "advanced structural and rule-consistency validation"
-- [ ] List exactly what is enforced; drop the unsubstantiated reachability claim
-- [ ] Fix the "at or above" off-by-one
+- [x] Soften prose to "advanced structural and rule-consistency validation"
+- [x] List exactly what is enforced; drop the unsubstantiated reachability claim
+- [x] Fix the "at or above" off-by-one
 
 ### Broken Javadoc link in `fen/package-info.java`
 Links to `com.dlb.chess.fen.FenParser` which does not exist. `mvn javadoc:jar` succeeds only because `<doclint>none</doclint>` in pom.xml; the warning is still emitted. Real target is `FenParserRaw` + `FenParserAdvanced`.
@@ -53,12 +53,12 @@ The `EnPassantCaptureRuleThreefold` enum (`DO_IGNORE` / `DO_NOT_IGNORE`) drives 
 
 That research goal is no longer load-bearing for the library. The dual code path costs ongoing complexity (two flavours of `equals`-like comparison, two parallel data structures on `Report`, two flavours of every repetition test fixture) for a feature whose audience was one researcher. As clean-chess matures, the library should implement the FIDE rule cleanly and only.
 
-- [ ] Drop the `EnPassantCaptureRuleThreefold` enum
-- [ ] Remove `Report.repetitionListListInitialEnPassantCapture()` and any other dual-path fields/methods on `Report`
-- [ ] Collapse `RepetitionUtility.getCountRepetition` and the surrounding repetition-tracking machinery to the single FIDE-correct path
-- [ ] Drop the dual-path test fixtures, reports, and representation code in `com.dlb.chess.test.report.representation.*`
-- [ ] Strip the explanatory paragraph in `RepetitionUtility`'s class-level Javadoc about "two different ways" of counting repetition
-- [ ] Verify `git grep -i "ignoring en passant"` (or similar phrasing) returns zero hits afterwards
+- [x] Drop the `EnPassantCaptureRuleThreefold` enum
+- [x] Remove `Report.repetitionListListInitialEnPassantCapture()` and any other dual-path fields/methods on `Report`
+- [x] Collapse `RepetitionUtility.getCountRepetition` and the surrounding repetition-tracking machinery to the single FIDE-correct path
+- [x] Drop the dual-path test fixtures, reports, and representation code in `com.dlb.chess.test.report.representation.*`
+- [x] Strip the explanatory paragraph in `RepetitionUtility`'s class-level Javadoc about "two different ways" of counting repetition
+- [x] Verify `git grep -i "ignoring en passant"` (or similar phrasing) returns zero hits afterwards
 
 ### Replace `EnumConstants` constant interface
 `com.dlb.chess.common.constants.EnumConstants` is a `public interface` whose only purpose is to expose ~90 `public static final` aliases for `Square.*`, `Side.*`, `Piece.*`, `PieceType.*`, `Rank.*`, `File.*` so implementing classes inherit them unqualified. This is the classic "constant interface" anti-pattern (Effective Java item 22): interfaces should describe a contract/behavior, not be a convenience-inheritance vehicle for constants. The mechanism reads as beginner Java and leaks an internal vocabulary choice into the public type surface — `ChessBoard extends EnumConstants` is the clearest symptom (the chess contract has nothing to do with how implementers prefer to spell `Square.E4`). Used by 43 files under `src/main` plus tests.
@@ -82,12 +82,12 @@ The fix is to promote these single-step relationships to data:
 - The map is built once at class load; tests verify the table by inspection or via python-chess cross-reference (folds into the existing python-chess backlog)
 - The bug surface shrinks to one place: the table-builder
 
-- [ ] Inventory single-step `calculate*` methods on `Square` / `File` / `Rank` that are pure square→square (or square+side→square) lookups
-- [ ] Replace each with a precomputed `EnumMap` constant + a thin accessor
-- [ ] Generate the expected tables either by hand-curation or by python-chess cross-reference (latter is preferred once the python-chess infrastructure lands)
-- [ ] Drop the algorithm-vs-algorithm test patterns; tests become "look up in production table, compare to reference table"
-- [ ] Folds naturally into the DeepSquare rename moment — this kind of foundational rigor is exactly what the rename signals
-- [ ] **Companion concern — bloated lookup-table implementations.** `PawnDiagonalSquares` is 826 lines of generated code (per-square `addWhiteA1`, `addWhiteA2`, … methods) to express what is conceptually "for each pawn from-square, the 0–2 diagonal capture squares." The same shape recurs across the `com.dlb.chess.squares.emptyboard.*` family (`Knight`, `Bishop`, `Rook`, `Queen`, `King`, `PawnOneAdvance`, `PawnTwoAdvance`, `PawnAnyAdvance`). These tables are correctly precomputed, but their implementation should be a single `static {}` initializer that loops over `Square.REAL` and computes each entry via simple file/rank arithmetic — not hundreds of method-per-square stubs. Replacing them collapses ~thousand-line files to dozens of lines while preserving the precomputed-table API. Same theme as the main bullet: keep the lookup, sane the implementation.
+- [x] Inventory single-step `calculate*` methods on `Square` / `File` / `Rank` that are pure square→square (or square+side→square) lookups
+- [x] Replace each with a precomputed `EnumMap` constant + a thin accessor
+- [x] Generate the expected tables either by hand-curation or by python-chess cross-reference (latter is preferred once the python-chess infrastructure lands)
+- [x] Drop the algorithm-vs-algorithm test patterns; tests become "look up in production table, compare to reference table"
+- [x] Folds naturally into the DeepSquare rename moment — this kind of foundational rigor is exactly what the rename signals
+- [x] **Companion concern — bloated lookup-table implementations.** `PawnDiagonalSquares` is 826 lines of generated code (per-square `addWhiteA1`, `addWhiteA2`, … methods) to express what is conceptually "for each pawn from-square, the 0–2 diagonal capture squares." The same shape recurs across the `com.dlb.chess.squares.emptyboard.*` family (`Knight`, `Bishop`, `Rook`, `Queen`, `King`, `PawnOneAdvance`, `PawnTwoAdvance`, `PawnAnyAdvance`). These tables are correctly precomputed, but their implementation should be a single `static {}` initializer that loops over `Square.REAL` and computes each entry via simple file/rank arithmetic — not hundreds of method-per-square stubs. Replacing them collapses ~thousand-line files to dozens of lines while preserving the precomputed-table API. Same theme as the main bullet: keep the lookup, sane the implementation.
 
 ### SAN-validator generated-enum cleanup
 Same shape as the (already-done) `UciValidateHelper` replacement: seven hand-generated enums under
@@ -103,20 +103,20 @@ populated in a static initializer using `AbstractEmptyBoardSquares` + the disamb
 scripts already contain. The generators become deletable.
 
 Action items:
-- [ ] Audit `*SanValidateStaticallyStrict*Calculate.java` callers to confirm they need only the SAN-string set, not the enum type
-- [ ] Replace each of the 7 enums with a `static final ImmutableSet<String>` populated in a static initializer; the
+- [x] Audit `*SanValidateStaticallyStrict*Calculate.java` callers to confirm they need only the SAN-string set, not the enum type
+- [x] Replace each of the 7 enums with a `static final ImmutableSet<String>` populated in a static initializer; the
   generation logic lives in the production file's `static {}` (mirroring the empty-board pattern)
-- [ ] Delete the 7 `Generate*SanValidateStrict.java` scripts + `AbstractGenerateSanValidateStrict.java` + `AbstractPawnSanValidateStrict.java`
-- [ ] Verify total bytecode shrink (~5k source lines → ~100; not as JAR-dominant as `UciValidateHelper` was since these are in `src/test`)
+- [x] Delete the 7 `Generate*SanValidateStrict.java` scripts + `AbstractGenerateSanValidateStrict.java` + `AbstractPawnSanValidateStrict.java`
+- [x] Verify total bytecode shrink (~5k source lines → ~100; not as JAR-dominant as `UciValidateHelper` was since these are in `src/test`)
 
 While in the neighbourhood, also delete the now-orphan generators in `src/test/java/com/dlb/chess/test/generate/squares/`:
-- [ ] `GenerateEmptyBoardSquares.java` (723 lines) — produced the per-square `addXX(map)` methods that the
+- [x] `GenerateEmptyBoardSquares.java` (723 lines) — produced the per-square `addXX(map)` methods that the
   "Profound-level square geometry" refactor replaced with arithmetic loops
-- [ ] `GeneratePawnDiagonalSquares.java` — same status
-- [ ] `GenerateSquareFlip.java` — produced the `Square.flip` 65-case switch; the switch stays (it *is* the lookup
+- [x] `GeneratePawnDiagonalSquares.java` — same status
+- [x] `GenerateSquareFlip.java` — produced the `Square.flip` 65-case switch; the switch stays (it *is* the lookup
   table), but the generator that printed it is no longer load-bearing
-- [ ] `GeneratePawnMoveType.java` if unreferenced — verify via grep first
-- [ ] Drop the `com.dlb.chess.test.generate.squares` package if it ends up empty
+- [x] `GeneratePawnMoveType.java` if unreferenced — verify via grep first
+- [x] Drop the `com.dlb.chess.test.generate.squares` package if it ends up empty
 
 The principle (carried over from the `GenerateUciMove` deletion): once the runtime computation supersedes a one-shot
 generator that printed code, the generator is dead test code. Git keeps the history; the repo doesn't need to.
@@ -133,8 +133,8 @@ Surfaced by the unused-code-detector pass on `StaticPosition`: the record carrie
 
 ### Rename `NonNullWrapperCommon` to `Nulls`
 The class is used pervasively (every JDT-null-safe wrapper for JDK calls goes through it), and `NonNullWrapperCommon` is too long for something so frequent. `Nulls` is short, pronounceable, says the domain (this utility exists because of nullness handling), and discoverable in the IDE. Rejected alternatives: `NNVC` (cryptic codeword), `Safe` / `Checked` (vague), `NonNulls` (awkward plural).
-- [ ] Rename class `NonNullWrapperCommon` → `Nulls`; update all call sites (uses appear in most files in the project — bulk rename)
-- [ ] Verify the methods are still all about nullness handling; if any aren't, reconsider the name
+- [x] Rename class `NonNullWrapperCommon` → `Nulls`; update all call sites (uses appear in most files in the project — bulk rename)
+- [x] Verify the methods are still all about nullness handling; if any aren't, reconsider the name
 
 ## Future release — PGN headers treatment and lenient FEN validation
 
