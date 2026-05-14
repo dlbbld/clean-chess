@@ -66,11 +66,21 @@ Landed in `996bcd3a` (May 14, 2026) as a structured `TranspositionKey` record on
 
 **Deferred to the bitboard release.** A long Zobrist hash (with per-square-piece random tables, XOR'd incrementally on each move) becomes natural once `BitboardPosition` lands — the bitboard update sites are exactly where the Zobrist XORs go. If profiling at that point shows the record allocation matters, promote to a `long` key then. Until then the structured record is the right shape.
 
-### Note on `DynamicPosition`'s en-passant boolean — intentionally kept
+### Switch `DynamicPosition` to hold the normalized en-passant target square; collapse `TranspositionKey` into it
 
-`DynamicPosition` carries a boolean for en-passant availability, not a target square. This is correct for what `DynamicPosition` is used for (in-game threefold repetition): along a single game's history, pawn moves are irreversible, so two positions with identical piece arrangements cannot have arrived via different pawn double-steps. The boolean fully distinguishes the cases the rule needs to distinguish.
+After the helpmate transposition-key work landed (`996bcd3a`), `DynamicPosition` and `TranspositionKey` are structurally near-identical: both are `(StaticPosition, Side, CastlingRight, CastlingRight, ?)`. The only difference is that `DynamicPosition` carries a `boolean isEnPassantCapturePossible` and `TranspositionKey` carries a `Square enPassantCaptureTargetSquare` (normalized to `NONE` when no opposing pawn can actually capture).
 
-A square-valued field is only required when crossing the move-tree (the `findHelpMate` transposition key above), where two paths *can* converge on identical piece arrangements with different recent double-steps. That square lives at the transposition-key layer, not on `DynamicPosition`. Captured here so future-me doesn't "fix" the boolean.
+**Semantic equivalence:** within a single game's history, pawn-irreversibility means the boolean and the normalized-square carry equivalent equality information — the threefold-repetition behavior is unchanged either way. The boolean was correct for `DynamicPosition`'s use case. The reason to switch is architectural symmetry, not correctness: if `DynamicPosition` adopts the square, then `TranspositionKey` becomes structurally identical and can collapse into `DynamicPosition`. One type, one normalization rule, one conceptual model of "chess-position equivalence." The helpmate transposition map keys directly on `DynamicPosition` and `FindHelpmateExhaust.calculateTranspositionKey` disappears.
+
+The FEN export path is untouched — it reads `Board.getEnPassantCaptureTargetSquare()` (the raw, FEN-spec target square), which is separate from `DynamicPosition`'s normalized square. Those two pieces of information serve different purposes (FEN compliance vs. position equivalence) and the distinction stays.
+
+- [ ] Change `DynamicPosition`'s `boolean isEnPassantCapturePossible` to `Square enPassantCaptureTargetSquare`; the field holds the e.p. target square when an opposing pawn can actually capture there, `Square.NONE` otherwise
+- [ ] Update Board's two `DynamicPosition` construction sites (initial and post-move) to pass the normalized square instead of the boolean
+- [ ] Update `RepetitionUtility`'s manual `DynamicPosition` equality (line 34 today) to compare the square component
+- [ ] Update `Board.isEnPassantCapturePossible()` public API to read `getDynamicPosition().enPassantCaptureTargetSquare() != Square.NONE` — preserves the public method for existing callers
+- [ ] In `FindHelpmateExhaust`: switch the transposition map to `HashMap<DynamicPosition, Integer>`, delete the `TranspositionKey` record, delete `calculateTranspositionKey`, callers use `board.getDynamicPosition()` directly
+- [ ] Delete `calculateIsEraseEnPassantCaptureTargetSquare` from `FindHelpmateExhaust` (now unused — the normalization lives at `DynamicPosition` construction)
+- [ ] Verify the existing helpmate transposition-key tests still pass under the new shape
 
 ### Auto-CHA after every move
 - [ ] Per-move pipeline: invoke `isUnwinnableQuick` for both sides after every legal move; both unwinnable ⇒ `DEAD_POSITION` automatic termination

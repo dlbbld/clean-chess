@@ -105,8 +105,10 @@ public class LibraryCarlosBoard {
     final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
-    dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(), isEnPassantCapturePossible(),
-        getCastlingRightWhite(), getCastlingRightBlack()));
+    final Square normalizedEnPassantCaptureTargetSquare = isEnPassantCapturePossible() ? getEnPassantCaptureTargetSquare()
+        : Square.NONE;
+    dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(),
+        normalizedEnPassantCaptureTargetSquare, getCastlingRightWhite(), getCastlingRightBlack()));
 
     // TODO timely dependency, must be after the above code is very very dangerous
     final HalfMove halfMove = buildHalfMove(moveSpecification);

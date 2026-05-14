@@ -144,8 +144,12 @@ public class Board {
     final Side initialHavingMove = initialFenUse.havingMove();
     final CastlingRight initialCastlingRight = CastlingUtility.getCastlingRight(initialFenUse, initialHavingMove);
     final var initialEnPassantCaptureTargetSquare = initialFenUse.enPassantCaptureTargetSquare();
-    final var initialIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(
-        initialEnPassantCaptureTargetSquare, initialHavingMove, initialStaticPosition);
+    // Normalize: keep the target square on DynamicPosition only when an opposing pawn can actually capture there.
+    // The raw FEN-spec square is preserved on Board (see getEnPassantCaptureTargetSquare()) for FEN export.
+    final Square initialNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
+        initialEnPassantCaptureTargetSquare, initialHavingMove, initialStaticPosition)
+            ? initialEnPassantCaptureTargetSquare
+            : Square.NONE;
 
     this.initialFen = initialFenUse;
 
@@ -182,7 +186,7 @@ public class Board {
       this.dynamicPositionList.add(DynamicPositionConstants.INITIAL);
     } else {
       this.dynamicPositionList.add(new DynamicPosition(initialHavingMove, initialStaticPosition,
-          initialIsEnPassantCapturePossible, initialCastlingRightWhite, initialCastlingRightBlack));
+          initialNormalizedEnPassantCaptureTargetSquare, initialCastlingRightWhite, initialCastlingRightBlack));
     }
     this.halfMoveClockList = new ArrayList<>();
     this.halfMoveClockList.add(initialFenUse.halfMoveClock());
@@ -340,8 +344,10 @@ public class Board {
         afterHavingMove);
     final var afterEnPassantCaptureTargetSquare = EnPassantCaptureUtility
         .calculateEnPassantCaptureTargetSquare(moveToPerform);
-    final var afterIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(afterEnPassantCaptureTargetSquare,
-        afterHavingMove, afterStaticPosition);
+    // Normalize for DynamicPosition; see initial-position construction site for the rationale.
+    final Square afterNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
+        afterEnPassantCaptureTargetSquare, afterHavingMove, afterStaticPosition) ? afterEnPassantCaptureTargetSquare
+            : Square.NONE;
 
     // update castling loss reasons
     this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
@@ -376,7 +382,7 @@ public class Board {
     this.isStalemateList.add(isStalemate);
 
     final var newDynamicPosition = new DynamicPosition(afterHavingMove, afterStaticPosition,
-        afterIsEnPassantCapturePossible, afterCastlingRightBoth.castlingRightWhite(),
+        afterNormalizedEnPassantCaptureTargetSquare, afterCastlingRightBoth.castlingRightWhite(),
         afterCastlingRightBoth.castlingRightBlack());
     this.dynamicPositionList.add(newDynamicPosition);
 
@@ -711,7 +717,7 @@ public class Board {
   }
 
   public boolean isEnPassantCapturePossible() {
-    return Nulls.getLast(dynamicPositionList).isEnPassantCapturePossible();
+    return Nulls.getLast(dynamicPositionList).enPassantCaptureTargetSquare() != Square.NONE;
   }
 
   private static boolean calculateIsEnPassantCapturePossible(Square enPassantCaptureTargetSquare, Side havingMove,
