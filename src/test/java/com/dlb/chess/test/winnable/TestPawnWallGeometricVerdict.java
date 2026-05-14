@@ -17,7 +17,7 @@ import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 /**
- * Tests the geometric {@link PawnWall#calculate(Board)} verdict on the pawn-wall PGN corpus, with two independent
+ * Tests the geometric {@link PawnWallGeometricVerdict#calculate(Board)} verdict on the pawn-wall PGN corpus, with two independent
  * second opinions:
  *
  * <ol>
@@ -72,7 +72,7 @@ class TestPawnWallGeometricVerdict {
     // are not part of any spanning chain - they are floating pawns.
     final Board board = new Board("7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 0 1");
 
-    assertEquals(PawnWallVerdict.UNKNOWN, PawnWall.calculate(board),
+    assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricVerdict.calculate(board),
         "ambrona_10 has a floating a2/a3 pawn pair - must be rejected by the all-pawns-involved check");
   }
 
@@ -99,7 +99,7 @@ class TestPawnWallGeometricVerdict {
       final Board board = new Board(testCase.fen());
       // Asymmetric contract: only YES verdicts get cross-checked. NO/UNKNOWN fixtures are skipped - both the BFS
       // oracle and UnwinnableQuick are allowed to detect more positions than the conservative geometric check.
-      if (PawnWall.calculate(board) != PawnWallVerdict.YES) {
+      if (PawnWallGeometricVerdict.calculate(board) != PawnWallVerdict.YES) {
         continue;
       }
       yesFiles.add(testCase.pgnFileName());
@@ -134,7 +134,7 @@ class TestPawnWallGeometricVerdict {
    * accepted a position the BFS does not, or the test corpus is wrong.
    */
   private static void assertGeometricAndBfsAgreeOnYes(Board board, String label) {
-    assertEquals(PawnWallVerdict.YES, PawnWall.calculate(board),
+    assertEquals(PawnWallVerdict.YES, PawnWallGeometricVerdict.calculate(board),
         label + ": geometric check must classify this fixture as YES");
     assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.WHITE),
         label + ": BFS oracle - White king must be trapped behind the wall");

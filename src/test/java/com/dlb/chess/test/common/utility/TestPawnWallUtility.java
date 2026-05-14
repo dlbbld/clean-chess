@@ -15,9 +15,9 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.fen.constants.FenConstants;
-import com.dlb.chess.test.winnable.PawnWall;
+import com.dlb.chess.test.winnable.PawnWallGeometricVerdict;
 
-class TestPawnWallUtility extends PawnWall {
+class TestPawnWallUtility extends PawnWallGeometricVerdict {
 
   // TODO add the pawn walls with also rooks and knight and instead pawn with or without bishops only
 
@@ -49,7 +49,7 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     final Set<Square> expectedSquareSet = new TreeSet<>(Arrays.asList(expectedSquareList));
-    assertEquals(expectedSquareSet, PawnWall.calculateAttackingSquares(board, side));
+    assertEquals(expectedSquareSet, PawnWallGeometricVerdict.calculateAttackingSquares(board, side));
   }
 
   @SuppressWarnings("static-method")
@@ -67,9 +67,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateIsAllPawnsCanReachPawnAhead(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsCanReachPawnAhead(board));
     } else {
-      assertFalse(PawnWall.calculateIsAllPawnsCanReachPawnAhead(board));
+      assertFalse(PawnWallGeometricVerdict.calculateIsAllPawnsCanReachPawnAhead(board));
     }
   }
 
@@ -96,9 +96,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateIsAllPawnsHavePawnAhead(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsHavePawnAhead(board));
     } else {
-      assertFalse(PawnWall.calculateIsAllPawnsHavePawnAhead(board));
+      assertFalse(PawnWallGeometricVerdict.calculateIsAllPawnsHavePawnAhead(board));
     }
   }
 
@@ -124,9 +124,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
     } else {
-      assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertFalse(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
     }
   }
 
@@ -136,21 +136,21 @@ class TestPawnWallUtility extends PawnWall {
     {
       final Board board = new Board("4k3/8/8/8/p7/8/1P6/4K3 w - - 0 50");
 
-      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
       board.moveStrict("b4");
-      assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertFalse(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
       board.moveStrict("Ke7");
-      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
     }
 
     {
       final Board board = new Board("8/5p2/3k4/6P1/8/8/8/4K3 b - - 0 50");
 
-      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
       board.moveStrict("f5");
-      assertFalse(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertFalse(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
       board.moveStrict("Ke2");
-      assertTrue(PawnWall.calculateIsAllPawnsCannotCapture(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsCannotCapture(board));
     }
 
   }
@@ -172,9 +172,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateIsAllPawnsBlocked(board));
+      assertTrue(PawnWallGeometricVerdict.calculateIsAllPawnsBlocked(board));
     } else {
-      assertFalse(PawnWall.calculateIsAllPawnsBlocked(board));
+      assertFalse(PawnWallGeometricVerdict.calculateIsAllPawnsBlocked(board));
     }
   }
 
@@ -228,9 +228,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateHasPawnWallLine(board, side));
+      assertTrue(PawnWallGeometricVerdict.calculateHasPawnWallLine(board, side));
     } else {
-      assertFalse(PawnWall.calculateHasPawnWallLine(board, side));
+      assertFalse(PawnWallGeometricVerdict.calculateHasPawnWallLine(board, side));
     }
   }
 
@@ -268,9 +268,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateHasPawnWall(board));
+      assertTrue(PawnWallGeometricVerdict.calculateHasPawnWall(board));
     } else {
-      assertFalse(PawnWall.calculateHasPawnWall(board));
+      assertFalse(PawnWallGeometricVerdict.calculateHasPawnWall(board));
     }
   }
 
@@ -617,9 +617,9 @@ class TestPawnWallUtility extends PawnWall {
     final Board board = new Board(fen);
 
     if (isExpectedTrue) {
-      assertTrue(PawnWall.calculateHasPawnWall(board));
+      assertTrue(PawnWallGeometricVerdict.calculateHasPawnWall(board));
     } else {
-      assertFalse(PawnWall.calculateHasPawnWall(board));
+      assertFalse(PawnWallGeometricVerdict.calculateHasPawnWall(board));
     }
   }
 }

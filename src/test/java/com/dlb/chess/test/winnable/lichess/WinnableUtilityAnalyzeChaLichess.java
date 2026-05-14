@@ -18,7 +18,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.ListUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.test.winnable.PawnWall;
+import com.dlb.chess.test.winnable.PawnWallGeometricVerdict;
 import com.dlb.chess.test.winnable.PawnWallVerdict;
 import com.dlb.chess.test.winnable.enums.GameStatusAnalysis;
 import com.dlb.chess.test.winnable.enums.Winnable;
@@ -150,7 +150,7 @@ public class WinnableUtilityAnalyzeChaLichess {
 
       logResult(IS_DEBUG, "first;" + evaluationFirst.numberOfHalfMoves(), winnableFirst, board, sideToEvaluate,
           isKingOnlyNonFlagging, isKingOnlyFlagging);
-      if (winnableFirst.winnable() == Winnable.UNKNOWN && PawnWall.calculate(board) == PawnWallVerdict.YES) {
+      if (winnableFirst.winnable() == Winnable.UNKNOWN && PawnWallGeometricVerdict.calculate(board) == PawnWallVerdict.YES) {
         return Winnable.NO;
       }
       return winnableFirst.winnable();
@@ -177,7 +177,7 @@ public class WinnableUtilityAnalyzeChaLichess {
       logResult(IS_DEBUG, "second;" + evaluationSecond.numberOfHalfMoves(), winnableSecond, board, sideToEvaluate, "na",
           "na");
 
-      if (winnableSecond.winnable() == Winnable.UNKNOWN && PawnWall.calculate(board) == PawnWallVerdict.YES) {
+      if (winnableSecond.winnable() == Winnable.UNKNOWN && PawnWallGeometricVerdict.calculate(board) == PawnWallVerdict.YES) {
         return Winnable.NO;
       }
       return winnableSecond.winnable();
@@ -194,7 +194,7 @@ public class WinnableUtilityAnalyzeChaLichess {
     logResult(IS_DEBUG, "forced;" + evaluationForced.numberOfForcedHalfMoves(), winnableForced, board, sideToEvaluate,
         "na", "na");
 
-    if (winnableForced.winnable() == Winnable.UNKNOWN && PawnWall.calculate(board) == PawnWallVerdict.YES) {
+    if (winnableForced.winnable() == Winnable.UNKNOWN && PawnWallGeometricVerdict.calculate(board) == PawnWallVerdict.YES) {
       return Winnable.NO;
     }
     return winnableForced.winnable();
