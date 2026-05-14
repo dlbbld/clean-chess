@@ -44,4 +44,19 @@ class TestFindHelpmateExhaustTranspositionKey {
 
     assertNotEquals(boardWithTarget.getDynamicPosition(), boardWithoutTarget.getDynamicPosition());
   }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testNormalizesPinnedEnPassantCapturer() {
+    // Black king on a4, White rook on h4. Black's d4 pawn is adjacent to the just-double-stepped
+    // e4 White pawn, so a looser "is there an opposing pawn next door?" check would keep e3 as the
+    // e.p. target. But the d4 pawn is pinned along rank 4: capturing e.p. (d4xe3) would clear both
+    // d4 and e4 from rank 4, exposing the Black king on a4 to the White rook on h4. The capture is
+    // illegal, so the king-safety-aware normalization correctly drops the e.p. target to NONE -
+    // collapsing this position into the same DynamicPosition as one with no e.p. target at all.
+    final var boardWithPinnedCapturer = new Board("8/8/8/8/k2pP2R/8/8/7K b - e3 0 1");
+    final var boardWithoutTarget = new Board("8/8/8/8/k2pP2R/8/8/7K b - - 0 1");
+
+    assertEquals(boardWithPinnedCapturer.getDynamicPosition(), boardWithoutTarget.getDynamicPosition());
+  }
 }

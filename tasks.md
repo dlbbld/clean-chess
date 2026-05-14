@@ -74,13 +74,17 @@ After the helpmate transposition-key work landed (`996bcd3a`), `DynamicPosition`
 
 The FEN export path is untouched — it reads `Board.getEnPassantCaptureTargetSquare()` (the raw, FEN-spec target square), which is separate from `DynamicPosition`'s normalized square. Those two pieces of information serve different purposes (FEN compliance vs. position equivalence) and the distinction stays.
 
-- [ ] Change `DynamicPosition`'s `boolean isEnPassantCapturePossible` to `Square enPassantCaptureTargetSquare`; the field holds the e.p. target square when an opposing pawn can actually capture there, `Square.NONE` otherwise
-- [ ] Update Board's two `DynamicPosition` construction sites (initial and post-move) to pass the normalized square instead of the boolean
-- [ ] Update `RepetitionUtility`'s manual `DynamicPosition` equality (line 34 today) to compare the square component
-- [ ] Update `Board.isEnPassantCapturePossible()` public API to read `getDynamicPosition().enPassantCaptureTargetSquare() != Square.NONE` — preserves the public method for existing callers
-- [ ] In `FindHelpmateExhaust`: switch the transposition map to `HashMap<DynamicPosition, Integer>`, delete the `TranspositionKey` record, delete `calculateTranspositionKey`, callers use `board.getDynamicPosition()` directly
-- [ ] Delete `calculateIsEraseEnPassantCaptureTargetSquare` from `FindHelpmateExhaust` (now unused — the normalization lives at `DynamicPosition` construction)
-- [ ] Verify the existing helpmate transposition-key tests still pass under the new shape
+Landed in `2d01c2ab` (May 14, 2026); follow-up `[hash-of-this-commit]` adds the `DynamicPosition.isEnPassantCapturePossible()` derived accessor for public-API source compatibility and a test for the king-safety-aware tightening.
+
+- [x] Change `DynamicPosition`'s `boolean isEnPassantCapturePossible` to `Square enPassantCaptureTargetSquare`; the field holds the e.p. target square when an opposing pawn can actually capture there, `Square.NONE` otherwise
+- [x] Update Board's two `DynamicPosition` construction sites (initial and post-move) to pass the normalized square instead of the boolean
+- [x] Update `RepetitionUtility`'s manual `DynamicPosition` equality (line 34 today) to compare the square component
+- [x] Update `Board.isEnPassantCapturePossible()` public API to read `getDynamicPosition().enPassantCaptureTargetSquare() != Square.NONE` — preserves the public method for existing callers
+- [x] Preserve `DynamicPosition.isEnPassantCapturePossible()` as a derived accessor on the record so external callers of the old auto-generated accessor still compile
+- [x] In `FindHelpmateExhaust`: switch the transposition map to `HashMap<DynamicPosition, Integer>`, delete the `TranspositionKey` record, delete `calculateTranspositionKey`, callers use `board.getDynamicPosition()` directly
+- [x] Verify the existing helpmate transposition-key tests still pass under the new shape; add a pinned-e.p.-capturer test to cover the king-safety-aware tightening (positions where an adjacent pawn exists but cannot legally capture due to a pin now correctly collapse to `Square.NONE`)
+
+`FindHelpmateExhaust.calculateIsEraseEnPassantCaptureTargetSquare` is **kept**, contrary to the original sketch: it has one remaining caller, the debug-only `calculateStockfishFen` helper (cold code behind `IS_DEBUG = false`).
 
 ### Auto-CHA after every move
 - [ ] Per-move pipeline: invoke `isUnwinnableQuick` for both sides after every legal move; both unwinnable ⇒ `DEAD_POSITION` automatic termination
