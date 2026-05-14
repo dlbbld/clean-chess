@@ -3,6 +3,9 @@ package com.dlb.chess.test.winnable;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -25,12 +28,33 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * </ul>
  *
  * <p>
- * The two hand-coded tests below pin the soundness model with the textbook horizontal-wall and zig-zag-wall fixtures
- * from {@code pawn-wall-soundness.md}. The folder iteration runs the same agreement check across the full
- * {@code src/test/resources/pgn/cha/pawnWall} corpus (encoded in {@link PgnTest#CHA_PAWN_WALL}) — every fixture where
- * the geometric check returns {@link PawnWallVerdict#YES} must independently pass the BFS oracle for both sides.
+ * The two hand-coded tests pin the soundness model with the textbook horizontal-wall and zig-zag-wall fixtures from
+ * {@code pawn-wall-soundness.md}. The folder iteration runs the same agreement check across the full
+ * {@code src/test/resources/pgn/cha/pawnWall} corpus (encoded in {@link PgnTest#CHA_PAWN_WALL}) — every fixture
+ * where the geometric check returns {@link PawnWallVerdict#YES} must independently pass the BFS oracle for both
+ * sides.
+ *
+ * <p>
+ * The folder test asserts on both the total fixture count and the number of fixtures returning {@code YES}. Without
+ * these counts the test could pass vacuously if fixture loading broke or the geometric check regressed to always
+ * returning {@link PawnWallVerdict#UNKNOWN}.
  */
 class TestPawnWallGeometricVerdict {
+
+  /**
+   * Expected number of fixtures in {@link PgnTest#CHA_PAWN_WALL}. The corpus contains positions with various wall
+   * topologies (clean horizontal, zig-zag, Norgaard, Ambrona's real game), positions that look like walls but are
+   * winnable (en passant possible, kings on the same side), and positions with bishops (now excluded from
+   * {@code YES} by the soundness restriction in {@link PawnWall#calculate(Board)}).
+   */
+  private static final int EXPECTED_FIXTURE_COUNT = 26;
+
+  /**
+   * Expected number of fixtures returning {@link PawnWallVerdict#YES}. The remaining 12 are intentionally
+   * {@link PawnWallVerdict#UNKNOWN}: bishop fixtures (6 — excluded by the soundness restriction), en-passant
+   * fixtures (4 — pawns can move, wall not locked), and kings-on-same-side fixtures (2 — kings not separated).
+   */
+  private static final int EXPECTED_YES_COUNT = 14;
 
   @SuppressWarnings("static-method")
   @Test
@@ -55,7 +79,13 @@ class TestPawnWallGeometricVerdict {
   @SuppressWarnings("static-method")
   @Test
   void testAllPawnWallFolderFixtures() {
-    for (final PgnFileTestCase testCase : CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL).list()) {
+    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL).list();
+    assertEquals(EXPECTED_FIXTURE_COUNT, fixtures.size(),
+        "pawnWall corpus must have " + EXPECTED_FIXTURE_COUNT + " fixtures — if this fails, the corpus loader is "
+            + "broken or fixtures were added/removed");
+
+    final List<String> yesFiles = new ArrayList<>();
+    for (final PgnFileTestCase testCase : fixtures) {
       final Board board = new Board(testCase.fen());
       // Asymmetric contract: only YES verdicts must agree with the BFS oracle. NO/UNKNOWN fixtures are skipped -
       // the geometric check is allowed to be conservative there, and Auto-CHA / CHA-quick covers them at a higher
@@ -63,11 +93,16 @@ class TestPawnWallGeometricVerdict {
       if (PawnWall.calculate(board) != PawnWallVerdict.YES) {
         continue;
       }
+      yesFiles.add(testCase.pgnFileName());
       assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.WHITE),
           "Geometric YES but BFS says White king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
       assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.BLACK),
           "Geometric YES but BFS says Black king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
     }
+    assertEquals(EXPECTED_YES_COUNT, yesFiles.size(),
+        "expected exactly " + EXPECTED_YES_COUNT + " geometric-YES fixtures - if this fails, the geometric check "
+            + "regressed (returns YES for more or fewer fixtures than expected). Got " + yesFiles.size() + ": "
+            + yesFiles);
   }
 
   /**

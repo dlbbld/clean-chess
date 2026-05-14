@@ -18,7 +18,7 @@ Anything else → `UNKNOWN`. Auto-CHA per move catches what the geometric check 
 **Test oracle**: BFS king-walk over a corpus of pawn-wall fixtures.
 
 - For each fixture where the geometric check returns `YES`, run the BFS independently.
-- Assert: BFS confirms the king cannot reach any opposing pawn through passable squares (treating own non-pawn pieces as movable and undefended opposing pawns as capturable).
+- Assert: BFS confirms the king cannot reach the opposing king's square through passable squares (treating own non-pawn pieces as movable and undefended opposing pawns as capturable stepping stones).
 - If they disagree, either the geometric check accepted a false positive or the BFS is wrong — test failure either way.
 
 The contract is asymmetric:
@@ -118,6 +118,8 @@ If all pass → `YES`. Otherwise → `UNKNOWN`.
 
 Steps 1–5 are already implemented in `PawnWall.calculateHasPawnWall`; the public API is rewrapped to return `PawnWallVerdict.YES` when the existing predicate returns true, and `UNKNOWN` otherwise.
 
+**Soundness restriction: no bishops.** `PawnWall.calculate(Board)` returns `UNKNOWN` whenever any bishop is on the board, regardless of what the underlying predicate would say. The underlying predicate is correct as a king-walk classifier — a colour-locked bishop truly cannot reach an opposing pawn of the opposite colour — but a "king-trapped" position is not necessarily *unwinnable*: bishops can deliver mate without the king's support. The position `7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -` is the documented case (CHA-full says WINNABLE despite an apparent permanent barrier). To avoid propagating "geometrically trapped but actually winnable" verdicts to `Winnable.NO` via `WinnableAnalyzer`, the bishop-positive case is conservatively excluded. Auto-CHA per move handles those positions correctly once it lands.
+
 ## Test oracle — BFS king-walk
 
 Test-only. Implements the BFS that the production check doesn't run.
@@ -150,7 +152,7 @@ A square is **impassable** iff:
 - Currently occupied by a same-side pawn, **OR**
 - Attacked by any opposing pawn — covers both empty attacked squares (king can't enter check) and opposing pawns defended by another opposing pawn (the defender's attack also hits the defended pawn's square; capture would be re-captured).
 
-The BFS uses a **static** attack model: opposing-pawn attacks don't update when an opposing pawn is captured. This is conservative — squares previously attacked by a now-captured pawn remain marked impassable. Sound for the "king trapped" claim; may declare some positions trapped that a dynamic search would clear.
+The BFS uses a **dynamic capture model**, iterating to a fixed point. Each round computes opposing-pawn attacks from the *remaining* opposing pawns (after previous captures), then BFS-expands the king's reach. Any undefended opposing pawn within reach is captured (removed from the remaining set) and a new round runs with updated attacks. The process terminates when a round produces no new captures. This avoids the under-approximation of a single-pass static BFS, which would leave squares attacked by an already-captured pawn marked impassable forever — making the oracle artificially conservative in its "trapped" verdict and thus a weaker second opinion against the geometric check.
 
 The BFS does **not** terminate at the first opposing pawn reached. It walks through every passable square, treating captures as continuation points. The wall is breachable iff the visited set includes the **opposing king's square** — i.e. the king's reach extends across the wall to the opposing king's territory. Reaching an undefended opposing pawn on the king's own side of the wall does not by itself constitute a breach (the wall structure may still separate the two kings; e.g. Norgaard's position 2 where the king can capture all rank-5 Black pawns but still cannot cross the rank-6 barrier).
 
@@ -159,7 +161,7 @@ The BFS does **not** terminate at the first opposing pawn reached. It walks thro
 For every fixture in the corpus:
 
 - Run `PawnWall.calculate(board)`.
-- If result is `YES`, run the BFS oracle. The oracle must confirm the king cannot reach any opposing pawn for either side. If it disagrees, **test failure** — the geometric check is unsound on this fixture.
+- If result is `YES`, run the BFS oracle. The oracle must confirm the king cannot reach the opposing king's square for either side. If it disagrees, **test failure** — the geometric check is unsound on this fixture.
 
 For positions where the geometric check returns `NO` or `UNKNOWN`, no claim is made about the BFS result (the geometric check is allowed to be conservative).
 

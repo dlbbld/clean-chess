@@ -26,17 +26,33 @@ public class PawnWall {
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;
 
   /**
-   * Tri-state classifier: returns {@link PawnWallVerdict#YES} when the geometric pawn-wall check accepts the position
-   * as a sound permanent barrier, {@link PawnWallVerdict#UNKNOWN} otherwise. See {@code pawn-wall-soundness.md} for the
+   * Classifier: returns {@link PawnWallVerdict#YES} when the geometric pawn-wall check accepts the position as a
+   * sound permanent barrier, {@link PawnWallVerdict#UNKNOWN} otherwise. See {@code pawn-wall-soundness.md} for the
    * full design, including the BFS test oracle that verifies the geometric verdict on a fixture corpus.
    *
    * <p>
    * The production geometric check is the predicate body of {@link #calculateHasPawnWall(Board)} — the chain-finder
    * across orthogonally-adjacent barrier squares, plus the precheck stack (no R/N/Q, locked pawns, bishop reach).
-   * The {@code calculate} method is the recommended entry point; the boolean predicate is retained for source
-   * compatibility with existing callers and tests.
+   *
+   * <p>
+   * <b>Soundness restriction: no bishops.</b> The underlying predicate accepts positions where bishops are present
+   * if the bishops are colour-locked vs. the opposing pawns. That predicate is correct as a king-walk classifier —
+   * the king truly is trapped in those positions — but a "trapped king" position is not necessarily unwinnable.
+   * Bishops can deliver mate without the king's support (e.g. the position
+   * {@code 7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -} is winnable per CHA-full even though the white king
+   * cannot cross the pawn structure). To avoid propagating these "geometrically trapped but actually winnable"
+   * positions to {@code Winnable.NO} via {@code WinnableAnalyzer}, this entry point conservatively returns
+   * {@link PawnWallVerdict#UNKNOWN} whenever any bishop is on the board. Auto-CHA per move is the right home for the
+   * bishop-positive case once it lands; until then, those positions take the slower CHA path.
+   *
+   * <p>
+   * The boolean predicate {@link #calculateHasPawnWall(Board)} retains its existing behaviour for backward
+   * compatibility with test code that calls it directly.
    */
   public static PawnWallVerdict calculate(Board board) {
+    if (hasAnyPieceType(board.getStaticPosition(), PieceType.BISHOP)) {
+      return PawnWallVerdict.UNKNOWN;
+    }
     return calculateHasPawnWall(board) ? PawnWallVerdict.YES : PawnWallVerdict.UNKNOWN;
   }
 
