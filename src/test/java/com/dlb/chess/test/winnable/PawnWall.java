@@ -27,32 +27,26 @@ public class PawnWall {
 
   /**
    * Classifier: returns {@link PawnWallVerdict#YES} when the geometric pawn-wall check accepts the position as a
-   * sound permanent barrier, {@link PawnWallVerdict#UNKNOWN} otherwise. See {@code pawn-wall-soundness.md} for the
+   * sound king-walk barrier, {@link PawnWallVerdict#UNKNOWN} otherwise. See {@code pawn-wall-soundness.md} for the
    * full design, including the BFS test oracle that verifies the geometric verdict on a fixture corpus.
    *
    * <p>
    * The production geometric check is the predicate body of {@link #calculateHasPawnWall(Board)} — the chain-finder
    * across orthogonally-adjacent barrier squares, plus the precheck stack (no R/N/Q, locked pawns, bishop reach).
+   * The chain itself is composed exclusively of pawn-derived barrier squares (own pawns + opposing-pawn-attacked
+   * squares); own non-pawn pieces never appear in the chain.
    *
    * <p>
-   * <b>Soundness restriction: no bishops.</b> The underlying predicate accepts positions where bishops are present
-   * if the bishops are colour-locked vs. the opposing pawns. That predicate is correct as a king-walk classifier —
-   * the king truly is trapped in those positions — but a "trapped king" position is not necessarily unwinnable.
-   * Bishops can deliver mate without the king's support (e.g. the position
-   * {@code 7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -} is winnable per CHA-full even though the white king
-   * cannot cross the pawn structure). To avoid propagating these "geometrically trapped but actually winnable"
-   * positions to {@code Winnable.NO} via {@code WinnableAnalyzer}, this entry point conservatively returns
-   * {@link PawnWallVerdict#UNKNOWN} whenever any bishop is on the board. Auto-CHA per move is the right home for the
-   * bishop-positive case once it lands; until then, those positions take the slower CHA path.
-   *
-   * <p>
-   * The boolean predicate {@link #calculateHasPawnWall(Board)} retains its existing behaviour for backward
-   * compatibility with test code that calls it directly.
+   * <b>Known limit:</b> a {@code YES} verdict is sound as a king-walk classifier (the king truly cannot reach the
+   * opposing king's square through any sequence of legal moves), but a king-trapped position is not equivalent to an
+   * unwinnable position. Bishops can deliver mate via checks without the king's support — the position
+   * {@code 7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -} is geometrically trapped but winnable per CHA-full.
+   * {@code WinnableAnalyzer} currently treats {@code YES} as {@code Winnable.NO}, which propagates this kind of
+   * false positive for unwinnability. Two ways out, captured as follow-ups in {@code tasks.md}:
+   * {@code WinnableAnalyzer} stops using the pawn-wall heuristic for {@code Winnable.NO}, or Auto-CHA per move
+   * subsumes the heuristic and we delete it. Until one of those lands, this class of false positive is documented.
    */
   public static PawnWallVerdict calculate(Board board) {
-    if (hasAnyPieceType(board.getStaticPosition(), PieceType.BISHOP)) {
-      return PawnWallVerdict.UNKNOWN;
-    }
     return calculateHasPawnWall(board) ? PawnWallVerdict.YES : PawnWallVerdict.UNKNOWN;
   }
 

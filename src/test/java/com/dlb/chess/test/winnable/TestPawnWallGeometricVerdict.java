@@ -50,11 +50,13 @@ class TestPawnWallGeometricVerdict {
   private static final int EXPECTED_FIXTURE_COUNT = 26;
 
   /**
-   * Expected number of fixtures returning {@link PawnWallVerdict#YES}. The remaining 12 are intentionally
-   * {@link PawnWallVerdict#UNKNOWN}: bishop fixtures (6 — excluded by the soundness restriction), en-passant
-   * fixtures (4 — pawns can move, wall not locked), and kings-on-same-side fixtures (2 — kings not separated).
+   * Expected number of fixtures returning {@link PawnWallVerdict#YES}. The remaining 7 are intentionally
+   * {@link PawnWallVerdict#UNKNOWN}: en-passant fixtures (5 — pawns can move, wall not locked) and
+   * kings-on-same-side fixtures (2 — kings not separated). Bishop fixtures with colour-locked bishops are accepted
+   * as {@code YES} (king truly trapped); the {@code WinnableAnalyzer}-level unsoundness for "trapped king but
+   * winnable via bishop mate" is tracked as a follow-up in {@code tasks.md}.
    */
-  private static final int EXPECTED_YES_COUNT = 14;
+  private static final int EXPECTED_YES_COUNT = 19;
 
   @SuppressWarnings("static-method")
   @Test

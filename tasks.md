@@ -122,6 +122,19 @@ Both are conservative — they reject some sound walls. Once Auto-CHA per move i
 - [ ] Add the false-positive fixture to the test corpus once the geometric check is tightened
 - [ ] Decide: tighten the geometric check, or delete the local heuristic once Auto-CHA is in place
 
+#### Follow-up — king-walk-trapped vs unwinnable
+
+`PawnWall.calculate(Board) == YES` is sound as a *king-walk classifier* (the king truly cannot cross the wall), but `WinnableAnalyzer` currently treats it as `Winnable.NO`, which is unsound. Bishops can deliver mate via checks without the king's support; the position `7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -` (Ambrona example 10) is geometrically trapped (chain found through pure pawn/attack barriers, king-walk BFS confirms) yet CHA-full says WINNABLE. The `Winnable.NO` claim from the pawn-wall heuristic is therefore wrong for this class.
+
+Two clean exits:
+
+- **Decouple**: stop using the pawn-wall heuristic for `Winnable.NO` in `WinnableAnalyzer`. The classification stays available as a hint but the unwinnability claim is deferred to CHA-quick / CHA-full.
+- **Auto-CHA subsumes**: once Auto-CHA per move is wired in, CHA-quick on each move handles this position correctly (it's WINNABLE) and the local pawn-wall heuristic becomes redundant.
+
+Decide at implementation time. Until then, the false positive is documented; the responsibility for catching it lies one level up the stack.
+
+- [ ] When deciding the pawn-wall follow-up above, also resolve this `Winnable.NO` propagation
+
 ---
 
 ## Next release — Bitboard backend
