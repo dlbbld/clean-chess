@@ -1,5 +1,8 @@
 package com.dlb.chess.test.unwinnability;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
@@ -57,13 +60,41 @@ class TestUnwinnabilityQuickAgainstWinnability {
 
         final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
         final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
-        CheckQuick.check(winnableWhite, unwinnableQuickWhite);
+        check(winnableWhite, unwinnableQuickWhite);
 
         final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
         final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
 
-        CheckQuick.check(winnableBlack, unwinnableQuickBlack);
+        check(winnableBlack, unwinnableQuickBlack);
       }
+    }
+  }
+
+  private static void check(Winnable winnable, UnwinnableQuick unwinnableQuick) {
+    switch (winnable) {
+      case NO:
+        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
+        break;
+      case YES:
+        assertNotEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
+        break;
+      case UNKNOWN:
+        break;
+      default:
+        throw new IllegalArgumentException();
+    }
+
+    switch (unwinnableQuick) {
+      case WINNABLE:
+        assertNotEquals(Winnable.NO, winnable);
+        break;
+      case UNWINNABLE:
+        assertNotEquals(Winnable.YES, winnable);
+        break;
+      case POSSIBLY_WINNABLE:
+        break;
+      default:
+        throw new IllegalArgumentException();
     }
   }
 

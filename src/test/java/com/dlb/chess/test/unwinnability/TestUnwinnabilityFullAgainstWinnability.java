@@ -1,5 +1,9 @@
 package com.dlb.chess.test.unwinnability;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
@@ -38,12 +42,38 @@ class TestUnwinnabilityFullAgainstWinnability {
     final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
     final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .unwinnableFull();
-    CheckFull.check(winnableWhite, unwinnableFullWhite);
+    check(winnableWhite, unwinnableFullWhite);
 
     final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
     final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
         .unwinnableFull();
-    CheckFull.check(winnableBlack, unwinnableFullBlack);
+    check(winnableBlack, unwinnableFullBlack);
 
   }
+
+  private static void check(Winnable winnable, UnwinnableFull unwinnableFull) {
+    switch (winnable) {
+      case NO:
+        assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
+        break;
+      case YES:
+        assertNotEquals(UnwinnableFull.WINNABLE, unwinnableFull);
+        break;
+      case UNKNOWN:
+        break;
+      default:
+        throw new IllegalArgumentException();
+    }
+
+    switch (unwinnableFull) {
+      case WINNABLE -> assertNotEquals(Winnable.NO, winnable);
+      case UNWINNABLE -> {
+        final var isIncomplete = winnable == Winnable.NO || winnable == Winnable.UNKNOWN;
+        assertTrue(isIncomplete);
+      }
+      case UNDETERMINED -> assertEquals(Winnable.UNKNOWN, winnable);
+      default -> throw new IllegalArgumentException();
+    }
+  }
+
 }
