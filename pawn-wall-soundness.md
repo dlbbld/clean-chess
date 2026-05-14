@@ -141,15 +141,18 @@ For each side, BFS from the king's square. A square is **passable** iff:
 
 - Currently empty, **OR**
 - Currently occupied by a same-side **non-pawn** piece, **OR**
-- Currently occupied by an **undefended** opposing pawn (defended only by other opposing pawns counts as defense; defense by an opposing piece does not).
+- Currently occupied by an **undefended** opposing pawn (king captures and continues BFS from the captured square), **OR**
+- Currently occupied by an opposing non-pawn piece (king captures), **OR**
+- The opposing king's square (BFS target).
 
 A square is **impassable** iff:
 
 - Currently occupied by a same-side pawn, **OR**
-- Attacked by any opposing pawn, **OR**
-- Currently occupied by an opposing pawn that is defended by another opposing pawn.
+- Attacked by any opposing pawn — covers both empty attacked squares (king can't enter check) and opposing pawns defended by another opposing pawn (the defender's attack also hits the defended pawn's square; capture would be re-captured).
 
-If the BFS reaches any opposing pawn for either side, the wall is breachable.
+The BFS uses a **static** attack model: opposing-pawn attacks don't update when an opposing pawn is captured. This is conservative — squares previously attacked by a now-captured pawn remain marked impassable. Sound for the "king trapped" claim; may declare some positions trapped that a dynamic search would clear.
+
+The BFS does **not** terminate at the first opposing pawn reached. It walks through every passable square, treating captures as continuation points. The wall is breachable iff the visited set includes the **opposing king's square** — i.e. the king's reach extends across the wall to the opposing king's territory. Reaching an undefended opposing pawn on the king's own side of the wall does not by itself constitute a breach (the wall structure may still separate the two kings; e.g. Norgaard's position 2 where the king can capture all rank-5 Black pawns but still cannot cross the rank-6 barrier).
 
 ### Test contract
 

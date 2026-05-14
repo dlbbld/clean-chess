@@ -7,6 +7,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
  * Verifies the geometric {@link PawnWall#calculate(Board)} verdict against the {@link PawnWallKingWalkOracle} BFS
@@ -22,8 +25,10 @@ import com.dlb.chess.board.enums.Side;
  * </ul>
  *
  * <p>
- * Each fixture below is a position where the production geometric check should classify as {@link
- * PawnWallVerdict#YES} <em>and</em> the BFS oracle confirms neither king can reach an opposing pawn.
+ * The two hand-coded tests below pin the soundness model with the textbook horizontal-wall and zig-zag-wall fixtures
+ * from {@code pawn-wall-soundness.md}. The folder iteration runs the same agreement check across the full
+ * {@code src/test/resources/pgn/cha/pawnWall} corpus (encoded in {@link PgnTest#CHA_PAWN_WALL}) — every fixture where
+ * the geometric check returns {@link PawnWallVerdict#YES} must independently pass the BFS oracle for both sides.
  */
 class TestPawnWallGeometricVerdict {
 
@@ -34,7 +39,7 @@ class TestPawnWallGeometricVerdict {
     // White king on e1, Black king on e8 - both far from the wall, no piece can breach.
     final Board board = new Board("4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 w - - 0 1");
 
-    assertGeometricAndBfsAgreeOnYes(board);
+    assertGeometricAndBfsAgreeOnYes(board, "textbook horizontal wall");
   }
 
   @SuppressWarnings("static-method")
@@ -44,7 +49,25 @@ class TestPawnWallGeometricVerdict {
     // up to g5/h5 on the kingside but no further; queenside sealed at rank 3.
     final Board board = new Board("4k3/5p1p/4pP1P/3pP3/p1pP4/P1P5/8/4K3 w - - 0 1");
 
-    assertGeometricAndBfsAgreeOnYes(board);
+    assertGeometricAndBfsAgreeOnYes(board, "textbook zig-zag wall");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testAllPawnWallFolderFixtures() {
+    for (final PgnFileTestCase testCase : CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL).list()) {
+      final Board board = new Board(testCase.fen());
+      // Asymmetric contract: only YES verdicts must agree with the BFS oracle. NO/UNKNOWN fixtures are skipped -
+      // the geometric check is allowed to be conservative there, and Auto-CHA / CHA-quick covers them at a higher
+      // level.
+      if (PawnWall.calculate(board) != PawnWallVerdict.YES) {
+        continue;
+      }
+      assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.WHITE),
+          "Geometric YES but BFS says White king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
+      assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.BLACK),
+          "Geometric YES but BFS says Black king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
+    }
   }
 
   /**
@@ -52,12 +75,13 @@ class TestPawnWallGeometricVerdict {
    * confirms both kings are trapped behind a permanent barrier. Test failure means either the geometric check
    * accepted a position the BFS does not, or the test corpus is wrong.
    */
-  private static void assertGeometricAndBfsAgreeOnYes(Board board) {
-    assertEquals(PawnWallVerdict.YES, PawnWall.calculate(board), "geometric check must classify this fixture as YES");
+  private static void assertGeometricAndBfsAgreeOnYes(Board board, String label) {
+    assertEquals(PawnWallVerdict.YES, PawnWall.calculate(board),
+        label + ": geometric check must classify this fixture as YES");
     assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.WHITE),
-        "BFS oracle: White king must be trapped behind the wall");
+        label + ": BFS oracle - White king must be trapped behind the wall");
     assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.BLACK),
-        "BFS oracle: Black king must be trapped behind the wall");
+        label + ": BFS oracle - Black king must be trapped behind the wall");
   }
 
 }

@@ -18,22 +18,25 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
  *
  * <p>
  * The production {@link PawnWall} predicate uses a geometric chain check. This oracle is the second opinion: a
- * king-walk BFS that asks whether the side's king can reach any opposing pawn through passable squares. If the
- * oracle reports the king can reach an opposing pawn while the geometric check returned {@link PawnWallVerdict#YES},
- * the geometric check has a false positive on that fixture — a test failure.
+ * king-walk BFS asking whether the side's king can reach the opposing king's square through passable squares — i.e.
+ * whether the wall is a genuine separator between the two kings.
  *
  * <p>
- * <b>Passable squares</b>: empty squares; squares occupied by same-side non-pawn pieces (they can move out of the
- * way in a future move, opponent cooperating); squares occupied by undefended opposing pawns (the king captures them).
+ * <b>Passable squares</b>: empty squares; squares occupied by same-side non-pawn pieces (they can move out of the way
+ * in a future move, opponent cooperating); squares occupied by undefended opposing pawns (the king captures them and
+ * continues from the captured square); squares occupied by opposing non-pawn pieces (king captures). The opposing
+ * king's square is treated as the BFS target — if the king's reach extends to it, the wall isn't a separator.
  *
  * <p>
  * <b>Impassable squares</b>: squares occupied by same-side pawns (locked in a wall configuration); squares attacked
- * by any opposing pawn (king cannot enter check); squares occupied by opposing pawns that are defended by another
- * opposing pawn.
+ * by any opposing pawn. The "attacked by opposing pawn" check covers both empty attacked squares (king can't enter
+ * check) and opposing pawns defended by another opposing pawn (the defender's attack also hits the defended pawn's
+ * square — capture would be re-captured).
  *
  * <p>
- * "Defended by another opposing pawn" specifically — defence by an opposing piece (bishop, etc.) does not count as
- * permanent because the piece can be moved away. Only pawn defence is structural in a locked-wall configuration.
+ * The BFS uses a static attack model: opposing-pawn attacks don't update when the king captures an opposing pawn.
+ * This is conservative — squares previously attacked by a now-captured pawn remain marked impassable. Sound for the
+ * "king trapped" claim; may declare some positions trapped that a dynamic search would clear.
  *
  * <p>
  * See {@code pawn-wall-soundness.md} for the full design and the asymmetric agreement contract
@@ -45,23 +48,21 @@ final class PawnWallKingWalkOracle {
   }
 
   /**
-   * Returns {@code true} iff the king of {@code side} cannot reach any opposing pawn through passable squares — i.e.
-   * the king is trapped behind a permanent barrier under the helpmate-cooperation movement model.
+   * Returns {@code true} iff the king of {@code side} cannot reach the opposing king's square through passable
+   * squares — i.e. the wall topologically separates the two kings under the helpmate-cooperation movement model.
    */
   static boolean isKingTrappedBehindPermanentBarrier(Board board, Side side) {
     final StaticPosition position = board.getStaticPosition();
     final Side opponent = side.getOppositeSide();
     final Set<Square> opposingPawnAttacks = calculatePawnAttacks(position, opponent);
-    final Set<Square> opposingPawnDefendedSquares = calculatePawnAttacks(position, opponent);
-    // Note: a pawn defends squares it attacks; opposingPawnAttacks and opposingPawnDefendedSquares are the same set.
-    // The two names are kept for readability — one is used for "the king cannot enter this attacked square", the
-    // other for "an opposing pawn on this square is defended."
 
-    final Square kingSquare = StaticPositionUtility.calculateKingSquare(position, side);
+    final Square ownKingSquare = StaticPositionUtility.calculateKingSquare(position, side);
+    final Square opposingKingSquare = StaticPositionUtility.calculateKingSquare(position, opponent);
+
     final Set<Square> visited = EnumSet.noneOf(Square.class);
     final Deque<Square> queue = new ArrayDeque<>();
-    visited.add(kingSquare);
-    queue.add(kingSquare);
+    visited.add(ownKingSquare);
+    queue.add(ownKingSquare);
 
     while (!queue.isEmpty()) {
       final Square current = queue.poll();
@@ -73,30 +74,24 @@ final class PawnWallKingWalkOracle {
           continue;
         }
         final Piece piece = position.get(neighbour);
-        // Same-side pawn — impassable.
+        // Impassable: same-side pawn (locked in a wall configuration).
         if (piece != Piece.NONE && piece.getSide() == side && piece.getPieceType() == PieceType.PAWN) {
           continue;
         }
-        // Attacked by opposing pawn — king cannot enter check.
+        // Impassable: attacked by an opposing pawn. Covers both empty attacked squares (king can't enter check) and
+        // opposing pawns defended by another opposing pawn (the defender's attack also hits the defended pawn's
+        // square - capture would be re-captured).
         if (opposingPawnAttacks.contains(neighbour)) {
           continue;
         }
-        // Opposing pawn — passable iff undefended (king captures); impassable iff defended by another opposing pawn.
-        if (piece != Piece.NONE && piece.getSide() == opponent && piece.getPieceType() == PieceType.PAWN) {
-          if (opposingPawnDefendedSquares.contains(neighbour)) {
-            // Defended by another opposing pawn — impassable.
-            continue;
-          }
-          // Undefended opposing pawn — king reaches an opposing pawn. Wall breachable.
-          return false;
-        }
-        // Empty, same-side non-pawn piece, or opposing non-pawn piece (king can capture) — passable.
+        // Passable: everything else (empty; own non-pawn piece; undefended opposing pawn; opposing non-pawn piece;
+        // opposing king's square). Captures are modelled by continuing BFS from the captured-piece's square.
         visited.add(neighbour);
         queue.add(neighbour);
       }
     }
-    // BFS exhausted without reaching any opposing pawn — king is trapped.
-    return true;
+    // King is trapped iff the BFS reach does not include the opposing king's square.
+    return !visited.contains(opposingKingSquare);
   }
 
   /**
