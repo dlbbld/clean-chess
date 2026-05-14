@@ -9,6 +9,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
@@ -35,7 +36,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
   private static final int LOCAL_NODES_BOUND = 10000;
 
   private final Side color;
-  private final HashMap<String, Integer> transpositionMap = new HashMap<>();
+  private final HashMap<TranspositionKey, Integer> transpositionMap = new HashMap<>();
 
   private int localNodeCount = 0;
 
@@ -109,7 +110,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     // set d := limits.max-depth - depth
     final var movesLeft = maxDepth - depth;
 
-    final String cacheKey = calculateCacheKey(board);
+    final TranspositionKey cacheKey = calculateTranspositionKey(board);
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
     if (calculateIsInTranspositionTableWithEnoughDepth(cacheKey, movesLeft)) {
       return FindHelpmateRecursionResult.FALSE;
@@ -217,15 +218,15 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   }
 
-  private boolean calculateIsInTranspositionTableWithEnoughDepth(String cacheKey, int movesLeft) {
-    if (transpositionMap.containsKey(cacheKey)) {
-      final int storedDepth = Nulls.get(transpositionMap, cacheKey);
-      return storedDepth >= movesLeft;
+  private boolean calculateIsInTranspositionTableWithEnoughDepth(TranspositionKey cacheKey, int movesLeft) {
+    final Integer storedDepth = transpositionMap.get(cacheKey);
+    if (storedDepth != null) {
+      return storedDepth.intValue() >= movesLeft;
     }
     return false;
   }
 
-  private void store(String cacheKey, int movesLeft) {
+  private void store(TranspositionKey cacheKey, int movesLeft) {
     transpositionMap.put(cacheKey, movesLeft);
   }
 
@@ -324,26 +325,14 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     return Nulls.toString(fenSquareErased);
   }
 
-  private static String calculateCacheKey(Board board) {
-    final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
-
-    final StringBuilder fenSquareErased = new StringBuilder();
-
-    fenSquareErased.append(fenRaw.piecePlacement());
-    fenSquareErased.append(" ");
-
-    fenSquareErased.append(fenRaw.havingMove());
-    fenSquareErased.append(" ");
-
-    fenSquareErased.append(fenRaw.castlingRightBothStr());
-
-    if (!"-".equals(fenRaw.enPassantCaptureTargetSquare()) && !calculateIsEraseEnPassantCaptureTargetSquare(board)) {
-      fenSquareErased.append(" ");
-
-      fenSquareErased.append(fenRaw.enPassantCaptureTargetSquare());
+  static TranspositionKey calculateTranspositionKey(Board board) {
+    var enPassantCaptureTargetSquare = board.getEnPassantCaptureTargetSquare();
+    if (enPassantCaptureTargetSquare != Square.NONE && calculateIsEraseEnPassantCaptureTargetSquare(board)) {
+      enPassantCaptureTargetSquare = Square.NONE;
     }
 
-    return Nulls.toString(fenSquareErased);
+    return new TranspositionKey(board.getStaticPosition(), board.getHavingMove(), board.getCastlingRightWhite(),
+        board.getCastlingRightBlack(), enPassantCaptureTargetSquare);
   }
 
   private static boolean calculateIsEraseEnPassantCaptureTargetSquare(Board board) {
@@ -358,6 +347,11 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     return !EnPassantCaptureUtility.calculateHasOpponentPawnOnLeftOrRight(pawnTwoAdvanceSquare,
         board.getStaticPosition());
+
+  }
+
+  record TranspositionKey(StaticPosition staticPosition, Side havingMove, CastlingRight castlingRightWhite,
+      CastlingRight castlingRightBlack, Square enPassantCaptureTargetSquare) {
 
   }
 
