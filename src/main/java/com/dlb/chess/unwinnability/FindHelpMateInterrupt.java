@@ -50,7 +50,7 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
     if (currentDepth < D && !board.isInsufficientMaterial(c) && !board.isFivefoldRepetition()
         && !board.isSeventyFiveMove()) {
 
-      for (final LegalMove legalMove : board.getLegalMoveSet()) {
+      for (final LegalMove legalMove : board.getLegalMoves()) {
         board.move(legalMove.moveSpecification());
         if (IS_DEBUG) {
           final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(),

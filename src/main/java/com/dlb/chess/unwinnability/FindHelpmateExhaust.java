@@ -139,9 +139,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     // 7: for every legal move m in pos do:
-    final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-
-    for (final LegalMove legalMove : legalMoveList) {
+    for (final LegalMove legalMove : board.getLegalMoves()) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! Ã¢Ë†â€™2
       ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
 

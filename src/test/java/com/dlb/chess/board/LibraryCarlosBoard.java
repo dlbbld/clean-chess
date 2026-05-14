@@ -39,7 +39,6 @@ import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
 import com.github.bhlangonijr.chesslib.move.MoveList;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 public class LibraryCarlosBoard {
 
@@ -142,7 +141,7 @@ public class LibraryCarlosBoard {
   }
 
   public boolean canClaimThreefoldRepetitionRuleWithOwnMove() {
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationList()) {
       move(moveSpecification);
       if (isThreefoldRepetition()) {
         unmove();
@@ -381,8 +380,8 @@ public class LibraryCarlosBoard {
     return Nulls.getLast(dynamicPositionList);
   }
 
-  public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
-    return Nulls.copyOfSet(generateMoveSpecificationSet(this.board));
+  public ImmutableList<MoveSpecification> getPossibleMoveSpecificationList() {
+    return Nulls.copyOfList(generateMoveSpecificationSortedSet(this.board));
   }
 
   // the API does not return null
@@ -414,7 +413,7 @@ public class LibraryCarlosBoard {
     return moveBackupList;
   }
 
-  private static Set<MoveSpecification> generateMoveSpecificationSet(Board board) {
+  private static Set<MoveSpecification> generateMoveSpecificationSortedSet(Board board) {
     final List<Move> moveList = generateLegalMoveList(board);
 
     final Set<MoveSpecification> result = new TreeSet<>();
@@ -431,7 +430,7 @@ public class LibraryCarlosBoard {
     return MoveConversionUtility.convertMove(move, movingPiece);
   }
 
-  private static Set<LegalMove> generateLegalMoveSet(Board board) {
+  private static Set<LegalMove> generateLegalMoveSortedSet(Board board) {
     final List<MoveBackup> moveBackupList = generateLegalMoveBackupList(board);
 
     final Set<LegalMove> result = new TreeSet<>();
@@ -503,8 +502,8 @@ public class LibraryCarlosBoard {
     return Nulls.copyOfList(moveSpecificationList);
   }
 
-  public ImmutableSet<LegalMove> getLegalMoveSet() {
-    return Nulls.copyOfSet(generateLegalMoveSet(this.board));
+  public ImmutableList<LegalMove> getLegalMoves() {
+    return Nulls.copyOfList(generateLegalMoveSortedSet(this.board));
   }
 
   private static boolean calculateIsPawnMove(MoveBackup moveBackup) {
@@ -592,14 +591,14 @@ public class LibraryCarlosBoard {
     return canClaimThreefoldRepetitionRuleWithOwnMove();
   }
 
-  public ImmutableSet<String> getLegalMovesSan() {
-    final Set<String> result = new TreeSet<>();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+  public ImmutableList<String> getLegalMovesSan() {
+    final List<String> result = new ArrayList<>();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationList()) {
       this.move(moveSpecification);
       result.add(getSan());
       this.unmove();
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
   private HalfMove buildHalfMove(MoveSpecification moveSpecification) {

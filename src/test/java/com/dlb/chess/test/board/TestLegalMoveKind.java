@@ -92,7 +92,7 @@ class TestLegalMoveKind {
    * Utility: find the unique legal move from {@code from} to {@code to} on the given board, or fail.
    */
   private static LegalMove findLegalMoveByFromTo(Board board, Square from, Square to) {
-    for (final LegalMove legalMove : board.getLegalMoveSet()) {
+    for (final LegalMove legalMove : board.getLegalMoves()) {
       if (legalMove.moveSpecification().fromSquare() == from && legalMove.moveSpecification().toSquare() == to) {
         return legalMove;
       }
@@ -101,7 +101,7 @@ class TestLegalMoveKind {
   }
 
   private static LegalMove findLegalMoveByCastlingMove(Board board, CastlingMove castlingMove) {
-    for (final LegalMove legalMove : board.getLegalMoveSet()) {
+    for (final LegalMove legalMove : board.getLegalMoves()) {
       final MoveSpecification spec = legalMove.moveSpecification();
       if (spec.castlingMove() == castlingMove) {
         return legalMove;
@@ -111,7 +111,7 @@ class TestLegalMoveKind {
   }
 
   private static LegalMove findFirstLegalMoveFromSquare(Board board, Square from) {
-    for (final LegalMove legalMove : board.getLegalMoveSet()) {
+    for (final LegalMove legalMove : board.getLegalMoves()) {
       if (legalMove.moveSpecification().fromSquare() == from) {
         return legalMove;
       }

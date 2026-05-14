@@ -30,15 +30,15 @@ public class UnwinnableFullAnalyzer {
     // add optimization from code
     // if position is advanced cannot use the provided mobility solution if any
     var isCanUseMobilitySolution = true;
-    var isForcedMove = board.getLegalMoveSet().size() == 1;
+    var isForcedMove = board.getLegalMoves().size() == 1;
     // to avoid endless loops in positions with each side having one repeating forced move
     var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
     var totalForcedMoves = 0;
     while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
       isCanUseMobilitySolution = false;
-      final LegalMove onlyLegalMove = Nulls.getFirst(new ArrayList<>(board.getLegalMoveSet()));
+      final LegalMove onlyLegalMove = Nulls.getFirst(board.getLegalMoves());
       board.move(onlyLegalMove.moveSpecification());
-      isForcedMove = board.getLegalMoveSet().size() == 1;
+      isForcedMove = board.getLegalMoves().size() == 1;
       isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
       totalForcedMoves++;
     }

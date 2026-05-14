@@ -3,6 +3,7 @@ package com.dlb.chess.board;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -86,7 +87,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
       return;
     }
 
-    final Set<LegalMove> legalMovesActual = board.getLegalMoveSet();
+    final List<LegalMove> legalMovesActual = board.getLegalMoves();
 
     final Set<MoveSpecification> moveSpecificationsBottomUp = toMoveSpecifications(legalMovesActual);
 
@@ -173,9 +174,9 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     return listForSquare;
   }
 
-  private static Set<MoveSpecification> toMoveSpecifications(Set<LegalMove> legalMoveSet) {
+  private static Set<MoveSpecification> toMoveSpecifications(List<LegalMove> legalMoves) {
     final Set<MoveSpecification> result = new TreeSet<>();
-    for (final LegalMove legalMove : legalMoveSet) {
+    for (final LegalMove legalMove : legalMoves) {
       result.add(legalMove.moveSpecification());
     }
     return result;

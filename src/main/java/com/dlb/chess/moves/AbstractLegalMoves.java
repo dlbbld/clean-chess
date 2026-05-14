@@ -19,6 +19,7 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveCalculation;
 import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.model.PseudoLegalMove;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 
 public abstract class AbstractLegalMoves implements EnumConstants {
@@ -32,9 +33,11 @@ public abstract class AbstractLegalMoves implements EnumConstants {
     }
   }
 
-  public static ImmutableSet<LegalMove> calculateLegalMoves(StaticPosition staticPosition, Side havingMove,
+  public static ImmutableList<LegalMove> calculateLegalMoves(StaticPosition staticPosition, Side havingMove,
       CastlingRight castlingRight, final Square enPassantCaptureTargetSquare) {
-    return Nulls.copyOfSet(
+    // The bottom-up call returns a TreeSet (sorted via LegalMove.compareTo). Wrapping with copyOfList preserves the
+    // sorted iteration order as a List, making the move ordering part of the public contract.
+    return Nulls.copyOfList(
         calculateLegalMovesBottomUp(staticPosition, havingMove, castlingRight, enPassantCaptureTargetSquare));
   }
 

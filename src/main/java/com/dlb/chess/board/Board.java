@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -55,7 +54,6 @@ import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * The library's central type â€” a chess <em>game</em>, not merely a position. A {@code Board} carries the position
@@ -113,7 +111,7 @@ public class Board {
 
   private final Fen initialFen;
   private final List<LegalMove> performedLegalMoveList;
-  private final List<ImmutableSet<LegalMove>> legalMoveSetList;
+  private final List<ImmutableList<LegalMove>> legalMoveListPerPly;
   private final List<Boolean> isCheckList;
   private final List<Boolean> isCheckmateList;
   private final List<Boolean> isStalemateList;
@@ -152,10 +150,10 @@ public class Board {
     this.initialFen = initialFenUse;
 
     this.performedLegalMoveList = new ArrayList<>();
-    this.legalMoveSetList = new ArrayList<>();
-    final ImmutableSet<LegalMove> legalMoveSet = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition,
+    this.legalMoveListPerPly = new ArrayList<>();
+    final ImmutableList<LegalMove> legalMoves = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition,
         initialHavingMove, initialCastlingRight, initialEnPassantCaptureTargetSquare);
-    this.legalMoveSetList.add(legalMoveSet);
+    this.legalMoveListPerPly.add(legalMoves);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(initialStaticPosition,
         initialHavingMove.getOppositeSide());
@@ -168,11 +166,11 @@ public class Board {
     this.isCheckList.add(isCheck);
 
     this.isCheckmateList = new ArrayList<>();
-    final var isCheckmate = isCheck && legalMoveSet.isEmpty();
+    final var isCheckmate = isCheck && legalMoves.isEmpty();
     this.isCheckmateList.add(isCheckmate);
 
     this.isStalemateList = new ArrayList<>();
-    final var isStalemate = !isCheck && legalMoveSet.isEmpty();
+    final var isStalemate = !isCheck && legalMoves.isEmpty();
     this.isStalemateList.add(isStalemate);
 
     this.dynamicPositionList = new ArrayList<>();
@@ -359,9 +357,9 @@ public class Board {
     this.performedLegalMoveList.add(moveToPerform);
 
     // now we have a depencency on instruction execution: the move must be performed before calling the legal moves
-    final ImmutableSet<LegalMove> legalMoveSetAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
+    final ImmutableList<LegalMove> legalMovesAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
         afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
-    this.legalMoveSetList.add(legalMoveSetAfterMove);
+    this.legalMoveListPerPly.add(legalMovesAfterMove);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(afterStaticPosition,
         afterHavingMove.getOppositeSide());
@@ -371,10 +369,10 @@ public class Board {
     final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
-    final var isCheckmate = isCheck && legalMoveSetAfterMove.isEmpty();
+    final var isCheckmate = isCheck && legalMovesAfterMove.isEmpty();
     this.isCheckmateList.add(isCheckmate);
 
-    final var isStalemate = !isCheck && legalMoveSetAfterMove.isEmpty();
+    final var isStalemate = !isCheck && legalMovesAfterMove.isEmpty();
     this.isStalemateList.add(isStalemate);
 
     final var newDynamicPosition = new DynamicPosition(afterHavingMove, afterStaticPosition,
@@ -391,13 +389,13 @@ public class Board {
         dynamicPositionList, newDynamicPosition);
     this.repetitionCountList.add(newRepetitionCount);
 
-    final ImmutableSet<LegalMove> legalMoveSetBeforeLastHalfMoveSet = Nulls.get(legalMoveSetList,
-        legalMoveSetList.size() - 2);
+    final ImmutableList<LegalMove> legalMovesBeforeLastHalfMove = Nulls.get(legalMoveListPerPly,
+        legalMoveListPerPly.size() - 2);
 
     final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck, isCheckmate);
 
     this.sanList
-        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));
+        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMovesBeforeLastHalfMove, sanTerminalMarker));
     this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = buildHalfMove(moveSpecification);
@@ -448,7 +446,7 @@ public class Board {
     }
 
     this.performedLegalMoveList.remove(performedLegalMoveList.size() - 1);
-    this.legalMoveSetList.remove(legalMoveSetList.size() - 1);
+    this.legalMoveListPerPly.remove(legalMoveListPerPly.size() - 1);
 
     this.isCheckList.remove(isCheckList.size() - 1);
     this.isCheckmateList.remove(isCheckmateList.size() - 1);
@@ -477,8 +475,8 @@ public class Board {
     return Nulls.getLast(this.performedLegalMoveList);
   }
 
-  public ImmutableSet<LegalMove> getLegalMoveSet() {
-    return Nulls.getLast(legalMoveSetList);
+  public ImmutableList<LegalMove> getLegalMoves() {
+    return Nulls.getLast(legalMoveListPerPly);
   }
 
   public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
@@ -514,7 +512,7 @@ public class Board {
   public boolean canClaimFiftyMoveRuleWithOwnMove() {
     final var halfMoveCounterNow = this.getHalfMoveClock();
     if (halfMoveCounterNow >= 99) {
-      for (final LegalMove legalMove : getLegalMoveSet()) {
+      for (final LegalMove legalMove : getLegalMoves()) {
         // we must not perform the move to check, which is crucial for performance reasons
         if (!BasicChessUtility.calculateIsResetHalfMoveClock(legalMove)) {
           return true;
@@ -525,7 +523,7 @@ public class Board {
   }
 
   public boolean canClaimThreefoldRepetitionRuleWithOwnMove() {
-    for (final LegalMove legalMove : getLegalMoveSet()) {
+    for (final LegalMove legalMove : getLegalMoves()) {
       // we must not check moves creating a position that never occurred so far
       if (!BasicChessUtility.calculateIsResetHalfMoveClock(legalMove)) {
         this.move(legalMove.moveSpecification());
@@ -768,12 +766,12 @@ public class Board {
     return Nulls.getLast(dynamicPositionList);
   }
 
-  public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
-    final Set<MoveSpecification> result = new TreeSet<>();
-    for (final LegalMove legalMove : this.getLegalMoveSet()) {
+  public ImmutableList<MoveSpecification> getPossibleMoveSpecificationList() {
+    final List<MoveSpecification> result = new ArrayList<>();
+    for (final LegalMove legalMove : this.getLegalMoves()) {
       result.add(legalMove.moveSpecification());
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
   @Override
@@ -803,7 +801,7 @@ public class Board {
   @Override
   public int hashCode() {
     return Objects.hash(dynamicPositionList, halfMoveClockList, halfMoveList, initialFen, isCheckList, isCheckmateList,
-        isStalemateList, lanList, legalMoveSetList, performedLegalMoveList, repetitionCountList, sanList);
+        isStalemateList, lanList, legalMoveListPerPly, performedLegalMoveList, repetitionCountList, sanList);
   }
 
   @Override
@@ -820,7 +818,7 @@ public class Board {
         && Objects.equals(halfMoveList, other.halfMoveList) && Objects.equals(initialFen, other.initialFen)
         && Objects.equals(isCheckList, other.isCheckList) && Objects.equals(isCheckmateList, other.isCheckmateList)
         && Objects.equals(isStalemateList, other.isStalemateList) && Objects.equals(lanList, other.lanList)
-        && Objects.equals(legalMoveSetList, other.legalMoveSetList)
+        && Objects.equals(legalMoveListPerPly, other.legalMoveListPerPly)
         && Objects.equals(performedLegalMoveList, other.performedLegalMoveList)
         && Objects.equals(repetitionCountList, other.repetitionCountList) && Objects.equals(sanList, other.sanList);
   }
@@ -942,24 +940,24 @@ public class Board {
     };
   }
 
-  public ImmutableSet<String> getLegalMovesSan() {
-    final Set<String> result = new TreeSet<>();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+  public ImmutableList<String> getLegalMovesSan() {
+    final List<String> result = new ArrayList<>();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationList()) {
       this.move(moveSpecification);
       result.add(getSan());
       this.unmove();
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
-  public ImmutableSet<String> getLegalMovesUci() {
-    final Set<String> result = new TreeSet<>();
+  public ImmutableList<String> getLegalMovesUci() {
+    final List<String> result = new ArrayList<>();
     final Side havingMove = getHavingMove();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationList()) {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
       result.add(uci);
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
   private HalfMove buildHalfMove(MoveSpecification moveSpecification) {

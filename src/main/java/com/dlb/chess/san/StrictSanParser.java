@@ -1,6 +1,6 @@
 package com.dlb.chess.san;
 
-import java.util.Set;
+import java.util.List;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
@@ -49,7 +49,7 @@ public class StrictSanParser extends AbstractSan {
 
     SanValidateDestination.validateDestinationSquareSemantics(board, havingMove, sanFormat, sanConversion);
 
-    final Set<LegalMove> legalMovesCandidates = SanValidateLegalMoves.calculateLegalMovesCandidates(board, havingMove,
+    final List<LegalMove> legalMovesCandidates = SanValidateLegalMoves.calculateLegalMovesCandidates(board, havingMove,
         sanParse);
     SanValidateLegalMoves.validateAgainstLegalMoves(board, havingMove, legalMovesCandidates, sanFormat, sanConversion);
 

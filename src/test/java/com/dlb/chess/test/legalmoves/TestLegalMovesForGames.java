@@ -975,16 +975,18 @@ class TestLegalMovesForGames {
   }
 
   private static void checkInitial(Board board) {
-    assertEquals(parseSanSet(INITIAL_LEGAL_MOVES), board.getLegalMovesSan());
+    assertEquals(parseSanSet(INITIAL_LEGAL_MOVES), new TreeSet<>(board.getLegalMovesSan()));
   }
 
   private static void checkLegalMoves(Board board, String san, String expected) {
     board.moveStrict(san);
-    assertEquals(parseSanSet(expected), board.getLegalMovesSan());
+    assertEquals(parseSanSet(expected), new TreeSet<>(board.getLegalMovesSan()));
   }
 
-  // Legal-move generation has no defined order; comparing comma-separated strings would couple the
-  // test to generation-order detail. Parse the hardcoded fixture into a Set and compare set-to-set.
+  // The fixtures are written in SAN-alphabetic order for readability, which is independent of the
+  // move-generation order now defined by Board#getLegalMoves. This test verifies legal-move
+  // membership only - the order contract is exercised by other tests. Wrap actual in a TreeSet so
+  // both sides compare under the same ordering.
   @SuppressWarnings("null")
   private static Set<String> parseSanSet(String commaSeparated) {
     if (commaSeparated.isEmpty()) {

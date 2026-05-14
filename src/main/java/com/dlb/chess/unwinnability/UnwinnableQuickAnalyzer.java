@@ -1,8 +1,5 @@
 package com.dlb.chess.unwinnability;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Side;
@@ -50,10 +47,9 @@ public class UnwinnableQuickAnalyzer {
         return UnwinnableQuick.UNWINNABLE;
       }
 
-      isForcedMove = board.getLegalMoveSet().size() == 1;
+      isForcedMove = board.getLegalMoves().size() == 1;
       if (isForcedMove) {
-        final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-        final LegalMove legalMove = Nulls.getFirst(legalMoveList);
+        final LegalMove legalMove = Nulls.getFirst(board.getLegalMoves());
         board.move(legalMove.moveSpecification());
         isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
         countHalfmoves++;

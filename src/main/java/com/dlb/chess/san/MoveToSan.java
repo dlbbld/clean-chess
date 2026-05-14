@@ -1,7 +1,7 @@
 package com.dlb.chess.san;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Piece;
@@ -17,7 +17,7 @@ import com.dlb.chess.moves.PromotionUtility;
 
 public class MoveToSan extends AbstractSan {
 
-  public static String calculateSanLastMove(LegalMove lastMove, Set<LegalMove> legalMoveSetBeforeLastHalfMove,
+  public static String calculateSanLastMove(LegalMove lastMove, List<LegalMove> legalMovesBeforeLastHalfMove,
       SanTerminalMarker sanTerminalMarker) {
 
     // first - check if castling move
@@ -25,22 +25,22 @@ public class MoveToSan extends AbstractSan {
     if (CastlingUtility.calculateIsCastlingMove(moveSpecification)) {
       return calculateSanLastMoveCastling(moveSpecification, sanTerminalMarker);
     }
-    return calculateSanLastMoveNonCastling(lastMove, legalMoveSetBeforeLastHalfMove, sanTerminalMarker);
+    return calculateSanLastMoveNonCastling(lastMove, legalMovesBeforeLastHalfMove, sanTerminalMarker);
   }
 
   private static SanSourceSpecification calculateSourceSpecification(LegalMove legalMove,
-      Set<LegalMove> legalMoveSetForMovingPiece) {
+      List<LegalMove> legalMovesForMovingPiece) {
 
     final MoveSpecification moveSpecification = legalMove.moveSpecification();
 
-    final Set<LegalMove> legalMoveSetForPieceAndToSquare = filterLegalMovesCandidates(legalMoveSetForMovingPiece,
+    final List<LegalMove> legalMovesForPieceAndToSquare = filterLegalMovesCandidates(legalMovesForMovingPiece,
         moveSpecification.toSquare());
     final var numberOfLegalMovesFromSameFile = calculateNumberOfLegalMovesFromFile(
-        moveSpecification.fromSquare().getFile(), legalMoveSetForPieceAndToSquare);
+        moveSpecification.fromSquare().getFile(), legalMovesForPieceAndToSquare);
     final var numberOfLegalMovesFromSameRank = calculateNumberOfLegalMovesFromRank(
-        moveSpecification.fromSquare().getRank(), legalMoveSetForPieceAndToSquare);
+        moveSpecification.fromSquare().getRank(), legalMovesForPieceAndToSquare);
     final var hasOtherFilesHavingLegalMoves = calculateHasOtherFilesHavingLegalMoves(
-        moveSpecification.fromSquare().getFile(), legalMoveSetForPieceAndToSquare);
+        moveSpecification.fromSquare().getFile(), legalMovesForPieceAndToSquare);
 
     if (hasOtherFilesHavingLegalMoves) {
       if (numberOfLegalMovesFromSameFile == 1) {
@@ -77,7 +77,7 @@ public class MoveToSan extends AbstractSan {
   }
 
   private static String calculateSanLastMoveNonCastling(LegalMove lastMove,
-      Set<LegalMove> legalMoveBeforeLastHalfMoveSet, SanTerminalMarker sanTerminalMarker) {
+      List<LegalMove> legalMovesBeforeLastHalfMove, SanTerminalMarker sanTerminalMarker) {
 
     final MoveSpecification moveSpecification = lastMove.moveSpecification();
     final Piece movingPiece = lastMove.movingPiece();
@@ -118,11 +118,11 @@ public class MoveToSan extends AbstractSan {
       case QUEEN:
         buildSan.append(pieceLetter);
 
-        final Set<LegalMove> legalMoveSetForMovingPiece = calculateLegalMoveSetForMovingPiece(lastMove.movingPiece(),
-            legalMoveBeforeLastHalfMoveSet);
+        final List<LegalMove> legalMovesForMovingPiece = calculateLegalMovesForMovingPiece(lastMove.movingPiece(),
+            legalMovesBeforeLastHalfMove);
 
         final SanSourceSpecification sourceSpecification = calculateSourceSpecification(lastMove,
-            legalMoveSetForMovingPiece);
+            legalMovesForMovingPiece);
         switch (sourceSpecification) {
           case SOURCE_NOT_REQUIRED:
             // nothing to add
@@ -164,13 +164,13 @@ public class MoveToSan extends AbstractSan {
 
   // semantics for moving piece: for castling the moving piece is none! so the castling is not returned here when
   // searching for the king as moving piece!!!
-  static Set<LegalMove> calculateLegalMoveSetForMovingPiece(Piece movingPiece, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> legalMoveSetForMovingPiece = new TreeSet<>();
-    for (final LegalMove legalMove : legalMoveSet) {
+  static List<LegalMove> calculateLegalMovesForMovingPiece(Piece movingPiece, List<LegalMove> legalMoves) {
+    final List<LegalMove> legalMovesForMovingPiece = new ArrayList<>();
+    for (final LegalMove legalMove : legalMoves) {
       if (legalMove.movingPiece() == movingPiece) {
-        legalMoveSetForMovingPiece.add(legalMove);
+        legalMovesForMovingPiece.add(legalMove);
       }
     }
-    return legalMoveSetForMovingPiece;
+    return legalMovesForMovingPiece;
   }
 }

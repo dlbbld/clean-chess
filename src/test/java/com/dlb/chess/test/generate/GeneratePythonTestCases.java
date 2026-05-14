@@ -4,7 +4,6 @@ import java.nio.file.FileSystems;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.logging.log4j.Logger;
 
@@ -140,7 +139,7 @@ public class GeneratePythonTestCases implements EnumConstants {
               codeLineList);
 
           // test legal moves
-          final Set<String> legalMovesUci = boardPlayAlong.getLegalMovesUci();
+          final List<String> legalMovesUci = boardPlayAlong.getLegalMovesUci();
           final var expectedSize = legalMovesUci.size();
 
           // test number of legal moves

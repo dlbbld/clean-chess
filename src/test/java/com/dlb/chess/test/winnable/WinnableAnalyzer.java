@@ -50,7 +50,7 @@ public class WinnableAnalyzer {
       return Winnable.NO;
     }
 
-    if (board.getLegalMoveSet().isEmpty()) {
+    if (board.getLegalMoves().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");
     }
 
@@ -84,7 +84,7 @@ public class WinnableAnalyzer {
       }
     }
 
-    if (board.getLegalMoveSet().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
+    if (board.getLegalMoves().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
       {
         final EvaluatePositions evaluatePositions = WinnableCalculateGameState
             .evaluateSecondHalfMoveNotMadeTheMove(board);
@@ -120,7 +120,7 @@ public class WinnableAnalyzer {
 
     final Side sideToEvaluate = board.getHavingMove().getOppositeSide();
 
-    if (board.getLegalMoveSet().isEmpty()) {
+    if (board.getLegalMoves().isEmpty()) {
       throw new ProgrammingMistakeException("At this point we must have at least one legal move");
     }
 
@@ -145,7 +145,7 @@ public class WinnableAnalyzer {
       }
     }
 
-    if (board.getLegalMoveSet().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
+    if (board.getLegalMoves().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
       {
         final EvaluatePositions evaluatePositions = WinnableCalculateGameState.evaluateSecondHalfMoveMadeTheMove(board);
         logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
