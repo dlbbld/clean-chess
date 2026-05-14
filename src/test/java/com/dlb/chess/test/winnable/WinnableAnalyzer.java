@@ -109,7 +109,7 @@ public class WinnableAnalyzer {
       }
     }
 
-    if (PawnWall.calculateHasPawnWall(board)) {
+    if (PawnWall.calculate(board) == PawnWallVerdict.YES) {
       return Winnable.NO;
     }
 
@@ -170,7 +170,7 @@ public class WinnableAnalyzer {
       }
     }
 
-    if (PawnWall.calculateHasPawnWall(board)) {
+    if (PawnWall.calculate(board) == PawnWallVerdict.YES) {
       return Winnable.NO;
     }
 

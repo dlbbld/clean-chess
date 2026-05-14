@@ -25,6 +25,21 @@ public class PawnWall {
   // TODO own pawns outside pawn wall line
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;
 
+  /**
+   * Tri-state classifier: returns {@link PawnWallVerdict#YES} when the geometric pawn-wall check accepts the position
+   * as a sound permanent barrier, {@link PawnWallVerdict#UNKNOWN} otherwise. See {@code pawn-wall-soundness.md} for the
+   * full design, including the BFS test oracle that verifies the geometric verdict on a fixture corpus.
+   *
+   * <p>
+   * The production geometric check is the predicate body of {@link #calculateHasPawnWall(Board)} — the chain-finder
+   * across orthogonally-adjacent barrier squares, plus the precheck stack (no R/N/Q, locked pawns, bishop reach).
+   * The {@code calculate} method is the recommended entry point; the boolean predicate is retained for source
+   * compatibility with existing callers and tests.
+   */
+  public static PawnWallVerdict calculate(Board board) {
+    return calculateHasPawnWall(board) ? PawnWallVerdict.YES : PawnWallVerdict.UNKNOWN;
+  }
+
   public static boolean calculateHasPawnWall(Board board) {
 
     final StaticPosition staticPosition = board.getStaticPosition();

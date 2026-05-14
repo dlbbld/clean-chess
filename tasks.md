@@ -100,7 +100,27 @@ Landed in `2d01c2ab` (May 14, 2026); follow-up `[hash-of-this-commit]` adds the 
 
 ### Pawn-wall classifier — sound tri-state verdict
 
-See [pawn-wall-soundness.md](pawn-wall-soundness.md) for the full design: tri-state `YES / NO / UNKNOWN` return, permanent-barrier principle (own pawns + pawn-attacked squares only — own pieces don't count), king-walk BFS, fixtures, implementation checklist, and the option of dropping the local heuristic once Auto-CHA is in place.
+See [pawn-wall-soundness.md](pawn-wall-soundness.md) for the full design: production geometric check (chain-finder over orthogonally-adjacent barrier squares), BFS king-walk as a test oracle, and the asymmetric agreement contract `geometric_YES ⟹ BFS_YES`. Initial scaffolding has landed; the geometric check still has a known false-positive case (see follow-up below).
+
+- [x] Introduce `PawnWallVerdict { YES, NO, UNKNOWN }`
+- [x] `PawnWall.calculate(Board) -> PawnWallVerdict` wrapping the existing geometric predicate
+- [x] Migrate the three call sites in `WinnableAnalyzer` and `WinnableUtilityAnalyzeChaLichess` to `verdict == YES`
+- [x] BFS king-walk implemented as the test-only `PawnWallKingWalkOracle`
+- [x] Test class `TestPawnWallGeometricVerdict` verifies the agreement contract on the horizontal-wall and zig-zag-wall fixtures from `pawn-wall-soundness.md`
+
+#### Follow-up — tighten the geometric check to reject the false-positive fixture
+
+The current chain-finder accepts the position `7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 0 1` (documented in `pawn-wall-soundness.md`). The chain `a5-b5-c5-c4-d4-d3-e3-e2-f2-g2-h2` is geometrically valid, but the king can capture the undefended Black pawn on a3 (sitting on the king's side of the chain) by routing through bishop-occupied squares (c2, b3). The geometric check returns `YES`; the BFS oracle would return "not trapped." This fixture is not in the test corpus yet (would cause a test failure with the current code).
+
+Two candidate tightenings:
+
+- Reject chains where any opposing pawn exists on the king's side of the chain. (Catches a3.)
+- Reject positions where any own non-pawn piece sits on a square that's currently masking the chain (i.e., the chain would be incomplete without that piece as a "stand-in barrier"). (Catches the c2/b3 bishops.)
+
+Both are conservative — they reject some sound walls. Once Auto-CHA per move is wired in, this whole local heuristic may be deletable. Decide at implementation time.
+
+- [ ] Add the false-positive fixture to the test corpus once the geometric check is tightened
+- [ ] Decide: tighten the geometric check, or delete the local heuristic once Auto-CHA is in place
 
 ---
 
