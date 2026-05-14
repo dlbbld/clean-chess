@@ -122,18 +122,20 @@ Both are conservative — they reject some sound walls. Once Auto-CHA per move i
 - [ ] Add the false-positive fixture to the test corpus once the geometric check is tightened
 - [ ] Decide: tighten the geometric check, or delete the local heuristic once Auto-CHA is in place
 
-#### Follow-up — king-walk-trapped vs unwinnable
+#### Follow-up — the all-pawns-involved soundness check landed
 
-`PawnWall.calculate(Board) == YES` is sound as a *king-walk classifier* (the king truly cannot cross the wall), but `WinnableAnalyzer` currently treats it as `Winnable.NO`, which is unsound. Bishops can deliver mate via checks without the king's support; the position `7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -` (Ambrona example 10) is geometrically trapped (chain found through pure pawn/attack barriers, king-walk BFS confirms) yet CHA-full says WINNABLE. The `Winnable.NO` claim from the pawn-wall heuristic is therefore wrong for this class.
+`PawnWall.calculate(Board)` now wraps the existing chain check with an additional rule: **every pawn on the board must be either a chain element or an attacker of a chain element**. Floating pawns — those not contributing to the barrier — admit helpmates where the king captures the floater (or allows it to be captured) and a promotion follows. This rule rejects the ambrona_10 false positive (`7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1`): the `a2`/`a3` pair are floating, and CHA-full correctly says WINNABLE.
 
-Two clean exits:
+The test corpus cross-checks the geometric verdict against two independent oracles:
 
-- **Decouple**: stop using the pawn-wall heuristic for `Winnable.NO` in `WinnableAnalyzer`. The classification stays available as a hint but the unwinnability claim is deferred to CHA-quick / CHA-full.
-- **Auto-CHA subsumes**: once Auto-CHA per move is wired in, CHA-quick on each move handles this position correctly (it's WINNABLE) and the local pawn-wall heuristic becomes redundant.
+1. The BFS king-walk (`PawnWallKingWalkOracle`) — verifies the king truly cannot reach the opposing king's square.
+2. `UnwinnableQuickAnalyzer` — Ambrona's quick unwinnability oracle. The main soundness gate.
 
-Decide at implementation time. Until then, the false positive is documented; the responsibility for catching it lies one level up the stack.
+The geometric classifier is now intentionally narrower than full unwinnability: many positions Ambrona's analyzer correctly classifies as `UNWINNABLE` fall through to `UNKNOWN` here (e.g. Norgaard examples with extra backed-up pawns that can't actually promote). The geometric classifier exists for the geometric pattern itself; `UnwinnableQuick` is the canonical unwinnability check.
 
-- [ ] When deciding the pawn-wall follow-up above, also resolve this `Winnable.NO` propagation
+#### Future work — bishop-mate edge cases
+
+The current all-pawns-involved rule is sound for the known false-positive class (floating-pawn promotion). It's possible some bishop-only mating patterns (positions where multiple same-coloured bishops force mate even though the king is trapped behind a sound wall) could still slip through — none have been observed in the corpus yet. If one surfaces, the test catches it via the `UnwinnableQuick != UNWINNABLE` disagreement.
 
 ---
 

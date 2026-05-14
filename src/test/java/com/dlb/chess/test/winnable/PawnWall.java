@@ -27,27 +27,98 @@ public class PawnWall {
 
   /**
    * Classifier: returns {@link PawnWallVerdict#YES} when the geometric pawn-wall check accepts the position as a
-   * sound king-walk barrier, {@link PawnWallVerdict#UNKNOWN} otherwise. See {@code pawn-wall-soundness.md} for the
-   * full design, including the BFS test oracle that verifies the geometric verdict on a fixture corpus.
+   * sound unwinnable-by-pawn-barrier configuration, {@link PawnWallVerdict#UNKNOWN} otherwise. See
+   * {@code pawn-wall-soundness.md} for the full design.
    *
    * <p>
-   * The production geometric check is the predicate body of {@link #calculateHasPawnWall(Board)} — the chain-finder
-   * across orthogonally-adjacent barrier squares, plus the precheck stack (no R/N/Q, locked pawns, bishop reach).
-   * The chain itself is composed exclusively of pawn-derived barrier squares (own pawns + opposing-pawn-attacked
-   * squares); own non-pawn pieces never appear in the chain.
+   * The verdict requires the position to satisfy:
+   *
+   * <ol>
+   * <li>The chain check ({@link #calculateHasPawnWall(Board)}) — orthogonally-adjacent barrier squares span the
+   * board from leftmost file to rightmost file, and both kings sit on opposite sides of the chain.</li>
+   * <li>The all-pawns-involved check ({@link #areAllPawnsInvolvedInPawnWall(Board)}) — every pawn on the board is
+   * either a chain element (if it's an own-side pawn at a chain-included square) or provides at least one chain
+   * attack square (if it's an opposing pawn attacking a chain element). Floating pawns — those not contributing to
+   * the barrier — admit helpmates where the king captures the floater (or allows the opposing king to capture it)
+   * and a promotion follows. Without this check, positions like
+   * {@code 7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -} would slip through: the chain
+   * {@code a5-b5-b4-c4-c3-d3-d2-e2-f2-g2-h2} is pawn/attack-only but the floating {@code a2}/{@code a3} pair
+   * (White's outside pawn + the Black pawn it interacts with) makes the position winnable.</li>
+   * </ol>
    *
    * <p>
-   * <b>Known limit:</b> a {@code YES} verdict is sound as a king-walk classifier (the king truly cannot reach the
-   * opposing king's square through any sequence of legal moves), but a king-trapped position is not equivalent to an
-   * unwinnable position. Bishops can deliver mate via checks without the king's support — the position
-   * {@code 7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -} is geometrically trapped but winnable per CHA-full.
-   * {@code WinnableAnalyzer} currently treats {@code YES} as {@code Winnable.NO}, which propagates this kind of
-   * false positive for unwinnability. Two ways out, captured as follow-ups in {@code tasks.md}:
-   * {@code WinnableAnalyzer} stops using the pawn-wall heuristic for {@code Winnable.NO}, or Auto-CHA per move
-   * subsumes the heuristic and we delete it. Until one of those lands, this class of false positive is documented.
+   * Bishops are tolerated: a position with own bishops on one colour and opposing pawns on the other colour
+   * (colour-locked) can still satisfy both checks. {@link PawnWallKingWalkOracle} verifies the king-trapped
+   * conclusion; the corpus test additionally cross-checks {@code UnwinnableQuick} agrees that the position is
+   * unwinnable for both sides.
    */
   public static PawnWallVerdict calculate(Board board) {
-    return calculateHasPawnWall(board) ? PawnWallVerdict.YES : PawnWallVerdict.UNKNOWN;
+    if (!calculateHasPawnWall(board)) {
+      return PawnWallVerdict.UNKNOWN;
+    }
+    if (!areAllPawnsInvolvedInPawnWall(board)) {
+      return PawnWallVerdict.UNKNOWN;
+    }
+    return PawnWallVerdict.YES;
+  }
+
+  /**
+   * Returns {@code true} iff some chain that spans the board from leftmost to rightmost file (for each side
+   * independently) has every same-side pawn as a chain element and every opposing pawn providing at least one chain
+   * attack square. See {@link #calculate(Board)} for the rationale.
+   */
+  static boolean areAllPawnsInvolvedInPawnWall(Board board) {
+    return areAllPawnsInvolvedInPawnWall(board, Side.WHITE) && areAllPawnsInvolvedInPawnWall(board, Side.BLACK);
+  }
+
+  private static boolean areAllPawnsInvolvedInPawnWall(Board board, Side side) {
+    final List<List<Square>> chains = findAllPawnWallLines(board, side);
+    final StaticPosition position = board.getStaticPosition();
+    for (final List<Square> chain : chains) {
+      if (allPawnsInvolvedInSpecificChain(position, chain, side)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  private static boolean allPawnsInvolvedInSpecificChain(StaticPosition position, List<Square> chain, Side side) {
+    final Set<Square> chainSet = new HashSet<>(chain);
+    for (final Square square : Square.REAL) {
+      final Piece piece = position.get(square);
+      if (piece == Piece.NONE || piece.getPieceType() != PieceType.PAWN) {
+        continue;
+      }
+      // A pawn is involved if it sits on a chain square (it IS a chain element) OR it attacks a chain square
+      // (its attack contributes the attack-square barrier entry in the chain). A pawn satisfying neither is
+      // "floating" - not contributing to the barrier. Floating pawns are the leak the
+      // 7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - position demonstrates: a2/a3 (White's outside pawn and
+      // the Black pawn ahead of it) are not part of the chain a5-b5-b4-c4-c3-d3-d2-e2-f2-g2-h2 and don't attack
+      // any chain element. The king can capture a3 and the a2 pawn promotes.
+      if (chainSet.contains(square)) {
+        continue;
+      }
+      if (!pawnAttacksAnyChainSquare(square, piece.getSide(), chainSet)) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private static boolean pawnAttacksAnyChainSquare(Square pawnSquare, Side pawnSide, Set<Square> chainSet) {
+    if (Square.calculateHasLeftDiagonalSquare(pawnSide, pawnSquare)) {
+      final Square left = Square.calculateLeftDiagonalSquare(pawnSide, pawnSquare);
+      if (chainSet.contains(left)) {
+        return true;
+      }
+    }
+    if (Square.calculateHasRightDiagonalSquare(pawnSide, pawnSquare)) {
+      final Square right = Square.calculateRightDiagonalSquare(pawnSide, pawnSquare);
+      if (chainSet.contains(right)) {
+        return true;
+      }
+    }
+    return false;
   }
 
   public static boolean calculateHasPawnWall(Board board) {
@@ -430,7 +501,15 @@ public class PawnWall {
   }
 
   protected static boolean calculateHasPawnWallLine(Board board, Side side) {
+    return calculateHasPawnWallLine(board.getStaticPosition(), findAllPawnWallLines(board, side), side);
+  }
 
+  /**
+   * Returns every chain of orthogonally-adjacent barrier squares spanning {@code side}'s leftmost file to the
+   * rightmost file. Barrier squares are own pawns blocked by a piece ahead and squares attacked by opposing pawns.
+   * The chain elements are never own non-pawn pieces - those squares do not appear in {@code blockedSquares}.
+   */
+  static List<List<Square>> findAllPawnWallLines(Board board, Side side) {
     final StaticPosition blockedSquares = calculateBlockedSquares(board, side);
 
     final List<Square> startCandidates = new ArrayList<>();
@@ -449,7 +528,7 @@ public class PawnWall {
       calculatePawnWallLines(blockedSquares, squareCandidate, true, side, currentLine, resultList);
       currentLine.remove(currentLine.size() - 1);
     }
-    return calculateHasPawnWallLine(board.getStaticPosition(), resultList, side);
+    return resultList;
   }
 
   private static boolean calculateHasPawnWallLine(StaticPosition staticPosition, List<List<Square>> resultList,

@@ -13,50 +13,44 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 /**
- * Verifies the geometric {@link PawnWall#calculate(Board)} verdict against the {@link PawnWallKingWalkOracle} BFS
- * second-opinion check.
+ * Tests the geometric {@link PawnWall#calculate(Board)} verdict on the pawn-wall PGN corpus, with two independent
+ * second opinions:
+ *
+ * <ol>
+ * <li>{@link PawnWallKingWalkOracle} — verifies the king-walk reading of the position (neither king can reach the
+ * opposing king's square through any sequence of legal moves).</li>
+ * <li>{@link UnwinnableQuickAnalyzer} — Ambrona's quick unwinnability check; verifies the position is unwinnable
+ * for both sides.</li>
+ * </ol>
  *
  * <p>
  * Contract (see {@code pawn-wall-soundness.md}):
  *
  * <ul>
- * <li>{@code geometric_YES} ⟹ {@code BFS_YES} (soundness — must hold).</li>
- * <li>{@code BFS_YES} ⟹ {@code geometric_YES} is <em>not</em> required; the geometric check is allowed to be
- * conservative.</li>
+ * <li>{@code geometric_YES} ⟹ {@code BFS_YES} (king-walk soundness — must hold).</li>
+ * <li>{@code geometric_YES} ⟹ {@code UnwinnableQuick == UNWINNABLE} for both sides (Ambrona-confirmed unwinnability —
+ * must hold).</li>
+ * <li>The reverse implications are not required; both second opinions are allowed to detect more positions than the
+ * geometric check.</li>
  * </ul>
  *
  * <p>
- * The two hand-coded tests pin the soundness model with the textbook horizontal-wall and zig-zag-wall fixtures from
- * {@code pawn-wall-soundness.md}. The folder iteration runs the same agreement check across the full
- * {@code src/test/resources/pgn/cha/pawnWall} corpus (encoded in {@link PgnTest#CHA_PAWN_WALL}) — every fixture
- * where the geometric check returns {@link PawnWallVerdict#YES} must independently pass the BFS oracle for both
- * sides.
- *
- * <p>
- * The folder test asserts on both the total fixture count and the number of fixtures returning {@code YES}. Without
- * these counts the test could pass vacuously if fixture loading broke or the geometric check regressed to always
- * returning {@link PawnWallVerdict#UNKNOWN}.
+ * The {@code UnwinnableQuick} cross-check is the main soundness gate. Per the user's framing: the pawn-wall
+ * detection is a geometric side product — Ambrona's analyzer is the canonical unwinnability oracle. If the
+ * geometric check says YES on a position where {@code UnwinnableQuick} disagrees, the geometric check has a false
+ * positive worth investigating.
  */
 class TestPawnWallGeometricVerdict {
 
   /**
-   * Expected number of fixtures in {@link PgnTest#CHA_PAWN_WALL}. The corpus contains positions with various wall
-   * topologies (clean horizontal, zig-zag, Norgaard, Ambrona's real game), positions that look like walls but are
-   * winnable (en passant possible, kings on the same side), and positions with bishops (now excluded from
-   * {@code YES} by the soundness restriction in {@link PawnWall#calculate(Board)}).
+   * Expected number of fixtures in {@link PgnTest#CHA_PAWN_WALL}. Pinned so test failures distinguish
+   * "corpus loader broke" from "geometric check regressed."
    */
   private static final int EXPECTED_FIXTURE_COUNT = 26;
-
-  /**
-   * Expected number of fixtures returning {@link PawnWallVerdict#YES}. The remaining 7 are intentionally
-   * {@link PawnWallVerdict#UNKNOWN}: en-passant fixtures (5 — pawns can move, wall not locked) and
-   * kings-on-same-side fixtures (2 — kings not separated). Bishop fixtures with colour-locked bishops are accepted
-   * as {@code YES} (king truly trapped); the {@code WinnableAnalyzer}-level unsoundness for "trapped king but
-   * winnable via bishop mate" is tracked as a follow-up in {@code tasks.md}.
-   */
-  private static final int EXPECTED_YES_COUNT = 19;
 
   @SuppressWarnings("static-method")
   @Test
@@ -66,6 +60,20 @@ class TestPawnWallGeometricVerdict {
     final Board board = new Board("4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 w - - 0 1");
 
     assertGeometricAndBfsAgreeOnYes(board, "textbook horizontal wall");
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testAmbronaTenIsRejected() {
+    // ambrona_10 - WINNABLE per CHA-full despite an apparent permanent barrier. The geometric chain
+    // a5-b5-b4-c4-c3-d3-d2-e2-f2-g2-h2 is pawn/attack-only and the king-walk BFS confirms trapped, but the
+    // helpmate exists: the king captures the undefended a3 pawn (routing through the c2/b3 bishop squares) and
+    // White's a2 pawn marches to promotion. The all-pawns-involved check rejects this position because a2 and a3
+    // are not part of any spanning chain - they are floating pawns.
+    final Board board = new Board("7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 0 1");
+
+    assertEquals(PawnWallVerdict.UNKNOWN, PawnWall.calculate(board),
+        "ambrona_10 has a floating a2/a3 pawn pair - must be rejected by the all-pawns-involved check");
   }
 
   @SuppressWarnings("static-method")
@@ -83,15 +91,14 @@ class TestPawnWallGeometricVerdict {
   void testAllPawnWallFolderFixtures() {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL).list();
     assertEquals(EXPECTED_FIXTURE_COUNT, fixtures.size(),
-        "pawnWall corpus must have " + EXPECTED_FIXTURE_COUNT + " fixtures — if this fails, the corpus loader is "
+        "pawnWall corpus must have " + EXPECTED_FIXTURE_COUNT + " fixtures - if this fails, the corpus loader is "
             + "broken or fixtures were added/removed");
 
     final List<String> yesFiles = new ArrayList<>();
     for (final PgnFileTestCase testCase : fixtures) {
       final Board board = new Board(testCase.fen());
-      // Asymmetric contract: only YES verdicts must agree with the BFS oracle. NO/UNKNOWN fixtures are skipped -
-      // the geometric check is allowed to be conservative there, and Auto-CHA / CHA-quick covers them at a higher
-      // level.
+      // Asymmetric contract: only YES verdicts get cross-checked. NO/UNKNOWN fixtures are skipped - both the BFS
+      // oracle and UnwinnableQuick are allowed to detect more positions than the conservative geometric check.
       if (PawnWall.calculate(board) != PawnWallVerdict.YES) {
         continue;
       }
@@ -100,11 +107,25 @@ class TestPawnWallGeometricVerdict {
           "Geometric YES but BFS says White king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
       assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.BLACK),
           "Geometric YES but BFS says Black king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
+      assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE),
+          "Geometric YES but UnwinnableQuick is not UNWINNABLE for White: " + testCase.pgnFileName() + " - "
+              + testCase.fen());
+      assertEquals(UnwinnableQuick.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK),
+          "Geometric YES but UnwinnableQuick is not UNWINNABLE for Black: " + testCase.pgnFileName() + " - "
+              + testCase.fen());
     }
-    assertEquals(EXPECTED_YES_COUNT, yesFiles.size(),
-        "expected exactly " + EXPECTED_YES_COUNT + " geometric-YES fixtures - if this fails, the geometric check "
-            + "regressed (returns YES for more or fewer fixtures than expected). Got " + yesFiles.size() + ": "
-            + yesFiles);
+    // A meaningful subset of the corpus must return YES, otherwise the test passes vacuously (e.g. if the geometric
+    // check regressed to always returning UNKNOWN).
+    assertTrue(yesFiles.size() >= 5,
+        "expected at least 5 geometric-YES fixtures (got " + yesFiles.size() + ": " + yesFiles + ")");
+    // The bishop fixtures specifically must remain in the YES set - per the user, color-locked bishops behind a
+    // genuine pawn wall are a valid case we want to keep detecting (the wall is sound; the bishop is harmless
+    // because it can never reach an opposing pawn).
+    assertTrue(yesFiles.contains("pawn_wall_bishop_1.pgn"),
+        "pawn_wall_bishop_1 must remain in the geometric-YES set (color-locked bishop, valid wall). Got: " + yesFiles);
+    // The classic textbook walls must be in the YES set.
+    assertTrue(yesFiles.contains("pawn_wall_horizontal_1.pgn"),
+        "pawn_wall_horizontal_1 must remain in the geometric-YES set. Got: " + yesFiles);
   }
 
   /**

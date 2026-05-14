@@ -15,11 +15,12 @@ This work is deferred to the **DeepSquare / Auto-CHA release** rather than the c
 
 Anything else → `UNKNOWN`. Auto-CHA per move catches what the geometric check doesn't.
 
-**Test oracle**: BFS king-walk over a corpus of pawn-wall fixtures.
+**Test oracles**: two independent second opinions cross-check the geometric verdict.
 
-- For each fixture where the geometric check returns `YES`, run the BFS independently.
-- Assert: BFS confirms the king cannot reach the opposing king's square through passable squares (treating own non-pawn pieces as movable and undefended opposing pawns as capturable stepping stones).
-- If they disagree, either the geometric check accepted a false positive or the BFS is wrong — test failure either way.
+1. **BFS king-walk** over a corpus of pawn-wall fixtures. For each fixture where the geometric check returns `YES`, the BFS must independently confirm the king cannot reach the opposing king's square through passable squares (treating own non-pawn pieces as movable and undefended opposing pawns as capturable stepping stones).
+2. **`UnwinnableQuickAnalyzer`** — Ambrona's quick unwinnability check. For each fixture where the geometric check returns `YES`, `UnwinnableQuick` must independently return `UNWINNABLE` for both sides.
+
+The `UnwinnableQuick` cross-check is the main soundness gate. The geometric pawn-wall classifier is a side product — Ambrona's analyzer is the canonical unwinnability oracle. If the geometric check says `YES` on a position where `UnwinnableQuick` disagrees, the geometric check has a false positive worth fixing.
 
 The contract is asymmetric:
 
@@ -116,9 +117,28 @@ The existing chain-finder in `calculateHasPawnWallLine` already implements the z
 
 If all pass → `YES`. Otherwise → `UNKNOWN`.
 
-Steps 1–5 are already implemented in `PawnWall.calculateHasPawnWall`; the public API is rewrapped to return `PawnWallVerdict.YES` when the existing predicate returns true, and `UNKNOWN` otherwise.
+Steps 1–5 are already implemented in `PawnWall.calculateHasPawnWall`. `PawnWall.calculate(Board)` wraps that predicate **plus** an additional all-pawns-involved check (see below); the wrapped result returns `PawnWallVerdict.YES` only when both succeed, otherwise `UNKNOWN`.
 
-**Known limit — king-walk-trapped ≠ unwinnable.** A `YES` verdict is sound as a king-walk classifier: the chain check uses only pawn-derived barriers (own pawns + opposing-pawn-attacked squares — never own non-pawn pieces), and when the chain spans file a to file h orthogonally with both kings on opposite sides, the king truly cannot cross the wall. But a *king-trapped* position is not equivalent to an *unwinnable* position. Bishops can deliver mate via checks without the king's support — the position `7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -` is geometrically trapped (chain `a5-b5-b4-c4-c3-d3-d2-e2-f2-g2-h2`, all pawn/attack barriers) and the king-walk BFS confirms trapped, yet CHA-full says WINNABLE because three same-colour bishops can force mate with cooperation. `WinnableAnalyzer` currently treats `YES` as `Winnable.NO`, which propagates this class of false positive for unwinnability claims. Two ways out, captured as follow-ups in `tasks.md`: stop using the pawn-wall heuristic for `Winnable.NO` in `WinnableAnalyzer` (defer to CHA-quick), or Auto-CHA per move subsumes the heuristic and the local code is deleted. Until one of those lands, this class of false positive is documented and the responsibility for catching it lies one level up the analysis stack.
+### Additional check — every pawn must be involved in the wall
+
+The chain check alone is not sufficient. The `7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - -` position (Ambrona example 10) demonstrates the leak: the chain `a5-b5-b4-c4-c3-d3-d2-e2-f2-g2-h2` is purely pawn/attack barriers, the king-walk BFS confirms trapped, yet the position is `WINNABLE` per CHA-full. The mechanism is not a bishop mate — it is a **floating pawn promoting**. White's `a2` pawn is not part of the chain. Black's `a3` pawn is not part of the chain. The king (routing through `c2`/`b3` bishop squares) captures `a3`; `a2` then marches `a3-a4-a5-a6-a7-a8` (all empty) and promotes.
+
+To exclude this class of false positive, `calculate(Board)` additionally requires:
+
+> **Every pawn on the board must be either a chain element OR an attacker of a chain element.**
+
+Concretely, for some chain found by the chain-finder:
+
+- Every same-side pawn must either sit on a chain square or attack at least one chain square (own pawn at `b3` is OK in a rank-4 chain because `b3` attacks `a4`/`c4`, both in chain).
+- Every opposing pawn must either sit on a chain square (Black pawn `b4` in a rank-4 chain spanning `PpPpPpPp` is itself a chain element) or attack at least one chain square (Black pawn `a5` attacks `b4`, in chain).
+
+Pawns satisfying neither are "floating" — they can be captured (by the king, routing through own-piece squares the BFS treats as passable) and the resulting open file admits promotion. In ambrona_10: `a2` doesn't sit on a chain square and attacks `b3` (not in chain), so it's floating; `a3` doesn't sit on a chain square and attacks `b2` (not in chain), so it's floating. The position is rejected.
+
+In `pawn_wall_bishop_1` (a color-locked bishop fixture) and the other corpus positions classified `YES`, every pawn either sits on a chain element or attacks one. The bishop case is preserved.
+
+### Known limit — narrower YES coverage
+
+The all-pawns-involved rule rejects some positions that are genuinely unwinnable (e.g. some Norgaard examples with extra pawns behind the wall that can't actually promote). The geometric classifier is now a **conservative subset** of true unwinnability: every `YES` is correct, but many sound walls fall through to `UNKNOWN`. `UnwinnableQuickAnalyzer` (Ambrona's quick check) is the canonical unwinnability oracle for those cases; the geometric classifier is a side product that exists for the geometric pattern itself, not as the primary unwinnability gate.
 
 ## Test oracle — BFS king-walk
 
