@@ -52,29 +52,25 @@ For clean-chess, adapt: short project description, copyright line, GPL v3 refere
 
 ### Speed up `findHelpMate` — transposition key instead of FEN string for visited-position storage
 
-The unwinnability `findHelpMate` search keys its visited-position set by `Board.fen()` — the full FEN string. On every node the FEN is re-serialised; on every lookup the string is re-hashed character by character; and the position is implicitly re-parsed when the next FEN is built for comparison. For a search that visits many positions, FEN serialisation is the hot path.
+The unwinnability `findHelpMate` search used to key its visited-position set by `Board.fen()` — the full FEN string. Every node serialised a FEN, re-parsed it via `FenParserRaw`, and rebuilt a stripped-down FEN-shape string for the map key. For a search visiting many positions, FEN serialisation was the hot path.
 
-Replace the FEN string with a lightweight transposition key — a single `long` (or a small wrapper of two `long`s if collision-resistance matters) that fingerprints the position via Zobrist-style hashing or equivalent. Equality becomes a long compare, not a string compare, and there is no FEN round-trip in the loop.
+Landed in `996bcd3a` (May 14, 2026) as a structured `TranspositionKey` record on `FindHelpmateExhaust`: `(StaticPosition, Side havingMove, CastlingRight white, CastlingRight black, Square enPassantCaptureTargetSquare)`. Records get `equals` / `hashCode` for free; no allocation of FEN strings; no regex parsing; exact equality (no hash-collision risk).
 
-This is the biggest performance win available **before** the bitboard release. Currently `findHelpMate` takes ~1 minute on positions where CHA-C runs in seconds; the FEN-string visited set is a meaningful fraction of that gap. The bitboard release then closes the rest.
+**En passant normalization.** Unlike `DynamicPosition` (which uses a boolean for en-passant availability — sufficient for in-game threefold repetition because pawn-irreversibility makes the boolean a complete distinguisher along a single game's history), the transposition key crosses the move-tree, not game history. Two different paths can converge on the same piece arrangement with the same side-to-move and castling rights but a *different* en-passant target square. The target is therefore included in the key, but **normalised**: if no opposing pawn can actually capture on the target (a "phantom" e.p. that FEN records but is unreachable), the field is set to `Square.NONE`. This uses the existing `calculateIsEraseEnPassantCaptureTargetSquare` logic from the old FEN-string approach.
 
-Do this **before** Auto-CHA: measure findHelpMate improvement first, then layer Auto-CHA on top.
+- [x] Decide on the key shape — chose structured record over long Zobrist hash. Simpler, no per-square-piece random tables, allocation-heavier per node but exact equality
+- [x] Swap `findHelpMate`'s visited-position store to use the new key
+- [x] Include the en-passant target square in the key (not just availability), normalised to `NONE` when no capture is actually available
+- [x] Confirm CHA-quick and CHA-full correctness unchanged (full `mvn -q test` passes)
+- [x] Tests covering counter-ignoring, phantom-e.p.-normalising, and capturable-e.p.-preserving behaviour (`TestFindHelpmateExhaustTranspositionKey`)
 
-- [ ] Decide on the key shape (`long` Zobrist hash, or wider key with collision guard)
-- [ ] Implement on `Board` (or the dynamic-position carrier) — incrementally updated on each move rather than computed from scratch
-- [ ] Swap `findHelpMate`'s visited-position store to use the new key
-- [ ] Verify search speed improvement on representative unwinnability fixtures
-- [ ] Confirm CHA-quick and CHA-full correctness unchanged
+**Deferred to the bitboard release.** A long Zobrist hash (with per-square-piece random tables, XOR'd incrementally on each move) becomes natural once `BitboardPosition` lands — the bitboard update sites are exactly where the Zobrist XORs go. If profiling at that point shows the record allocation matters, promote to a `long` key then. Until then the structured record is the right shape.
 
-### Dynamic position should store the en passant capture target square, not just a boolean
+### Note on `DynamicPosition`'s en-passant boolean — intentionally kept
 
-The dynamic position today carries a `boolean` for en passant availability — "possible / not possible." Functionally this is correct: the flag is reset after every pawn capture or pawn move, so the rule (en passant is legal only on the very next half-move after a double-step pawn advance) is enforced. But semantically it is wrong: en passant rules are square-specific, not abstract. The actual chess rule, and what FEN encodes (`e3`, `d6`, …), is the *square* the capturing pawn would land on. The implementation works because the target square is reconstructed elsewhere from the last half-move; storing it on the dynamic position would be the honest shape.
+`DynamicPosition` carries a boolean for en-passant availability, not a target square. This is correct for what `DynamicPosition` is used for (in-game threefold repetition): along a single game's history, pawn moves are irreversible, so two positions with identical piece arrangements cannot have arrived via different pawn double-steps. The boolean fully distinguishes the cases the rule needs to distinguish.
 
-Folds naturally with the transposition-key task above: a square-valued field hashes more cleanly than a boolean tied to an out-of-band reconstruction.
-
-- [ ] Replace the `boolean` field with an `enPassantCaptureTargetSquare` field (using the existing square enum, with `NONE` for "no en passant available")
-- [ ] Drop wherever the target square is currently reconstructed from the last half-move; the dynamic position becomes the source of truth
-- [ ] Verify that `equals` / `hashCode` for dynamic-position comparison (used in threefold repetition) treat the square correctly — same piece arrangement with different en passant targets must remain non-equal per FIDE rules (already enforced in 6.0.0 via the `EnPassantCaptureRuleThreefold` removal)
+A square-valued field is only required when crossing the move-tree (the `findHelpMate` transposition key above), where two paths *can* converge on identical piece arrangements with different recent double-steps. That square lives at the transposition-key layer, not on `DynamicPosition`. Captured here so future-me doesn't "fix" the boolean.
 
 ### Auto-CHA after every move
 - [ ] Per-move pipeline: invoke `isUnwinnableQuick` for both sides after every legal move; both unwinnable ⇒ `DEAD_POSITION` automatic termination
