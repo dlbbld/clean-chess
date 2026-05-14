@@ -8,7 +8,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.test.winnable.enums.Winnable;
 import com.dlb.chess.test.winnable.model.EvaluatePositions;
 import com.dlb.chess.test.winnable.model.GameForced;
@@ -38,15 +37,6 @@ public class WinnableAnalyzer {
 
     if (board.isInsufficientMaterial(side) || board.isStalemate() || board.isFivefoldRepetition()
         || board.isSeventyFiveMove()) {
-      return Winnable.NO;
-    }
-
-    // Defensive: if the position is in any FIDE-automatic termination not caught by the
-    // predicates above (e.g. mutual insufficient material without the per-side variant
-    // returning true on the queried side), the strict pipeline rejects further moves and the
-    // forced-line / move-tree analysis below would throw GAME_ALREADY_ENDED. Treat it as
-    // unwinnable.
-    if (BasicChessUtility.calculateGameStatus(board).isAutomaticTermination()) {
       return Winnable.NO;
     }
 
