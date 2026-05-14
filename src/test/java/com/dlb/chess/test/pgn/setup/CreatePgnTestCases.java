@@ -90,7 +90,8 @@ public class CreatePgnTestCases {
       case MAX_SAME_PIECE_PROMOTION_WHITE -> createTestCasesMaxSamePiecePromotionWhite();
       case MAX_SAME_PIECE_PROMOTION_BLACK -> createTestCasesMaxSamePiecePromotionBlack();
       case MAX_SAME_PIECE_PROMOTION_COMBINED -> createTestCasesMaxSamePiecePromotionByCombined();
-      case CHA_PAWN_WALL -> createTestCasesPawnWall();
+      case CHA_PAWN_WALL_YES -> createTestCasesPawnWallYes();
+      case CHA_PAWN_WALL_NO -> createTestCasesPawnWallNo();
       case RANDOM_CHECKMATE -> createTestCasesRandomCheckmate();
       case RANDOM_FIFTY -> createTestCasesRandomFifty();
       case RANDOM_FIVEFOLD -> createTestCasesRandomFivefold();
@@ -4872,10 +4873,12 @@ public class CreatePgnTestCases {
     return new PgnFileTestCaseList(PgnTest.CHA_AMBRONA, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesPawnWall() {
+  // Fixtures the geometric pawn-wall classifier accepts as YES: chain spans file a to h, both kings on opposite
+  // sides, every pawn on the board is either a chain element or attacks a chain element.
+  private static PgnFileTestCaseList createTestCasesPawnWallYes() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    // pawn walls without bishops
+    // pawn walls without bishops - clean horizontal / zig-zag
     list.add(new PgnFileTestCase("pawn_wall_horizontal_1.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/P1P1P1P1/8/8/4K3 w - - 0 50"));
@@ -4896,7 +4899,7 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "4k3/5p1p/1p2pP1P/pPp1P3/P1P5/8/8/4K3 w - - 0 50"));
 
-    // pawn walls with bishops
+    // pawn walls with bishops - colour-locked, all pawns involved
     list.add(new PgnFileTestCase("pawn_wall_bishop_1.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "8/6k1/p1p1p3/P1P1Pp1p/5P1P/2B5/6K1/8 b - - 0 50"));
@@ -4917,7 +4920,39 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "3B4/1b4k1/p1p1p3/P1P1Pp1p/5P1P/8/6K1/8 b - - 0 50"));
 
-    // pawn walls but king on wrong side
+    // interlocked pawn structure: rank-3 own pawns attack the rank-4 chain elements (involved)
+    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_1.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - - 0 50"));
+
+    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_2.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - - 0 50"));
+
+    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_3.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/P1PpPpPp/3P1P1P/8/4K3 b - - 0 50"));
+
+    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_4.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
+        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "4k3/8/7p/p1p2p1P/P1P1pP2/4P3/8/4K3 b - - 0 50"));
+
+    // Ambrona 83
+    list.add(new PgnFileTestCase("pawn_wall_ambrona_real_game.pgn", "", "", 5, 83, CheckmateOrStalemate.NA, 2,
+        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
+        UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
+
+    return new PgnFileTestCaseList(PgnTest.CHA_PAWN_WALL_YES, list);
+  }
+
+  // Fixtures that look like a pawn wall but are not - the geometric verdict must return UNKNOWN.
+  // Reasons vary: kings on the wrong side of the chain (no barrier between them), en-passant rights
+  // breaching the wall, or chains that fail the all-pawns-involved gate (Norgaard examples and the
+  // Norgaard "beyond dead position" examples - the chain does not span from leftmost to rightmost file).
+  private static PgnFileTestCaseList createTestCasesPawnWallNo() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    // pawn walls but king on wrong side - position is actually winnable
     list.add(new PgnFileTestCase("pawn_wall_both_kings_on_white_side.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "8/8/8/p1p1p1p1/P1P1P1P1/8/1k6/4K3 w - - 0 50"));
@@ -4926,47 +4961,30 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "3k2K1/1p6/pPp2p1p/P1P2P1P/8/8/8/8 w - - 0 50"));
 
-    // en passant without bishops
-    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_1.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
-        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - - 0 50"));
-
+    // en-passant capture breaches the wall - the position is winnable
     list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_1.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - a3 0 50"));
-
-    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_2.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
-        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - - 0 50"));
 
     list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_2.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - a3 0 50"));
 
-    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_3.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
-        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "4k3/8/8/p1p1p1p1/P1PpPpPp/3P1P1P/8/4K3 b - - 0 50"));
-
     list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_3.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4k3/8/8/p1p1p1p1/P1PpPpPp/3P1P1P/8/4K3 b - e3 0 50"));
-
-    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_4.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
-        1, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "4k3/8/7p/p1p2p1P/P1P1pP2/4P3/8/4K3 b - - 0 50"));
 
     list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_4.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "4k3/8/7p/p1p2p1P/P1P1pP2/4P3/8/4K3 b - f3 0 50"));
 
-    // en passant with bishops
+    // en-passant with bishops - legal en-passant capture breaches the wall
     list.add(new PgnFileTestCase("pawn_wall_bishop_en_passant_capture_legal.pgn", "", "", -1, 0,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnableFull.WINNABLE, UnwinnableFull.WINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableQuick.POSSIBLY_WINNABLE,
         "4k3/8/8/p1p1p3/P1P1Pp1p/1B3P1P/8/4K3 b - e3 0 50"));
 
-    // norgaard
-    // dead position
+    // Norgaard "dead position" - chain is not all-pawns-involved (floating pawns)
     list.add(new PgnFileTestCase("pawn_wall_norgaard_example_1.pgn", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, "6k1/1p1p1p1p/1P1P1P1P/8/8/4K3/1P1P1P1P/8 w - - 0 39"));
@@ -4976,7 +4994,8 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNDETERMINED, UnwinnableQuick.UNWINNABLE,
         UnwinnableQuick.POSSIBLY_WINNABLE, "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 0 34"));
 
-    // beyond dead position
+    // Norgaard "beyond dead position" - chain has no a-file (resp. h-file) pawn, so it does not span
+    // from leftmost to rightmost file; the geometric chain check rejects.
     list.add(new PgnFileTestCase("pawn_wall_norgaard_beyond_example_1.pgn", "", "638...Kg8 (1) 688.Ka3 (100)", 5, 100,
         CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE,
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
@@ -4987,12 +5006,7 @@ public class CreatePgnTestCases {
         UnwinnableQuick.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
         "k7/p1p1p1p1/P1P1P1P1/P1P1P1P1/8/8/6K1/8 b - - 100 883"));
 
-    // Ambrona 83
-    list.add(new PgnFileTestCase("pawn_wall_ambrona_real_game.pgn", "", "", 5, 83, CheckmateOrStalemate.NA, 2,
-        InsufficientMaterial.NONE, UnwinnableFull.UNWINNABLE, UnwinnableFull.UNWINNABLE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableQuick.UNWINNABLE, "1k6/5p1p/1p2pP1P/1P2P3/8/1K6/8/8 b - - 83 95"));
-
-    return new PgnFileTestCaseList(PgnTest.CHA_PAWN_WALL, list);
+    return new PgnFileTestCaseList(PgnTest.CHA_PAWN_WALL_NO, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLastMoveAddedAccidentally() {

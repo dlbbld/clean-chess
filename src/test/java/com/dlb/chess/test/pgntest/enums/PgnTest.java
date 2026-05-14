@@ -91,7 +91,8 @@ public enum PgnTest {
   CHA_LICHESS_QUICK_DEPTH_THREE(false, "cha/lichess/quick/depthThree"),
   CHA_LICHESS_NOT_QUICK(false, "cha/lichess/notQuick"),
   CHA_AMBRONA(false, "cha/ambrona"),
-  CHA_PAWN_WALL(false, "cha/pawnWall"),
+  CHA_PAWN_WALL_YES(false, "cha/pawnWall/yes"),
+  CHA_PAWN_WALL_NO(false, "cha/pawnWall/no"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
 
