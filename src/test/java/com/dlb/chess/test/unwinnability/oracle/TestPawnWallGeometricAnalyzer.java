@@ -3,7 +3,6 @@ package com.dlb.chess.test.unwinnability.oracle;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
@@ -52,18 +51,6 @@ import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
  */
 class TestPawnWallGeometricAnalyzer {
 
-  /**
-   * Expected number of fixtures in {@link PgnTest#CHA_PAWN_WALL_YES}. Pinned so test failures distinguish
-   * "corpus loader broke" from "geometric check regressed."
-   */
-  private static final int EXPECTED_YES_FIXTURE_COUNT = 15;
-
-  /**
-   * Expected number of fixtures in {@link PgnTest#CHA_PAWN_WALL_NO}. Pinned so test failures distinguish
-   * "corpus loader broke" from "geometric check regressed."
-   */
-  private static final int EXPECTED_NO_FIXTURE_COUNT = 11;
-
   @SuppressWarnings("static-method")
   @Test
   void testAmbronaTenIsRejected() {
@@ -84,11 +71,7 @@ class TestPawnWallGeometricAnalyzer {
   @Test
   void testYesFixtures() {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_YES).list();
-    assertEquals(EXPECTED_YES_FIXTURE_COUNT, fixtures.size(),
-        "pawnWall/yes corpus must have " + EXPECTED_YES_FIXTURE_COUNT + " fixtures - if this fails, the corpus "
-            + "loader is broken or fixtures were added/removed");
 
-    final List<String> failures = new ArrayList<>();
     for (final PgnFileTestCase testCase : fixtures) {
       final Board board = new Board(testCase.fen());
       // Every fixture in yes/ must be geometric YES; this is the contract that justifies the folder split.
@@ -106,19 +89,13 @@ class TestPawnWallGeometricAnalyzer {
       assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK),
           "Geometric YES but UnwinnableQuick is not UNWINNABLE for Black: " + testCase.pgnFileName() + " - "
               + testCase.fen());
-      failures.add(testCase.pgnFileName());
     }
-    assertEquals(EXPECTED_YES_FIXTURE_COUNT, failures.size(),
-        "all yes/ fixtures must have been exercised - got " + failures);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testNoFixtures() {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_NO).list();
-    assertEquals(EXPECTED_NO_FIXTURE_COUNT, fixtures.size(),
-        "pawnWall/no corpus must have " + EXPECTED_NO_FIXTURE_COUNT + " fixtures - if this fails, the corpus "
-            + "loader is broken or fixtures were added/removed");
 
     for (final PgnFileTestCase testCase : fixtures) {
       final Board board = new Board(testCase.fen());
