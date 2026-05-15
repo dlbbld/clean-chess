@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
@@ -23,10 +24,7 @@ class TestUnwinnabilityFullAgainstLimitedOracle {
   private static final Logger logger = Nulls.getLogger(TestUnwinnabilityFullAgainstLimitedOracle.class);
 
   @SuppressWarnings("static-method")
-  // TODO test cases
-  // known ambrona_10.pgn not working
-  // but lichess examples also not working
-  // @Test
+  @Test
   void test() throws Exception {
 
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
@@ -39,12 +37,14 @@ class TestUnwinnabilityFullAgainstLimitedOracle {
     final Board board = new Board(testCase.fen());
     logger.info(testCase.pgnFileName());
 
-    final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE);
+    final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
+        Side.WHITE);
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .verdict();
     check(verdictWhite, unwinnableFullWhite);
 
-    final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK);
+    final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
+        Side.BLACK);
     final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
         .verdict();
     check(verdictBlack, unwinnableFullBlack);
@@ -57,7 +57,7 @@ class TestUnwinnabilityFullAgainstLimitedOracle {
         assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, unwinnableFull);
         break;
       case WINNABLE:
-        assertNotEquals(UnwinnabilityFullVerdict.WINNABLE, unwinnableFull);
+        assertEquals(UnwinnabilityFullVerdict.WINNABLE, unwinnableFull);
         break;
       case UNKNOWN:
         break;
@@ -68,7 +68,8 @@ class TestUnwinnabilityFullAgainstLimitedOracle {
     switch (unwinnableFull) {
       case WINNABLE -> assertNotEquals(LimitedUnwinnabilityVerdict.UNWINNABLE, verdict);
       case UNWINNABLE -> {
-        final var isIncomplete = verdict == LimitedUnwinnabilityVerdict.UNWINNABLE || verdict == LimitedUnwinnabilityVerdict.UNKNOWN;
+        final var isIncomplete = verdict == LimitedUnwinnabilityVerdict.UNWINNABLE
+            || verdict == LimitedUnwinnabilityVerdict.UNKNOWN;
         assertTrue(isIncomplete);
       }
       case UNDETERMINED -> assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN, verdict);
