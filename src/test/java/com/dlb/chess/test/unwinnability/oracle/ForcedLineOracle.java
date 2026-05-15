@@ -75,8 +75,8 @@ public class ForcedLineOracle {
         case CHECKMATE:
         case FIVE_FOLD_REPETITION_RULE:
         case INSUFFICIENT_MATERIAL_BOTH:
-        case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-        case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
+        case INSUFFICIENT_MATERIAL_WHITE_ONLY:
+        case INSUFFICIENT_MATERIAL_BLACK_ONLY:
         case SEVENTY_FIVE_MOVE_RULE:
         case STALEMATE:
           final Side sideMadeLastMove = board.getHavingMove().getOppositeSide();
@@ -98,27 +98,27 @@ public class ForcedLineOracle {
     return new GameForced(GameStatus.ONGOING, countForcedHalfMoves, sideMadeLastMove);
   }
 
+  /**
+   * Decodes the terminal status reached at the end of the forced single-move chain into a verdict for
+   * {@code sideToEvaluate}. CHECKMATE depends on which side delivered the mate (= {@code sideMadeLastMove});
+   * the per-side insufficient-material variants depend on whether the colour with insufficient material
+   * <em>is</em> {@code sideToEvaluate} (then UNWINNABLE) or the opponent (then UNKNOWN — opponent's
+   * insufficient material doesn't decide our winnability either way from a forced chain alone).
+   */
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForced(GameForced gameForced, Side sideToEvaluate) {
-    if (sideToEvaluate == gameForced.sideMadeLastMove()) {
-      return calculateUnwinnabilityForcedMadeLastMove(gameForced.gameStatus());
-    }
-    return calculateUnwinnabilityForcedNotMadeLastMove(gameForced.gameStatus());
-  }
-
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForcedMadeLastMove(GameStatus gameStatusFinal) {
-    return switch (gameStatusFinal) {
-      case CHECKMATE -> LimitedUnwinnabilityVerdict.WINNABLE;
-      case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING -> LimitedUnwinnabilityVerdict.UNKNOWN;
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForcedNotMadeLastMove(GameStatus gameStatusFinal) {
-    return switch (gameStatusFinal) {
-      case CHECKMATE, STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, ONGOING -> LimitedUnwinnabilityVerdict.UNKNOWN;
-      default -> throw new IllegalArgumentException();
+    final Side sideMadeLastMove = gameForced.sideMadeLastMove();
+    return switch (gameForced.gameStatus()) {
+      case CHECKMATE -> sideMadeLastMove == sideToEvaluate
+          ? LimitedUnwinnabilityVerdict.WINNABLE
+          : LimitedUnwinnabilityVerdict.UNWINNABLE;
+      case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
+      case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE
+          ? LimitedUnwinnabilityVerdict.UNWINNABLE
+          : LimitedUnwinnabilityVerdict.UNKNOWN;
+      case INSUFFICIENT_MATERIAL_BLACK_ONLY -> sideToEvaluate == Side.BLACK
+          ? LimitedUnwinnabilityVerdict.UNWINNABLE
+          : LimitedUnwinnabilityVerdict.UNKNOWN;
+      case ONGOING -> LimitedUnwinnabilityVerdict.UNKNOWN;
     };
   }
 }

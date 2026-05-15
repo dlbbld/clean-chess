@@ -58,18 +58,23 @@ public class ShallowTerminationOracle {
     }
 
     if (board.getHavingMove() == side) {
-      return calculateUnwinnabilityHavingMove(board);
+      return calculateUnwinnabilityHavingMove(board, side);
     }
-    return calculateUnwinnabilityNotHavingMove(board);
+    return calculateUnwinnabilityNotHavingMove(board, side);
   }
 
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityHavingMove(Board board) {
+  /**
+   * Side-to-evaluate has the move at the root. Search alternates: depth 1 = side-to-evaluate, depth 2 = opponent,
+   * depth 3 = side-to-evaluate. So the "who picked the last move" at depth N is side-to-evaluate for odd N and
+   * opponent for even N.
+   */
+  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityHavingMove(Board board, Side sideToEvaluate) {
 
     {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateFirstHalfMoveMadeTheMove(board);
       logger.printf(Level.DEBUG, "first;madeTheMove: %s", evaluatePositions.evaluatedPositions());
       final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-          .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
+          .evaluateUnderOwnChoice(evaluatePositions.gameStatus(), sideToEvaluate);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -81,7 +86,7 @@ public class ShallowTerminationOracle {
           .evaluateSecondHalfMoveNotMadeTheMove(board);
       logger.printf(Level.DEBUG, "second;madeTheMove: %s", evaluatePositions.evaluatedPositions());
       final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-          .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
+          .evaluateUnderOpponentChoice(evaluatePositions.gameStatus(), sideToEvaluate);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -92,7 +97,7 @@ public class ShallowTerminationOracle {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateThirdHalfMoveMadeTheMove(board);
       logger.printf(Level.DEBUG, "third;madeTheMove: %s", evaluatePositions.evaluatedPositions());
       final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-          .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
+          .evaluateUnderOwnChoice(evaluatePositions.gameStatus(), sideToEvaluate);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -102,14 +107,19 @@ public class ShallowTerminationOracle {
     return LimitedUnwinnabilityVerdict.UNKNOWN;
   }
 
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityNotHavingMove(Board board) {
+  /**
+   * Side-to-evaluate does NOT have the move at the root (opponent moves first). Search alternates: depth 1 =
+   * opponent, depth 2 = side-to-evaluate, depth 3 = opponent. So "who picked the last move" at depth N is
+   * opponent for odd N and side-to-evaluate for even N.
+   */
+  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityNotHavingMove(Board board, Side sideToEvaluate) {
 
     {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator
           .evaluateFirstHalfMoveNotMadeTheMove(board);
       logger.printf(Level.DEBUG, "first;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
       final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-          .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
+          .evaluateUnderOpponentChoice(evaluatePositions.gameStatus(), sideToEvaluate);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -119,8 +129,13 @@ public class ShallowTerminationOracle {
     {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateSecondHalfMoveMadeTheMove(board);
       logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-      final LimitedUnwinnabilityVerdict verdict = calculateUnwinnabilityMadeTheMoveAfterOpponentChoice(
-          evaluatePositions);
+      // Depth 2 here: side-to-evaluate picked the last move, but opponent picked at depth 1.
+      // evaluateUnderOwnChoice would treat a CHECKMATE branch as WINNABLE, but that's unsound here because
+      // opponent's depth-1 choice could have avoided the path leading to that CHECKMATE. Switch to
+      // evaluateUnderOpponentChoice — it correctly returns UNKNOWN on any WIN branch and only UNWINNABLE on
+      // all-LOSS_OR_DRAW.
+      final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
+          .evaluateUnderOpponentChoice(evaluatePositions.gameStatus(), sideToEvaluate);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -132,7 +147,7 @@ public class ShallowTerminationOracle {
           .evaluateThirdHalfMoveNotMadeTheMove(board);
       logger.printf(Level.DEBUG, "third;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
       final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-          .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
+          .evaluateUnderOpponentChoice(evaluatePositions.gameStatus(), sideToEvaluate);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -140,18 +155,6 @@ public class ShallowTerminationOracle {
     }
 
     return LimitedUnwinnabilityVerdict.UNKNOWN;
-  }
-
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityMadeTheMoveAfterOpponentChoice(
-      EvaluatePositions evaluatePositions) {
-    final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-        .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
-    // The opponent chose the first move in this branch; a later mating reply is only a possible win, not a forced
-    // shallow-termination conclusion. Forced single-move lines are handled before this bounded search.
-    if (verdict == LimitedUnwinnabilityVerdict.WINNABLE) {
-      return LimitedUnwinnabilityVerdict.UNKNOWN;
-    }
-    return verdict;
   }
 
 }

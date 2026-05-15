@@ -55,11 +55,11 @@ public abstract class BasicChessUtility {
     if (board.isInsufficientMaterial()) {
       return GameStatus.INSUFFICIENT_MATERIAL_BOTH;
     }
-    if (board.isInsufficientMaterial(board.getHavingMove().getOppositeSide())) {
-      return GameStatus.INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY;
+    if (board.isInsufficientMaterial(Side.WHITE)) {
+      return GameStatus.INSUFFICIENT_MATERIAL_WHITE_ONLY;
     }
-    if (board.isInsufficientMaterial(board.getHavingMove())) {
-      return GameStatus.INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY;
+    if (board.isInsufficientMaterial(Side.BLACK)) {
+      return GameStatus.INSUFFICIENT_MATERIAL_BLACK_ONLY;
     }
     return GameStatus.ONGOING;
   }
