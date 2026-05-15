@@ -14,17 +14,14 @@ public class UnwinnableQuickAnalyzer {
   }
 
   /**
-   * Public entry — wrapped in {@link Board#withDeadPositionDetectionSuppressed} so the analyzer's internal
-   * {@code board.move(...)} calls don't re-trigger the auto-detect (the analyzer IS the dead-position computation).
+   * Runs the algorithm on a fresh detection-off board built from the caller's FEN. Isolation has two effects:
+   * (1) the caller's board is not mutated, and (2) the analyzer's internal {@code board.move(...)} calls don't
+   * trigger the dead-position auto-detect (which itself runs this analyzer). Repetition history from the caller's
+   * game is lost on the fresh board — acceptable for the quick check, whose verdict is conservative anyway.
    */
-  public static UnwinnabilityQuickVerdict unwinnableQuick(Board board, Side c, boolean isHasMobilitySolution,
+  public static UnwinnabilityQuickVerdict unwinnableQuick(Board input, Side c, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
-    return board.withDeadPositionDetectionSuppressed(
-        () -> unwinnableQuickInternal(board, c, isHasMobilitySolution, calculatedMobilitySolution));
-  }
-
-  private static UnwinnabilityQuickVerdict unwinnableQuickInternal(Board board, Side c, boolean isHasMobilitySolution,
-      MobilitySolution calculatedMobilitySolution) {
+    final Board board = input.copyCurrentPositionWithoutHistory(false);
 
     final String invariant = board.getFen();
 

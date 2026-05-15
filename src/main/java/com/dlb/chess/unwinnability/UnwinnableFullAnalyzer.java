@@ -19,11 +19,13 @@ public class UnwinnableFullAnalyzer {
   private static final int GLOBAL_NODES_BOUND = 500000;
 
   /**
-   * Public entry — wrapped in {@link Board#withDeadPositionDetectionSuppressed} so the analyzer's internal
-   * {@code board.move(...)} calls don't re-trigger the auto-detect (which itself runs the quick analyzer).
+   * Runs the algorithm on a fresh detection-off board built from the caller's FEN. The caller's board is not
+   * mutated, and the analyzer's internal {@code board.move(...)} calls don't trigger the dead-position auto-detect
+   * (which itself runs the quick analyzer). Repetition history from the caller's game is lost on the fresh board.
    */
-  public static UnwinnabilityFullAnalysis unwinnableFull(Board board, Side winner) {
-    return board.withDeadPositionDetectionSuppressed(() -> unwinnableFull(board, winner, false, new MobilitySolution()));
+  public static UnwinnabilityFullAnalysis unwinnableFull(Board input, Side winner) {
+    final Board board = input.copyCurrentPositionWithoutHistory(false);
+    return unwinnableFull(board, winner, false, new MobilitySolution());
   }
 
   // Inputs: position, intended winner

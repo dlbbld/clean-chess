@@ -34,9 +34,14 @@ import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
  */
 public class ForcedLineOracle {
 
-  public static LimitedUnwinnabilityVerdict calculateUnwinnability(Board board, Side side) {
-    // Suppress dead-position auto-detect while we walk the forced unique-move chain via board.move(...).
-    return board.withDeadPositionDetectionSuppressed(() -> calculateUnwinnabilityInternal(board, side));
+  /**
+   * Runs the oracle on a fresh detection-off board built from the caller's FEN — the oracle's internal
+   * {@code board.move(...)} calls don't trigger the dead-position auto-detect, and the caller's board is not
+   * mutated. Repetition history from the caller's game is lost on the fresh board.
+   */
+  public static LimitedUnwinnabilityVerdict calculateUnwinnability(Board input, Side side) {
+    final Board board = input.copyCurrentPositionWithoutHistory(false);
+    return calculateUnwinnabilityInternal(board, side);
   }
 
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityInternal(Board board, Side side) {

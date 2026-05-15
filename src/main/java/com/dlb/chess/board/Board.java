@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.function.Supplier;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -140,16 +139,6 @@ public class Board {
   private final transient boolean detectDeadPositionUnwinnable;
 
   /**
-   * Recursion guard: when {@code > 0}, both reading {@link #isDeadPositionUnwinnableQuick()} and writing to
-   * {@link #isDeadPositionUnwinnableQuickList} short-circuit to {@code false} without calling the analyzer. Managed
-   * exclusively by {@link #withDeadPositionDetectionSuppressed(Supplier)}.
-   *
-   * <p>
-   * {@code transient} — control state, not position state.
-   */
-  private transient int deadPositionAnalysisSuppressionDepth;
-
-  /**
    * Per-ply boolean: did the quick analyzer find both sides UNWINNABLE at this ply? Computed eagerly during
    * {@link #performMoveWithoutValidation} (and the constructor) and read by {@link #isDeadPositionUnwinnableQuick()}.
    * Same list-per-ply pattern as {@link #isCheckmateList}.
@@ -177,7 +166,6 @@ public class Board {
   public Board(Fen initialFen, boolean detectDeadPositionUnwinnable) {
 
     this.detectDeadPositionUnwinnable = detectDeadPositionUnwinnable;
-    this.deadPositionAnalysisSuppressionDepth = 0;
     this.isDeadPositionUnwinnableQuickList = new ArrayList<>();
 
     // using the static fen in case saves a bit of memory
@@ -1006,14 +994,11 @@ public class Board {
   }
 
   /**
-   * Per-ply: did the quick analyzer find both sides UNWINNABLE at the current position? Read-only against the
-   * eager per-ply state; returns {@code false} when detection is disabled or suppressed.
+   * Per-ply: did the quick analyzer find both sides UNWINNABLE at the current position? Read against the eager
+   * per-ply value; returns {@code false} when detection is disabled.
    */
   public boolean isDeadPositionUnwinnableQuick() {
     if (!detectDeadPositionUnwinnable) {
-      return false;
-    }
-    if (deadPositionAnalysisSuppressionDepth > 0) {
       return false;
     }
     return Nulls.getLast(isDeadPositionUnwinnableQuickList).booleanValue();
@@ -1029,41 +1014,18 @@ public class Board {
   }
 
   /**
-   * Runs {@code work} on this board with the {@link #isDeadPositionUnwinnableQuick} check suppressed —
-   * intermediate {@code board.move(...)} calls won't fire the auto-detect inside
-   * {@code ValidateNewMove.validateGameNotEnded}, and the eager per-ply compute pushed by those moves resolves to
-   * {@code false}. The recursion guard for analyzers and oracles that themselves drive board moves. Counter form
-   * supports safe nesting.
-   */
-  public <T> T withDeadPositionDetectionSuppressed(Supplier<T> work) {
-    deadPositionAnalysisSuppressionDepth++;
-    try {
-      return work.get();
-    } finally {
-      deadPositionAnalysisSuppressionDepth--;
-    }
-  }
-
-  /**
-   * Eager compute helper called once per ply from the constructor and {@link #performMoveWithoutValidation}.
-   * Pushes {@code false} when detection is disabled or when the call is reached recursively (suppression depth
-   * non-zero) — the analyzer itself drives this method's body and cannot call itself.
+   * Eager compute, called once per ply from the constructor and {@link #performMoveWithoutValidation}. Returns
+   * {@code false} when detection is disabled; otherwise delegates to the quick analyzer, which isolates itself by
+   * running on its own fresh detection-off board (no recursion concern).
    */
   private boolean computeDeadPositionUnwinnableQuick() {
     if (!detectDeadPositionUnwinnable) {
       return false;
     }
-    if (deadPositionAnalysisSuppressionDepth > 0) {
+    if (UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE) != UnwinnabilityQuickVerdict.UNWINNABLE) {
       return false;
     }
-    return withDeadPositionDetectionSuppressed(() -> {
-      final UnwinnabilityQuickVerdict white = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
-      if (white != UnwinnabilityQuickVerdict.UNWINNABLE) {
-        return Boolean.FALSE;
-      }
-      final UnwinnabilityQuickVerdict black = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
-      return Boolean.valueOf(black == UnwinnabilityQuickVerdict.UNWINNABLE);
-    }).booleanValue();
+    return UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK) == UnwinnabilityQuickVerdict.UNWINNABLE;
   }
 
   public DeadPositionFull isDeadPositionFull() {
