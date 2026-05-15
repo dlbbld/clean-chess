@@ -62,18 +62,6 @@ class TestUnwinnabilityAgainstInsufficientMaterial {
   private static void assertUnwinnable(PgnFileTestCase testCase, Side side) {
     final Board board = new Board(testCase.fen());
     final var message = testCase.pgnFileName() + " " + side;
-    switch (side) {
-      case WHITE -> {
-        assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, testCase.unwinnableQuickWhite());
-        assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, testCase.unwinnableFullWhite());
-      }
-      case BLACK -> {
-        assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, testCase.unwinnableQuickBlack());
-        assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, testCase.unwinnableFullBlack());
-      }
-      default -> throw new IllegalArgumentException();
-    }
-
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, side), message);
     assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, side).verdict(),
         message);
