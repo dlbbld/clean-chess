@@ -119,8 +119,8 @@ public class ShallowTerminationOracle {
     {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateSecondHalfMoveMadeTheMove(board);
       logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-      final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-          .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
+      final LimitedUnwinnabilityVerdict verdict = calculateUnwinnabilityMadeTheMoveAfterOpponentChoice(
+          evaluatePositions);
 
       if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
         return verdict;
@@ -141,4 +141,17 @@ public class ShallowTerminationOracle {
 
     return LimitedUnwinnabilityVerdict.UNKNOWN;
   }
+
+  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityMadeTheMoveAfterOpponentChoice(
+      EvaluatePositions evaluatePositions) {
+    final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
+        .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
+    // The opponent chose the first move in this branch; a later mating reply is only a possible win, not a forced
+    // shallow-termination conclusion. Forced single-move lines are handled before this bounded search.
+    if (verdict == LimitedUnwinnabilityVerdict.WINNABLE) {
+      return LimitedUnwinnabilityVerdict.UNKNOWN;
+    }
+    return verdict;
+  }
+
 }
