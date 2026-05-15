@@ -1,4 +1,4 @@
 @NonNullByDefault
-package com.dlb.chess.test.winnable.enums;
+package com.dlb.chess.test.unwinnability.oracle.enums;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;

@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.unwinnability.oracle;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -20,7 +20,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 
-public class PawnWallGeometricVerdict {
+public class PawnWallGeometricAnalyzer {
 
   // TODO own pawns outside pawn wall line
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;

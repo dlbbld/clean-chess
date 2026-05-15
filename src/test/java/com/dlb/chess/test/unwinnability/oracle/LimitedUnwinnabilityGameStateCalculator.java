@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.unwinnability.oracle;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -9,10 +9,10 @@ import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.common.utility.ListUtility;
 import com.dlb.chess.model.LegalMove;
-import com.dlb.chess.test.winnable.model.EvaluatePositions;
-import com.dlb.chess.test.winnable.model.GameForced;
+import com.dlb.chess.test.unwinnability.oracle.model.EvaluatePositions;
+import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
 
-public class WinnableCalculateGameState {
+public class LimitedUnwinnabilityGameStateCalculator {
 
   static EvaluatePositions evaluateFirstHalfMoveMadeTheMove(Board board) {
 

@@ -7,8 +7,8 @@ import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.PgnFileUtility;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.TagUtility;
-import com.dlb.chess.test.winnable.WinnableAnalyzer;
-import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
+import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 
 public abstract class AbstractLichessCheck {
 
@@ -31,8 +31,8 @@ public abstract class AbstractLichessCheck {
       throw new ProgrammingMistakeException("Should not happen");
     }
 
-    final Winnable winnable = WinnableAnalyzer.calculateWinnable(boardPerLastMove,
+    final LimitedUnwinnabilityVerdict verdict = LimitedUnwinnabilityOracle.calculateUnwinnability(boardPerLastMove,
         boardPerLastMove.getHavingMove().getOppositeSide());
-    return winnable == Winnable.NO;
+    return verdict == LimitedUnwinnabilityVerdict.UNWINNABLE;
   }
 }

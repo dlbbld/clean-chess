@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable.model;
+package com.dlb.chess.test.unwinnability.oracle.model;
 
 import java.util.Set;
 

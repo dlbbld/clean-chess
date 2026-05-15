@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.unwinnability.oracle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -15,20 +15,22 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
-class TestWinnability {
+class TestLimitedUnwinnabilityOracle {
 
-  private static final Logger logger = Nulls.getLogger(TestWinnability.class);
+  private static final Logger logger = Nulls.getLogger(TestLimitedUnwinnabilityOracle.class);
 
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
     final Board board = new Board();
 
-    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
-    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, Side.BLACK));
+    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
+    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -37,22 +39,26 @@ class TestWinnability {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen);
 
-    assertEquals(Winnable.YES, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
-    assertEquals(Winnable.UNKNOWN, WinnableAnalyzer.calculateWinnable(board, Side.BLACK));
+    assertEquals(LimitedUnwinnabilityVerdict.WINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
+    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileValue() {
-    final var pgnFileName = "pawn_wall_norgaard_example_2.pgn";
+    final var pgnFileName = "pawn_wall_ambrona_real_game.pgn";
 
     final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
     final Board board = GeneralUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
-    assertEquals(Winnable.NO, WinnableAnalyzer.calculateWinnable(board, Side.WHITE));
-    assertEquals(Winnable.NO, WinnableAnalyzer.calculateWinnable(board, Side.BLACK));
+    assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
+    assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
@@ -70,11 +76,11 @@ class TestWinnability {
   }
 
   private static void check(UnwinnabilityQuickVerdict unwinnableQuickSide, Side side, Board board) {
-    final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, side);
+    final LimitedUnwinnabilityVerdict verdict = LimitedUnwinnabilityOracle.calculateUnwinnability(board, side);
     switch (unwinnableQuickSide) {
-      case UNWINNABLE -> assertEquals(Winnable.NO, winnable);
-      case WINNABLE -> assertEquals(Winnable.YES, winnable);
-      case POSSIBLY_WINNABLE -> assertEquals(Winnable.UNKNOWN, winnable);
+      case UNWINNABLE -> assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE, verdict);
+      case WINNABLE -> assertEquals(LimitedUnwinnabilityVerdict.WINNABLE, verdict);
+      case POSSIBLY_WINNABLE -> assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN, verdict);
       default -> throw new IllegalArgumentException();
     }
   }

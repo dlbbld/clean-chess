@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable.model;
+package com.dlb.chess.test.unwinnability.oracle.model;
 
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;

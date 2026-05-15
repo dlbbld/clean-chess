@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.unwinnability.oracle;
 
 /**
  * Verdict for the pawn-wall classifier.

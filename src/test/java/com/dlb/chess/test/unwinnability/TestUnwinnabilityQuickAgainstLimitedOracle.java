@@ -14,14 +14,14 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableAnalyzer;
-import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
+import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
-class TestUnwinnabilityQuickAgainstWinnability {
+class TestUnwinnabilityQuickAgainstLimitedOracle {
 
-  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityQuickAgainstWinnability.class);
+  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityQuickAgainstLimitedOracle.class);
 
   @SuppressWarnings("static-method")
   @Test
@@ -30,7 +30,7 @@ class TestUnwinnabilityQuickAgainstWinnability {
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        if (RestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST) {
+        if (RestrictTestConstants.IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_LIMITED_ORACLE_TEST) {
           switch (testCaseList.pgnTest()) {
             case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
             case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE:
@@ -58,24 +58,24 @@ class TestUnwinnabilityQuickAgainstWinnability {
 
         logger.info(testCase.pgnFileName());
 
-        final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
+        final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE);
         final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
-        check(winnableWhite, unwinnableQuickWhite);
+        check(verdictWhite, unwinnableQuickWhite);
 
-        final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
+        final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK);
         final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
 
-        check(winnableBlack, unwinnableQuickBlack);
+        check(verdictBlack, unwinnableQuickBlack);
       }
     }
   }
 
-  private static void check(Winnable winnable, UnwinnabilityQuickVerdict unwinnableQuick) {
-    switch (winnable) {
-      case NO:
+  private static void check(LimitedUnwinnabilityVerdict verdict, UnwinnabilityQuickVerdict unwinnableQuick) {
+    switch (verdict) {
+      case UNWINNABLE:
         assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, unwinnableQuick);
         break;
-      case YES:
+      case WINNABLE:
         assertNotEquals(UnwinnabilityQuickVerdict.UNWINNABLE, unwinnableQuick);
         break;
       case UNKNOWN:
@@ -86,10 +86,10 @@ class TestUnwinnabilityQuickAgainstWinnability {
 
     switch (unwinnableQuick) {
       case WINNABLE:
-        assertNotEquals(Winnable.NO, winnable);
+        assertNotEquals(LimitedUnwinnabilityVerdict.UNWINNABLE, verdict);
         break;
       case UNWINNABLE:
-        assertNotEquals(Winnable.YES, winnable);
+        assertNotEquals(LimitedUnwinnabilityVerdict.WINNABLE, verdict);
         break;
       case POSSIBLY_WINNABLE:
         break;

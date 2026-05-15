@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable.enums;
+package com.dlb.chess.test.unwinnability.oracle.enums;
 
 public enum GameStatusAnalysis {
 

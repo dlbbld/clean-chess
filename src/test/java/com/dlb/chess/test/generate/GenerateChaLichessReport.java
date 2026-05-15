@@ -12,8 +12,8 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableAnalyzer;
-import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
+import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 
 public class GenerateChaLichessReport {
 
@@ -34,11 +34,13 @@ public class GenerateChaLichessReport {
         logger.info(pgnFileName + ";" + "pawn wall");
       } else {
         final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
-        final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
-        final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
+        final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
+            Side.WHITE);
+        final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
+            Side.BLACK);
 
-        logger.info("winnable white;" + winnableWhite);
-        logger.info("winnable black;" + winnableBlack);
+        logger.info("verdict white;" + verdictWhite);
+        logger.info("verdict black;" + verdictBlack);
       }
     }
   }

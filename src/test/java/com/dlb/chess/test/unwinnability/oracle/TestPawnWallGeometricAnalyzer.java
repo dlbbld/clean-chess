@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.unwinnability.oracle;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,7 +17,7 @@ import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 /**
- * Tests the geometric {@link PawnWallGeometricVerdict#calculate(Board)} verdict on the pawn-wall PGN corpus, with two independent
+ * Tests the geometric {@link PawnWallGeometricAnalyzer#calculate(Board)} verdict on the pawn-wall PGN corpus, with two independent
  * second opinions:
  *
  * <ol>
@@ -50,7 +50,7 @@ import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
  * {@link #testNoFixtures()}; piece-placement-only manual tests are intentionally absent because every relevant
  * position is already covered by a PGN fixture.
  */
-class TestPawnWallGeometricVerdict {
+class TestPawnWallGeometricAnalyzer {
 
   /**
    * Expected number of fixtures in {@link PgnTest#CHA_PAWN_WALL_YES}. Pinned so test failures distinguish
@@ -76,7 +76,7 @@ class TestPawnWallGeometricVerdict {
     // tests below; we keep the explicit FEN here.
     final Board board = new Board("7k/8/1p6/1Pp5/2Pp4/pB1Pp1p1/P1B1P1P1/3B2K1 b - - 0 1");
 
-    assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricVerdict.calculate(board),
+    assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricAnalyzer.calculate(board),
         "ambrona_10 has a floating a2/a3 pawn pair - must be rejected by the all-pawns-involved check");
   }
 
@@ -92,7 +92,7 @@ class TestPawnWallGeometricVerdict {
     for (final PgnFileTestCase testCase : fixtures) {
       final Board board = new Board(testCase.fen());
       // Every fixture in yes/ must be geometric YES; this is the contract that justifies the folder split.
-      assertEquals(PawnWallVerdict.YES, PawnWallGeometricVerdict.calculate(board),
+      assertEquals(PawnWallVerdict.YES, PawnWallGeometricAnalyzer.calculate(board),
           "yes/ fixture must return geometric YES: " + testCase.pgnFileName() + " - " + testCase.fen());
       // Soundness gate 1: king-walk BFS must agree both kings are trapped.
       assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.WHITE),
@@ -124,7 +124,7 @@ class TestPawnWallGeometricVerdict {
       final Board board = new Board(testCase.fen());
       // Every fixture in no/ must be geometric UNKNOWN. Reasons: position is actually winnable (kings on wrong
       // side, en-passant capture available), or the chain fails the all-pawns-involved gate (floating pawns).
-      assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricVerdict.calculate(board),
+      assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricAnalyzer.calculate(board),
           "no/ fixture must return geometric UNKNOWN: " + testCase.pgnFileName() + " - " + testCase.fen());
     }
   }

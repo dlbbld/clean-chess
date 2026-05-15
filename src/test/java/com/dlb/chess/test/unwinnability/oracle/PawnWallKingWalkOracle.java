@@ -1,4 +1,4 @@
-package com.dlb.chess.test.winnable;
+package com.dlb.chess.test.unwinnability.oracle;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
  * Test-only BFS oracle for the pawn-wall classifier.
  *
  * <p>
- * The production {@link PawnWallGeometricVerdict} predicate uses a geometric chain check. This oracle is the second opinion: a
+ * The production {@link PawnWallGeometricAnalyzer} predicate uses a geometric chain check. This oracle is the second opinion: a
  * king-walk BFS asking whether the side's king can reach the opposing king's square through passable squares — i.e.
  * whether the wall is a genuine separator between the two kings.
  *

@@ -13,14 +13,14 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.winnable.WinnableAnalyzer;
-import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
+import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
-class TestUnwinnabilityFullAgainstWinnability {
+class TestUnwinnabilityFullAgainstLimitedOracle {
 
-  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityFullAgainstWinnability.class);
+  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityFullAgainstLimitedOracle.class);
 
   @SuppressWarnings("static-method")
   // TODO test cases
@@ -39,24 +39,24 @@ class TestUnwinnabilityFullAgainstWinnability {
     final Board board = new Board(testCase.fen());
     logger.info(testCase.pgnFileName());
 
-    final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
+    final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE);
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .verdict();
-    check(winnableWhite, unwinnableFullWhite);
+    check(verdictWhite, unwinnableFullWhite);
 
-    final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
+    final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK);
     final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
         .verdict();
-    check(winnableBlack, unwinnableFullBlack);
+    check(verdictBlack, unwinnableFullBlack);
 
   }
 
-  private static void check(Winnable winnable, UnwinnabilityFullVerdict unwinnableFull) {
-    switch (winnable) {
-      case NO:
+  private static void check(LimitedUnwinnabilityVerdict verdict, UnwinnabilityFullVerdict unwinnableFull) {
+    switch (verdict) {
+      case UNWINNABLE:
         assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, unwinnableFull);
         break;
-      case YES:
+      case WINNABLE:
         assertNotEquals(UnwinnabilityFullVerdict.WINNABLE, unwinnableFull);
         break;
       case UNKNOWN:
@@ -66,12 +66,12 @@ class TestUnwinnabilityFullAgainstWinnability {
     }
 
     switch (unwinnableFull) {
-      case WINNABLE -> assertNotEquals(Winnable.NO, winnable);
+      case WINNABLE -> assertNotEquals(LimitedUnwinnabilityVerdict.UNWINNABLE, verdict);
       case UNWINNABLE -> {
-        final var isIncomplete = winnable == Winnable.NO || winnable == Winnable.UNKNOWN;
+        final var isIncomplete = verdict == LimitedUnwinnabilityVerdict.UNWINNABLE || verdict == LimitedUnwinnabilityVerdict.UNKNOWN;
         assertTrue(isIncomplete);
       }
-      case UNDETERMINED -> assertEquals(Winnable.UNKNOWN, winnable);
+      case UNDETERMINED -> assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN, verdict);
       default -> throw new IllegalArgumentException();
     }
   }
