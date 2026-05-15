@@ -94,7 +94,8 @@ public class CreatePgnTestCases {
       case CHA_PAWN_WALL_YES -> createTestCasesPawnWallYes();
       case CHA_PAWN_WALL_NO -> createTestCasesPawnWallNo();
       case CHA_SHALLOW_TERMINATION -> createTestCasesShallowTermination();
-      case CHA_HELPMATE_BEYOND -> createTestCasesHelpmateBeyond();
+      case CHA_HELPMATE_BEYOND_FIVEFOLD -> createTestCasesHelpmateBeyondFivefold();
+      case CHA_HELPMATE_BEYOND_SEVENTY_FIVE -> createTestCasesHelpmateBeyondSeventyFive();
       case RANDOM_CHECKMATE -> createTestCasesRandomCheckmate();
       case RANDOM_FIFTY -> createTestCasesRandomFifty();
       case RANDOM_FIVEFOLD -> createTestCasesRandomFivefold();
@@ -3858,18 +3859,6 @@ public class CreatePgnTestCases {
         UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, "k7/8/1p6/1P6/1Pp5/KpP5/1P6/8 w - - 0 37"));
 
-    // unwinnable due to fivefold or seventy-five-move rule
-    list.add(new PgnFileTestCase("special_unwinnable_fivefold_inevitable.pgn",
-        "repPos=4: 3...Kxg8 5...Kg8 7...Kg8 9...Kg8; repPos=4: 4.Kh6 6.Kh6 8.Kh6 10.Kh6; repPos=4: 4...Kh8 6...Kh8 8...Kh8 10...Kh8; repPos=4: 5.Kg6 7.Kg6 9.Kg6 11.Kg6",
-        "", 1, 15, CheckmateOrStalemate.NA, 4, InsufficientMaterial.BLACK_ONLY, UnwinnabilityFullVerdict.UNWINNABLE,
-        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
-        "7k/8/2R3K1/8/8/8/8/8 b - - 15 11"));
-
-    list.add(new PgnFileTestCase("special_unwinnable_seventy_five_move_rule_inevitable.pgn", "",
-        "26.NA (1) 75...NA (100) 100.NA (149)", -1, 149, CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY,
-        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, "7k/8/2R3K1/8/8/8/8/8 b - - 149 100"));
-
     return new PgnFileTestCaseList(PgnTest.SPECIAL, list);
   }
 
@@ -5967,7 +5956,7 @@ public class CreatePgnTestCases {
     return new PgnFileTestCaseList(PgnTest.CHA_SHALLOW_TERMINATION, list);
   }
 
-  private static PgnFileTestCaseList createTestCasesHelpmateBeyond() {
+  private static PgnFileTestCaseList createTestCasesHelpmateBeyondFivefold() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
     list.add(new PgnFileTestCase("01_beyond_fivefold.pgn",
@@ -5975,12 +5964,30 @@ public class CreatePgnTestCases {
         "", -1, 34, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
         "3K4/2P5/3k4/4r3/8/1r6/8/8 w - - 34 58"));
+
+    list.add(new PgnFileTestCase("02_beyond_fivefold.pgn",
+        "repPos=4: 3...Kxg8 5...Kg8 7...Kg8 9...Kg8; repPos=4: 4.Kh6 6.Kh6 8.Kh6 10.Kh6; repPos=4: 4...Kh8 6...Kh8 8...Kh8 10...Kh8; repPos=4: 5.Kg6 7.Kg6 9.Kg6 11.Kg6",
+        "", 1, 15, CheckmateOrStalemate.NA, 4, InsufficientMaterial.BLACK_ONLY, UnwinnabilityFullVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        "7k/8/2R3K1/8/8/8/8/8 b - - 15 11"));
+
+    return new PgnFileTestCaseList(PgnTest.CHA_HELPMATE_BEYOND_FIVEFOLD, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesHelpmateBeyondSeventyFive() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
     list.add(new PgnFileTestCase("01_beyond_seventy_five.pgn", "", "26.NA (1) 75...NA (100) 99...NA (148)", -1, 148,
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
         "8/5r2/p3k3/P7/8/1K6/8/8 w - - 148 100"));
 
-    return new PgnFileTestCaseList(PgnTest.CHA_HELPMATE_BEYOND, list);
+    list.add(new PgnFileTestCase("02_beyond_seventy_five.pgn", "", "26.NA (1) 75...NA (100) 100.NA (149)", -1, 149,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, UnwinnabilityFullVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        "7k/8/2R3K1/8/8/8/8/8 b - - 149 100"));
+
+    return new PgnFileTestCaseList(PgnTest.CHA_HELPMATE_BEYOND_SEVENTY_FIVE, list);
   }
 
   private static PgnFileTestCaseList createTestCasesLastMoveAddedAccidentally() {
