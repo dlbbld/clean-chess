@@ -3874,6 +3874,11 @@ public class CreatePgnTestCases {
   private static PgnFileTestCaseList createTestCasesChaLichessQuickNotDepthThree() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
+    list.add(new PgnFileTestCase("lichess_V7eJ1RR9.pgn", "", "", 14, 7, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        "1k6/2P5/K7/2q5/8/8/8/8 b - - 0 56"));
+
     list.add(new PgnFileTestCase("lichess_02dMeCVV.pgn", "", "", 19, 32, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
@@ -5143,7 +5148,9 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         "7R/6pk/8/6K1/2n1r3/8/8/8 b - - 9 61"));
-
+    list.add(new PgnFileTestCase("test_lichess_V7eJ1RR9_helpmate.pgn", "", "", 14, 34, CheckmateOrStalemate.CHECKMATE,
+        1, InsufficientMaterial.WHITE_ONLY, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 34 74"));
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE, list);
   }
 
@@ -5617,10 +5624,6 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.WINNABLE,
         "8/p4kp1/6Pp/7K/2rq4/7P/8/8 b - - 0 51"));
-    list.add(new PgnFileTestCase("lichess_V7eJ1RR9.pgn", "", "", 14, 7, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "1k6/2P5/K7/2q5/8/8/8/8 b - - 0 56"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE, list);
   }

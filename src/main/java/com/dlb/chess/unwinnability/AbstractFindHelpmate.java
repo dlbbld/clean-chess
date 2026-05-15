@@ -10,6 +10,7 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.PgnCreate;
+import com.dlb.chess.pgn.PgnWriter;
 
 abstract class AbstractFindHelpmate {
 
@@ -17,6 +18,7 @@ abstract class AbstractFindHelpmate {
 
   private static final boolean IS_DEBUG = false;
 
+  // TODO remove in deep square release - is a double-check only
   protected static Board checkHelpmate(String fen, List<LegalMove> moveProgressList) {
 
     final var boardCheck = new Board(fen);
@@ -36,6 +38,8 @@ abstract class AbstractFindHelpmate {
     if (!boardCheck.isCheckmate()) {
       throw new ProgrammingMistakeException("It is not a checkmate line because it does not end in checkmate");
     }
+
+    PgnWriter.writePgnFile(PgnCreate.createPgnFile(boardCheck), "c:\\temp\\checkHelpmate.pgn");
 
     if (IS_DEBUG) {
       if (isFoundFivefold) {

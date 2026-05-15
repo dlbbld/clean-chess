@@ -6,6 +6,10 @@ import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.pgn.LenientPgnParser;
+import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnWriter;
+import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
@@ -32,6 +36,10 @@ class TestSinglePgnReportAgainstTestCase extends AbstractPgnReportTest {
     }
 
     testReportAgainstTestCase(PGN_FILE_NAME, expectedReports);
+
+    final PgnFile pgnFileFull = LenientPgnParser.parse("c:\\temp\\checkHelpmateFull.pgn");
+    PgnWriter.writePgnFile(pgnFileFull, "c:\\temp\\checkHelpmateFullOut.pgn", WriteMode.ARCHIVAL);
+
   }
 
 }
