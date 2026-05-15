@@ -13,7 +13,17 @@ public class UnwinnableQuickAnalyzer {
     return unwinnableQuick(board, c, false, new MobilitySolution());
   }
 
+  /**
+   * Public entry — wrapped in {@link Board#withDeadPositionDetectionSuppressed} so the analyzer's internal
+   * {@code board.move(...)} calls don't re-trigger the auto-detect (the analyzer IS the dead-position computation).
+   */
   public static UnwinnabilityQuickVerdict unwinnableQuick(Board board, Side c, boolean isHasMobilitySolution,
+      MobilitySolution calculatedMobilitySolution) {
+    return board.withDeadPositionDetectionSuppressed(
+        () -> unwinnableQuickInternal(board, c, isHasMobilitySolution, calculatedMobilitySolution));
+  }
+
+  private static UnwinnabilityQuickVerdict unwinnableQuickInternal(Board board, Side c, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     final String invariant = board.getFen();

@@ -25,14 +25,14 @@ class TestThreefoldClaimAheadUtility {
 
     {
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility
-          .calculateThreefoldClaimAhead(new Board());
+          .calculateThreefoldClaimAhead(new Board(false));
 
       assertEquals(expectedEmptyListList, actualListList);
     }
 
     {
       final List<List<ClaimAhead>> actual = ThreefoldClaimAheadUtility
-          .calculateThreefoldClaimAhead(new Board(FenConstants.FEN_AFTER_E4_STR));
+          .calculateThreefoldClaimAhead(new Board(FenConstants.FEN_AFTER_E4_STR, false));
 
       assertEquals(expectedEmptyListList, actual);
     }

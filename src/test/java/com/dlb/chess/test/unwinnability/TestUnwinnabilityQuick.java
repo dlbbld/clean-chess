@@ -29,7 +29,7 @@ class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
-    final Board board = new Board();
+    final Board board = new Board(false);
     assertEquals(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
@@ -61,7 +61,7 @@ class TestUnwinnabilityQuick {
 
     final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
 
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE));
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK));
@@ -87,7 +87,7 @@ class TestUnwinnabilityQuick {
   @Test
   void testPgnFileExpected() {
     final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase("25_black_capture_king_pawn.pgn");
-    final Board board = new Board(pgnFileTestCase.fen());
+    final Board board = new Board(pgnFileTestCase.fen(), false);
     logger.info(pgnFileTestCase.pgnFileName());
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
@@ -105,7 +105,7 @@ class TestUnwinnabilityQuick {
 
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen(), false);
       logger.info(testCase.pgnFileName());
 
       {

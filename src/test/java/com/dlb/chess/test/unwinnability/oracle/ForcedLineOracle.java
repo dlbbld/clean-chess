@@ -35,6 +35,11 @@ import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
 public class ForcedLineOracle {
 
   public static LimitedUnwinnabilityVerdict calculateUnwinnability(Board board, Side side) {
+    // Suppress dead-position auto-detect while we walk the forced unique-move chain via board.move(...).
+    return board.withDeadPositionDetectionSuppressed(() -> calculateUnwinnabilityInternal(board, side));
+  }
+
+  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityInternal(Board board, Side side) {
 
     if (board.isCheckmate()) {
       if (side == board.getHavingMove()) {
@@ -111,7 +116,7 @@ public class ForcedLineOracle {
       case CHECKMATE -> sideMadeLastMove == sideToEvaluate
           ? LimitedUnwinnabilityVerdict.WINNABLE
           : LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
+      case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, DEAD_POSITION_UNWINNABLE_QUICK, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
       case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE
           ? LimitedUnwinnabilityVerdict.UNWINNABLE
           : LimitedUnwinnabilityVerdict.UNKNOWN;

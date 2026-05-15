@@ -64,13 +64,13 @@ class TestStrictPgnParserFromCustomPosition {
 
     assertNotEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
 
-    final Board boardFromFen = new Board(pgnFile.startFen());
+    final Board boardFromFen = new Board(pgnFile.startFen(), false);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       boardFromFen.moveStrict(halfMove.san());
     }
 
-    final Board boardFromFirstMove = new Board();
+    final Board boardFromFirstMove = new Board(false);
     for (final String san : hardCodedCompleteSanList) {
       @SuppressWarnings("null") @NonNull final String nonNullSan = san;
       boardFromFirstMove.moveStrict(nonNullSan);

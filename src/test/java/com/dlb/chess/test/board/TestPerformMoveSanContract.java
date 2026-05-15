@@ -82,7 +82,7 @@ class TestPerformMoveSanContract {
   private static void verifyProvidedSanToCalculatedSan(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
-    final Board board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen(), false);
 
     var halfMoveIndex = 0;
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
@@ -114,7 +114,7 @@ class TestPerformMoveSanContract {
       PgnFileTestCase testCase) {
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
-    final Board board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen(), false);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       board.moveStrict(halfMove.san());

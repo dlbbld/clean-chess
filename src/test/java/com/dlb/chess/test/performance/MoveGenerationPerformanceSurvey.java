@@ -45,7 +45,7 @@ public class MoveGenerationPerformanceSurvey {
       }
       final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(),
           testCase.pgnFileName());
-      final Board board = new Board(pgnFile.startFen());
+      final Board board = new Board(pgnFile.startFen(), false);
       addPosition(result, board);
       for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
         board.moveStrict(halfMove.san());

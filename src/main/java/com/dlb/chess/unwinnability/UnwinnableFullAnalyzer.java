@@ -18,8 +18,12 @@ public class UnwinnableFullAnalyzer {
   private static final int MAX_DEPTH = 100;
   private static final int GLOBAL_NODES_BOUND = 500000;
 
+  /**
+   * Public entry — wrapped in {@link Board#withDeadPositionDetectionSuppressed} so the analyzer's internal
+   * {@code board.move(...)} calls don't re-trigger the auto-detect (which itself runs the quick analyzer).
+   */
   public static UnwinnabilityFullAnalysis unwinnableFull(Board board, Side winner) {
-    return unwinnableFull(board, winner, false, new MobilitySolution());
+    return board.withDeadPositionDetectionSuppressed(() -> unwinnableFull(board, winner, false, new MobilitySolution()));
   }
 
   // Inputs: position, intended winner

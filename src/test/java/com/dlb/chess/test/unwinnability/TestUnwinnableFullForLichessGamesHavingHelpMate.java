@@ -52,7 +52,7 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
   }
 
   private static void assertHelpmateLine(String fen, Side winner, List<UciMove> mateLine) {
-    final var board = new Board(fen);
+    final var board = new Board(fen, false);
     advanceForcedMoves(board);
     for (final UciMove uciMove : mateLine) {
       board.move(UciMoveUtility.convertUciMoveToMoveSpecification(board, uciMove));

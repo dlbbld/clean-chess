@@ -57,7 +57,7 @@ public class GenerateChaTestCases implements EnumConstants {
 
           final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-          final Board board = new Board(pgnFile.startFen());
+          final Board board = new Board(pgnFile.startFen(), false);
 
           var halfMoveCounter = 0;
           pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));

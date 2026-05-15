@@ -103,7 +103,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
 
       final UnwinnabilityFullRead fullChaResult = Nulls.get(chaFullResultList, i);
 
-      final Board board = new Board(fullChaResult.fen());
+      final Board board = new Board(fullChaResult.fen(), false);
       final UnwinnabilityFullAnalysis fullMineResult = UnwinnableFullAnalyzer.unwinnableFull(board,
           fullChaResult.winner());
 

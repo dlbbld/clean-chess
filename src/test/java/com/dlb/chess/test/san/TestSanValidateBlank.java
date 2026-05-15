@@ -16,7 +16,7 @@ class TestSanValidateBlank {
   @Test
   void test() {
 
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     checkException("", board);
     checkException(" ", board);

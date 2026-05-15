@@ -66,7 +66,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final Board board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnFile.startFen(), false);
     checkLegalMoves(board);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {

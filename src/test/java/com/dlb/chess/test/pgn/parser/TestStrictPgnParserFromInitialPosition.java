@@ -65,13 +65,13 @@ class TestStrictPgnParserFromInitialPosition {
 
     assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
 
-    final Board actual = new Board();
+    final Board actual = new Board(false);
 
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       actual.moveStrict(halfMove.san());
     }
 
-    final Board expected = new Board();
+    final Board expected = new Board(false);
     for (final String san : sanList) {
       @SuppressWarnings("null") @NonNull final String nonNullSan = san;
       expected.moveStrict(nonNullSan);

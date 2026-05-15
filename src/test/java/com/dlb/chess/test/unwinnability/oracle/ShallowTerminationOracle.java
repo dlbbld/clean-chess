@@ -40,6 +40,11 @@ public class ShallowTerminationOracle {
   private static final Logger logger = Nulls.getLogger(ShallowTerminationOracle.class);
 
   public static LimitedUnwinnabilityVerdict calculateUnwinnability(Board board, Side side) {
+    // Suppress dead-position auto-detect while we scan the 1/2/3-ply tree via board.move(...).
+    return board.withDeadPositionDetectionSuppressed(() -> calculateUnwinnabilityInternal(board, side));
+  }
+
+  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityInternal(Board board, Side side) {
 
     if (board.isCheckmate()) {
       if (side == board.getHavingMove()) {

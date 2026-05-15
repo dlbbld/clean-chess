@@ -28,7 +28,7 @@ class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     assertEquals(UnwinnabilityFullVerdict.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict());
     assertEquals(UnwinnabilityFullVerdict.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).verdict());
@@ -38,7 +38,7 @@ class TestUnwinnabilityFull {
   @Test
   void testFen() {
     final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     assertEquals(UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict());
@@ -53,7 +53,7 @@ class TestUnwinnabilityFull {
     final var pgnFileName = "ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase(pgnFileName);
-    final Board board = new Board(pgnFileTestCase.fen());
+    final Board board = new Board(pgnFileTestCase.fen(), false);
     logger.info(pgnFileName);
 
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
@@ -71,7 +71,7 @@ class TestUnwinnabilityFull {
   void testChaLichessExamples() throws Exception {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen(), false);
 
       logger.info(testCase.pgnFileName());
 
@@ -91,7 +91,7 @@ class TestUnwinnabilityFull {
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen(), false);
 
       logger.info(testCase.pgnFileName());
 

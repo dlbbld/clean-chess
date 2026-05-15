@@ -22,7 +22,7 @@ class TestFenConstants {
 
     // second we calculate what we expect them to be
     final Set<String> calculatedFenSet = new TreeSet<>();
-    final Board board = new Board();
+    final Board board = new Board(false);
     for (final MoveSpecification moveSpecification : board.getPossibleMoveSpecificationList()) {
       board.move(moveSpecification);
       calculatedFenSet.add(board.getFen());

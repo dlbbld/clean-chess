@@ -10,7 +10,7 @@ import com.dlb.chess.board.enums.Side;
 class TestInsufficientMaterialUtility {
 
   private static StaticPosition position(String fen) {
-    return new Board(fen).getStaticPosition();
+    return new Board(fen, false).getStaticPosition();
   }
 
   // =====================================================================

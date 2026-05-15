@@ -32,7 +32,7 @@ class TestKingSafetyCheck implements EnumConstants {
   }
 
   private static void check(String fen, MoveSpecification move, KingSafetyCheck expected) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
     assertEquals(expected, analyze(board, move));
   }
 
@@ -40,7 +40,7 @@ class TestKingSafetyCheck implements EnumConstants {
   @Test
   void testSuccess() {
     // initial position: e2-e4 leaves king safe
-    final Board board = new Board();
+    final Board board = new Board(false);
     assertEquals(KingSafetyCheck.SUCCESS, analyze(board, new MoveSpecification(E2, E4)));
   }
 

@@ -42,21 +42,21 @@ class TestMovementCheck implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testSuccess() {
-    check(new Board(), new MoveSpecification(E2, E4), MovementCheck.SUCCESS);
+    check(new Board(false), new MoveSpecification(E2, E4), MovementCheck.SUCCESS);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testNotPossible() {
     // knight cannot move three squares forward
-    check(new Board(), new MoveSpecification(B1, B4), MovementCheck.NOT_POSSIBLE);
+    check(new Board(false), new MoveSpecification(B1, B4), MovementCheck.NOT_POSSIBLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testToSquareOccupiedByOwnPiece() {
     // rook tries to move onto own pawn
-    check(new Board(), new MoveSpecification(A1, A2), MovementCheck.TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(new Board(false), new MoveSpecification(A1, A2), MovementCheck.TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
   }
 
   @SuppressWarnings("static-method")

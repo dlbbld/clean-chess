@@ -28,7 +28,7 @@ class TestPotentialToSquares implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testRookSquares() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     // test initital position
     // white
@@ -389,7 +389,7 @@ class TestPotentialToSquares implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testKnightSquares() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     // test initital position
     // white
@@ -772,7 +772,7 @@ class TestPotentialToSquares implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testBishopSquares() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     // test initital position
     // white
@@ -1154,7 +1154,7 @@ class TestPotentialToSquares implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testQueenSquares() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     // test initital position
     // white
@@ -1521,7 +1521,7 @@ class TestPotentialToSquares implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testKingNonCastlingSquares() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     // test initital position
     // white
@@ -1978,7 +1978,7 @@ class TestPotentialToSquares implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void testPawnSquares() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     // test initital position
     // white

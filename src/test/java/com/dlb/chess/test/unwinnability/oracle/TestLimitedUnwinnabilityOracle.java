@@ -22,7 +22,7 @@ class TestLimitedUnwinnabilityOracle {
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
         LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
@@ -34,7 +34,7 @@ class TestLimitedUnwinnabilityOracle {
   @Test
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
         LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
@@ -49,7 +49,10 @@ class TestLimitedUnwinnabilityOracle {
 
     final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final Board board = GeneralUtility.calculateBoard(pgnFile);
+    // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
+    // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
+    // itself then asserts the oracle behaviour on the resulting position.
+    final Board board = GeneralUtility.calculateBoard(pgnFile, false);
     logger.info(pgnFileName);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,

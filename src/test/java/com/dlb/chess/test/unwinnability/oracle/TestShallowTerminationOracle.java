@@ -19,7 +19,7 @@ class TestShallowTerminationOracle {
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
         ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
@@ -31,7 +31,7 @@ class TestShallowTerminationOracle {
   @Test
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
         ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
@@ -45,7 +45,7 @@ class TestShallowTerminationOracle {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen(), false);
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
@@ -67,7 +67,7 @@ class TestShallowTerminationOracle {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_SHALLOW_TERMINATION).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen(), false);
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());

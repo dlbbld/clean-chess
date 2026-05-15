@@ -93,7 +93,7 @@ public class ShallowTerminationEvaluator {
   private static LeafOutcome classify(GameStatus status, Side sideToEvaluate, Side sideThatJustMoved) {
     return switch (status) {
       case CHECKMATE -> sideThatJustMoved == sideToEvaluate ? LeafOutcome.WIN : LeafOutcome.LOSS_OR_DRAW;
-      case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LeafOutcome.LOSS_OR_DRAW;
+      case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, DEAD_POSITION_UNWINNABLE_QUICK, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LeafOutcome.LOSS_OR_DRAW;
       case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE
           ? LeafOutcome.LOSS_OR_DRAW
           : LeafOutcome.INCONCLUSIVE;

@@ -94,6 +94,7 @@ public class CreatePgnTestCases {
       case CHA_PAWN_WALL_YES -> createTestCasesPawnWallYes();
       case CHA_PAWN_WALL_NO -> createTestCasesPawnWallNo();
       case CHA_SHALLOW_TERMINATION -> createTestCasesShallowTermination();
+      case CHA_HELPMATE_BEYOND -> createTestCasesHelpmateBeyond();
       case RANDOM_CHECKMATE -> createTestCasesRandomCheckmate();
       case RANDOM_FIFTY -> createTestCasesRandomFifty();
       case RANDOM_FIVEFOLD -> createTestCasesRandomFivefold();

@@ -67,13 +67,8 @@ public class StrictSanParser extends AbstractSan {
   }
 
   /**
-   * Top-of-pipeline check: a board with history represents a game, and once any FIDE-automatic termination has been
-   * reached the game has ended permanently â€” no further moves are accepted.
-   *
-   * <p>
-   * The five terminal statuses are: checkmate, stalemate, mutual insufficient material (FIDE 5.2.2 dead position),
-   * fivefold repetition, and the 75-move rule. Single-side insufficient-material diagnostics, the claimable draws
-   * (3-fold repetition, 50-move rule), and ongoing positions are deliberately NOT rejected here.
+   * SAN-pipeline mirror of {@code ValidateNewMove.validateGameNotEnded}: rejects SAN input on a board that has reached
+   * any FIDE-automatic termination. See {@code com.dlb.chess.board} package-info for the six terminal statuses.
    */
   private static void validateGameNotEnded(Board board) throws SanValidationException {
     final GameStatus gameStatus = BasicChessUtility.calculateGameStatus(board);

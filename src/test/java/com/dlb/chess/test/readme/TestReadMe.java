@@ -132,7 +132,7 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void boardExampleEndsInCheckmate() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     board.moveStrict("e4");
     board.movesStrict("e5", "Bc4");
@@ -419,20 +419,20 @@ class TestReadMe {
   }
 
   private static Board createOpeningExampleBoard() {
-    final Board board = new Board();
+    final Board board = new Board(false);
     board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
     return board;
   }
 
   private static void assertUnwinnability(String fen, Side side, UnwinnabilityQuickVerdict expectedQuick,
       UnwinnabilityFullVerdict expectedFull) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
     assertEquals(expectedQuick, board.isUnwinnableQuick(side));
     assertEquals(expectedFull, board.isUnwinnableFull(side));
   }
 
   private static void assertDeadPosition(String fen, DeadPositionQuick expectedQuick, DeadPositionFull expectedFull) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
     assertEquals(expectedQuick, board.isDeadPositionQuick());
     assertEquals(expectedFull, board.isDeadPositionFull());
   }

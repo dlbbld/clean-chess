@@ -12,7 +12,7 @@ class TestSanCalculation implements EnumConstants {
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     board.moveStrict("e4");
     assertEquals("e4", board.getSan());

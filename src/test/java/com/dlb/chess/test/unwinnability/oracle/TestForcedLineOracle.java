@@ -26,7 +26,7 @@ class TestForcedLineOracle {
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
         ForcedLineOracle.calculateUnwinnability(board, Side.WHITE));
@@ -40,7 +40,7 @@ class TestForcedLineOracle {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.BASIC_FORCED).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen());
+      final Board board = new Board(testCase.fen(), false);
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ForcedLineOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());

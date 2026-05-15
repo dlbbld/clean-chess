@@ -55,6 +55,9 @@ public abstract class BasicChessUtility {
     if (board.isInsufficientMaterial()) {
       return GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL;
     }
+    if (board.isDeadPositionUnwinnableQuick()) {
+      return GameStatus.DEAD_POSITION_UNWINNABLE_QUICK;
+    }
     if (board.isInsufficientMaterial(Side.WHITE)) {
       return GameStatus.INSUFFICIENT_MATERIAL_WHITE_ONLY;
     }

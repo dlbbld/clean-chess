@@ -54,7 +54,11 @@ class TestInsufficientMaterial implements EnumConstants {
     logger.info(pgnFileName);
 
     final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
-    final Board boardFromFen = new Board(pgnFile.startFen());
+    // PGN replay disables dead-position-unwinnable-quick auto-detection. Some of these recorded games pass through
+    // positions the quick analyzer would classify as dead before reaching the actually-insufficient-material final
+    // position; the test cares about the mechanical insufficient-material check on the final state, not the
+    // analyzer's prediction on intermediate positions.
+    final Board boardFromFen = new Board(pgnFile.startFen(), false);
     for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
       boardFromFen.moveStrict(halfMove.san());
     }

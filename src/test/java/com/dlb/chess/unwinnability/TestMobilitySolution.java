@@ -331,7 +331,7 @@ class TestMobilitySolution implements EnumConstants {
   }
 
   private static void checkCustom(String fen, Map<Square, List<Square>> mobilityMap) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
     for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
@@ -346,7 +346,7 @@ class TestMobilitySolution implements EnumConstants {
 
   private static void checkAllLockedButKing(String fen, List<Square> whiteKingToSquareList,
       List<Square> blackKingToSquareList) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
@@ -385,7 +385,7 @@ class TestMobilitySolution implements EnumConstants {
 
   private static void checkPawnWallOnlyKingAndPawn(String fen, List<Square> whiteKingToSquareList,
       List<Square> blackKingToSquareList) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
 
@@ -417,7 +417,7 @@ class TestMobilitySolution implements EnumConstants {
   }
 
   private static void checkAllMaximum(String fen) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
 
     final MobilitySolution mobilitySolution = Mobility.mobility(board);
 

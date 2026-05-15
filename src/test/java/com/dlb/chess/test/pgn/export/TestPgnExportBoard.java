@@ -33,7 +33,7 @@ class TestPgnExportBoard {
 
   private static void check(ResultTagValue resultTagValue, String... sanArray) {
 
-    final Board boardExpected = new Board();
+    final Board boardExpected = new Board(false);
     for (final String san : sanArray) {
       @SuppressWarnings("null") @NonNull final String sanIsNotNull = san;
       boardExpected.moveStrict(sanIsNotNull);
