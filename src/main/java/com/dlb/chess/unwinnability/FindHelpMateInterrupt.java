@@ -13,7 +13,7 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
 
-class FindHelpMateInterrupt extends AbstractFindHelpmate {
+class FindHelpMateInterrupt {
 
   private static final boolean IS_DEBUG = false;
 
@@ -30,10 +30,7 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
     final FindHelpMateInterruptResult result = calculateHelpmate(board, c, 0, mateList);
 
     return switch (result) {
-      case TRUE -> {
-        checkHelpmate(board.getFen(), mateList);
-        yield FindHelpmateResult.YES;
-      }
+      case TRUE -> FindHelpmateResult.YES;
       case FALSE -> FindHelpmateResult.NO;
       case INTERRUPTED -> FindHelpmateResult.UNKNOWN;
       default -> throw new IllegalArgumentException();
