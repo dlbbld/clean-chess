@@ -2,7 +2,7 @@ package com.dlb.chess.common.enums;
 
 /**
  * Status of a game (board with history). The five FIDE-automatic terminations ({@link #CHECKMATE}, {@link #STALEMATE},
- * {@link #INSUFFICIENT_MATERIAL_BOTH}, {@link #FIVE_FOLD_REPETITION_RULE}, {@link #SEVENTY_FIVE_MOVE_RULE}) end the
+ * {@link #DEAD_POSITION_INSUFFICIENT_MATERIAL}, {@link #FIVE_FOLD_REPETITION_RULE}, {@link #SEVENTY_FIVE_MOVE_RULE}) end the
  * game permanently — no further moves are accepted by the validation pipeline (see {@code ValidateNewMove} and
  * {@code StrictSanParser}).
  *
@@ -20,7 +20,7 @@ public enum GameStatus {
 
   CHECKMATE,
   STALEMATE,
-  INSUFFICIENT_MATERIAL_BOTH,
+  DEAD_POSITION_INSUFFICIENT_MATERIAL,
   INSUFFICIENT_MATERIAL_WHITE_ONLY,
   INSUFFICIENT_MATERIAL_BLACK_ONLY,
   FIVE_FOLD_REPETITION_RULE,
@@ -33,7 +33,7 @@ public enum GameStatus {
    */
   public boolean isAutomaticTermination() {
     return switch (this) {
-      case CHECKMATE, STALEMATE, INSUFFICIENT_MATERIAL_BOTH, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> true;
+      case CHECKMATE, STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> true;
       case INSUFFICIENT_MATERIAL_WHITE_ONLY, INSUFFICIENT_MATERIAL_BLACK_ONLY, ONGOING -> false;
     };
   }

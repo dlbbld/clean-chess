@@ -15,7 +15,7 @@ import com.dlb.chess.san.StrictSanParser;
 /**
  * Surface-level tests for the strict-pipeline game-end pre-check in {@link StrictSanParser#parseText}: one scenario per
  * FIDE-automatic termination ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE},
- * {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
+ * {@link GameStatus#DEAD_POSITION_INSUFFICIENT_MATERIAL}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
  * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any SAN attempted on a terminal-state board is
  * rejected with {@link SanValidationProblem#GAME_ALREADY_ENDED} and that the thrown {@link SanValidationException}
  * carries the originating {@link GameStatus} as payload.
@@ -44,7 +44,7 @@ class TestSanValidationGameEnded {
   @Test
   void testGameEndedByInsufficientMaterialBoth() {
     final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
-    check("Ke2", board, GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+    check("Ke2", board, GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL);
   }
 
   @SuppressWarnings("static-method")

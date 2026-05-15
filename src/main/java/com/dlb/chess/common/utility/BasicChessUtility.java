@@ -53,7 +53,7 @@ public abstract class BasicChessUtility {
       return GameStatus.SEVENTY_FIVE_MOVE_RULE;
     }
     if (board.isInsufficientMaterial()) {
-      return GameStatus.INSUFFICIENT_MATERIAL_BOTH;
+      return GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL;
     }
     if (board.isInsufficientMaterial(Side.WHITE)) {
       return GameStatus.INSUFFICIENT_MATERIAL_WHITE_ONLY;

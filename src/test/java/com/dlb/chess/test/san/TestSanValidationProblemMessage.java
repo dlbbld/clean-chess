@@ -580,7 +580,7 @@ class TestSanValidationProblemMessage {
     }
 
     // NOT_REACHABLE_KING_NON_CASTLING: lone white king on e1 cannot reach c3 (not king-adjacent).
-    // Black rook on a8 ensures the position is not in INSUFFICIENT_MATERIAL_BOTH; it does not
+    // Black rook on a8 ensures the position is not in DEAD_POSITION_INSUFFICIENT_MATERIAL; it does not
     // attack any square involved in the test.
     {
       final Board board = new Board("r6k/8/8/8/8/8/8/4K3 w - - 0 1");
@@ -972,7 +972,7 @@ class TestSanValidationProblemMessage {
     {
       final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
       checkException("Ke2", board, SanValidationProblem.GAME_ALREADY_ENDED,
-          "The game has already ended by INSUFFICIENT_MATERIAL_BOTH - no further moves are accepted.");
+          "The game has already ended by DEAD_POSITION_INSUFFICIENT_MATERIAL - no further moves are accepted.");
     }
   }
 

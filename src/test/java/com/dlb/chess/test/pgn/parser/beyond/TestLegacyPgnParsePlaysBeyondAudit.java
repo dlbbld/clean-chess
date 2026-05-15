@@ -1,7 +1,7 @@
 package com.dlb.chess.test.pgn.parser.beyond;
 
 import static com.dlb.chess.common.enums.GameStatus.FIVE_FOLD_REPETITION_RULE;
-import static com.dlb.chess.common.enums.GameStatus.INSUFFICIENT_MATERIAL_BOTH;
+import static com.dlb.chess.common.enums.GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL;
 import static com.dlb.chess.common.enums.GameStatus.SEVENTY_FIVE_MOVE_RULE;
 import static org.junit.jupiter.api.Assertions.fail;
 import static org.junit.jupiter.api.Assumptions.assumeFalse;
@@ -238,7 +238,7 @@ class TestLegacyPgnParsePlaysBeyondAudit {
 
     // ====== lastMoveAddedAccidentally (1) — KvK, last move past dead-position ======
     m.put("lastMoveAddedAccidentally/02_last_move_added_accidentally_result_draw_one_move_in_KvK.pgn",
-        sanGameEnded(INSUFFICIENT_MATERIAL_BOTH));
+        sanGameEnded(DEAD_POSITION_INSUFFICIENT_MATERIAL));
 
     // ====== long (1) — historical long game crossing 75-move ======
     m.put("long/long_nikolic_arsovic_1989.pgn", sanGameEnded(SEVENTY_FIVE_MOVE_RULE));

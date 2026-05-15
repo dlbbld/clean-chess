@@ -74,7 +74,7 @@ public class ForcedLineOracle {
       switch (BasicChessUtility.calculateGameStatus(board)) {
         case CHECKMATE:
         case FIVE_FOLD_REPETITION_RULE:
-        case INSUFFICIENT_MATERIAL_BOTH:
+        case DEAD_POSITION_INSUFFICIENT_MATERIAL:
         case INSUFFICIENT_MATERIAL_WHITE_ONLY:
         case INSUFFICIENT_MATERIAL_BLACK_ONLY:
         case SEVENTY_FIVE_MOVE_RULE:
@@ -111,7 +111,7 @@ public class ForcedLineOracle {
       case CHECKMATE -> sideMadeLastMove == sideToEvaluate
           ? LimitedUnwinnabilityVerdict.WINNABLE
           : LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
+      case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
       case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE
           ? LimitedUnwinnabilityVerdict.UNWINNABLE
           : LimitedUnwinnabilityVerdict.UNKNOWN;

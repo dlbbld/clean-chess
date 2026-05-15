@@ -20,7 +20,7 @@
  * <ul>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#CHECKMATE} (FIDE 5.1.1)</li>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#STALEMATE} (FIDE 5.2.1)</li>
- * <li>{@link com.dlb.chess.common.enums.GameStatus#INSUFFICIENT_MATERIAL_BOTH} — mutual insufficient material, FIDE
+ * <li>{@link com.dlb.chess.common.enums.GameStatus#DEAD_POSITION_INSUFFICIENT_MATERIAL} — mutual insufficient material, FIDE
  * 5.2.2 dead position (the single-side {@code INSUFFICIENT_MATERIAL_*_ONLY} variants are diagnostic states, NOT
  * terminations)</li>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#FIVE_FOLD_REPETITION_RULE} (FIDE 9.6.1)</li>

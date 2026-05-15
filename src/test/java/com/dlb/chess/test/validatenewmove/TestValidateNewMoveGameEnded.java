@@ -16,7 +16,7 @@ import com.dlb.chess.exceptions.InvalidMoveException;
 /**
  * Surface-level tests for the strict-pipeline game-end pre-check in
  * {@link com.dlb.chess.board.ValidateNewMove#validateNewMove}: one scenario per FIDE-automatic termination
- * ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE}, {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH},
+ * ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE}, {@link GameStatus#DEAD_POSITION_INSUFFICIENT_MATERIAL},
  * {@link GameStatus#FIVE_FOLD_REPETITION_RULE}, {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any move
  * attempted on a terminal-state board is rejected with {@link MoveCheck#GAME_ALREADY_ENDED} and that the thrown
  * {@link InvalidMoveException} carries the originating {@link GameStatus} as payload.
@@ -48,14 +48,14 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
     check(board, new MoveSpecification(H8, G8), GameStatus.STALEMATE);
   }
 
-  // --- INSUFFICIENT_MATERIAL_BOTH ---
+  // --- DEAD_POSITION_INSUFFICIENT_MATERIAL ---
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByInsufficientMaterialBoth() {
     // K vs K: dead position under FIDE 5.2.2.
     final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
-    check(board, new MoveSpecification(E1, E2), GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+    check(board, new MoveSpecification(E1, E2), GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL);
   }
 
   // --- SEVENTY_FIVE_MOVE_RULE ---

@@ -122,7 +122,7 @@ public class PgnCreate {
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
-      case FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH -> ResultTagValue.DRAW;
+      case FIVE_FOLD_REPETITION_RULE, DEAD_POSITION_INSUFFICIENT_MATERIAL -> ResultTagValue.DRAW;
       case INSUFFICIENT_MATERIAL_WHITE_ONLY, INSUFFICIENT_MATERIAL_BLACK_ONLY, ONGOING -> ResultTagValue.ONGOING;
       case SEVENTY_FIVE_MOVE_RULE, STALEMATE -> ResultTagValue.DRAW;
       default -> throw new IllegalArgumentException();
