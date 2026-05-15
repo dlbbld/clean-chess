@@ -95,6 +95,7 @@ public enum PgnTest {
   CHA_PAWN_WALL_YES(false, "cha/pawnWall/yes"),
   CHA_PAWN_WALL_NO(false, "cha/pawnWall/no"),
   CHA_SHALLOW_TERMINATION(false, "cha/shallowTermination"),
+  CHA_HELPMATE_BEYOND(false, "cha/helpmateBeyond"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
 

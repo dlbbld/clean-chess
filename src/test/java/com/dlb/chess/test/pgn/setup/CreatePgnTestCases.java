@@ -5966,6 +5966,22 @@ public class CreatePgnTestCases {
     return new PgnFileTestCaseList(PgnTest.CHA_SHALLOW_TERMINATION, list);
   }
 
+  private static PgnFileTestCaseList createTestCasesHelpmateBeyond() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(new PgnFileTestCase("01_beyond_fivefold.pgn",
+        "repPos=4: 50.Kc8 52.Kc8 54.Kc8 56.Kc8; repPos=4: 50...Kc6 52...Kc6 54...Kc6 56...Kc6; repPos=4: 51.Kd8 53.Kd8 55.Kd8 57.Kd8; repPos=5: 51...Kd6 53...Kd6 55...Kd6 57...Kd6",
+        "", -1, 34, CheckmateOrStalemate.NA, 5, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        "3K4/2P5/3k4/4r3/8/1r6/8/8 w - - 34 58"));
+    list.add(new PgnFileTestCase("01_beyond_seventy_five.pgn", "", "26.NA (1) 75...NA (100) 99...NA (148)", -1, 148,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        "8/5r2/p3k3/P7/8/1K6/8/8 w - - 148 100"));
+
+    return new PgnFileTestCaseList(PgnTest.CHA_HELPMATE_BEYOND, list);
+  }
+
   private static PgnFileTestCaseList createTestCasesLastMoveAddedAccidentally() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
