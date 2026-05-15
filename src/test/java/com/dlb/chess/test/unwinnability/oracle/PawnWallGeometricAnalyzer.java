@@ -22,7 +22,6 @@ import com.dlb.chess.common.utility.StaticPositionUtility;
 
 public class PawnWallGeometricAnalyzer {
 
-  // TODO own pawns outside pawn wall line
   private static final boolean IS_IGNORE_PAWN_OWN_PAWN_OUTSIDE_PAWN_WALL_LINE = true;
 
   /**
@@ -167,9 +166,6 @@ public class PawnWallGeometricAnalyzer {
       // 2b)
       // For this we calculate all squares where the pawns as is can capture plus the squares resulting in moving per
       // side. When the intersection is empty we think we hold the promise.
-      // TODO Potentially this check is too strong.
-      // When there are forced moves so a pawn cannot visit all empty squares
-      // ahead, for opponent pawn having to move.
       final Set<Square> attackingSquaresWhite = calculateAttackingSquares(board, Side.WHITE);
       final Set<Square> pawnSquaresBlack = calculatePawnSquares(board, Side.BLACK);
       if (!BasicUtility.calculateIsDisjoint(attackingSquaresWhite, pawnSquaresBlack)) {
@@ -403,12 +399,12 @@ public class PawnWallGeometricAnalyzer {
       throw new ProgrammingMistakeException("We are not expecting this to happen, as we only allow legal positions");
     }
 
-    final int direction = side == Side.WHITE ? 1 : -1;
-    final int promotionRankNumber = Rank.calculatePromotionRank(side).getNumber();
-    final int fileNumber = square.getFile().getNumber();
+    final var direction = side == Side.WHITE ? 1 : -1;
+    final var promotionRankNumber = Rank.calculatePromotionRank(side).getNumber();
+    final var fileNumber = square.getFile().getNumber();
 
-    for (var rankNumber = square.getRank().getNumber() + direction; rankNumber != promotionRankNumber;
-        rankNumber += direction) {
+    for (var rankNumber = square.getRank().getNumber()
+        + direction; rankNumber != promotionRankNumber; rankNumber += direction) {
       final Square squareAhead = Square.calculate(fileNumber, rankNumber);
       if (staticPosition.isPawn(squareAhead)) {
         // we only require a piece ahead, no matter which side
@@ -485,7 +481,6 @@ public class PawnWallGeometricAnalyzer {
         }
         if (Square.calculateHasRightDiagonalSquare(side.getOppositeSide(), square)) {
           final Square squareRightDiagonal = Square.calculateRightDiagonalSquare(side.getOppositeSide(), square);
-          // TODO how comes we are trying to add a pawn on a square already holding a pawn
           calculateBlockedSquares = createChangedPositionIfChange(calculateBlockedSquares, squareRightDiagonal);
         }
       }
@@ -494,7 +489,6 @@ public class PawnWallGeometricAnalyzer {
   }
 
   private static StaticPosition createChangedPositionIfChange(StaticPosition staticPosition, Square square) {
-    // TODO how comes we are trying to add a pawn on a square already holding a pawn
     if (staticPosition.get(square) != Piece.WHITE_PAWN) {
       return staticPosition.createChangedPosition(square, Piece.WHITE_PAWN);
     }
