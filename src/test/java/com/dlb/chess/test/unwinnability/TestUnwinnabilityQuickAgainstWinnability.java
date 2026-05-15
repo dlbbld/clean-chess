@@ -16,7 +16,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 class TestUnwinnabilityQuickAgainstWinnability {
@@ -59,24 +59,24 @@ class TestUnwinnabilityQuickAgainstWinnability {
         logger.info(testCase.pgnFileName());
 
         final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
-        final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
+        final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
         check(winnableWhite, unwinnableQuickWhite);
 
         final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
-        final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
+        final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
 
         check(winnableBlack, unwinnableQuickBlack);
       }
     }
   }
 
-  private static void check(Winnable winnable, UnwinnableQuick unwinnableQuick) {
+  private static void check(Winnable winnable, UnwinnabilityQuickVerdict unwinnableQuick) {
     switch (winnable) {
       case NO:
-        assertEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
+        assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, unwinnableQuick);
         break;
       case YES:
-        assertNotEquals(UnwinnableQuick.UNWINNABLE, unwinnableQuick);
+        assertNotEquals(UnwinnabilityQuickVerdict.UNWINNABLE, unwinnableQuick);
         break;
       case UNKNOWN:
         break;

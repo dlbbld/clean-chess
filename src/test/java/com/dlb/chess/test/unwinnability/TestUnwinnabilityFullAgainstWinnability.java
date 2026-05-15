@@ -15,7 +15,7 @@ import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.WinnableAnalyzer;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnabilityFullAgainstWinnability {
@@ -40,24 +40,24 @@ class TestUnwinnabilityFullAgainstWinnability {
     logger.info(testCase.pgnFileName());
 
     final Winnable winnableWhite = WinnableAnalyzer.calculateWinnable(board, Side.WHITE);
-    final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
-        .unwinnableFull();
+    final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
+        .verdict();
     check(winnableWhite, unwinnableFullWhite);
 
     final Winnable winnableBlack = WinnableAnalyzer.calculateWinnable(board, Side.BLACK);
-    final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
-        .unwinnableFull();
+    final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+        .verdict();
     check(winnableBlack, unwinnableFullBlack);
 
   }
 
-  private static void check(Winnable winnable, UnwinnableFull unwinnableFull) {
+  private static void check(Winnable winnable, UnwinnabilityFullVerdict unwinnableFull) {
     switch (winnable) {
       case NO:
-        assertEquals(UnwinnableFull.UNWINNABLE, unwinnableFull);
+        assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, unwinnableFull);
         break;
       case YES:
-        assertNotEquals(UnwinnableFull.WINNABLE, unwinnableFull);
+        assertNotEquals(UnwinnabilityFullVerdict.WINNABLE, unwinnableFull);
         break;
       case UNKNOWN:
         break;

@@ -18,7 +18,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnabilityFull {
@@ -30,8 +30,8 @@ class TestUnwinnabilityFull {
   void testStartPosition() {
     final Board board = new Board();
 
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
-    assertEquals(UnwinnableFull.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
+    assertEquals(UnwinnabilityFullVerdict.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict());
+    assertEquals(UnwinnabilityFullVerdict.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).verdict());
   }
 
   @SuppressWarnings("static-method")
@@ -40,8 +40,8 @@ class TestUnwinnabilityFull {
     final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
     final Board board = new Board(fen);
 
-    assertEquals(UnwinnableFull.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).unwinnableFull());
-    assertEquals(UnwinnableFull.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).unwinnableFull());
+    assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict());
+    assertEquals(UnwinnabilityFullVerdict.UNWINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).verdict());
   }
 
   @SuppressWarnings("static-method")
@@ -54,12 +54,12 @@ class TestUnwinnabilityFull {
     final Board board = new Board(pgnFileTestCase.fen());
     logger.info(pgnFileName);
 
-    final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
-        .unwinnableFull();
+    final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
+        .verdict();
     assertEquals(pgnFileTestCase.unwinnableFullWhite(), unwinnableFullWhite);
 
-    final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
-        .unwinnableFull();
+    final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+        .verdict();
     assertEquals(pgnFileTestCase.unwinnableFullBlack(), unwinnableFullBlack);
 
   }
@@ -73,8 +73,8 @@ class TestUnwinnabilityFull {
 
       logger.info(testCase.pgnFileName());
 
-      final UnwinnableFull unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
-          .unwinnableFull(board, board.getHavingMove().getOppositeSide()).unwinnableFull();
+      final UnwinnabilityFullVerdict unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
+          .unwinnableFull(board, board.getHavingMove().getOppositeSide()).verdict();
 
       switch (board.getHavingMove().getOppositeSide()) {
         case WHITE -> assertEquals(testCase.unwinnableFullWhite(), unwinnableFullNotHavingMove);
@@ -95,16 +95,16 @@ class TestUnwinnabilityFull {
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
-            .unwinnableFull();
+        final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
+            .verdict();
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
         assertEquals(testCase.unwinnableFullWhite(), unwinnableFullWhite);
       }
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
-            .unwinnableFull();
+        final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
+            .verdict();
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
         assertEquals(testCase.unwinnableFullBlack(), unwinnableFullBlack);
       }

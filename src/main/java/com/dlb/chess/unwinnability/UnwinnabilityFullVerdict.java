@@ -2,14 +2,14 @@ package com.dlb.chess.unwinnability;
 
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
-public enum UnwinnableFull {
+public enum UnwinnabilityFullVerdict {
   WINNABLE("winnable"),
   UNWINNABLE("unwinnable"),
   UNDETERMINED("undetermined");
 
   private final String identifier;
 
-  UnwinnableFull(String identifier) {
+  UnwinnabilityFullVerdict(String identifier) {
     this.identifier = identifier;
   }
 
@@ -18,7 +18,7 @@ public enum UnwinnableFull {
   }
 
   public static boolean exists(String identifier) {
-    for (final UnwinnableFull mode : values()) {
+    for (final UnwinnabilityFullVerdict mode : values()) {
       if (mode.getIdentifier().equals(identifier)) {
         return true;
       }
@@ -26,11 +26,11 @@ public enum UnwinnableFull {
     return false;
   }
 
-  public static UnwinnableFull calculate(String identifier) {
+  public static UnwinnabilityFullVerdict calculate(String identifier) {
     if (!exists(identifier)) {
       throw new IllegalArgumentException("No mode for this letter identifier");
     }
-    for (final UnwinnableFull mode : values()) {
+    for (final UnwinnabilityFullVerdict mode : values()) {
       if (mode.getIdentifier().equals(identifier)) {
         return mode;
       }

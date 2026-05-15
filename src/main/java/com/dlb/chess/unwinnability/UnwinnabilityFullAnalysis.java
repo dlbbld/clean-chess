@@ -4,6 +4,6 @@ import java.util.List;
 
 import com.dlb.chess.model.UciMove;
 
-public record UnwinnableFullAnalysis(UnwinnableFull unwinnableFull, List<UciMove> mateLine) {
+public record UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict verdict, List<UciMove> mateLine) {
 
 }

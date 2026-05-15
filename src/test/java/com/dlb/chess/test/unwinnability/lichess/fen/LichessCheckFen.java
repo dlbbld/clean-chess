@@ -11,7 +11,7 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.FenSideSymbol;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public class LichessCheckFen extends AbstractLichessCheckFen {
@@ -71,7 +71,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
         final Board board = new Board(fen);
         final Side testingSide = board.getHavingMove().getOppositeSide();
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, testingSide);
+        final UnwinnabilityQuickVerdict unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, testingSide);
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
         final StringBuilder outputLine = new StringBuilder();

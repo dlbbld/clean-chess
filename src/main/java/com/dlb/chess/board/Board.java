@@ -49,9 +49,9 @@ import com.dlb.chess.san.StrictSanParserValidationResult;
 import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
-import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.google.common.collect.ImmutableList;
 
@@ -903,38 +903,38 @@ public class Board {
   }
 
   public DeadPositionQuick isDeadPositionQuick() {
-    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
-    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
-    if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
+    final UnwinnabilityQuickVerdict unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
+    final UnwinnabilityQuickVerdict unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
+    if (unwinnableWhite == UnwinnabilityQuickVerdict.UNWINNABLE && unwinnableBlack == UnwinnabilityQuickVerdict.UNWINNABLE) {
       return DeadPositionQuick.DEAD_POSITION;
     }
-    if (unwinnableWhite == UnwinnableQuick.WINNABLE && unwinnableBlack == UnwinnableQuick.WINNABLE) {
+    if (unwinnableWhite == UnwinnabilityQuickVerdict.WINNABLE && unwinnableBlack == UnwinnabilityQuickVerdict.WINNABLE) {
       return DeadPositionQuick.NON_DEAD_POSITION;
     }
     return DeadPositionQuick.POSSIBLY_NON_DEAD_POSITION;
   }
 
   public DeadPositionFull isDeadPositionFull() {
-    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
-    if (unwinnableWhite == UnwinnableFull.WINNABLE) {
+    final UnwinnabilityFullVerdict unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).verdict();
+    if (unwinnableWhite == UnwinnabilityFullVerdict.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).unwinnableFull();
-    if (unwinnableBlack == UnwinnableFull.WINNABLE) {
+    final UnwinnabilityFullVerdict unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).verdict();
+    if (unwinnableBlack == UnwinnabilityFullVerdict.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    if (unwinnableWhite == UnwinnableFull.UNWINNABLE && unwinnableBlack == UnwinnableFull.UNWINNABLE) {
+    if (unwinnableWhite == UnwinnabilityFullVerdict.UNWINNABLE && unwinnableBlack == UnwinnabilityFullVerdict.UNWINNABLE) {
       return DeadPositionFull.DEAD_POSITION;
     }
     return DeadPositionFull.UNDETERMINED;
   }
 
-  public UnwinnableQuick isUnwinnableQuick(Side side) {
+  public UnwinnabilityQuickVerdict isUnwinnableQuick(Side side) {
     return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
   }
 
-  public UnwinnableFull isUnwinnableFull(Side side) {
-    return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
+  public UnwinnabilityFullVerdict isUnwinnableFull(Side side) {
+    return UnwinnableFullAnalyzer.unwinnableFull(this, side).verdict();
   }
 
   public CastlingRight getCastlingRight(Side havingMove) {

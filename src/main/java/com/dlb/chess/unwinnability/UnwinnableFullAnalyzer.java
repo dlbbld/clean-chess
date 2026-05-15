@@ -18,13 +18,13 @@ public class UnwinnableFullAnalyzer {
   private static final int MAX_DEPTH = 100;
   private static final int GLOBAL_NODES_BOUND = 500000;
 
-  public static UnwinnableFullAnalysis unwinnableFull(Board board, Side winner) {
+  public static UnwinnabilityFullAnalysis unwinnableFull(Board board, Side winner) {
     return unwinnableFull(board, winner, false, new MobilitySolution());
   }
 
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
-  private static UnwinnableFullAnalysis unwinnableFull(Board board, Side winner, boolean isHasMobilitySolution,
+  private static UnwinnabilityFullAnalysis unwinnableFull(Board board, Side winner, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     // add optimization from code
@@ -52,7 +52,7 @@ public class UnwinnableFullAnalyzer {
     }
     if (UnwinnableSemiStatic.unwinnableSemiStatic(board, winner, mobilitySolution)) {
       undoForcedMoves(board, totalForcedMoves);
-      return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+      return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNWINNABLE, new ArrayList<>());
     }
 
     // we must instantiate the class here to share the transposition table between calls
@@ -68,19 +68,19 @@ public class UnwinnableFullAnalyzer {
       globalNodeCount += helpmateAnalysis.localNodesCount();
 
       if (globalNodeCount > GLOBAL_NODES_BOUND) {
-        return new UnwinnableFullAnalysis(UnwinnableFull.UNDETERMINED, new ArrayList<>());
+        return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNDETERMINED, new ArrayList<>());
       }
 
       switch (helpmateAnalysis.findHelpmateResult()) {
         case YES:
           // 4: if bd = true then return Winnable
           undoForcedMoves(board, totalForcedMoves);
-          return new UnwinnableFullAnalysis(UnwinnableFull.WINNABLE, helpmateAnalysis.mateLine());
+          return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.WINNABLE, helpmateAnalysis.mateLine());
         case NO:
           // 5: else if the search was not interrupted (in step 4 of Figure 5) then
           // 6: return Unwinnable
           undoForcedMoves(board, totalForcedMoves);
-          return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+          return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNWINNABLE, new ArrayList<>());
         case UNKNOWN:
           // the algorithm continues with next depth
           break;
@@ -90,7 +90,7 @@ public class UnwinnableFullAnalyzer {
     }
 
     undoForcedMoves(board, totalForcedMoves);
-    return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+    return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNWINNABLE, new ArrayList<>());
   }
 
   private static void undoForcedMoves(Board board, int totalForcedMoves) {

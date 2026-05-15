@@ -34,8 +34,8 @@ import com.dlb.chess.report.Reporter;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
-import com.dlb.chess.unwinnability.UnwinnableFull;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 class TestReadMe {
 
@@ -106,16 +106,16 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void unwinnabilityExamplesReturnExpectedResults() {
-    assertUnwinnability("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50", Side.BLACK, UnwinnableQuick.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE);
-    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK, UnwinnableQuick.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE);
-    assertUnwinnability("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51", Side.WHITE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE);
+    assertUnwinnability("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50", Side.BLACK, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE);
+    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE);
+    assertUnwinnability("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51", Side.WHITE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE);
     assertUnwinnability("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29", Side.WHITE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableFull.WINNABLE);
-    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableFull.UNWINNABLE);
+        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.WINNABLE);
+    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
   @Test
@@ -424,8 +424,8 @@ class TestReadMe {
     return board;
   }
 
-  private static void assertUnwinnability(String fen, Side side, UnwinnableQuick expectedQuick,
-      UnwinnableFull expectedFull) {
+  private static void assertUnwinnability(String fen, Side side, UnwinnabilityQuickVerdict expectedQuick,
+      UnwinnabilityFullVerdict expectedFull) {
     final Board board = new Board(fen);
     assertEquals(expectedQuick, board.isUnwinnableQuick(side));
     assertEquals(expectedFull, board.isUnwinnableFull(side));

@@ -1,13 +1,13 @@
 package com.dlb.chess.unwinnability;
 
-public enum UnwinnableQuick {
+public enum UnwinnabilityQuickVerdict {
   WINNABLE("winnable"),
   UNWINNABLE("unwinnable"),
   POSSIBLY_WINNABLE("undetermined");
 
   private final String identifier;
 
-  UnwinnableQuick(String identifier) {
+  UnwinnabilityQuickVerdict(String identifier) {
     this.identifier = identifier;
   }
 
@@ -16,7 +16,7 @@ public enum UnwinnableQuick {
   }
 
   public static boolean exists(String identifier) {
-    for (final UnwinnableQuick mode : values()) {
+    for (final UnwinnabilityQuickVerdict mode : values()) {
       if (mode.getIdentifier().equals(identifier)) {
         return true;
       }

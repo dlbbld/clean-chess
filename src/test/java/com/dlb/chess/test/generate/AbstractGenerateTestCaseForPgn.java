@@ -12,9 +12,9 @@ import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.test.report.representation.RepetitionRepresentation;
-import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public abstract class AbstractGenerateTestCaseForPgn {
@@ -69,17 +69,17 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(", ");
 
     final Board finalBoard = report.board();
-    final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
-        .unwinnableFull();
-    final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)
-        .unwinnableFull();
-    final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.WHITE);
-    final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.BLACK);
+    final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
+        .verdict();
+    final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)
+        .verdict();
+    final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.WHITE);
+    final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.BLACK);
 
-    result.append(UnwinnableFull.class.getSimpleName()).append(".").append(unwinnableFullWhite.name()).append(", ");
-    result.append(UnwinnableFull.class.getSimpleName()).append(".").append(unwinnableFullBlack.name()).append(", ");
-    result.append(UnwinnableQuick.class.getSimpleName()).append(".").append(unwinnableQuickWhite.name()).append(", ");
-    result.append(UnwinnableQuick.class.getSimpleName()).append(".").append(unwinnableQuickBlack.name()).append(", ");
+    result.append(UnwinnabilityFullVerdict.class.getSimpleName()).append(".").append(unwinnableFullWhite.name()).append(", ");
+    result.append(UnwinnabilityFullVerdict.class.getSimpleName()).append(".").append(unwinnableFullBlack.name()).append(", ");
+    result.append(UnwinnabilityQuickVerdict.class.getSimpleName()).append(".").append(unwinnableQuickWhite.name()).append(", ");
+    result.append(UnwinnabilityQuickVerdict.class.getSimpleName()).append(".").append(unwinnableQuickBlack.name()).append(", ");
 
     final var fen = report.fen();
 

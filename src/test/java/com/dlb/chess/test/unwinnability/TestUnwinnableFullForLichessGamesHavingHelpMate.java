@@ -15,7 +15,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 class TestUnwinnableFullForLichessGamesHavingHelpMate {
@@ -35,10 +35,10 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       final PgnFile pgnFileLichessGame = LenientPgnParser.parse(pgnTestLichessGame.getFolderPath(), lichessGame);
 
       final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFileLichessGame);
-      final UnwinnableFull unwinnableFullHavingMove = UnwinnableFullAnalyzer
-          .unwinnableFull(board, board.getHavingMove()).unwinnableFull();
+      final UnwinnabilityFullVerdict unwinnableFullHavingMove = UnwinnableFullAnalyzer
+          .unwinnableFull(board, board.getHavingMove()).verdict();
 
-      assertEquals(UnwinnableFull.WINNABLE, unwinnableFullHavingMove);
+      assertEquals(UnwinnabilityFullVerdict.WINNABLE, unwinnableFullHavingMove);
     }
   }
 

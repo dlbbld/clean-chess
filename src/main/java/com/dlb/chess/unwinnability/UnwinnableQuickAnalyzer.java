@@ -9,11 +9,11 @@ import com.dlb.chess.model.LegalMove;
 
 public class UnwinnableQuickAnalyzer {
 
-  public static UnwinnableQuick unwinnableQuick(Board board, Side c) {
+  public static UnwinnabilityQuickVerdict unwinnableQuick(Board board, Side c) {
     return unwinnableQuick(board, c, false, new MobilitySolution());
   }
 
-  public static UnwinnableQuick unwinnableQuick(Board board, Side c, boolean isHasMobilitySolution,
+  public static UnwinnabilityQuickVerdict unwinnableQuick(Board board, Side c, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     final String invariant = board.getFen();
@@ -34,9 +34,9 @@ public class UnwinnableQuickAnalyzer {
           throw new ProgrammingMistakeException("Board was changed");
         }
         if (sideBeingCheckmated == c) {
-          return UnwinnableQuick.UNWINNABLE;
+          return UnwinnabilityQuickVerdict.UNWINNABLE;
         }
-        return UnwinnableQuick.WINNABLE;
+        return UnwinnabilityQuickVerdict.WINNABLE;
       }
 
       if (board.isInsufficientMaterial(c) || board.isStalemate()) {
@@ -44,7 +44,7 @@ public class UnwinnableQuickAnalyzer {
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.UNWINNABLE;
+        return UnwinnabilityQuickVerdict.UNWINNABLE;
       }
 
       isForcedMove = board.getLegalMoves().size() == 1;
@@ -71,14 +71,14 @@ public class UnwinnableQuickAnalyzer {
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.WINNABLE;
+        return UnwinnabilityQuickVerdict.WINNABLE;
       case NO:
         // 4: else if the search was not interrupted then return Unwinnable
         unperformHalfmoves(board, countHalfmoves);
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.UNWINNABLE;
+        return UnwinnabilityQuickVerdict.UNWINNABLE;
       case UNKNOWN:
         break;
       default:
@@ -102,7 +102,7 @@ public class UnwinnableQuickAnalyzer {
         if (!invariant.equals(board.getFen())) {
           throw new ProgrammingMistakeException("Board was changed");
         }
-        return UnwinnableQuick.UNWINNABLE;
+        return UnwinnabilityQuickVerdict.UNWINNABLE;
       }
     }
 
@@ -111,7 +111,7 @@ public class UnwinnableQuickAnalyzer {
     if (!invariant.equals(board.getFen())) {
       throw new ProgrammingMistakeException("Board was changed");
     }
-    return UnwinnableQuick.POSSIBLY_WINNABLE;
+    return UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE;
   }
 
   private static boolean calculateHasOnlyPawnsBishopsAndKings(StaticPosition staticPosition) {

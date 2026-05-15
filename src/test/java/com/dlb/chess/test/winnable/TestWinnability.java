@@ -16,7 +16,7 @@ import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.winnable.enums.Winnable;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 class TestWinnability {
 
@@ -69,7 +69,7 @@ class TestWinnability {
     }
   }
 
-  private static void check(UnwinnableQuick unwinnableQuickSide, Side side, Board board) {
+  private static void check(UnwinnabilityQuickVerdict unwinnableQuickSide, Side side, Board board) {
     final Winnable winnable = WinnableAnalyzer.calculateWinnable(board, side);
     switch (unwinnableQuickSide) {
       case UNWINNABLE -> assertEquals(Winnable.NO, winnable);
