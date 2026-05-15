@@ -19,8 +19,6 @@ import com.dlb.chess.test.unwinnability.oracle.PawnWallGeometricAnalyzer;
 
 class TestPawnWallUtility extends PawnWallGeometricAnalyzer {
 
-  // TODO add the pawn walls with also rooks and knight and instead pawn with or without bishops only
-
   @SuppressWarnings("static-method")
   @Test
   void testCalculateAttackingSquares() {
