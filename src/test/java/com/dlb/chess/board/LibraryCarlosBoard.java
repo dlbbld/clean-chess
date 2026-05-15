@@ -105,12 +105,13 @@ public class LibraryCarlosBoard {
     final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
-    final Square normalizedEnPassantCaptureTargetSquare = isEnPassantCapturePossible() ? getEnPassantCaptureTargetSquare()
+    final var normalizedEnPassantCaptureTargetSquare = isEnPassantCapturePossible()
+        ? getEnPassantCaptureTargetSquare()
         : Square.NONE;
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(),
         normalizedEnPassantCaptureTargetSquare, getCastlingRightWhite(), getCastlingRightBlack()));
 
-    // TODO timely dependency, must be after the above code is very very dangerous
+    // ATTENTION: timely dependency, must be after the above code is very very dangerous
     final HalfMove halfMove = buildHalfMove(moveSpecification);
     halfMoveList.add(halfMove);
   }
@@ -483,8 +484,8 @@ public class LibraryCarlosBoard {
       return false;
     }
     final Move move = NullsCarlos.getMove(moveBackup);
-    final int fromRank = move.getFrom().getRank().ordinal();
-    final int toRank = move.getTo().getRank().ordinal();
+    final var fromRank = move.getFrom().getRank().ordinal();
+    final var toRank = move.getTo().getRank().ordinal();
     return Math.abs(fromRank - toRank) == 2;
   }
 

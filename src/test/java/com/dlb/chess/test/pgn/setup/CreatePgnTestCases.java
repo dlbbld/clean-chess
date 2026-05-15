@@ -5860,7 +5860,7 @@ public class CreatePgnTestCases {
         UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
         "6k1/1p1p1p1p/1P1P1P1P/8/8/4K3/1P1P1P1P/8 w - - 0 39"));
 
-    // TODO today c code quick sees unwinnable
+    // TODO today's Ambrona website (full or quick) sees unwinnable for both sides
     list.add(
         new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_not_marched_up_with_opponent_pawns_between.pgn",
             "", "", 5, 3, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
