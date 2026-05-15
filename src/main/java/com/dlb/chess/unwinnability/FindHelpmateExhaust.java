@@ -26,7 +26,7 @@ import com.dlb.chess.moves.EnPassantCaptureUtility;
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
 //cnt = 0, and an empty table. The value of maxDepth and nodesBound can be chosen to set the
 //limits of the search. The Score routine is defined in Figure 12 (Appendix A).
-class FindHelpmateExhaust extends AbstractFindHelpmate {
+class FindHelpmateExhaust {
 
   private static final boolean IS_DEBUG = false;
 
@@ -76,7 +76,6 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     switch (findHelpmate) {
       case TRUE:
-        checkHelpmate(board.getFen(), moveEvaluationList);
         return new FindHelpmateAnalysis(FindHelpmateResult.YES, localNodeCount,
             convertLegalMoveList(moveEvaluationList));
       case FALSE:

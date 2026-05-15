@@ -1,12 +1,18 @@
 package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
+import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.PgnFileUtility;
@@ -15,6 +21,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.unwinnability.UnwinnabilityFullAnalysis;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
@@ -35,10 +42,28 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       final PgnFile pgnFileLichessGame = LenientPgnParser.parse(pgnTestLichessGame.getFolderPath(), lichessGame);
 
       final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFileLichessGame);
-      final UnwinnabilityFullVerdict unwinnableFullHavingMove = UnwinnableFullAnalyzer
-          .unwinnableFull(board, board.getHavingMove()).verdict();
+      final String fen = board.getFen();
+      final Side winner = board.getHavingMove();
+      final UnwinnabilityFullAnalysis analysis = UnwinnableFullAnalyzer.unwinnableFull(board, winner);
 
-      assertEquals(UnwinnabilityFullVerdict.WINNABLE, unwinnableFullHavingMove);
+      assertEquals(UnwinnabilityFullVerdict.WINNABLE, analysis.verdict());
+      assertHelpmateLine(fen, winner, analysis.mateLine());
+    }
+  }
+
+  private static void assertHelpmateLine(String fen, Side winner, List<UciMove> mateLine) {
+    final var board = new Board(fen);
+    advanceForcedMoves(board);
+    for (final UciMove uciMove : mateLine) {
+      board.move(UciMoveUtility.convertUciMoveToMoveSpecification(board, uciMove));
+    }
+    assertEquals(winner.getOppositeSide(), board.getHavingMove());
+    assertTrue(board.isCheckmate());
+  }
+
+  private static void advanceForcedMoves(Board board) {
+    while (board.getLegalMoves().size() == 1 && !board.isFivefoldRepetition() && !board.isSeventyFiveMove()) {
+      board.move(Nulls.getFirst(board.getLegalMoves()).moveSpecification());
     }
   }
 

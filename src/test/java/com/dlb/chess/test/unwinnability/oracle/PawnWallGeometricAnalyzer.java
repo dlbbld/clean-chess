@@ -402,20 +402,21 @@ public class PawnWallGeometricAnalyzer {
     if (!Square.calculateHasAheadSquare(side, square)) {
       throw new ProgrammingMistakeException("We are not expecting this to happen, as we only allow legal positions");
     }
-    final Square squareAhead = Square.calculateAheadSquare(side, square);
 
-    if (Rank.calculateIsPromotionRank(side, squareAhead.getRank())) {
-      // the pawn is one square before the promotion rank, there can be no other pawn,
-      // for an own pawn would have to be promoted, an opponent pawn cannot start on the opponent's first rank
-      return false;
-    }
-    if (staticPosition.isPawn(squareAhead)) {
-      // we only require a piece ahead, no matter which side
-      return true;
+    final int direction = side == Side.WHITE ? 1 : -1;
+    final int promotionRankNumber = Rank.calculatePromotionRank(side).getNumber();
+    final int fileNumber = square.getFile().getNumber();
+
+    for (var rankNumber = square.getRank().getNumber() + direction; rankNumber != promotionRankNumber;
+        rankNumber += direction) {
+      final Square squareAhead = Square.calculate(fileNumber, rankNumber);
+      if (staticPosition.isPawn(squareAhead)) {
+        // we only require a piece ahead, no matter which side
+        return true;
+      }
     }
 
-    // TODO replace unbounded recursion with primitive recursion
-    return calculateHasPawnAhead(staticPosition, squareAhead, side);
+    return false;
   }
 
   protected static boolean calculateIsAllPawnsCannotCapture(Board board) {
