@@ -6,20 +6,36 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.test.unwinnability.oracle.model.EvaluatePositions;
-import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
 
 /**
- * Test-only oracle for conclusions that follow from terminal positions, forced lines, or a bounded three-half-move
- * search. It deliberately does not use pawn-wall geometry; {@link LimitedUnwinnabilityOracle} combines this with the
- * geometric oracle.
+ * Test-only oracle that performs a bounded 1/2/3-half-move scan over <em>all</em> legal moves at the root and
+ * reports the verdict implied by any terminal status reachable inside that scan window. The scan stops at the
+ * first depth where a non-{@code UNKNOWN} verdict can be concluded.
+ *
+ * <p>
+ * This oracle deliberately does <em>not</em> walk the forced unique-move chain — that is
+ * {@link ForcedLineOracle}'s job. The two are kept separate so each can be exercised in isolation:
+ *
+ * <ul>
+ * <li>{@code ForcedLineOracle} — tested against {@code PgnTest.BASIC_FORCED}.</li>
+ * <li>{@code ShallowTerminationOracle} — tested against {@code PgnTest.CHA_SHALLOW_TERMINATION}.</li>
+ * </ul>
+ *
+ * <p>
+ * {@link LimitedUnwinnabilityOracle} composes both plus the pawn-wall analyzer.
+ *
+ * <p>
+ * The oracle is self-contained: it performs its own pre-checks for terminal-at-the-root and insufficient-material
+ * positions, so callers do not need to filter the board beforehand.
+ *
+ * <p>
+ * Note: there is no branching-factor gate on the depth-2/3 scan. Worst-case work is bounded by the legal-move
+ * count cubed, which on a 64-square board with normal material is well within test-time budgets.
  */
 public class ShallowTerminationOracle {
-
-  public static final int MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE = 10;
 
   private static final Logger logger = Nulls.getLogger(ShallowTerminationOracle.class);
 
@@ -49,18 +65,6 @@ public class ShallowTerminationOracle {
 
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityHavingMove(Board board) {
 
-    final Side sideToEvaluate = board.getHavingMove();
-
-    {
-      final GameForced forced = ShallowTerminationCalculator.evaluateForcedLine(board);
-      logger.printf(Level.DEBUG, "forced;madeTheMove: %s", forced.evaluatedPositions());
-      final LimitedUnwinnabilityVerdict verdict = calculateUnwinnabilityForced(forced, sideToEvaluate);
-
-      if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
-        return verdict;
-      }
-    }
-
     {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateFirstHalfMoveMadeTheMove(board);
       logger.printf(Level.DEBUG, "first;madeTheMove: %s", evaluatePositions.evaluatedPositions());
@@ -72,28 +76,26 @@ public class ShallowTerminationOracle {
       }
     }
 
-    if (board.getLegalMoves().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
-      {
-        final EvaluatePositions evaluatePositions = ShallowTerminationCalculator
-            .evaluateSecondHalfMoveNotMadeTheMove(board);
-        logger.printf(Level.DEBUG, "second;madeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-            .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
+    {
+      final EvaluatePositions evaluatePositions = ShallowTerminationCalculator
+          .evaluateSecondHalfMoveNotMadeTheMove(board);
+      logger.printf(Level.DEBUG, "second;madeTheMove: %s", evaluatePositions.evaluatedPositions());
+      final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
+          .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
 
-        if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
-          return verdict;
-        }
+      if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
+        return verdict;
       }
+    }
 
-      {
-        final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateThirdHalfMoveMadeTheMove(board);
-        logger.printf(Level.DEBUG, "third;madeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-            .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
+    {
+      final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateThirdHalfMoveMadeTheMove(board);
+      logger.printf(Level.DEBUG, "third;madeTheMove: %s", evaluatePositions.evaluatedPositions());
+      final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
+          .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
 
-        if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
-          return verdict;
-        }
+      if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
+        return verdict;
       }
     }
 
@@ -101,22 +103,6 @@ public class ShallowTerminationOracle {
   }
 
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityNotHavingMove(Board board) {
-
-    final Side sideToEvaluate = board.getHavingMove().getOppositeSide();
-
-    if (board.getLegalMoves().isEmpty()) {
-      throw new ProgrammingMistakeException("At this point we must have at least one legal move");
-    }
-
-    {
-      final GameForced forced = ShallowTerminationCalculator.evaluateForcedLine(board);
-      logger.printf(Level.DEBUG, "forced;notMadeTheMove: %s", forced.evaluatedPositions());
-      final LimitedUnwinnabilityVerdict verdict = calculateUnwinnabilityForced(forced, sideToEvaluate);
-
-      if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
-        return verdict;
-      }
-    }
 
     {
       final EvaluatePositions evaluatePositions = ShallowTerminationCalculator
@@ -130,56 +116,29 @@ public class ShallowTerminationOracle {
       }
     }
 
-    if (board.getLegalMoves().size() <= MAX_NUMBER_OF_HALF_MOVES_FIRST_HALF_MOVE) {
-      {
-        final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateSecondHalfMoveMadeTheMove(board);
-        logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-            .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
+    {
+      final EvaluatePositions evaluatePositions = ShallowTerminationCalculator.evaluateSecondHalfMoveMadeTheMove(board);
+      logger.printf(Level.DEBUG, "second;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
+      final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
+          .calculateUnwinnabilityMadeTheMove(evaluatePositions.gameStatus());
 
-        if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
-          return verdict;
-        }
+      if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
+        return verdict;
       }
+    }
 
-      {
-        final EvaluatePositions evaluatePositions = ShallowTerminationCalculator
-            .evaluateThirdHalfMoveNotMadeTheMove(board);
-        logger.printf(Level.DEBUG, "third;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
-        final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
-            .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
+    {
+      final EvaluatePositions evaluatePositions = ShallowTerminationCalculator
+          .evaluateThirdHalfMoveNotMadeTheMove(board);
+      logger.printf(Level.DEBUG, "third;notMadeTheMove: %s", evaluatePositions.evaluatedPositions());
+      final LimitedUnwinnabilityVerdict verdict = ShallowTerminationEvaluator
+          .calculateUnwinnabilityNotMadeTheMove(evaluatePositions.gameStatus());
 
-        if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
-          return verdict;
-        }
+      if (verdict != LimitedUnwinnabilityVerdict.UNKNOWN) {
+        return verdict;
       }
     }
 
     return LimitedUnwinnabilityVerdict.UNKNOWN;
   }
-
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForced(GameForced gameForced, Side sideToEvaluate) {
-    if (sideToEvaluate == gameForced.sideMadeLastMove()) {
-      return calculateUnwinnabilityForcedMadeLastMove(gameForced.gameStatus());
-    }
-    return calculateUnwinnabilityForcedNotMadeLastMove(gameForced.gameStatus());
-  }
-
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForcedMadeLastMove(GameStatus gameStatusFinal) {
-    return switch (gameStatusFinal) {
-      case CHECKMATE -> LimitedUnwinnabilityVerdict.WINNABLE;
-      case STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING -> LimitedUnwinnabilityVerdict.UNKNOWN;
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
-  private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForcedNotMadeLastMove(GameStatus gameStatusFinal) {
-    return switch (gameStatusFinal) {
-      case CHECKMATE, STALEMATE, INSUFFICIENT_MATERIAL_BOTH, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, ONGOING -> LimitedUnwinnabilityVerdict.UNKNOWN;
-      default -> throw new IllegalArgumentException();
-    };
-  }
-
 }

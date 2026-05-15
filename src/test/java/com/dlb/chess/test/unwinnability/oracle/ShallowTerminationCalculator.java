@@ -4,13 +4,10 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.utility.BasicChessUtility;
-import com.dlb.chess.common.utility.ListUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.unwinnability.oracle.model.EvaluatePositions;
-import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
 
 public class ShallowTerminationCalculator {
 
@@ -196,42 +193,6 @@ public class ShallowTerminationCalculator {
     }
 
     return new EvaluatePositions(gameStatusSet, countEvaluatedPositions);
-  }
-
-  static GameForced evaluateForcedLine(Board board) {
-    // we check position after series of forced moves
-    // we cannot use early returns for after evaluation we need to undo the moves
-    var countForcedHalfMoves = 0;
-    while (board.getLegalMoves().size() == 1) {
-      countForcedHalfMoves++;
-      final LegalMove legalMove = ListUtility.getOnly(board.getLegalMoves());
-      board.move(legalMove.moveSpecification());
-      final GameStatus evaluation = BasicChessUtility.calculateGameStatus(board);
-      switch (BasicChessUtility.calculateGameStatus(board)) {
-        case CHECKMATE:
-        case FIVE_FOLD_REPETITION_RULE:
-        case INSUFFICIENT_MATERIAL_BOTH:
-        case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY:
-        case INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY:
-        case SEVENTY_FIVE_MOVE_RULE:
-        case STALEMATE:
-          final Side sideMadeLastMove = board.getHavingMove().getOppositeSide();
-          for (var i = 1; i <= countForcedHalfMoves; i++) {
-            board.unmove();
-          }
-          return new GameForced(evaluation, countForcedHalfMoves, sideMadeLastMove);
-        case ONGOING:
-          break;
-        default:
-          throw new IllegalArgumentException();
-      }
-    }
-
-    final Side sideMadeLastMove = board.getHavingMove().getOppositeSide();
-    for (var i = 1; i <= countForcedHalfMoves; i++) {
-      board.unmove();
-    }
-    return new GameForced(GameStatus.ONGOING, countForcedHalfMoves, sideMadeLastMove);
   }
 
   private static boolean calculateIsEndMoveEvaluationMadeTheMove(GameStatus moveEvaluation) {
