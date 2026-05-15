@@ -84,6 +84,7 @@ public class CreatePgnTestCases {
       case CHA_LICHESS_QUICK_NOT_DEPTH_THREE -> createTestCasesChaLichessQuickNotDepthThree();
       case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE -> createTestCasesChaLichessQuickNotDepthThreeHelpmate();
       case CHA_LICHESS_QUICK_DEPTH_THREE -> createTestCasesChaLichessQuickDepthThree();
+      case CHA_LICHESS_QUICK_DEPTH_FOUR -> createTestCasesChaLichessQuickDepthFour();
       case CHA_LICHESS_NOT_QUICK -> createTestCasesChaLichessNotQuick();
       case CHA_AMBRONA -> createTestCasesChaAmbrona();
       case MAX_MOVES -> createTestCasesLongestPossible();
@@ -5608,12 +5609,6 @@ public class CreatePgnTestCases {
   private static PgnFileTestCaseList createTestCasesChaLichessQuickDepthThree() {
     final List<PgnFileTestCase> list = new ArrayList<>();
 
-    // four half-moves depth!!!
-    list.add(new PgnFileTestCase("lichess_mf4MFw9v.pgn", "", "", 23, 12, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
-        "8/8/8/8/pp6/k1p5/1qQ5/K7 w - - 2 72"));
-
     list.add(new PgnFileTestCase("lichess_pUEeHLfu.pgn", "", "", 20, 18, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnabilityQuickVerdict.WINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
@@ -5628,6 +5623,17 @@ public class CreatePgnTestCases {
         "1k6/2P5/K7/2q5/8/8/8/8 b - - 0 56"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE, list);
+  }
+
+  private static PgnFileTestCaseList createTestCasesChaLichessQuickDepthFour() {
+    final List<PgnFileTestCase> list = new ArrayList<>();
+
+    list.add(new PgnFileTestCase("lichess_mf4MFw9v.pgn", "", "", 23, 12, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        "8/8/8/8/pp6/k1p5/1qQ5/K7 w - - 2 72"));
+
+    return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_DEPTH_FOUR, list);
   }
 
   private static PgnFileTestCaseList createTestCasesChaLichessNotQuick() {
@@ -5790,7 +5796,7 @@ public class CreatePgnTestCases {
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
         "4k3/8/8/p1p1p1p1/P1PpPpPp/3P1P1P/8/4K3 b - - 0 50"));
 
-    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_2.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
+    list.add(new PgnFileTestCase("pawn_wall_without_en_passant_capture_3.pgn", "", "", -1, 0, CheckmateOrStalemate.NA,
         1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
         "4k3/8/7p/p1p2p1P/P1P1pP2/4P3/8/4K3 b - - 0 50"));

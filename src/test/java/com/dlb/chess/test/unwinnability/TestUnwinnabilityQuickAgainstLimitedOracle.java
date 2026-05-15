@@ -35,6 +35,7 @@ class TestUnwinnabilityQuickAgainstLimitedOracle {
             case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
             case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE:
             case CHA_LICHESS_QUICK_DEPTH_THREE:
+            case CHA_LICHESS_QUICK_DEPTH_FOUR:
             case CHA_LICHESS_NOT_QUICK:
             case CHA_AMBRONA:
               break;
@@ -58,12 +59,16 @@ class TestUnwinnabilityQuickAgainstLimitedOracle {
 
         logger.info(testCase.pgnFileName());
 
-        final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE);
-        final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE);
+        final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
+            Side.WHITE);
+        final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+            Side.WHITE);
         check(verdictWhite, unwinnableQuickWhite);
 
-        final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK);
-        final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK);
+        final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
+            Side.BLACK);
+        final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board,
+            Side.BLACK);
 
         check(verdictBlack, unwinnableQuickBlack);
       }

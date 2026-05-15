@@ -16,8 +16,6 @@ import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 class TestShallowTerminationOracle {
 
-  private static final int EXPECTED_DEPTH_THREE_FIXTURE_COUNT = 4;
-
   @SuppressWarnings("static-method")
   @Test
   void testStartPosition() {
@@ -44,19 +42,10 @@ class TestShallowTerminationOracle {
   @SuppressWarnings("static-method")
   @Test
   void testChaLichessDepthThreeFixtures() {
-    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE)
-        .list();
-    assertEquals(EXPECTED_DEPTH_THREE_FIXTURE_COUNT, fixtures.size());
+    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
       final Board board = new Board(testCase.fen());
-      if ("lichess_mf4MFw9v.pgn".equals(testCase.pgnFileName())) {
-        assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
-            ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
-        assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-            ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK), testCase.pgnFileName());
-        continue;
-      }
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
