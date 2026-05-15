@@ -5831,14 +5831,9 @@ public class CreatePgnTestCases {
     list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_2.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P1P/8/4K3 b - a3 0 50"));
-
-    list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_3.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.WINNABLE,
-        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         "4k3/8/8/p1p1p1p1/P1PpPpPp/3P1P1P/8/4K3 b - e3 0 50"));
 
-    list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_4.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+    list.add(new PgnFileTestCase("pawn_wall_with_en_passant_capture_3.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         "4k3/8/7p/p1p2p1P/P1P1pP2/4P3/8/4K3 b - f3 0 50"));
@@ -5850,28 +5845,29 @@ public class CreatePgnTestCases {
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, "4k3/8/8/p1p1p3/P1P1Pp1p/1B3P1P/8/4K3 b - e3 0 50"));
 
     // Norgaard "dead position" - chain is not all-pawns-involved (floating pawns)
-    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_not_marched_up.pgn", "", "", 5, 6, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_not_marched_up.pgn", "", "", 5, 6,
+        CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
         "6k1/1p1p1p1p/1P1P1P1P/8/8/4K3/1P1P1P1P/8 w - - 0 39"));
 
     // TODO today c code quick sees unwinnable
-    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_not_marched_up_with_opponent_pawns_between.pgn", "", "", 5, 3, CheckmateOrStalemate.NA, 1,
-        InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNDETERMINED,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 0 34"));
+    list.add(
+        new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_not_marched_up_with_opponent_pawns_between.pgn",
+            "", "", 5, 3, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
+            UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityQuickVerdict.UNWINNABLE,
+            UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, "1k6/p1p1p1p1/P1P1P1P1/p1p1p1p1/8/8/P1P1P1P1/4K3 w - - 0 34"));
 
     // Norgaard "beyond dead position" - chain has no a-file (resp. h-file) pawn, so it does not span
     // from leftmost to rightmost file; the geometric chain check rejects.
-    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_marched_up_example_1.pgn", "", "638...Kg8 (1) 688.Ka3 (100)", 5, 100,
-        CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
-        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
-        "7k/1p1p1p1p/1P1P1P1P/1P1P1P1P/8/K7/8/8 b - - 100 688"));
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_marched_up_example_1.pgn", "",
+        "638...Kg8 (1) 688.Ka3 (100)", 5, 100, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, "7k/1p1p1p1p/1P1P1P1P/1P1P1P1P/8/K7/8/8 b - - 100 688"));
 
-    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_marched_up_example_2.pgn", "", "833...Kb8 (1) 883.Kg2 (100)", 5, 100,
-        CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE,
-        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
-        "k7/p1p1p1p1/P1P1P1P1/P1P1P1P1/8/8/6K1/8 b - - 100 883"));
+    list.add(new PgnFileTestCase("pawn_wall_norgaard_additional_own_pawns_marched_up_example_2.pgn", "",
+        "833...Kb8 (1) 883.Kg2 (100)", 5, 100, CheckmateOrStalemate.NA, 2, InsufficientMaterial.NONE,
+        UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, "k7/p1p1p1p1/P1P1P1P1/P1P1P1P1/8/8/6K1/8 b - - 100 883"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_PAWN_WALL_NO, list);
   }

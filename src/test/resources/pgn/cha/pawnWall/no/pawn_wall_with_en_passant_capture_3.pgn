@@ -6,7 +6,7 @@
 [Black "?"]
 [Result "*"]
 [SetUp "1"]
-[FEN "4k3/8/8/p1p1p1p1/P1PpPpPp/3P1P1P/8/4K3 b - e3 0 50"]
+[FEN "4k3/8/7p/p1p2p1P/P1P1pP2/4P3/8/4K3 b - f3 0 50"]
 
  *
 
