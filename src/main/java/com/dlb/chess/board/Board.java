@@ -18,6 +18,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
+import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
@@ -303,6 +304,17 @@ public class Board {
    */
   public Board(String fen, boolean detectDeadPositionUnwinnable) {
     this(FenParserAdvanced.parseFenAdvanced(fen), detectDeadPositionUnwinnable);
+  }
+
+  /**
+   * Creates a new board whose initial position is this board's current position, without carrying over the move
+   * history. This is equivalent to constructing from the current FEN, but avoids formatting and parsing that FEN.
+   */
+  public Board copyCurrentPositionWithoutHistory(boolean detectDeadPositionUnwinnable) {
+    final Fen currentPosition = new Fen(null, getStaticPosition(), getHavingMove(), getCastlingRightWhite(),
+        getCastlingRightBlack(), getEnPassantCaptureTargetSquare(), getHalfMoveClock(),
+        getFullMoveNumberForNextHalfMove());
+    return new Board(currentPosition, detectDeadPositionUnwinnable);
   }
 
   /**
@@ -642,13 +654,18 @@ public class Board {
   }
 
   public String getFen() {
-    if (isFirstMove()) {
-      return getInitialFen().fen();
+    if (isFirstMove() && initialFen.fen() != null) {
+      return initialFen.fen();
     }
     return FenBoard.calculateFen(this);
   }
 
   public Fen getInitialFen() {
+    if (initialFen.fen() == null) {
+      return new Fen(FenBoard.calculateFen(this), initialFen.staticPosition(), initialFen.havingMove(),
+          initialFen.castlingRightWhite(), initialFen.castlingRightBlack(), initialFen.enPassantCaptureTargetSquare(),
+          initialFen.halfMoveClock(), initialFen.fullMoveNumber());
+    }
     return initialFen;
   }
 
