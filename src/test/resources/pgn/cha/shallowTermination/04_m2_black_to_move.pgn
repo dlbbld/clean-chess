@@ -1,11 +1,12 @@
 [Event "?"]
 [Site "?"]
-[Date "?"]
+[Date "????.??.??"]
 [Round "?"]
 [White "?"]
 [Black "?"]
 [Result "*"]
 [SetUp "1"]
-[FEN "rr6/8/8/8/8/6k1/7P/7K b - - 0 1"]
+[FEN "RnQ1K2k/p1P1PP2/2rP1p2/5B2/2P3R1/8/8/8 b q - 5 3"]
+[Link "https://www.chess.com/blog/ThePawnSlayer/checkmate-in-two-puzzles-test-very-hard"]
 
 *
