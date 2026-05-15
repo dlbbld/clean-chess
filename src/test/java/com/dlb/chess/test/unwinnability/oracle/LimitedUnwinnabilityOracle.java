@@ -6,7 +6,7 @@ import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict
 
 /**
  * Test-only oracle that composes three independent sub-oracles in sequence, returning the first non-{@code UNKNOWN}
- * verdict any of them reports:
+ * verdict any of them reports.
  *
  * <ol>
  * <li>{@link ForcedLineOracle} — walks the unique-legal-move chain to any depth.</li>
@@ -17,8 +17,8 @@ import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict
  *
  * <p>
  * Each sub-oracle is self-contained (does its own pre-checks) and tested in isolation. This oracle's only
- * responsibility is the composition, which is intentionally explicit at the call site rather than buried in helpers
- * so the decision pipeline is visible when reading the code.
+ * responsibility is the composition, which is intentionally explicit at the call site rather than buried in helpers so
+ * the decision pipeline is visible when reading the code.
  */
 public class LimitedUnwinnabilityOracle {
 

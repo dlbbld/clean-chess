@@ -16,14 +16,14 @@ import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 /**
- * Tests the geometric {@link PawnWallGeometricAnalyzer#calculate(Board)} verdict on the pawn-wall PGN corpus, with two independent
- * second opinions:
+ * Tests the geometric {@link PawnWallGeometricAnalyzer#calculate(Board)} verdict on the pawn-wall PGN corpus, with two
+ * independent second opinions.
  *
  * <ol>
  * <li>{@link PawnWallKingWalkOracle} — verifies the king-walk reading of the position (neither king can reach the
  * opposing king's square through any sequence of legal moves).</li>
- * <li>{@link UnwinnableQuickAnalyzer} — Ambrona's quick unwinnability check; verifies the position is unwinnable
- * for both sides.</li>
+ * <li>{@link UnwinnableQuickAnalyzer} — Ambrona's quick unwinnability check; verifies the position is unwinnable for
+ * both sides.</li>
  * </ol>
  *
  * <p>
@@ -38,16 +38,16 @@ import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
  * </ul>
  *
  * <p>
- * The {@code UnwinnableQuick} cross-check is the main soundness gate. Per the user's framing: the pawn-wall
- * detection is a geometric side product — Ambrona's analyzer is the canonical unwinnability oracle. If the
- * geometric check says YES on a position where {@code UnwinnableQuick} disagrees, the geometric check has a false
- * positive worth investigating.
+ * The {@code UnwinnableQuick} cross-check is the main soundness gate. Per the user's framing: the pawn-wall detection
+ * is a geometric side product — Ambrona's analyzer is the canonical unwinnability oracle. If the geometric check says
+ * YES on a position where {@code UnwinnableQuick} disagrees, the geometric check has a false positive worth
+ * investigating.
  *
  * <p>
  * The pawnWall corpus is split into two PGN sub-folders: {@code yes/} (geometric YES expected) and {@code no/}
  * (geometric UNKNOWN expected). Each fixture is exercised here by {@link #testYesFixtures()} or
- * {@link #testNoFixtures()}; piece-placement-only manual tests are intentionally absent because every relevant
- * position is already covered by a PGN fixture.
+ * {@link #testNoFixtures()}; piece-placement-only manual tests are intentionally absent because every relevant position
+ * is already covered by a PGN fixture.
  */
 class TestPawnWallGeometricAnalyzer {
 

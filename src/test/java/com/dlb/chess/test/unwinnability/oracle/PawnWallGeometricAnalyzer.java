@@ -81,7 +81,7 @@ public class PawnWallGeometricAnalyzer {
     return false;
   }
 
-  private static boolean allPawnsInvolvedInSpecificChain(StaticPosition position, List<Square> chain, Side side) {
+  private static boolean allPawnsInvolvedInSpecificChain(StaticPosition position, List<Square> chain) {
     final Set<Square> chainSet = new HashSet<>(chain);
     for (final Square square : Square.REAL) {
       final Piece piece = position.get(square);
@@ -499,6 +499,19 @@ public class PawnWallGeometricAnalyzer {
     return calculateHasPawnWallLine(board.getStaticPosition(), findAllPawnWallLines(board, side), side);
   }
 
+  private static boolean calculateHasPawnWallLine(StaticPosition staticPosition, List<List<Square>> resultList,
+      Side side) {
+    // we want all own pawns behind the pawn line for the one example
+    for (final List<Square> pawnWallLine : resultList) {
+      // we check to find one such line
+      if (calculateHasAllPawnsBehindLine(staticPosition, pawnWallLine, side)) {
+        return true;
+      }
+    }
+    // no such line found
+    return false;
+  }
+
   /**
    * Returns every chain of orthogonally-adjacent barrier squares spanning {@code side}'s leftmost file to the rightmost
    * file. Barrier squares are own pawns blocked by a piece ahead and squares attacked by opposing pawns. The chain
@@ -524,19 +537,6 @@ public class PawnWallGeometricAnalyzer {
       currentLine.remove(currentLine.size() - 1);
     }
     return resultList;
-  }
-
-  private static boolean calculateHasPawnWallLine(StaticPosition staticPosition, List<List<Square>> resultList,
-      Side side) {
-    // we want all own pawns behind the pawn line for the one example
-    for (final List<Square> pawnWallLine : resultList) {
-      // we check to find one such line
-      if (calculateHasAllPawnsBehindLine(staticPosition, pawnWallLine, side)) {
-        return true;
-      }
-    }
-    // no such line found
-    return false;
   }
 
   private static boolean calculateHasAllPawnsBehindLine(StaticPosition staticPosition, List<Square> pawnWallLine,
