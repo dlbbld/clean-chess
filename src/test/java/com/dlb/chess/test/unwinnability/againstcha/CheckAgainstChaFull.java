@@ -17,8 +17,9 @@ import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityFullRead;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
 import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
-import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
+import com.dlb.chess.test.unwinnability.identifier.UnwinnabilityFullVerdictIdentifier;
 import com.dlb.chess.unwinnability.UnwinnabilityFullAnalysis;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
 public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
@@ -49,7 +50,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
       if (rawResult.mode() != UnwinnabilityMode.FULL) {
         throw new IllegalArgumentException("Invalid testing line, expected full result");
       }
-      final UnwinnabilityFullVerdict unwinnableFull = UnwinnabilityFullVerdict.calculate(rawResult.result());
+      final UnwinnabilityFullVerdict unwinnableFull = UnwinnabilityFullVerdictIdentifier.calculate(rawResult.result());
       final UnwinnabilityFullRead chaFullRead = new UnwinnabilityFullRead(rawResult.fen(), rawResult.lichessGameId(),
           rawResult.winner(), unwinnableFull, rawResult.mateLine());
       resultList.add(chaFullRead);
@@ -111,7 +112,7 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
       mineOut.append(fullChaResult.lichessGameId()).append(";");
       mineOut.append(UnwinnabilityMode.FULL.getIdentifier()).append(";");
       mineOut.append(FenSideSymbol.calculate(fullChaResult.winner()).sideLetter()).append(";");
-      mineOut.append(fullMineResult.verdict().getIdentifier()).append(";");
+      mineOut.append(UnwinnabilityFullVerdictIdentifier.getIdentifier(fullMineResult.verdict())).append(";");
       final String mateLine = uciMoveSequence(fullMineResult.mateLine());
       mineOut.append(mateLine);
 
@@ -121,8 +122,8 @@ public class CheckAgainstChaFull extends AbstractCheckAgainstCha {
 
       if (fullChaResult.unwinnableFull() != fullMineResult.verdict()) {
         System.out.println("Difference found:");
-        System.out.println("CHA: " + fullChaResult.unwinnableFull().getIdentifier() + ", mine: "
-            + fullMineResult.verdict().getIdentifier());
+        System.out.println("CHA: " + UnwinnabilityFullVerdictIdentifier.getIdentifier(fullChaResult.unwinnableFull())
+            + ", mine: " + UnwinnabilityFullVerdictIdentifier.getIdentifier(fullMineResult.verdict()));
         System.out.println(mineOutStr);
       }
 
