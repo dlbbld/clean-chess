@@ -94,6 +94,7 @@ public enum PgnTest {
   CHA_AMBRONA(false, "cha/ambrona"),
   CHA_PAWN_WALL_YES(false, "cha/pawnWall/yes"),
   CHA_PAWN_WALL_NO(false, "cha/pawnWall/no"),
+  CHA_SHALLOW_TERMINATION(false, "cha/shallowTermination"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
 

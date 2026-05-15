@@ -54,6 +54,28 @@ class TestShallowTerminationOracle {
     }
   }
 
+  /**
+   * Corpus designed to exercise each of the oracle's three ply-depths independently. Each fixture is a position
+   * where the first terminal status appears at a specific depth (1, 2, or 3) for one side, plus a control where
+   * no termination is reachable within 3 plies. Both White-to-move and Black-to-move variants are included; the
+   * positions are independent (not just mirrors). See {@code createTestCasesShallowTermination} for the
+   * fixture-by-fixture rationale.
+   */
+  @SuppressWarnings("static-method")
+  @Test
+  void testShallowTerminationCorpus() {
+    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_SHALLOW_TERMINATION).list();
+
+    for (final PgnFileTestCase testCase : fixtures) {
+      final Board board = new Board(testCase.fen());
+
+      assertEquals(convert(testCase.unwinnableQuickWhite()),
+          ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
+      assertEquals(convert(testCase.unwinnableQuickBlack()),
+          ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK), testCase.pgnFileName());
+    }
+  }
+
   private static LimitedUnwinnabilityVerdict convert(UnwinnabilityQuickVerdict verdict) {
     return switch (verdict) {
       case UNWINNABLE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
