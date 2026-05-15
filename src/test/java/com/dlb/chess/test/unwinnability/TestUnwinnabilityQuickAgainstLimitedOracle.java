@@ -48,7 +48,7 @@ class TestUnwinnabilityQuickAgainstLimitedOracle {
           // here my tool sees unwinnability but not the quick analysis
           case "ambrona_10.pgn":
           case "ambrona_16.pgn":
-          case "pawn_wall_norgaard_example_2.pgn":
+          case "pawn_wall_norgaard_additional_own_pawns_not_marched_up_with_opponent_pawns_between.pgn":
             continue;
           default:
             break;
