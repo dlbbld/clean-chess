@@ -10,7 +10,7 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.google.common.collect.ImmutableSet;
 
-public class LimitedUnwinnabilityGameStateEvaluator {
+public class ShallowTerminationEvaluator {
 
   private static final ImmutableSet<GameStatus> GAME_DRAW_SET;
   private static final ImmutableSet<GameStatus> GAME_MADE_THE_MOVE_UNWINNABLE_SET;

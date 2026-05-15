@@ -12,7 +12,7 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.test.unwinnability.oracle.model.EvaluatePositions;
 import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
 
-public class LimitedUnwinnabilityGameStateCalculator {
+public class ShallowTerminationCalculator {
 
   static EvaluatePositions evaluateFirstHalfMoveMadeTheMove(Board board) {
 
