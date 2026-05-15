@@ -137,6 +137,38 @@ The geometric classifier is now intentionally narrower than full unwinnability: 
 
 The current all-pawns-involved rule is sound for the known false-positive class (floating-pawn promotion). It's possible some bishop-only mating patterns (positions where multiple same-coloured bishops force mate even though the king is trapped behind a sound wall) could still slip through — none have been observed in the corpus yet. If one surfaces, the test catches it via the `UnwinnableQuick != UNWINNABLE` disagreement.
 
+### Separate the cheap-position and full-game paths on `PgnFileTestCase`
+
+Most of the test corpus consists of fixtures where the test only consults `testCase.fen()` — the FEN field is the cache, populated when the fixture was added to `CreatePgnTestCases`. For those tests the PGN file on disk is dead weight: `new Board(testCase.fen())` builds a history-less position and skips replay entirely. A second category of tests genuinely needs the move history (repetition counts, claimable threefold, end-to-end PGN-pipeline tests); for those, `LenientPgnParser.parse(...)` + `GeneralUtility.calculateBoard(pgnFile)` replays the full game.
+
+The two paths look different at the call site today and don't advertise themselves as cheap-vs-expensive. A new test author writing a position-only test can accidentally reach for the replay path because they see other tests do it. With dead-position detection landing this release, that mistake becomes much more expensive: replay cost scales as N × (unwinnable-quick-cost-per-position) for a fixture that only needed its final position.
+
+**The fix is small and structural — no startup cache, no build-time codegen, no disk-cache invalidation.** Two changes:
+
+1. Name the two paths on `PgnFileTestCase` so the choice is intentional and visible at every call site:
+
+   ```java
+   public record PgnFileTestCase(...) {
+     /** History-free position from the FEN field. Cheap. Use for position-only tests. */
+     public Board position() { return new Board(fen()); }
+
+     /** History-bearing board from PGN replay. Expensive. Use for repetition / claimable / pipeline tests. */
+     public Board game() {
+       final PgnFile pgnFile = LenientPgnParser.parse(folder, pgnFileName);
+       return GeneralUtility.calculateBoard(pgnFile);
+     }
+   }
+   ```
+
+2. Add a small command-line scratch tool that prints a PGN's final FEN. Currently, adding a new fixture means computing the FEN by hand (or by ad-hoc tooling); a 30-line `FenFromPgn` under `src/test/java/.../tools/` makes the workflow `mvn exec:java -Dexec.args="path/to/fixture.pgn"` → paste the FEN into `CreatePgnTestCases`. Fully mechanical.
+
+**What this is NOT.** Not an in-memory startup cache (single-test runs would pay full-suite startup cost). Not a `.fen` parallel corpus (bulk file conversion has no upside given the FEN is already in source). Not build-time codegen of `PgnFileTestCase` from PGN files (the FEN being committed source IS the cache and works fine). The existing architecture already gives lazy-per-fixture behaviour; this task just names the cheap/expensive paths cleanly and removes the friction of adding new fixtures.
+
+- [ ] Add `position()` and `game()` methods on `PgnFileTestCase`
+- [ ] Sweep existing tests; replace `new Board(testCase.fen())` with `testCase.position()` and `GeneralUtility.calculateBoard(LenientPgnParser.parse(...))` with `testCase.game()` (mechanical search/replace)
+- [ ] Add the `FenFromPgn` scratch tool
+- [ ] Document the choice in `PgnFileTestCase`'s javadoc: when to use which
+
 ---
 
 ## Next release — Bitboard backend
