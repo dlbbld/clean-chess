@@ -51,8 +51,8 @@ import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
-import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.google.common.collect.ImmutableList;
 
@@ -128,15 +128,15 @@ public class Board {
   private final List<CastlingRightLoss> blackQueenSideLossList;
 
   /**
-   * Constructor flag: auto-detect {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} after every move. {@code true}
-   * is the FIDE-compliant default. {@code false} skips the expensive analyzer-driven check; mechanical
+   * Constructor flag: auto-detect {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} after every move. {@code true} is
+   * the FIDE-compliant default. {@code false} skips the expensive analyzer-driven check; mechanical
    * insufficient-material detection is unaffected.
    *
    * <p>
-   * {@code transient} so reflective equality treats boards with different detection flags as equal — the flag
-   * governs detection behaviour, not position state.
+   * {@code transient} so reflective equality treats boards with different detection flags as equal — the flag governs
+   * detection behaviour, not position state.
    */
-  private final transient boolean detectDeadPositionUnwinnable;
+  private final transient boolean isDetectDeadPositionUnwinnable;
 
   /**
    * Per-ply boolean: did the quick analyzer find both sides UNWINNABLE at this ply? Computed eagerly during
@@ -147,8 +147,8 @@ public class Board {
 
   /**
    * Constructs a {@code Board} at the position carried by the given pre-parsed {@link Fen}, with dead-position
-   * unwinnable-quick detection enabled (FIDE-compliant default — game terminates automatically when both sides reach
-   * a position the quick unwinnability analyzer classifies as unwinnable).
+   * unwinnable-quick detection enabled (FIDE-compliant default — game terminates automatically when both sides reach a
+   * position the quick unwinnability analyzer classifies as unwinnable).
    */
   public Board(Fen initialFen) {
     this(initialFen, true);
@@ -159,13 +159,13 @@ public class Board {
    * the {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} auto-detection. Pass {@code false} to skip the expensive
    * per-move analyzer-driven check; mechanical insufficient-material detection (cheap, exact) always runs regardless.
    *
-   * @param detectDeadPositionUnwinnable {@code true} for FIDE-compliant behaviour (default); {@code false} for
-   *                                     callers that have their own dead-position pipeline or for test corpora that
-   *                                     replay large numbers of games and can't afford the per-move analyzer cost
+   * @param detectDeadPositionUnwinnable {@code true} for FIDE-compliant behaviour (default); {@code false} for callers
+   *                                     that have their own dead-position pipeline or for test corpora that replay
+   *                                     large numbers of games and can't afford the per-move analyzer cost
    */
   public Board(Fen initialFen, boolean detectDeadPositionUnwinnable) {
 
-    this.detectDeadPositionUnwinnable = detectDeadPositionUnwinnable;
+    this.isDetectDeadPositionUnwinnable = detectDeadPositionUnwinnable;
     this.isDeadPositionUnwinnableQuickList = new ArrayList<>();
 
     // using the static fen in case saves a bit of memory
@@ -183,7 +183,7 @@ public class Board {
     final var initialEnPassantCaptureTargetSquare = initialFenUse.enPassantCaptureTargetSquare();
     // Normalize: keep the target square on DynamicPosition only when an opposing pawn can actually capture there.
     // The raw FEN-spec square is preserved on Board (see getEnPassantCaptureTargetSquare()) for FEN export.
-    final Square initialNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
+    final var initialNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
         initialEnPassantCaptureTargetSquare, initialHavingMove, initialStaticPosition)
             ? initialEnPassantCaptureTargetSquare
             : Square.NONE;
@@ -255,7 +255,7 @@ public class Board {
 
     // Eager initial-position dead-position-unwinnable-quick value. Must be after all other state is initialised
     // since the analyzer reads the board via the regular API.
-    this.isDeadPositionUnwinnableQuickList.add(Boolean.valueOf(computeDeadPositionUnwinnableQuick()));
+    this.isDeadPositionUnwinnableQuickList.add(computeDeadPositionUnwinnableQuick());
   }
 
   /**
@@ -287,8 +287,8 @@ public class Board {
 
   /**
    * Constructs a {@code Board} from a FEN string with explicit control of the
-   * {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} auto-detection. See
-   * {@link #Board(Fen, boolean)} for the meaning of the flag.
+   * {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} auto-detection. See {@link #Board(Fen, boolean)} for the meaning
+   * of the flag.
    */
   public Board(String fen, boolean detectDeadPositionUnwinnable) {
     this(FenParserAdvanced.parseFenAdvanced(fen), detectDeadPositionUnwinnable);
@@ -296,10 +296,10 @@ public class Board {
 
   /**
    * Creates a new board whose initial position is this board's current position, without carrying over the move
-   * history. This is equivalent to constructing from the current FEN, but avoids formatting and parsing that FEN.
+   * history. This is equivalent to constructing from the current FEN, but avoids parsing that FEN.
    */
   public Board copyCurrentPositionWithoutHistory(boolean detectDeadPositionUnwinnable) {
-    final Fen currentPosition = new Fen(null, getStaticPosition(), getHavingMove(), getCastlingRightWhite(),
+    final Fen currentPosition = new Fen(getFen(), getStaticPosition(), getHavingMove(), getCastlingRightWhite(),
         getCastlingRightBlack(), getEnPassantCaptureTargetSquare(), getHalfMoveClock(),
         getFullMoveNumberForNextHalfMove());
     return new Board(currentPosition, detectDeadPositionUnwinnable);
@@ -308,10 +308,10 @@ public class Board {
   /**
    * Constructs a {@code Board} from a FEN string via {@link LenientFenParser}. The lenient layer applies a
    * syntactic-tolerance pass (whitespace, casing, missing halfmove/fullmove counters, non-canonical castling order,
-   * non-ASCII dashes, trailing garbage) before delegating to {@link FenParserAdvanced}. Strict semantic invariants
-   * are unchanged: a FEN with a missing king, a pawn on rank 1, an impossible double-check, or castling rights that
-   * contradict the piece placement still fails. Callers who need to see the list of tolerated deviations should
-   * invoke {@link LenientFenParser#validateText(String)} directly.
+   * non-ASCII dashes, trailing garbage) before delegating to {@link FenParserAdvanced}. Strict semantic invariants are
+   * unchanged: a FEN with a missing king, a pawn on rank 1, an impossible double-check, or castling rights that
+   * contradict the piece placement still fails. Callers who need to see the list of tolerated deviations should invoke
+   * {@link LenientFenParser#validateText(String)} directly.
    *
    * @throws com.dlb.chess.fen.LenientFenParserValidationException when the input cannot be recovered or fails the
    *                                                               strict semantic checks
@@ -414,7 +414,7 @@ public class Board {
     final var afterEnPassantCaptureTargetSquare = EnPassantCaptureUtility
         .calculateEnPassantCaptureTargetSquare(moveToPerform);
     // Normalize for DynamicPosition; see initial-position construction site for the rationale.
-    final Square afterNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
+    final var afterNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
         afterEnPassantCaptureTargetSquare, afterHavingMove, afterStaticPosition) ? afterEnPassantCaptureTargetSquare
             : Square.NONE;
 
@@ -469,15 +469,14 @@ public class Board {
 
     final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck, isCheckmate);
 
-    this.sanList
-        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMovesBeforeLastHalfMove, sanTerminalMarker));
+    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMovesBeforeLastHalfMove, sanTerminalMarker));
     this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = buildHalfMove(moveSpecification);
     this.halfMoveList.add(halfMove);
 
     // Eager per-ply dead-position-unwinnable-quick value (false when detection disabled or recursion-suppressed).
-    this.isDeadPositionUnwinnableQuickList.add(Boolean.valueOf(computeDeadPositionUnwinnableQuick()));
+    this.isDeadPositionUnwinnableQuickList.add(computeDeadPositionUnwinnableQuick());
 
     return true;
 
@@ -642,18 +641,13 @@ public class Board {
   }
 
   public String getFen() {
-    if (isFirstMove() && initialFen.fen() != null) {
+    if (isFirstMove()) {
       return initialFen.fen();
     }
     return FenBoard.calculateFen(this);
   }
 
   public Fen getInitialFen() {
-    if (initialFen.fen() == null) {
-      return new Fen(FenBoard.calculateFen(this), initialFen.staticPosition(), initialFen.havingMove(),
-          initialFen.castlingRightWhite(), initialFen.castlingRightBlack(), initialFen.enPassantCaptureTargetSquare(),
-          initialFen.halfMoveClock(), initialFen.fullMoveNumber());
-    }
     return initialFen;
   }
 
@@ -984,30 +978,31 @@ public class Board {
   public DeadPositionQuick isDeadPositionQuick() {
     final UnwinnabilityQuickVerdict unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
     final UnwinnabilityQuickVerdict unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
-    if (unwinnableWhite == UnwinnabilityQuickVerdict.UNWINNABLE && unwinnableBlack == UnwinnabilityQuickVerdict.UNWINNABLE) {
+    if (unwinnableWhite == UnwinnabilityQuickVerdict.UNWINNABLE
+        && unwinnableBlack == UnwinnabilityQuickVerdict.UNWINNABLE) {
       return DeadPositionQuick.DEAD_POSITION;
     }
-    if (unwinnableWhite == UnwinnabilityQuickVerdict.WINNABLE && unwinnableBlack == UnwinnabilityQuickVerdict.WINNABLE) {
+    if (unwinnableWhite == UnwinnabilityQuickVerdict.WINNABLE
+        && unwinnableBlack == UnwinnabilityQuickVerdict.WINNABLE) {
       return DeadPositionQuick.NON_DEAD_POSITION;
     }
     return DeadPositionQuick.POSSIBLY_NON_DEAD_POSITION;
   }
 
   /**
-   * Per-ply: did the quick analyzer find both sides UNWINNABLE at the current position? Read against the eager
-   * per-ply value; returns {@code false} when detection is disabled.
+   * Per-ply: did the quick analyzer find both sides UNWINNABLE at the current position? Read against the eager per-ply
+   * value; returns {@code false} when detection is disabled.
    */
   public boolean isDeadPositionUnwinnableQuick() {
-    if (!detectDeadPositionUnwinnable) {
+    if (!isDetectDeadPositionUnwinnable) {
       return false;
     }
-    return Nulls.getLast(isDeadPositionUnwinnableQuickList).booleanValue();
+    return Nulls.getLast(isDeadPositionUnwinnableQuickList);
   }
 
   /**
-   * FIDE 5.2.2 dead position: either both sides insufficient material (cheap, exact) or both sides UNWINNABLE per
-   * the quick analyzer ({@link #isDeadPositionUnwinnableQuick}). The cheap predicate short-circuits the expensive
-   * one.
+   * FIDE 5.2.2 dead position: either both sides insufficient material (cheap, exact) or both sides UNWINNABLE per the
+   * quick analyzer ({@link #isDeadPositionUnwinnableQuick}). The cheap predicate short-circuits the expensive one.
    */
   public boolean isDeadPosition() {
     return isInsufficientMaterial() || isDeadPositionUnwinnableQuick();
@@ -1019,7 +1014,7 @@ public class Board {
    * running on its own fresh detection-off board (no recursion concern).
    */
   private boolean computeDeadPositionUnwinnableQuick() {
-    if (!detectDeadPositionUnwinnable) {
+    if (!isDetectDeadPositionUnwinnable) {
       return false;
     }
     if (UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE) != UnwinnabilityQuickVerdict.UNWINNABLE) {
@@ -1037,7 +1032,8 @@ public class Board {
     if (unwinnableBlack == UnwinnabilityFullVerdict.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    if (unwinnableWhite == UnwinnabilityFullVerdict.UNWINNABLE && unwinnableBlack == UnwinnabilityFullVerdict.UNWINNABLE) {
+    if (unwinnableWhite == UnwinnabilityFullVerdict.UNWINNABLE
+        && unwinnableBlack == UnwinnabilityFullVerdict.UNWINNABLE) {
       return DeadPositionFull.DEAD_POSITION;
     }
     return DeadPositionFull.UNDETERMINED;

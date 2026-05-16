@@ -156,9 +156,8 @@ public class Nulls {
     return checkResult(list[index]);
   }
 
-  @SuppressWarnings("null")
   public static Path pathOf(final String filePath) {
-    return Path.of(filePath); // not null by API
+    return checkResult(Path.of(filePath)); // not null by API
   }
 
   @NonNull
@@ -188,12 +187,11 @@ public class Nulls {
 
   @SuppressWarnings("null")
   public static <E, F> Set<Map.Entry<E, F>> entrySet(Map<E, F> map) {
-    return map.entrySet();
+    return checkResult(map.entrySet());
   }
 
-  @SuppressWarnings("null")
   public static <E, F> Set<E> keySet(Map<E, F> map) {
-    return map.keySet();
+    return checkResult(map.keySet());
   }
 
   public static <E extends Enum<E>> EnumSet<E> newEnumSet(Iterable<E> iterable, Class<E> elementType) {
@@ -225,28 +223,30 @@ public class Nulls {
     return checkResult(Arrays.asList(a));
   }
 
-  @SuppressWarnings("null")
   public static Path pathResolve(final Path directoryPath, final String filePath) {
-    return directoryPath.resolve(filePath);
+    return checkResult(directoryPath.resolve(filePath));
   }
 
-  @SuppressWarnings("null")
   public static Path pathRelativize(final Path directoryPath, final Path other) {
-    return directoryPath.relativize(other);
+    return checkResult(directoryPath.relativize(other));
   }
 
   public static Path getFileName(Path path) {
     return checkResult(path.getFileName());
   }
 
-  @SuppressWarnings({ "null", "unchecked" })
+  @SuppressWarnings({ "unchecked" })
   public static <E> Set<E> setOf(E... items) {
-    return Set.of(items);
+    return checkResult(Set.of(items));
   }
 
-  @SuppressWarnings({ "null", "unchecked" })
+  @SuppressWarnings({ "unchecked" })
   public static <E> List<E> listOf(E... items) {
-    return List.of(items);
+    return checkResult(List.of(items));
+  }
+
+  public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> enumClass) {
+    return checkResult(EnumSet.noneOf(enumClass));
   }
 
 }

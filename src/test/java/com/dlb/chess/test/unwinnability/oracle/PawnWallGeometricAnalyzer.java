@@ -74,7 +74,7 @@ public class PawnWallGeometricAnalyzer {
     final List<List<Square>> chains = findAllPawnWallLines(board, side);
     final StaticPosition position = board.getStaticPosition();
     for (final List<Square> chain : chains) {
-      if (allPawnsInvolvedInSpecificChain(position, chain, side)) {
+      if (allPawnsInvolvedInSpecificChain(position, chain)) {
         return true;
       }
     }

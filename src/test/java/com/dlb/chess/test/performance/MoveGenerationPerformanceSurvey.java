@@ -3,6 +3,8 @@ package com.dlb.chess.test.performance;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jdt.annotation.NonNull;
+
 import com.dlb.chess.board.Board;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.moves.AbstractLegalMoves;
@@ -26,13 +28,14 @@ public class MoveGenerationPerformanceSurvey {
 
   public static void main(String[] args) {
     for (final PgnTest pgnTest : GROUPS) {
-      final List<PositionPair> positionList = collectPositions(pgnTest);
+      @SuppressWarnings("null") final @NonNull PgnTest pgnTestNotNull = pgnTest;
+      final List<PositionPair> positionList = collectPositions(pgnTestNotNull);
       warmup(positionList);
 
       final Measurement cleanChess = measureCleanChess(positionList);
       final Measurement chessLib = measureChessLib(positionList);
 
-      printResult(pgnTest, positionList.size(), cleanChess, chessLib);
+      printResult(pgnTestNotNull, positionList.size(), cleanChess, chessLib);
     }
   }
 
@@ -73,8 +76,8 @@ public class MoveGenerationPerformanceSurvey {
   }
 
   private static Measurement measureCleanChess(List<PositionPair> positionList) {
-    long moveCount = 0;
-    final long start = System.nanoTime();
+    var moveCount = 0L;
+    final var start = System.nanoTime();
     for (var round = 0; round < MEASURE_ROUNDS; round++) {
       for (final PositionPair position : positionList) {
         final Board board = position.cleanChessBoard();
@@ -86,8 +89,8 @@ public class MoveGenerationPerformanceSurvey {
   }
 
   private static Measurement measureChessLib(List<PositionPair> positionList) {
-    long moveCount = 0;
-    final long start = System.nanoTime();
+    var moveCount = 0L;
+    final var start = System.nanoTime();
     for (var round = 0; round < MEASURE_ROUNDS; round++) {
       for (final PositionPair position : positionList) {
         moveCount += generateChessLibLegalMoves(position.chessLibBoard()).size();
@@ -96,6 +99,7 @@ public class MoveGenerationPerformanceSurvey {
     return new Measurement(System.nanoTime() - start, moveCount);
   }
 
+  @SuppressWarnings("null")
   private static List<com.github.bhlangonijr.chesslib.move.Move> generateChessLibLegalMoves(
       com.github.bhlangonijr.chesslib.Board board) {
     try {
@@ -107,9 +111,9 @@ public class MoveGenerationPerformanceSurvey {
 
   private static void printResult(PgnTest pgnTest, int positionCount, Measurement cleanChess, Measurement chessLib) {
     final double denominator = positionCount * MEASURE_ROUNDS;
-    final double cleanChessMicroseconds = cleanChess.nanoseconds() / denominator / 1000.0;
-    final double chessLibMicroseconds = chessLib.nanoseconds() / denominator / 1000.0;
-    final double ratio = cleanChessMicroseconds / chessLibMicroseconds;
+    final var cleanChessMicroseconds = cleanChess.nanoseconds() / denominator / 1000.0;
+    final var chessLibMicroseconds = chessLib.nanoseconds() / denominator / 1000.0;
+    final var ratio = cleanChessMicroseconds / chessLibMicroseconds;
 
     System.out.printf("%s%n", pgnTest);
     System.out.printf("  positions: %,d%n", positionCount);
