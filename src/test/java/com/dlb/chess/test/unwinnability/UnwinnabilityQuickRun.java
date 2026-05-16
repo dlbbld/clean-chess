@@ -13,10 +13,10 @@ public class UnwinnabilityQuickRun {
 
   public static void main(String[] args) {
 
-    final var pgnFileName = "05_helpmate2_white_to_move.pgn";
+    final var pgnName = "05_helpmate2_white_to_move.pgn";
 
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnName);
     final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
     System.out.println("White quick: " + UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE));

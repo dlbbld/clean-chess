@@ -33,16 +33,16 @@ class TestLibraryCarlosZobristBugPass {
 
     final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.MAX_MOVES);
     for (final PgnTestCase testCase : testCaseList.list()) {
-      final Path pgnFilePath = Nulls.pathResolve(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
-      logger.info(testCase.pgnFileName());
-      testPrintingPosition(pgnFilePath);
-      testWithoutPrintingPosition(pgnFilePath);
+      final Path pgnPath = Nulls.pathResolve(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
+      logger.info(testCase.pgnName());
+      testPrintingPosition(pgnPath);
+      testWithoutPrintingPosition(pgnPath);
     }
   }
 
-  private static void testPrintingPosition(Path pgnFilePath) throws Exception {
+  private static void testPrintingPosition(Path pgnPath) throws Exception {
 
-    final var pgn = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
+    final var pgn = new PgnHolder(pgnPath.toAbsolutePath().toString());
 
     pgn.loadPgn();
     final var game = Nulls.getFirst(NullsCarlos.getGames(pgn));
@@ -71,9 +71,9 @@ class TestLibraryCarlosZobristBugPass {
     assertFalse(board.isRepetition());
   }
 
-  private static void testWithoutPrintingPosition(Path pgnFilePath) throws Exception {
+  private static void testWithoutPrintingPosition(Path pgnPath) throws Exception {
 
-    final PgnHolder pgn = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
+    final PgnHolder pgn = new PgnHolder(pgnPath.toAbsolutePath().toString());
     pgn.loadPgn();
     final var game = Nulls.getFirst(NullsCarlos.getGames(pgn));
     game.loadMoveText();

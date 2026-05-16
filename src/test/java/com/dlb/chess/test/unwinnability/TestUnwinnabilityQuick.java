@@ -89,12 +89,12 @@ class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnNotListed() {
-    final var pgnFileName = "01_beyond_seventy_five.pgn";
+    final var pgnName = "01_beyond_seventy_five.pgn";
 
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnName);
     final Board board = PgnUtility.calculateBoard(pgnGame, false);
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
@@ -108,7 +108,7 @@ class TestUnwinnabilityQuick {
   void testPgnAgainstTestCase() {
     final PgnTestCase pgnTestCase = PgnTestCaseCatalog.findTestCase("25_black_capture_king_pawn.pgn");
     final Board board = pgnTestCase.finalPosition();
-    logger.info(pgnTestCase.pgnFileName());
+    logger.info(pgnTestCase.pgnName());
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         Side.WHITE);
@@ -128,7 +128,7 @@ class TestUnwinnabilityQuick {
     final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();

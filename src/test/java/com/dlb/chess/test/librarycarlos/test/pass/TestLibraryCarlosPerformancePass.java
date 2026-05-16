@@ -36,9 +36,9 @@ class TestLibraryCarlosPerformancePass {
     for (final PgnTest pgnTest : PGN_TEST_LIST) {
       final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
       for (final PgnTestCase testCase : testCaseList.list()) {
-        final String pgnFileName = testCase.pgnFileName();
-        logger.info(pgnFileName);
-        final Path filePath = Nulls.pathResolve(pgnTest.getFolderPath(), pgnFileName);
+        final String pgnName = testCase.pgnName();
+        logger.info(pgnName);
+        final Path filePath = Nulls.pathResolve(pgnTest.getFolderPath(), pgnName);
         final var pgn = new PgnHolder(filePath.toAbsolutePath().toString());
 
         final var millisecondsBeforeLoadPgn = System.currentTimeMillis();

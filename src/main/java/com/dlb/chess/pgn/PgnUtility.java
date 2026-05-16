@@ -26,8 +26,8 @@ public abstract class PgnUtility {
     return board;
   }
 
-  public static Board calculateBoard(Path folderPath, String pgnFileName, boolean detectDeadPositionUnwinnable) {
-    final PgnGame pgnGame = LenientPgnParser.parse(folderPath, pgnFileName);
+  public static Board calculateBoard(Path folderPath, String pgnName, boolean detectDeadPositionUnwinnable) {
+    final PgnGame pgnGame = LenientPgnParser.parse(folderPath, pgnName);
     return calculateBoard(pgnGame, detectDeadPositionUnwinnable);
   }
 

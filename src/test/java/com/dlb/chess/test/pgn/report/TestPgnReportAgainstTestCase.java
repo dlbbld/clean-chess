@@ -41,7 +41,7 @@ class TestPgnReportAgainstTestCase extends AbstractPgnReportTest {
         if (RestrictTestConstants.IS_RESTRICT_PGN_REPORT_TEST && processedFilesInFolder >= MAX_FILES_PER_FOLDER) {
           break;
         }
-        logger.info(testCase.pgnFileName());
+        logger.info(testCase.pgnName());
         testReportAgainstTestCase(testCaseList, testCase);
         processedFilesInFolder++;
       }

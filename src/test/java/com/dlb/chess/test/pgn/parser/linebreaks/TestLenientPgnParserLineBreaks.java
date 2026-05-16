@@ -70,12 +70,12 @@ public class TestLenientPgnParserLineBreaks {
 
   }
 
-  private static void checkFile(PgnGame pgnGameExpected, String pgnFileName) {
+  private static void checkFile(PgnGame pgnGameExpected, String pgnName) {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
     final PgnGame pgnGameActual = LenientPgnParser
-        .parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, pgnFileName);
+        .parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, pgnName);
 
     // The on-disk fixtures use a different tag order than the inline expected (ECO is placed after EventDate
     // there). The lenient parser preserves input order, so direct PgnGame equality fails. Archival

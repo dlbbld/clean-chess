@@ -55,16 +55,16 @@ class TestLegalMovesAgainstCreatedUsingValidation {
         }
       }
       for (final PgnTestCase testCase : testCaseList.list()) {
-        checkLegalMoves(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        checkLegalMoves(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
       }
     }
   }
 
-  private static void checkLegalMoves(Path folderPath, String pgnFileName) {
+  private static void checkLegalMoves(Path folderPath, String pgnName) {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
-    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnName);
 
     final Board board = new Board(pgnGame.startFen(), false);
     checkLegalMoves(board);

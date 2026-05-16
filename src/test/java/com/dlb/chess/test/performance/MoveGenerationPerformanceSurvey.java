@@ -47,7 +47,7 @@ public class MoveGenerationPerformanceSurvey {
         break;
       }
       final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(),
-          testCase.pgnFileName());
+          testCase.pgnName());
       final Board board = new Board(pgnGame.startFen(), false);
       addPosition(result, board);
       for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {

@@ -12,11 +12,11 @@ public class PgnParserUtilityLibraryCarlos {
   private PgnParserUtilityLibraryCarlos() {
   }
 
-  public static Game parse(Path pgnFolderPath, String pgnFileName) {
+  public static Game parse(Path pgnFolderPath, String pgnName) {
 
-    final Path pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
+    final Path pgnPath = Nulls.pathResolve(pgnFolderPath, pgnName);
 
-    final var pgnHolder = new PgnHolder(pgnFilePath.toAbsolutePath().toString());
+    final var pgnHolder = new PgnHolder(pgnPath.toAbsolutePath().toString());
     try {
       pgnHolder.loadPgn();
     } catch (final Exception e) {

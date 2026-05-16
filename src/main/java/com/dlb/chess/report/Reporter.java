@@ -58,8 +58,8 @@ public final class Reporter {
     printReport(board);
   }
 
-  public static void printReport(Path folderPath, String pgnFileName) {
-    final Board board = PgnUtility.calculateBoard(folderPath, pgnFileName, false);
+  public static void printReport(Path folderPath, String pgnName) {
+    final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
     printReport(board);
   }
 
@@ -81,8 +81,8 @@ public final class Reporter {
    * Returns the same human-readable report as {@link #printReport(Path, String)} but as a single string, lines joined
    * by {@code "\n"}.
    */
-  public static String calculateReportText(Path folderPath, String pgnFileName) {
-    final Board board = PgnUtility.calculateBoard(folderPath, pgnFileName, false);
+  public static String calculateReportText(Path folderPath, String pgnName) {
+    final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
     return calculateReportText(board);
   }
 
@@ -140,9 +140,9 @@ public final class Reporter {
     return output;
   }
 
-  public static Report calculateReport(Path folderPath, String pgnFileName) throws Exception {
+  public static Report calculateReport(Path folderPath, String pgnName) throws Exception {
 
-    final Board board = PgnUtility.calculateBoard(folderPath, pgnFileName, false);
+    final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
     return calculateReport(board);
   }
 

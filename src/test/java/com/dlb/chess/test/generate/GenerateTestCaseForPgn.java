@@ -12,9 +12,9 @@ public class GenerateTestCaseForPgn extends AbstractGenerateTestCaseForPgn {
     generateTestCaseForPgn(ABC_XYZ_PGN_TTT_NAME);
   }
 
-  private static void generateTestCaseForPgn(String pgnFileName) throws Exception {
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    final String testCaseValues = generate(pgnTest.getFolderPath(), pgnFileName);
+  private static void generateTestCaseForPgn(String pgnName) throws Exception {
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    final String testCaseValues = generate(pgnTest.getFolderPath(), pgnName);
     System.out.println(testCaseValues);
   }
 }

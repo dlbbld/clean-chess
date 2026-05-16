@@ -51,7 +51,7 @@ class TestShallowTerminationOracle {
     final List<PgnTestCase> fixtures = PgnTestCaseCatalog.getTestList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE).list();
 
     for (final PgnTestCase testCase : fixtures) {
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       final Board board = testCase.finalPosition();
 
@@ -75,7 +75,7 @@ class TestShallowTerminationOracle {
     final List<PgnTestCase> fixtures = PgnTestCaseCatalog.getTestList(PgnTest.CHA_SHALLOW_TERMINATION).list();
 
     for (final PgnTestCase testCase : fixtures) {
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       final Board board = testCase.finalPosition();
 

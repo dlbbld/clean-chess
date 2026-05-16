@@ -58,9 +58,9 @@ public final class MultiplePgnSplitUtility {
 
             currentFileLines.add("");
 
-            final String pgnFileName = PgnExtensionUtility.addPgnExtension(padNumber(writtenFileCounter, -1));
+            final String pgnName = PgnExtensionUtility.addPgnExtension(padNumber(writtenFileCounter, -1));
 
-            FileUtility.writeFile(outputFolderPath, pgnFileName, currentFileLines);
+            FileUtility.writeFile(outputFolderPath, pgnName, currentFileLines);
           } else {
             chess960Counter++;
           }

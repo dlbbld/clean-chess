@@ -62,7 +62,7 @@ class TestBoardUnperformMove {
 
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getParserIntegrationSmokeList()) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        logger.info(testCase.pgnFileName());
+        logger.info(testCase.pgnName());
         halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
         pgnsExercised++;
       }
@@ -81,7 +81,7 @@ class TestBoardUnperformMove {
    */
   private static int runUnperformContractTest(PgnTestCaseList testCaseList, PgnTestCase testCase) {
     final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-        testCase.pgnFileName());
+        testCase.pgnName());
 
     final Board expected = new Board(pgnGame.startFen(), false);
     final Board actual = new Board(pgnGame.startFen(), false);
@@ -94,7 +94,7 @@ class TestBoardUnperformMove {
       // Test: perform then unperform on actual; it must return to the pre-move state.
       actual.moveStrict(san);
       actual.unmove();
-      assertBoardsEqual(expected, actual, testCase.pgnFileName(), halfMoveIndex, san);
+      assertBoardsEqual(expected, actual, testCase.pgnName(), halfMoveIndex, san);
 
       // Advance both boards by the (now-unperformed) move so the next iteration starts in lockstep.
       expected.moveStrict(san);
@@ -103,10 +103,10 @@ class TestBoardUnperformMove {
     return halfMoveIndex;
   }
 
-  private static void assertBoardsEqual(Board expected, Board actual, String pgnFileName, int halfMoveIndex,
+  private static void assertBoardsEqual(Board expected, Board actual, String pgnName, int halfMoveIndex,
       String san) {
     if (!EqualsBuilder.reflectionEquals(expected, actual)) {
-      fail("Boards differ in " + pgnFileName + " after perform+unperform of halfmove " + halfMoveIndex + " (" + san
+      fail("Boards differ in " + pgnName + " after perform+unperform of halfmove " + halfMoveIndex + " (" + san
           + ")");
     }
   }

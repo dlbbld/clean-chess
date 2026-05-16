@@ -18,24 +18,24 @@ class TestBasicEnPassantCaptureWhite extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicEnPassantCaptureWhite.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_en_passant_capture_right_a6.pgn");
-    pgnFileNameList.add("02_white_en_passant_capture_right_b6.pgn");
-    pgnFileNameList.add("03_white_en_passant_capture_right_c6.pgn");
-    pgnFileNameList.add("04_white_en_passant_capture_right_d6.pgn");
-    pgnFileNameList.add("05_white_en_passant_capture_right_e6.pgn");
-    pgnFileNameList.add("06_white_en_passant_capture_right_f6.pgn");
-    pgnFileNameList.add("07_white_en_passant_capture_right_g6.pgn");
-    pgnFileNameList.add("08_white_en_passant_capture_left_b6.pgn");
-    pgnFileNameList.add("09_white_en_passant_capture_left_c6.pgn");
-    pgnFileNameList.add("10_white_en_passant_capture_left_d6.pgn");
-    pgnFileNameList.add("11_white_en_passant_capture_left_e6.pgn");
-    pgnFileNameList.add("12_white_en_passant_capture_left_f6.pgn");
-    pgnFileNameList.add("13_white_en_passant_capture_left_g6.pgn");
-    pgnFileNameList.add("14_white_en_passant_capture_left_h6.pgn");
+    pgnNameList.add("01_white_en_passant_capture_right_a6.pgn");
+    pgnNameList.add("02_white_en_passant_capture_right_b6.pgn");
+    pgnNameList.add("03_white_en_passant_capture_right_c6.pgn");
+    pgnNameList.add("04_white_en_passant_capture_right_d6.pgn");
+    pgnNameList.add("05_white_en_passant_capture_right_e6.pgn");
+    pgnNameList.add("06_white_en_passant_capture_right_f6.pgn");
+    pgnNameList.add("07_white_en_passant_capture_right_g6.pgn");
+    pgnNameList.add("08_white_en_passant_capture_left_b6.pgn");
+    pgnNameList.add("09_white_en_passant_capture_left_c6.pgn");
+    pgnNameList.add("10_white_en_passant_capture_left_d6.pgn");
+    pgnNameList.add("11_white_en_passant_capture_left_e6.pgn");
+    pgnNameList.add("12_white_en_passant_capture_left_f6.pgn");
+    pgnNameList.add("13_white_en_passant_capture_left_g6.pgn");
+    pgnNameList.add("14_white_en_passant_capture_left_h6.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_EN_PASSANT_CAPTURE_WHITE);
   }
 
   @SuppressWarnings("static-method")
@@ -45,9 +45,9 @@ class TestBasicEnPassantCaptureWhite extends AbstractTestBasic {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_white_en_passant_capture_right_a6.pgn" -> checkEnPassantCapture(WHITE, B5, A6, board);
         case "02_white_en_passant_capture_right_b6.pgn" -> checkEnPassantCapture(WHITE, C5, B6, board);
         case "03_white_en_passant_capture_right_c6.pgn" -> checkEnPassantCapture(WHITE, D5, C6, board);

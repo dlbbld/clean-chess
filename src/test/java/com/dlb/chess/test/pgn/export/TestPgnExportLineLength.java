@@ -27,11 +27,11 @@ class TestPgnExportLineLength {
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    final List<String> pgnFileNameList = calculatePgnNameList();
-    assertFalse(pgnFileNameList.isEmpty(), "The PGN export line-length test folder must contain PGN files");
+    final List<String> pgnNameList = calculatePgnNameList();
+    assertFalse(pgnNameList.isEmpty(), "The PGN export line-length test folder must contain PGN files");
 
-    for (final String pgnFileName : pgnFileNameList) {
-      checkFile(pgnFileName);
+    for (final String pgnName : pgnNameList) {
+      checkFile(pgnName);
     }
   }
 
@@ -47,13 +47,13 @@ class TestPgnExportLineLength {
     return result;
   }
 
-  private static void checkFile(String pgnFileName) {
+  private static void checkFile(String pgnName) {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
-    final List<String> fileLinesExpectedFromFileSystem = FileUtility.readFileLines(TEST_FOLDER_PATH, pgnFileName);
+    final List<String> fileLinesExpectedFromFileSystem = FileUtility.readFileLines(TEST_FOLDER_PATH, pgnName);
 
-    final PgnGame pgnGameFromFileSystem = PgnCacheForStrictPgnParserTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
+    final PgnGame pgnGameFromFileSystem = PgnCacheForStrictPgnParserTestCases.getPgn(TEST_FOLDER_PATH, pgnName);
     final List<String> fileLinesActualFromPgn = PgnCreate.createPgnLines(pgnGameFromFileSystem);
     assertEquals(fileLinesExpectedFromFileSystem, fileLinesActualFromPgn);
   }

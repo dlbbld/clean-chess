@@ -40,16 +40,16 @@ class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
         }
       }
       for (final PgnTestCase testCase : testCaseList.list()) {
-        checkFenRoundtrip(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        checkFenRoundtrip(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
       }
     }
   }
 
-  private static void checkFenRoundtrip(Path folderPath, String pgnFileName) throws Exception {
+  private static void checkFenRoundtrip(Path folderPath, String pgnName) throws Exception {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
-    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnName);
 
     final Board board = new Board(pgnGame.startFen(), false);
     for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {

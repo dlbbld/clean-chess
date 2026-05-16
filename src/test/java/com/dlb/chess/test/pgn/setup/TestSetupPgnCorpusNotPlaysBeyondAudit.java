@@ -46,16 +46,16 @@ class TestSetupPgnCorpusNotPlaysBeyondAudit {
       final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
       for (final PgnTestCase testCase : testCaseList.list()) {
         totalFiles++;
-        final String pgnFileName = testCase.pgnFileName();
+        final String pgnName = testCase.pgnName();
         try {
-          PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
+          PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnName);
         } catch (final RuntimeException e) {
           // The strict parser surfaces both move-past-termination
           // (StrictPgnParserValidationException) and FEN-rejection
           // (FenAdvancedValidationException, wrapped) cases as runtime exceptions; collect
           // both. Catching the broader RuntimeException keeps the audit robust against future
           // exception subtypes that also indicate the same "cannot replay" outcome.
-          playsBeyondFiles.add(pgnTest.name() + " / " + pgnFileName + "  —  " + e.getMessage());
+          playsBeyondFiles.add(pgnTest.name() + " / " + pgnName + "  —  " + e.getMessage());
         }
       }
     }

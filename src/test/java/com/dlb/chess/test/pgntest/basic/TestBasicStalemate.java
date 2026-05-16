@@ -24,7 +24,7 @@ class TestBasicStalemate extends AbstractTestBasic {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       assertFalse(board.isCheck());
       assertFalse(board.isCheckmate());

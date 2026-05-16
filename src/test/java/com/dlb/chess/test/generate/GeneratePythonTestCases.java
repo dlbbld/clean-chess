@@ -66,12 +66,12 @@ public class GeneratePythonTestCases implements EnumConstants {
       processPythonCodeLine("  def test_" + folderIndication + "(self):", counterList, codeLineList);
       processPythonCodeLine("    print(\"Processing module " + folderIndication + "\")", counterList, codeLineList);
       for (final PgnTestCase testCase : testCaseList.list()) {
-        logger.info("Processing game " + testCase.pgnFileName());
+        logger.info("Processing game " + testCase.pgnName());
 
-        final Report report = Reporter.calculateReport(folderPath, testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(folderPath, testCase.pgnName());
         processPythonCodeLine("", counterList, codeLineList);
-        processPythonCodeLine("    #" + testCase.pgnFileName(), counterList, codeLineList);
-        processPythonCodeLine("    print(\"  Processing game " + testCase.pgnFileName() + "\")", counterList,
+        processPythonCodeLine("    #" + testCase.pgnName(), counterList, codeLineList);
+        processPythonCodeLine("    print(\"  Processing game " + testCase.pgnName() + "\")", counterList,
             codeLineList);
         processPythonCodeLine("    board = chess.Board()", counterList, codeLineList);
 

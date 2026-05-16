@@ -40,9 +40,9 @@ class TestForcedLineOracle {
       final Board board = testCase.finalPosition();
 
       assertEquals(convert(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickWhite()),
-          ForcedLineOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
+          ForcedLineOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnName());
       assertEquals(convert(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickBlack()),
-          ForcedLineOracle.calculateUnwinnability(board, Side.BLACK), testCase.pgnFileName());
+          ForcedLineOracle.calculateUnwinnability(board, Side.BLACK), testCase.pgnName());
     }
   }
 

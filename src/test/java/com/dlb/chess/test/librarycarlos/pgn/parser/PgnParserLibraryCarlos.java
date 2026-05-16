@@ -14,9 +14,9 @@ import com.github.bhlangonijr.chesslib.move.Move;
 
 public class PgnParserLibraryCarlos {
 
-  public static PgnSan parsePgnSan(Path pgnFolderPath, String pgnFileName) {
+  public static PgnSan parsePgnSan(Path pgnFolderPath, String pgnName) {
 
-    final Game game = PgnParserUtilityLibraryCarlos.parse(pgnFolderPath, pgnFileName);
+    final Game game = PgnParserUtilityLibraryCarlos.parse(pgnFolderPath, pgnName);
 
     // we only check if the fen is set
     // the API does not check the startup value

@@ -36,8 +36,8 @@ class TestSetupPgnRegistration {
   @SuppressWarnings("static-method")
   @Test
   void everyPgnOnDiskIsRegisteredAndViceVersa() {
-    final Set<String> diskFileNames = collectPgnFileNamesOnDisk();
-    final Set<String> registeredFileNames = collectRegisteredPgnFileNames();
+    final Set<String> diskFileNames = collectPgnNamesOnDisk();
+    final Set<String> registeredFileNames = collectRegisteredPgnNames();
 
     final Set<String> onDiskNotRegistered = new TreeSet<>(diskFileNames);
     onDiskNotRegistered.removeAll(registeredFileNames);
@@ -67,7 +67,7 @@ class TestSetupPgnRegistration {
     fail(report.toString());
   }
 
-  private static Set<String> collectPgnFileNamesOnDisk() {
+  private static Set<String> collectPgnNamesOnDisk() {
     final Set<String> names = new TreeSet<>();
     for (final Path p : FileUtility.listAllFilesRecursively(PgnTestConstants.PGN_TEST_ROOT_FOLDER_PATH)) {
       if (!Nulls.toString(p).endsWith(".pgn")) {
@@ -78,12 +78,12 @@ class TestSetupPgnRegistration {
     return names;
   }
 
-  private static Set<String> collectRegisteredPgnFileNames() {
+  private static Set<String> collectRegisteredPgnNames() {
     final Set<String> names = new TreeSet<>();
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
       for (final PgnTestCase testCase : testCaseList.list()) {
-        names.add(testCase.pgnFileName());
+        names.add(testCase.pgnName());
       }
     }
     return names;

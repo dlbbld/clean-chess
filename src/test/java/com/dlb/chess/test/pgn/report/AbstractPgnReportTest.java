@@ -12,14 +12,14 @@ import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 
 public abstract class AbstractPgnReportTest {
 
-  public static void testReportAgainstTestCase(String pgnFileName, Report report) throws Exception {
-    final PgnTestCase testCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
+  public static void testReportAgainstTestCase(String pgnName, Report report) throws Exception {
+    final PgnTestCase testCase = PgnTestCaseCatalog.findTestCase(pgnName);
     testReportAgainstTestCase(testCase, report);
   }
 
   public static void testReportAgainstTestCase(PgnTestCaseList testCaseList, PgnTestCase testCase)
       throws Exception {
-    final var report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final var report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
     testReportAgainstTestCase(testCase, report);
   }
 

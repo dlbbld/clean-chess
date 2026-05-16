@@ -42,12 +42,12 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
           && processedFilesInFolder >= MAX_FILES) {
         break;
       }
-      logger.info(testCaseHavingHelpmate.pgnFileName());
+      logger.info(testCaseHavingHelpmate.pgnName());
 
       // Cheap path: the lichess game's final position is already cached on its test case's FEN field, so the PGN
       // need not be parsed and replayed just to read the end state. The helpmate-line check below builds its own
       // mini-board from the FEN.
-      final String lichessGame = calculateCorrespondingLichessGame(testCaseHavingHelpmate.pgnFileName());
+      final String lichessGame = calculateCorrespondingLichessGame(testCaseHavingHelpmate.pgnName());
       final PgnTestCase lichessTestCase = PgnTestCaseCatalog.findTestCase(lichessGame);
       final Board board = lichessTestCase.finalPosition();
       final String fen = lichessTestCase.finalFen();

@@ -34,10 +34,10 @@ public class PrintSinglePgnReport {
     Reporter.printReport(pgnString);
   }
 
-  static void printReport(String pgnFileName) throws Exception {
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    System.out.println(pgnFileName);
-    Reporter.printReport(pgnTest.getFolderPath(), pgnFileName);
+  static void printReport(String pgnName) throws Exception {
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    System.out.println(pgnName);
+    Reporter.printReport(pgnTest.getFolderPath(), pgnName);
   }
 
 }

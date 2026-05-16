@@ -111,7 +111,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
       for (final PgnTestCase testCase : testCaseList.list()) {
 
         var isJustHitGame = false;
-        if (isBefore && GAME_TO_OR_FROM_ABC_XYZ_PGN_TTT_NAME.equals(testCase.pgnFileName())) {
+        if (isBefore && GAME_TO_OR_FROM_ABC_XYZ_PGN_TTT_NAME.equals(testCase.pgnName())) {
           isBefore = false;
           isJustHitGame = true;
         }
@@ -121,13 +121,13 @@ public class GenerateScalaChessTestCases implements EnumConstants {
           continue;
         }
 
-        logger.info("Processing game " + testCase.pgnFileName());
+        logger.info("Processing game " + testCase.pgnName());
 
-        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
         processScalaChessCodeLine("", counterList, codeLineList);
-        processScalaChessCodeLine("  println(\"Declaring test case for " + testCase.pgnFileName() + "\")", counterList,
+        processScalaChessCodeLine("  println(\"Declaring test case for " + testCase.pgnName() + "\")", counterList,
             codeLineList);
-        processScalaChessCodeLine("  \"" + testCase.pgnFileName() + "\" should {", counterList, codeLineList);
+        processScalaChessCodeLine("  \"" + testCase.pgnName() + "\" should {", counterList, codeLineList);
 
         // initialize variables to use throughout the game
         processScalaChessCodeLine("    val board = new Board(false)", counterList, codeLineList);
@@ -144,7 +144,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
           if (isMadeByWhite && halfMove.fullMoveNumber() % PRINT_MOVES_INTERVAL == 0) {
             final var moveDescription = halfMove.fullMoveNumber() + "." + halfMove.san();
             processScalaChessCodeLine(
-                "    println(\"" + testCase.pgnFileName() + " - performed " + moveDescription + "\")", counterList,
+                "    println(\"" + testCase.pgnName() + " - performed " + moveDescription + "\")", counterList,
                 codeLineList);
           }
 
@@ -193,7 +193,7 @@ public class GenerateScalaChessTestCases implements EnumConstants {
   private static boolean isContinueFileLevel(boolean isGenerateForFileOnly, boolean isGameToIncludingGame,
       boolean isGameFromIncludingGame, PgnTestCase testCase, boolean isBefore, boolean isJustHitGame) {
     // code to only look at one specific game
-    if (isGenerateForFileOnly && !GENERATE_ABC_XYZ_PGN_TTT_NAME.equals(testCase.pgnFileName())) {
+    if (isGenerateForFileOnly && !GENERATE_ABC_XYZ_PGN_TTT_NAME.equals(testCase.pgnName())) {
       return true;
     }
 

@@ -35,7 +35,7 @@ class TestUnwinnabilityFullAgainstLimitedOracle {
 
   private static void test(PgnTestCase testCase) {
     final Board board = testCase.finalPosition();
-    logger.info(testCase.pgnFileName());
+    logger.info(testCase.pgnName());
 
     final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
         Side.WHITE);

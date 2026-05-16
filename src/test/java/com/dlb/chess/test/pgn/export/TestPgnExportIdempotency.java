@@ -31,12 +31,12 @@ class TestPgnExportIdempotency {
         : PgnTestCaseCatalog.getRestrictedTestListList();
     for (final PgnTestCaseList testCaseList : source) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        final String pgnFileName = testCase.pgnFileName();
+        final String pgnName = testCase.pgnName();
 
-        logger.info(pgnFileName);
+        logger.info(pgnName);
 
         final PgnGame importedPgn = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+            pgnName);
 
         final List<String> exportedLines = PgnCreate.createPgnLines(importedPgn);
         final PgnGame exportedLinesImportedPgn = LenientPgnParser.parse(exportedLines);

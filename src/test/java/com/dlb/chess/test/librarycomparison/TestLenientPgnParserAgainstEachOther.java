@@ -47,13 +47,13 @@ class TestLenientPgnParserAgainstEachOther {
           }
         }
 
-        final String pgnFileName = testCase.pgnFileName();
+        final String pgnName = testCase.pgnName();
 
-        logger.info(pgnFileName);
+        logger.info(pgnName);
 
-        final PgnSan parsedPgn = parcePgnSan(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+        final PgnSan parsedPgn = parcePgnSan(testCaseList.pgnTest().getFolderPath(), pgnName);
         final PgnSan carlosParsedPgn = PgnParserLibraryCarlos.parsePgnSan(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+            pgnName);
 
         assertEquals(parsedPgn, carlosParsedPgn);
       }
@@ -62,8 +62,8 @@ class TestLenientPgnParserAgainstEachOther {
 
   // we extract some of the most important information from the PGN reader we can test against API carlos PGN reader
   // we cannot test the full information against API carlos PGN reader
-  public static PgnSan parcePgnSan(Path pgnFolderPath, String pgnFileName) {
-    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnFolderPath, pgnFileName);
+  public static PgnSan parcePgnSan(Path pgnFolderPath, String pgnName) {
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnFolderPath, pgnName);
     final Fen startFen = pgnGame.startFen();
 
     final List<String> sanList = new ArrayList<>();

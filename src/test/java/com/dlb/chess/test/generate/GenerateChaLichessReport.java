@@ -26,14 +26,14 @@ public class GenerateChaLichessReport {
   private static void generate(PgnTestCaseList testCaseList) throws Exception {
 
     for (final PgnTestCase testCase : testCaseList.list()) {
-      final String pgnFileName = testCase.pgnFileName();
+      final String pgnName = testCase.pgnName();
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
 
       final var isPawnWallAmbrona = true;
       if (isPawnWallAmbrona) {
-        logger.info(pgnFileName + ";" + "pawn wall");
+        logger.info(pgnName + ";" + "pawn wall");
       } else {
-        final Board board = PgnUtility.calculateBoard(folderPath, pgnFileName, false);
+        final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
         final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
             Side.WHITE);
         final LimitedUnwinnabilityVerdict verdictBlack = LimitedUnwinnabilityOracle.calculateUnwinnability(board,

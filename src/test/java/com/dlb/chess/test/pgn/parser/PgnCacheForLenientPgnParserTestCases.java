@@ -14,20 +14,20 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 public class PgnCacheForLenientPgnParserTestCases {
   private static final Map<String, PgnGame> PGN_CACHE = new HashMap<>();
 
-  public static PgnGame getPgn(Path pgnFolderPath, String pgnFileName) {
-    final Path pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
+  public static PgnGame getPgn(Path pgnFolderPath, String pgnName) {
+    final Path pgnPath = Nulls.pathResolve(pgnFolderPath, pgnName);
     if (PgnTest.existsFolderPath(pgnFolderPath)) {
-      @SuppressWarnings("null") final @NonNull String key = pgnFilePath.toAbsolutePath().toString();
+      @SuppressWarnings("null") final @NonNull String key = pgnPath.toAbsolutePath().toString();
       if (PGN_CACHE.containsKey(key)) {
         @SuppressWarnings("null") final PgnGame pgnGame = PGN_CACHE.get(key);
         return pgnGame;
       }
-      final PgnGame pgnGame = LenientPgnParser.parse(pgnFolderPath, pgnFileName);
+      final PgnGame pgnGame = LenientPgnParser.parse(pgnFolderPath, pgnName);
       PGN_CACHE.put(key, pgnGame);
       return pgnGame;
     }
     // other PGN's we are not caching
-    return LenientPgnParser.parse(pgnFolderPath, pgnFileName);
+    return LenientPgnParser.parse(pgnFolderPath, pgnName);
 
   }
 }

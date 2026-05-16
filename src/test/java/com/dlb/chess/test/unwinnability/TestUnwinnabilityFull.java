@@ -49,11 +49,11 @@ class TestUnwinnabilityFull {
   @Test
   void testPgnExpected() {
     // assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_EXPECTED_TEST);
-    final var pgnFileName = "03_m2_white_to_move.pgn";
+    final var pgnName = "03_m2_white_to_move.pgn";
 
-    final PgnTestCase pgnTestCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
+    final PgnTestCase pgnTestCase = PgnTestCaseCatalog.findTestCase(pgnName);
     final Board board = pgnTestCase.finalPosition();
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .verdict();
@@ -72,7 +72,7 @@ class TestUnwinnabilityFull {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       final UnwinnabilityFullVerdict unwinnableFullNotHavingMove = UnwinnableFullAnalyzer
           .unwinnableFull(board, board.getHavingMove().getOppositeSide()).verdict();
@@ -94,7 +94,7 @@ class TestUnwinnabilityFull {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       {
         final var beforeMilliSeconds = System.currentTimeMillis();

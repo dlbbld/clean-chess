@@ -180,10 +180,10 @@ public class PgnTestCaseCatalog {
     return resultListList;
   }
 
-  public static PgnTest findPgnTest(String testPgnFileName) {
+  public static PgnTest findPgnTest(String testPgnName) {
     for (final PgnTestCaseList testCaseList : allTestCaseListList) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        if (testCase.pgnFileName().equals(testPgnFileName)) {
+        if (testCase.pgnName().equals(testPgnName)) {
           return testCaseList.pgnTest();
         }
       }
@@ -191,24 +191,24 @@ public class PgnTestCaseCatalog {
     throw new IllegalArgumentException("No such file exists");
   }
 
-  public static PgnTest findPgnTestPgnNotListed(String testPgnFileName) {
+  public static PgnTest findPgnTestPgnNotListed(String testPgnName) {
     for (final PgnTestCaseList testCaseList : allTestCaseListList) {
-      if (FileUtility.exists(testCaseList.pgnTest().getFolderPath(), testPgnFileName)) {
+      if (FileUtility.exists(testCaseList.pgnTest().getFolderPath(), testPgnName)) {
         return testCaseList.pgnTest();
       }
     }
     throw new IllegalArgumentException("No such file exists");
   }
 
-  public static PgnTestCase findTestCase(String testPgnFileName) {
+  public static PgnTestCase findTestCase(String testPgnName) {
     for (final PgnTestCaseList testCaseList : allTestCaseListList) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        if (testCase.pgnFileName().equals(testPgnFileName)) {
+        if (testCase.pgnName().equals(testPgnName)) {
           return testCase;
         }
       }
     }
-    throw new IllegalArgumentException("The file " + testPgnFileName + " does not exist");
+    throw new IllegalArgumentException("The file " + testPgnName + " does not exist");
   }
 
   public static List<PgnTestCaseList> getRestrictedTestListList() {
@@ -303,9 +303,9 @@ public class PgnTestCaseCatalog {
     final List<PgnTestCase> filtered = new ArrayList<>();
     final Set<String> found = new TreeSet<>();
     for (final PgnTestCase tc : getTestList(pgnTest).list()) {
-      if (wanted.contains(tc.pgnFileName())) {
+      if (wanted.contains(tc.pgnName())) {
         filtered.add(tc);
-        found.add(tc.pgnFileName());
+        found.add(tc.pgnName());
       }
     }
     if (found.size() != wanted.size()) {
@@ -324,8 +324,8 @@ public class PgnTestCaseCatalog {
     final Set<String> fileNames = new TreeSet<>();
     for (final PgnTestCaseList testCaseList : testCaseListList) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        final String pgnFileName = testCase.pgnFileName();
-        final var isNotContained = !fileNames.add(pgnFileName);
+        final String pgnName = testCase.pgnName();
+        final var isNotContained = !fileNames.add(pgnName);
         if (isNotContained) {
           throw new ProgrammingMistakeException("The PGN test cases files names are not unique");
         }

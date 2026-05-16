@@ -18,35 +18,35 @@ class TestBasicCaptureBlack extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicCaptureBlack.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_black_capture_rook_rook.pgn");
-    pgnFileNameList.add("02_black_capture_rook_knight.pgn");
-    pgnFileNameList.add("03_black_capture_rook_bishop.pgn");
-    pgnFileNameList.add("04_black_capture_rook_queen.pgn");
-    pgnFileNameList.add("05_black_capture_rook_pawn.pgn");
-    pgnFileNameList.add("06_black_capture_knight_rook.pgn");
-    pgnFileNameList.add("07_black_capture_knight_knight.pgn");
-    pgnFileNameList.add("08_black_capture_knight_bishop.pgn");
-    pgnFileNameList.add("09_black_capture_knight_queen.pgn");
-    pgnFileNameList.add("10_black_capture_knight_pawn.pgn");
-    pgnFileNameList.add("11_black_capture_bishop_rook.pgn");
-    pgnFileNameList.add("12_black_capture_bishop_knight.pgn");
-    pgnFileNameList.add("13_black_capture_bishop_bishop.pgn");
-    pgnFileNameList.add("14_black_capture_bishop_queen.pgn");
-    pgnFileNameList.add("15_black_capture_bishop_pawn.pgn");
-    pgnFileNameList.add("16_black_capture_queen_rook.pgn");
-    pgnFileNameList.add("17_black_capture_queen_knight.pgn");
-    pgnFileNameList.add("18_black_capture_queen_bishop.pgn");
-    pgnFileNameList.add("19_black_capture_queen_queen.pgn");
-    pgnFileNameList.add("20_black_capture_queen_pawn.pgn");
-    pgnFileNameList.add("21_black_capture_king_rook.pgn");
-    pgnFileNameList.add("22_black_capture_king_knight.pgn");
-    pgnFileNameList.add("23_black_capture_king_bishop.pgn");
-    pgnFileNameList.add("24_black_capture_king_queen.pgn");
-    pgnFileNameList.add("25_black_capture_king_pawn.pgn");
+    pgnNameList.add("01_black_capture_rook_rook.pgn");
+    pgnNameList.add("02_black_capture_rook_knight.pgn");
+    pgnNameList.add("03_black_capture_rook_bishop.pgn");
+    pgnNameList.add("04_black_capture_rook_queen.pgn");
+    pgnNameList.add("05_black_capture_rook_pawn.pgn");
+    pgnNameList.add("06_black_capture_knight_rook.pgn");
+    pgnNameList.add("07_black_capture_knight_knight.pgn");
+    pgnNameList.add("08_black_capture_knight_bishop.pgn");
+    pgnNameList.add("09_black_capture_knight_queen.pgn");
+    pgnNameList.add("10_black_capture_knight_pawn.pgn");
+    pgnNameList.add("11_black_capture_bishop_rook.pgn");
+    pgnNameList.add("12_black_capture_bishop_knight.pgn");
+    pgnNameList.add("13_black_capture_bishop_bishop.pgn");
+    pgnNameList.add("14_black_capture_bishop_queen.pgn");
+    pgnNameList.add("15_black_capture_bishop_pawn.pgn");
+    pgnNameList.add("16_black_capture_queen_rook.pgn");
+    pgnNameList.add("17_black_capture_queen_knight.pgn");
+    pgnNameList.add("18_black_capture_queen_bishop.pgn");
+    pgnNameList.add("19_black_capture_queen_queen.pgn");
+    pgnNameList.add("20_black_capture_queen_pawn.pgn");
+    pgnNameList.add("21_black_capture_king_rook.pgn");
+    pgnNameList.add("22_black_capture_king_knight.pgn");
+    pgnNameList.add("23_black_capture_king_bishop.pgn");
+    pgnNameList.add("24_black_capture_king_queen.pgn");
+    pgnNameList.add("25_black_capture_king_pawn.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_CAPTURE_BLACK);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_CAPTURE_BLACK);
   }
 
   @SuppressWarnings("static-method")
@@ -56,9 +56,9 @@ class TestBasicCaptureBlack extends AbstractTestBasic {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_black_capture_rook_rook.pgn" -> checkCapture(D6, D5, BLACK_ROOK, WHITE_ROOK, board);
         case "02_black_capture_rook_knight.pgn" -> checkCapture(A6, A7, BLACK_ROOK, WHITE_KNIGHT, board);
         case "03_black_capture_rook_bishop.pgn" -> checkCapture(A6, H6, BLACK_ROOK, WHITE_BISHOP, board);

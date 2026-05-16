@@ -51,22 +51,22 @@ public class GenerateChaTestCases implements EnumConstants {
           // if (!testList.getFolder().equals(PgnTest.BASIC_CHECKMATE)) {
           // continue;
           // }
-          logger.info("Processing game " + testCase.pgnFileName());
+          logger.info("Processing game " + testCase.pgnName());
 
-          final String pgnFileName = testCase.pgnFileName();
+          final String pgnName = testCase.pgnName();
 
-          final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+          final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnName);
 
           final Board board = new Board(pgnGame.startFen(), false);
 
           var halfMoveCounter = 0;
-          pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
+          pw.println(calculateLine(board, folderPath, pgnName, halfMoveCounter));
 
           for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
             halfMoveCounter++;
             board.moveStrict(halfMove.san());
 
-            pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
+            pw.println(calculateLine(board, folderPath, pgnName, halfMoveCounter));
 
           }
 

@@ -42,11 +42,11 @@ class TestStrictPgnParserMoveSuffixAnnotation {
         StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
   }
 
-  private static void checkMoveSuffixAnnotationException(String pgnFileName,
+  private static void checkMoveSuffixAnnotationException(String pgnName,
       StrictPgnParserValidationProblem expectedProblem) {
     var isException = false;
     try {
-      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH, pgnFileName);
+      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_EXCEPTION_FOLDER_PATH, pgnName);
     } catch (final StrictPgnParserValidationException pre) {
       assertEquals(expectedProblem, pre.getStrictPgnParserValidationProblem());
       isException = true;
@@ -66,10 +66,10 @@ class TestStrictPgnParserMoveSuffixAnnotation {
         Nulls.asList(MoveSuffixAnnotation.BLUNDER, MoveSuffixAnnotation.NONE, MoveSuffixAnnotation.GOOD_MOVE));
   }
 
-  private static void checkMoveSuffixAnnotationSuccess(String pgnFileName,
+  private static void checkMoveSuffixAnnotationSuccess(String pgnName,
       List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected) {
     final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases
-        .getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH, pgnFileName);
+        .getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH, pgnName);
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnGame.halfMoveList()));
   }
 
@@ -87,10 +87,10 @@ class TestStrictPgnParserMoveSuffixAnnotation {
     checkCombinedException("02_example.pgn", StrictPgnParserValidationProblem.MOVETEXT_MOVE_SUFFIX_ANNOTATION_INVALID);
   }
 
-  private static void checkCombinedException(String pgnFileName, StrictPgnParserValidationProblem expectedProblem) {
+  private static void checkCombinedException(String pgnName, StrictPgnParserValidationProblem expectedProblem) {
     var isException = false;
     try {
-      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH, pgnFileName);
+      PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_EXCEPTION_FOLDER_PATH, pgnName);
     } catch (final StrictPgnParserValidationException pre) {
       assertEquals(expectedProblem, pre.getStrictPgnParserValidationProblem());
       isException = true;
@@ -113,11 +113,11 @@ class TestStrictPgnParserMoveSuffixAnnotation {
         Nulls.asList("commentBlack1", "commentWhite", "commentBlack2"));
   }
 
-  private static void checkCombinedSuccess(String pgnFileName, String pregameCommentaryExpected,
+  private static void checkCombinedSuccess(String pgnName, String pregameCommentaryExpected,
       List<String> sanListExpected, List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected,
       List<String> commentaryListExpected) {
     final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
-        pgnFileName);
+        pgnName);
     assertEquals(pregameCommentaryExpected, pgnGame.pregameCommentary().value());
     assertEquals(sanListExpected, calculateSanList(pgnGame.halfMoveList()));
     assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnGame.halfMoveList()));

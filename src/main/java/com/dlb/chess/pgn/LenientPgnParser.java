@@ -56,16 +56,16 @@ public final class LenientPgnParser {
     return new LenientPgnParser(pgn).parseInternal();
   }
 
-  public static PgnGame parse(Path pgnFilePath) {
-    return parseText(PgnReader.readPgn(pgnFilePath));
+  public static PgnGame parse(Path pgnPath) {
+    return parseText(PgnReader.readPgn(pgnPath));
   }
 
-  public static PgnGame parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static PgnGame parse(Path pgnFolderPath, String pgnName) {
+    return parse(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static PgnGame parse(String pgnFilePath) {
-    return parse(Nulls.pathOf(pgnFilePath));
+  public static PgnGame parse(String pgnPath) {
+    return parse(Nulls.pathOf(pgnPath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -81,18 +81,18 @@ public final class LenientPgnParser {
     return Nulls.toString(builder);
   }
 
-  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnName) {
+    return validate(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static LenientPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(Nulls.pathOf(pgnFilePath));
+  public static LenientPgnParserValidationResult validate(String pgnPath) {
+    return validate(Nulls.pathOf(pgnPath));
   }
 
-  public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
+  public static LenientPgnParserValidationResult validate(Path pgnPath) {
     final LenientPgnParser parser;
     try {
-      parser = new LenientPgnParser(PgnReader.readPgn(pgnFilePath));
+      parser = new LenientPgnParser(PgnReader.readPgn(pgnPath));
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ForgivenItem.EMPTY_LIST,

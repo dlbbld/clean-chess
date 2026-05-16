@@ -43,15 +43,15 @@ class TestBoardAgainstEachOther {
           }
         }
 
-        final String pgnFileName = testCase.pgnFileName();
-        logger.info(pgnFileName);
+        final String pgnName = testCase.pgnName();
+        logger.info(pgnName);
 
         final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+            pgnName);
 
         if (pgnGame.startFen() != FenConstants.FEN_INITIAL) {
           // API Carlos does not generate correct SAN when starting from position
-          logger.warn("Skipping PGN as starting from non-initital position:" + pgnFileName);
+          logger.warn("Skipping PGN as starting from non-initital position:" + pgnName);
           continue;
         }
 

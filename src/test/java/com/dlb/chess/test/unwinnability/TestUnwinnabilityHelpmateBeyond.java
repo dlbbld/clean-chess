@@ -53,15 +53,15 @@ class TestUnwinnabilityHelpmateBeyond {
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
-  private static void assertVerdicts(String pgnFileName, UnwinnabilityQuickVerdict quickWhite,
+  private static void assertVerdicts(String pgnName, UnwinnabilityQuickVerdict quickWhite,
       UnwinnabilityQuickVerdict quickBlack, UnwinnabilityFullVerdict fullWhite, UnwinnabilityFullVerdict fullBlack) {
-    logger.info(pgnFileName);
-    final PgnTestCase testCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
+    logger.info(pgnName);
+    final PgnTestCase testCase = PgnTestCaseCatalog.findTestCase(pgnName);
     final Board board = testCase.finalPosition();
 
-    assertEquals(quickWhite, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE), pgnFileName);
-    assertEquals(quickBlack, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK), pgnFileName);
-    assertEquals(fullWhite, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict(), pgnFileName);
-    assertEquals(fullBlack, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).verdict(), pgnFileName);
+    assertEquals(quickWhite, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE), pgnName);
+    assertEquals(quickBlack, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK), pgnName);
+    assertEquals(fullWhite, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict(), pgnName);
+    assertEquals(fullBlack, UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).verdict(), pgnName);
   }
 }

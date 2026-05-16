@@ -45,7 +45,7 @@ class TestUnwinnabilityQuickAgainstLimitedOracle {
           }
         }
 
-        switch (testCase.pgnFileName()) {
+        switch (testCase.pgnName()) {
           // here my tool sees unwinnability but not the quick analysis
           case "ambrona_10.pgn":
           case "ambrona_16.pgn":
@@ -57,7 +57,7 @@ class TestUnwinnabilityQuickAgainstLimitedOracle {
 
         final Board board = testCase.finalPosition();
 
-        logger.info(testCase.pgnFileName());
+        logger.info(testCase.pgnName());
 
         final LimitedUnwinnabilityVerdict verdictWhite = LimitedUnwinnabilityOracle.calculateUnwinnability(board,
             Side.WHITE);

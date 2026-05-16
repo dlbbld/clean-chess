@@ -13,17 +13,17 @@ import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.san.SanValidationProblem;
 
 public abstract class AbstractTestLenientPgnParserException extends AbstractTestLenientPgnParser {
-  static void checkException(Path pgnTestFolderPath, String pgnFileName,
+  static void checkException(Path pgnTestFolderPath, String pgnName,
       LenientPgnParserValidationProblem expectedProblemParser, SanValidationProblem expectedProblemSan) {
-    checkParse(pgnTestFolderPath, pgnFileName, expectedProblemParser, expectedProblemSan);
-    checkValidate(pgnTestFolderPath, pgnFileName, expectedProblemParser, expectedProblemSan);
+    checkParse(pgnTestFolderPath, pgnName, expectedProblemParser, expectedProblemSan);
+    checkValidate(pgnTestFolderPath, pgnName, expectedProblemParser, expectedProblemSan);
   }
 
-  private static void checkParse(Path pgnTestFolderPath, String pgnFileName,
+  private static void checkParse(Path pgnTestFolderPath, String pgnName,
       LenientPgnParserValidationProblem expectedProblemParser, SanValidationProblem expectedProblemSan) {
     var isException = false;
     try {
-      LenientPgnParser.parse(pgnTestFolderPath, pgnFileName);
+      LenientPgnParser.parse(pgnTestFolderPath, pgnName);
     } catch (final LenientPgnParserValidationException e) {
       isException = true;
       assertEquals(expectedProblemParser, e.getLenientPgnParserValidationProblem());
@@ -32,9 +32,9 @@ public abstract class AbstractTestLenientPgnParserException extends AbstractTest
     assertTrue(isException);
   }
 
-  private static void checkValidate(Path pgnTestFolderPath, String pgnFileName,
+  private static void checkValidate(Path pgnTestFolderPath, String pgnName,
       LenientPgnParserValidationProblem expectedParserProblem, SanValidationProblem expectedSanProblem) {
-    final LenientPgnParserValidationResult result = LenientPgnParser.validate(pgnTestFolderPath, pgnFileName);
+    final LenientPgnParserValidationResult result = LenientPgnParser.validate(pgnTestFolderPath, pgnName);
     assertFalse(result.isValid());
     assertEquals(expectedParserProblem, result.problemParser());
     assertEquals(expectedSanProblem, result.problemSan());

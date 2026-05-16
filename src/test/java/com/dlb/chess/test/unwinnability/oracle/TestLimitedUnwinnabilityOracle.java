@@ -22,15 +22,15 @@ class TestLimitedUnwinnabilityOracle {
   @SuppressWarnings("static-method")
   @Test
   void testHelpmate() {
-    final var pgnFileName = "07_helpmate3_white_to_move.pgn";
+    final var pgnName = "07_helpmate3_white_to_move.pgn";
 
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnName);
     // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
     // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
     // itself then asserts the oracle behaviour on the resulting position.
     final Board board = PgnUtility.calculateBoard(pgnGame, false);
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
     assertEquals(LimitedUnwinnabilityVerdict.WINNABLE,
         LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
@@ -41,15 +41,15 @@ class TestLimitedUnwinnabilityOracle {
   @SuppressWarnings("static-method")
   @Test
   void testForced() {
-    final var pgnFileName = "01_forced_checkmate.pgn";
+    final var pgnName = "01_forced_checkmate.pgn";
 
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnName);
     // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
     // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
     // itself then asserts the oracle behaviour on the resulting position.
     final Board board = PgnUtility.calculateBoard(pgnGame, false);
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
     assertEquals(LimitedUnwinnabilityVerdict.WINNABLE,
         LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
@@ -60,15 +60,15 @@ class TestLimitedUnwinnabilityOracle {
   @SuppressWarnings("static-method")
   @Test
   void testPawnWall() {
-    final var pgnFileName = "pawn_wall_ambrona_real_game.pgn";
+    final var pgnName = "pawn_wall_ambrona_real_game.pgn";
 
-    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
-    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnName);
+    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnName);
     // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
     // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
     // itself then asserts the oracle behaviour on the resulting position.
     final Board board = PgnUtility.calculateBoard(pgnGame, false);
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
         LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));

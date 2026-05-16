@@ -8,7 +8,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
  * A single fixture row in the test corpus. The {@link #finalFen()} string is the cached final position of the PGN file
- * named by {@link #pgnFileName()}; populated when the fixture is added to {@code PgnTestCaseCatalog}.
+ * named by {@link #pgnName()}; populated when the fixture is added to {@code PgnTestCaseCatalog}.
  *
  * <p>
  * Two ways to materialise a board from a fixture, chosen by the test author:
@@ -25,7 +25,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * The cost difference is significant with auto-CHA on: replay pays {@code N × isUnwinnableQuick(...)} per move; a
  * position-only test that mistakenly chose {@code game(...)} scales as the number of plies in the fixture.
  */
-public record PgnTestCase(String pgnFileName, String expectedRepetition, String expectedNoProgressMoveRule,
+public record PgnTestCase(String pgnName, String expectedRepetition, String expectedNoProgressMoveRule,
     int firstCapture, int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate,
     int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial, String finalFen) {
 
@@ -49,7 +49,7 @@ public record PgnTestCase(String pgnFileName, String expectedRepetition, String 
    * or {@link com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog#findPgnTest(String)} when starting from a bare test case.
    */
   public Board game(PgnTest pgnTest) {
-    return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnFileName(), false);
+    return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnName(), false);
   }
 
 }

@@ -1001,8 +1001,8 @@ class TestLegalMovesForGames {
     generateGame(PgnTest.WIKIPEDIA_FIFTY_MOVE, "2_2_karpov_kasparov_1991.pgn");
   }
 
-  private static void generateGame(PgnTest pgnTest, String pgnFileName) {
-    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
+  private static void generateGame(PgnTest pgnTest, String pgnName) {
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnName);
     final var board = new Board(false);
     for (final PgnHalfMove move : pgnGame.halfMoveList()) {
       board.moveStrict(move.san());

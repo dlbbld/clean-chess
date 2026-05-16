@@ -14,17 +14,17 @@ import com.dlb.chess.pgn.StrictPgnParser;
 public class PgnCacheForStrictPgnParserTestCases {
   private static final Map<String, PgnGame> PGN_CACHE = new HashMap<>();
 
-  public static PgnGame getPgn(Path pgnFolderPath, String pgnFileName) {
+  public static PgnGame getPgn(Path pgnFolderPath, String pgnName) {
     // Validate the folder path
     if (!Files.isDirectory(pgnFolderPath)) {
       throw new IllegalArgumentException("Invalid folder path: " + pgnFolderPath);
     }
 
     // Construct the full path to the PGN file
-    final var pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
+    final var pgnPath = Nulls.pathResolve(pgnFolderPath, pgnName);
 
     // Convert to a canonical String for cache lookups
-    @SuppressWarnings("null") final @NonNull String key = pgnFilePath.toAbsolutePath().toString();
+    @SuppressWarnings("null") final @NonNull String key = pgnPath.toAbsolutePath().toString();
 
     // Check the cache
     if (PGN_CACHE.containsKey(key)) {
@@ -33,7 +33,7 @@ public class PgnCacheForStrictPgnParserTestCases {
     }
 
     // Not in cache; read it from disk and store
-    final PgnGame pgnGame = StrictPgnParser.parse(pgnFolderPath, pgnFileName);
+    final PgnGame pgnGame = StrictPgnParser.parse(pgnFolderPath, pgnName);
     PGN_CACHE.put(key, pgnGame);
 
     return pgnGame;

@@ -49,18 +49,18 @@ public final class StrictPgnParser {
     return new StrictPgnParser(pgn).parseInternal();
   }
 
-  public static PgnGame parse(Path pgnFilePath) {
+  public static PgnGame parse(Path pgnPath) {
     // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually
     // present.
-    return parseText(PgnReader.readPgn(pgnFilePath));
+    return parseText(PgnReader.readPgn(pgnPath));
   }
 
-  public static PgnGame parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static PgnGame parse(Path pgnFolderPath, String pgnName) {
+    return parse(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static PgnGame parse(String pgnFilePath) {
-    return parse(Nulls.pathOf(pgnFilePath));
+  public static PgnGame parse(String pgnPath) {
+    return parse(Nulls.pathOf(pgnPath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
@@ -76,17 +76,17 @@ public final class StrictPgnParser {
     return Nulls.toString(builder);
   }
 
-  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnName) {
+    return validate(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static StrictPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(Nulls.pathOf(pgnFilePath));
+  public static StrictPgnParserValidationResult validate(String pgnPath) {
+    return validate(Nulls.pathOf(pgnPath));
   }
 
-  public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
+  public static StrictPgnParserValidationResult validate(Path pgnPath) {
     try {
-      parse(pgnFilePath);
+      parse(pgnPath);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
     } catch (final StrictPgnParserValidationException e) {
       final String message = BasicUtility.getMessage(e);

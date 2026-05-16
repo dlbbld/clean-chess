@@ -25,8 +25,8 @@ class TestLenientPgnParserSanException extends AbstractTestLenientPgnParserExcep
 
   }
 
-  private static void checkException(String pgnFileName, SanValidationProblem expectedSanValidationProblem) {
-    checkException(PGN_TEST_FOLDER_PATH, pgnFileName, LenientPgnParserValidationProblem.SAN,
+  private static void checkException(String pgnName, SanValidationProblem expectedSanValidationProblem) {
+    checkException(PGN_TEST_FOLDER_PATH, pgnName, LenientPgnParserValidationProblem.SAN,
         expectedSanValidationProblem);
   }
 }

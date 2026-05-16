@@ -20,18 +20,18 @@ class TestBasicPromotionPieceWhite extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicPromotionPieceWhite.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_promotion_piece_capture_no_rook.pgn");
-    pgnFileNameList.add("02_white_promotion_piece_capture_no_knight.pgn");
-    pgnFileNameList.add("03_white_promotion_piece_capture_no_bishop.pgn");
-    pgnFileNameList.add("04_white_promotion_piece_capture_no_queen.pgn");
-    pgnFileNameList.add("05_white_promotion_piece_capture_yes_rook.pgn");
-    pgnFileNameList.add("06_white_promotion_piece_capture_yes_knight.pgn");
-    pgnFileNameList.add("07_white_promotion_piece_capture_yes_bishop.pgn");
-    pgnFileNameList.add("08_white_promotion_piece_capture_yes_queen.pgn");
+    pgnNameList.add("01_white_promotion_piece_capture_no_rook.pgn");
+    pgnNameList.add("02_white_promotion_piece_capture_no_knight.pgn");
+    pgnNameList.add("03_white_promotion_piece_capture_no_bishop.pgn");
+    pgnNameList.add("04_white_promotion_piece_capture_no_queen.pgn");
+    pgnNameList.add("05_white_promotion_piece_capture_yes_rook.pgn");
+    pgnNameList.add("06_white_promotion_piece_capture_yes_knight.pgn");
+    pgnNameList.add("07_white_promotion_piece_capture_yes_bishop.pgn");
+    pgnNameList.add("08_white_promotion_piece_capture_yes_queen.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_PROMOTION_PIECE_WHITE);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_PROMOTION_PIECE_WHITE);
   }
 
   @SuppressWarnings("static-method")
@@ -41,9 +41,9 @@ class TestBasicPromotionPieceWhite extends AbstractTestBasic {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_white_promotion_piece_capture_no_rook.pgn" -> checkPromotion(WHITE, B7, B8, Piece.NONE,
             PromotionPieceType.ROOK, board);
         case "02_white_promotion_piece_capture_no_knight.pgn" -> checkPromotion(WHITE, B7, B8, Piece.NONE,

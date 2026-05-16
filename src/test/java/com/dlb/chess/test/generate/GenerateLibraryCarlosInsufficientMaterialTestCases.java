@@ -23,12 +23,12 @@ public class GenerateLibraryCarlosInsufficientMaterialTestCases {
         PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK, PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
       for (final PgnTestCase testCase : testCaseList.list()) {
 
-        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
 
         final InsufficientMaterial insufficientMaterial = report.insufficientMaterial();
         final String fen = report.fen();
 
-        final String testCaseTitel = calculateTestCaseTitel(testCase.pgnFileName());
+        final String testCaseTitel = calculateTestCaseTitel(testCase.pgnName());
         System.out.println("//" + testCaseTitel);
         System.out.println("board.loadFromFen(\"" + fen + "\");");
 

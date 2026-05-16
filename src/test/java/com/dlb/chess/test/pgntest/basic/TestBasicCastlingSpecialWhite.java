@@ -19,20 +19,20 @@ class TestBasicCastlingSpecialWhite extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicCastlingSpecialWhite.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_castling_special_kingside_check.pgn");
-    pgnFileNameList.add("02_white_castling_special_kingside_checkmate.pgn");
-    pgnFileNameList.add("03_white_castling_special_kingside_fifty_move.pgn");
-    pgnFileNameList.add("04_white_castling_special_kingside_seventy_five_move.pgn");
-    pgnFileNameList.add("05_white_castling_special_kingside_stalemate.pgn");
-    pgnFileNameList.add("06_white_castling_special_queenside_check.pgn");
-    pgnFileNameList.add("07_white_castling_special_queenside_checkmate.pgn");
-    pgnFileNameList.add("08_white_castling_special_queenside_fifty_move.pgn");
-    pgnFileNameList.add("09_white_castling_special_queenside_seventy_five_move.pgn");
-    pgnFileNameList.add("10_white_castling_special_queenside_stalemate.pgn");
+    pgnNameList.add("01_white_castling_special_kingside_check.pgn");
+    pgnNameList.add("02_white_castling_special_kingside_checkmate.pgn");
+    pgnNameList.add("03_white_castling_special_kingside_fifty_move.pgn");
+    pgnNameList.add("04_white_castling_special_kingside_seventy_five_move.pgn");
+    pgnNameList.add("05_white_castling_special_kingside_stalemate.pgn");
+    pgnNameList.add("06_white_castling_special_queenside_check.pgn");
+    pgnNameList.add("07_white_castling_special_queenside_checkmate.pgn");
+    pgnNameList.add("08_white_castling_special_queenside_fifty_move.pgn");
+    pgnNameList.add("09_white_castling_special_queenside_seventy_five_move.pgn");
+    pgnNameList.add("10_white_castling_special_queenside_stalemate.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_CASTLING_SPECIAL_WHITE);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_CASTLING_SPECIAL_WHITE);
   }
 
   @SuppressWarnings("static-method")
@@ -42,9 +42,9 @@ class TestBasicCastlingSpecialWhite extends AbstractTestBasic {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_white_castling_special_kingside_check.pgn" -> checkCastle(WHITE, CastlingMove.KING_SIDE, board);
         case "02_white_castling_special_kingside_checkmate.pgn" -> checkCastle(WHITE, CastlingMove.KING_SIDE, board);
         case "03_white_castling_special_kingside_fifty_move.pgn" -> checkCastle(WHITE, CastlingMove.KING_SIDE, board);

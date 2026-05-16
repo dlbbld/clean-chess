@@ -31,12 +31,12 @@ class TestPgnImportAgainstExport {
         : PgnTestCaseCatalog.getRestrictedTestListList();
     for (final PgnTestCaseList testCaseList : source) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        final String pgnFileName = testCase.pgnFileName();
+        final String pgnName = testCase.pgnName();
 
-        logger.info(pgnFileName);
+        logger.info(pgnName);
 
         final PgnGame pgnGameFromFileSystem = PgnCacheForLenientPgnParserTestCases
-            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnName);
 
         final List<String> export = PgnCreate.createPgnLines(pgnGameFromFileSystem);
         final PgnGame pgnGameFromReadingExport = LenientPgnParser.parse(export);

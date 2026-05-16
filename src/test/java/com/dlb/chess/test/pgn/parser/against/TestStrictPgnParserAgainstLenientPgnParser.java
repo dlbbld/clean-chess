@@ -29,15 +29,15 @@ class TestStrictPgnParserAgainstLenientPgnParser {
     for (final PgnTestCaseList testCaseList : source) {
       for (final PgnTestCase testCase : testCaseList.list()) {
 
-        final String pgnFileName = testCase.pgnFileName();
+        final String pgnName = testCase.pgnName();
 
-        logger.info(pgnFileName);
+        logger.info(pgnName);
 
         final PgnGame pgnGameStandard = PgnCacheForLenientPgnParserTestCases
-            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnName);
 
         final PgnGame pgnGameStrict = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+            pgnName);
 
         assertEquals(pgnGameStandard, pgnGameStrict);
       }

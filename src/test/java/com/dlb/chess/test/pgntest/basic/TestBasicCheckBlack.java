@@ -18,25 +18,25 @@ class TestBasicCheckBlack extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicCheckBlack.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_black_check_rook_direct_adjacent.pgn");
-    pgnFileNameList.add("02_black_check_rook_direct_range.pgn");
-    pgnFileNameList.add("03_black_check_rook_discover.pgn");
-    pgnFileNameList.add("04_black_check_knight_direct.pgn");
-    pgnFileNameList.add("05_black_check_knight_discover_orthogonal.pgn");
-    pgnFileNameList.add("06_black_check_knight_discover_diagonal.pgn");
-    pgnFileNameList.add("07_black_check_bishop_direct_adjacent.pgn");
-    pgnFileNameList.add("08_black_check_bishop_direct_range.pgn");
-    pgnFileNameList.add("09_black_check_bishop_discover.pgn");
-    pgnFileNameList.add("10_black_check_queen_direct_orthogonal_adjacent.pgn");
-    pgnFileNameList.add("11_black_check_queen_direct_orthogonal_range.pgn");
-    pgnFileNameList.add("12_black_check_queen_direct_diagonal_adjacent.pgn");
-    pgnFileNameList.add("13_black_check_queen_direct_diagonal_range.pgn");
-    pgnFileNameList.add("14_black_check_king_discover_orthogonal.pgn");
-    pgnFileNameList.add("15_black_check_king_discover_diagonal.pgn");
+    pgnNameList.add("01_black_check_rook_direct_adjacent.pgn");
+    pgnNameList.add("02_black_check_rook_direct_range.pgn");
+    pgnNameList.add("03_black_check_rook_discover.pgn");
+    pgnNameList.add("04_black_check_knight_direct.pgn");
+    pgnNameList.add("05_black_check_knight_discover_orthogonal.pgn");
+    pgnNameList.add("06_black_check_knight_discover_diagonal.pgn");
+    pgnNameList.add("07_black_check_bishop_direct_adjacent.pgn");
+    pgnNameList.add("08_black_check_bishop_direct_range.pgn");
+    pgnNameList.add("09_black_check_bishop_discover.pgn");
+    pgnNameList.add("10_black_check_queen_direct_orthogonal_adjacent.pgn");
+    pgnNameList.add("11_black_check_queen_direct_orthogonal_range.pgn");
+    pgnNameList.add("12_black_check_queen_direct_diagonal_adjacent.pgn");
+    pgnNameList.add("13_black_check_queen_direct_diagonal_range.pgn");
+    pgnNameList.add("14_black_check_king_discover_orthogonal.pgn");
+    pgnNameList.add("15_black_check_king_discover_diagonal.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_CHECK_BLACK);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_CHECK_BLACK);
   }
 
   @SuppressWarnings("static-method")
@@ -44,10 +44,10 @@ class TestBasicCheckBlack extends AbstractTestBasic {
   void test() throws Exception {
     final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_CHECK_BLACK);
     for (final PgnTestCase testCase : testCaseList.list()) {
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
       final Board board = testCase.game(testCaseList.pgnTest());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_black_check_rook_direct_adjacent.pgn" -> checkNonCaptureCheck(C6, C4, BLACK_ROOK, board);
         case "02_black_check_rook_direct_range.pgn" -> checkNonCaptureCheck(A4, A3, BLACK_ROOK, board);
         case "03_black_check_rook_discover.pgn" -> checkNonCaptureCheck(B4, B7, BLACK_ROOK, board);

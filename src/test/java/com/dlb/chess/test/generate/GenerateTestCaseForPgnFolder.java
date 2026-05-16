@@ -34,13 +34,13 @@ public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn
       if (file == null) {
         throw new ProgrammingMistakeException("Wrong assumption about API behaviour");
       }
-      final String pgnFileName = Nulls.getName(file);
-      if (!PgnExtensionUtility.hasPgnExtension(pgnFileName)) {
+      final String pgnName = Nulls.getName(file);
+      if (!PgnExtensionUtility.hasPgnExtension(pgnName)) {
         throw new IllegalArgumentException(
             "All files in the folder must be valid PGN files and have the extension \"" + ChessConstants.PGN_EXTENSION
-                + "\". The file \"" + pgnFileName + " does not meet the extension expectation");
+                + "\". The file \"" + pgnName + " does not meet the extension expectation");
       }
-      final String testCaseValues = generate(pgnFolderPath, pgnFileName);
+      final String testCaseValues = generate(pgnFolderPath, pgnName);
       System.out.println(testCaseValues);
     }
   }

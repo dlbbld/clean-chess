@@ -56,10 +56,10 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
       final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(bucket);
       for (final PgnTestCase testCase : testCaseList.list()) {
         totalFixtures++;
-        final String pgnFileName = testCase.pgnFileName();
-        logger.info(pgnFileName);
+        final String pgnName = testCase.pgnName();
+        logger.info(pgnName);
 
-        final PgnGame pgnGame = parse.apply(bucket.getFolderPath(), pgnFileName);
+        final PgnGame pgnGame = parse.apply(bucket.getFolderPath(), pgnName);
 
         final Board board = new Board(pgnGame.startFen(), false);
         for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
@@ -68,7 +68,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
         try {
           assertEquals(testCase.finalFen(), board.getFen(),
-              () -> bucket + " / " + pgnFileName + " — final FEN mismatch (halfmove-clock or move-number drift)");
+              () -> bucket + " / " + pgnName + " — final FEN mismatch (halfmove-clock or move-number drift)");
         } catch (final AssertionError e) {
           failures.add(BasicUtility.getMessage(e));
         }

@@ -13,16 +13,16 @@ import com.dlb.chess.test.report.representation.RepetitionRepresentation;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
-  static String generate(Path pgnFolderPath, String pgnFileName) throws Exception {
+  static String generate(Path pgnFolderPath, String pgnName) throws Exception {
 
-    final Report report = Reporter.calculateReport(pgnFolderPath, pgnFileName);
+    final Report report = Reporter.calculateReport(pgnFolderPath, pgnName);
 
     final StringBuilder result = new StringBuilder();
     result.append("list.add(new ").append(PgnTestCase.class.getSimpleName()).append("(");
 
     // begin values
     result.append("\"");
-    result.append(pgnFileName);
+    result.append(pgnName);
     result.append("\"");
     result.append(", ");
 

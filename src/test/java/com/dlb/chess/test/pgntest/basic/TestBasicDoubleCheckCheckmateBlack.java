@@ -19,14 +19,14 @@ class TestBasicDoubleCheckCheckmateBlack extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicDoubleCheckCheckmateBlack.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_black_double_check_checkmate_rook.pgn");
-    pgnFileNameList.add("02_black_double_check_checkmate_knight_orthogonal.pgn");
-    pgnFileNameList.add("03_black_double_check_checkmate_knight_diagonal.pgn");
-    pgnFileNameList.add("04_black_double_check_checkmate_bishop.pgn");
+    pgnNameList.add("01_black_double_check_checkmate_rook.pgn");
+    pgnNameList.add("02_black_double_check_checkmate_knight_orthogonal.pgn");
+    pgnNameList.add("03_black_double_check_checkmate_knight_diagonal.pgn");
+    pgnNameList.add("04_black_double_check_checkmate_bishop.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_CHECKMATE_DOUBLE_CHECK_BLACK);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_CHECKMATE_DOUBLE_CHECK_BLACK);
   }
 
   @SuppressWarnings("static-method")
@@ -36,9 +36,9 @@ class TestBasicDoubleCheckCheckmateBlack extends AbstractTestBasic {
     for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_black_double_check_checkmate_rook.pgn" -> checkDoubleCheckCheckmate(Piece.BLACK_ROOK, board);
         case "02_black_double_check_checkmate_knight_orthogonal.pgn" -> checkDoubleCheckCheckmate(Piece.BLACK_KNIGHT,
             board);

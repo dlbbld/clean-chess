@@ -58,7 +58,7 @@ class TestPerformMoveSanContract {
   void testPlayedMoveSanMoveSpecRoundtrip() {
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getParserIntegrationSmokeList()) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        logger.info(testCase.pgnFileName());
+        logger.info(testCase.pgnName());
         verifyProvidedSanToCalculatedSan(testCaseList, testCase);
       }
     }
@@ -69,7 +69,7 @@ class TestPerformMoveSanContract {
   void testAllLegalMovesSanMoveSpecRoundtrip() {
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getParserIntegrationSmokeList()) {
       for (final PgnTestCase testCase : testCaseList.list()) {
-        logger.info(testCase.pgnFileName());
+        logger.info(testCase.pgnName());
         verifyCalculatedSanToCalculatedMoveSpecification(testCaseList, testCase);
       }
     }
@@ -81,7 +81,7 @@ class TestPerformMoveSanContract {
    */
   private static void verifyProvidedSanToCalculatedSan(PgnTestCaseList testCaseList, PgnTestCase testCase) {
     final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-        testCase.pgnFileName());
+        testCase.pgnName());
     final Board board = new Board(pgnGame.startFen(), false);
 
     var halfMoveIndex = 0;
@@ -97,11 +97,11 @@ class TestPerformMoveSanContract {
 
       final MoveSpecification actualStoredMoveSpecification = board.getLastMove().moveSpecification();
       assertEquals(expectedCalculatedMoveSpecification, actualStoredMoveSpecification,
-          () -> testCase.pgnFileName() + ": halfmove " + hmi + " (" + expectedProvidedSan
+          () -> testCase.pgnName() + ": halfmove " + hmi + " (" + expectedProvidedSan
               + ") — MoveSpec derived from SAN does not match the LegalMove's MoveSpec after perform");
 
       final String actualCalculatedSan = board.getSan();
-      assertEquals(expectedProvidedSan, actualCalculatedSan, () -> testCase.pgnFileName() + ": halfmove " + hmi + " ("
+      assertEquals(expectedProvidedSan, actualCalculatedSan, () -> testCase.pgnName() + ": halfmove " + hmi + " ("
           + expectedProvidedSan + ") — SAN reconstructed from LegalMove does not match the original PGN SAN");
     }
   }
@@ -113,7 +113,7 @@ class TestPerformMoveSanContract {
   private static void verifyCalculatedSanToCalculatedMoveSpecification(PgnTestCaseList testCaseList,
       PgnTestCase testCase) {
     final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-        testCase.pgnFileName());
+        testCase.pgnName());
     final Board board = new Board(pgnGame.startFen(), false);
 
     for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
