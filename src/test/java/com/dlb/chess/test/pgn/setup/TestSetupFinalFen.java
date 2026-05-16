@@ -7,7 +7,6 @@ import java.util.List;
 
 import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledIfSystemProperty;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
@@ -35,15 +34,21 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  */
 class TestSetupFinalFen {
 
+  private static final int PROGRESS_LOG_INTERVAL = 50;
+
   private static final Logger logger = Nulls.getLogger(TestSetupFinalFen.class);
 
   @SuppressWarnings("static-method")
   @Test
-  @EnabledIfSystemProperty(named = "fen.audit", matches = "true")
+  // @EnabledIfSystemProperty(named = "fen.audit", matches = "true")
   void auditCachedFenAgainstPgnReplay() {
     final List<String> mismatches = new ArrayList<>();
     final List<String> errors = new ArrayList<>();
     var totalFixtures = 0;
+    final int totalFixturesToCheck = countFixtures();
+
+    logger.info("Auditing cached final FENs for {} fixtures across {} PgnTest folders.", totalFixturesToCheck,
+        PgnTest.values().length);
 
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
@@ -57,10 +62,14 @@ class TestSetupFinalFen {
             mismatches.add(String.format("%s (%s)%n  expected: %s%n  actual:   %s", testCase.pgnFileName(), pgnTest,
                 expectedFen, actualFen));
           }
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
           // PGN missing on disk, parse error, or illegal move: surface alongside the FEN mismatches so the
           // operator gets the full picture in one pass instead of crashing on the first bad fixture.
           errors.add(String.format("%s (%s): %s", testCase.pgnFileName(), pgnTest, e.getMessage()));
+        }
+        if (totalFixtures % PROGRESS_LOG_INTERVAL == 0 || totalFixtures == totalFixturesToCheck) {
+          logger.info("Checked {}/{} final FENs; {} mismatches; {} replay errors. Current: {} ({})", totalFixtures,
+              totalFixturesToCheck, mismatches.size(), errors.size(), testCase.pgnFileName(), pgnTest);
         }
       }
     }
@@ -83,5 +92,13 @@ class TestSetupFinalFen {
       }
       fail(sb.toString());
     }
+  }
+
+  private static int countFixtures() {
+    var result = 0;
+    for (final PgnTest pgnTest : PgnTest.values()) {
+      result += CreatePgnTestCases.getTestList(pgnTest).list().size();
+    }
+    return result;
   }
 }
