@@ -218,8 +218,10 @@ class FindHelpmateExhaust {
   }
 
   private boolean calculateIsInTranspositionTableWithEnoughDepth(DynamicPosition cacheKey, int movesLeft) {
-    final Integer storedDepth = Nulls.get(transpositionMap, cacheKey);
-    return storedDepth.intValue() >= movesLeft;
+    if (!transpositionMap.containsKey(cacheKey)) {
+      return false;
+    }
+    return Nulls.get(transpositionMap, cacheKey).intValue() >= movesLeft;
   }
 
   private void store(DynamicPosition cacheKey, int movesLeft) {
