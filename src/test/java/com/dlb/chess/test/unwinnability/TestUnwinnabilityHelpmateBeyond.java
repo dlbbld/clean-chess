@@ -24,16 +24,17 @@ class TestUnwinnabilityHelpmateBeyond {
   void testFivefoldFirstGame() {
     // Quick/Full work on a fresh, history-less copy, so the helpmate hiding behind the
     // fivefold boundary is not detected — both sides come back WINNABLE.
-    assertVerdicts("01_beyond_fivefold.pgn", UnwinnabilityQuickVerdict.WINNABLE, UnwinnabilityQuickVerdict.WINNABLE,
-        UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.WINNABLE);
+    assertVerdicts("01_beyond_fivefold.pgn", UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.WINNABLE,
+        UnwinnabilityFullVerdict.WINNABLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testFivefoldSecondGame() {
     // K+R vs lone K — White can helpmate; Black has insufficient material.
-    assertVerdicts("02_beyond_fivefold.pgn", UnwinnabilityQuickVerdict.WINNABLE, UnwinnabilityQuickVerdict.UNWINNABLE,
-        UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
+    assertVerdicts("02_beyond_fivefold.pgn", UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
   @SuppressWarnings("static-method")

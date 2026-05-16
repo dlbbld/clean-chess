@@ -13,8 +13,8 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.test.report.representation.RepetitionRepresentation;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
-import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
+import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public abstract class AbstractGenerateTestCaseForPgn {

@@ -69,6 +69,22 @@ class TestUnwinnabilityQuick {
 
   @SuppressWarnings("static-method")
   @Test
+  void testMateInOneWhiteToMove() {
+    final Board board = new Board("6k1/5ppp/8/8/8/8/5PPP/R3K3 w Q - 0 1", false);
+
+    assertEquals(UnwinnabilityQuickVerdict.WINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testMateInOneBlackToMove() {
+    final Board board = new Board("1q6/8/8/P7/8/n2k4/8/3K4 b - - 0 1", false);
+
+    assertEquals(UnwinnabilityQuickVerdict.WINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
   void testPgnFileNotListed() {
     final var pgnFileName = "01_beyond_seventy_five.pgn";
 

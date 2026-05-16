@@ -13,7 +13,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn {
 
   // the folder can only contain PGN files
-  private static final Path PGN_FOLDER_PATH = PgnTest.REPETITION_QUIZ_TWO.getFolderPath();
+  private static final Path PGN_FOLDER_PATH = PgnTest.CHA_SHALLOW_TERMINATION.getFolderPath();
 
   public static void main(String[] args) throws Exception {
     generateTestCaseForFolder(PGN_FOLDER_PATH);
