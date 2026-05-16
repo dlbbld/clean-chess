@@ -13,12 +13,12 @@ import com.dlb.chess.common.exceptions.FileSystemAccessException;
  * Reads a PGN file as a UTF-8 string. Used internally by {@link StrictPgnParser} and {@link LenientPgnParser} to
  * support their {@code Path}-based parse / validate overloads. Not part of the public API.
  */
-final class PgnFileReader {
+final class PgnReader {
 
-  private PgnFileReader() {
+  private PgnReader() {
   }
 
-  static String readPgnFile(Path filePath) {
+  static String readPgn(Path filePath) {
     final var file = filePath.toFile();
     if (!file.exists()) {
       throw new FileSystemAccessException("File \"" + filePath + "\" was not found.");

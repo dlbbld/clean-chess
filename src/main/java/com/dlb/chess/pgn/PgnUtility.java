@@ -8,7 +8,7 @@ import com.dlb.chess.model.PgnHalfMove;
 public abstract class PgnUtility {
 
   /**
-   * Replays the half-moves of {@code pgnFile} on a fresh board and returns the resulting state. The {@code
+   * Replays the half-moves of {@code pgnGame} on a fresh board and returns the resulting state. The {@code
    * detectDeadPositionUnwinnable} flag is forwarded to the underlying {@link Board} constructor — set it to
    * {@code false} when the PGN is allowed to pass through a position the quick unwinnability analyzer would classify as
    * dead (for example, recorded games used as test fixtures whose final position is intentionally dead). The mechanical

@@ -79,7 +79,7 @@ public class TestPgnExportLineBreaks {
     // Archival mode: the inline source uses a different tag order than the on-disk reference fixture (canonical
     // sort order, ECO after BlackElo/EventDate). The lenient parser preserves input order; archival emission
     // sorts into canonical order, matching the reference.
-    PgnWriter.writePgnFile(pgnGame, TEST_DESTINATION_FILE_PATH, WriteMode.ARCHIVAL);
+    PgnWriter.writePgn(pgnGame, TEST_DESTINATION_FILE_PATH, WriteMode.ARCHIVAL);
 
     assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
   }

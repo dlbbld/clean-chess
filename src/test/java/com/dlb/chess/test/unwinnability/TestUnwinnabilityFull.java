@@ -47,21 +47,21 @@ class TestUnwinnabilityFull {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFileExpected() {
-    // assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST);
+  void testPgnExpected() {
+    // assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_EXPECTED_TEST);
     final var pgnFileName = "03_m2_white_to_move.pgn";
 
-    final PgnTestCase pgnFileTestCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
-    final Board board = pgnFileTestCase.finalPosition();
+    final PgnTestCase pgnTestCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
+    final Board board = pgnTestCase.finalPosition();
     logger.info(pgnFileName);
 
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .verdict();
-    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).fullWhite(), unwinnableFullWhite);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnTestCase.finalFen()).fullWhite(), unwinnableFullWhite);
 
     final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
         .verdict();
-    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).fullBlack(), unwinnableFullBlack);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnTestCase.finalFen()).fullBlack(), unwinnableFullBlack);
 
   }
 

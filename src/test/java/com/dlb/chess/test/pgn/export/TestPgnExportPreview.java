@@ -57,10 +57,10 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           e4 e5 Nf3 Nc6""";
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);
@@ -83,11 +83,11 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           [Event "Zuerich Open"]
           e4 e5 Nf3 Nc6 1-0""";
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);
@@ -110,13 +110,13 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           [Result "1/2-1/2"]
           [Date "2000.01.01"]
           [Event "Zuerich Open"]
           e4 e5 Nf3 Nc6 """;
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);
@@ -146,11 +146,11 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           [FEN "r1b2r2/pp1pk1pp/8/7q/3pP1n1/5N1P/PPQ2PP1/3R1RK1 w - - 0 17"]
           Qa4 Rb8 Qc4 Ra8 """;
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);
@@ -175,13 +175,13 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           [Black "Mickey Mouse"]
           [White "Donald Duck"]
           [FEN "r1b2r2/pp1pk1pp/8/7q/3pP1n1/5N1P/PPQ2PP1/3R1RK1 w - - 0 17"]
           1. Qa4 Rb8 2. Qc4 Ra8 """;
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);
@@ -211,12 +211,12 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           [Result "1-0"]
           [FEN "1n2kb1r/p4ppp/4q3/4p1B1/4P3/8/PPP2PPP/2KR4 b k - 0 17"]
           Qd7 Re1 Na6 Rd1 Nb8 Kb1 Be7 Kc1 """;
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);
@@ -241,13 +241,13 @@ class TestPgnExportPreview {
 
           """;
 
-      final var pgnFileImport = """
+      final var pgnImport = """
           [Date "2011.12.31"]
           [Round "13"]
           [FEN "1n2kb1r/p4ppp/4q3/4p1B1/4P3/8/PPP2PPP/2KR4 b k - 0 17"]
           1... Qd7 2. Re1 Na6 3. Rd1 Nb8 4. Kb1 Be7 5. Kc1""";
 
-      final List<String> actualLineList = convertFromTextBlock(pgnFileImport);
+      final List<String> actualLineList = convertFromTextBlock(pgnImport);
       final PgnGame pgnGame = LenientPgnParser.parse(actualLineList);
 
       final List<String> expectedLineList = PgnCreate.createPgnLines(pgnGame, WriteMode.ARCHIVAL);

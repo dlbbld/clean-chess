@@ -57,7 +57,7 @@ public final class LenientPgnParser {
   }
 
   public static PgnGame parse(Path pgnFilePath) {
-    return parseText(PgnFileReader.readPgnFile(pgnFilePath));
+    return parseText(PgnReader.readPgn(pgnFilePath));
   }
 
   public static PgnGame parse(Path pgnFolderPath, String pgnFileName) {
@@ -92,7 +92,7 @@ public final class LenientPgnParser {
   public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
     final LenientPgnParser parser;
     try {
-      parser = new LenientPgnParser(PgnFileReader.readPgnFile(pgnFilePath));
+      parser = new LenientPgnParser(PgnReader.readPgn(pgnFilePath));
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ForgivenItem.EMPTY_LIST,

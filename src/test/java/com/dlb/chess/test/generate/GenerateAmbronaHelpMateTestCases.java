@@ -122,14 +122,14 @@ public class GenerateAmbronaHelpMateTestCases {
 
       // write the file
       final String pgnFileNameCreate = calculatePgnNameCreate(pgnFileName);
-      PgnWriter.writePgnFile(board, newTagList, OUTPUT_FOLDER_PATH, pgnFileNameCreate);
+      PgnWriter.writePgn(board, newTagList, OUTPUT_FOLDER_PATH, pgnFileNameCreate);
       logger.info("Wrote " + pgnFileNameCreate);
     }
   }
 
   private static String calculatePgnNameCreate(String pgnFileName) {
-    final String pgnFileNameWithoutExtension = PgnExtensionUtility.removePgnFileExtension(pgnFileName);
-    return PgnExtensionUtility.addPgnFileExtension(pgnFileNameWithoutExtension + "_helpmate");
+    final String pgnFileNameWithoutExtension = PgnExtensionUtility.removePgnExtension(pgnFileName);
+    return PgnExtensionUtility.addPgnExtension(pgnFileNameWithoutExtension + "_helpmate");
   }
 
   // we print out the below and add it to the map below manually, so we can use it in the code

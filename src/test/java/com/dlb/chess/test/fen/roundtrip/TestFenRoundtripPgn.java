@@ -23,7 +23,7 @@ class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFiles() throws Exception {
+  void testPgnSample() throws Exception {
 
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_FEN_PARSER_ALL_TEST) {

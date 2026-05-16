@@ -88,7 +88,7 @@ class TestUnwinnabilityQuick {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFileNotListed() {
+  void testPgnNotListed() {
     final var pgnFileName = "01_beyond_seventy_five.pgn";
 
     final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
@@ -105,18 +105,18 @@ class TestUnwinnabilityQuick {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFileAgainstTestCase() {
-    final PgnTestCase pgnFileTestCase = PgnTestCaseCatalog.findTestCase("25_black_capture_king_pawn.pgn");
-    final Board board = pgnFileTestCase.finalPosition();
-    logger.info(pgnFileTestCase.pgnFileName());
+  void testPgnAgainstTestCase() {
+    final PgnTestCase pgnTestCase = PgnTestCaseCatalog.findTestCase("25_black_capture_king_pawn.pgn");
+    final Board board = pgnTestCase.finalPosition();
+    logger.info(pgnTestCase.pgnFileName());
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         Side.WHITE);
-    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).quickWhite(), unwinnableQuickResultWhite);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnTestCase.finalFen()).quickWhite(), unwinnableQuickResultWhite);
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         Side.BLACK);
-    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).quickBlack(), unwinnableQuickResultBlack);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnTestCase.finalFen()).quickBlack(), unwinnableQuickResultBlack);
 
   }
 

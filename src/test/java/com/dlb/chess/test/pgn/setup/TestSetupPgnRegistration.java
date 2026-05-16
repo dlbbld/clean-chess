@@ -31,11 +31,11 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * {@code PgnExpectedValue.checkUniqueFileNames}, which lets a single set of file names stand in for the registry
  * without losing information.
  */
-class TestSetupPgnFileRegistration {
+class TestSetupPgnRegistration {
 
   @SuppressWarnings("static-method")
   @Test
-  void everyPgnFileOnDiskIsRegisteredAndViceVersa() {
+  void everyPgnOnDiskIsRegisteredAndViceVersa() {
     final Set<String> diskFileNames = collectPgnFileNamesOnDisk();
     final Set<String> registeredFileNames = collectRegisteredPgnFileNames();
 

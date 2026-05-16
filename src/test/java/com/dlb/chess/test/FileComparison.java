@@ -15,13 +15,13 @@ public class FileComparison {
 
   // problem PGN files in Eclipse suddenly have windows line breaks instead of unix line breaks
   @SuppressWarnings("null")
-  public static boolean checkWithLineEndingsConversion(Path pgnFileExpectedPath, Path pgnFileActualPath) {
-    logger.info("Testing " + pgnFileExpectedPath + " against " + pgnFileActualPath);
+  public static boolean checkWithLineEndingsConversion(Path pgnExpectedPath, Path pgnActualPath) {
+    logger.info("Testing " + pgnExpectedPath + " against " + pgnActualPath);
 
     try {
-      final var expectedAsIs = Files.readString(pgnFileExpectedPath, Charset.forName("UTF-8"));
+      final var expectedAsIs = Files.readString(pgnExpectedPath, Charset.forName("UTF-8"));
       final String expectedConverted = convertWindowsToUnixLineEndings(expectedAsIs);
-      final var actualAsIs = Files.readString(pgnFileActualPath, Charset.forName("UTF-8"));
+      final var actualAsIs = Files.readString(pgnActualPath, Charset.forName("UTF-8"));
       return expectedConverted.equals(actualAsIs);
     } catch (final IOException e) {
       logger.error("Error while comparing files: " + e.getMessage());
@@ -33,12 +33,12 @@ public class FileComparison {
     return Nulls.replace(text, "\r\n", "\n");
   }
 
-  public static boolean check(Path pgnFileExpectedPath, Path pgnFileActualPath) {
+  public static boolean check(Path pgnExpectedPath, Path pgnActualPath) {
 
-    logger.info("Testing " + pgnFileExpectedPath + " against " + pgnFileActualPath);
+    logger.info("Testing " + pgnExpectedPath + " against " + pgnActualPath);
 
     try {
-      return determineIsFilesAreEqual(pgnFileExpectedPath, pgnFileActualPath);
+      return determineIsFilesAreEqual(pgnExpectedPath, pgnActualPath);
     } catch (final IOException e) {
       logger.error("Error while comparing files: " + e.getMessage());
       return false;

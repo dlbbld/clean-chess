@@ -149,7 +149,7 @@ class TestReadMe {
 
   @Test
   @SuppressWarnings("static-method")
-  void pgnFileCanBeWrittenAndParsed(@TempDir Path tempDir) {
+  void pgnCanBeWrittenAndParsed(@TempDir Path tempDir) {
     final Board sourceBoard = createOpeningExampleBoard();
     final PgnGame pgnGame = PgnCreate.createPgnGame(sourceBoard);
     final Path filePath = Nulls.pathResolve(tempDir, "myFile.pgn");
@@ -157,7 +157,7 @@ class TestReadMe {
     // Archival mode for the write: createPgnGame(Board) carries no tags by design (no caller-provided input to
     // preserve), so a SEMANTIC write would produce a tag-less PGN that strict parsing rejects. Round-tripping
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
-    PgnWriter.writePgnFile(pgnGame, filePath, WriteMode.ARCHIVAL);
+    PgnWriter.writePgn(pgnGame, filePath, WriteMode.ARCHIVAL);
 
     final Board lenientBoard = PgnUtility.calculateBoard(LenientPgnParser.parse(filePath), false);
     final Board strictBoard = PgnUtility.calculateBoard(StrictPgnParser.parse(filePath), false);

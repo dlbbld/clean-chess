@@ -31,17 +31,17 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
   private static final int RESUME_FROM_PGN_NUMBER = 550000;
 
   // 2020 - March - 13.9 GB - 55,544,817 games
-  private static final Path MULTIPLE_PGN_FILE_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
+  private static final Path MULTIPLE_PGN_PATH = Nulls.pathResolve(ConfigurationConstants.TEMP_FOLDER_PATH,
       "lichess_db_standard_rated_2020-03.pgn");
 
   private static final Logger logger = Nulls.getLogger(LichessCheckMultiplePgn.class);
 
   public static void main(String[] args) {
-    doTheCheck(MULTIPLE_PGN_FILE_PATH);
+    doTheCheck(MULTIPLE_PGN_PATH);
   }
 
-  private static void doTheCheck(Path multiplePgnFilePath) {
-    logger.printf(Level.INFO, "Processing file %s", multiplePgnFilePath);
+  private static void doTheCheck(Path multiplePgnPath) {
+    logger.printf(Level.INFO, "Processing file %s", multiplePgnPath);
     logger.printf(Level.INFO, "Resuming from PGN number %s", RESUME_FROM_PGN_NUMBER);
 
     var readFileCounter = 0;
@@ -50,12 +50,12 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
     var blankLineCounter = 0;
     var isChess960 = false;
     var isFen = false;
-    List<String> currentPgnFileLines = new ArrayList<>();
-    StringBuilder currentPgnFileString = new StringBuilder();
+    List<String> currentPgnLines = new ArrayList<>();
+    StringBuilder currentPgnString = new StringBuilder();
 
-    final var file = multiplePgnFilePath.toFile();
+    final var file = multiplePgnPath.toFile();
     if (!file.isFile()) {
-      throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
+      throw new IllegalArgumentException("\"" + multiplePgnPath + "\" is not a file");
     }
 
     try (final Scanner myReader = new Scanner(file, StandardCharsets.ISO_8859_1);) {
@@ -77,16 +77,16 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
             readFileCounter++;
 
             // last line must be emmpty
-            currentPgnFileLines.add("");
-            currentPgnFileString.append("");
+            currentPgnLines.add("");
+            currentPgnString.append("");
 
             // we check the tags on the string value as this is much faster than creating the PGN only for this
             // purpose
             if (readFileCounter >= RESUME_FROM_PGN_NUMBER
-                && currentPgnFileString.indexOf("[Termination \"Time forfeit\"]") != -1
-                && (currentPgnFileString.indexOf("[Result \"1-0\"]") != -1
-                    || currentPgnFileString.indexOf("[Result \"0-1\"]") != -1)) {
-              final PgnGame pgnGame = StrictPgnParser.parse(currentPgnFileLines);
+                && currentPgnString.indexOf("[Termination \"Time forfeit\"]") != -1
+                && (currentPgnString.indexOf("[Result \"1-0\"]") != -1
+                    || currentPgnString.indexOf("[Result \"0-1\"]") != -1)) {
+              final PgnGame pgnGame = StrictPgnParser.parse(currentPgnLines);
               if (!AbstractLichessCheck.calculateIsTimeForfeitCandidate(pgnGame)) {
                 final String siteValue = TagUtility.calculateTagValue(pgnGame, "Site");
                 logger.printf(Level.INFO, "Invalid parsing of %s", siteValue);
@@ -104,8 +104,8 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
           blankLineCounter = 0;
           isChess960 = false;
           isFen = false;
-          currentPgnFileLines = new ArrayList<>();
-          currentPgnFileString = new StringBuilder();
+          currentPgnLines = new ArrayList<>();
+          currentPgnString = new StringBuilder();
           if (readFileCounter == RESUME_FROM_PGN_NUMBER) {
             logger.info("Read until resume");
           } else if (readFileCounter > RESUME_FROM_PGN_NUMBER) {
@@ -116,8 +116,8 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
           }
           continue;
         }
-        currentPgnFileLines.add(line);
-        currentPgnFileString.append(line);
+        currentPgnLines.add(line);
+        currentPgnString.append(line);
       }
     } catch (final IOException e) {
       throw new RuntimeException(e);

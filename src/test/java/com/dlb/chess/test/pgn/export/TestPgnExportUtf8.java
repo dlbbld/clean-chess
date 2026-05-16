@@ -64,7 +64,7 @@ public class TestPgnExportUtf8 {
     logger.info(TEST_SOURCE_FILE_PATH.getFileName());
 
     final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
-    PgnWriter.writePgnFile(pgnGame, TEST_DESTINATION_FILE_PATH);
+    PgnWriter.writePgn(pgnGame, TEST_DESTINATION_FILE_PATH);
 
     assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
   }

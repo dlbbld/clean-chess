@@ -78,8 +78,8 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
   }
 
   private static String calculateCorrespondingLichessGame(String lichessGameHelpmate) {
-    final var lichessGameHelpmateWithoutExtension = PgnExtensionUtility.removePgnFileExtension(lichessGameHelpmate);
+    final var lichessGameHelpmateWithoutExtension = PgnExtensionUtility.removePgnExtension(lichessGameHelpmate);
     final var lichessGameWithoutExtension = Nulls.replace(lichessGameHelpmateWithoutExtension, "_helpmate", "");
-    return PgnExtensionUtility.addPgnFileExtension(lichessGameWithoutExtension);
+    return PgnExtensionUtility.addPgnExtension(lichessGameWithoutExtension);
   }
 }

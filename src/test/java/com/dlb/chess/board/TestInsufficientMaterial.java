@@ -24,7 +24,7 @@ class TestInsufficientMaterial implements EnumConstants {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFiles() throws Exception {
+  void testPgnSample() throws Exception {
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_INSUFFICIENT_MATERIAL_TEST) {
         switch (testCaseList.pgnTest()) {

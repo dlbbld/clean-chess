@@ -52,7 +52,7 @@ public final class StrictPgnParser {
   public static PgnGame parse(Path pgnFilePath) {
     // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually
     // present.
-    return parseText(PgnFileReader.readPgnFile(pgnFilePath));
+    return parseText(PgnReader.readPgn(pgnFilePath));
   }
 
   public static PgnGame parse(Path pgnFolderPath, String pgnFileName) {

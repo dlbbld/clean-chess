@@ -35,7 +35,7 @@ public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn
         throw new ProgrammingMistakeException("Wrong assumption about API behaviour");
       }
       final String pgnFileName = Nulls.getName(file);
-      if (!PgnExtensionUtility.hasPgnFileExtension(pgnFileName)) {
+      if (!PgnExtensionUtility.hasPgnExtension(pgnFileName)) {
         throw new IllegalArgumentException(
             "All files in the folder must be valid PGN files and have the extension \"" + ChessConstants.PGN_EXTENSION
                 + "\". The file \"" + pgnFileName + " does not meet the extension expectation");

@@ -7,7 +7,7 @@ public class ChessConstants {
   public static final int THREEFOLD_REPETITION_RULE_THRESHOLD = 3;
   public static final int FIVEFOLD_REPETITION_RULE_THRESHOLD = 5;
   public static final String PGN_EXTENSION = "pgn";
-  public static final String PGN_FILE_EXTENSION_INCLUDING_DOT = "." + PGN_EXTENSION;
+  public static final String PGN_EXTENSION_INCLUDING_DOT = "." + PGN_EXTENSION;
 
   public static final int INITIAL_NUMBER_OF_ROOKS = 2;
   public static final int INITIAL_NUMBER_OF_KNIGHTS = 2;
