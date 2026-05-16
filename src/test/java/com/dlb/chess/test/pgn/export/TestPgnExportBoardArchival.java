@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.Tag;
@@ -44,7 +44,7 @@ class TestPgnExportBoardArchival {
       board.moveStrict(sanIsNotNull);
     }
 
-    final PgnFile boardPgnFile = PgnCreate.createPgnFile(board);
+    final PgnGame boardPgnFile = PgnCreate.createPgnFile(board);
 
     // Sanity precondition: the Board path itself does not fabricate STR. Archival output is the only place STR
     // gets filled.
@@ -92,7 +92,7 @@ class TestPgnExportBoardArchival {
     tagList.add(new Tag(StandardTag.SET_UP.getName(), "1"));
     tagList.add(new Tag(StandardTag.FEN.getName(), customFen));
 
-    final PgnFile boardPgnFile = PgnCreate.createPgnFile(board, tagList);
+    final PgnGame boardPgnFile = PgnCreate.createPgnFile(board, tagList);
     final String archivalOutput = PgnCreate.createPgnFileString(boardPgnFile, WriteMode.ARCHIVAL);
 
     assertTrue(archivalOutput.contains("[" + StandardTag.SET_UP.getName() + " \"1\"]"));
@@ -107,9 +107,9 @@ class TestPgnExportBoardArchival {
     // Tags emitted in canonical sort order (STR first by sortOrder, then supplemental tags). Verify by checking
     // that Event appears before Result in the output.
     final Board board = new Board(false);
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    final PgnGame pgnGame = PgnCreate.createPgnFile(board);
 
-    final String archivalOutput = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
+    final String archivalOutput = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
 
     final var eventIdx = archivalOutput.indexOf("[" + StandardTag.EVENT.getName() + " ");
     final var resultIdx = archivalOutput.indexOf("[" + StandardTag.RESULT.getName() + " ");
@@ -124,9 +124,9 @@ class TestPgnExportBoardArchival {
     // Counterpart to the archival path: semantic mode of an initial-position Board emits a tag-less PGN — just
     // the movetext and termination marker. Honest preservation of "no caller-provided tags."
     final Board board = new Board(false);
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    final PgnGame pgnGame = PgnCreate.createPgnFile(board);
 
-    final String semanticOutput = PgnCreate.createPgnFileString(pgnFile, WriteMode.SEMANTIC);
+    final String semanticOutput = PgnCreate.createPgnFileString(pgnGame, WriteMode.SEMANTIC);
 
     // Tag section is empty — no '[' appears in the output, no STR placeholders.
     assertFalse(semanticOutput.contains("[" + StandardTag.EVENT.getName() + " "));
@@ -135,7 +135,7 @@ class TestPgnExportBoardArchival {
     assertTrue(semanticOutput.contains("*"));
 
     // And the tagList check that no fabrication slipped into the model on this path.
-    assertTrue(!TagUtility.calculateIsContainsAllSevenTagRosterTags(pgnFile.tagList()));
+    assertTrue(!TagUtility.calculateIsContainsAllSevenTagRosterTags(pgnGame.tagList()));
   }
 
   @SuppressWarnings("static-method")

@@ -23,13 +23,13 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.squares.AbstractPotentialToSquares;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
@@ -40,7 +40,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
   void test() {
     // the move generation from validation for testing is about ten times slower than the used on
     // so we only perform a spot checks on the PGN^s
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_CHECK_WHITE:
@@ -54,7 +54,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
             continue;
         }
       }
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
         checkLegalMoves(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       }
     }
@@ -64,12 +64,12 @@ class TestLegalMovesAgainstCreatedUsingValidation {
 
     logger.info(pgnFileName);
 
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
 
-    final Board board = new Board(pgnFile.startFen(), false);
+    final Board board = new Board(pgnGame.startFen(), false);
     checkLegalMoves(board);
 
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       board.moveStrict(halfMove.san());
       checkLegalMoves(board);
     }

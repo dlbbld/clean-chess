@@ -15,9 +15,9 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.UnwinnabilityFullAnalysis;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
@@ -33,11 +33,11 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
   @SuppressWarnings("static-method")
   @Test
   void testFolder() throws Exception {
-    final PgnFileTestCaseList testCaseHavingHelpmateList = CreatePgnTestCases
+    final PgnTestCaseList testCaseHavingHelpmateList = PgnTestCaseCatalog
         .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE);
 
     var processedFilesInFolder = 0;
-    for (final PgnFileTestCase testCaseHavingHelpmate : testCaseHavingHelpmateList.list()) {
+    for (final PgnTestCase testCaseHavingHelpmate : testCaseHavingHelpmateList.list()) {
       if (RestrictTestConstants.IS_RESTRICT_UNWINNABLE_FULL_FOR_LICHESS_HELPMATE_TEST
           && processedFilesInFolder >= MAX_FILES) {
         break;
@@ -48,7 +48,7 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       // need not be parsed and replayed just to read the end state. The helpmate-line check below builds its own
       // mini-board from the FEN.
       final String lichessGame = calculateCorrespondingLichessGame(testCaseHavingHelpmate.pgnFileName());
-      final PgnFileTestCase lichessTestCase = CreatePgnTestCases.findTestCase(lichessGame);
+      final PgnTestCase lichessTestCase = PgnTestCaseCatalog.findTestCase(lichessGame);
       final Board board = lichessTestCase.finalPosition();
       final String fen = lichessTestCase.finalFen();
       final Side winner = board.getHavingMove();

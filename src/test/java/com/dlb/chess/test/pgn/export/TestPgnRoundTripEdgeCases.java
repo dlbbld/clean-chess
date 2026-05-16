@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.pgn.WriteMode;
 
@@ -43,13 +43,13 @@ class TestPgnRoundTripEdgeCases {
         *
 
         """;
-    final PgnFile parsed = LenientPgnParser.parseText(pgn);
+    final PgnGame parsed = LenientPgnParser.parseText(pgn);
     // Model carries the unescaped form.
     assertEquals("A \"Quote\" and slash \\", TagUtility.calculateTagValue(parsed, "Event"));
 
     final String exported = PgnCreate.createPgnFileString(parsed, WriteMode.SEMANTIC);
     // Exported form re-escapes both backslash and quote, so re-parsing recovers the same unescaped value.
-    final PgnFile reparsed = LenientPgnParser.parseText(exported);
+    final PgnGame reparsed = LenientPgnParser.parseText(exported);
     assertEquals("A \"Quote\" and slash \\", TagUtility.calculateTagValue(reparsed, "Event"));
 
     // And the exported representation contains the spec-required escapes in the bracketed value.
@@ -70,7 +70,7 @@ class TestPgnRoundTripEdgeCases {
         """;
     final LenientPgnParserValidationResult parseResult = LenientPgnParser.validateText(pgn);
     assertTrue(parseResult.isValid(), () -> "expected valid; got: " + parseResult.message());
-    final PgnFile parsed = pgnFileOf(parseResult);
+    final PgnGame parsed = pgnGameOf(parseResult);
 
     // Should not throw on an empty movetext.
     final String exported = PgnCreate.createPgnFileString(parsed, WriteMode.SEMANTIC);
@@ -78,24 +78,24 @@ class TestPgnRoundTripEdgeCases {
     // Re-parsing the exported PGN must succeed and yield the same tag set + same empty movetext signal.
     final LenientPgnParserValidationResult reparseResult = LenientPgnParser.validateText(exported);
     assertTrue(reparseResult.isValid(), () -> "expected valid re-parse; got: " + reparseResult.message());
-    final PgnFile reparsed = pgnFileOf(reparseResult);
+    final PgnGame reparsed = pgnGameOf(reparseResult);
     assertEquals(parsed.tagList(), reparsed.tagList());
     assertTrue(reparsed.halfMoveList().isEmpty());
     assertEquals(null, reparsed.terminationMarker());
   }
 
   /**
-   * Extracts the {@link PgnFile} from a successful validation result, asserting non-null. Gives the JDT null-flow
+   * Extracts the {@link PgnGame} from a successful validation result, asserting non-null. Gives the JDT null-flow
    * analysis the narrowed type it needs at the use site — {@code LenientPgnParserValidationResult
    * .pgnFile()} is declared {@code @Nullable} (it carries {@code null} on failure), and JDT does not infer non-null
    * from {@code isValid()} alone.
    */
-  private static PgnFile pgnFileOf(LenientPgnParserValidationResult result) {
-    final PgnFile pgnFile = result.pgnFile();
-    if (pgnFile == null) {
+  private static PgnGame pgnGameOf(LenientPgnParserValidationResult result) {
+    final PgnGame pgnGame = result.pgnGame();
+    if (pgnGame == null) {
       throw new AssertionError("Expected a non-null PgnFile on the lenient PGN validation result; problem="
           + result.problemParser() + ", message=" + result.message());
     }
-    return pgnFile;
+    return pgnGame;
   }
 }

@@ -13,10 +13,10 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
@@ -48,21 +48,21 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
 
   private static final List<PgnTest> BUCKETS = Nulls.listOf(PgnTest.PARSER_FROM_FEN);
 
-  protected static void runForBuckets(BiFunction<java.nio.file.Path, String, PgnFile> parse, Logger logger) {
+  protected static void runForBuckets(BiFunction<java.nio.file.Path, String, PgnGame> parse, Logger logger) {
     final List<String> failures = new ArrayList<>();
     var totalFixtures = 0;
 
     for (final PgnTest bucket : BUCKETS) {
-      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(bucket);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(bucket);
+      for (final PgnTestCase testCase : testCaseList.list()) {
         totalFixtures++;
         final String pgnFileName = testCase.pgnFileName();
         logger.info(pgnFileName);
 
-        final PgnFile pgnFile = parse.apply(bucket.getFolderPath(), pgnFileName);
+        final PgnGame pgnGame = parse.apply(bucket.getFolderPath(), pgnFileName);
 
-        final Board board = new Board(pgnFile.startFen(), false);
-        for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+        final Board board = new Board(pgnGame.startFen(), false);
+        for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
           board.moveStrict(halfMove.san());
         }
 

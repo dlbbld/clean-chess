@@ -1,7 +1,7 @@
 package com.dlb.chess.test.pgn.report;
 
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class PrintSinglePgnReport {
@@ -35,7 +35,7 @@ public class PrintSinglePgnReport {
   }
 
   static void printReport(String pgnFileName) throws Exception {
-    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
     System.out.println(pgnFileName);
     Reporter.printReport(pgnTest.getFolderPath(), pgnFileName);
   }

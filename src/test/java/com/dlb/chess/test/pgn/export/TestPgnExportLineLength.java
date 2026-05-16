@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -53,8 +53,8 @@ class TestPgnExportLineLength {
 
     final List<String> fileLinesExpectedFromFileSystem = FileUtility.readFileLines(TEST_FOLDER_PATH, pgnFileName);
 
-    final PgnFile pgnFileFromFileSystem = PgnCacheForStrictPgnParserTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
-    final List<String> fileLinesActualFromPgn = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
+    final PgnGame pgnGameFromFileSystem = PgnCacheForStrictPgnParserTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
+    final List<String> fileLinesActualFromPgn = PgnCreate.createPgnFileLines(pgnGameFromFileSystem);
     assertEquals(fileLinesExpectedFromFileSystem, fileLinesActualFromPgn);
   }
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.report.representation.BasicRepresentation;
 
@@ -23,7 +23,7 @@ class TestSinglePgnReportAgainstTestCase extends AbstractPgnReportTest {
 
     logger.info(PGN_FILE_NAME);
 
-    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(PGN_FILE_NAME);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(PGN_FILE_NAME);
     final var expectedReports = Reporter.calculateReport(pgnTest.getFolderPath(), PGN_FILE_NAME);
     final List<String> visualIndication = BasicRepresentation.calculateRepresentation(expectedReports, PGN_FILE_NAME);
 

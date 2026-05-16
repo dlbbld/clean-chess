@@ -97,8 +97,8 @@ public abstract class TagUtility {
     return ResultTagValue.calculate(readResult(tagList));
   }
 
-  public static ResultTagValue readResultTagValue(PgnFile pgnFile) {
-    return readResultTagValue(pgnFile.tagList());
+  public static ResultTagValue readResultTagValue(PgnGame pgnGame) {
+    return readResultTagValue(pgnGame.tagList());
   }
 
   static Tag calculateTag(String tagLine) {
@@ -188,15 +188,15 @@ public abstract class TagUtility {
     removeTag(tagList, StandardTag.FEN);
   }
 
-  public static String calculateTagValue(PgnFile pgnFile, String tagName) {
-    if (!existsTagName(pgnFile.tagList(), tagName)) {
+  public static String calculateTagValue(PgnGame pgnGame, String tagName) {
+    if (!existsTagName(pgnGame.tagList(), tagName)) {
       return "NA";
     }
-    return readTagValue(pgnFile.tagList(), tagName);
+    return readTagValue(pgnGame.tagList(), tagName);
   }
 
-  public static String calculateTagValue(PgnFile pgnFile, StandardTag sevenTagRoster) {
-    return calculateTagValue(pgnFile, sevenTagRoster.getName());
+  public static String calculateTagValue(PgnGame pgnGame, StandardTag sevenTagRoster) {
+    return calculateTagValue(pgnGame, sevenTagRoster.getName());
   }
 
 }

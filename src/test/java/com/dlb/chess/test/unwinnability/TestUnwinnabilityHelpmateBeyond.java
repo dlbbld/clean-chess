@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
@@ -56,7 +56,7 @@ class TestUnwinnabilityHelpmateBeyond {
   private static void assertVerdicts(String pgnFileName, UnwinnabilityQuickVerdict quickWhite,
       UnwinnabilityQuickVerdict quickBlack, UnwinnabilityFullVerdict fullWhite, UnwinnabilityFullVerdict fullBlack) {
     logger.info(pgnFileName);
-    final PgnFileTestCase testCase = CreatePgnTestCases.findTestCase(pgnFileName);
+    final PgnTestCase testCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
     final Board board = testCase.finalPosition();
 
     assertEquals(quickWhite, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE), pgnFileName);

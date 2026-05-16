@@ -12,7 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.TagUtility;
 
@@ -86,12 +86,12 @@ public class LichessCheckMultiplePgn extends AbstractLichessCheck {
                 && currentPgnFileString.indexOf("[Termination \"Time forfeit\"]") != -1
                 && (currentPgnFileString.indexOf("[Result \"1-0\"]") != -1
                     || currentPgnFileString.indexOf("[Result \"0-1\"]") != -1)) {
-              final PgnFile pgnFile = StrictPgnParser.parse(currentPgnFileLines);
-              if (!AbstractLichessCheck.calculateIsTimeForfeitCandidate(pgnFile)) {
-                final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
+              final PgnGame pgnGame = StrictPgnParser.parse(currentPgnFileLines);
+              if (!AbstractLichessCheck.calculateIsTimeForfeitCandidate(pgnGame)) {
+                final String siteValue = TagUtility.calculateTagValue(pgnGame, "Site");
                 logger.printf(Level.INFO, "Invalid parsing of %s", siteValue);
-              } else if (AbstractLichessCheck.calculateIsIncorrectResult(pgnFile)) {
-                final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
+              } else if (AbstractLichessCheck.calculateIsIncorrectResult(pgnGame)) {
+                final String siteValue = TagUtility.calculateTagValue(pgnGame, "Site");
                 logger.printf(Level.INFO, "Time forfeit - incorrect result;%s", siteValue);
               } else {
                 // logger.info("Time forfeit - possibly correct result - " + file.getName());

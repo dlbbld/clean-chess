@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
@@ -43,8 +43,8 @@ class TestSetupPgnCorpusNotPlaysBeyondAudit {
     var totalFiles = 0;
 
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+      for (final PgnTestCase testCase : testCaseList.list()) {
         totalFiles++;
         final String pgnFileName = testCase.pgnFileName();
         try {

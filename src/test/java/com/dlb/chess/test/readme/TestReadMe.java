@@ -20,7 +20,7 @@ import com.dlb.chess.pgn.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.pgn.StrictPgnParser;
@@ -151,13 +151,13 @@ class TestReadMe {
   @SuppressWarnings("static-method")
   void pgnFileCanBeWrittenAndParsed(@TempDir Path tempDir) {
     final Board sourceBoard = createOpeningExampleBoard();
-    final PgnFile pgnFile = PgnCreate.createPgnFile(sourceBoard);
+    final PgnGame pgnGame = PgnCreate.createPgnFile(sourceBoard);
     final Path filePath = Nulls.pathResolve(tempDir, "myFile.pgn");
 
     // Archival mode for the write: createPgnFile(Board) carries no tags by design (no caller-provided input to
     // preserve), so a SEMANTIC write would produce a tag-less PGN that strict parsing rejects. Round-tripping
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
-    PgnWriter.writePgnFile(pgnFile, filePath, WriteMode.ARCHIVAL);
+    PgnWriter.writePgnFile(pgnGame, filePath, WriteMode.ARCHIVAL);
 
     final Board lenientBoard = PgnUtility.calculateBoard(LenientPgnParser.parse(filePath), false);
     final Board strictBoard = PgnUtility.calculateBoard(StrictPgnParser.parse(filePath), false);
@@ -179,12 +179,12 @@ class TestReadMe {
           3. Bc4 Bc5
                 """;
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     board.moveStrict("a3");
 
-    assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
-    assertEquals(6, pgnFile.halfMoveList().size());
+    assertEquals("Spring Classic", tagValue(pgnGame, "Event"));
+    assertEquals(6, pgnGame.halfMoveList().size());
   }
 
   @Test
@@ -200,11 +200,11 @@ class TestReadMe {
                 3. Bc4 Bc5
         """;
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
     // Archival mode produces a strict-spec-compliant export from the deficient lenient input: fills the missing
     // STR placeholders, synthesises a Result tag, emits the termination marker. The README example is exactly
     // the lenient-input + archival-output flow.
-    final String exported = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
+    final String exported = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
 
     assertTrue(exported.contains("[Event \"Spring Classic\"]"));
     assertTrue(exported.contains("[White \"John Doe\"]"));
@@ -249,11 +249,11 @@ class TestReadMe {
 
         """;
 
-    final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    final PgnGame pgnGame = StrictPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     board.moveStrict("a3");
 
-    assertEquals(6, pgnFile.halfMoveList().size());
+    assertEquals(6, pgnGame.halfMoveList().size());
   }
 
   @Test
@@ -313,11 +313,11 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void pgnCreationProducesParserValidExport() {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(createOpeningExampleBoard());
+    final PgnGame pgnGame = PgnCreate.createPgnFile(createOpeningExampleBoard());
     // Archival mode is the contract a Board-to-PGN consumer wants when round-tripping through strict parsing:
     // semantic mode would produce a tag-less PGN (createPgnFile(Board) carries no tags by design), which strict
     // parsing rejects for the missing Result tag.
-    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
+    final String pgnFileString = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
 
     assertTrue(LenientPgnParser.validateText(pgnFileString).isValid());
     assertTrue(StrictPgnParser.validateText(pgnFileString).isValid());
@@ -437,8 +437,8 @@ class TestReadMe {
     assertEquals(expectedFull, board.isDeadPositionFull());
   }
 
-  private static String tagValue(PgnFile pgnFile, String name) {
-    for (final Tag tag : pgnFile.tagList()) {
+  private static String tagValue(PgnGame pgnGame, String name) {
+    for (final Tag tag : pgnGame.tagList()) {
       if (tag.name().equals(name)) {
         return tag.value();
       }

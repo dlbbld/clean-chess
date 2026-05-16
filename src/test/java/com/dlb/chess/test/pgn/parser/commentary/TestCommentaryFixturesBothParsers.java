@@ -14,7 +14,7 @@ import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
@@ -23,7 +23,7 @@ import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
- * Cross-parser fidelity: each fixture must yield the same {@link PgnFile} through both strict and lenient.
+ * Cross-parser fidelity: each fixture must yield the same {@link PgnGame} through both strict and lenient.
  */
 class TestCommentaryFixturesBothParsers {
 
@@ -196,8 +196,8 @@ class TestCommentaryFixturesBothParsers {
   }
 
   private static void assertParseAgrees(Path folder, String pgnFileName) {
-    final PgnFile strictModel = StrictPgnParser.parse(folder, pgnFileName);
-    final PgnFile lenientModel = LenientPgnParser.parse(folder, pgnFileName);
+    final PgnGame strictModel = StrictPgnParser.parse(folder, pgnFileName);
+    final PgnGame lenientModel = LenientPgnParser.parse(folder, pgnFileName);
     assertEquals(strictModel, lenientModel,
         "Strict and lenient parsers disagree on " + folder.getFileName() + "/" + pgnFileName);
   }

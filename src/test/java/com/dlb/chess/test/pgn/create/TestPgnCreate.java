@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.PgnTestHelper;
 
 class TestPgnCreate {
@@ -17,7 +17,7 @@ class TestPgnCreate {
 
     final var expectedString = PgnTestHelper.header("*") + "1. e4 e5 *\n\n";
 
-    final PgnFile fileImport = LenientPgnParser.parseText(expectedString);
+    final PgnGame fileImport = LenientPgnParser.parseText(expectedString);
 
     final String actualString = PgnCreate.createPgnFileString(fileImport);
 
@@ -39,7 +39,7 @@ class TestPgnCreate {
     final var inputWithoutIndicator = PgnTestHelper.header("*") + "1. e4 {after-white} e5 *\n\n";
     final var expectedExport = PgnTestHelper.header("*") + "1. e4 {after-white} 1... e5 *\n\n";
 
-    final PgnFile fileImport = LenientPgnParser.parseText(inputWithoutIndicator);
+    final PgnGame fileImport = LenientPgnParser.parseText(inputWithoutIndicator);
     final String actualExport = PgnCreate.createPgnFileString(fileImport);
 
     assertEquals(expectedExport, actualExport);
@@ -51,7 +51,7 @@ class TestPgnCreate {
     // Sanity check: without intervening commentary, exporter must NOT inject any "N..." indicator.
     final var input = PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 Nc6 *\n\n";
 
-    final PgnFile fileImport = LenientPgnParser.parseText(input);
+    final PgnGame fileImport = LenientPgnParser.parseText(input);
     final String actualExport = PgnCreate.createPgnFileString(fileImport);
 
     assertEquals(input, actualExport);
@@ -64,7 +64,7 @@ class TestPgnCreate {
     final var inputWithoutIndicator = PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 {after-white-2} Nc6 *\n\n";
     final var expectedExport = PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 {after-white-2} 2... Nc6 *\n\n";
 
-    final PgnFile fileImport = LenientPgnParser.parseText(inputWithoutIndicator);
+    final PgnGame fileImport = LenientPgnParser.parseText(inputWithoutIndicator);
     final String actualExport = PgnCreate.createPgnFileString(fileImport);
 
     assertEquals(expectedExport, actualExport);

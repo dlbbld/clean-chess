@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -21,9 +21,9 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @Test
   void testResultTagOnly() {
 
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
-    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+    final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
         "01_result_tag_only.pgn");
 
     assertTrue(TagUtility.hasResult(expected.tagList()));
@@ -36,9 +36,9 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @Test
   void testNoSpaceBetweenTagNameAndValue() {
 
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
-    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+    final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
         "02_no_space_between_tag_name_and_value.pgn");
 
     assertEquals(actual, expected);
@@ -48,9 +48,9 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @Test
   void testTooMuchSpaces() {
 
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
-    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+    final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
         "03_too_much_space_in_tag.pgn");
 
     assertEquals(actual, expected);
@@ -60,17 +60,17 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @Test
   void testIgnoreSetUpTag() {
 
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "04_setup_tag_zero_remove.pgn");
       // Lenient parser preserves the redundant SetUp tag in the parsed model; archival normalisation drops it
       // because startFen is the initial position (FEN/SetUp are archival-only signals when not needed).
       assertEqualsArchival(actual, expected);
     }
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "05_setup_tag_one_remove.pgn");
       assertEqualsArchival(actual, expected);
     }
@@ -79,14 +79,14 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @SuppressWarnings("static-method")
   @Test
   void testTabs() {
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "06_having_tabs.pgn");
+      final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "06_having_tabs.pgn");
       assertEquals(actual, expected);
     }
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "07_having_tabs.pgn");
+      final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "07_having_tabs.pgn");
       assertEquals(actual, expected);
     }
   }
@@ -95,14 +95,14 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @Test
   void testEmptyLines() {
 
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "99_original.pgn");
 
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "08_empty_lines.pgn");
+      final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "08_empty_lines.pgn");
       assertEquals(actual, expected);
     }
     {
-      final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "09_empty_lines.pgn");
+      final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "09_empty_lines.pgn");
       assertEquals(actual, expected);
     }
 
@@ -111,9 +111,9 @@ class TestLenientPgnParserTag extends AbstractTestLenientPgnParser {
   @SuppressWarnings("static-method")
   @Test
   void testNoTags() {
-    final PgnFile actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "98_original.pgn");
+    final PgnGame actual = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "98_original.pgn");
 
-    final PgnFile expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "10_empty_tag_list.pgn");
+    final PgnGame expected = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "10_empty_tag_list.pgn");
     assertEqualsButTagListAndResult(actual, expected);
   }
 

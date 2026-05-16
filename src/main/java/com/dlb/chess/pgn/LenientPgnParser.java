@@ -52,24 +52,24 @@ public final class LenientPgnParser {
   // Public entry points
   // -------------------------------------------------------------------------------------------------
 
-  public static PgnFile parseText(String pgn) {
+  public static PgnGame parseText(String pgn) {
     return new LenientPgnParser(pgn).parseInternal();
   }
 
-  public static PgnFile parse(Path pgnFilePath) {
+  public static PgnGame parse(Path pgnFilePath) {
     return parseText(PgnFileReader.readPgnFile(pgnFilePath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
+  public static PgnGame parse(Path pgnFolderPath, String pgnFileName) {
     return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
   }
 
-  public static PgnFile parse(String pgnFilePath) {
+  public static PgnGame parse(String pgnFilePath) {
     return parse(Nulls.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
-  public static PgnFile parse(List<String> fileLines) {
+  public static PgnGame parse(List<String> fileLines) {
     return parseText(joinLines(fileLines));
   }
 
@@ -103,7 +103,7 @@ public final class LenientPgnParser {
 
   /**
    * Like {@link #parseText(String)} but returns a structured result instead of throwing. The result also carries the
-   * parsed {@link PgnFile} (on success) and the list of SAN-level deviations the lenient layer forgave during movetext
+   * parsed {@link PgnGame} (on success) and the list of SAN-level deviations the lenient layer forgave during movetext
    * replay.
    */
   public static LenientPgnParserValidationResult validateText(String pgn) {
@@ -112,9 +112,9 @@ public final class LenientPgnParser {
 
   private static LenientPgnParserValidationResult runValidation(LenientPgnParser parser) {
     try {
-      final PgnFile pgnFile = parser.parseInternal();
+      final PgnGame pgnGame = parser.parseInternal();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK",
-          pgnFile, Nulls.copyOfList(parser.sanForgivenItemsAccumulator),
+          pgnGame, Nulls.copyOfList(parser.sanForgivenItemsAccumulator),
           Nulls.copyOfList(parser.tagForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       final String message = BasicUtility.getMessage(e);
@@ -154,7 +154,7 @@ public final class LenientPgnParser {
   // Top-level parsing
   // -------------------------------------------------------------------------------------------------
 
-  private PgnFile parseInternal() {
+  private PgnGame parseInternal() {
     skipInsignificantWhitespace();
 
     final List<Tag> tagList = parseTagSection();
@@ -183,7 +183,7 @@ public final class LenientPgnParser {
 
     final List<PgnHalfMove> canonicalHalfMoveList = replayBoardCanonicalizing(startFen, movetext.halfMoveList());
 
-    return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+    return new PgnGame(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
         Nulls.copyOfList(canonicalHalfMoveList), movetext.terminationResult());
   }
 
@@ -610,7 +610,7 @@ public final class LenientPgnParser {
   /**
    * Validates that the Result tag value (if present) matches the movetext termination marker (if present). This is the
    * only result-related cross-check the lenient parser performs; both signals are preserved independently on the parse
-   * model (Result tag on the tag list, termination marker on {@link PgnFile#terminationMarker}).
+   * model (Result tag on the tag list, termination marker on {@link PgnGame#terminationMarker}).
    */
   private static void validateResultConsistency(List<Tag> tagList, @Nullable ResultTagValue terminationResult) {
     if (!TagUtility.hasResult(tagList) || terminationResult == null) {
@@ -727,7 +727,7 @@ public final class LenientPgnParser {
   /**
    * Replays each half-move on a fresh board via {@link Board#moveLenient}, accumulates SAN-level forgiven items into
    * the parser-instance accumulator, and returns a copy of the half-move list with the canonical SAN substituted (so
-   * the resulting {@link PgnFile} compares equal to a strict-parsed file built from the same canonical moves).
+   * the resulting {@link PgnGame} compares equal to a strict-parsed file built from the same canonical moves).
    * Move-suffix annotations and commentaries are carried through unchanged.
    *
    * <p>

@@ -16,9 +16,9 @@ import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 public class GeneratePythonTestCases implements EnumConstants {
@@ -49,7 +49,7 @@ public class GeneratePythonTestCases implements EnumConstants {
     processPythonCodeLine("", counterList, codeLineList);
     processPythonCodeLine("class GameTestCase(unittest.TestCase):", counterList, codeLineList);
 
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
       logger.info("Processing folder " + folderPath);
       processPythonCodeLine("", counterList, codeLineList);
@@ -65,7 +65,7 @@ public class GeneratePythonTestCases implements EnumConstants {
       }
       processPythonCodeLine("  def test_" + folderIndication + "(self):", counterList, codeLineList);
       processPythonCodeLine("    print(\"Processing module " + folderIndication + "\")", counterList, codeLineList);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
         logger.info("Processing game " + testCase.pgnFileName());
 
         final Report report = Reporter.calculateReport(folderPath, testCase.pgnFileName());

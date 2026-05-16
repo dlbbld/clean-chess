@@ -9,8 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
@@ -70,9 +70,9 @@ class TestPawnWallGeometricAnalyzer {
   @SuppressWarnings("static-method")
   @Test
   void testYesFixtures() {
-    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_YES).list();
+    final List<PgnTestCase> fixtures = PgnTestCaseCatalog.getTestList(PgnTest.CHA_PAWN_WALL_YES).list();
 
-    for (final PgnFileTestCase testCase : fixtures) {
+    for (final PgnTestCase testCase : fixtures) {
       final Board board = testCase.finalPosition();
       // Every fixture in yes/ must be geometric YES; this is the contract that justifies the folder split.
       assertEquals(PawnWallVerdict.YES, PawnWallGeometricAnalyzer.calculate(board),
@@ -97,9 +97,9 @@ class TestPawnWallGeometricAnalyzer {
   @SuppressWarnings("static-method")
   @Test
   void testNoFixtures() {
-    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_NO).list();
+    final List<PgnTestCase> fixtures = PgnTestCaseCatalog.getTestList(PgnTest.CHA_PAWN_WALL_NO).list();
 
-    for (final PgnFileTestCase testCase : fixtures) {
+    for (final PgnTestCase testCase : fixtures) {
       final Board board = testCase.finalPosition();
       // Every fixture in no/ must be geometric UNKNOWN. Reasons: position is actually winnable (kings on wrong
       // side, en-passant capture available), or the chain fails the all-pawns-involved gate (floating pawns).

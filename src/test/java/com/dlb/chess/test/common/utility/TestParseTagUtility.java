@@ -9,7 +9,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
@@ -157,7 +157,7 @@ class TestParseTagUtility {
   }
 
   private static void checkTagValues(String tagLine, String expectedTagName, String expectedTagValue) {
-    final PgnFile file = StrictPgnParser.parseText(buildMinimalPgn(tagLine));
+    final PgnGame file = StrictPgnParser.parseText(buildMinimalPgn(tagLine));
     final Tag subject = findTagByName(file, expectedTagName);
     assertEquals(expectedTagName, subject.name());
     assertEquals(expectedTagValue, subject.value());
@@ -224,7 +224,7 @@ class TestParseTagUtility {
     return Nulls.substring(tagLine, afterOpen, space);
   }
 
-  private static Tag findTagByName(PgnFile file, String name) {
+  private static Tag findTagByName(PgnGame file, String name) {
     for (final Tag tag : file.tagList()) {
       if (tag.name().equals(name)) {
         return tag;

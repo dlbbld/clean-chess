@@ -27,11 +27,11 @@ import com.google.common.collect.ImmutableList;
  * Don't use to construct PgnFile's on your own, intended as a parser result only, so holding valid data.
  */
 @SuppressWarnings("null")
-public record PgnFile(@NonNull ImmutableList<@NonNull Tag> tagList, @NonNull Fen startFen,
+public record PgnGame(@NonNull ImmutableList<@NonNull Tag> tagList, @NonNull Fen startFen,
     @NonNull PgnCommentary pregameCommentary, @NonNull ImmutableList<@NonNull PgnHalfMove> halfMoveList,
     @Nullable ResultTagValue terminationMarker) {
 
-  public PgnFile {
+  public PgnGame {
     tagList = Nulls.copyOfList(tagList);
     halfMoveList = Nulls.copyOfList(halfMoveList);
     if (terminationMarker != null && TagUtility.hasResult(tagList)) {

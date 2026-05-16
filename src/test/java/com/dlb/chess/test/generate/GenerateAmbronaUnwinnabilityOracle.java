@@ -19,13 +19,13 @@ import org.apache.logging.log4j.Logger;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.test.ConfigurationTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
- * Regenerates the Ambrona unwinnability oracle from the cached final FENs in {@link PgnFileTestCase}. Requires WSL with
+ * Regenerates the Ambrona unwinnability oracle from the cached final FENs in {@link PgnTestCase}. Requires WSL with
  * D3-Chess built and Stockfish installed; pass the WSL D3-Chess checkout root as the optional first argument when it is
  * not at the default location.
  */
@@ -82,8 +82,8 @@ public final class GenerateAmbronaUnwinnabilityOracle {
   private static List<String> collectDistinctFinalFenList() {
     final Set<String> fenSet = new LinkedHashSet<>();
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+      for (final PgnTestCase testCase : testCaseList.list()) {
         fenSet.add(testCase.finalFen());
       }
     }

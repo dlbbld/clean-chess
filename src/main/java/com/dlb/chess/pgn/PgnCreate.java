@@ -33,20 +33,20 @@ public class PgnCreate {
     return createPgnFileString(createPgnFile(board));
   }
 
-  public static String createPgnFileString(PgnFile pgnFile) {
-    return createPgnFileString(pgnFile, WriteMode.SEMANTIC);
+  public static String createPgnFileString(PgnGame pgnGame) {
+    return createPgnFileString(pgnGame, WriteMode.SEMANTIC);
   }
 
-  public static String createPgnFileString(PgnFile pgnFile, WriteMode writeMode) {
-    return appendEmptyLine(BasicUtility.convertToString(createPgnFileLines(pgnFile, writeMode)));
+  public static String createPgnFileString(PgnGame pgnGame, WriteMode writeMode) {
+    return appendEmptyLine(BasicUtility.convertToString(createPgnFileLines(pgnGame, writeMode)));
   }
 
-  public static List<String> createPgnFileLines(PgnFile pgnFile) {
-    return createPgnFileLines(pgnFile, WriteMode.SEMANTIC);
+  public static List<String> createPgnFileLines(PgnGame pgnGame) {
+    return createPgnFileLines(pgnGame, WriteMode.SEMANTIC);
   }
 
-  public static List<String> createPgnFileLines(PgnFile pgnFile, WriteMode writeMode) {
-    final PgnFile effective = writeMode == WriteMode.ARCHIVAL ? PgnArchivalNormalization.apply(pgnFile) : pgnFile;
+  public static List<String> createPgnFileLines(PgnGame pgnGame, WriteMode writeMode) {
+    final PgnGame effective = writeMode == WriteMode.ARCHIVAL ? PgnArchivalNormalization.apply(pgnGame) : pgnGame;
     return calculatePgnFileFileLines(effective.tagList(), effective.pregameCommentary(), effective.startFen(),
         effective.halfMoveList(), effective.terminationMarker());
   }
@@ -200,11 +200,11 @@ public class PgnCreate {
    * no sort). The termination marker is derived from the board's game-status — semantic-mode export will emit it as the
    * movetext trailer; archival-mode export will also synthesise a Result tag from it.
    */
-  public static PgnFile createPgnFile(Board board, List<Tag> tagList) {
+  public static PgnGame createPgnFile(Board board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(Nulls.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
+    return new PgnGame(Nulls.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
         Nulls.copyOfList(halfMoveList), calculateResultTagValue(board));
   }
 
@@ -212,9 +212,9 @@ public class PgnCreate {
    * Creates a PgnFile from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty when
    * the board started from the initial position, or just SetUp+FEN when from a non-initial position. STR fabrication
    * does not happen here — callers who want a spec section 8.1.1-conformant artifact pass {@link WriteMode#ARCHIVAL} to
-   * {@link PgnWriter} or {@link #createPgnFileString(PgnFile, WriteMode)}.
+   * {@link PgnWriter} or {@link #createPgnFileString(PgnGame, WriteMode)}.
    */
-  public static PgnFile createPgnFile(Board board) {
+  public static PgnGame createPgnFile(Board board) {
 
     final List<Tag> tagList = new ArrayList<>();
 

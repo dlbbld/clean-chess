@@ -19,7 +19,7 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.StandardTag;
@@ -27,10 +27,10 @@ import com.dlb.chess.pgn.Tag;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateAmbronaHelpMateTestCases {
@@ -53,8 +53,8 @@ public class GenerateAmbronaHelpMateTestCases {
     final Map<String, String> havingHelpMate = new TreeMap<>();
     populateHelpMateUci(havingHelpMate);
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
       final var report = Reporter.calculateReport(folderPath, testCase.pgnFileName());
       if (IS_CREATE_UCI_REQUIRED) {
@@ -91,7 +91,7 @@ public class GenerateAmbronaHelpMateTestCases {
 
     if (havingHelpMate.containsKey(pgnFileName)) {
 
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderExisting, pgnFileName);
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderExisting, pgnFileName);
 
       final Side helpMatingSide = report.havingMove();
       final var newResultTagValue = switch (helpMatingSide) {
@@ -100,7 +100,7 @@ public class GenerateAmbronaHelpMateTestCases {
         case NONE -> throw new IllegalArgumentException();
       };
 
-      final List<Tag> newTagList = new ArrayList<>(pgnFile.tagList());
+      final List<Tag> newTagList = new ArrayList<>(pgnGame.tagList());
 
       updateTag(newTagList, StandardTag.RESULT.getName(), newResultTagValue.getValue());
       updateTag(newTagList, "Termination", "Adjudication");

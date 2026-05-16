@@ -11,7 +11,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserFromInitialPosition {
@@ -61,13 +61,13 @@ class TestStrictPgnParserFromInitialPosition {
   }
 
   private static void checkGame(String pgn, String... sanList) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, pgn);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, pgn);
 
-    assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+    assertEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
 
     final Board actual = new Board(false);
 
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       actual.moveStrict(halfMove.san());
     }
 

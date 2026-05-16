@@ -18,7 +18,7 @@ import com.dlb.chess.common.utility.BoardUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 
 /**
@@ -53,8 +53,8 @@ public final class Reporter {
   }
 
   public static void printReport(String pgnString) {
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
-    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgnString);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     printReport(board);
   }
 
@@ -72,8 +72,8 @@ public final class Reporter {
    * {@code "\n"}. Use this when the consumer is not stdout â€” web responses, file writes, GUI displays, etc.
    */
   public static String calculateReportText(String pgnString) {
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
-    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgnString);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     return calculateReportText(board);
   }
 

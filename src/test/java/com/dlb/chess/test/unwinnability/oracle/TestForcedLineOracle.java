@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
@@ -34,9 +34,9 @@ class TestForcedLineOracle {
   @SuppressWarnings("static-method")
   @Test
   void testBasicForcedCorpus() {
-    final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.BASIC_FORCED).list();
+    final List<PgnTestCase> fixtures = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_FORCED).list();
 
-    for (final PgnFileTestCase testCase : fixtures) {
+    for (final PgnTestCase testCase : fixtures) {
       final Board board = testCase.finalPosition();
 
       assertEquals(convert(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickWhite()),

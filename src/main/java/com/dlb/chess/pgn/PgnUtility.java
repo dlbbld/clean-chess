@@ -14,11 +14,11 @@ public abstract class PgnUtility {
    * dead (for example, recorded games used as test fixtures whose final position is intentionally dead). The mechanical
    * insufficient-material termination is unaffected.
    */
-  public static Board calculateBoard(PgnFile pgnFile, boolean detectDeadPositionUnwinnable) {
+  public static Board calculateBoard(PgnGame pgnGame, boolean detectDeadPositionUnwinnable) {
 
-    final Board board = new Board(pgnFile.startFen(), detectDeadPositionUnwinnable);
+    final Board board = new Board(pgnGame.startFen(), detectDeadPositionUnwinnable);
 
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       final String san = halfMove.san();
       board.moveStrict(san);
     }
@@ -27,8 +27,8 @@ public abstract class PgnUtility {
   }
 
   public static Board calculateBoard(Path folderPath, String pgnFileName, boolean detectDeadPositionUnwinnable) {
-    final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
-    return calculateBoard(pgnFile, detectDeadPositionUnwinnable);
+    final PgnGame pgnGame = LenientPgnParser.parse(folderPath, pgnFileName);
+    return calculateBoard(pgnGame, detectDeadPositionUnwinnable);
   }
 
 }

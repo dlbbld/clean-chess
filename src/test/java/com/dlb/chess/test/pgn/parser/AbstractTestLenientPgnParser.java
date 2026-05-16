@@ -3,7 +3,7 @@ package com.dlb.chess.test.pgn.parser;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.WriteMode;
 
 public abstract class AbstractTestLenientPgnParser {
@@ -16,19 +16,19 @@ public abstract class AbstractTestLenientPgnParser {
    * order, redundant FEN/SetUp, or termination-marker presence. Archival normalisation is the right lens for the
    * invariant the original tests intended ("these variants are equivalent under spec section 8.1.1 form").
    */
-  static void assertEqualsArchival(PgnFile expected, PgnFile actual) {
+  static void assertEqualsArchival(PgnGame expected, PgnGame actual) {
     assertEquals(PgnCreate.createPgnFileString(expected, WriteMode.ARCHIVAL),
         PgnCreate.createPgnFileString(actual, WriteMode.ARCHIVAL));
   }
 
-  static void assertEqualsButTagList(PgnFile expected, PgnFile actual) {
+  static void assertEqualsButTagList(PgnGame expected, PgnGame actual) {
     assertEquals(expected.halfMoveList(), actual.halfMoveList());
     assertEquals(expected.pregameCommentary(), actual.pregameCommentary());
     // assertEquals(expected.tagList(), actual.tagList());
     assertEquals(expected.startFen(), actual.startFen());
   }
 
-  static void assertEqualsButTagListAndResult(PgnFile expected, PgnFile actual) {
+  static void assertEqualsButTagListAndResult(PgnGame expected, PgnGame actual) {
     // assertEquals(expected.resultTagValue(), actual.resultTagValue());
     assertEquals(expected.halfMoveList(), actual.halfMoveList());
     assertEquals(expected.pregameCommentary(), actual.pregameCommentary());

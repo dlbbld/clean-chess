@@ -11,7 +11,7 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 
 /**
- * Prepares a {@link PgnFile} for PGN spec section 8.1.1 archival-storage output. Operates on the in-memory model only;
+ * Prepares a {@link PgnGame} for PGN spec section 8.1.1 archival-storage output. Operates on the in-memory model only;
  * the actual line emission is unchanged from semantic mode. Five transformations:
  *
  * <ol>
@@ -34,7 +34,7 @@ final class PgnArchivalNormalization {
   private PgnArchivalNormalization() {
   }
 
-  static PgnFile apply(PgnFile input) {
+  static PgnGame apply(PgnGame input) {
     final List<Tag> tagList = new ArrayList<>(input.tagList());
     final Fen startFen = input.startFen();
 
@@ -45,7 +45,7 @@ final class PgnArchivalNormalization {
     fillMissingSevenTagRoster(tagList);
     Collections.sort(tagList);
 
-    return new PgnFile(Nulls.copyOfList(tagList), startFen, input.pregameCommentary(), input.halfMoveList(), marker);
+    return new PgnGame(Nulls.copyOfList(tagList), startFen, input.pregameCommentary(), input.halfMoveList(), marker);
   }
 
   /**

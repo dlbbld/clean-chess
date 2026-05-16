@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParser {
@@ -16,23 +16,23 @@ class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParse
   @Test
   void testWhite() {
 
-    final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+    final PgnGame expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
         "98_white_start_original.pgn");
 
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_white_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "01_white_start.pgn");
       assertEqualsArchival(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "02_white_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "02_white_start.pgn");
       assertEqualsArchival(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "03_white_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "03_white_start.pgn");
       assertEqualsArchival(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "04_white_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "04_white_start.pgn");
       assertEqualsArchival(expected, actual);
     }
   }
@@ -41,23 +41,23 @@ class TestLenientPgnParserFromCustomPosition extends AbstractTestLenientPgnParse
   @Test
   void testBlack() {
 
-    final PgnFile expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+    final PgnGame expected = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
         "99_black_start_original.pgn");
 
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "05_black_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "05_black_start.pgn");
       assertEqualsArchival(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "06_black_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "06_black_start.pgn");
       assertEqualsArchival(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "07_black_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "07_black_start.pgn");
       assertEqualsArchival(expected, actual);
     }
     {
-      final PgnFile actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "08_black_start.pgn");
+      final PgnGame actual = PgnCacheForLenientPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, "08_black_start.pgn");
       assertEqualsArchival(expected, actual);
     }
   }

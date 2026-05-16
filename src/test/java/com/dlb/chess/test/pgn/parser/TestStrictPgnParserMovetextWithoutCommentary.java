@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StrictPgnParser;
 
 class TestStrictPgnParserMovetextWithoutCommentary {
@@ -44,7 +44,7 @@ class TestStrictPgnParserMovetextWithoutCommentary {
    * marker, produces the expected ordered half-move SAN list and leaves every half-move's commentary empty.
    */
   private static void checkInitialWithoutCommentary(String movetextPart, List<String> expectedSanList) {
-    final PgnFile file = StrictPgnParser.parseText(header() + movetextPart + " *\n\n");
+    final PgnGame file = StrictPgnParser.parseText(header() + movetextPart + " *\n\n");
     assertEquals("", file.pregameCommentary().value());
     assertEquals(expectedSanList, calculateSanList(file.halfMoveList()));
     for (final com.dlb.chess.model.PgnHalfMove halfMove : file.halfMoveList()) {

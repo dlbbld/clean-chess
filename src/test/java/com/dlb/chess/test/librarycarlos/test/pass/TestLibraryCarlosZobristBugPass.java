@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.librarycarlos.NullsCarlos;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.github.bhlangonijr.chesslib.Board;
 import com.github.bhlangonijr.chesslib.Side;
@@ -31,8 +31,8 @@ class TestLibraryCarlosZobristBugPass {
   @Test
   void testFolder() throws Exception {
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.MAX_MOVES);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.MAX_MOVES);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       final Path pgnFilePath = Nulls.pathResolve(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
       logger.info(testCase.pgnFileName());
       testPrintingPosition(pgnFilePath);

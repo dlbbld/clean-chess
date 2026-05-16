@@ -45,26 +45,26 @@ public final class StrictPgnParser {
   // Public entry points
   // -------------------------------------------------------------------------------------------------
 
-  public static PgnFile parseText(String pgn) {
+  public static PgnGame parseText(String pgn) {
     return new StrictPgnParser(pgn).parseInternal();
   }
 
-  public static PgnFile parse(Path pgnFilePath) {
+  public static PgnGame parse(Path pgnFilePath) {
     // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually
     // present.
     return parseText(PgnFileReader.readPgnFile(pgnFilePath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
+  public static PgnGame parse(Path pgnFolderPath, String pgnFileName) {
     return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
   }
 
-  public static PgnFile parse(String pgnFilePath) {
+  public static PgnGame parse(String pgnFilePath) {
     return parse(Nulls.pathOf(pgnFilePath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
-  public static PgnFile parse(List<String> fileLines) {
+  public static PgnGame parse(List<String> fileLines) {
     return parseText(joinLines(fileLines));
   }
 
@@ -128,7 +128,7 @@ public final class StrictPgnParser {
   // Top-level parsing
   // -------------------------------------------------------------------------------------------------
 
-  private PgnFile parseInternal() {
+  private PgnGame parseInternal() {
     StrictFileStructurePreScan.validate(source);
 
     final List<Tag> tagList = parseTagSection();
@@ -144,7 +144,7 @@ public final class StrictPgnParser {
 
     validateBoardPerLastMove(startFen, movetext.halfMoveList());
 
-    return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+    return new PgnGame(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
         Nulls.copyOfList(movetext.halfMoveList()), resultTagValue);
   }
 

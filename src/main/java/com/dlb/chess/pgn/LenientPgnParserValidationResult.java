@@ -9,7 +9,7 @@ import com.dlb.chess.san.SanValidationProblem;
 import com.google.common.collect.ImmutableList;
 
 /**
- * Outcome of a lenient PGN parse-with-validation. On success, {@link #pgnFile} carries the parsed model and the two
+ * Outcome of a lenient PGN parse-with-validation. On success, {@link #pgnGame} carries the parsed model and the two
  * forgiven-items channels list every deviation the lenient layer tolerated without rejecting:
  * <ul>
  * <li>{@link #sanForgivenItems} — SAN-level deviations during movetext replay (e.g. {@code e2-e4} normalised to
@@ -18,12 +18,12 @@ import com.google.common.collect.ImmutableList;
  * absent, FEN without SetUp). The parse model preserves all inputs as-given; archival-mode export via
  * {@code WriteMode.ARCHIVAL} is the path that produces a normalised PGN.</li>
  * </ul>
- * Both lists are empty when the input was already canonical. On failure, {@link #pgnFile} is {@code null} and the two
+ * Both lists are empty when the input was already canonical. On failure, {@link #pgnGame} is {@code null} and the two
  * lists contain whatever was accumulated up to the failure point.
  */
 @SuppressWarnings("null")
 public record LenientPgnParserValidationResult(@NonNull LenientPgnParserValidationProblem problemParser,
-    @NonNull SanValidationProblem problemSan, @NonNull String message, @Nullable PgnFile pgnFile,
+    @NonNull SanValidationProblem problemSan, @NonNull String message, @Nullable PgnGame pgnGame,
     @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItems,
     @NonNull ImmutableList<@NonNull ForgivenTagItem> tagForgivenItems) {
 

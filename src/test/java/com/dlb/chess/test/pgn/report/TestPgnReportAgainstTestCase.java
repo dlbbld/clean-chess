@@ -5,9 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 /**
  * Analyzes PGN test cases and validates expected values. Default scope (when
@@ -31,13 +31,13 @@ class TestPgnReportAgainstTestCase extends AbstractPgnReportTest {
   @SuppressWarnings({ "static-method" })
   @Test
   void test() throws Exception {
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_REPORT_TEST && !testCaseList.pgnTest().getIsBasicTest()) {
         continue;
       }
 
       var processedFilesInFolder = 0;
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
         if (RestrictTestConstants.IS_RESTRICT_PGN_REPORT_TEST && processedFilesInFolder >= MAX_FILES_PER_FOLDER) {
           break;
         }

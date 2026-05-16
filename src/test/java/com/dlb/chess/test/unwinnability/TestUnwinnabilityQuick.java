@@ -12,12 +12,12 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.test.PrintDuration;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
@@ -89,9 +89,9 @@ class TestUnwinnabilityQuick {
   void testPgnFileNotListed() {
     final var pgnFileName = "01_beyond_seventy_five.pgn";
 
-    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
-    final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(pgnFileName);
+    final PgnGame pgnGame = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     logger.info(pgnFileName);
 
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE,
@@ -104,7 +104,7 @@ class TestUnwinnabilityQuick {
   @SuppressWarnings("static-method")
   @Test
   void testPgnFileAgainstTestCase() {
-    final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase("25_black_capture_king_pawn.pgn");
+    final PgnTestCase pgnFileTestCase = PgnTestCaseCatalog.findTestCase("25_black_capture_king_pawn.pgn");
     final Board board = pgnFileTestCase.finalPosition();
     logger.info(pgnFileTestCase.pgnFileName());
 
@@ -123,8 +123,8 @@ class TestUnwinnabilityQuick {
   void testFolder() throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_AMBRONA);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.CHA_AMBRONA);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
       logger.info(testCase.pgnFileName());
 

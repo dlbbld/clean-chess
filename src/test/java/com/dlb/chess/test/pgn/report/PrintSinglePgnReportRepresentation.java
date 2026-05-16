@@ -6,7 +6,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.report.representation.BasicRepresentation;
 
@@ -18,7 +18,7 @@ public class PrintSinglePgnReportRepresentation extends AbstractPgnReportTest {
 
   public static void main(String[] args) throws Exception {
 
-    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(PGN_FILE_NAME);
+    final PgnTest pgnTest = PgnTestCaseCatalog.findPgnTestPgnNotListed(PGN_FILE_NAME);
     final var report = Reporter.calculateReport(pgnTest.getFolderPath(), PGN_FILE_NAME);
     final List<String> representation = BasicRepresentation.calculateRepresentation(report, PGN_FILE_NAME);
 

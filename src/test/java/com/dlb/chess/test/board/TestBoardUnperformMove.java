@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 /**
  * Verifies the {@link com.dlb.chess.board.Board#unperformMove} contract: after performing a move and immediately
@@ -60,8 +60,8 @@ class TestBoardUnperformMove {
     var pgnsExercised = 0;
     var halfMovesExercised = 0;
 
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getParserIntegrationSmokeList()) {
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getParserIntegrationSmokeList()) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
         logger.info(testCase.pgnFileName());
         halfMovesExercised += runUnperformContractTest(testCaseList, testCase);
         pgnsExercised++;
@@ -79,15 +79,15 @@ class TestBoardUnperformMove {
    * immediately unperforms it on {@code actual}, then asserts {@code actual} equals the parallel forward-only
    * {@code expected} board. Returns the number of halfmoves verified.
    */
-  private static int runUnperformContractTest(PgnFileTestCaseList testCaseList, PgnFileTestCase testCase) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
+  private static int runUnperformContractTest(PgnTestCaseList testCaseList, PgnTestCase testCase) {
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
         testCase.pgnFileName());
 
-    final Board expected = new Board(pgnFile.startFen(), false);
-    final Board actual = new Board(pgnFile.startFen(), false);
+    final Board expected = new Board(pgnGame.startFen(), false);
+    final Board actual = new Board(pgnGame.startFen(), false);
 
     var halfMoveIndex = 0;
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       halfMoveIndex++;
       final String san = halfMove.san();
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.test.FileComparison;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -63,8 +63,8 @@ public class TestPgnExportUtf8 {
 
     logger.info(TEST_SOURCE_FILE_PATH.getFileName());
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    PgnWriter.writePgnFile(pgnFile, TEST_DESTINATION_FILE_PATH);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
+    PgnWriter.writePgnFile(pgnGame, TEST_DESTINATION_FILE_PATH);
 
     assertTrue(FileComparison.checkWithLineEndingsConversion(TEST_SOURCE_FILE_PATH, TEST_DESTINATION_FILE_PATH));
   }

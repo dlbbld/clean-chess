@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.WriteMode;
 
@@ -46,12 +46,12 @@ class TestPgnDeficientEndToEnd {
   void test01_lenientParsePreservesDeficientShape() {
     final LenientPgnParserValidationResult result = LenientPgnParser.validateText(DEFICIENT_PGN);
     assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
-    final PgnFile pgnFile = result.pgnFile();
-    assertNotNull(pgnFile);
+    final PgnGame pgnGame = result.pgnGame();
+    assertNotNull(pgnGame);
     // Parse model preserves: exactly the three tags the user supplied (Event, White, FEN), nothing fabricated.
-    assertEquals(3, pgnFile.tagList().size());
+    assertEquals(3, pgnGame.tagList().size());
     // No termination marker was in the input.
-    assertEquals(null, pgnFile.terminationMarker());
+    assertEquals(null, pgnGame.terminationMarker());
     // Tag-forgiven-items report the deviations (missing STR tags, missing Result/marker, FEN without SetUp).
     assertFalse(result.tagForgivenItems().isEmpty());
     // SAN-forgiven-items report the long-algebraic move and the spurious check suffix.
@@ -60,8 +60,8 @@ class TestPgnDeficientEndToEnd {
 
   @Test
   void test02_semanticExportEchoesTheParseModel() {
-    final PgnFile pgnFile = LenientPgnParser.parseText(DEFICIENT_PGN);
-    final String semantic = PgnCreate.createPgnFileString(pgnFile, WriteMode.SEMANTIC);
+    final PgnGame pgnGame = LenientPgnParser.parseText(DEFICIENT_PGN);
+    final String semantic = PgnCreate.createPgnFileString(pgnGame, WriteMode.SEMANTIC);
 
     // Tags preserved as given (whitespace normalised inside the brackets).
     assertTrue(semantic.contains("[Event \"Spring Classic\"]"));
@@ -85,8 +85,8 @@ class TestPgnDeficientEndToEnd {
 
   @Test
   void test03_archivalExportProducesSpecCompliantOutput() {
-    final PgnFile pgnFile = LenientPgnParser.parseText(DEFICIENT_PGN);
-    final String archival = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
+    final PgnGame pgnGame = LenientPgnParser.parseText(DEFICIENT_PGN);
+    final String archival = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
 
     // Caller-supplied tag values preserved.
     assertTrue(archival.contains("[Event \"Spring Classic\"]"));

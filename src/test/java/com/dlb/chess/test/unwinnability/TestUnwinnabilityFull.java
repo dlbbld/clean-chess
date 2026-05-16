@@ -12,9 +12,9 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.PrintDuration;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
@@ -51,7 +51,7 @@ class TestUnwinnabilityFull {
     // assumeFalse(RestrictTestConstants.IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST);
     final var pgnFileName = "03_m2_white_to_move.pgn";
 
-    final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase(pgnFileName);
+    final PgnTestCase pgnFileTestCase = PgnTestCaseCatalog.findTestCase(pgnFileName);
     final Board board = pgnFileTestCase.finalPosition();
     logger.info(pgnFileName);
 
@@ -68,8 +68,8 @@ class TestUnwinnabilityFull {
   @SuppressWarnings("static-method")
   @Test
   void testChaLichessExamples() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
 
       logger.info(testCase.pgnFileName());
@@ -90,8 +90,8 @@ class TestUnwinnabilityFull {
 
   static void testFolderPerformance(PgnTest pgnTest) throws Exception {
     final List<Long> milliSecondsList = new ArrayList<>();
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       final Board board = testCase.finalPosition();
 
       logger.info(testCase.pgnFileName());

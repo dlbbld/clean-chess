@@ -25,7 +25,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * The cost difference is significant with auto-CHA on: replay pays {@code N × isUnwinnableQuick(...)} per move; a
  * position-only test that mistakenly chose {@code game(...)} scales as the number of plies in the fixture.
  */
-public record PgnFileTestCase(String pgnFileName, String expectedRepetition, String expectedNoProgressMoveRule,
+public record PgnTestCase(String pgnFileName, String expectedRepetition, String expectedNoProgressMoveRule,
     int firstCapture, int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate,
     int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial, String finalFen) {
 
@@ -46,7 +46,7 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition, Str
    *
    * <p>
    * The {@code pgnTest} argument supplies the folder; pass {@code testCaseList.pgnTest()} when iterating a test list,
-   * or {@link com.dlb.chess.test.pgn.setup.CreatePgnTestCases#findPgnTest(String)} when starting from a bare test case.
+   * or {@link com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog#findPgnTest(String)} when starting from a bare test case.
    */
   public Board game(PgnTest pgnTest) {
     return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnFileName(), false);

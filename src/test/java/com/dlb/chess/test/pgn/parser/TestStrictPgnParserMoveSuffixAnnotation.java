@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.enums.MoveSuffixAnnotation;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -68,9 +68,9 @@ class TestStrictPgnParserMoveSuffixAnnotation {
 
   private static void checkMoveSuffixAnnotationSuccess(String pgnFileName,
       List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases
         .getPgn(PGN_TEST_MOVE_SUFFIX_ANNOTATION_SUCCESS_FOLDER_PATH, pgnFileName);
-    assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
+    assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnGame.halfMoveList()));
   }
 
   // -------------------------------------------------------------------------------------------------
@@ -116,12 +116,12 @@ class TestStrictPgnParserMoveSuffixAnnotation {
   private static void checkCombinedSuccess(String pgnFileName, String pregameCommentaryExpected,
       List<String> sanListExpected, List<MoveSuffixAnnotation> moveSuffixAnnotationListExpected,
       List<String> commentaryListExpected) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_COMBINED_SUCCESS_FOLDER_PATH,
         pgnFileName);
-    assertEquals(pregameCommentaryExpected, pgnFile.pregameCommentary().value());
-    assertEquals(sanListExpected, calculateSanList(pgnFile.halfMoveList()));
-    assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnFile.halfMoveList()));
-    assertEquals(commentaryListExpected, calculateCommentaryList(pgnFile.halfMoveList()));
+    assertEquals(pregameCommentaryExpected, pgnGame.pregameCommentary().value());
+    assertEquals(sanListExpected, calculateSanList(pgnGame.halfMoveList()));
+    assertEquals(moveSuffixAnnotationListExpected, calculateMoveSuffixAnnotationList(pgnGame.halfMoveList()));
+    assertEquals(commentaryListExpected, calculateCommentaryList(pgnGame.halfMoveList()));
   }
 
   private static List<String> calculateSanList(List<PgnHalfMove> halfMoveList) {

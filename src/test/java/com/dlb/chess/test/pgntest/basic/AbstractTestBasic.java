@@ -19,9 +19,9 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.test.common.exceptions.SetupException;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public abstract class AbstractTestBasic implements EnumConstants {
@@ -33,7 +33,7 @@ public abstract class AbstractTestBasic implements EnumConstants {
   // 2b) for each file in the test folder there is an entry in the JUnit hardcoded file list
   protected static void checkTestFolder(List<String> junitHardcodedPgnFileNameList, PgnTest pgnTest) {
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
     final List<String> expectedValueHardcodedFileList = calculatePgnFileNameList(testCaseList.list());
 
     // 1a)
@@ -70,9 +70,9 @@ public abstract class AbstractTestBasic implements EnumConstants {
 
   }
 
-  private static List<String> calculatePgnFileNameList(List<PgnFileTestCase> testCaseList) {
+  private static List<String> calculatePgnFileNameList(List<PgnTestCase> testCaseList) {
     final List<String> result = new ArrayList<>();
-    for (final PgnFileTestCase testCase : testCaseList) {
+    for (final PgnTestCase testCase : testCaseList) {
       result.add(testCase.pgnFileName());
     }
     return result;

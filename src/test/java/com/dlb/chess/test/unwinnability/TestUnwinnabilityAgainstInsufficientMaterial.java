@@ -6,8 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
@@ -34,7 +34,7 @@ class TestUnwinnabilityAgainstInsufficientMaterial {
   @SuppressWarnings("static-method")
   @Test
   void testBothSidesInsufficient() {
-    for (final PgnFileTestCase testCase : CreatePgnTestCases.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH)
+    for (final PgnTestCase testCase : PgnTestCaseCatalog.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH)
         .list()) {
       assertUnwinnable(testCase, Side.WHITE);
       assertUnwinnable(testCase, Side.BLACK);
@@ -44,7 +44,7 @@ class TestUnwinnabilityAgainstInsufficientMaterial {
   @SuppressWarnings("static-method")
   @Test
   void testOnlyWhiteInsufficient() {
-    for (final PgnFileTestCase testCase : CreatePgnTestCases.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE)
+    for (final PgnTestCase testCase : PgnTestCaseCatalog.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE)
         .list()) {
       assertUnwinnable(testCase, Side.WHITE);
     }
@@ -53,13 +53,13 @@ class TestUnwinnabilityAgainstInsufficientMaterial {
   @SuppressWarnings("static-method")
   @Test
   void testOnlyBlackInsufficient() {
-    for (final PgnFileTestCase testCase : CreatePgnTestCases.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK)
+    for (final PgnTestCase testCase : PgnTestCaseCatalog.getTestList(PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK)
         .list()) {
       assertUnwinnable(testCase, Side.BLACK);
     }
   }
 
-  private static void assertUnwinnable(PgnFileTestCase testCase, Side side) {
+  private static void assertUnwinnable(PgnTestCase testCase, Side side) {
     final Board board = testCase.finalPosition();
     final var message = testCase.pgnFileName() + " " + side;
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, side), message);

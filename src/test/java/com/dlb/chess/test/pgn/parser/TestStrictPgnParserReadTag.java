@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -33,73 +33,73 @@ class TestStrictPgnParserReadTag {
   @Test
   void test() {
     {
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "01_example_white_last_move.pgn");
 
-      assertEquals("Groningen", TagUtility.calculateTagValue(pgnFile, StandardTag.EVENT));
-      assertEquals("Groningen NED", TagUtility.calculateTagValue(pgnFile, StandardTag.SITE));
-      assertEquals("1997.??.??", TagUtility.calculateTagValue(pgnFile, StandardTag.DATE));
-      assertEquals("9", TagUtility.calculateTagValue(pgnFile, StandardTag.ROUND));
-      assertEquals("Pavel Blatny", TagUtility.calculateTagValue(pgnFile, StandardTag.WHITE));
-      assertEquals("Frank Holzke", TagUtility.calculateTagValue(pgnFile, StandardTag.BLACK));
-      assertEquals("1/2-1/2", TagUtility.calculateTagValue(pgnFile, StandardTag.RESULT));
-      assertEquals("A15", TagUtility.calculateTagValue(pgnFile, "ECO"));
-      assertEquals("1997.??.??", TagUtility.calculateTagValue(pgnFile, "EventDate"));
+      assertEquals("Groningen", TagUtility.calculateTagValue(pgnGame, StandardTag.EVENT));
+      assertEquals("Groningen NED", TagUtility.calculateTagValue(pgnGame, StandardTag.SITE));
+      assertEquals("1997.??.??", TagUtility.calculateTagValue(pgnGame, StandardTag.DATE));
+      assertEquals("9", TagUtility.calculateTagValue(pgnGame, StandardTag.ROUND));
+      assertEquals("Pavel Blatny", TagUtility.calculateTagValue(pgnGame, StandardTag.WHITE));
+      assertEquals("Frank Holzke", TagUtility.calculateTagValue(pgnGame, StandardTag.BLACK));
+      assertEquals("1/2-1/2", TagUtility.calculateTagValue(pgnGame, StandardTag.RESULT));
+      assertEquals("A15", TagUtility.calculateTagValue(pgnGame, "ECO"));
+      assertEquals("1997.??.??", TagUtility.calculateTagValue(pgnGame, "EventDate"));
 
-      assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+      assertEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
     }
 
     {
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "02_example_black_last_move.pgn");
 
-      assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+      assertEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
     }
 
     {
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "03_example_white_last_move_short.pgn");
       final List<String> halfMoveList = new ArrayList<>();
       halfMoveList.add("Nf3");
       halfMoveList.add("Nf6");
       halfMoveList.add("c4");
-      assertEquals(halfMoveList, calculateSanList(pgnFile.halfMoveList()));
+      assertEquals(halfMoveList, calculateSanList(pgnGame.halfMoveList()));
 
-      assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+      assertEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
     }
 
     {
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "04_example_black_last_move_short.pgn");
       final List<String> halfMoveList = new ArrayList<>();
       halfMoveList.add("Nf3");
       halfMoveList.add("Nf6");
       halfMoveList.add("c4");
       halfMoveList.add("c5");
-      assertEquals(halfMoveList, calculateSanList(pgnFile.halfMoveList()));
+      assertEquals(halfMoveList, calculateSanList(pgnGame.halfMoveList()));
 
-      assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+      assertEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
     }
 
     {
       // we want to check that the initial position - the easiest case - is read properly
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "05_set_up_value_1_fen_initial_position.pgn");
-      assertEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+      assertEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
     }
 
     {
       // the FEN must be there for this case
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "06_set_up_value_1_fen_non_initial_position.pgn");
-      assertEquals("3k4/8/8/8/3K4/3R4/8/8 w - - 0 100", pgnFile.startFen().fen());
+      assertEquals("3k4/8/8/8/3K4/3R4/8/8 w - - 0 100", pgnGame.startFen().fen());
     }
 
     {
       // the FEN must not be there for this case
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH,
           "07_set_up_value_0_fen_not_set.pgn");
-      assertEquals(FenConstants.FEN_INITIAL_STR, pgnFile.startFen().fen());
+      assertEquals(FenConstants.FEN_INITIAL_STR, pgnGame.startFen().fen());
     }
 
   }

@@ -7,7 +7,7 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnTestCase;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.test.report.representation.RepetitionRepresentation;
 
@@ -18,7 +18,7 @@ public abstract class AbstractGenerateTestCaseForPgn {
     final Report report = Reporter.calculateReport(pgnFolderPath, pgnFileName);
 
     final StringBuilder result = new StringBuilder();
-    result.append("list.add(new ").append(PgnFileTestCase.class.getSimpleName()).append("(");
+    result.append("list.add(new ").append(PgnTestCase.class.getSimpleName()).append("(");
 
     // begin values
     result.append("\"");

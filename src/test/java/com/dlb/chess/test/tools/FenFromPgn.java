@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 
 /**
@@ -43,8 +43,8 @@ public final class FenFromPgn {
     final Path folder = Nulls.getParent(pgnPath);
     final String fileName = Nulls.toString(Nulls.getFileName(pgnPath));
 
-    final PgnFile pgnFile = LenientPgnParser.parse(folder, fileName);
-    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    final PgnGame pgnGame = LenientPgnParser.parse(folder, fileName);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     System.out.println(board.getFen());
   }
 }

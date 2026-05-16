@@ -10,14 +10,14 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
  * Setup invariant: every PGN file under {@code src/test/resources/pgn} has a corresponding test case registered in
- * {@link CreatePgnTestCases}, and every registered test case has a matching PGN file on disk. The two sets must agree
+ * {@link PgnTestCaseCatalog}, and every registered test case has a matching PGN file on disk. The two sets must agree
  * exactly.
  *
  * <p>
@@ -81,8 +81,8 @@ class TestSetupPgnFileRegistration {
   private static Set<String> collectRegisteredPgnFileNames() {
     final Set<String> names = new TreeSet<>();
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+      for (final PgnTestCase testCase : testCaseList.list()) {
         names.add(testCase.pgnFileName());
       }
     }

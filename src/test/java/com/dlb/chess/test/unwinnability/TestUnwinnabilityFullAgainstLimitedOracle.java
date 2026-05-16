@@ -10,9 +10,9 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
@@ -27,13 +27,13 @@ class TestUnwinnabilityFullAgainstLimitedOracle {
   @Test
   void test() throws Exception {
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       test(testCase);
     }
   }
 
-  private static void test(PgnFileTestCase testCase) {
+  private static void test(PgnTestCase testCase) {
     final Board board = testCase.finalPosition();
     logger.info(testCase.pgnFileName());
 

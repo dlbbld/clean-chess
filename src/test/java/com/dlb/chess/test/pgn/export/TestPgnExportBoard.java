@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.ResultTagValue;
 
@@ -39,7 +39,7 @@ class TestPgnExportBoard {
       boardExpected.moveStrict(sanIsNotNull);
     }
 
-    final PgnFile boardExpectedPgnFile = PgnCreate.createPgnFile(boardExpected);
+    final PgnGame boardExpectedPgnFile = PgnCreate.createPgnFile(boardExpected);
 
     checkNoFabrication(resultTagValue, boardExpectedPgnFile);
 
@@ -51,12 +51,12 @@ class TestPgnExportBoard {
    * is empty. The termination marker carries the board-state-derived result; the Result tag itself is not fabricated
    * (it would be added on the archival-write path, not into the parse-model).
    */
-  private static void checkNoFabrication(ResultTagValue resultTagValue, PgnFile pgnFile) {
-    assertTrue(pgnFile.tagList().isEmpty());
-    assertEquals(resultTagValue, pgnFile.terminationMarker());
+  private static void checkNoFabrication(ResultTagValue resultTagValue, PgnGame pgnGame) {
+    assertTrue(pgnGame.tagList().isEmpty());
+    assertEquals(resultTagValue, pgnGame.terminationMarker());
   }
 
-  private static void checkBoardReplay(Board boardExpected, PgnFile boardExpectedPgnFile) {
+  private static void checkBoardReplay(Board boardExpected, PgnGame boardExpectedPgnFile) {
     final Board boardActual = PgnUtility.calculateBoard(boardExpectedPgnFile, false);
     assertEquals(boardExpected, boardActual);
   }

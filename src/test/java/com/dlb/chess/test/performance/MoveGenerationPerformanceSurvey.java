@@ -8,11 +8,11 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.model.PgnHalfMove;
 import com.dlb.chess.moves.AbstractLegalMoves;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.github.bhlangonijr.chesslib.move.MoveGenerator;
 import com.github.bhlangonijr.chesslib.move.MoveGeneratorException;
@@ -41,16 +41,16 @@ public class MoveGenerationPerformanceSurvey {
 
   private static List<PositionPair> collectPositions(PgnTest pgnTest) {
     final List<PositionPair> result = new ArrayList<>();
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       if (result.size() >= MAX_POSITIONS_PER_GROUP) {
         break;
       }
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(),
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(),
           testCase.pgnFileName());
-      final Board board = new Board(pgnFile.startFen(), false);
+      final Board board = new Board(pgnGame.startFen(), false);
       addPosition(result, board);
-      for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+      for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
         board.moveStrict(halfMove.san());
         addPosition(result, board);
         if (result.size() >= MAX_POSITIONS_PER_GROUP) {

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
@@ -1002,9 +1002,9 @@ class TestLegalMovesForGames {
   }
 
   private static void generateGame(PgnTest pgnTest, String pgnFileName) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
     final var board = new Board(false);
-    for (final PgnHalfMove move : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove move : pgnGame.halfMoveList()) {
       board.moveStrict(move.san());
       final String san = board.getSan();
       final String legalMoveList = BasicUtility.calculateCommaSeparatedList(new ArrayList<>(board.getLegalMovesSan()));
