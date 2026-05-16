@@ -36,7 +36,7 @@ class TestMovementCheck implements EnumConstants {
   }
 
   private static void check(String fen, MoveSpecification move, MovementCheck expected) {
-    check(new Board(fen), move, expected);
+    check(new Board(fen, false), move, expected);
   }
 
   @SuppressWarnings("static-method")

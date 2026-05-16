@@ -64,7 +64,7 @@ public abstract class AbstractTestChessRuleAnalyzerScenarios implements EnumCons
   }
 
   static void check(String fen, MoveSpecification move, MoveCheck expectedMoveCheck) {
-    check(new Board(fen), move, expectedMoveCheck);
+    check(new Board(fen, false), move, expectedMoveCheck);
   }
 
   private static @Nullable MovementCheck toMovementCheck(MoveCheck mc) {
