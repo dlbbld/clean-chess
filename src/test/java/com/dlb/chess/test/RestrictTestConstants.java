@@ -36,6 +36,7 @@ public abstract class RestrictTestConstants {
   public static final boolean IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_LIMITED_ORACLE_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_REPORT_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_UNWINNABLE_FULL_FOR_LICHESS_HELPMATE_TEST = true && IS_RESTRICT_PGN;
+  public static final boolean IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST = true && IS_RESTRICT_PGN;
 
   public static final PgnTestInclusion PGN_TEST_INCLUSION = IS_FULL ? PgnTestInclusion.ALL
       : PgnTestInclusion.ALL_EXCEPT_LONGEST_POSSIBLE;
