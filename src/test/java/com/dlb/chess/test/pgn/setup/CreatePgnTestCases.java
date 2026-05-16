@@ -5135,9 +5135,6 @@ public class CreatePgnTestCases {
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         "7R/6pk/8/6K1/2n1r3/8/8/8 b - - 9 61"));
-    list.add(new PgnFileTestCase("test_lichess_V7eJ1RR9_helpmate.pgn", "", "", 14, 34, CheckmateOrStalemate.CHECKMATE,
-        1, InsufficientMaterial.WHITE_ONLY, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 34 74"));
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE, list);
   }
 
@@ -5596,6 +5593,9 @@ public class CreatePgnTestCases {
     list.add(new PgnFileTestCase("lichess_zmelXKvA_helpmate.pgn", "", "", 23, 14, CheckmateOrStalemate.CHECKMATE, 1,
         InsufficientMaterial.WHITE_ONLY, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.WINNABLE, "8/q7/8/8/8/8/K1k5/4b3 w - - 14 80"));
+    list.add(new PgnFileTestCase("test_lichess_V7eJ1RR9_helpmate.pgn", "", "", 14, 34, CheckmateOrStalemate.CHECKMATE,
+        1, InsufficientMaterial.WHITE_ONLY, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityQuickVerdict.WINNABLE, "8/8/8/8/8/7k/8/q6K w - - 34 74"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE, list);
   }
@@ -5904,50 +5904,50 @@ public class CreatePgnTestCases {
     list.add(new PgnFileTestCase("03_m2_white_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+        "kbK5/pp6/1P6/8/8/8/8/R7 w - - 0 1"));
 
     // F4 — M2 Black: B has K+2R, W has K+P. 1...Ra1+ Kh2 (forced) 2...Rh8# pattern from Kg3 with W stuck near corner.
     // Verified: oracle(W)=UNKNOWN, oracle(B)=WINNABLE, first-mate-depth=3, 6 legal moves at root.
     list.add(new PgnFileTestCase("04_m2_black_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.WINNABLE,
-        "rr6/8/8/8/8/6k1/7P/7K b - - 0 1"));
+        "rNq1k2K/P1p1pp2/2Rp1P2/5b2/2p3r1/8/8/8 b q - 5 3"));
 
     // F5 — Helpmate in 2 plies, White-to-move: W plays, B mates W cooperatively. Purity: no M1.
     list.add(new PgnFileTestCase("05_helpmate2_white_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+        "8/8/8/8/8/5k2/2p5/4K3 w - - 1 50"));
 
     // F6 — Helpmate in 2 plies, Black-to-move: B plays, W mates B cooperatively. Purity: no M1.
     list.add(new PgnFileTestCase("06_helpmate2_black_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"));
+        "8/5K2/7k/8/8/8/6Q1/8 b - - 0 50"));
 
     // F7 — Helpmate in 3 plies, White-to-move: W plays, B plays, W mates B cooperatively. Purity: no HM2.
     list.add(new PgnFileTestCase("07_helpmate3_white_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+        "8/5K1k/4N3/2B5/8/8/8/8 w - - 0 50"));
 
     // F8 — Helpmate in 3 plies, Black-to-move: B plays, W plays, B mates W cooperatively. Purity: no HM2.
     list.add(new PgnFileTestCase("08_helpmate3_black_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"));
+        "8/8/8/5b2/8/2b3k1/8/6K1 b - - 0 50"));
 
     // F9 — Control White-to-move: no termination within 3 plies; oracle returns UNKNOWN for both sides.
     list.add(new PgnFileTestCase("09_control_white_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+        "8/8/8/rk6/8/8/1K6/8 w - - 0 50"));
 
     // F10 — Control Black-to-move: no termination within 3 plies.
     list.add(new PgnFileTestCase("10_control_black_to_move.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
         InsufficientMaterial.NONE, UnwinnabilityFullVerdict.UNDETERMINED, UnwinnabilityFullVerdict.UNDETERMINED,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1"));
+        "k2bb1K1/8/8/8/8/8/8/8 b - - 0 50"));
 
     return new PgnFileTestCaseList(PgnTest.CHA_SHALLOW_TERMINATION, list);
   }
