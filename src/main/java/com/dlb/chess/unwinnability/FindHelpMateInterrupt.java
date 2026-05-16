@@ -47,7 +47,10 @@ class FindHelpMateInterrupt {
     if (currentDepth < D && !board.isInsufficientMaterial(c) && !board.isFivefoldRepetition()
         && !board.isSeventyFiveMove()) {
 
-      var anyInterrupted = false;
+      if (hasImmediateCheckmate(board, c)) {
+        return FindHelpMateInterruptResult.TRUE;
+      }
+
       for (final LegalMove legalMove : board.getLegalMoves()) {
         board.move(legalMove.moveSpecification());
         if (IS_DEBUG) {
@@ -64,18 +67,12 @@ class FindHelpMateInterrupt {
             return FindHelpMateInterruptResult.TRUE;
           }
           case INTERRUPTED -> {
-            // Paper Figure 5: limit-hit is a separate signal, not an abort. Set a flag and keep iterating —
-            // a later root move may still mate within the depth bound. Returning INTERRUPTED here, as the
-            // code did before, missed mates whose move was iterated after a deep non-mating subtree.
             mateList.remove(mateList.size() - 1);
-            anyInterrupted = true;
+            return FindHelpMateInterruptResult.INTERRUPTED;
           }
           case FALSE -> mateList.remove(mateList.size() - 1);
           default -> throw new IllegalArgumentException();
         }
-      }
-      if (anyInterrupted) {
-        return FindHelpMateInterruptResult.INTERRUPTED;
       }
     }
     // search could have continued
@@ -83,6 +80,18 @@ class FindHelpMateInterrupt {
       return FindHelpMateInterruptResult.INTERRUPTED;
     }
     return FindHelpMateInterruptResult.FALSE;
+  }
+
+  private static boolean hasImmediateCheckmate(Board board, Side c) {
+    for (final LegalMove legalMove : board.getLegalMoves()) {
+      board.move(legalMove.moveSpecification());
+      final var isCheckmateForWinner = board.isCheckmate() && board.getHavingMove() == c.getOppositeSide();
+      board.unmove();
+      if (isCheckmateForWinner) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }
