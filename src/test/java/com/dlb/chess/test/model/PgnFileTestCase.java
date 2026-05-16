@@ -20,8 +20,8 @@ import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
  *   <li>{@link #position()} — history-less board built from {@link #fen()}. <b>Cheap.</b> Use whenever the test only
  *       consults the final piece arrangement and clocks (most CHA-quick / CHA-full / static-evaluation tests).
  *   <li>{@link #game(PgnTest)} — full PGN replay with move history attached. <b>Expensive.</b> Use only when the test
- *       genuinely needs the history (repetition counts, claimable-threefold/fifty-move-rule, PGN export round-trips,
- *       end-to-end pipeline tests).
+ *       genuinely needs history-derived state (repetition counts, claimable-threefold/fifty-move-rule, last-move
+ *       metadata such as capture/promotion/castling/en-passant, PGN export round-trips, end-to-end pipeline tests).
  * </ul>
  *
  * <p>The cost difference is significant with auto-CHA on: replay pays {@code N × isUnwinnableQuick(...)} per move; a
@@ -62,9 +62,9 @@ public record PgnFileTestCase(String pgnFileName, String expectedRepetition, Str
 
   /**
    * Full PGN replay with move history. Expensive — parses the PGN and plays every half-move. Use only when the test
-   * genuinely needs the history (repetition counts, claimable threefold, end-to-end pipeline tests). Dead-position
-   * auto-detection is disabled during replay so fixtures may pass through positions the quick analyzer would classify
-   * as dead.
+   * genuinely needs history-derived state (repetition counts, claimable threefold, last-move metadata, end-to-end
+   * pipeline tests). Dead-position auto-detection is disabled during replay so fixtures may pass through positions the
+   * quick analyzer would classify as dead.
    *
    * <p>The {@code pgnTest} argument supplies the folder; pass {@code testCaseList.pgnTest()} when iterating a test
    * list, or {@link com.dlb.chess.test.pgn.setup.CreatePgnTestCases#findPgnTest(String)} when starting from a bare

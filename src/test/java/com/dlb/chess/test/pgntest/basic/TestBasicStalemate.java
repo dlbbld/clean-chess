@@ -22,7 +22,7 @@ class TestBasicStalemate extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_STALEMATE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = testCase.game(testCaseList.pgnTest());
+      final Board board = testCase.position();
 
       logger.info(testCase.pgnFileName());
 

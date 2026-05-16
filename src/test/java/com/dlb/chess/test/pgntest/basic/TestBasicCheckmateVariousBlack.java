@@ -20,7 +20,7 @@ class TestBasicCheckmateVariousBlack extends AbstractTestBasic {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CHECKMATE_VARIOUS_BLACK);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       logger.info(testCase.pgnFileName());
-      final Board board = testCase.game(testCaseList.pgnTest());
+      final Board board = testCase.position();
       checkCheckmate(board);
     }
   }
