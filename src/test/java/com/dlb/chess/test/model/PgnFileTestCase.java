@@ -5,8 +5,6 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
-import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 /**
  * A single fixture row in the test corpus. The {@link #finalFen()} string is the cached final position of the PGN file
@@ -29,9 +27,7 @@ import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
  */
 public record PgnFileTestCase(String pgnFileName, String expectedRepetition, String expectedNoProgressMoveRule,
     int firstCapture, int maxNoProgressSequence, CheckmateOrStalemate checkmateOrStalemate,
-    int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial,
-    UnwinnabilityFullVerdict unwinnableFullWhite, UnwinnabilityFullVerdict unwinnableFullBlack,
-    UnwinnabilityQuickVerdict unwinnableQuickWhite, UnwinnabilityQuickVerdict unwinnableQuickBlack, String finalFen) {
+    int repetitionCountFinalPosition, InsufficientMaterial insufficientMaterial, String finalFen) {
 
   /**
    * History-less board built directly from the cached FEN. Cheap — no PGN parse, no move replay. Use this whenever the

@@ -11,14 +11,14 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 /**
  * Exercises {@link ForcedLineOracle} against the BASIC_FORCED corpus: positions where the unique-legal-move chain from
- * the root leads to a terminal status (checkmate / stalemate / insufficient material). Each fixture's expected per-side
- * verdict is encoded in the {@code unwinnableQuickWhite}/{@code unwinnableQuickBlack} columns of
- * {@link PgnFileTestCase}; the convert helper folds Ambrona's three-valued POSSIBLY_WINNABLE into the oracle's UNKNOWN.
+ * the root leads to a terminal status (checkmate / stalemate / insufficient material). The convert helper folds
+ * Ambrona's three-valued POSSIBLY_WINNABLE into the oracle's UNKNOWN.
  */
 class TestForcedLineOracle {
 
@@ -39,10 +39,10 @@ class TestForcedLineOracle {
     for (final PgnFileTestCase testCase : fixtures) {
       final Board board = testCase.finalPosition();
 
-      assertEquals(convert(testCase.unwinnableQuickWhite()), ForcedLineOracle.calculateUnwinnability(board, Side.WHITE),
-          testCase.pgnFileName());
-      assertEquals(convert(testCase.unwinnableQuickBlack()), ForcedLineOracle.calculateUnwinnability(board, Side.BLACK),
-          testCase.pgnFileName());
+      assertEquals(convert(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickWhite()),
+          ForcedLineOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
+      assertEquals(convert(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickBlack()),
+          ForcedLineOracle.calculateUnwinnability(board, Side.BLACK), testCase.pgnFileName());
     }
   }
 

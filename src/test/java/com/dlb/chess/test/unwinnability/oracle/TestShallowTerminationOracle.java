@@ -14,6 +14,7 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
@@ -54,8 +55,10 @@ class TestShallowTerminationOracle {
 
       final Board board = testCase.finalPosition();
 
-      check(testCase.unwinnableQuickWhite(), ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
-      check(testCase.unwinnableQuickBlack(), ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK));
+      check(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickWhite(),
+          ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
+      check(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickBlack(),
+          ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK));
     }
   }
 
@@ -76,8 +79,10 @@ class TestShallowTerminationOracle {
 
       final Board board = testCase.finalPosition();
 
-      check(testCase.unwinnableQuickWhite(), ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
-      check(testCase.unwinnableQuickBlack(), ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK));
+      check(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickWhite(),
+          ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
+      check(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickBlack(),
+          ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK));
     }
   }
 

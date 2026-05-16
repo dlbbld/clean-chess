@@ -16,6 +16,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
@@ -56,11 +57,11 @@ class TestUnwinnabilityFull {
 
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
         .verdict();
-    assertEquals(pgnFileTestCase.unwinnableFullWhite(), unwinnableFullWhite);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).fullWhite(), unwinnableFullWhite);
 
     final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
         .verdict();
-    assertEquals(pgnFileTestCase.unwinnableFullBlack(), unwinnableFullBlack);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).fullBlack(), unwinnableFullBlack);
 
   }
 
@@ -77,8 +78,10 @@ class TestUnwinnabilityFull {
           .unwinnableFull(board, board.getHavingMove().getOppositeSide()).verdict();
 
       switch (board.getHavingMove().getOppositeSide()) {
-        case WHITE -> assertEquals(testCase.unwinnableFullWhite(), unwinnableFullNotHavingMove);
-        case BLACK -> assertEquals(testCase.unwinnableFullBlack(), unwinnableFullNotHavingMove);
+        case WHITE -> assertEquals(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).fullWhite(),
+            unwinnableFullNotHavingMove);
+        case BLACK -> assertEquals(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).fullBlack(),
+            unwinnableFullNotHavingMove);
         default -> throw new IllegalArgumentException();
       }
 
@@ -98,7 +101,7 @@ class TestUnwinnabilityFull {
         final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
             .verdict();
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullWhite(), unwinnableFullWhite);
+        assertEquals(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).fullWhite(), unwinnableFullWhite);
       }
 
       {
@@ -106,7 +109,7 @@ class TestUnwinnabilityFull {
         final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK)
             .verdict();
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableFullBlack(), unwinnableFullBlack);
+        assertEquals(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).fullBlack(), unwinnableFullBlack);
       }
 
     }

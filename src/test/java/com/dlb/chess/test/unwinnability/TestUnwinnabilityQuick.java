@@ -19,6 +19,7 @@ import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
+import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
@@ -109,11 +110,11 @@ class TestUnwinnabilityQuick {
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         Side.WHITE);
-    assertEquals(pgnFileTestCase.unwinnableQuickWhite(), unwinnableQuickResultWhite);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).quickWhite(), unwinnableQuickResultWhite);
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board,
         Side.BLACK);
-    assertEquals(pgnFileTestCase.unwinnableQuickBlack(), unwinnableQuickResultBlack);
+    assertEquals(AmbronaUnwinnabilityOracle.get(pgnFileTestCase.finalFen()).quickBlack(), unwinnableQuickResultBlack);
 
   }
 
@@ -132,7 +133,7 @@ class TestUnwinnabilityQuick {
         final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board,
             Side.WHITE);
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableQuickWhite(), unwinnableQuickWhite);
+        assertEquals(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickWhite(), unwinnableQuickWhite);
       }
 
       {
@@ -140,7 +141,7 @@ class TestUnwinnabilityQuick {
         final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(board,
             Side.BLACK);
         milliSecondsList.add(System.currentTimeMillis() - beforeMilliSeconds);
-        assertEquals(testCase.unwinnableQuickBlack(), unwinnableQuickBlack);
+        assertEquals(AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickBlack(), unwinnableQuickBlack);
       }
 
     }
