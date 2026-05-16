@@ -74,9 +74,6 @@ class TestShallowTerminationOracle {
     for (final PgnFileTestCase testCase : fixtures) {
       logger.info(testCase.pgnFileName());
 
-      if (!"05_helpmate2_white_to_move.pgn".equals(testCase.pgnFileName())) {
-        continue;
-      }
       final Board board = testCase.finalPosition();
 
       check(testCase.unwinnableQuickWhite(), ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
