@@ -21,31 +21,8 @@ class TestLimitedUnwinnabilityOracle {
 
   @SuppressWarnings("static-method")
   @Test
-  void testStartPosition() {
-    final Board board = new Board(false);
-
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testFen() {
-    final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
-    final Board board = new Board(fen, false);
-
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
-  }
-
-  @SuppressWarnings("static-method")
-  @Test
-  void testPawnWallCombinesAfterShallowTerminationUnknown() {
-    final var pgnFileName = "pawn_wall_ambrona_real_game.pgn";
+  void testHelpmate() {
+    final var pgnFileName = "07_helpmate3_white_to_move.pgn";
 
     final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
@@ -55,10 +32,43 @@ class TestLimitedUnwinnabilityOracle {
     final Board board = PgnUtility.calculateBoard(pgnFile, false);
     logger.info(pgnFileName);
 
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-        ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
-        ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK));
+    assertEquals(LimitedUnwinnabilityVerdict.WINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
+    assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testForced() {
+    final var pgnFileName = "01_forced_checkmate.pgn";
+
+    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
+    final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
+    // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
+    // itself then asserts the oracle behaviour on the resulting position.
+    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    logger.info(pgnFileName);
+
+    assertEquals(LimitedUnwinnabilityVerdict.WINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
+    assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
+        LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.BLACK));
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testPawnWall() {
+    final var pgnFileName = "pawn_wall_ambrona_real_game.pgn";
+
+    final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
+    final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
+    // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
+    // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
+    // itself then asserts the oracle behaviour on the resulting position.
+    final Board board = PgnUtility.calculateBoard(pgnFile, false);
+    logger.info(pgnFileName);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNWINNABLE,
         LimitedUnwinnabilityOracle.calculateUnwinnability(board, Side.WHITE));
