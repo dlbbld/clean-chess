@@ -235,6 +235,10 @@ public class Nulls {
     return checkResult(path.getFileName());
   }
 
+  public static Path getParent(Path path) {
+    return checkResult(path.getParent());
+  }
+
   @SuppressWarnings({ "unchecked" })
   public static <E> Set<E> setOf(E... items) {
     return checkResult(Set.of(items));

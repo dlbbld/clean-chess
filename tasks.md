@@ -164,10 +164,10 @@ The two paths look different at the call site today and don't advertise themselv
 
 **What this is NOT.** Not an in-memory startup cache (single-test runs would pay full-suite startup cost). Not a `.fen` parallel corpus (bulk file conversion has no upside given the FEN is already in source). Not build-time codegen of `PgnFileTestCase` from PGN files (the FEN being committed source IS the cache and works fine). The existing architecture already gives lazy-per-fixture behaviour; this task just names the cheap/expensive paths cleanly and removes the friction of adding new fixtures.
 
-- [ ] Add `position()` and `game()` methods on `PgnFileTestCase`
-- [ ] Sweep existing tests; replace `new Board(testCase.fen())` with `testCase.position()` and `GeneralUtility.calculateBoard(LenientPgnParser.parse(...))` with `testCase.game()` (mechanical search/replace)
-- [ ] Add the `FenFromPgn` scratch tool
-- [ ] Document the choice in `PgnFileTestCase`'s javadoc: when to use which
+- [x] Add `position()` and `game()` methods on `PgnFileTestCase`
+- [x] Sweep existing tests; replace `new Board(testCase.fen())` with `testCase.position()` and `GeneralUtility.calculateBoard(LenientPgnParser.parse(...))` with `testCase.game()` (mechanical search/replace)
+- [x] Add the `FenFromPgn` scratch tool
+- [x] Document the choice in `PgnFileTestCase`'s javadoc: when to use which
 
 ---
 

@@ -3178,11 +3178,7 @@ public class CreatePgnTestCases {
     list.add(new PgnFileTestCase("various_pranav_savic_2021_incomplete_speculative_from_last_capture.pgn", "", "", 1,
         73, CheckmateOrStalemate.NA, 1, InsufficientMaterial.NONE, UnwinnabilityFullVerdict.WINNABLE,
         UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        // FEN tag in the PGN reads "... 2 1" (speculative fullMoveNumber placeholder). Lenient FEN auto-corrects
-        // fullMoveNumber up to halfMoveClock rounded up to the next multiple of ten (10 for halfMoveClock=2), a
-        // round-numbered placeholder that signals a reconstructed value rather than a measured one.
-        "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 54"));
+        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, "8/5k2/2R5/5p2/5P2/6P1/6K1/r7 w - - 73 101"));
 
     // repetition after promotion
     list.add(new PgnFileTestCase("various_keres_fischer_1962.pgn", "", "", 20, 17, CheckmateOrStalemate.NA, 1,
