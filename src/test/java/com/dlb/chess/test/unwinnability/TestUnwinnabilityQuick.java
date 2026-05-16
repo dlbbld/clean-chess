@@ -64,7 +64,13 @@ class TestUnwinnabilityQuick {
 
     final Board board = new Board(fen, false);
 
-    assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE));
+    // Quick deliberately does not enforce the 75-move rule per the CHA paper / Ambrona issue thread.
+    // White can mate via 1...Kg8 2.Rc8# but Quick's bounded helpmate search misses it (the first root
+    // move at depth 0 isn't Rc8 and the INTERRUPTED early-bail returns before Rc8 is tried). Matches
+    // the Ambrona reference (TSV: quickWhite=POSSIBLY_WINNABLE for this FEN). Black has just the
+    // king — insufficient material, UNWINNABLE.
+    assertEquals(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE));
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK));
   }
 
@@ -96,10 +102,13 @@ class TestUnwinnabilityQuick {
     final Board board = PgnUtility.calculateBoard(pgnGame, false);
     logger.info(pgnName);
 
-    assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE,
+    // Quick no longer enforces 75-move in the helpmate search (paper / Ambrona issue thread). On this
+    // fixture (halfmove=148) both sides come back POSSIBLY_WINNABLE — matches the Ambrona TSV row for
+    // this FEN.
+    assertEquals(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));
 
-    assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE,
+    assertEquals(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
         UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove().getOppositeSide()));
   }
 
