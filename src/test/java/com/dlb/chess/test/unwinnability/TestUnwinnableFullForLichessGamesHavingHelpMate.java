@@ -16,6 +16,7 @@ import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -29,12 +30,21 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
 
   private static final Logger logger = Nulls.getLogger(TestUnwinnableFullForLichessGamesHavingHelpMate.class);
 
+  /** Cap on files tested when the smoke restriction is active. */
+  private static final int MAX_FILES = 10;
+
   @SuppressWarnings("static-method")
   @Test
   void testFolder() throws Exception {
     final PgnFileTestCaseList testCaseHavingHelpmateList = CreatePgnTestCases
         .getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE);
+
+    var processedFilesInFolder = 0;
     for (final PgnFileTestCase testCaseHavingHelpmate : testCaseHavingHelpmateList.list()) {
+      if (RestrictTestConstants.IS_RESTRICT_UNWINNABLE_FULL_FOR_LICHESS_HELPMATE_TEST
+          && processedFilesInFolder >= MAX_FILES) {
+        break;
+      }
       logger.info(testCaseHavingHelpmate.pgnFileName());
 
       final String lichessGame = calculateCorrespondingLichessGame(testCaseHavingHelpmate.pgnFileName());
@@ -48,6 +58,8 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
 
       assertEquals(UnwinnabilityFullVerdict.WINNABLE, analysis.verdict());
       assertHelpmateLine(fen, winner, analysis.mateLine());
+
+      processedFilesInFolder++;
     }
   }
 
