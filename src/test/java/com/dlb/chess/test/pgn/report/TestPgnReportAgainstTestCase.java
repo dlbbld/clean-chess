@@ -23,7 +23,7 @@ class TestPgnReportAgainstTestCase extends AbstractPgnReportTest {
   private static final Logger logger = Nulls.getLogger(TestPgnReportAgainstTestCase.class);
 
   /** Cap on files tested per category when the smoke restriction is active. */
-  private static final int MAX_FILES_PER_FOLDER = 2;
+  private static final int MAX_FILES_PER_FOLDER = 1;
 
   // "unused" suppresses Eclipse JDT's "Dead code" warning that fires on the IS_RESTRICT_PGN_REPORT_TEST gate:
   // the constant resolves at runtime (Boolean.getBoolean) but Eclipse's flow analysis treats the gate as
