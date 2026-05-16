@@ -11,7 +11,7 @@ import com.dlb.chess.pgn.PgnUtility;
 
 /**
  * Scratch tool that prints the final FEN of a PGN file. Mechanical helper for fixture authoring: when a new test case
- * is added to {@code CreatePgnTestCases}, the {@code fen} field needs the position reached after the PGN's last
+ * is added to {@code PgnTestCaseCatalog}, the {@code fen} field needs the position reached after the PGN's last
  * half-move. Computing it by hand is tedious; this tool replays the PGN with dead-position auto-detection disabled (so
  * fixtures whose final position is intentionally dead still produce a FEN) and prints the result on stdout.
  *

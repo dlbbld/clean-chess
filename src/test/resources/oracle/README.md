@@ -1,7 +1,7 @@
 # Ambrona unwinnability oracle
 
 `ambrona-unwinnability.tsv` is generated from the final FENs cached in the
-`PgnFileTestCase` fixtures. The generator calls Miguel Ambrona's D3-Chess C++
+`PgnTestCase` fixtures. The generator calls Miguel Ambrona's D3-Chess C++
 implementation through WSL and writes one row per distinct final FEN.
 
 The TSV columns are:

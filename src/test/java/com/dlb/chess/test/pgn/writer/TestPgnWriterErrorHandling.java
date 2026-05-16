@@ -19,8 +19,8 @@ class TestPgnWriterErrorHandling {
   @Test
   void testWritePgnFilePropagatesFileSystemAccessException(@TempDir Path tempFolder) {
     final Path filePath = Nulls.pathResolve(tempFolder, "missing/game.pgn");
-    final var pgnFile = PgnCreate.createPgnFile(new Board(false));
+    final var pgnGame = PgnCreate.createPgnGame(new Board(false));
 
-    assertThrows(FileSystemAccessException.class, () -> PgnWriter.writePgnFile(pgnFile, filePath));
+    assertThrows(FileSystemAccessException.class, () -> PgnWriter.writePgnFile(pgnGame, filePath));
   }
 }

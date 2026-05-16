@@ -16,15 +16,15 @@ import com.google.common.collect.ImmutableList;
  *
  * <p>
  * Invariant: when a Result tag is present in {@link #tagList()} <em>and</em> {@link #terminationMarker} is non-null,
- * the two must agree. The lenient and strict PGN parsers enforce this before constructing the {@code PgnFile} (via the
- * cross-signal consistency check); the {@code Board}-to-{@code PgnFile} path
- * ({@link PgnCreate#createPgnFile(com.dlb.chess.board.Board, java.util.List)}) is also guarded here by the compact
+ * the two must agree. The lenient and strict PGN parsers enforce this before constructing the {@code PgnGame} (via the
+ * cross-signal consistency check); the {@code Board}-to-{@code PgnGame} path
+ * ({@link PgnCreate#createPgnGame(com.dlb.chess.board.Board, java.util.List)}) is also guarded here by the compact
  * constructor — a caller that supplies a Result tag disagreeing with the board's game-status-derived marker triggers an
  * {@link IllegalArgumentException} rather than silently producing an internally inconsistent model that archival export
  * would then have to choose between.
  *
  * <p>
- * Don't use to construct PgnFile's on your own, intended as a parser result only, so holding valid data.
+ * Don't use to construct PgnGame's on your own, intended as a parser result only, so holding valid data.
  */
 @SuppressWarnings("null")
 public record PgnGame(@NonNull ImmutableList<@NonNull Tag> tagList, @NonNull Fen startFen,
@@ -42,7 +42,7 @@ public record PgnGame(@NonNull ImmutableList<@NonNull Tag> tagList, @NonNull Fen
           throw new IllegalArgumentException("The Result tag value \"" + resultValue
               + "\" disagrees with the termination marker \"" + terminationMarker.getValue()
               + "\". Both signals must agree when both are present; the lenient and strict parsers enforce this"
-              + " before constructing PgnFile, and the Board-to-PgnFile path must pass a tag list consistent with"
+              + " before constructing PgnGame, and the Board-to-PgnGame path must pass a tag list consistent with"
               + " the board's game-status-derived result.");
         }
       }

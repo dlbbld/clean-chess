@@ -38,13 +38,13 @@ class TestPgnExportIdempotency {
         final PgnGame importedPgn = PgnCacheForLenientPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
             pgnFileName);
 
-        final List<String> exportedLines = PgnCreate.createPgnFileLines(importedPgn);
+        final List<String> exportedLines = PgnCreate.createPgnLines(importedPgn);
         final PgnGame exportedLinesImportedPgn = LenientPgnParser.parse(exportedLines);
 
         assertEquals(importedPgn, exportedLinesImportedPgn);
 
         final List<String> exportedLinesImportedPgnExportedLines = PgnCreate
-            .createPgnFileLines(exportedLinesImportedPgn);
+            .createPgnLines(exportedLinesImportedPgn);
 
         assertEquals(exportedLines, exportedLinesImportedPgnExportedLines);
 

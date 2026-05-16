@@ -47,7 +47,7 @@ class TestPgnRoundTripEdgeCases {
     // Model carries the unescaped form.
     assertEquals("A \"Quote\" and slash \\", TagUtility.calculateTagValue(parsed, "Event"));
 
-    final String exported = PgnCreate.createPgnFileString(parsed, WriteMode.SEMANTIC);
+    final String exported = PgnCreate.createPgnString(parsed, WriteMode.SEMANTIC);
     // Exported form re-escapes both backslash and quote, so re-parsing recovers the same unescaped value.
     final PgnGame reparsed = LenientPgnParser.parseText(exported);
     assertEquals("A \"Quote\" and slash \\", TagUtility.calculateTagValue(reparsed, "Event"));
@@ -73,7 +73,7 @@ class TestPgnRoundTripEdgeCases {
     final PgnGame parsed = pgnGameOf(parseResult);
 
     // Should not throw on an empty movetext.
-    final String exported = PgnCreate.createPgnFileString(parsed, WriteMode.SEMANTIC);
+    final String exported = PgnCreate.createPgnString(parsed, WriteMode.SEMANTIC);
 
     // Re-parsing the exported PGN must succeed and yield the same tag set + same empty movetext signal.
     final LenientPgnParserValidationResult reparseResult = LenientPgnParser.validateText(exported);
@@ -93,7 +93,7 @@ class TestPgnRoundTripEdgeCases {
   private static PgnGame pgnGameOf(LenientPgnParserValidationResult result) {
     final PgnGame pgnGame = result.pgnGame();
     if (pgnGame == null) {
-      throw new AssertionError("Expected a non-null PgnFile on the lenient PGN validation result; problem="
+      throw new AssertionError("Expected a non-null PgnGame on the lenient PGN validation result; problem="
           + result.problemParser() + ", message=" + result.message());
     }
     return pgnGame;

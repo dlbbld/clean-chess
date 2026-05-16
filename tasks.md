@@ -137,37 +137,36 @@ The geometric classifier is now intentionally narrower than full unwinnability: 
 
 The current all-pawns-involved rule is sound for the known false-positive class (floating-pawn promotion). It's possible some bishop-only mating patterns (positions where multiple same-coloured bishops force mate even though the king is trapped behind a sound wall) could still slip through — none have been observed in the corpus yet. If one surfaces, the test catches it via the `UnwinnableQuick != UNWINNABLE` disagreement.
 
-### Separate the cheap-position and full-game paths on `PgnFileTestCase`
+### Separate the cheap-position and full-game paths on `PgnTestCase`
 
-Most of the test corpus consists of fixtures where the test only consults `testCase.fen()` — the FEN field is the cache, populated when the fixture was added to `CreatePgnTestCases`. For those tests the PGN file on disk is dead weight: `new Board(testCase.fen())` builds a history-less position and skips replay entirely. A second category of tests genuinely needs the move history (repetition counts, claimable threefold, end-to-end PGN-pipeline tests); for those, `LenientPgnParser.parse(...)` + `GeneralUtility.calculateBoard(pgnFile)` replays the full game.
+Most of the test corpus consists of fixtures where the test only consults `testCase.finalFen()` — the FEN field is the cache, populated when the fixture was added to `PgnTestCaseCatalog`. For those tests the PGN file on disk is dead weight: `testCase.finalPosition()` builds a history-less position and skips replay entirely. A second category of tests genuinely needs the move history (repetition counts, claimable threefold, end-to-end PGN-pipeline tests); for those, `testCase.game(...)` replays the full game.
 
 The two paths look different at the call site today and don't advertise themselves as cheap-vs-expensive. A new test author writing a position-only test can accidentally reach for the replay path because they see other tests do it. With dead-position detection landing this release, that mistake becomes much more expensive: replay cost scales as N × (unwinnable-quick-cost-per-position) for a fixture that only needed its final position.
 
 **The fix is small and structural — no startup cache, no build-time codegen, no disk-cache invalidation.** Two changes:
 
-1. Name the two paths on `PgnFileTestCase` so the choice is intentional and visible at every call site:
+1. Name the two paths on `PgnTestCase` so the choice is intentional and visible at every call site:
 
    ```java
-   public record PgnFileTestCase(...) {
+   public record PgnTestCase(...) {
      /** History-free position from the FEN field. Cheap. Use for position-only tests. */
-     public Board position() { return new Board(fen()); }
+     public Board finalPosition() { return new Board(finalFen(), false); }
 
      /** History-bearing board from PGN replay. Expensive. Use for repetition / claimable / pipeline tests. */
-     public Board game() {
-       final PgnFile pgnFile = LenientPgnParser.parse(folder, pgnFileName);
-       return GeneralUtility.calculateBoard(pgnFile);
+     public Board game(PgnTest pgnTest) {
+       return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnFileName(), false);
      }
    }
    ```
 
-2. Add a small command-line scratch tool that prints a PGN's final FEN. Currently, adding a new fixture means computing the FEN by hand (or by ad-hoc tooling); a 30-line `FenFromPgn` under `src/test/java/.../tools/` makes the workflow `mvn exec:java -Dexec.args="path/to/fixture.pgn"` → paste the FEN into `CreatePgnTestCases`. Fully mechanical.
+2. Add a small command-line scratch tool that prints a PGN's final FEN. Currently, adding a new fixture means computing the FEN by hand (or by ad-hoc tooling); a 30-line `FenFromPgn` under `src/test/java/.../tools/` makes the workflow `mvn exec:java -Dexec.args="path/to/fixture.pgn"` → paste the FEN into `PgnTestCaseCatalog`. Fully mechanical.
 
-**What this is NOT.** Not an in-memory startup cache (single-test runs would pay full-suite startup cost). Not a `.fen` parallel corpus (bulk file conversion has no upside given the FEN is already in source). Not build-time codegen of `PgnFileTestCase` from PGN files (the FEN being committed source IS the cache and works fine). The existing architecture already gives lazy-per-fixture behaviour; this task just names the cheap/expensive paths cleanly and removes the friction of adding new fixtures.
+**What this is NOT.** Not an in-memory startup cache (single-test runs would pay full-suite startup cost). Not a `.fen` parallel corpus (bulk file conversion has no upside given the FEN is already in source). Not build-time codegen of `PgnTestCase` from PGN files (the FEN being committed source IS the cache and works fine). The existing architecture already gives lazy-per-fixture behaviour; this task just names the cheap/expensive paths cleanly and removes the friction of adding new fixtures.
 
-- [x] Add `position()` and `game()` methods on `PgnFileTestCase`
-- [x] Sweep existing tests; replace `new Board(testCase.fen())` with `testCase.position()` and `GeneralUtility.calculateBoard(LenientPgnParser.parse(...))` with `testCase.game()` (mechanical search/replace)
+- [x] Add `finalPosition()` and `game(PgnTest)` methods on `PgnTestCase`
+- [x] Sweep existing tests; replace `new Board(testCase.finalFen())` with `testCase.finalPosition()` and replay helpers with `testCase.game(...)` (mechanical search/replace)
 - [x] Add the `FenFromPgn` scratch tool
-- [x] Document the choice in `PgnFileTestCase`'s javadoc: when to use which
+- [x] Document the choice in `PgnTestCase`'s javadoc: when to use which
 
 ---
 
@@ -319,7 +318,7 @@ The project rule (documented in `coding-conventions.md`): records carry data; do
 Surfaced by the unused-code-detector pass on `StaticPosition`: the record carries multiple non-data methods — `createChangedPosition` (three overloads), `isPawn`, `isOwnPawn`, `isOpponentPawn`, `isOwnKing`, `isOpponentKing`, almost certainly more. Some have only test callers (suggesting test scaffolding), some have production callers, one (`isOwnKing`) has zero callers anywhere.
 
 - [ ] Catalog every non-permitted member on `StaticPosition` and assign a disposition per member: delete (no callers anywhere), move to a test-side helper that **takes** a `StaticPosition` rather than duplicating it (test-only callers), or move to a `StaticPositionUtility` (production callers).
-- [ ] Sweep every record under `src/main/java` for the same pattern. Records to check include at least `Fen`, `Tag`, `PgnFile`, `LegalMove`, `MoveSpecification`, `StaticPosition`, plus any other top-level `record` declarations under `src/main`.
+- [ ] Sweep every record under `src/main/java` for the same pattern. Records to check include at least `Fen`, `Tag`, `PgnGame`, `LegalMove`, `MoveSpecification`, `StaticPosition`, plus any other top-level `record` declarations under `src/main`.
 - [ ] Apply the dispositions; verify only the permitted member shapes remain on each record.
 - [ ] Naturally folds into the API-surface reduction release, since most "move to utility" relocations open the door to making the utility itself package-private.
 

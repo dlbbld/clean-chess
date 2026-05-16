@@ -29,25 +29,25 @@ public class PgnCreate {
   /** PGN export-format guideline: lines should not exceed 79 characters. */
   public static final int MAX_LINE_LENGTH = 79;
 
-  public static String createPgnFileString(Board board) {
-    return createPgnFileString(createPgnFile(board));
+  public static String createPgnString(Board board) {
+    return createPgnString(createPgnGame(board));
   }
 
-  public static String createPgnFileString(PgnGame pgnGame) {
-    return createPgnFileString(pgnGame, WriteMode.SEMANTIC);
+  public static String createPgnString(PgnGame pgnGame) {
+    return createPgnString(pgnGame, WriteMode.SEMANTIC);
   }
 
-  public static String createPgnFileString(PgnGame pgnGame, WriteMode writeMode) {
-    return appendEmptyLine(BasicUtility.convertToString(createPgnFileLines(pgnGame, writeMode)));
+  public static String createPgnString(PgnGame pgnGame, WriteMode writeMode) {
+    return appendEmptyLine(BasicUtility.convertToString(createPgnLines(pgnGame, writeMode)));
   }
 
-  public static List<String> createPgnFileLines(PgnGame pgnGame) {
-    return createPgnFileLines(pgnGame, WriteMode.SEMANTIC);
+  public static List<String> createPgnLines(PgnGame pgnGame) {
+    return createPgnLines(pgnGame, WriteMode.SEMANTIC);
   }
 
-  public static List<String> createPgnFileLines(PgnGame pgnGame, WriteMode writeMode) {
+  public static List<String> createPgnLines(PgnGame pgnGame, WriteMode writeMode) {
     final PgnGame effective = writeMode == WriteMode.ARCHIVAL ? PgnArchivalNormalization.apply(pgnGame) : pgnGame;
-    return calculatePgnFileFileLines(effective.tagList(), effective.pregameCommentary(), effective.startFen(),
+    return calculateFileLines(effective.tagList(), effective.pregameCommentary(), effective.startFen(),
         effective.halfMoveList(), effective.terminationMarker());
   }
 
@@ -55,7 +55,7 @@ public class PgnCreate {
     return text + "\n";
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary pregameCommentary,
+  private static List<String> calculateFileLines(List<Tag> tagList, PgnCommentary pregameCommentary,
       Fen startFen, List<PgnHalfMove> halfMoveList, @Nullable ResultTagValue terminationMarker) {
 
     final List<String> fileLines = new ArrayList<>();
@@ -83,7 +83,7 @@ public class PgnCreate {
       movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + moves + terminationSuffix;
     }
 
-    // Lenient parses can produce a PgnFile with no pregame commentary, no half-moves, and no termination marker
+    // Lenient parses can produce a PgnGame with no pregame commentary, no half-moves, and no termination marker
     // (a tags-only PGN). The movetext string is then empty; PgnLineWrapper rejects empty input, so skip the
     // wrap call and leave the movetext section blank. The output stays structurally well-formed (tag section,
     // separator, trailing blank) and re-parses cleanly under the lenient parser.
@@ -196,11 +196,11 @@ public class PgnCreate {
   }
 
   /**
-   * Creates a PgnFile from a Board with a caller-supplied tag list. The tag list is preserved verbatim (no fabrication,
+   * Creates a PgnGame from a Board with a caller-supplied tag list. The tag list is preserved verbatim (no fabrication,
    * no sort). The termination marker is derived from the board's game-status — semantic-mode export will emit it as the
    * movetext trailer; archival-mode export will also synthesise a Result tag from it.
    */
-  public static PgnGame createPgnFile(Board board, List<Tag> tagList) {
+  public static PgnGame createPgnGame(Board board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
@@ -209,12 +209,12 @@ public class PgnCreate {
   }
 
   /**
-   * Creates a PgnFile from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty when
+   * Creates a PgnGame from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty when
    * the board started from the initial position, or just SetUp+FEN when from a non-initial position. STR fabrication
    * does not happen here — callers who want a spec section 8.1.1-conformant artifact pass {@link WriteMode#ARCHIVAL} to
-   * {@link PgnWriter} or {@link #createPgnFileString(PgnGame, WriteMode)}.
+   * {@link PgnWriter} or {@link #createPgnString(PgnGame, WriteMode)}.
    */
-  public static PgnGame createPgnFile(Board board) {
+  public static PgnGame createPgnGame(Board board) {
 
     final List<Tag> tagList = new ArrayList<>();
 
@@ -223,7 +223,7 @@ public class PgnCreate {
       tagList.add(new Tag(StandardTag.FEN.getName(), board.getInitialFen().fen()));
     }
 
-    return createPgnFile(board, tagList);
+    return createPgnGame(board, tagList);
   }
 
 }

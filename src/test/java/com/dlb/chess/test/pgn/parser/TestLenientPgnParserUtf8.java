@@ -155,8 +155,8 @@ public class TestLenientPgnParserUtf8 {
     // Compare under archival normalisation: the two inputs differ in tag order (test2/test3 use
     // intentionally-shuffled tag order to exercise lenient acceptance), which the parser preserves but archival
     // export reconciles to canonical order.
-    assertEquals(PgnCreate.createPgnFileString(pgnGameExpected, WriteMode.ARCHIVAL),
-        PgnCreate.createPgnFileString(pgnGameActual, WriteMode.ARCHIVAL));
+    assertEquals(PgnCreate.createPgnString(pgnGameExpected, WriteMode.ARCHIVAL),
+        PgnCreate.createPgnString(pgnGameActual, WriteMode.ARCHIVAL));
   }
 
 }

@@ -78,9 +78,9 @@ public class TestLenientPgnParserLineBreaks {
         .parse(PgnTestConstants.LENIENT_PGN_PARSER_LINE_BREAKS_TEST_ROOT_FOLDER_PATH, pgnFileName);
 
     // The on-disk fixtures use a different tag order than the inline expected (ECO is placed after EventDate
-    // there). The lenient parser preserves input order, so direct PgnFile equality fails. Archival
+    // there). The lenient parser preserves input order, so direct PgnGame equality fails. Archival
     // normalisation sorts both into canonical order — the right lens for "these inputs are equivalent."
-    assertEquals(PgnCreate.createPgnFileString(pgnGameExpected, WriteMode.ARCHIVAL),
-        PgnCreate.createPgnFileString(pgnGameActual, WriteMode.ARCHIVAL));
+    assertEquals(PgnCreate.createPgnString(pgnGameExpected, WriteMode.ARCHIVAL),
+        PgnCreate.createPgnString(pgnGameActual, WriteMode.ARCHIVAL));
   }
 }

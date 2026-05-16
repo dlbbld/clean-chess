@@ -13,7 +13,7 @@ import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.ResultTagValue;
 
 /**
- * Verifies that {@link PgnCreate#createPgnFile(Board)} produces the minimal honest model — no STR fabrication — and
+ * Verifies that {@link PgnCreate#createPgnGame(Board)} produces the minimal honest model — no STR fabrication — and
  * that the model round-trips through the parser back to the source board. STR fabrication is exercised separately in
  * {@code TestPgnExportBoardArchival} (the archival-mode path that does fill the Seven Tag Roster).
  */
@@ -39,11 +39,11 @@ class TestPgnExportBoard {
       boardExpected.moveStrict(sanIsNotNull);
     }
 
-    final PgnGame boardExpectedPgnFile = PgnCreate.createPgnFile(boardExpected);
+    final PgnGame boardExpectedPgnGame = PgnCreate.createPgnGame(boardExpected);
 
-    checkNoFabrication(resultTagValue, boardExpectedPgnFile);
+    checkNoFabrication(resultTagValue, boardExpectedPgnGame);
 
-    checkBoardReplay(boardExpected, boardExpectedPgnFile);
+    checkBoardReplay(boardExpected, boardExpectedPgnGame);
   }
 
   /**
@@ -56,8 +56,8 @@ class TestPgnExportBoard {
     assertEquals(resultTagValue, pgnGame.terminationMarker());
   }
 
-  private static void checkBoardReplay(Board boardExpected, PgnGame boardExpectedPgnFile) {
-    final Board boardActual = PgnUtility.calculateBoard(boardExpectedPgnFile, false);
+  private static void checkBoardReplay(Board boardExpected, PgnGame boardExpectedPgnGame) {
+    final Board boardActual = PgnUtility.calculateBoard(boardExpectedPgnGame, false);
     assertEquals(boardExpected, boardActual);
   }
 

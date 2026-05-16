@@ -25,7 +25,7 @@ import com.dlb.chess.fen.model.Fen;
  * {@code ????.??.??} for Date (per spec section 8.1.1.3), {@code *} for Result (per section 8.1.1.7), {@code ?} for the
  * rest (per sections 8.1.1.1, 8.1.1.2, 8.1.1.4, 8.1.1.5, 8.1.1.6).</li>
  * <li><b>Canonical tag order.</b> Tags are sorted into STR-first-by-sort-order via {@link Tag#compareTo}.</li>
- * <li><b>Termination marker guaranteed.</b> The returned {@code PgnFile.terminationMarker} is non-null; semantic-mode
+ * <li><b>Termination marker guaranteed.</b> The returned {@code PgnGame.terminationMarker} is non-null; semantic-mode
  * emission then writes it as the movetext trailer.</li>
  * </ol>
  */

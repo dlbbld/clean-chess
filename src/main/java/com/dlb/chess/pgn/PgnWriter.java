@@ -18,7 +18,7 @@ import com.dlb.chess.common.exceptions.FileSystemAccessException;
 public class PgnWriter {
 
   // -------------------------------------------------------------------------------------------------
-  // PgnFile entry points — semantic default, explicit-mode overloads
+  // PgnGame entry points — semantic default, explicit-mode overloads
   // -------------------------------------------------------------------------------------------------
 
   public static void writePgnFile(PgnGame pgnGame, String pgnFilePath) {
@@ -42,7 +42,7 @@ public class PgnWriter {
   }
 
   public static void writePgnFile(PgnGame pgnGame, Path filePath, WriteMode writeMode) {
-    final List<String> fileLines = PgnCreate.createPgnFileLines(pgnGame, writeMode);
+    final List<String> fileLines = PgnCreate.createPgnLines(pgnGame, writeMode);
     writeLinesReplacing(filePath, fileLines);
   }
 
@@ -56,7 +56,7 @@ public class PgnWriter {
 
   public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName,
       WriteMode writeMode) {
-    final PgnGame pgnGame = PgnCreate.createPgnFile(board, tagList);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board, tagList);
     writePgnFile(pgnGame, folderPath, pgnFileName, writeMode);
   }
 
@@ -65,7 +65,7 @@ public class PgnWriter {
   }
 
   public static void writePgnFile(Board board, Path folderPath, String pgnFileName, WriteMode writeMode) {
-    final PgnGame pgnGame = PgnCreate.createPgnFile(board);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
     writePgnFile(pgnGame, folderPath, pgnFileName, writeMode);
   }
 

@@ -8,7 +8,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
  * A single fixture row in the test corpus. The {@link #finalFen()} string is the cached final position of the PGN file
- * named by {@link #pgnFileName()}; populated when the fixture is added to {@code CreatePgnTestCases}.
+ * named by {@link #pgnFileName()}; populated when the fixture is added to {@code PgnTestCaseCatalog}.
  *
  * <p>
  * Two ways to materialise a board from a fixture, chosen by the test author:

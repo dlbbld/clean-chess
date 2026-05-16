@@ -151,10 +151,10 @@ class TestReadMe {
   @SuppressWarnings("static-method")
   void pgnFileCanBeWrittenAndParsed(@TempDir Path tempDir) {
     final Board sourceBoard = createOpeningExampleBoard();
-    final PgnGame pgnGame = PgnCreate.createPgnFile(sourceBoard);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(sourceBoard);
     final Path filePath = Nulls.pathResolve(tempDir, "myFile.pgn");
 
-    // Archival mode for the write: createPgnFile(Board) carries no tags by design (no caller-provided input to
+    // Archival mode for the write: createPgnGame(Board) carries no tags by design (no caller-provided input to
     // preserve), so a SEMANTIC write would produce a tag-less PGN that strict parsing rejects. Round-tripping
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
     PgnWriter.writePgnFile(pgnGame, filePath, WriteMode.ARCHIVAL);
@@ -204,7 +204,7 @@ class TestReadMe {
     // Archival mode produces a strict-spec-compliant export from the deficient lenient input: fills the missing
     // STR placeholders, synthesises a Result tag, emits the termination marker. The README example is exactly
     // the lenient-input + archival-output flow.
-    final String exported = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
+    final String exported = PgnCreate.createPgnString(pgnGame, WriteMode.ARCHIVAL);
 
     assertTrue(exported.contains("[Event \"Spring Classic\"]"));
     assertTrue(exported.contains("[White \"John Doe\"]"));
@@ -313,14 +313,14 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void pgnCreationProducesParserValidExport() {
-    final PgnGame pgnGame = PgnCreate.createPgnFile(createOpeningExampleBoard());
+    final PgnGame pgnGame = PgnCreate.createPgnGame(createOpeningExampleBoard());
     // Archival mode is the contract a Board-to-PGN consumer wants when round-tripping through strict parsing:
-    // semantic mode would produce a tag-less PGN (createPgnFile(Board) carries no tags by design), which strict
+    // semantic mode would produce a tag-less PGN (createPgnGame(Board) carries no tags by design), which strict
     // parsing rejects for the missing Result tag.
-    final String pgnFileString = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
+    final String pgnString = PgnCreate.createPgnString(pgnGame, WriteMode.ARCHIVAL);
 
-    assertTrue(LenientPgnParser.validateText(pgnFileString).isValid());
-    assertTrue(StrictPgnParser.validateText(pgnFileString).isValid());
+    assertTrue(LenientPgnParser.validateText(pgnString).isValid());
+    assertTrue(StrictPgnParser.validateText(pgnString).isValid());
   }
 
   @Test

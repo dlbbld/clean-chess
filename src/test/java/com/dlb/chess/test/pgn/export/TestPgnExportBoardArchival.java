@@ -20,7 +20,7 @@ import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.pgn.WriteMode;
 
 /**
- * The {@link PgnCreate#createPgnFile(Board)} path produces a minimal honest model — no STR fabrication. Archival export
+ * The {@link PgnCreate#createPgnGame(Board)} path produces a minimal honest model — no STR fabrication. Archival export
  * ({@link WriteMode#ARCHIVAL}) is the opt-in path that fills the Seven Tag Roster, synthesises a Result tag from the
  * termination marker, and emits PGN spec section 8.1.1-conformant output. This test exercises that archival path on
  * Board-derived inputs.
@@ -44,13 +44,13 @@ class TestPgnExportBoardArchival {
       board.moveStrict(sanIsNotNull);
     }
 
-    final PgnGame boardPgnFile = PgnCreate.createPgnFile(board);
+    final PgnGame boardPgnGame = PgnCreate.createPgnGame(board);
 
     // Sanity precondition: the Board path itself does not fabricate STR. Archival output is the only place STR
     // gets filled.
-    assertTrue(boardPgnFile.tagList().isEmpty());
+    assertTrue(boardPgnGame.tagList().isEmpty());
 
-    final String archivalOutput = PgnCreate.createPgnFileString(boardPgnFile, WriteMode.ARCHIVAL);
+    final String archivalOutput = PgnCreate.createPgnString(boardPgnGame, WriteMode.ARCHIVAL);
 
     assertContainsAllStrPlaceholders(archivalOutput);
     assertResultTagMatchesExpected(archivalOutput, expectedResult);
@@ -92,8 +92,8 @@ class TestPgnExportBoardArchival {
     tagList.add(new Tag(StandardTag.SET_UP.getName(), "1"));
     tagList.add(new Tag(StandardTag.FEN.getName(), customFen));
 
-    final PgnGame boardPgnFile = PgnCreate.createPgnFile(board, tagList);
-    final String archivalOutput = PgnCreate.createPgnFileString(boardPgnFile, WriteMode.ARCHIVAL);
+    final PgnGame boardPgnGame = PgnCreate.createPgnGame(board, tagList);
+    final String archivalOutput = PgnCreate.createPgnString(boardPgnGame, WriteMode.ARCHIVAL);
 
     assertTrue(archivalOutput.contains("[" + StandardTag.SET_UP.getName() + " \"1\"]"));
     assertTrue(archivalOutput.contains("[" + StandardTag.FEN.getName() + " \"" + customFen + "\"]"));
@@ -107,9 +107,9 @@ class TestPgnExportBoardArchival {
     // Tags emitted in canonical sort order (STR first by sortOrder, then supplemental tags). Verify by checking
     // that Event appears before Result in the output.
     final Board board = new Board(false);
-    final PgnGame pgnGame = PgnCreate.createPgnFile(board);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
 
-    final String archivalOutput = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
+    final String archivalOutput = PgnCreate.createPgnString(pgnGame, WriteMode.ARCHIVAL);
 
     final var eventIdx = archivalOutput.indexOf("[" + StandardTag.EVENT.getName() + " ");
     final var resultIdx = archivalOutput.indexOf("[" + StandardTag.RESULT.getName() + " ");
@@ -124,9 +124,9 @@ class TestPgnExportBoardArchival {
     // Counterpart to the archival path: semantic mode of an initial-position Board emits a tag-less PGN — just
     // the movetext and termination marker. Honest preservation of "no caller-provided tags."
     final Board board = new Board(false);
-    final PgnGame pgnGame = PgnCreate.createPgnFile(board);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
 
-    final String semanticOutput = PgnCreate.createPgnFileString(pgnGame, WriteMode.SEMANTIC);
+    final String semanticOutput = PgnCreate.createPgnString(pgnGame, WriteMode.SEMANTIC);
 
     // Tag section is empty — no '[' appears in the output, no STR placeholders.
     assertFalse(semanticOutput.contains("[" + StandardTag.EVENT.getName() + " "));
@@ -141,9 +141,9 @@ class TestPgnExportBoardArchival {
   @SuppressWarnings("static-method")
   @Test
   void callerSuppliedResultTagDisagreeingWithBoardThrows() {
-    // The PgnFile invariant: when a Result tag is present in tagList AND terminationMarker is non-null, the
-    // two must agree. The Board-to-PgnFile path derives terminationMarker from the board's game status; if the
-    // caller supplies a Result tag with a different value, the compact constructor of PgnFile catches the
+    // The PgnGame invariant: when a Result tag is present in tagList AND terminationMarker is non-null, the
+    // two must agree. The Board-to-PgnGame path derives terminationMarker from the board's game status; if the
+    // caller supplies a Result tag with a different value, the compact constructor of PgnGame catches the
     // inconsistency and throws — rather than silently producing a model that archival export would then have
     // to choose between when emitting the Result tag vs the termination marker.
     final Board boardWonByWhite = new Board(false);
@@ -157,9 +157,9 @@ class TestPgnExportBoardArchival {
     assertTrue(boardWonByWhite.isCheckmate());
 
     // Nulls.copyOfList wraps List.of with the @NonNull-annotated immutable list shape JDT requires for the
-    // {@code createPgnFile(Board, List<Tag>)} parameter.
+    // {@code createPgnGame(Board, List<Tag>)} parameter.
     @SuppressWarnings("null") final List<Tag> contradictoryTagList = Nulls
         .copyOfList(java.util.Collections.singletonList(new Tag(StandardTag.RESULT.getName(), "0-1")));
-    assertThrows(IllegalArgumentException.class, () -> PgnCreate.createPgnFile(boardWonByWhite, contradictoryTagList));
+    assertThrows(IllegalArgumentException.class, () -> PgnCreate.createPgnGame(boardWonByWhite, contradictoryTagList));
   }
 }

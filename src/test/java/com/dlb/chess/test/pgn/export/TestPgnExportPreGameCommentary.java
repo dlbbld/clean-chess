@@ -23,7 +23,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = StrictPgnParser.parseText(fileString);
 
@@ -41,7 +41,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = StrictPgnParser.parseText(fileString);
 
@@ -60,7 +60,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = StrictPgnParser.parseText(fileString);
 
@@ -78,7 +78,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = StrictPgnParser.parseText(fileString);
 
@@ -96,7 +96,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " 1. e4 e5 *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = LenientPgnParser.parseText(fileString);
 
@@ -114,7 +114,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = LenientPgnParser.parseText(fileString);
 
@@ -133,7 +133,7 @@ class TestPgnExportPreGameCommentary {
         .parseText(PgnTestHelper.header("*") + "{" + pregameCommentary + "}" + " *\n\n");
     assertEquals(pregameCommentary, fileImport.pregameCommentary().value());
 
-    final String fileString = PgnCreate.createPgnFileString(fileImport);
+    final String fileString = PgnCreate.createPgnString(fileImport);
 
     final PgnGame fileExport = LenientPgnParser.parseText(fileString);
 
@@ -189,7 +189,7 @@ class TestPgnExportPreGameCommentary {
 
   private static void assertRoundTripStable(String inputPgn) {
     final PgnGame p1 = LenientPgnParser.parseText(inputPgn);
-    final String t1 = PgnCreate.createPgnFileString(p1);
+    final String t1 = PgnCreate.createPgnString(p1);
     final PgnGame p2 = LenientPgnParser.parseText(t1);
 
     assertEquals(p1, p2, "Round-trip changed the parsed model");
@@ -201,7 +201,7 @@ class TestPgnExportPreGameCommentary {
     // T-005: export emits LF only.
     final PgnGame fileImport = LenientPgnParser
         .parseText(PgnTestHelper.header("*") + "{intro\r\nnote} 1. e4 {move\r\nnote} e5 *\n\n");
-    final String exported = PgnCreate.createPgnFileString(fileImport);
+    final String exported = PgnCreate.createPgnString(fileImport);
     org.junit.jupiter.api.Assertions.assertFalse(exported.contains("\r"));
   }
 

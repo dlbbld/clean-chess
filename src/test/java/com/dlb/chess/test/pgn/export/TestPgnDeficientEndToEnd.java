@@ -61,7 +61,7 @@ class TestPgnDeficientEndToEnd {
   @Test
   void test02_semanticExportEchoesTheParseModel() {
     final PgnGame pgnGame = LenientPgnParser.parseText(DEFICIENT_PGN);
-    final String semantic = PgnCreate.createPgnFileString(pgnGame, WriteMode.SEMANTIC);
+    final String semantic = PgnCreate.createPgnString(pgnGame, WriteMode.SEMANTIC);
 
     // Tags preserved as given (whitespace normalised inside the brackets).
     assertTrue(semantic.contains("[Event \"Spring Classic\"]"));
@@ -86,7 +86,7 @@ class TestPgnDeficientEndToEnd {
   @Test
   void test03_archivalExportProducesSpecCompliantOutput() {
     final PgnGame pgnGame = LenientPgnParser.parseText(DEFICIENT_PGN);
-    final String archival = PgnCreate.createPgnFileString(pgnGame, WriteMode.ARCHIVAL);
+    final String archival = PgnCreate.createPgnString(pgnGame, WriteMode.ARCHIVAL);
 
     // Caller-supplied tag values preserved.
     assertTrue(archival.contains("[Event \"Spring Classic\"]"));

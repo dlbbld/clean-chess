@@ -19,7 +19,7 @@ class TestPgnCreate {
 
     final PgnGame fileImport = LenientPgnParser.parseText(expectedString);
 
-    final String actualString = PgnCreate.createPgnFileString(fileImport);
+    final String actualString = PgnCreate.createPgnString(fileImport);
 
     assertEquals(expectedString, actualString);
 
@@ -40,7 +40,7 @@ class TestPgnCreate {
     final var expectedExport = PgnTestHelper.header("*") + "1. e4 {after-white} 1... e5 *\n\n";
 
     final PgnGame fileImport = LenientPgnParser.parseText(inputWithoutIndicator);
-    final String actualExport = PgnCreate.createPgnFileString(fileImport);
+    final String actualExport = PgnCreate.createPgnString(fileImport);
 
     assertEquals(expectedExport, actualExport);
   }
@@ -52,7 +52,7 @@ class TestPgnCreate {
     final var input = PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 Nc6 *\n\n";
 
     final PgnGame fileImport = LenientPgnParser.parseText(input);
-    final String actualExport = PgnCreate.createPgnFileString(fileImport);
+    final String actualExport = PgnCreate.createPgnString(fileImport);
 
     assertEquals(input, actualExport);
   }
@@ -65,7 +65,7 @@ class TestPgnCreate {
     final var expectedExport = PgnTestHelper.header("*") + "1. e4 e5 2. Nf3 {after-white-2} 2... Nc6 *\n\n";
 
     final PgnGame fileImport = LenientPgnParser.parseText(inputWithoutIndicator);
-    final String actualExport = PgnCreate.createPgnFileString(fileImport);
+    final String actualExport = PgnCreate.createPgnString(fileImport);
 
     assertEquals(expectedExport, actualExport);
   }

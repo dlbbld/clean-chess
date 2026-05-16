@@ -38,7 +38,7 @@ class TestPgnImportAgainstExport {
         final PgnGame pgnGameFromFileSystem = PgnCacheForLenientPgnParserTestCases
             .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
 
-        final List<String> export = PgnCreate.createPgnFileLines(pgnGameFromFileSystem);
+        final List<String> export = PgnCreate.createPgnLines(pgnGameFromFileSystem);
         final PgnGame pgnGameFromReadingExport = LenientPgnParser.parse(export);
 
         assertEquals(pgnGameFromFileSystem, pgnGameFromReadingExport);
