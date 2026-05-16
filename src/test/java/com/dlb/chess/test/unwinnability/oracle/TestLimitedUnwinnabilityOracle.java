@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
@@ -52,7 +52,7 @@ class TestLimitedUnwinnabilityOracle {
     // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
     // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
     // itself then asserts the oracle behaviour on the resulting position.
-    final Board board = GeneralUtility.calculateBoard(pgnFile, false);
+    final Board board = PgnUtility.calculateBoard(pgnFile, false);
     logger.info(pgnFileName);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,

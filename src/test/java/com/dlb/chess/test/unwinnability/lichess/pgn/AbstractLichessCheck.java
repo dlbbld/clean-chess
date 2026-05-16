@@ -4,7 +4,7 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
@@ -23,7 +23,7 @@ public abstract class AbstractLichessCheck {
 
   static boolean calculateIsIncorrectResult(PgnFile pgnFile) {
 
-    final Board boardPerLastMove = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
+    final Board boardPerLastMove = PgnUtility.calculateBoardPerLastMove(pgnFile);
     final ResultTagValue resultTagValue = TagUtility.readResultTagValue(pgnFile);
 
     if (boardPerLastMove.getHavingMove() == Side.WHITE && resultTagValue == ResultTagValue.WHITE_WON

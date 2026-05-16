@@ -21,7 +21,7 @@ import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.pgn.StrictPgnParser;
@@ -159,8 +159,8 @@ class TestReadMe {
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
     PgnWriter.writePgnFile(pgnFile, filePath, WriteMode.ARCHIVAL);
 
-    final Board lenientBoard = PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
-    final Board strictBoard = PgnFileUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
+    final Board lenientBoard = PgnUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
+    final Board strictBoard = PgnUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
 
     assertFalse(lenientBoard.isCheckmate());
     assertFalse(strictBoard.isThreefoldRepetition());
@@ -180,7 +180,7 @@ class TestReadMe {
                 """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
     board.moveStrict("a3");
 
     assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
@@ -250,7 +250,7 @@ class TestReadMe {
         """;
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
     board.moveStrict("a3");
 
     assertEquals(6, pgnFile.halfMoveList().size());
@@ -415,7 +415,7 @@ class TestReadMe {
   }
 
   private static Board calculateBoard(String pgn) {
-    return PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parseText(pgn));
+    return PgnUtility.calculateBoardPerLastMove(LenientPgnParser.parseText(pgn));
   }
 
   private static Board createOpeningExampleBoard() {

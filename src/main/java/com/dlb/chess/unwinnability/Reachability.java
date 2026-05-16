@@ -12,7 +12,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.GeneralUtility;
 
 class Reachability {
 
@@ -87,11 +86,11 @@ class Reachability {
     final List<ReachabilityVariable> entriesWithValueOneList = calculateEntriesWithValueOne();
 
     final Set<Square> reachableSquareSetWhite = calculateSquareSet(Side.WHITE, entriesWithValueOneList);
-    final String squareListWhite = GeneralUtility.calculateSquareList(reachableSquareSetWhite);
+    final String squareListWhite = BasicUtility.calculateSquareList(reachableSquareSetWhite);
     lineList.add(Side.WHITE.getName() + ": " + squareListWhite);
 
     final Set<Square> reachableSquareSetBlack = calculateSquareSet(Side.BLACK, entriesWithValueOneList);
-    final String squareListBlack = GeneralUtility.calculateSquareList(reachableSquareSetBlack);
+    final String squareListBlack = BasicUtility.calculateSquareList(reachableSquareSetBlack);
     lineList.add(Side.BLACK.getName() + ": " + squareListBlack);
 
     return BasicUtility.convertToString(lineList);

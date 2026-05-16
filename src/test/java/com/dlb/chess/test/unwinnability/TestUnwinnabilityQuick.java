@@ -11,9 +11,9 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.test.PrintDuration;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
@@ -74,7 +74,7 @@ class TestUnwinnabilityQuick {
 
     final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final Board board = GeneralUtility.calculateBoard(pgnFile);
+    final Board board = PgnUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, board.getHavingMove()));

@@ -15,7 +15,7 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.UciMove;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -51,7 +51,7 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       final PgnTest pgnTestLichessGame = CreatePgnTestCases.findPgnTest(lichessGame);
       final PgnFile pgnFileLichessGame = LenientPgnParser.parse(pgnTestLichessGame.getFolderPath(), lichessGame);
 
-      final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFileLichessGame);
+      final Board board = PgnUtility.calculateBoardPerLastMove(pgnFileLichessGame);
       final String fen = board.getFen();
       final Side winner = board.getHavingMove();
       final UnwinnabilityFullAnalysis analysis = UnwinnableFullAnalyzer.unwinnableFull(board, winner);
