@@ -14,19 +14,17 @@ import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict
  * Two entry points, distinguished by who chose the last move on the paths that produced the set:
  *
  * <ul>
- * <li>{@link #evaluateUnderOwnChoice} — the side-to-evaluate picked the last move on each path. OR semantics:
- * a single branch ending in {@code WIN} for the side-to-evaluate is enough to conclude {@code WINNABLE}; only if
- * every branch ends in {@code LOSS_OR_DRAW} does the verdict become {@code UNWINNABLE}; otherwise
- * {@code UNKNOWN}.</li>
- * <li>{@link #evaluateUnderOpponentChoice} — the opponent picked the last move on each path. AND semantics: the
- * verdict can only be {@code UNWINNABLE} (every branch ends in loss-or-draw for the side-to-evaluate) or
- * {@code UNKNOWN}; {@code WINNABLE} cannot be concluded because the opponent would just avoid any branch that
- * lets us win.</li>
+ * <li>{@link #evaluateUnderOwnChoice} — the side-to-evaluate picked the last move on each path. OR semantics: a single
+ * branch ending in {@code WIN} for the side-to-evaluate is enough to conclude {@code WINNABLE}; only if every branch
+ * ends in {@code LOSS_OR_DRAW} does the verdict become {@code UNWINNABLE}; otherwise {@code UNKNOWN}.</li>
+ * <li>{@link #evaluateUnderOpponentChoice} — the opponent picked the last move on each path. AND semantics: the verdict
+ * can only be {@code UNWINNABLE} (every branch ends in loss-or-draw for the side-to-evaluate) or {@code UNKNOWN};
+ * {@code WINNABLE} cannot be concluded because the opponent would just avoid any branch that lets us win.</li>
  * </ul>
  *
  * <p>
- * Both entry points reduce to the same per-status {@link #classify} function, parameterised by the colour of the
- * side that just moved at the leaf — which is determined by the entry-point choice.
+ * Both entry points reduce to the same per-status {@link #classify} function, parameterised by the colour of the side
+ * that just moved at the leaf — which is determined by the entry-point choice.
  */
 public class ShallowTerminationEvaluator {
 
@@ -49,9 +47,9 @@ public class ShallowTerminationEvaluator {
   }
 
   /**
-   * Reduces the set under the assumption that the opponent picked the last move on each path (so we can never
-   * conclude {@code WINNABLE} — opponent would avoid any winning branch — but we can conclude {@code UNWINNABLE}
-   * if every branch ends in loss-or-draw for the side-to-evaluate).
+   * Reduces the set under the assumption that the opponent picked the last move on each path (so we can never conclude
+   * {@code WINNABLE} — opponent would avoid any winning branch — but we can conclude {@code UNWINNABLE} if every branch
+   * ends in loss-or-draw for the side-to-evaluate).
    */
   static LimitedUnwinnabilityVerdict evaluateUnderOpponentChoice(Set<GameStatus> statuses, Side sideToEvaluate) {
     return reduce(statuses, sideToEvaluate, sideToEvaluate.getOppositeSide(), /* sideToEvaluatePicked */ false);
@@ -94,11 +92,9 @@ public class ShallowTerminationEvaluator {
     return switch (status) {
       case CHECKMATE -> sideThatJustMoved == sideToEvaluate ? LeafOutcome.WIN : LeafOutcome.LOSS_OR_DRAW;
       case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, DEAD_POSITION_UNWINNABLE_QUICK, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LeafOutcome.LOSS_OR_DRAW;
-      case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE
-          ? LeafOutcome.LOSS_OR_DRAW
+      case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE ? LeafOutcome.LOSS_OR_DRAW
           : LeafOutcome.INCONCLUSIVE;
-      case INSUFFICIENT_MATERIAL_BLACK_ONLY -> sideToEvaluate == Side.BLACK
-          ? LeafOutcome.LOSS_OR_DRAW
+      case INSUFFICIENT_MATERIAL_BLACK_ONLY -> sideToEvaluate == Side.BLACK ? LeafOutcome.LOSS_OR_DRAW
           : LeafOutcome.INCONCLUSIVE;
       case ONGOING -> LeafOutcome.INCONCLUSIVE;
     };

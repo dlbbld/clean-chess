@@ -15,7 +15,8 @@ import com.dlb.chess.pgn.PgnUtility;
  * half-move. Computing it by hand is tedious; this tool replays the PGN with dead-position auto-detection disabled (so
  * fixtures whose final position is intentionally dead still produce a FEN) and prints the result on stdout.
  *
- * <p>Usage from Maven:
+ * <p>
+ * Usage from Maven:
  *
  * <pre>{@code
  * mvn -q exec:java -Dexec.classpathScope=test \
@@ -23,8 +24,9 @@ import com.dlb.chess.pgn.PgnUtility;
  *     -Dexec.args="src/test/resources/pgn/path/to/fixture.pgn"
  * }</pre>
  *
- * <p>The argument may be an absolute path or a path relative to the working directory. The PGN is parsed with the
- * lenient parser to match the test-fixture workflow.
+ * <p>
+ * The argument may be an absolute path or a path relative to the working directory. The PGN is parsed with the lenient
+ * parser to match the test-fixture workflow.
  */
 public final class FenFromPgn {
 

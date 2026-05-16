@@ -3,9 +3,9 @@ package com.dlb.chess.test.unwinnability.identifier;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 /**
- * Test-side mapping between {@link UnwinnabilityQuickVerdict} values and the lowercase string identifiers
- * emitted by Ambrona's CHA C binary ({@code "winnable"}, {@code "unwinnable"}, {@code "undetermined"}). Used only
- * when reading raw CHA output for cross-checks against the Java port; not part of the production API.
+ * Test-side mapping between {@link UnwinnabilityQuickVerdict} values and the lowercase string identifiers emitted by
+ * Ambrona's CHA C binary ({@code "winnable"}, {@code "unwinnable"}, {@code "undetermined"}). Used only when reading raw
+ * CHA output for cross-checks against the Java port; not part of the production API.
  *
  * <p>
  * Note that {@link UnwinnabilityQuickVerdict#POSSIBLY_WINNABLE} maps to {@code "undetermined"} because that is the

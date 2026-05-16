@@ -1,10 +1,9 @@
 package com.dlb.chess.fen;
 
 /**
- * FEN-level deviations the lenient FEN parser accepts. Surfaced on the validation result so consumers can see what
- * the parser tolerated without rejecting. None of these alter the semantic content of the position — they are
- * purely syntactic-tolerance transformations applied before delegating to {@link FenParserRaw} /
- * {@link FenParserAdvanced}.
+ * FEN-level deviations the lenient FEN parser accepts. Surfaced on the validation result so consumers can see what the
+ * parser tolerated without rejecting. None of these alter the semantic content of the position — they are purely
+ * syntactic-tolerance transformations applied before delegating to {@link FenParserRaw} / {@link FenParserAdvanced}.
  */
 public enum ForgivenFenItemCode {
 
@@ -38,8 +37,8 @@ public enum ForgivenFenItemCode {
   UPPERCASE_SIDE_TO_MOVE,
 
   /**
-   * Castling-rights letters present in non-canonical order (e.g. {@code QKqk}, {@code kqKQ}). Reordered to
-   * canonical {@code KQkq} subset.
+   * Castling-rights letters present in non-canonical order (e.g. {@code QKqk}, {@code kqKQ}). Reordered to canonical
+   * {@code KQkq} subset.
    */
   CASTLING_NON_CANONICAL_ORDER,
 
@@ -54,18 +53,18 @@ public enum ForgivenFenItemCode {
   EN_PASSANT_UPPERCASE,
 
   /**
-   * More than six fields in the input. The first six are kept; the trailing field(s) are dropped. The detail
-   * carries the dropped fragment.
+   * More than six fields in the input. The first six are kept; the trailing field(s) are dropped. The detail carries
+   * the dropped fragment.
    */
   TRAILING_GARBAGE_TOKEN,
 
   /**
-   * Half-move clock and full-move number are inconsistent: a FEN like {@code ... 15 1} claims 15 half-moves have
-   * been played but the full-move counter is still at 1. Physically impossible in a single chess game. The
-   * lenient parser auto-corrects by bumping {@code fullMoveNumber} up to {@code halfMoveClock} rounded up to the
-   * next multiple of ten — {@code halfMoveClock = 15} gives {@code fullMoveNumber = 20}, {@code halfMoveClock = 2}
-   * gives {@code fullMoveNumber = 10}. The round-numbered result is well above the strict minimum and signals to
-   * a reader that the value was reconstructed rather than measured. Strict parsing rejects (see
+   * Half-move clock and full-move number are inconsistent: a FEN like {@code ... 15 1} claims 15 half-moves have been
+   * played but the full-move counter is still at 1. Physically impossible in a single chess game. The lenient parser
+   * auto-corrects by bumping {@code fullMoveNumber} up to {@code halfMoveClock} rounded up to the next multiple of ten
+   * — {@code halfMoveClock = 15} gives {@code fullMoveNumber = 20}, {@code halfMoveClock = 2} gives
+   * {@code fullMoveNumber = 10}. The round-numbered result is well above the strict minimum and signals to a reader
+   * that the value was reconstructed rather than measured. Strict parsing rejects (see
    * {@code FenAdvancedValidationProblem.INVALID_HALF_MOVE_CLOCK_TOO_BIG_RELATIVE_TO_FULL_MOVE_NUMBER}).
    */
   HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER,

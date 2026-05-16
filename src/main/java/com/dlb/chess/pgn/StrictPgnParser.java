@@ -269,7 +269,8 @@ public final class StrictPgnParser {
   private static ResultTagValue validateResultTagValue(List<Tag> tagList) {
     if (!TagUtility.hasResult(tagList)) {
       throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_RESULT_MISSING,
-          SanValidationProblem.NONE, "The " + StandardTag.RESULT.getName()
+          SanValidationProblem.NONE,
+          "The " + StandardTag.RESULT.getName()
               + " tag is required. PGN spec section 8.1.1 archival storage requires the full seven tag roster, but the"
               + " strict parser only enforces the semantic essentials: a Result tag (whose value must match the"
               + " termination marker) and the SetUp/FEN coupling. Other roster tags are archival-storage concerns"

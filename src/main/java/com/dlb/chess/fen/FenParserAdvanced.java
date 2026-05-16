@@ -90,15 +90,14 @@ public class FenParserAdvanced implements EnumConstants {
   }
 
   /**
-   * Half-move clock cannot exceed the maximum number of half-moves that have been played by the start of the
-   * given full-move number. With {@code havingMove == WHITE} the maximum is {@code 2 * (fullMoveNumber - 1)};
-   * with {@code havingMove == BLACK} the count includes White's half-move on the current full-move, so the
-   * maximum is {@code 2 * (fullMoveNumber - 1) + 1}. Violations are physical impossibilities — a FEN like
-   * {@code ... 15 1} (15 half-moves played, claiming move 1) cannot arise from a real game. The lenient FEN
-   * parser auto-corrects this by bumping {@code fullMoveNumber} up to {@code halfMoveClock} rounded up to the
-   * next multiple of ten (a generous reserve over the strict minimum; the round-numbered value signals a
-   * reconstructed placeholder) and surfaces the deviation via
-   * {@code ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER}.
+   * Half-move clock cannot exceed the maximum number of half-moves that have been played by the start of the given
+   * full-move number. With {@code havingMove == WHITE} the maximum is {@code 2 * (fullMoveNumber - 1)}; with
+   * {@code havingMove == BLACK} the count includes White's half-move on the current full-move, so the maximum is
+   * {@code 2 * (fullMoveNumber - 1) + 1}. Violations are physical impossibilities — a FEN like {@code ... 15 1} (15
+   * half-moves played, claiming move 1) cannot arise from a real game. The lenient FEN parser auto-corrects this by
+   * bumping {@code fullMoveNumber} up to {@code halfMoveClock} rounded up to the next multiple of ten (a generous
+   * reserve over the strict minimum; the round-numbered value signals a reconstructed placeholder) and surfaces the
+   * deviation via {@code ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER}.
    */
   private static void validateHalfMoveClockAgainstFullMoveNumber(int halfMoveClock, int fullMoveNumber, Side havingMove)
       throws FenAdvancedValidationException {

@@ -14,10 +14,10 @@ public class UnwinnableQuickAnalyzer {
   }
 
   /**
-   * Runs the algorithm on a fresh detection-off board built from the caller's FEN. Isolation has two effects:
-   * (1) the caller's board is not mutated, and (2) the analyzer's internal {@code board.move(...)} calls don't
-   * trigger the dead-position auto-detect (which itself runs this analyzer). Repetition history from the caller's
-   * game is lost on the fresh board — acceptable for the quick check, whose verdict is conservative anyway.
+   * Runs the algorithm on a fresh detection-off board built from the caller's FEN. Isolation has two effects: (1) the
+   * caller's board is not mutated, and (2) the analyzer's internal {@code board.move(...)} calls don't trigger the
+   * dead-position auto-detect (which itself runs this analyzer). Repetition history from the caller's game is lost on
+   * the fresh board — acceptable for the quick check, whose verdict is conservative anyway.
    */
   public static UnwinnabilityQuickVerdict unwinnableQuick(Board input, Side c, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {

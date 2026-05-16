@@ -108,7 +108,8 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
         }
         break;
       case "undetermined":
-        if (!mineResult.equals(UnwinnabilityQuickVerdictIdentifier.getIdentifier(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE))) {
+        if (!mineResult
+            .equals(UnwinnabilityQuickVerdictIdentifier.getIdentifier(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE))) {
           return true;
         }
         break;

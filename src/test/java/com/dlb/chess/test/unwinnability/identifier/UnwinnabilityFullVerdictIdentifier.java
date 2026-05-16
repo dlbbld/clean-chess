@@ -4,9 +4,9 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 
 /**
- * Test-side mapping between {@link UnwinnabilityFullVerdict} values and the lowercase string identifiers
- * emitted by Ambrona's CHA C binary ({@code "winnable"}, {@code "unwinnable"}, {@code "undetermined"}). Used only
- * when reading raw CHA output for cross-checks against the Java port; not part of the production API.
+ * Test-side mapping between {@link UnwinnabilityFullVerdict} values and the lowercase string identifiers emitted by
+ * Ambrona's CHA C binary ({@code "winnable"}, {@code "unwinnable"}, {@code "undetermined"}). Used only when reading raw
+ * CHA output for cross-checks against the Java port; not part of the production API.
  */
 public final class UnwinnabilityFullVerdictIdentifier {
 

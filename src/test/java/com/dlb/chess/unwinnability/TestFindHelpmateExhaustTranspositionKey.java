@@ -11,10 +11,10 @@ import com.dlb.chess.board.Board;
  * Verifies the helpmate-search transposition-key behaviour now exposed via {@link Board#getDynamicPosition()}.
  *
  * <p>
- * The helpmate search keys its visited-position map on {@code DynamicPosition}. The properties tested here are the
- * ones that distinguish {@code DynamicPosition} from a raw FEN-equality test: the halfmove and fullmove counters are
- * not part of position identity, and the en-passant target square is normalised away when no opposing pawn can
- * actually capture there.
+ * The helpmate search keys its visited-position map on {@code DynamicPosition}. The properties tested here are the ones
+ * that distinguish {@code DynamicPosition} from a raw FEN-equality test: the halfmove and fullmove counters are not
+ * part of position identity, and the en-passant target square is normalised away when no opposing pawn can actually
+ * capture there.
  */
 class TestFindHelpmateExhaustTranspositionKey {
 

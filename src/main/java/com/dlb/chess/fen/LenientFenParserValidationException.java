@@ -21,16 +21,15 @@ public class LenientFenParserValidationException extends UsageException {
 
   /**
    * The underlying {@link FenAdvancedValidationProblem} when {@link #lenientFenParserValidationProblem} is
-   * {@link LenientFenParserValidationProblem#ADVANCED_INVALID}; {@link FenAdvancedValidationProblem#SUCCESS}
-   * otherwise. Carried so callers can react to the specific advanced-invariant violation without parsing the
-   * message.
+   * {@link LenientFenParserValidationProblem#ADVANCED_INVALID}; {@link FenAdvancedValidationProblem#SUCCESS} otherwise.
+   * Carried so callers can react to the specific advanced-invariant violation without parsing the message.
    */
   private final FenAdvancedValidationProblem fenAdvancedValidationProblem;
 
   /**
-   * Forgiven items accumulated before the failure point. Lenient normalisation runs left-to-right; if the
-   * delegate parser then rejects the normalised FEN, the items that fired up to that point are carried so the
-   * caller has full diagnostic context.
+   * Forgiven items accumulated before the failure point. Lenient normalisation runs left-to-right; if the delegate
+   * parser then rejects the normalised FEN, the items that fired up to that point are carried so the caller has full
+   * diagnostic context.
    */
   private final @NonNull ImmutableList<@NonNull ForgivenFenItem> forgivenItemsAccumulated;
 

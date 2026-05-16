@@ -11,14 +11,14 @@ import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict
 import com.dlb.chess.test.unwinnability.oracle.model.GameForced;
 
 /**
- * Test-only oracle that walks the chain of forced single-legal-move positions starting from a board and reports
- * the verdict implied by where the chain ends. If the chain reaches a terminal status (checkmate / stalemate /
- * insufficient material / five-fold / seventy-five-move), the verdict is decisive; otherwise it is UNKNOWN.
+ * Test-only oracle that walks the chain of forced single-legal-move positions starting from a board and reports the
+ * verdict implied by where the chain ends. If the chain reaches a terminal status (checkmate / stalemate / insufficient
+ * material / five-fold / seventy-five-move), the verdict is decisive; otherwise it is UNKNOWN.
  *
  * <p>
- * Companion to {@link ShallowTerminationOracle}, which handles the bounded 1/2/3-ply scan over <em>all</em> legal
- * moves at the root rather than only the unique-move chain. The two are deliberately separate so each can be
- * exercised in isolation:
+ * Companion to {@link ShallowTerminationOracle}, which handles the bounded 1/2/3-ply scan over <em>all</em> legal moves
+ * at the root rather than only the unique-move chain. The two are deliberately separate so each can be exercised in
+ * isolation:
  *
  * <ul>
  * <li>{@code ForcedLineOracle} — tested against {@code PgnTest.BASIC_FORCED}.</li>
@@ -36,8 +36,8 @@ public class ForcedLineOracle {
 
   /**
    * Runs the oracle on a fresh detection-off board built from the caller's FEN — the oracle's internal
-   * {@code board.move(...)} calls don't trigger the dead-position auto-detect, and the caller's board is not
-   * mutated. Repetition history from the caller's game is lost on the fresh board.
+   * {@code board.move(...)} calls don't trigger the dead-position auto-detect, and the caller's board is not mutated.
+   * Repetition history from the caller's game is lost on the fresh board.
    */
   public static LimitedUnwinnabilityVerdict calculateUnwinnability(Board input, Side side) {
     final Board board = input.copyCurrentPositionWithoutHistory(false);
@@ -67,10 +67,10 @@ public class ForcedLineOracle {
   }
 
   /**
-   * Walks the unique-legal-move chain from the current position. Mutates the board during the walk and undoes all
-   * moves before returning, leaving the board unchanged. Returns a {@link GameForced} carrying the terminal status
-   * (if any) reached at the end of the chain, the number of forced half-moves walked, and which side made the last
-   * move in the chain.
+   * Walks the unique-legal-move chain from the current position. Mutates the board during the walk and undoes all moves
+   * before returning, leaving the board unchanged. Returns a {@link GameForced} carrying the terminal status (if any)
+   * reached at the end of the chain, the number of forced half-moves walked, and which side made the last move in the
+   * chain.
    */
   static GameForced evaluateForcedLine(Board board) {
     // we check position after series of forced moves
@@ -110,23 +110,20 @@ public class ForcedLineOracle {
 
   /**
    * Decodes the terminal status reached at the end of the forced single-move chain into a verdict for
-   * {@code sideToEvaluate}. CHECKMATE depends on which side delivered the mate (= {@code sideMadeLastMove});
-   * the per-side insufficient-material variants depend on whether the colour with insufficient material
-   * <em>is</em> {@code sideToEvaluate} (then UNWINNABLE) or the opponent (then UNKNOWN — opponent's
-   * insufficient material doesn't decide our winnability either way from a forced chain alone).
+   * {@code sideToEvaluate}. CHECKMATE depends on which side delivered the mate (= {@code sideMadeLastMove}); the
+   * per-side insufficient-material variants depend on whether the colour with insufficient material <em>is</em>
+   * {@code sideToEvaluate} (then UNWINNABLE) or the opponent (then UNKNOWN — opponent's insufficient material doesn't
+   * decide our winnability either way from a forced chain alone).
    */
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityForced(GameForced gameForced, Side sideToEvaluate) {
     final Side sideMadeLastMove = gameForced.sideMadeLastMove();
     return switch (gameForced.gameStatus()) {
-      case CHECKMATE -> sideMadeLastMove == sideToEvaluate
-          ? LimitedUnwinnabilityVerdict.WINNABLE
+      case CHECKMATE -> sideMadeLastMove == sideToEvaluate ? LimitedUnwinnabilityVerdict.WINNABLE
           : LimitedUnwinnabilityVerdict.UNWINNABLE;
       case STALEMATE, DEAD_POSITION_INSUFFICIENT_MATERIAL, DEAD_POSITION_UNWINNABLE_QUICK, FIVE_FOLD_REPETITION_RULE, SEVENTY_FIVE_MOVE_RULE -> LimitedUnwinnabilityVerdict.UNWINNABLE;
-      case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE
-          ? LimitedUnwinnabilityVerdict.UNWINNABLE
+      case INSUFFICIENT_MATERIAL_WHITE_ONLY -> sideToEvaluate == Side.WHITE ? LimitedUnwinnabilityVerdict.UNWINNABLE
           : LimitedUnwinnabilityVerdict.UNKNOWN;
-      case INSUFFICIENT_MATERIAL_BLACK_ONLY -> sideToEvaluate == Side.BLACK
-          ? LimitedUnwinnabilityVerdict.UNWINNABLE
+      case INSUFFICIENT_MATERIAL_BLACK_ONLY -> sideToEvaluate == Side.BLACK ? LimitedUnwinnabilityVerdict.UNWINNABLE
           : LimitedUnwinnabilityVerdict.UNKNOWN;
       case ONGOING -> LimitedUnwinnabilityVerdict.UNKNOWN;
     };

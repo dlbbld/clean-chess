@@ -20,9 +20,9 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 
 /**
- * PGN serialisation entry points. The library defaults to {@link WriteMode#SEMANTIC} — emits the parse model
- * as-given without inventing content. {@link WriteMode#ARCHIVAL} runs the model through
- * {@link PgnArchivalNormalization} first to produce a PGN spec section 8.1.1-conformant artifact.
+ * PGN serialisation entry points. The library defaults to {@link WriteMode#SEMANTIC} — emits the parse model as-given
+ * without inventing content. {@link WriteMode#ARCHIVAL} runs the model through {@link PgnArchivalNormalization} first
+ * to produce a PGN spec section 8.1.1-conformant artifact.
  */
 public class PgnCreate {
 
@@ -140,9 +140,9 @@ public class PgnCreate {
   /**
    * Inverse of the tokeniser's tag-string unescape (see {@code PgnTokenizer.readTagValueString}). PGN spec section
    * 8.1.2 defines two escapes inside a string token: a backslash represents a literal backslash and a backslash
-   * followed by a quote represents a literal quote. Other characters do not require escaping. Order matters —
-   * backslash must be doubled before quotes are escaped, otherwise the backslash introduced by quote-escaping
-   * would itself be re-escaped.
+   * followed by a quote represents a literal quote. Other characters do not require escaping. Order matters — backslash
+   * must be doubled before quotes are escaped, otherwise the backslash introduced by quote-escaping would itself be
+   * re-escaped.
    */
   private static String escapeTagValue(String value) {
     return Nulls.replace(Nulls.replace(value, "\\", "\\\\"), "\"", "\\\"");
@@ -196,9 +196,9 @@ public class PgnCreate {
   }
 
   /**
-   * Creates a PgnFile from a Board with a caller-supplied tag list. The tag list is preserved verbatim (no
-   * fabrication, no sort). The termination marker is derived from the board's game-status — semantic-mode export
-   * will emit it as the movetext trailer; archival-mode export will also synthesise a Result tag from it.
+   * Creates a PgnFile from a Board with a caller-supplied tag list. The tag list is preserved verbatim (no fabrication,
+   * no sort). The termination marker is derived from the board's game-status — semantic-mode export will emit it as the
+   * movetext trailer; archival-mode export will also synthesise a Result tag from it.
    */
   public static PgnFile createPgnFile(Board board, List<Tag> tagList) {
 
@@ -209,10 +209,10 @@ public class PgnCreate {
   }
 
   /**
-   * Creates a PgnFile from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty
-   * when the board started from the initial position, or just SetUp+FEN when from a non-initial position. STR
-   * fabrication does not happen here — callers who want a spec section 8.1.1-conformant artifact pass
-   * {@link WriteMode#ARCHIVAL} to {@link PgnWriter} or {@link #createPgnFileString(PgnFile, WriteMode)}.
+   * Creates a PgnFile from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty when
+   * the board started from the initial position, or just SetUp+FEN when from a non-initial position. STR fabrication
+   * does not happen here — callers who want a spec section 8.1.1-conformant artifact pass {@link WriteMode#ARCHIVAL} to
+   * {@link PgnWriter} or {@link #createPgnFileString(PgnFile, WriteMode)}.
    */
   public static PgnFile createPgnFile(Board board) {
 

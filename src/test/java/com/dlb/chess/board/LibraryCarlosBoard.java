@@ -105,8 +105,7 @@ public class LibraryCarlosBoard {
     final MoveBackup moveBackup = NullsCarlos.getLast(this.board);
     final LegalMove legalMove = calculateLegalMove(moveSpecification, moveBackup);
     performedLegalMoveList.add(legalMove);
-    final var normalizedEnPassantCaptureTargetSquare = isEnPassantCapturePossible()
-        ? getEnPassantCaptureTargetSquare()
+    final var normalizedEnPassantCaptureTargetSquare = isEnPassantCapturePossible() ? getEnPassantCaptureTargetSquare()
         : Square.NONE;
     dynamicPositionList.add(new DynamicPosition(getHavingMove(), getStaticPosition(),
         normalizedEnPassantCaptureTargetSquare, getCastlingRightWhite(), getCastlingRightBlack()));

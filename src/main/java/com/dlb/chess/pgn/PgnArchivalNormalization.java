@@ -11,23 +11,22 @@ import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.fen.model.Fen;
 
 /**
- * Prepares a {@link PgnFile} for PGN spec section 8.1.1 archival-storage output. Operates on the in-memory model
- * only; the actual line emission is unchanged from semantic mode. Five transformations:
+ * Prepares a {@link PgnFile} for PGN spec section 8.1.1 archival-storage output. Operates on the in-memory model only;
+ * the actual line emission is unchanged from semantic mode. Five transformations:
  *
  * <ol>
- *   <li><b>FEN / SetUp pair follows {@code startFen}.</b> If {@code startFen} is the initial position, any
- *       FEN/SetUp tag in the input is dropped (they would describe a position that is already the implicit
- *       default). Otherwise both tags are emitted: {@code SetUp "1"} and {@code FEN <startFen>}. Any pre-existing
- *       FEN/SetUp values are replaced by the canonical pair derived from {@code startFen} to guarantee internal
- *       consistency.</li>
- *   <li><b>Result tag from the termination marker.</b> If the input has no Result tag, one is added with the
- *       termination marker's value (or {@code *} if no marker either).</li>
- *   <li><b>Seven Tag Roster fill.</b> Any missing roster entry is filled with the spec-defined placeholder:
- *       {@code ????.??.??} for Date (per spec section 8.1.1.3), {@code *} for Result (per section 8.1.1.7),
- *       {@code ?} for the rest (per sections 8.1.1.1, 8.1.1.2, 8.1.1.4, 8.1.1.5, 8.1.1.6).</li>
- *   <li><b>Canonical tag order.</b> Tags are sorted into STR-first-by-sort-order via {@link Tag#compareTo}.</li>
- *   <li><b>Termination marker guaranteed.</b> The returned {@code PgnFile.terminationMarker} is non-null;
- *       semantic-mode emission then writes it as the movetext trailer.</li>
+ * <li><b>FEN / SetUp pair follows {@code startFen}.</b> If {@code startFen} is the initial position, any FEN/SetUp tag
+ * in the input is dropped (they would describe a position that is already the implicit default). Otherwise both tags
+ * are emitted: {@code SetUp "1"} and {@code FEN <startFen>}. Any pre-existing FEN/SetUp values are replaced by the
+ * canonical pair derived from {@code startFen} to guarantee internal consistency.</li>
+ * <li><b>Result tag from the termination marker.</b> If the input has no Result tag, one is added with the termination
+ * marker's value (or {@code *} if no marker either).</li>
+ * <li><b>Seven Tag Roster fill.</b> Any missing roster entry is filled with the spec-defined placeholder:
+ * {@code ????.??.??} for Date (per spec section 8.1.1.3), {@code *} for Result (per section 8.1.1.7), {@code ?} for the
+ * rest (per sections 8.1.1.1, 8.1.1.2, 8.1.1.4, 8.1.1.5, 8.1.1.6).</li>
+ * <li><b>Canonical tag order.</b> Tags are sorted into STR-first-by-sort-order via {@link Tag#compareTo}.</li>
+ * <li><b>Termination marker guaranteed.</b> The returned {@code PgnFile.terminationMarker} is non-null; semantic-mode
+ * emission then writes it as the movetext trailer.</li>
  * </ol>
  */
 final class PgnArchivalNormalization {
@@ -53,8 +52,7 @@ final class PgnArchivalNormalization {
    * Termination-marker decision: prefer the parse-model marker; fall back to the Result tag value; default to
    * {@link ResultTagValue#ONGOING}.
    */
-  private static ResultTagValue decideTerminationMarker(List<Tag> tagList,
-      @Nullable ResultTagValue currentMarker) {
+  private static ResultTagValue decideTerminationMarker(List<Tag> tagList, @Nullable ResultTagValue currentMarker) {
     if (currentMarker != null) {
       return currentMarker;
     }

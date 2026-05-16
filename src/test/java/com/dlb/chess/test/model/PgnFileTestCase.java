@@ -9,15 +9,15 @@ import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 /**
- * A single fixture row in the test corpus. The {@link #finalFen()} string is the cached final position of the PGN file named
- * by {@link #pgnFileName()}; populated when the fixture is added to {@code CreatePgnTestCases}.
+ * A single fixture row in the test corpus. The {@link #finalFen()} string is the cached final position of the PGN file
+ * named by {@link #pgnFileName()}; populated when the fixture is added to {@code CreatePgnTestCases}.
  *
  * <p>
  * Two ways to materialise a board from a fixture, chosen by the test author:
  *
  * <ul>
- * <li>{@link #finalPosition()} — history-less board built from {@link #finalFen()}. <b>Cheap.</b> Use whenever the test only
- * consults the final piece arrangement and clocks (most CHA-quick / CHA-full / static-evaluation tests).
+ * <li>{@link #finalPosition()} — history-less board built from {@link #finalFen()}. <b>Cheap.</b> Use whenever the test
+ * only consults the final piece arrangement and clocks (most CHA-quick / CHA-full / static-evaluation tests).
  * <li>{@link #game(PgnTest)} — full PGN replay with move history attached. <b>Expensive.</b> Use only when the test
  * genuinely needs history-derived state (repetition counts, claimable-threefold/fifty-move-rule, last-move metadata
  * such as capture/promotion/castling/en-passant, PGN export round-trips, end-to-end pipeline tests).

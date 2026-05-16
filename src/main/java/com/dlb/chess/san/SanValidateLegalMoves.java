@@ -832,8 +832,8 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     return legalMovesForFrom;
   }
 
-  private static List<LegalMove> filterLegalMovesCandidatesForPromotion(SanFormat sanFormat, SanConversion sanConversion,
-      List<LegalMove> legalMoveSet) {
+  private static List<LegalMove> filterLegalMovesCandidatesForPromotion(SanFormat sanFormat,
+      SanConversion sanConversion, List<LegalMove> legalMoveSet) {
     final List<LegalMove> legalMovesForPromotion = new ArrayList<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       switch (sanFormat) {

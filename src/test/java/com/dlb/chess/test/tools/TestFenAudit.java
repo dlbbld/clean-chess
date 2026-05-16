@@ -20,16 +20,18 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * On-demand audit that verifies every {@link PgnFileTestCase}'s cached {@code fen} matches the position actually
  * reached by replaying its PGN. Disabled by default because it replays the full corpus.
  *
- * <p>Run with:
+ * <p>
+ * Run with:
  *
  * <pre>{@code
  * mvn -q test -Dtest=TestFenAudit -Dfen.audit=true
  * }</pre>
  *
- * <p>The audit replays each PGN with dead-position auto-detection disabled (the same mode used when the fixture was
- * originally captured) so fixtures whose final position is intentionally dead still produce a deterministic FEN.
- * Every mismatch is reported on the test failure message: PGN filename, the {@link PgnTest} it belongs to, the
- * expected (cached) FEN, and the actual (replayed) FEN. Apply fixes by editing the matching literal in
+ * <p>
+ * The audit replays each PGN with dead-position auto-detection disabled (the same mode used when the fixture was
+ * originally captured) so fixtures whose final position is intentionally dead still produce a deterministic FEN. Every
+ * mismatch is reported on the test failure message: PGN filename, the {@link PgnTest} it belongs to, the expected
+ * (cached) FEN, and the actual (replayed) FEN. Apply fixes by editing the matching literal in
  * {@code CreatePgnTestCases}.
  */
 class TestFenAudit {
@@ -53,8 +55,8 @@ class TestFenAudit {
           final String actualFen = board.getFen();
           final String expectedFen = testCase.finalFen();
           if (!actualFen.equals(expectedFen)) {
-            mismatches.add(String.format("%s (%s)%n  expected: %s%n  actual:   %s",
-                testCase.pgnFileName(), pgnTest, expectedFen, actualFen));
+            mismatches.add(String.format("%s (%s)%n  expected: %s%n  actual:   %s", testCase.pgnFileName(), pgnTest,
+                expectedFen, actualFen));
           }
         } catch (RuntimeException e) {
           // PGN missing on disk, parse error, or illegal move: surface alongside the FEN mismatches so the
@@ -64,8 +66,8 @@ class TestFenAudit {
       }
     }
 
-    logger.info("Audited {} fixtures across {} PgnTest folders; {} mismatches; {} replay errors.",
-        totalFixtures, PgnTest.values().length, mismatches.size(), errors.size());
+    logger.info("Audited {} fixtures across {} PgnTest folders; {} mismatches; {} replay errors.", totalFixtures,
+        PgnTest.values().length, mismatches.size(), errors.size());
 
     if (!mismatches.isEmpty() || !errors.isEmpty()) {
       final StringBuilder sb = new StringBuilder();

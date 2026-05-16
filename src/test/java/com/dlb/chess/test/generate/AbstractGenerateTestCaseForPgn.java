@@ -73,13 +73,19 @@ public abstract class AbstractGenerateTestCaseForPgn {
         .verdict();
     final UnwinnabilityFullVerdict unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)
         .verdict();
-    final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.WHITE);
-    final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.BLACK);
+    final UnwinnabilityQuickVerdict unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard,
+        Side.WHITE);
+    final UnwinnabilityQuickVerdict unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard,
+        Side.BLACK);
 
-    result.append(UnwinnabilityFullVerdict.class.getSimpleName()).append(".").append(unwinnableFullWhite.name()).append(", ");
-    result.append(UnwinnabilityFullVerdict.class.getSimpleName()).append(".").append(unwinnableFullBlack.name()).append(", ");
-    result.append(UnwinnabilityQuickVerdict.class.getSimpleName()).append(".").append(unwinnableQuickWhite.name()).append(", ");
-    result.append(UnwinnabilityQuickVerdict.class.getSimpleName()).append(".").append(unwinnableQuickBlack.name()).append(", ");
+    result.append(UnwinnabilityFullVerdict.class.getSimpleName()).append(".").append(unwinnableFullWhite.name())
+        .append(", ");
+    result.append(UnwinnabilityFullVerdict.class.getSimpleName()).append(".").append(unwinnableFullBlack.name())
+        .append(", ");
+    result.append(UnwinnabilityQuickVerdict.class.getSimpleName()).append(".").append(unwinnableQuickWhite.name())
+        .append(", ");
+    result.append(UnwinnabilityQuickVerdict.class.getSimpleName()).append(".").append(unwinnableQuickBlack.name())
+        .append(", ");
 
     final var fen = report.fen();
 

@@ -204,11 +204,11 @@ public class ShallowTerminationCalculator {
   }
 
   /**
-   * Early-exit predicate for the "not made the move" iteration: the iteration can stop once it finds a position
-   * that isn't a guaranteed loss for the not-made-the-move side. The two such cases are ONGOING (game continues,
-   * nothing forced) and the insufficient-material flavour where the side that <em>just moved</em> has insufficient
-   * material — that's good for the not-made-the-move side, not bad, so it doesn't contribute to an UNWINNABLE
-   * conclusion and lets the iteration return early.
+   * Early-exit predicate for the "not made the move" iteration: the iteration can stop once it finds a position that
+   * isn't a guaranteed loss for the not-made-the-move side. The two such cases are ONGOING (game continues, nothing
+   * forced) and the insufficient-material flavour where the side that <em>just moved</em> has insufficient material —
+   * that's good for the not-made-the-move side, not bad, so it doesn't contribute to an UNWINNABLE conclusion and lets
+   * the iteration return early.
    */
   private static boolean calculateIsEndMoveEvaluationNotMadeTheMove(GameStatus moveEvaluation, Side sideThatJustMoved) {
     return switch (moveEvaluation) {

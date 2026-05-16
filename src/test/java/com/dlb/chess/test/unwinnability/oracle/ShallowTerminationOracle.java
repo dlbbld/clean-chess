@@ -11,13 +11,13 @@ import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict
 import com.dlb.chess.test.unwinnability.oracle.model.EvaluatePositions;
 
 /**
- * Test-only oracle that performs a bounded 1/2/3-half-move scan over <em>all</em> legal moves at the root and
- * reports the verdict implied by any terminal status reachable inside that scan window. The scan stops at the
- * first depth where a non-{@code UNKNOWN} verdict can be concluded.
+ * Test-only oracle that performs a bounded 1/2/3-half-move scan over <em>all</em> legal moves at the root and reports
+ * the verdict implied by any terminal status reachable inside that scan window. The scan stops at the first depth where
+ * a non-{@code UNKNOWN} verdict can be concluded.
  *
  * <p>
- * This oracle deliberately does <em>not</em> walk the forced unique-move chain — that is
- * {@link ForcedLineOracle}'s job. The two are kept separate so each can be exercised in isolation:
+ * This oracle deliberately does <em>not</em> walk the forced unique-move chain — that is {@link ForcedLineOracle}'s
+ * job. The two are kept separate so each can be exercised in isolation:
  *
  * <ul>
  * <li>{@code ForcedLineOracle} — tested against {@code PgnTest.BASIC_FORCED}.</li>
@@ -32,8 +32,8 @@ import com.dlb.chess.test.unwinnability.oracle.model.EvaluatePositions;
  * positions, so callers do not need to filter the board beforehand.
  *
  * <p>
- * Note: there is no branching-factor gate on the depth-2/3 scan. Worst-case work is bounded by the legal-move
- * count cubed, which on a 64-square board with normal material is well within test-time budgets.
+ * Note: there is no branching-factor gate on the depth-2/3 scan. Worst-case work is bounded by the legal-move count
+ * cubed, which on a 64-square board with normal material is well within test-time budgets.
  */
 public class ShallowTerminationOracle {
 
@@ -41,8 +41,8 @@ public class ShallowTerminationOracle {
 
   /**
    * Runs the oracle on a fresh detection-off board built from the caller's FEN — the 1/2/3-ply scan's
-   * {@code board.move(...)} calls don't trigger the dead-position auto-detect, and the caller's board is not
-   * mutated. Repetition history from the caller's game is lost on the fresh board.
+   * {@code board.move(...)} calls don't trigger the dead-position auto-detect, and the caller's board is not mutated.
+   * Repetition history from the caller's game is lost on the fresh board.
    */
   public static LimitedUnwinnabilityVerdict calculateUnwinnability(Board input, Side side) {
     final Board board = input.copyCurrentPositionWithoutHistory(false);
@@ -74,9 +74,9 @@ public class ShallowTerminationOracle {
   }
 
   /**
-   * Side-to-evaluate has the move at the root. Search alternates: depth 1 = side-to-evaluate, depth 2 = opponent,
-   * depth 3 = side-to-evaluate. So the "who picked the last move" at depth N is side-to-evaluate for odd N and
-   * opponent for even N.
+   * Side-to-evaluate has the move at the root. Search alternates: depth 1 = side-to-evaluate, depth 2 = opponent, depth
+   * 3 = side-to-evaluate. So the "who picked the last move" at depth N is side-to-evaluate for odd N and opponent for
+   * even N.
    */
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityHavingMove(Board board, Side sideToEvaluate) {
 
@@ -118,9 +118,9 @@ public class ShallowTerminationOracle {
   }
 
   /**
-   * Side-to-evaluate does NOT have the move at the root (opponent moves first). Search alternates: depth 1 =
-   * opponent, depth 2 = side-to-evaluate, depth 3 = opponent. So "who picked the last move" at depth N is
-   * opponent for odd N and side-to-evaluate for even N.
+   * Side-to-evaluate does NOT have the move at the root (opponent moves first). Search alternates: depth 1 = opponent,
+   * depth 2 = side-to-evaluate, depth 3 = opponent. So "who picked the last move" at depth N is opponent for odd N and
+   * side-to-evaluate for even N.
    */
   private static LimitedUnwinnabilityVerdict calculateUnwinnabilityNotHavingMove(Board board, Side sideToEvaluate) {
 

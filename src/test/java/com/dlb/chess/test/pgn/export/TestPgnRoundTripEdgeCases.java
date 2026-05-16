@@ -17,11 +17,10 @@ import com.dlb.chess.pgn.WriteMode;
  * {@code parse -> semantic-write -> parse} without information loss or invalid output.
  *
  * <ul>
- *   <li>Tag values containing the two escape-required characters from PGN spec section 8.1.2 (backslash and
- *       quote) — the tokenizer unescapes on read, so the exporter must re-escape on write.</li>
- *   <li>A tags-only PGN with no movetext and no termination marker — the lenient parser accepts this shape,
- *       semantic export must produce a well-formed (re-parseable) PGN, not throw because the movetext string
- *       is empty.</li>
+ * <li>Tag values containing the two escape-required characters from PGN spec section 8.1.2 (backslash and quote) — the
+ * tokenizer unescapes on read, so the exporter must re-escape on write.</li>
+ * <li>A tags-only PGN with no movetext and no termination marker — the lenient parser accepts this shape, semantic
+ * export must produce a well-formed (re-parseable) PGN, not throw because the movetext string is empty.</li>
  * </ul>
  */
 @SuppressWarnings("static-method")
@@ -86,10 +85,10 @@ class TestPgnRoundTripEdgeCases {
   }
 
   /**
-   * Extracts the {@link PgnFile} from a successful validation result, asserting non-null. Gives the JDT
-   * null-flow analysis the narrowed type it needs at the use site — {@code LenientPgnParserValidationResult
-   * .pgnFile()} is declared {@code @Nullable} (it carries {@code null} on failure), and JDT does not infer
-   * non-null from {@code isValid()} alone.
+   * Extracts the {@link PgnFile} from a successful validation result, asserting non-null. Gives the JDT null-flow
+   * analysis the narrowed type it needs at the use site — {@code LenientPgnParserValidationResult
+   * .pgnFile()} is declared {@code @Nullable} (it carries {@code null} on failure), and JDT does not infer non-null
+   * from {@code isValid()} alone.
    */
   private static PgnFile pgnFileOf(LenientPgnParserValidationResult result) {
     final PgnFile pgnFile = result.pgnFile();
