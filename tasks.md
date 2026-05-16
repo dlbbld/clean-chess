@@ -154,7 +154,7 @@ The two paths look different at the call site today and don't advertise themselv
 
      /** History-bearing board from PGN replay. Expensive. Use for repetition / claimable / pipeline tests. */
      public Board game(PgnTest pgnTest) {
-       return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnFileName(), false);
+       return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnName(), false);
      }
    }
    ```

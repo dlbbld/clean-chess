@@ -599,7 +599,7 @@ A PGN can be written to the file system as below.
     board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
     final PgnGame pgnGame = PgnCreate.createPgnGame(board);
-    PgnWriter.writePgnGame(pgnGame, "C:\\temp\\myFile.pgn");
+    PgnWriter.writePgn(pgnGame, "C:\\temp\\myFile.pgn");
 ```
     
 ## PGN validation
