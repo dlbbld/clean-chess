@@ -22,7 +22,7 @@ class TestShallowTerminationOracle {
   private static final Logger logger = Nulls.getLogger(TestShallowTerminationOracle.class);
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testStartPosition() {
     final Board board = new Board(false);
 
@@ -33,19 +33,19 @@ class TestShallowTerminationOracle {
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testFen() {
     final var fen = "rnbq1bnr/pppp2pp/PN6/R4k2/4pp2/5N2/1PPPPPPP/2BQKB1R b K - 5 8";
     final Board board = new Board(fen, false);
 
-    assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
+    assertEquals(LimitedUnwinnabilityVerdict.WINNABLE,
         ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE));
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
         ShallowTerminationOracle.calculateUnwinnability(board, Side.BLACK));
   }
 
   @SuppressWarnings("static-method")
-  // @Test
+  @Test
   void testChaLichessDepthThreeFixtures() {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE).list();
 
