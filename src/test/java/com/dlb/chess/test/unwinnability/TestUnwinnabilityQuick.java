@@ -27,7 +27,6 @@ class TestUnwinnabilityQuick {
       if (RestrictTestConstants.IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST) {
         switch (testCaseList.pgnTest()) {
           case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
-          case CHA_LICHESS_QUICK_NOT_DEPTH_THREE_HELPMATE:
           case CHA_LICHESS_QUICK_DEPTH_THREE:
           case CHA_LICHESS_QUICK_DEPTH_FOUR:
           case CHA_LICHESS_NOT_QUICK:
