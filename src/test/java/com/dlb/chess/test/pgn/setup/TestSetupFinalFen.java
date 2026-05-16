@@ -1,4 +1,4 @@
-package com.dlb.chess.test.tools;
+package com.dlb.chess.test.pgn.setup;
 
 import static org.junit.jupiter.api.Assertions.fail;
 
@@ -13,7 +13,6 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.model.PgnFileTestCase;
 import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
@@ -34,9 +33,9 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * (cached) FEN, and the actual (replayed) FEN. Apply fixes by editing the matching literal in
  * {@code CreatePgnTestCases}.
  */
-class TestFenAudit {
+class TestSetupFinalFen {
 
-  private static final Logger logger = Nulls.getLogger(TestFenAudit.class);
+  private static final Logger logger = Nulls.getLogger(TestSetupFinalFen.class);
 
   @SuppressWarnings("static-method")
   @Test
