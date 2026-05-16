@@ -19,7 +19,11 @@ import com.dlb.chess.model.UciMove;
 // false; here we only enforce the depth bound). The recursion returns plain bool — true on a
 // confirmed checkmate sequence for the intended winner, false otherwise — exactly as in Figure 5;
 // limit-hit is a separate piece of information collected on the {@code isCanExhaust} flag and
-// decided at the top of the search.
+// decided at the top of the search. Move ordering / depth adjustment uses the Figure 12 Score
+// heuristic — same shape as FindHelpmateExhaust — so progress-making moves (captures, advanced
+// pawn pushes, king-walks toward the corner) are explored deeper while regressive moves are cut
+// off earlier; without this Quick is correct but explores too widely on positions with deep
+// helpmates.
 class FindHelpMateInterrupt {
 
   private static final boolean IS_DEBUG = false;
@@ -31,6 +35,11 @@ class FindHelpMateInterrupt {
   // (empirically chosen) depth bound of D = 9, all incorrectly classified games from the Lichess
   // Database except three were correctly identified by Unwinnablequick.
   private static final int D = 9;
+
+  // Match FindHelpmateExhaust: beyond this absolute ply count, REWARD is downgraded to NORMAL so
+  // a chain of REWARD-extended branches cannot loop indefinitely. The transposition table is the
+  // primary backstop; this is the secondary one.
+  private static final int MAX_ACTUAL_DEPTH_FOR_REWARD = 300;
 
   public static FindHelpmateResult calculateHelpmate(Board board, Side c) {
     return new FindHelpMateInterrupt(c).search(board);
@@ -45,7 +54,7 @@ class FindHelpMateInterrupt {
   }
 
   private FindHelpmateResult search(Board board) {
-    final boolean found = searchRec(board, 0);
+    final boolean found = searchRec(board, 0, 0, false);
     if (found) {
       return FindHelpmateResult.YES;
     }
@@ -55,10 +64,11 @@ class FindHelpMateInterrupt {
     return FindHelpmateResult.NO;
   }
 
-  // Inputs: position, currentDepth.
+  // Inputs: position, currentDepth (Score-adjusted), actualDepth (true ply count), isPastProgress
+  //         (the previous ply was a REWARD).
   // Output: true if a checkmate sequence for the intended winner was found, false otherwise.
   // Side effect: isCanExhaust set to false if any recursive call hits the depth bound.
-  private boolean searchRec(Board board, int currentDepth) {
+  private boolean searchRec(Board board, int currentDepth, int actualDepth, boolean isPastProgress) {
 
     // 1: if the intended winner is checkmating their opponent in pos then return true
     if (board.isCheckmate() && board.getHavingMove() == color.getOppositeSide()) {
@@ -90,15 +100,41 @@ class FindHelpMateInterrupt {
     // 6: store (pos, d) in table
     transpositionMap.put(cacheKey, movesLeft);
 
-    // 7-9: for every legal move m do: if FindHelpmate(pos.move(m), depth + 1) then return true
+    // 7-9: for every legal move m do: let inc = match Score with Normal→0|Reward→1|Punish→-2;
+    //      if Find-Helpmate(pos.move(m), depth + 1, maxDepth + inc) then return true
     for (final LegalMove legalMove : board.getLegalMoves()) {
+      ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
+
+      // Match Exhaust: REWARD downgrades when the loser holds a queen (helpmate often forces the
+      // loser to lose it) and when the absolute ply count grows beyond the safety threshold.
+      if (board.getHavingMove() == color.getOppositeSide()
+          && UnwinnabilityMaterial.calculateHasQueen(color.getOppositeSide(), board.getStaticPosition())) {
+        score = score == ScoreResult.REWARD ? ScoreResult.NORMAL : score;
+      }
+      if (actualDepth > MAX_ACTUAL_DEPTH_FOR_REWARD) {
+        score = score == ScoreResult.REWARD ? ScoreResult.NORMAL : score;
+      }
+
+      var newDepth = currentDepth + 1;
+      switch (score) {
+        case REWARD -> newDepth = newDepth - 1;
+        case PUNISH -> newDepth = Math.min(D, newDepth + 2);
+        case NORMAL -> {
+          if (isPastProgress) {
+            newDepth = newDepth - 1;
+          }
+        }
+        default -> throw new IllegalArgumentException();
+      }
+
       board.move(legalMove.moveSpecification());
       if (IS_DEBUG) {
         final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(),
             legalMove.moveSpecification());
-        logger.printf(Level.DEBUG, "%s - %d", uciMove.text(), currentDepth + 1);
+        logger.printf(Level.DEBUG, "%s - %d", uciMove.text(), newDepth);
       }
-      final boolean found = searchRec(board, currentDepth + 1);
+      final boolean isProgress = score == ScoreResult.REWARD;
+      final boolean found = searchRec(board, newDepth, actualDepth + 1, isProgress);
       board.unmove();
       if (found) {
         return true;
