@@ -24,7 +24,7 @@ public abstract class AbstractPgnReportTest {
   }
 
   public static void testReportAgainstTestCase(PgnFileTestCase testCase, Report report) throws Exception {
-    testFen(testCase.fen(), report.fen());
+    testFen(testCase.finalFen(), report.fen());
     testRepetition(report, testCase);
     testNoProgressMoveRule(report, testCase);
     testFirstCapture(report, testCase);

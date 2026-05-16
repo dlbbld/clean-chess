@@ -51,7 +51,7 @@ class TestFenAudit {
         try {
           final Board board = testCase.game(pgnTest);
           final String actualFen = board.getFen();
-          final String expectedFen = testCase.fen();
+          final String expectedFen = testCase.finalFen();
           if (!actualFen.equals(expectedFen)) {
             mismatches.add(String.format("%s (%s)%n  expected: %s%n  actual:   %s",
                 testCase.pgnFileName(), pgnTest, expectedFen, actualFen));

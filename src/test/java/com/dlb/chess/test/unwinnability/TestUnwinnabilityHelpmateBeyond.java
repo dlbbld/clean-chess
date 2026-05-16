@@ -59,7 +59,7 @@ class TestUnwinnabilityHelpmateBeyond {
       UnwinnabilityFullVerdict fullBlack) {
     logger.info(pgnFileName);
     final PgnFileTestCase testCase = CreatePgnTestCases.findTestCase(pgnFileName);
-    final Board board = testCase.position();
+    final Board board = testCase.finalPosition();
 
     assertEquals(quickWhite, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE), pgnFileName);
     assertEquals(quickBlack, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK), pgnFileName);

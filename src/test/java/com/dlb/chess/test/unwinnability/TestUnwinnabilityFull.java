@@ -53,7 +53,7 @@ class TestUnwinnabilityFull {
     final var pgnFileName = "ambrona_10.pgn";
 
     final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase(pgnFileName);
-    final Board board = pgnFileTestCase.position();
+    final Board board = pgnFileTestCase.finalPosition();
     logger.info(pgnFileName);
 
     final UnwinnabilityFullVerdict unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE)
@@ -71,7 +71,7 @@ class TestUnwinnabilityFull {
   void testChaLichessExamples() throws Exception {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = testCase.position();
+      final Board board = testCase.finalPosition();
 
       logger.info(testCase.pgnFileName());
 
@@ -91,7 +91,7 @@ class TestUnwinnabilityFull {
     final List<Long> milliSecondsList = new ArrayList<>();
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = testCase.position();
+      final Board board = testCase.finalPosition();
 
       logger.info(testCase.pgnFileName());
 

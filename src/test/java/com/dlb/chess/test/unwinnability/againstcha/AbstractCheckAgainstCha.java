@@ -70,7 +70,7 @@ public abstract class AbstractCheckAgainstCha {
     for (final PgnTest pgnTest : PgnTest.values()) {
       final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
       for (final PgnFileTestCase testCase : testCaseList.list()) {
-        System.out.println(testCase.fen() + ";noLichessGameId");
+        System.out.println(testCase.finalFen() + ";noLichessGameId");
       }
     }
   }

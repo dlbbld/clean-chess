@@ -67,7 +67,7 @@ abstract class AbstractTestPgnParserHalfMoveClockFromFen {
         }
 
         try {
-          assertEquals(testCase.fen(), board.getFen(),
+          assertEquals(testCase.finalFen(), board.getFen(),
               () -> bucket + " / " + pgnFileName + " — final FEN mismatch (halfmove-clock or move-number drift)");
         } catch (final AssertionError e) {
           failures.add(BasicUtility.getMessage(e));

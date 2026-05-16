@@ -73,22 +73,22 @@ class TestPawnWallGeometricAnalyzer {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_YES).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = testCase.position();
+      final Board board = testCase.finalPosition();
       // Every fixture in yes/ must be geometric YES; this is the contract that justifies the folder split.
       assertEquals(PawnWallVerdict.YES, PawnWallGeometricAnalyzer.calculate(board),
-          "yes/ fixture must return geometric YES: " + testCase.pgnFileName() + " - " + testCase.fen());
+          "yes/ fixture must return geometric YES: " + testCase.pgnFileName() + " - " + testCase.finalFen());
       // Soundness gate 1: king-walk BFS must agree both kings are trapped.
       assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.WHITE),
-          "Geometric YES but BFS says White king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
+          "Geometric YES but BFS says White king is not trapped: " + testCase.pgnFileName() + " - " + testCase.finalFen());
       assertTrue(PawnWallKingWalkOracle.isKingTrappedBehindPermanentBarrier(board, Side.BLACK),
-          "Geometric YES but BFS says Black king is not trapped: " + testCase.pgnFileName() + " - " + testCase.fen());
+          "Geometric YES but BFS says Black king is not trapped: " + testCase.pgnFileName() + " - " + testCase.finalFen());
       // Soundness gate 2: Ambrona's quick unwinnability check must agree the position is unwinnable for both sides.
       assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.WHITE),
           "Geometric YES but UnwinnableQuick is not UNWINNABLE for White: " + testCase.pgnFileName() + " - "
-              + testCase.fen());
+              + testCase.finalFen());
       assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnableQuickAnalyzer.unwinnableQuick(board, Side.BLACK),
           "Geometric YES but UnwinnableQuick is not UNWINNABLE for Black: " + testCase.pgnFileName() + " - "
-              + testCase.fen());
+              + testCase.finalFen());
     }
   }
 
@@ -98,11 +98,11 @@ class TestPawnWallGeometricAnalyzer {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_NO).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = testCase.position();
+      final Board board = testCase.finalPosition();
       // Every fixture in no/ must be geometric UNKNOWN. Reasons: position is actually winnable (kings on wrong
       // side, en-passant capture available), or the chain fails the all-pawns-involved gate (floating pawns).
       assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricAnalyzer.calculate(board),
-          "no/ fixture must return geometric UNKNOWN: " + testCase.pgnFileName() + " - " + testCase.fen());
+          "no/ fixture must return geometric UNKNOWN: " + testCase.pgnFileName() + " - " + testCase.finalFen());
     }
   }
 

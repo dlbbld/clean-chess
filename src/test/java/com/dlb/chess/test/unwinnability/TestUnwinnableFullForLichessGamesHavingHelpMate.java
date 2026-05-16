@@ -49,8 +49,8 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       // mini-board from the FEN.
       final String lichessGame = calculateCorrespondingLichessGame(testCaseHavingHelpmate.pgnFileName());
       final PgnFileTestCase lichessTestCase = CreatePgnTestCases.findTestCase(lichessGame);
-      final Board board = lichessTestCase.position();
-      final String fen = lichessTestCase.fen();
+      final Board board = lichessTestCase.finalPosition();
+      final String fen = lichessTestCase.finalFen();
       final Side winner = board.getHavingMove();
       final UnwinnabilityFullAnalysis analysis = UnwinnableFullAnalyzer.unwinnableFull(board, winner);
 
