@@ -41,7 +41,7 @@ class TestBasicCastlingSpecialBlack extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CASTLING_SPECIAL_BLACK);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = PgnUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+      final Board board = PgnUtility.calculateBoardStrict(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
 
       logger.info(testCase.pgnFileName());
 

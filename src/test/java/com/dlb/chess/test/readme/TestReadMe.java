@@ -23,12 +23,12 @@ import com.dlb.chess.pgn.PgnCreate;
 import com.dlb.chess.pgn.PgnFile;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.PgnWriter;
-import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.StrictPgnParserValidationResult;
 import com.dlb.chess.pgn.Tag;
+import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.san.SanValidationProblem;
@@ -48,7 +48,7 @@ class TestReadMe {
         fxe5 16. Bxe5 b6 17. Bg2 Nxe5 18. Bxa8 Nf7 19. Bg2 bxc5 20. Nxc5 Qb6 21. Qf2
         Qb5 22. Bf1 Qc6 23. Bg2 Qb5 24. Bf1 Qc6 25. Bg2""";
 
-    final Report report = Reporter.calculateReport(calculateBoard(pgn));
+    final Report report = Reporter.calculateReport(calculateBoardStrict(pgn));
 
     assertFalse(report.hasThreefoldRepetition());
     assertFalse(report.hasFivefoldRepetition());
@@ -67,7 +67,7 @@ class TestReadMe {
         40. Qf4 Qd1+ 41. Qf1 Qd7 42. Rxh5 Nxe3 43. Qf3 Qd4 44. Qa8+ Ke7 45. Qb7+ Kf8 46.
         Qb8+""";
 
-    final Report report = Reporter.calculateReport(calculateBoard(pgn));
+    final Report report = Reporter.calculateReport(calculateBoardStrict(pgn));
 
     assertTrue(report.hasThreefoldRepetition());
     assertFalse(report.hasFivefoldRepetition());
@@ -97,7 +97,7 @@ class TestReadMe {
         109. Bf5 Rf1 110. Ndf4 Ra1 111. Ng6+ Kg8 112. Ne7+ Kh8 113. Ng5 Ra6+ 114. Kf7
         Rf6+""";
 
-    final Report report = Reporter.calculateReport(calculateBoard(pgn));
+    final Report report = Reporter.calculateReport(calculateBoardStrict(pgn));
 
     assertTrue(report.hasFiftyMoveRule());
     assertFalse(report.hasSeventyFiveMoveRule());
@@ -108,14 +108,14 @@ class TestReadMe {
   void unwinnabilityExamplesReturnExpectedResults() {
     assertUnwinnability("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50", Side.BLACK, UnwinnabilityQuickVerdict.UNWINNABLE,
         UnwinnabilityFullVerdict.UNWINNABLE);
-    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK, UnwinnabilityQuickVerdict.UNWINNABLE,
-        UnwinnabilityFullVerdict.UNWINNABLE);
+    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
     assertUnwinnability("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51", Side.WHITE, UnwinnabilityQuickVerdict.UNWINNABLE,
         UnwinnabilityFullVerdict.UNWINNABLE);
     assertUnwinnability("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29", Side.WHITE,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.WINNABLE);
-    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE, UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
-        UnwinnabilityFullVerdict.UNWINNABLE);
+    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE,
+        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
   @Test
@@ -159,8 +159,8 @@ class TestReadMe {
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
     PgnWriter.writePgnFile(pgnFile, filePath, WriteMode.ARCHIVAL);
 
-    final Board lenientBoard = PgnUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
-    final Board strictBoard = PgnUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
+    final Board lenientBoard = PgnUtility.calculateBoardStrict(LenientPgnParser.parse(filePath));
+    final Board strictBoard = PgnUtility.calculateBoardStrict(StrictPgnParser.parse(filePath));
 
     assertFalse(lenientBoard.isCheckmate());
     assertFalse(strictBoard.isThreefoldRepetition());
@@ -180,7 +180,7 @@ class TestReadMe {
                 """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final Board board = PgnUtility.calculateBoardStrict(pgnFile);
     board.moveStrict("a3");
 
     assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
@@ -250,7 +250,7 @@ class TestReadMe {
         """;
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final Board board = PgnUtility.calculateBoardStrict(pgnFile);
     board.moveStrict("a3");
 
     assertEquals(6, pgnFile.halfMoveList().size());
@@ -414,8 +414,8 @@ class TestReadMe {
     assertEquals(SanValidationProblem.NONE, invalidResult.problemSan());
   }
 
-  private static Board calculateBoard(String pgn) {
-    return PgnUtility.calculateBoardPerLastMove(LenientPgnParser.parseText(pgn));
+  private static Board calculateBoardStrict(String pgn) {
+    return PgnUtility.calculateBoardStrict(LenientPgnParser.parseText(pgn));
   }
 
   private static Board createOpeningExampleBoard() {
