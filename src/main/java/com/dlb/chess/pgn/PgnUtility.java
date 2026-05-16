@@ -7,10 +7,6 @@ import com.dlb.chess.model.PgnHalfMove;
 
 public abstract class PgnUtility {
 
-  public static Board calculateBoard(PgnFile pgnFile) {
-    return PgnUtility.calculateBoard(pgnFile, true);
-  }
-
   /**
    * Replays the half-moves of {@code pgnFile} on a fresh board and returns the resulting state. The {@code
    * detectDeadPositionUnwinnable} flag is forwarded to the underlying {@link Board} constructor — set it to
@@ -30,9 +26,9 @@ public abstract class PgnUtility {
     return board;
   }
 
-  public static Board calculateBoard(Path folderPath, String pgnFileName) {
+  public static Board calculateBoard(Path folderPath, String pgnFileName, boolean detectDeadPositionUnwinnable) {
     final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
-    return calculateBoard(pgnFile);
+    return calculateBoard(pgnFile, detectDeadPositionUnwinnable);
   }
 
 }

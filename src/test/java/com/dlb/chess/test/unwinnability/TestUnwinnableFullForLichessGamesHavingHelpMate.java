@@ -51,7 +51,7 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       final PgnTest pgnTestLichessGame = CreatePgnTestCases.findPgnTest(lichessGame);
       final PgnFile pgnFileLichessGame = LenientPgnParser.parse(pgnTestLichessGame.getFolderPath(), lichessGame);
 
-      final Board board = PgnUtility.calculateBoard(pgnFileLichessGame);
+      final Board board = PgnUtility.calculateBoard(pgnFileLichessGame, false);
       final String fen = board.getFen();
       final Side winner = board.getHavingMove();
       final UnwinnabilityFullAnalysis analysis = UnwinnableFullAnalyzer.unwinnableFull(board, winner);

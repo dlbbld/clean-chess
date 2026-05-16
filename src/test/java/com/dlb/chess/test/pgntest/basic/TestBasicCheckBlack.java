@@ -46,7 +46,7 @@ class TestBasicCheckBlack extends AbstractTestBasic {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CHECK_BLACK);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
       logger.info(testCase.pgnFileName());
-      final Board board = PgnUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+      final Board board = PgnUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName(), false);
 
       switch (testCase.pgnFileName()) {
         case "01_black_check_rook_direct_adjacent.pgn" -> checkNonCaptureCheck(C6, C4, BLACK_ROOK, board);

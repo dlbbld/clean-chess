@@ -159,8 +159,8 @@ class TestReadMe {
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
     PgnWriter.writePgnFile(pgnFile, filePath, WriteMode.ARCHIVAL);
 
-    final Board lenientBoard = PgnUtility.calculateBoard(LenientPgnParser.parse(filePath));
-    final Board strictBoard = PgnUtility.calculateBoard(StrictPgnParser.parse(filePath));
+    final Board lenientBoard = PgnUtility.calculateBoard(LenientPgnParser.parse(filePath), false);
+    final Board strictBoard = PgnUtility.calculateBoard(StrictPgnParser.parse(filePath), false);
 
     assertFalse(lenientBoard.isCheckmate());
     assertFalse(strictBoard.isThreefoldRepetition());
@@ -180,7 +180,7 @@ class TestReadMe {
                 """;
 
     final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoard(pgnFile);
+    final Board board = PgnUtility.calculateBoard(pgnFile, false);
     board.moveStrict("a3");
 
     assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
@@ -250,7 +250,7 @@ class TestReadMe {
         """;
 
     final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoard(pgnFile);
+    final Board board = PgnUtility.calculateBoard(pgnFile, false);
     board.moveStrict("a3");
 
     assertEquals(6, pgnFile.halfMoveList().size());
@@ -415,7 +415,7 @@ class TestReadMe {
   }
 
   private static Board calculateBoard(String pgn) {
-    return PgnUtility.calculateBoard(LenientPgnParser.parseText(pgn));
+    return PgnUtility.calculateBoard(LenientPgnParser.parseText(pgn), false);
   }
 
   private static Board createOpeningExampleBoard() {

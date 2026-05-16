@@ -45,7 +45,7 @@ class TestBasicCheckmateWhite extends AbstractTestBasic {
   void test() throws Exception {
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CHECKMATE_WHITE);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = PgnUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+      final Board board = PgnUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName(), false);
 
       logger.info(testCase.pgnFileName());
 
