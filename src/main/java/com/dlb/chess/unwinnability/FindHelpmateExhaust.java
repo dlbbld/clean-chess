@@ -127,10 +127,9 @@ class FindHelpmateExhaust {
     // 6: store (pos,D) in table
     store(cacheKey, movesLeft);
 
-    // adding fivefold repetition and seventy-five move rule
-    if (board.isFivefoldRepetition() || board.isSeventyFiveMove()) {
-      return FindHelpmateRecursionResult.FALSE;
-    }
+    // Per the paper / Ambrona issue thread: 75-move and 5-fold repetition do not apply when adjudicating
+    // timeouts, so the helpmate search must continue past them. The previous fivefold/seventy-five gate
+    // here is removed for paper compliance.
 
     if (UnwinnabilityMaterial.calculateHasKingOnly(color, board.getStaticPosition())
         || UnwinnabilityMaterial.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())

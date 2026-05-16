@@ -44,8 +44,11 @@ class FindHelpMateInterrupt {
       return FindHelpMateInterruptResult.TRUE;
     }
 
-    if (currentDepth < D && !board.isInsufficientMaterial(c) && !board.isFivefoldRepetition()
-        && !board.isSeventyFiveMove()) {
+    // Per the paper / Ambrona issue thread: 75-move and 5-fold repetition do not apply when adjudicating
+    // timeouts, so the helpmate search must continue past them. Termination conditions here are the
+    // paper's Figure 5 line 2 (intended winner has just the king / Lemma 5 / Lemma 6 / stalemate /
+    // self-checkmate) plus the depth bound.
+    if (currentDepth < D && !board.isInsufficientMaterial(c)) {
 
       for (final LegalMove legalMove : board.getLegalMoves()) {
         board.move(legalMove.moveSpecification());
