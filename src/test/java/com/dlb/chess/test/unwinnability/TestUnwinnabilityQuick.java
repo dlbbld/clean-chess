@@ -88,7 +88,7 @@ class TestUnwinnabilityQuick {
   @Test
   void testPgnFileAgainstTestCase() {
     final PgnFileTestCase pgnFileTestCase = CreatePgnTestCases.findTestCase("25_black_capture_king_pawn.pgn");
-    final Board board = new Board(pgnFileTestCase.fen(), false);
+    final Board board = pgnFileTestCase.position();
     logger.info(pgnFileTestCase.pgnFileName());
 
     final UnwinnabilityQuickVerdict unwinnableQuickResultWhite = UnwinnableQuickAnalyzer.unwinnableQuick(board,
@@ -108,7 +108,7 @@ class TestUnwinnabilityQuick {
 
     final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_AMBRONA);
     for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = new Board(testCase.fen(), false);
+      final Board board = testCase.position();
       logger.info(testCase.pgnFileName());
 
       {

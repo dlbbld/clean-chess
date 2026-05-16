@@ -73,7 +73,7 @@ class TestPawnWallGeometricAnalyzer {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_YES).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen(), false);
+      final Board board = testCase.position();
       // Every fixture in yes/ must be geometric YES; this is the contract that justifies the folder split.
       assertEquals(PawnWallVerdict.YES, PawnWallGeometricAnalyzer.calculate(board),
           "yes/ fixture must return geometric YES: " + testCase.pgnFileName() + " - " + testCase.fen());
@@ -98,7 +98,7 @@ class TestPawnWallGeometricAnalyzer {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_PAWN_WALL_NO).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen(), false);
+      final Board board = testCase.position();
       // Every fixture in no/ must be geometric UNKNOWN. Reasons: position is actually winnable (kings on wrong
       // side, en-passant capture available), or the chain fails the all-pawns-involved gate (floating pawns).
       assertEquals(PawnWallVerdict.UNKNOWN, PawnWallGeometricAnalyzer.calculate(board),

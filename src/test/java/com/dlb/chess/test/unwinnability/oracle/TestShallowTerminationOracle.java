@@ -45,7 +45,7 @@ class TestShallowTerminationOracle {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_DEPTH_THREE).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen(), false);
+      final Board board = testCase.position();
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());
@@ -67,7 +67,7 @@ class TestShallowTerminationOracle {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.CHA_SHALLOW_TERMINATION).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen(), false);
+      final Board board = testCase.position();
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ShallowTerminationOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());

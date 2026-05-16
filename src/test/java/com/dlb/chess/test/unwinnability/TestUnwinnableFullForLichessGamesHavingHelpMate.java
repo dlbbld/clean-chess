@@ -13,9 +13,6 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.test.RestrictTestConstants;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
 import com.dlb.chess.test.model.PgnFileTestCase;
@@ -47,12 +44,13 @@ class TestUnwinnableFullForLichessGamesHavingHelpMate {
       }
       logger.info(testCaseHavingHelpmate.pgnFileName());
 
+      // Cheap path: the lichess game's final position is already cached on its test case's FEN field, so the PGN
+      // need not be parsed and replayed just to read the end state. The helpmate-line check below builds its own
+      // mini-board from the FEN.
       final String lichessGame = calculateCorrespondingLichessGame(testCaseHavingHelpmate.pgnFileName());
-      final PgnTest pgnTestLichessGame = CreatePgnTestCases.findPgnTest(lichessGame);
-      final PgnFile pgnFileLichessGame = LenientPgnParser.parse(pgnTestLichessGame.getFolderPath(), lichessGame);
-
-      final Board board = PgnUtility.calculateBoard(pgnFileLichessGame, false);
-      final String fen = board.getFen();
+      final PgnFileTestCase lichessTestCase = CreatePgnTestCases.findTestCase(lichessGame);
+      final Board board = lichessTestCase.position();
+      final String fen = lichessTestCase.fen();
       final Side winner = board.getHavingMove();
       final UnwinnabilityFullAnalysis analysis = UnwinnableFullAnalyzer.unwinnableFull(board, winner);
 

@@ -40,7 +40,7 @@ class TestForcedLineOracle {
     final List<PgnFileTestCase> fixtures = CreatePgnTestCases.getTestList(PgnTest.BASIC_FORCED).list();
 
     for (final PgnFileTestCase testCase : fixtures) {
-      final Board board = new Board(testCase.fen(), false);
+      final Board board = testCase.position();
 
       assertEquals(convert(testCase.unwinnableQuickWhite()),
           ForcedLineOracle.calculateUnwinnability(board, Side.WHITE), testCase.pgnFileName());

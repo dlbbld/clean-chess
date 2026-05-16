@@ -55,7 +55,7 @@ class TestUnwinnabilityQuickAgainstLimitedOracle {
             break;
         }
 
-        final Board board = new Board(testCase.fen(), false);
+        final Board board = testCase.position();
 
         logger.info(testCase.pgnFileName());
 
