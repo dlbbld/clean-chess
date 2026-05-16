@@ -7,8 +7,8 @@ import com.dlb.chess.model.PgnHalfMove;
 
 public abstract class PgnUtility {
 
-  public static Board calculateBoardStrict(PgnFile pgnFile) {
-    return PgnUtility.calculateBoardStrict(pgnFile, true);
+  public static Board calculateBoard(PgnFile pgnFile) {
+    return PgnUtility.calculateBoard(pgnFile, true);
   }
 
   /**
@@ -18,7 +18,7 @@ public abstract class PgnUtility {
    * dead (for example, recorded games used as test fixtures whose final position is intentionally dead). The mechanical
    * insufficient-material termination is unaffected.
    */
-  public static Board calculateBoardStrict(PgnFile pgnFile, boolean detectDeadPositionUnwinnable) {
+  public static Board calculateBoard(PgnFile pgnFile, boolean detectDeadPositionUnwinnable) {
 
     final Board board = new Board(pgnFile.startFen(), detectDeadPositionUnwinnable);
 
@@ -30,11 +30,9 @@ public abstract class PgnUtility {
     return board;
   }
 
-  public static Board calculateBoardStrict(Path folderPath, String pgnFileName) {
-
+  public static Board calculateBoard(Path folderPath, String pgnFileName) {
     final PgnFile pgnFile = LenientPgnParser.parse(folderPath, pgnFileName);
-
-    return calculateBoardStrict(pgnFile);
+    return calculateBoard(pgnFile);
   }
 
 }

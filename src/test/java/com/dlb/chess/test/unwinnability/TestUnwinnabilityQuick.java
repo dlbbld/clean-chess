@@ -74,7 +74,7 @@ class TestUnwinnabilityQuick {
 
     final PgnTest pgnTest = CreatePgnTestCases.findPgnTestPgnNotListed(pgnFileName);
     final PgnFile pgnFile = LenientPgnParser.parse(pgnTest.getFolderPath(), pgnFileName);
-    final Board board = PgnUtility.calculateBoardStrict(pgnFile);
+    final Board board = PgnUtility.calculateBoard(pgnFile);
     logger.info(pgnFileName);
 
     assertEquals(UnwinnabilityQuickVerdict.UNWINNABLE,

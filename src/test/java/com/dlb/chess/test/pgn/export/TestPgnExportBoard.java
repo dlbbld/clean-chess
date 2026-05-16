@@ -57,7 +57,7 @@ class TestPgnExportBoard {
   }
 
   private static void checkBoardReplay(Board boardExpected, PgnFile boardExpectedPgnFile) {
-    final Board boardActual = PgnUtility.calculateBoardStrict(boardExpectedPgnFile);
+    final Board boardActual = PgnUtility.calculateBoard(boardExpectedPgnFile);
     assertEquals(boardExpected, boardActual);
   }
 

@@ -14,13 +14,17 @@ import com.google.common.collect.ImmutableList;
  * is independent of any {@code Result} tag in {@link #tagList()}: both, either, or neither may be present in
  * lenient-parsed input, while strict-parsed input always has both (and they match).
  *
- * <p>Invariant: when a Result tag is present in {@link #tagList()} <em>and</em> {@link #terminationMarker} is
- * non-null, the two must agree. The lenient and strict PGN parsers enforce this before constructing the
- * {@code PgnFile} (via the cross-signal consistency check); the {@code Board}-to-{@code PgnFile} path
- * ({@link PgnCreate#createPgnFile(com.dlb.chess.board.Board, java.util.List)}) is also guarded here by the
- * compact constructor — a caller that supplies a Result tag disagreeing with the board's game-status-derived
- * marker triggers an {@link IllegalArgumentException} rather than silently producing an internally inconsistent
- * model that archival export would then have to choose between.
+ * <p>
+ * Invariant: when a Result tag is present in {@link #tagList()} <em>and</em> {@link #terminationMarker} is non-null,
+ * the two must agree. The lenient and strict PGN parsers enforce this before constructing the {@code PgnFile} (via the
+ * cross-signal consistency check); the {@code Board}-to-{@code PgnFile} path
+ * ({@link PgnCreate#createPgnFile(com.dlb.chess.board.Board, java.util.List)}) is also guarded here by the compact
+ * constructor — a caller that supplies a Result tag disagreeing with the board's game-status-derived marker triggers an
+ * {@link IllegalArgumentException} rather than silently producing an internally inconsistent model that archival export
+ * would then have to choose between.
+ *
+ * <p>
+ * Don't use to construct PgnFile's on your own, intended as a parser result only, so holding valid data.
  */
 @SuppressWarnings("null")
 public record PgnFile(@NonNull ImmutableList<@NonNull Tag> tagList, @NonNull Fen startFen,

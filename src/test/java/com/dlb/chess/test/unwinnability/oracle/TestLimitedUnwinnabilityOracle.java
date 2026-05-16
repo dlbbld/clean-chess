@@ -52,7 +52,7 @@ class TestLimitedUnwinnabilityOracle {
     // PGN replay must NOT auto-detect DEAD_POSITION_UNWINNABLE_QUICK here — the recorded game intentionally passes
     // through a pawn-wall position that the quick analyzer classifies as dead before the PGN's final move. The test
     // itself then asserts the oracle behaviour on the resulting position.
-    final Board board = PgnUtility.calculateBoardStrict(pgnFile, false);
+    final Board board = PgnUtility.calculateBoard(pgnFile, false);
     logger.info(pgnFileName);
 
     assertEquals(LimitedUnwinnabilityVerdict.UNKNOWN,
