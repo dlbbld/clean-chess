@@ -97,6 +97,10 @@ public enum PgnTest {
   CHA_SHALLOW_TERMINATION(false, "cha/shallowTermination"),
   CHA_HELPMATE_BEYOND_FIVEFOLD(false, "cha/helpmateBeyond/fivefold"),
   CHA_HELPMATE_BEYOND_SEVENTY_FIVE(false, "cha/helpmateBeyond/seventyFive"),
+  CHA_BASIC_MATE_DRAW(false, "cha/basicCheckmate/draw"),
+  CHA_BASIC_MATE_HELPMATE_04(false, "cha/basicCheckmate/helpmate04"),
+  CHA_BASIC_MATE_HELPMATE_10(false, "cha/basicCheckmate/helpmate10"),
+  CHA_BASIC_MATE_HELPMATE_AROUND_MAX(false, "cha/basicCheckmate/helpmateAroundMax"),
 
   LAST_MOVE_ADDED_ACCIDENTALLY(false, "realGames/lastMoveAddedAccidentally"),
 

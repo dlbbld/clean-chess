@@ -94,6 +94,10 @@ public class PgnTestCaseCatalog {
       case CHA_SHALLOW_TERMINATION -> createTestCasesShallowTermination();
       case CHA_HELPMATE_BEYOND_FIVEFOLD -> createTestCasesHelpmateBeyondFivefold();
       case CHA_HELPMATE_BEYOND_SEVENTY_FIVE -> createTestCasesHelpmateBeyondSeventyFive();
+      case CHA_BASIC_MATE_DRAW -> createTestCasesBasicMateDraw();
+      case CHA_BASIC_MATE_HELPMATE_04 -> createTestCasesBasicMateHelpmate04();
+      case CHA_BASIC_MATE_HELPMATE_10 -> createTestCasesBasicMateHelpmate10();
+      case CHA_BASIC_MATE_HELPMATE_AROUND_MAX -> createTestCasesBasicMateHelpmateAroundMax();
       case RANDOM_CHECKMATE -> createTestCasesRandomCheckmate();
       case RANDOM_FIFTY -> createTestCasesRandomFifty();
       case RANDOM_FIVEFOLD -> createTestCasesRandomFivefold();
@@ -3696,6 +3700,66 @@ public class PgnTestCaseCatalog {
         CheckmateOrStalemate.NA, 1, InsufficientMaterial.BLACK_ONLY, "7k/8/2R3K1/8/8/8/8/8 b - - 149 100"));
 
     return new PgnTestCaseList(PgnTest.CHA_HELPMATE_BEYOND_SEVENTY_FIVE, list);
+  }
+
+  private static PgnTestCaseList createTestCasesBasicMateDraw() {
+    final List<PgnTestCase> list = new ArrayList<>();
+
+    list.add(new PgnTestCase("01_draw_KR_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/8/8/8/8/1R1K4/k7 b - - 0 50"));
+    list.add(new PgnTestCase("02_draw_KQ_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/8/8/8/8/Q2K4/1k6 b - - 0 50"));
+    list.add(new PgnTestCase("03_draw_KBwBb_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/8/8/8/5B2/4K2B/6k1 b - - 0 50"));
+    list.add(new PgnTestCase("04_draw_KBwN_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/8/8/8/5B2/4K2N/6k1 b - - 0 1"));
+
+    return new PgnTestCaseList(PgnTest.CHA_BASIC_MATE_DRAW, list);
+  }
+
+  private static PgnTestCaseList createTestCasesBasicMateHelpmate04() {
+    final List<PgnTestCase> list = new ArrayList<>();
+
+    list.add(new PgnTestCase("01_helpmate_04_KR_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/8/8/8/1K1R4/8/1k6 b - - 0 50"));
+    list.add(new PgnTestCase("02_helpmate_04_KQ_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/8/8/k7/2K5/3Q4/8 b - - 0 50"));
+    list.add(new PgnTestCase("03_helpmate_04_KBwBb_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "2k5/8/K7/8/BB6/8/8/8 b - - 0 50"));
+    list.add(new PgnTestCase("04_helpmate_04_KBwN_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "2k5/8/K7/4N3/B7/8/8/8 b - - 0 1"));
+
+    return new PgnTestCaseList(PgnTest.CHA_BASIC_MATE_HELPMATE_04, list);
+  }
+
+  private static PgnTestCaseList createTestCasesBasicMateHelpmate10() {
+    final List<PgnTestCase> list = new ArrayList<>();
+
+    list.add(new PgnTestCase("01_helpmate_10_KR_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/k7/6K1/8/8/8/1R6 b - - 0 50"));
+    list.add(new PgnTestCase("02_helpmate_10_KQ_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/8/k7/6K1/8/8/8/1Q6 b - - 0 50"));
+    list.add(new PgnTestCase("03_helpmate_10_KBwBb_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "1k6/8/5B2/5B2/8/K7/8/8 b - - 0 50"));
+    list.add(new PgnTestCase("04_helpmate_10_KBwN_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "8/k7/8/KB6/8/8/8/6N1 b - - 0 50"));
+
+    return new PgnTestCaseList(PgnTest.CHA_BASIC_MATE_HELPMATE_10, list);
+  }
+
+  private static PgnTestCaseList createTestCasesBasicMateHelpmateAroundMax() {
+    final List<PgnTestCase> list = new ArrayList<>();
+
+    list.add(new PgnTestCase("01_helpmate_around_max_KR_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "7K/6R1/8/8/8/8/8/k7 b - - 0 50"));
+    list.add(new PgnTestCase("02_helpmate_around_max_KQ_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "7K/6Q1/8/8/8/8/8/k7 b - - 0 50"));
+    list.add(new PgnTestCase("03_helpmate_around_max_KBwBb_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "5BBK/8/8/8/8/8/8/k7 b - - 0 50"));
+    list.add(new PgnTestCase("04_helpmate_around_max_KBwN_K.pgn", "", "", -1, 0, CheckmateOrStalemate.NA, 1,
+        InsufficientMaterial.BLACK_ONLY, "5NBK/8/8/8/8/8/8/k7 b - - 0 50"));
+
+    return new PgnTestCaseList(PgnTest.CHA_BASIC_MATE_HELPMATE_AROUND_MAX, list);
   }
 
   private static PgnTestCaseList createTestCasesLastMoveAddedAccidentally() {

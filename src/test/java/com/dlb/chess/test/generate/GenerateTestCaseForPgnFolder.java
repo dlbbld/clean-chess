@@ -13,7 +13,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn {
 
   // the folder can only contain PGN files
-  private static final Path PGN_FOLDER_PATH = PgnTest.CHA_SHALLOW_TERMINATION.getFolderPath();
+  private static final Path PGN_FOLDER_PATH = PgnTest.CHA_BASIC_MATE_HELPMATE_AROUND_MAX.getFolderPath();
 
   public static void main(String[] args) throws Exception {
     generateTestCaseForFolder(PGN_FOLDER_PATH);
@@ -36,9 +36,8 @@ public class GenerateTestCaseForPgnFolder extends AbstractGenerateTestCaseForPgn
       }
       final String pgnName = Nulls.getName(file);
       if (!PgnExtensionUtility.hasPgnExtension(pgnName)) {
-        throw new IllegalArgumentException(
-            "All files in the folder must be valid PGN files and have the extension \"" + ChessConstants.PGN_EXTENSION
-                + "\". The file \"" + pgnName + " does not meet the extension expectation");
+        throw new IllegalArgumentException("All files in the folder must be valid PGN files and have the extension \""
+            + ChessConstants.PGN_EXTENSION + "\". The file \"" + pgnName + " does not meet the extension expectation");
       }
       final String testCaseValues = generate(pgnFolderPath, pgnName);
       System.out.println(testCaseValues);
