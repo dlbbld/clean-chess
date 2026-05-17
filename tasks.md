@@ -211,6 +211,10 @@ The architectural advantage clean-chess has: the two representations are indepen
 
 ---
 
+## Deep square moment follow-up release - bitboard for tree search
+
+- [ ] Implement a bitboard suited for tree search (the existing board is rich and not designed for such operations, for example the unmove is partially slow, as it maintains a lot of lists).
+
 ## Future release — python-chess primary cross-validation + PGN/FEN test coverage expansion
 
 The third release. Reactivates the python-chess test path (currently dormant), makes python-chess the main move-test reference, and expands PGN import/export test coverage — especially the FEN-anchored cases that `chesslib` cannot exercise.
