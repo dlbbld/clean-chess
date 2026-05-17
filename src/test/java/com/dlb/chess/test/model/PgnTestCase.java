@@ -5,6 +5,7 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.report.CheckmateOrStalemate;
+import com.dlb.chess.test.fen.FenCacheForTestCases;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
@@ -37,7 +38,7 @@ public record PgnTestCase(String pgnName, String expectedRepetition, String expe
    * intentionally dead can still be analysed.
    */
   public Board finalPosition() {
-    return new Board(finalFen(), false);
+    return new Board(FenCacheForTestCases.getFen(finalFen()), false);
   }
 
   /**
