@@ -6,7 +6,7 @@ Releases from 3.3 onward. Earlier history is in git tags only.
 
 ## [8.0.0] - 2026-05-17
 
-The **DeepSquare moment**. clean-chess closes the FIDE 5.2.2 dead-position gap (auto-CHA per move) and is now cross-validated against the D3-Chess (Ambrona FUN22) reference oracle at three levels.
+The **DeepSquare moment**. clean-chess closes FIDE 5.2.2 dead-position gap to high extend (auto-CHA unwinnability quick per move) and is now cross-validated against the D3-Chess (Ambrona FUN22) reference oracle at three levels. Higher coverage with unwinnability full in evaluation for later release.
 
 ### Notable
 - **Auto-CHA per move.** `DEAD_POSITION_UNWINNABLE_QUICK` is the sixth FIDE-automatic termination. The validation pipeline — both `ValidateNewMove` and `StrictSanParser` — rejects moves attempted on a dead position with `GAME_ALREADY_ENDED`, the thrown exception carrying the originating `GameStatus`. Consumers that previously had to query unwinnability themselves and stop the game manually can delete that code.
