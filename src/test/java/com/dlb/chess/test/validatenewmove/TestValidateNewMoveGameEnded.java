@@ -17,9 +17,18 @@ import com.dlb.chess.exceptions.InvalidMoveException;
  * Surface-level tests for the strict-pipeline game-end pre-check in
  * {@link com.dlb.chess.board.ValidateNewMove#validateNewMove}: one scenario per FIDE-automatic termination
  * ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE}, {@link GameStatus#DEAD_POSITION_INSUFFICIENT_MATERIAL},
- * {@link GameStatus#FIVE_FOLD_REPETITION_RULE}, {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any move
- * attempted on a terminal-state board is rejected with {@link MoveCheck#GAME_ALREADY_ENDED} and that the thrown
- * {@link InvalidMoveException} carries the originating {@link GameStatus} as payload.
+ * {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
+ * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any move attempted on a terminal-state board is
+ * rejected with {@link MoveCheck#GAME_ALREADY_ENDED} and that the thrown {@link InvalidMoveException} carries the
+ * originating {@link GameStatus} as payload.
+ *
+ * <p>
+ * For {@code DEAD_POSITION_UNWINNABLE_QUICK} two scenarios are exercised: a board born dead from a pawn-wall FEN (the
+ * constructor's eager per-ply detection at {@code Board#computeDeadPositionUnwinnableQuick}), and a board that becomes
+ * dead as a consequence of the locking pawn move (the per-move detection inside
+ * {@code Board#performMoveWithoutValidation}). The "born dead" tests for this status must construct the board with
+ * {@code Board(fen, true)} — auto-detection off would short-circuit {@code isDeadPositionUnwinnableQuick()} to
+ * {@code false}.
  *
  * <p>
  * The companion {@code TestSanValidationGameEnded} mirrors this set against the SAN pipeline.
@@ -56,6 +65,32 @@ class TestValidateNewMoveGameEnded implements EnumConstants {
     // K vs K: dead position under FIDE 5.2.2.
     final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1", false);
     check(board, new MoveSpecification(E1, E2), GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL);
+  }
+
+  // --- DEAD_POSITION_UNWINNABLE_QUICK ---
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testGameEndedByDeadPositionUnwinnableQuickBornDead() {
+    // Pawn-wall fortress (horizontal_1 from the CHA pawn-wall corpus). Both sides have only kings
+    // and locked pawns; the cheap insufficient-material detector stays quiet because pawns are
+    // present, but the CHA quick analyzer classifies the position as dead. Auto-detection must be
+    // ENABLED — Board(fen, false) would suppress isDeadPositionUnwinnableQuick() and the move
+    // would slip through.
+    final Board board = new Board("4k3/8/8/p1p1p1p1/P1P1P1P1/8/8/4K3 w - - 0 50", true);
+    check(board, new MoveSpecification(E1, D1), GameStatus.DEAD_POSITION_UNWINNABLE_QUICK);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testGameEndedByDeadPositionUnwinnableQuickPlayedInto() {
+    // Predecessor: same wall structure as the no-en-passant pawn_wall fixture but with the white
+    // h-pawn still on h2 (one rank back). White's h3 push completes the lock — the per-ply
+    // detection inside performMoveWithoutValidation flips the position to dead. Any subsequent
+    // move attempt must be rejected.
+    final Board board = new Board("4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P2/7P/4K3 w - - 0 49", true);
+    board.moveStrict("h3");
+    check(board, new MoveSpecification(E8, D8), GameStatus.DEAD_POSITION_UNWINNABLE_QUICK);
   }
 
   // --- SEVENTY_FIVE_MOVE_RULE ---
