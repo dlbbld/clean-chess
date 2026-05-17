@@ -39,8 +39,7 @@ class TestUnwinnabilityFull {
     final var fen = "7k/8/2R3K1/8/8/8/8/8 b - - 149 100";
     final Board board = new Board(fen, false);
 
-    assertEquals(UnwinnabilityFullVerdict.UNWINNABLE,
-        UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict());
+    assertEquals(UnwinnabilityFullVerdict.WINNABLE, UnwinnableFullAnalyzer.unwinnableFull(board, Side.WHITE).verdict());
     assertEquals(UnwinnabilityFullVerdict.UNWINNABLE,
         UnwinnableFullAnalyzer.unwinnableFull(board, Side.BLACK).verdict());
   }

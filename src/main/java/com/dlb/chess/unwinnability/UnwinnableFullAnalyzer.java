@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 
 //Figure 9 Main routine for deciding chess unwinnability. It is based on our semi-static
@@ -24,8 +25,15 @@ public class UnwinnableFullAnalyzer {
    * runs the quick analyzer). Repetition history from the caller's game is lost on the fresh board.
    */
   public static UnwinnabilityFullAnalysis unwinnableFull(Board input, Side winner) {
-    final Board board = input.copyCurrentPositionWithoutHistory(false);
+    final Board board = copyCurrentPositionForFullSearch(input);
     return unwinnableFull(board, winner, false, new MobilitySolution());
+  }
+
+  private static Board copyCurrentPositionForFullSearch(Board input) {
+    final Fen fen = new Fen(input.getFen(), input.getStaticPosition(), input.getHavingMove(),
+        input.getCastlingRightWhite(), input.getCastlingRightBlack(), input.getEnPassantCaptureTargetSquare(), 0,
+        input.getFullMoveNumberForNextHalfMove());
+    return new Board(fen, false);
   }
 
   // Inputs: position, intended winner

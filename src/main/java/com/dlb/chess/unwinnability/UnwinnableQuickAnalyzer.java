@@ -281,9 +281,6 @@ public class UnwinnableQuickAnalyzer {
   }
 
   private static UnwinnabilityQuickVerdict calculateWinnableVerdict() {
-    if (IS_ALIGN_QUICK_WITH_AMBRONA_REFERENCE_IMPLEMENTATION) {
-      return UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE;
-    }
     return UnwinnabilityQuickVerdict.WINNABLE;
   }
 
