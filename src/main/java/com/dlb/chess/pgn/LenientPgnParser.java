@@ -155,6 +155,15 @@ public final class LenientPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   private PgnGame parseInternal() {
+    // Empty-input rejection. Lenient leniency is about recovering signal from imperfect PGN text — it does not
+    // fabricate a game out of zero input. "Empty" here includes whitespace-only (spaces, tabs, newlines) on top
+    // of strictly zero-length: a file containing nothing but whitespace carries no signal either. Callers who
+    // really want the initial position have {@code new Board()}.
+    if (source.isBlank()) {
+      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.FILE_EMPTY,
+          SanValidationProblem.NONE, "The PGN is empty.");
+    }
+
     skipInsignificantWhitespace();
 
     final List<Tag> tagList = parseTagSection();

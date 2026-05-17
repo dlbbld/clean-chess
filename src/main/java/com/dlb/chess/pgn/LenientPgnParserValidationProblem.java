@@ -3,6 +3,17 @@ package com.dlb.chess.pgn;
 public enum LenientPgnParserValidationProblem {
   UNKNOWN_ERROR,
   OK,
+  /**
+   * The PGN input is empty — zero bytes, only the UTF-8 BOM, or whitespace-only (spaces, tabs, newlines in any
+   * combination). Even the lenient parser refuses to fabricate a game out of no signal. Callers who genuinely want
+   * the initial position have {@code new Board()}.
+   *
+   * <p>
+   * Slightly broader than {@link StrictPgnParserValidationProblem#FILE_EMPTY}, which fires only for the strictly
+   * zero-length case (the strict parser's whitespace-only inputs land in the {@code FILE_EMPTY_LINE_*} family
+   * instead). The lenient parser doesn't have that family, so all "no-content" inputs collapse here.
+   */
+  FILE_EMPTY,
   TAG_REAPPEAR,
   TAG_FORMAT_INVALID,
   TAG_NAME_NOT_UNIQUE,
