@@ -4,12 +4,13 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.dlb.chess.board.Board;
-import com.dlb.chess.board.enums.CastlingRight;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.utility.BasicUtility;
+import com.dlb.chess.squares.KingNonCastlingEmptyBoardSquares;
 
 //Figure 8 Semi-statically unwinnable algorithm, which may conclude that a position is
 //unwinnable for an intended winner based on an admissible solution to the mobility problem.
@@ -22,79 +23,162 @@ class UnwinnableSemiStatic {
   // Output: bool (true if position is declared unwinnable, false otherwise)
   public static boolean unwinnableSemiStatic(Board board, Side c, MobilitySolution mobilitySolution) {
 
-    // 1: if en passant is possible or a player has castling rights in pos then return false
+    if (board.getLegalMoves().isEmpty()) {
+      return !board.isCheck() || board.getHavingMove() == c;
+    }
 
-    // en passant is possible
-    // a player has castling rights
-    if (board.isEnPassantCapturePossible() || board.getCastlingRightWhite() != CastlingRight.NONE
-        || board.getCastlingRightBlack() != CastlingRight.NONE) {
+    if (board.isEnPassantCapturePossible()) {
       return false;
     }
 
-    // 2: for every piece P in pos, define region(P) := {s in S |MP>s = 1} ( -> The squares that
-    // can potentially be reached by piece P)
-
-    // 3: let Kc (resp. KÂ¬c) be the intended winnerâ€™s king (resp. intended loserâ€™s king)
     final PiecePlacement intendedLoserKing = calculateKing(c.getOppositeSide(), mobilitySolution);
+    final Set<Square> intendedLoserKingRegion = SemiStaticFunctions.region(intendedLoserKing, mobilitySolution);
+    final Set<PiecePlacement> visitorSet = calculateVisitorsExpanded(intendedLoserKingRegion, c, mobilitySolution);
 
-    // 4: set intruders := {P in pos | P.side = c ^ region(P) \ region(KÂ¬c) != the empty set} ( -> The
-    // intended winnerâ€™s pieces that can potentially reach the intended loserâ€™s king region)
+    if (visitorSet.isEmpty()) {
+      return true;
+    }
 
-    // 5: if ex P in intruders with P.type != bishop then return false ( -> We require that the set of
-    // intruders be empty or formed entirely by bishops for the position to be unwinnable)
-    final Set<PiecePlacement> intruderSet = SemiStaticFunctions.intruders(intendedLoserKing, mobilitySolution);
-    for (final PiecePlacement intruder : intruderSet) {
-      if (intruder.pieceType() != PieceType.BISHOP) {
+    final Set<SquareType> visitorSquareTypeSet = calculateSquareTypeSet(visitorSet);
+    if (visitorSquareTypeSet.size() > 1) {
+      return false;
+    }
+
+    for (final PiecePlacement visitor : visitorSet) {
+      if (visitor.pieceType() != PieceType.BISHOP) {
         return false;
       }
     }
 
-    // 6: if 9P, P0 2 intruders with color(P.sq) 6= color(P0.sq) then return false ( -> We
-    // require that all intruders (only bishops at this point) be of the same square color)
-    final Set<SquareType> squareTypeSet = new TreeSet<>();
-    for (final PiecePlacement intruder : intruderSet) {
-      squareTypeSet.add(intruder.squareOriginal().getSquareType());
+    final SquareType visitorSquareType = visitorSquareTypeSet.iterator().next();
+    for (final Square matingSquare : Square.REAL) {
+      final Set<PiecePlacement> matingBishopSet = removeKing(visitors(Set.of(matingSquare), c, false, mobilitySolution),
+          c);
+
+      if (matingBishopSet.isEmpty() || !intendedLoserKingRegion.contains(matingSquare)) {
+        continue;
+      }
+
+      final Set<Square> escapingSquareSet = new TreeSet<>();
+      final Set<Square> checkingSquareSet = new TreeSet<>();
+      for (final Square adjacentSquare : KingNonCastlingEmptyBoardSquares.getKingSquares(matingSquare)) {
+        if (intendedLoserKingRegion.contains(adjacentSquare)) {
+          if (adjacentSquare.getSquareType() == visitorSquareType) {
+            checkingSquareSet.add(adjacentSquare);
+          } else {
+            escapingSquareSet.add(adjacentSquare);
+          }
+        }
+      }
+
+      final Set<Square> neighbourSet = KingNonCastlingEmptyBoardSquares.getKingSquares(matingSquare);
+      final boolean isActiveWinnerKing = visitors(neighbourSet, c, false, mobilitySolution)
+          .contains(calculateKing(c, mobilitySolution));
+      if (calculateHasTwoDiagonals(checkingSquareSet) && matingBishopSet.size() < 2 && !isActiveWinnerKing) {
+        continue;
+      }
+
+      var isUnblockable = false;
+      for (final Square escapingSquare : escapingSquareSet) {
+        if (removeKings(visitors(Set.of(escapingSquare), c.getOppositeSide(), false, mobilitySolution)).isEmpty()) {
+          isUnblockable = true;
+          break;
+        }
+      }
+
+      if (isUnblockable && !isActiveWinnerKing) {
+        continue;
+      }
+
+      final Set<PiecePlacement> blockerSet = visitors(escapingSquareSet, c.getOppositeSide(), false, mobilitySolution);
+      final int blockerCount = (isActiveWinnerKing ? 1 : 0) + removeKings(blockerSet).size();
+      if (escapingSquareSet.size() <= blockerCount) {
+        return false;
+      }
     }
-    if (squareTypeSet.size() > 1) {
-      return false;
-    }
 
-    // 7: for P 2 pos, define att-region(P) := {s 2 S | pred-captP (s) \ region(P) 6= ;} (-> The
-    // squares that can potentially be attacked by piece P)
+    return true;
 
-    // 8: for s 2 S, let blockers(s) := {P 2 pos | P.side 6= c ^ region(P) \ (s) 6= ;}a ( -> The
-    // intended loserâ€™s pieces that can potentially reach an adjacent square to s)
+  }
 
-    // 9: for s 2 S, define assistants(s) := {P 2 pos | P.side = c ^ att-region(P) \ (s) 6= ;}
-    // ( -> The intended winnerâ€™s pieces that can potentially attack an adjacent square to s)
+  static Set<PiecePlacement> calculateVisitorsExpanded(Set<Square> intendedLoserKingRegion, Side intendedWinner,
+      MobilitySolution mobilitySolution) {
+    return removeKing(visitors(intendedLoserKingRegion, intendedWinner, true, mobilitySolution), intendedWinner);
+  }
 
-    // 10: if 9s 2 region(KÂ¬c) such that |blockers(s)| + |assistants(s)|  | (s)| and 9P 2 pos
-    // satisfying s 2 att-region(P) ^ P.side = c then return false . There is a square s
-    // that can potentially be reached by KÂ¬c and attacked by the intended winner; and
-    // there are enough defenders/attackers that can block/cover all adjacent squares to s
+  private static Set<PiecePlacement> visitors(Set<Square> region, Side side, boolean expandedPawnRegion,
+      MobilitySolution mobilitySolution) {
+    final Set<PiecePlacement> result = new TreeSet<>();
+    final boolean isIgnorePawns = SemiStaticFunctions.region(calculateKing(side.getOppositeSide(), mobilitySolution),
+        mobilitySolution).size() > 1;
 
-    for (final Square squareKingEscape : SemiStaticFunctions.region(intendedLoserKing, mobilitySolution)) {
-      final Set<PiecePlacement> blockerPieceSet = SemiStaticFunctions.blockers(squareKingEscape, c, mobilitySolution);
-      final Set<PiecePlacement> assistantsPieceSet = SemiStaticFunctions.assistants(squareKingEscape, c,
-          mobilitySolution);
-      final Set<Square> adjacentSet = KingDistanceOneFunctions.calculateOrthogonalSquares(squareKingEscape);
+    for (final PiecePlacement piecePlacement : mobilitySolution.getPiecePlacementSet()) {
+      final Set<Square> pieceRegion = SemiStaticFunctions.region(piecePlacement, mobilitySolution);
+      if (piecePlacement.pieceType() == PieceType.PAWN && isIgnorePawns && !pieceRegion.contains(Square.A1)) {
+        continue;
+      }
 
-      if (blockerPieceSet.size() + assistantsPieceSet.size() >= adjacentSet.size()) {
-        for (final PiecePlacement checkPiece : mobilitySolution.getPiecePlacementSet()) {
-          if (checkPiece.side() == c) {
-            final Set<Square> attRegionSet = SemiStaticFunctions.attackedRegion(checkPiece, mobilitySolution);
-
-            if (attRegionSet.contains(squareKingEscape)) {
-              return false;
-            }
+      if (piecePlacement.side() == side) {
+        for (final Square target : region) {
+          if (pieceRegion.contains(target)) {
+            result.add(piecePlacement);
+            break;
+          }
+          if (piecePlacement.pieceType() == PieceType.PAWN && expandedPawnRegion
+              && piecePlacement.squareOriginal().getFile() != target.getFile()
+              && !BasicUtility.calculateIsDisjoint(MobilityFunctions.predecessorsCapture(piecePlacement, target),
+                  pieceRegion)) {
+            result.add(piecePlacement);
+            break;
           }
         }
       }
     }
+    return result;
+  }
 
-    // 11: return true . The position must be unwinnable
-    return true;
+  private static Set<PiecePlacement> removeKing(Set<PiecePlacement> piecePlacementSet, Side side) {
+    final Set<PiecePlacement> result = new TreeSet<>();
+    for (final PiecePlacement piecePlacement : piecePlacementSet) {
+      if (piecePlacement.side() != side || piecePlacement.pieceType() != PieceType.KING) {
+        result.add(piecePlacement);
+      }
+    }
+    return result;
+  }
 
+  private static Set<PiecePlacement> removeKings(Set<PiecePlacement> piecePlacementSet) {
+    final Set<PiecePlacement> result = new TreeSet<>();
+    for (final PiecePlacement piecePlacement : piecePlacementSet) {
+      if (piecePlacement.pieceType() != PieceType.KING) {
+        result.add(piecePlacement);
+      }
+    }
+    return result;
+  }
+
+  private static Set<SquareType> calculateSquareTypeSet(Set<PiecePlacement> piecePlacementSet) {
+    final Set<SquareType> result = new TreeSet<>();
+    for (final PiecePlacement piecePlacement : piecePlacementSet) {
+      result.add(piecePlacement.squareOriginal().getSquareType());
+    }
+    return result;
+  }
+
+  private static boolean calculateHasTwoDiagonals(Set<Square> checkingSquareSet) {
+    for (final Square squareA : checkingSquareSet) {
+      for (final Square squareB : checkingSquareSet) {
+        if (squareA == squareB) {
+          continue;
+        }
+        final int fileDistance = Math.abs(squareA.getFile().getNumber() - squareB.getFile().getNumber());
+        final int rankDistance = Math.abs(squareA.getRank().getNumber() - squareB.getRank().getNumber());
+        if (fileDistance == 2 && rankDistance == 0 || fileDistance == 0 && rankDistance == 2) {
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
   private static PiecePlacement calculateKing(Side c, MobilitySolution mobilitySolution) {
@@ -105,4 +189,5 @@ class UnwinnableSemiStatic {
     }
     throw new ProgrammingMistakeException("King not in the list");
   }
+
 }

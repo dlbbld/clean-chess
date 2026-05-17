@@ -21,7 +21,26 @@ public final class CompareAmbronaMobilityOracle {
   private CompareAmbronaMobilityOracle() {
   }
 
+  public record MobilityOracleComparison(int comparedFenCount, int fenDifferenceCount, int rowDifferenceCount,
+      List<String> differentFenList, List<String> printedDifferenceList) {
+  }
+
   public static void main(String[] args) throws Exception {
+    final MobilityOracleComparison comparison = compare();
+
+    System.out.println("Compared FENs: " + comparison.comparedFenCount());
+    System.out.println("FENs with differences: " + comparison.fenDifferenceCount());
+    System.out.println("Row differences: " + comparison.rowDifferenceCount());
+    for (final String fen : comparison.differentFenList()) {
+      System.out.println("Different FEN: " + fen);
+    }
+    for (final String difference : comparison.printedDifferenceList()) {
+      System.out.println();
+      System.out.println(difference);
+    }
+  }
+
+  public static MobilityOracleComparison compare() throws Exception {
     final Map<String, List<String>> expectedByFen = readExpectedByFen();
     var fenDifferenceCount = 0;
     var rowDifferenceCount = 0;
@@ -39,17 +58,8 @@ public final class CompareAmbronaMobilityOracle {
         rowDifferenceCount += differenceCount;
       }
     }
-
-    System.out.println("Compared FENs: " + expectedByFen.size());
-    System.out.println("FENs with differences: " + fenDifferenceCount);
-    System.out.println("Row differences: " + rowDifferenceCount);
-    for (final String fen : differentFenList) {
-      System.out.println("Different FEN: " + fen);
-    }
-    for (final String difference : printedDifferenceList) {
-      System.out.println();
-      System.out.println(difference);
-    }
+    return new MobilityOracleComparison(expectedByFen.size(), fenDifferenceCount, rowDifferenceCount,
+        List.copyOf(differentFenList), List.copyOf(printedDifferenceList));
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {

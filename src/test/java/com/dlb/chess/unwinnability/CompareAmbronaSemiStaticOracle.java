@@ -23,7 +23,30 @@ public final class CompareAmbronaSemiStaticOracle {
   private CompareAmbronaSemiStaticOracle() {
   }
 
+  public record SemiStaticOracleComparison(int comparedFenCount, int fenDifferenceCount, int rowDifferenceCount,
+      Map<String, Integer> differenceCountByKind, List<String> differentFenList, List<String> printedDifferenceList) {
+  }
+
   public static void main(String[] args) throws Exception {
+    final SemiStaticOracleComparison comparison = compare();
+
+    System.out.println("Compared FENs: " + comparison.comparedFenCount());
+    System.out.println("FENs with differences: " + comparison.fenDifferenceCount());
+    System.out.println("Row differences: " + comparison.rowDifferenceCount());
+    for (final Map.Entry<String, Integer> entry : comparison.differenceCountByKind().entrySet()) {
+      System.out.println("Row differences for " + Nulls.getKey(entry) + ": " + Nulls.getValue(entry));
+    }
+    for (final String fen : comparison.differentFenList().subList(0,
+        Math.min(MAX_PRINTED_DIFFERENT_FENS, comparison.differentFenList().size()))) {
+      System.out.println("Different FEN: " + fen);
+    }
+    for (final String difference : comparison.printedDifferenceList()) {
+      System.out.println();
+      System.out.println(difference);
+    }
+  }
+
+  public static SemiStaticOracleComparison compare() throws Exception {
     final Map<String, List<String>> expectedByFen = readExpectedByFen();
     var fenDifferenceCount = 0;
     var rowDifferenceCount = 0;
@@ -43,20 +66,8 @@ public final class CompareAmbronaSemiStaticOracle {
         rowDifferenceCount += differenceCount;
       }
     }
-
-    System.out.println("Compared FENs: " + expectedByFen.size());
-    System.out.println("FENs with differences: " + fenDifferenceCount);
-    System.out.println("Row differences: " + rowDifferenceCount);
-    for (final Map.Entry<String, Integer> entry : differenceCountByKind.entrySet()) {
-      System.out.println("Row differences for " + Nulls.getKey(entry) + ": " + Nulls.getValue(entry));
-    }
-    for (final String fen : differentFenList.subList(0, Math.min(MAX_PRINTED_DIFFERENT_FENS, differentFenList.size()))) {
-      System.out.println("Different FEN: " + fen);
-    }
-    for (final String difference : printedDifferenceList) {
-      System.out.println();
-      System.out.println(difference);
-    }
+    return new SemiStaticOracleComparison(expectedByFen.size(), fenDifferenceCount, rowDifferenceCount,
+        Map.copyOf(differenceCountByKind), List.copyOf(differentFenList), List.copyOf(printedDifferenceList));
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
@@ -71,9 +82,6 @@ public final class CompareAmbronaSemiStaticOracle {
       final String[] itemArray = Nulls.split(line, "\t");
       if (itemArray.length != 5) {
         throw new IllegalStateException("Invalid semistatic oracle row: " + line);
-      }
-      if (Nulls.get(itemArray, 2).startsWith("AMBRONA_")) {
-        continue;
       }
       final String fen = Nulls.get(itemArray, 0);
       if (!expectedByFen.containsKey(fen)) {

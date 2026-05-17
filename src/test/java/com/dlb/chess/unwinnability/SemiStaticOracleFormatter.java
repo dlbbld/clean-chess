@@ -55,6 +55,8 @@ public final class SemiStaticOracleFormatter {
       addRow(rowList, fen, winner.name(), "JAVA_LOSER_KING_REGION", "-", formatSquares(loserKingRegion));
       addRow(rowList, fen, winner.name(), "JAVA_INTRUDERS", "-",
           formatPieces(SemiStaticFunctions.intruders(loserKing, mobilitySolution)));
+      addRow(rowList, fen, winner.name(), "AMBRONA_VISITORS_EXPANDED", "-",
+          formatPieces(UnwinnableSemiStatic.calculateVisitorsExpanded(loserKingRegion, winner, mobilitySolution)));
 
       for (final Square square : loserKingRegion) {
         addRow(rowList, fen, winner.name(), "JAVA_BLOCKERS", square.getName(),

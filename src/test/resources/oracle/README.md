@@ -19,6 +19,13 @@ that piece.
 fen	side	pieceType	from	toSquares
 ```
 
+`ambrona-semistatic.tsv` uses the same final FEN source and writes Ambrona rows
+for semistatic verdicts and helper sets.
+
+```text
+fen	side	kind	subject	value
+```
+
 ## One-time Windows setup
 
 1. Install WSL with Ubuntu from PowerShell or Windows Terminal:
@@ -110,9 +117,33 @@ The optional D3-Chess path argument and `ambrona.d3.path` system property work
 the same way as for the unwinnability oracle. The mobility generator compiles
 `tools/ambrona-oracle/mobility_oracle.cpp`.
 
+To regenerate the semistatic oracle, run:
+
+```powershell
+mvn -q org.codehaus.mojo:exec-maven-plugin:3.6.2:java "-Dexec.classpathScope=test" "-Dexec.mainClass=com.dlb.chess.test.generate.GenerateAmbronaSemiStaticOracle"
+```
+
+The optional D3-Chess path argument and `ambrona.d3.path` system property work
+the same way as for the unwinnability oracle. The semistatic generator compiles
+`tools/ambrona-oracle/semistatic_oracle.cpp`.
+
 To compare the generated mobility oracle against the Java mobility
 implementation without turning the mismatch report into a JUnit failure, run:
 
 ```powershell
 mvn -q org.codehaus.mojo:exec-maven-plugin:3.6.2:java "-Dexec.classpathScope=test" "-Dexec.mainClass=com.dlb.chess.unwinnability.CompareAmbronaMobilityOracle"
+```
+
+To compare the generated semistatic oracle without turning the mismatch report
+into a JUnit failure, run:
+
+```powershell
+mvn -q org.codehaus.mojo:exec-maven-plugin:3.6.2:java "-Dexec.classpathScope=test" "-Dexec.mainClass=com.dlb.chess.unwinnability.CompareAmbronaSemiStaticOracle"
+```
+
+The corresponding JUnit baseline tests live in the unwinnability test package,
+which is excluded from default Maven test runs. Run them explicitly with:
+
+```powershell
+mvn -q "-Dtest.excludes=" "-Dtest=TestAmbronaMobilityOracleComparison,TestAmbronaSemiStaticOracleComparison" test
 ```

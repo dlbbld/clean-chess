@@ -115,7 +115,7 @@ class TestReadMe {
     assertUnwinnability("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29", Side.WHITE,
         UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.WINNABLE);
     assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE,
-        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
   @Test
