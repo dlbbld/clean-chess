@@ -296,28 +296,15 @@ public class Board {
 
   /**
    * Creates a new board whose initial position is this board's current position, without carrying over the move
-   * history or the no-progress halfmove clock — i.e. with the halfmove clock reset to zero.
+   * history.
    *
    * <p>
-   * Discarding the move history makes the new board insensitive to fivefold repetition; resetting the halfmove clock
-   * makes it insensitive to the seventy-five-move rule. Both auto-terminations are sequence-derived FIDE conventions
-   * that the helpmate search must look past per the CHA paper / Ambrona issue thread — see
-   * {@code FindHelpMateInterrupt} / {@code FindHelpmateExhaust}.
-   *
-   * <p>
-   * Material-derived auto-terminations (CHECKMATE, STALEMATE, insufficient material) still apply on the new board, and
-   * {@code DEAD_POSITION_UNWINNABLE_QUICK} auto-detection follows the {@code detectDeadPositionUnwinnable} flag.
+   * Auto-detection of {@code DEAD_POSITION_UNWINNABLE_QUICK} follows the {@code detectDeadPositionUnwinnable} flag.
    */
   public Board copyCurrentPositionWithoutHistory(boolean detectDeadPositionUnwinnable) {
-    final String resetFen = withHalfMoveClockResetToZero(getFen());
-    return new Board(resetFen, detectDeadPositionUnwinnable);
-  }
-
-  private static String withHalfMoveClockResetToZero(String fen) {
-    // FEN layout: piecePlacement havingMove castling enPassant halfmoveClock fullmoveNumber
-    final String[] parts = fen.split(" ");
-    parts[4] = "0";
-    return String.join(" ", parts);
+    final Fen currentPosition = new Fen(getFen(), getStaticPosition(), getHavingMove(), getCastlingRightWhite(),
+        getCastlingRightBlack(), getEnPassantCaptureTargetSquare(), 0, getFullMoveNumberForNextHalfMove());
+    return new Board(currentPosition, detectDeadPositionUnwinnable);
   }
 
   /**
