@@ -51,7 +51,7 @@ class UnwinnableSemiStatic {
       }
     }
 
-    final SquareType visitorSquareType = visitorSquareTypeSet.iterator().next();
+    final SquareType visitorSquareType = BasicUtility.calculateOnlyElement(visitorSquareTypeSet);
     for (final Square matingSquare : Square.REAL) {
       final Set<PiecePlacement> matingBishopSet = removeKing(
           visitors(Nulls.setOf(matingSquare), c, false, mobilitySolution), c);
