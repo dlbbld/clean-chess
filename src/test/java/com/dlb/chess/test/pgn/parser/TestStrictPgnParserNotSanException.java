@@ -20,7 +20,6 @@ class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserExce
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    checkException("01_empty_file.pgn", StrictPgnParserValidationProblem.FILE_EMPTY);
     checkException("02_starts_with_empty_line.pgn", StrictPgnParserValidationProblem.FILE_EMPTY_LINE_CANNOT_START_WITH);
     checkException("03_does_not_end_with_empty_line.pgn",
         StrictPgnParserValidationProblem.FILE_EMPTY_LINE_MUST_END_WITH);

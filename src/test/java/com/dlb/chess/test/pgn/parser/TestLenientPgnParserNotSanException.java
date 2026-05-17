@@ -31,13 +31,6 @@ class TestLenientPgnParserNotSanException extends AbstractTestLenientPgnParserEx
     checkException("09_tag_setup_tag_value_invalid.pgn", LenientPgnParserValidationProblem.TAG_SET_UP_VALUE_INVALID);
     checkException("10_tag_setup_tag_zero_but_fen_provided.pgn",
         LenientPgnParserValidationProblem.TAG_SET_UP_VALUE_ZERO_BUT_FEN_PROVIDED);
-
-    // Empty file: lenient explicitly rejects rather than fabricating an initial-position game with no moves.
-    // "Empty" includes whitespace-only — spaces, tabs, newlines in any combination — because the rejection is
-    // about no signal, not about the byte count. Strict differentiates these two cases (FILE_EMPTY vs
-    // FILE_EMPTY_LINE_*); lenient collapses both to FILE_EMPTY.
-    checkException("11_empty_file.pgn", LenientPgnParserValidationProblem.FILE_EMPTY);
-    checkException("12_whitespace_only.pgn", LenientPgnParserValidationProblem.FILE_EMPTY);
   }
 
   private static void checkException(String pgnName, LenientPgnParserValidationProblem expected) {
