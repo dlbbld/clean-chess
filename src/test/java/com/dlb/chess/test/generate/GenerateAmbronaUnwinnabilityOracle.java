@@ -103,38 +103,40 @@ public final class GenerateAmbronaUnwinnabilityOracle {
   private static List<String> runOracle(List<String> fenList) throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc",
         "LD_LIBRARY_PATH=/usr/local/lib " + shellQuote(WSL_RUNNER_PATH));
-    final Process process = processBuilder.start();
+    final Process process = Nulls.startProcess(processBuilder);
     final List<String> result = new ArrayList<>();
 
-    try (BufferedWriter writer = new BufferedWriter(
-        new OutputStreamWriter(Nulls.getOutputStream(process), StandardCharsets.UTF_8));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(Nulls.getInputStream(process),
-            StandardCharsets.UTF_8))) {
+    try (InputStream errorStream = Nulls.getErrorStream(process)) {
+      try (BufferedWriter writer = new BufferedWriter(
+          new OutputStreamWriter(Nulls.getOutputStream(process), StandardCharsets.UTF_8));
+          BufferedReader reader = new BufferedReader(new InputStreamReader(Nulls.getInputStream(process),
+              StandardCharsets.UTF_8))) {
 
-      var processed = 0;
-      for (final String fen : fenList) {
-        writer.write(fen);
-        writer.write('\n');
-        writer.flush();
+        var processed = 0;
+        for (final String fen : fenList) {
+          writer.write(fen);
+          writer.write('\n');
+          writer.flush();
 
-        final String resultLine = reader.readLine();
-        if (resultLine == null) {
-          throw new IllegalStateException("Ambrona oracle runner stopped before returning a result for " + fen);
-        }
-        validateResultLine(resultLine);
-        result.add(resultLine);
-        processed++;
+          final String resultLine = reader.readLine();
+          if (resultLine == null) {
+            throw new IllegalStateException("Ambrona oracle runner stopped before returning a result for " + fen);
+          }
+          validateResultLine(resultLine);
+          result.add(resultLine);
+          processed++;
 
-        if (processed % PROGRESS_LOG_INTERVAL == 0 || processed == fenList.size()) {
-          logger.info("Generated {}/{} Ambrona oracle rows.", processed, fenList.size());
+          if (processed % PROGRESS_LOG_INTERVAL == 0 || processed == fenList.size()) {
+            logger.info("Generated {}/{} Ambrona oracle rows.", processed, fenList.size());
+          }
         }
       }
-    }
 
-    final int exitCode = process.waitFor();
-    if (exitCode != 0) {
-      throw new IllegalStateException("Ambrona oracle runner exited with " + exitCode + ": "
-          + readStream(Nulls.getErrorStream(process)));
+      final int exitCode = process.waitFor();
+      if (exitCode != 0) {
+        throw new IllegalStateException(
+            "Ambrona oracle runner exited with " + exitCode + ": " + readStream(errorStream));
+      }
     }
     return result;
   }
@@ -147,50 +149,57 @@ public final class GenerateAmbronaUnwinnabilityOracle {
   }
 
   private static String windowsPathToWsl(Path path) throws Exception {
-    final String windowsPath = path.toAbsolutePath().toString().replace('\\', '/');
+    final String windowsPath = Nulls.replace(Nulls.toString(Nulls.toAbsolutePath(path)), '\\', '/');
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "wslpath", "-a", windowsPath);
-    final Process process = processBuilder.start();
-    final String output = readStream(Nulls.getInputStream(process)).trim();
-    final String error = readStream(Nulls.getErrorStream(process)).trim();
-    final int exitCode = process.waitFor();
-    if (exitCode != 0) {
-      throw new IllegalStateException("wslpath failed with " + exitCode + ": " + error);
+    processBuilder.redirectErrorStream(true);
+    final Process process = Nulls.startProcess(processBuilder);
+    try (InputStream outputStream = Nulls.getInputStream(process)) {
+      final String output = Nulls.trim(readStream(outputStream));
+      final int exitCode = process.waitFor();
+      if (exitCode != 0) {
+        throw new IllegalStateException("wslpath failed with " + exitCode + ": " + output);
+      }
+      return output;
     }
-    return output;
   }
 
   private static String readWslDefaultD3ChessRoot() throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc", "printf '%s' \"$HOME/D3-Chess\"");
-    final Process process = processBuilder.start();
-    final String output = readStream(Nulls.getInputStream(process)).trim();
-    final String error = readStream(Nulls.getErrorStream(process)).trim();
-    final int exitCode = process.waitFor();
-    if (exitCode != 0) {
-      throw new IllegalStateException("Resolving the WSL D3-Chess default path failed with " + exitCode + ": " + error);
+    processBuilder.redirectErrorStream(true);
+    final Process process = Nulls.startProcess(processBuilder);
+    try (InputStream outputStream = Nulls.getInputStream(process)) {
+      final String output = Nulls.trim(readStream(outputStream));
+      final int exitCode = process.waitFor();
+      if (exitCode != 0) {
+        throw new IllegalStateException(
+            "Resolving the WSL D3-Chess default path failed with " + exitCode + ": " + output);
+      }
+      if (output.isBlank()) {
+        throw new IllegalStateException("Resolving the WSL D3-Chess default path returned an empty path");
+      }
+      return output;
     }
-    if (output.isBlank()) {
-      throw new IllegalStateException("Resolving the WSL D3-Chess default path returned an empty path");
-    }
-    return output;
   }
 
   private static void runWslCommand(String command) throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc", command);
     processBuilder.redirectErrorStream(true);
-    final Process process = processBuilder.start();
-    final String output = readStream(Nulls.getInputStream(process)).trim();
-    final int exitCode = process.waitFor();
-    if (!output.isEmpty()) {
-      logger.info(output);
-    }
-    if (exitCode != 0) {
-      throw new IllegalStateException("WSL command failed with " + exitCode + ": " + output);
+    final Process process = Nulls.startProcess(processBuilder);
+    try (InputStream outputStream = Nulls.getInputStream(process)) {
+      final String output = Nulls.trim(readStream(outputStream));
+      final int exitCode = process.waitFor();
+      if (!output.isEmpty()) {
+        logger.info(output);
+      }
+      if (exitCode != 0) {
+        throw new IllegalStateException("WSL command failed with " + exitCode + ": " + output);
+      }
     }
   }
 
   private static String readStream(InputStream inputStream) {
-    try (InputStream stream = inputStream) {
-      return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+    try {
+      return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
     } catch (final IOException ioe) {
       throw new FileSystemAccessException("Reading process output failed", ioe);
     }

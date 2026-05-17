@@ -1,8 +1,11 @@
 package com.dlb.chess.common;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +23,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
+import org.eclipse.jdt.annotation.Owning;
 import org.eclipse.jdt.annotation.Nullable;
 
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
@@ -149,6 +153,11 @@ public class Nulls {
   }
 
   @NonNull
+  public static <E, F> F getOrDefault(Map<E, F> map, E key, F defaultValue) {
+    return checkResult(map.getOrDefault(key, defaultValue));
+  }
+
+  @NonNull
   public static <E> E get(List<E> list, int index) {
     return checkResult(list.get(index));
   }
@@ -245,16 +254,28 @@ public class Nulls {
     return checkResult(path.toAbsolutePath());
   }
 
+  public static Process startProcess(ProcessBuilder processBuilder) throws IOException {
+    return checkResult(processBuilder.start());
+  }
+
+  @Owning
   public static InputStream getInputStream(Process process) {
     return checkResult(process.getInputStream());
   }
 
+  @Owning
   public static InputStream getErrorStream(Process process) {
     return checkResult(process.getErrorStream());
   }
 
+  @Owning
   public static OutputStream getOutputStream(Process process) {
     return checkResult(process.getOutputStream());
+  }
+
+  @SuppressWarnings("null")
+  public static List<String> readAllLines(Path path, Charset charset) throws IOException {
+    return checkResult(Files.readAllLines(path, charset));
   }
 
   public static String format(String format, Object... args) {

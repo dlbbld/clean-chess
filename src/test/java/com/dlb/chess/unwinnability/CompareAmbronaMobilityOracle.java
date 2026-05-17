@@ -1,7 +1,6 @@
 package com.dlb.chess.unwinnability;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -63,7 +62,7 @@ public final class CompareAmbronaMobilityOracle {
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
-    final List<String> lineList = Files.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
+    final List<String> lineList = Nulls.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
     if (lineList.isEmpty() || !MobilityOracleFormatter.HEADER.equals(Nulls.get(lineList, 0))) {
       throw new IllegalStateException("Unexpected mobility oracle header");
     }

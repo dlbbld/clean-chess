@@ -1,7 +1,6 @@
 package com.dlb.chess.unwinnability;
 
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -72,7 +71,7 @@ public final class CompareAmbronaSemiStaticOracle {
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
-    final List<String> lineList = Files.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
+    final List<String> lineList = Nulls.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
     if (lineList.isEmpty() || !SemiStaticOracleFormatter.HEADER.equals(Nulls.get(lineList, 0))) {
       throw new IllegalStateException("Unexpected semistatic oracle header");
     }
@@ -103,7 +102,7 @@ public final class CompareAmbronaSemiStaticOracle {
       if (!expectedRow.equals(actualRow)) {
         differenceCount++;
         final String kind = calculateKind(expectedRow, actualRow);
-        differenceCountByKind.put(kind, differenceCountByKind.getOrDefault(kind, 0) + 1);
+        differenceCountByKind.put(kind, Nulls.getOrDefault(differenceCountByKind, kind, 0) + 1);
         if (printedDifferenceList.size() < MAX_PRINTED_DIFFERENCES) {
           printedDifferenceList.add("Expected: " + expectedRow + "\nActual:   " + actualRow);
         }
