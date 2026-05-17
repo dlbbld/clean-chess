@@ -10,10 +10,9 @@ import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 /**
- * Covers the strict parser's rejection of a strictly-empty (zero-byte) PGN input via
- * {@link StrictPgnParserValidationProblem#FILE_EMPTY}. Whitespace-only inputs are NOT a {@code FILE_EMPTY} case under
- * strict — they hit the {@code FILE_EMPTY_LINE_*} family because strict enforces the exact two-empty-lines layout
- * required by the PGN spec. Those cases are exercised by {@link TestStrictPgnParserNotSanException}.
+ * Covers the strict parser's rejection of input that carries no signal — strictly-empty bytes, or whitespace-only
+ * files (any combination of spaces, tabs, newlines). Both shapes collapse to
+ * {@link StrictPgnParserValidationProblem#FILE_EMPTY}. Symmetric with the lenient parser's empty-input handling.
  */
 class TestStrictPgnParserEmptyException extends AbstractTestStrictPgnParserException {
 
@@ -24,6 +23,7 @@ class TestStrictPgnParserEmptyException extends AbstractTestStrictPgnParserExcep
   @Test
   void testException() {
     checkException("01_empty_file.pgn", StrictPgnParserValidationProblem.FILE_EMPTY);
+    checkException("02_whitespace_only.pgn", StrictPgnParserValidationProblem.FILE_EMPTY);
   }
 
   private static void checkException(String pgnName, StrictPgnParserValidationProblem expected) {

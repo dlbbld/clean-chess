@@ -15,7 +15,11 @@ final class StrictFileStructurePreScan {
   }
 
   static void validate(String source) {
-    if (source.isEmpty()) {
+    // Empty-input rejection covers both strictly-empty (zero bytes / BOM-only) and whitespace-only — any
+    // combination of spaces, tabs, and newlines with no other content. Both shapes carry no signal; the
+    // FILE_EMPTY_LINE_* diagnostics below are about the strict two-blank-lines layout and don't apply when
+    // there's nothing to lay out in the first place.
+    if (source.isBlank()) {
       throw error(StrictPgnParserValidationProblem.FILE_EMPTY, "The PGN is empty.");
     }
 
