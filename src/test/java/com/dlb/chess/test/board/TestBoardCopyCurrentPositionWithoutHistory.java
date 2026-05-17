@@ -29,10 +29,9 @@ class TestBoardCopyCurrentPositionWithoutHistory {
     final Board source = new Board(false);
     source.movesStrict(sanMoves);
 
-    final Board expected = new Board(source.getFen(), false);
     final Board actual = source.copyCurrentPositionWithoutHistory(false);
 
-    assertEquivalentHistorylessBoard(expected, actual);
+    assertEquivalentHistorylessBoard(source, actual);
   }
 
   private static void checkFromFen(String fen) {
@@ -44,25 +43,30 @@ class TestBoardCopyCurrentPositionWithoutHistory {
     assertEquivalentHistorylessBoard(source, copyOfCopy);
   }
 
-  private static void assertEquivalentHistorylessBoard(Board expected, Board actual) {
+  /**
+   * Same piece arrangement, side-to-move, castling rights, en-passant target square and fullmove number — but
+   * <em>no</em> move history (no fivefold tracking) and the halfmove clock reset to zero (no seventy-five-move). See
+   * the contract documented on {@code Board.copyCurrentPositionWithoutHistory}.
+   */
+  private static void assertEquivalentHistorylessBoard(Board source, Board actual) {
+    // no history
     assertEquals(0, actual.getPerformedHalfMoveCount());
     assertEquals(0, actual.getPerformedLegalMoveList().size());
     assertEquals(0, actual.getHalfMoveList().size());
 
-    assertEquals(expected.getFen(), actual.getFen());
-    assertEquals(expected.getInitialFen(), actual.getInitialFen());
-    assertEquals(expected.getStaticPosition(), actual.getStaticPosition());
-    assertEquals(expected.getHavingMove(), actual.getHavingMove());
-    assertEquals(expected.getCastlingRightWhite(), actual.getCastlingRightWhite());
-    assertEquals(expected.getCastlingRightBlack(), actual.getCastlingRightBlack());
-    assertEquals(expected.getEnPassantCaptureTargetSquare(), actual.getEnPassantCaptureTargetSquare());
-    assertEquals(expected.getHalfMoveClock(), actual.getHalfMoveClock());
-    assertEquals(expected.getFullMoveNumberForNextHalfMove(), actual.getFullMoveNumberForNextHalfMove());
-    assertEquals(expected.getLegalMoves(), actual.getLegalMoves());
-    assertEquals(expected.isCheck(), actual.isCheck());
-    assertEquals(expected.isCheckmate(), actual.isCheckmate());
-    assertEquals(expected.isStalemate(), actual.isStalemate());
-    assertEquals(expected.isInsufficientMaterial(), actual.isInsufficientMaterial());
-    assertEquals(expected.isDeadPositionUnwinnableQuick(), actual.isDeadPositionUnwinnableQuick());
+    // halfmove clock reset, everything else preserved
+    assertEquals(0, actual.getHalfMoveClock());
+    assertEquals(source.getStaticPosition(), actual.getStaticPosition());
+    assertEquals(source.getHavingMove(), actual.getHavingMove());
+    assertEquals(source.getCastlingRightWhite(), actual.getCastlingRightWhite());
+    assertEquals(source.getCastlingRightBlack(), actual.getCastlingRightBlack());
+    assertEquals(source.getEnPassantCaptureTargetSquare(), actual.getEnPassantCaptureTargetSquare());
+    assertEquals(source.getFullMoveNumberForNextHalfMove(), actual.getFullMoveNumberForNextHalfMove());
+    assertEquals(source.getLegalMoves(), actual.getLegalMoves());
+    assertEquals(source.isCheck(), actual.isCheck());
+    assertEquals(source.isCheckmate(), actual.isCheckmate());
+    assertEquals(source.isStalemate(), actual.isStalemate());
+    assertEquals(source.isInsufficientMaterial(), actual.isInsufficientMaterial());
+    assertEquals(source.isDeadPositionUnwinnableQuick(), actual.isDeadPositionUnwinnableQuick());
   }
 }
