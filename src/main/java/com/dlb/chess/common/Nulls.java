@@ -153,11 +153,6 @@ public class Nulls {
   }
 
   @NonNull
-  public static <E, F> F getOrDefault(Map<E, F> map, E key, F defaultValue) {
-    return checkResult(map.getOrDefault(key, defaultValue));
-  }
-
-  @NonNull
   public static <E> E get(List<E> list, int index) {
     return checkResult(list.get(index));
   }
@@ -203,6 +198,11 @@ public class Nulls {
 
   public static <E, F> Set<E> keySet(Map<E, F> map) {
     return checkResult(map.keySet());
+  }
+
+  @NonNull
+  public static <E, F> F getOrDefault(Map<E, F> map, E key, F defaultValue) {
+    return checkResult(map.getOrDefault(key, defaultValue));
   }
 
   public static <E extends Enum<E>> EnumSet<E> newEnumSet(Iterable<E> iterable, Class<E> elementType) {
@@ -260,22 +260,34 @@ public class Nulls {
 
   @Owning
   public static InputStream getInputStream(Process process) {
-    return checkResult(process.getInputStream());
+    final InputStream result = process.getInputStream();
+    if (result == null) {
+      throw new ProgrammingMistakeException("Assumed value is not null");
+    }
+    return result;
   }
 
   @Owning
   public static InputStream getErrorStream(Process process) {
-    return checkResult(process.getErrorStream());
+    final InputStream result = process.getErrorStream();
+    if (result == null) {
+      throw new ProgrammingMistakeException("Assumed value is not null");
+    }
+    return result;
   }
 
   @Owning
   public static OutputStream getOutputStream(Process process) {
-    return checkResult(process.getOutputStream());
+    final OutputStream result = process.getOutputStream();
+    if (result == null) {
+      throw new ProgrammingMistakeException("Assumed value is not null");
+    }
+    return result;
   }
 
   @SuppressWarnings("null")
-  public static List<String> readAllLines(Path path, Charset charset) throws IOException {
-    return checkResult(Files.readAllLines(path, charset));
+  public static List<String> readAllLines(Path path, @Nullable Charset charset) throws IOException {
+    return checkResult(Files.readAllLines(path, checkResult(charset)));
   }
 
   public static String format(String format, Object... args) {
