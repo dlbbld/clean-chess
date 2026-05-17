@@ -21,7 +21,7 @@ public final class MobilityOracleFormatter {
     if (args.length == 0) {
       throw new IllegalArgumentException("Usage: MobilityOracleFormatter <fen>");
     }
-    final String fen = Nulls.join(" ", List.of(args));
+    final String fen = Nulls.join(" ", Nulls.listOf(args));
     System.out.println(HEADER);
     for (final String row : calculateRows(fen)) {
       System.out.println(row);

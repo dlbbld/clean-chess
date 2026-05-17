@@ -125,8 +125,8 @@ public class UnwinnableQuickAnalyzer {
 
     if (IS_ALIGN_QUICK_WITH_AMBRONA_REFERENCE_IMPLEMENTATION) {
       var isUnwinnable = false;
-      final boolean hasOnlyPawnsAndBishops = calculateHasOnlyPawnsBishopsAndKings(board.getStaticPosition());
-      final boolean isBlockedCandidate = calculateIsBlockedCandidate(board.getStaticPosition());
+      final var hasOnlyPawnsAndBishops = calculateHasOnlyPawnsBishopsAndKings(board.getStaticPosition());
+      final var isBlockedCandidate = calculateIsBlockedCandidate(board.getStaticPosition());
       if (isBlockedCandidate && hasOnlyPawnsAndBishops) {
         final MobilitySolution mobilitySolution = Mobility.mobility(board);
         isUnwinnable = UnwinnableSemiStatic.unwinnableSemiStatic(board, c, mobilitySolution);
@@ -138,7 +138,7 @@ public class UnwinnableQuickAnalyzer {
       }
 
       final MovedKings movedKings = new MovedKings();
-      final boolean isDynamicSearchCandidate = hasOnlyPawnsAndBishops && board.getLegalMoves().size() <= 8;
+      final var isDynamicSearchCandidate = hasOnlyPawnsAndBishops && board.getLegalMoves().size() <= 8;
       if (!isUnwinnable && isDynamicSearchCandidate) {
         isUnwinnable = calculateIsDynamicallyUnwinnable(board, c, 7, movedKings, new HashMap<>());
       }
@@ -210,7 +210,7 @@ public class UnwinnableQuickAnalyzer {
 
     final var cacheKey = new DynamicSearchKey(board.getDynamicPosition(), depth);
     if (transpositionMap.containsKey(cacheKey)) {
-      return Nulls.get(transpositionMap, cacheKey).booleanValue();
+      return Nulls.get(transpositionMap, cacheKey);
     }
 
     for (final LegalMove legalMove : board.getLegalMoves()) {
@@ -218,16 +218,16 @@ public class UnwinnableQuickAnalyzer {
         movedKings.value |= board.getHavingMove() == Side.WHITE ? 2 : 1;
       }
       board.move(legalMove.moveSpecification());
-      final boolean isUnwinnable = calculateIsDynamicallyUnwinnable(board, intendedWinner, depth - 1, movedKings,
+      final var isUnwinnable = calculateIsDynamicallyUnwinnable(board, intendedWinner, depth - 1, movedKings,
           transpositionMap);
       board.unmove();
       if (!isUnwinnable) {
-        transpositionMap.put(cacheKey, Boolean.FALSE);
+        transpositionMap.put(cacheKey, false);
         return false;
       }
     }
 
-    transpositionMap.put(cacheKey, Boolean.TRUE);
+    transpositionMap.put(cacheKey, true);
     return true;
   }
 
@@ -239,7 +239,7 @@ public class UnwinnableQuickAnalyzer {
     for (final LegalMove legalMove : board.getLegalMoves()) {
       board.move(legalMove.moveSpecification());
       final MobilitySolution mobilitySolution = Mobility.mobility(board);
-      final boolean isUnwinnable = UnwinnableSemiStatic.unwinnableSemiStatic(board, intendedWinner, mobilitySolution);
+      final var isUnwinnable = UnwinnableSemiStatic.unwinnableSemiStatic(board, intendedWinner, mobilitySolution);
       board.unmove();
       if (!isUnwinnable) {
         return false;
@@ -271,10 +271,10 @@ public class UnwinnableQuickAnalyzer {
     for (final var square : Square.REAL) {
       final Piece piece = staticPosition.get(square);
       if (piece == Piece.WHITE_PAWN && square.getRank().getNumber() < 7) {
-        whitePawnFileMask |= 1 << (square.getFile().getNumber() - 1);
+        whitePawnFileMask |= 1 << square.getFile().getNumber() - 1;
       }
       if (piece == Piece.BLACK_PAWN && square.getRank().getNumber() > 2) {
-        blackPawnFileMask |= 1 << (square.getFile().getNumber() - 1);
+        blackPawnFileMask |= 1 << square.getFile().getNumber() - 1;
       }
     }
     return whitePawnFileMask != blackPawnFileMask;

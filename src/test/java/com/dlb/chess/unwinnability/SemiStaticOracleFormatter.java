@@ -22,7 +22,7 @@ public final class SemiStaticOracleFormatter {
     if (args.length == 0) {
       throw new IllegalArgumentException("Usage: SemiStaticOracleFormatter <fen>");
     }
-    final String fen = Nulls.join(" ", List.of(args));
+    final String fen = Nulls.join(" ", Nulls.listOf(args));
     System.out.println(HEADER);
     for (final String row : calculateRows(fen)) {
       System.out.println(row);
@@ -49,19 +49,19 @@ public final class SemiStaticOracleFormatter {
       final PiecePlacement loserKing = calculateKing(winner.getOppositeSide(), mobilitySolution);
       final Set<Square> loserKingRegion = SemiStaticFunctions.region(loserKing, mobilitySolution);
 
-      addRow(rowList, fen, winner.name(), "VERDICT", "-",
+      addRow(rowList, fen, Nulls.name(winner), "VERDICT", "-",
           UnwinnableSemiStatic.unwinnableSemiStatic(board, winner, mobilitySolution) ? "UNWINNABLE"
               : "POSSIBLY_WINNABLE");
-      addRow(rowList, fen, winner.name(), "JAVA_LOSER_KING_REGION", "-", formatSquares(loserKingRegion));
-      addRow(rowList, fen, winner.name(), "JAVA_INTRUDERS", "-",
+      addRow(rowList, fen, Nulls.name(winner), "JAVA_LOSER_KING_REGION", "-", formatSquares(loserKingRegion));
+      addRow(rowList, fen, Nulls.name(winner), "JAVA_INTRUDERS", "-",
           formatPieces(SemiStaticFunctions.intruders(loserKing, mobilitySolution)));
-      addRow(rowList, fen, winner.name(), "AMBRONA_VISITORS_EXPANDED", "-",
+      addRow(rowList, fen, Nulls.name(winner), "AMBRONA_VISITORS_EXPANDED", "-",
           formatPieces(UnwinnableSemiStatic.calculateVisitorsExpanded(loserKingRegion, winner, mobilitySolution)));
 
       for (final Square square : loserKingRegion) {
-        addRow(rowList, fen, winner.name(), "JAVA_BLOCKERS", square.getName(),
+        addRow(rowList, fen, Nulls.name(winner), "JAVA_BLOCKERS", square.getName(),
             formatPieces(SemiStaticFunctions.blockers(square, winner, mobilitySolution)));
-        addRow(rowList, fen, winner.name(), "JAVA_ASSISTANTS", square.getName(),
+        addRow(rowList, fen, Nulls.name(winner), "JAVA_ASSISTANTS", square.getName(),
             formatPieces(SemiStaticFunctions.assistants(square, winner, mobilitySolution)));
       }
     }

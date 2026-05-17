@@ -21,7 +21,6 @@ import com.dlb.chess.test.model.PgnTestCase;
 import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
-import com.dlb.chess.test.unwinnability.againstcha.model.AmbronaUnwinnabilityVerdicts;
 import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
 
@@ -88,8 +87,7 @@ class TestAmbronaUnwinnabilityFullOracleComparison {
 
   private static Set<AcceptedDifference> readAcceptedDifferenceSet() {
     final List<String> lineList = FileUtility.readFileLines(ACCEPTED_DIFFERENCE_PATH);
-    if (lineList.isEmpty()
-        || !"pgnName\tside\texpected\tactual\tfen\treason".equals(Nulls.get(lineList, 0))) {
+    if (lineList.isEmpty() || !"pgnName\tside\texpected\tactual\tfen\treason".equals(Nulls.get(lineList, 0))) {
       throw new ProgrammingMistakeException("Unexpected full unwinnability accepted-differences header");
     }
 
@@ -111,7 +109,7 @@ class TestAmbronaUnwinnabilityFullOracleComparison {
   }
 
   private static String formatFailureMessage(int checkedPositionCount, List<String> failureList) {
-    final List<String> printedFailureList = failureList.subList(0, Math.min(MAX_PRINTED_FAILURES, failureList.size()));
+    final var printedFailureList = failureList.subList(0, Math.min(MAX_PRINTED_FAILURES, failureList.size()));
     return "Full unwinnability oracle mismatches for " + failureList.size() + " of " + checkedPositionCount
         + " CHA positions:\n" + Nulls.join("\n", printedFailureList);
   }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.apache.logging.log4j.Logger;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.Nulls;
@@ -20,8 +19,6 @@ import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class PgnTestCaseCatalog {
-
-  private static final Logger logger = Nulls.getLogger(PgnTestCaseCatalog.class);
 
   private static PgnTestCaseList calculateTestCaseList(PgnTest pgnTest) {
 

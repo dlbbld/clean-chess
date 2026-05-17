@@ -29,13 +29,6 @@ public class UnwinnableFullAnalyzer {
     return unwinnableFull(board, winner, false, new MobilitySolution());
   }
 
-  private static Board copyCurrentPositionForFullSearch(Board input) {
-    final Fen fen = new Fen(input.getFen(), input.getStaticPosition(), input.getHavingMove(),
-        input.getCastlingRightWhite(), input.getCastlingRightBlack(), input.getEnPassantCaptureTargetSquare(), 0,
-        input.getFullMoveNumberForNextHalfMove());
-    return new Board(fen, false);
-  }
-
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
   private static UnwinnabilityFullAnalysis unwinnableFull(Board board, Side winner, boolean isHasMobilitySolution,
@@ -112,4 +105,12 @@ public class UnwinnableFullAnalyzer {
       board.unmove();
     }
   }
+
+  private static Board copyCurrentPositionForFullSearch(Board input) {
+    final Fen fen = new Fen(input.getFen(), input.getStaticPosition(), input.getHavingMove(),
+        input.getCastlingRightWhite(), input.getCastlingRightBlack(), input.getEnPassantCaptureTargetSquare(), 0,
+        input.getFullMoveNumberForNextHalfMove());
+    return new Board(fen, false);
+  }
+
 }

@@ -3,6 +3,8 @@ package com.dlb.chess.test.fen;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.eclipse.jdt.annotation.Nullable;
+
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.model.Fen;
 
@@ -23,8 +25,9 @@ public final class FenCacheForTestCases {
   private FenCacheForTestCases() {
   }
 
+  @SuppressWarnings({ "null", "unused" })
   public static Fen getFen(String fen) {
-    final Fen cached = FEN_CACHE.get(fen);
+    final @Nullable Fen cached = FEN_CACHE.get(fen);
     if (cached != null) {
       return cached;
     }

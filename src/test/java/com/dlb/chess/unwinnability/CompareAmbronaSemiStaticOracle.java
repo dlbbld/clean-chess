@@ -33,7 +33,7 @@ public final class CompareAmbronaSemiStaticOracle {
     System.out.println("Compared FENs: " + comparison.comparedFenCount());
     System.out.println("FENs with differences: " + comparison.fenDifferenceCount());
     System.out.println("Row differences: " + comparison.rowDifferenceCount());
-    for (final Map.Entry<String, Integer> entry : comparison.differenceCountByKind().entrySet()) {
+    for (final Map.Entry<String, Integer> entry : Nulls.entrySet(comparison.differenceCountByKind())) {
       System.out.println("Row differences for " + Nulls.getKey(entry) + ": " + Nulls.getValue(entry));
     }
     for (final String fen : comparison.differentFenList().subList(0,
@@ -54,11 +54,11 @@ public final class CompareAmbronaSemiStaticOracle {
     final List<String> printedDifferenceList = new ArrayList<>();
     final Map<String, Integer> differenceCountByKind = new TreeMap<>();
 
-    for (final Map.Entry<String, List<String>> entry : expectedByFen.entrySet()) {
+    for (final Map.Entry<String, List<String>> entry : Nulls.entrySet(expectedByFen)) {
       final String fen = Nulls.getKey(entry);
       final List<String> expectedRows = Nulls.getValue(entry);
       final List<String> actualRows = SemiStaticOracleFormatter.calculateRows(fen);
-      final int differenceCount = countDifferences(expectedRows, actualRows, printedDifferenceList,
+      final var differenceCount = countDifferences(expectedRows, actualRows, printedDifferenceList,
           differenceCountByKind);
       if (differenceCount != 0) {
         fenDifferenceCount++;
@@ -67,12 +67,13 @@ public final class CompareAmbronaSemiStaticOracle {
       }
     }
     return new SemiStaticOracleComparison(expectedByFen.size(), fenDifferenceCount, rowDifferenceCount,
-        Map.copyOf(differenceCountByKind), List.copyOf(differentFenList), List.copyOf(printedDifferenceList));
+        Nulls.copyOfMap(differenceCountByKind), Nulls.copyOfList(differentFenList),
+        Nulls.copyOfList(printedDifferenceList));
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
     final List<String> lineList = Files.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
-    if (lineList.isEmpty() || !Nulls.get(lineList, 0).equals(SemiStaticOracleFormatter.HEADER)) {
+    if (lineList.isEmpty() || !SemiStaticOracleFormatter.HEADER.equals(Nulls.get(lineList, 0))) {
       throw new IllegalStateException("Unexpected semistatic oracle header");
     }
 
@@ -95,10 +96,10 @@ public final class CompareAmbronaSemiStaticOracle {
   private static int countDifferences(List<String> expectedRows, List<String> actualRows,
       List<String> printedDifferenceList, Map<String, Integer> differenceCountByKind) {
     var differenceCount = 0;
-    final int maxSize = Math.max(expectedRows.size(), actualRows.size());
+    final var maxSize = Math.max(expectedRows.size(), actualRows.size());
     for (var i = 0; i < maxSize; i++) {
-      final String expectedRow = i < expectedRows.size() ? Nulls.get(expectedRows, i) : "<missing>";
-      final String actualRow = i < actualRows.size() ? Nulls.get(actualRows, i) : "<missing>";
+      final var expectedRow = i < expectedRows.size() ? Nulls.get(expectedRows, i) : "<missing>";
+      final var actualRow = i < actualRows.size() ? Nulls.get(actualRows, i) : "<missing>";
       if (!expectedRow.equals(actualRow)) {
         differenceCount++;
         final String kind = calculateKind(expectedRow, actualRow);
@@ -112,7 +113,7 @@ public final class CompareAmbronaSemiStaticOracle {
   }
 
   private static String calculateKind(String expectedRow, String actualRow) {
-    final String sourceRow = expectedRow.equals("<missing>") ? actualRow : expectedRow;
+    final var sourceRow = "<missing>".equals(expectedRow) ? actualRow : expectedRow;
     final String[] itemArray = Nulls.split(sourceRow, "\t");
     if (itemArray.length != 5) {
       return "<unknown>";
