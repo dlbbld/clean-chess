@@ -1,6 +1,8 @@
 package com.dlb.chess.common;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.Collection;
@@ -237,6 +239,44 @@ public class Nulls {
 
   public static Path getParent(Path path) {
     return checkResult(path.getParent());
+  }
+
+  public static Path toAbsolutePath(Path path) {
+    return checkResult(path.toAbsolutePath());
+  }
+
+  public static InputStream getInputStream(Process process) {
+    return checkResult(process.getInputStream());
+  }
+
+  public static InputStream getErrorStream(Process process) {
+    return checkResult(process.getErrorStream());
+  }
+
+  public static OutputStream getOutputStream(Process process) {
+    return checkResult(process.getOutputStream());
+  }
+
+  public static String format(String format, Object... args) {
+    return checkResult(String.format(format, args));
+  }
+
+  public static <E> List<E> subList(List<E> list, int fromIndex, int toIndex) {
+    return checkResult(list.subList(fromIndex, toIndex));
+  }
+
+  /**
+   * Wraps a {@code main(String[] args)} array as a properly-annotated {@code @NonNull List<@NonNull String>}, runtime-
+   * checking each element. Bypasses the varargs nullness-inference trap that fires when {@code Nulls.listOf(args)} is
+   * used: with @NonNullByDefault active, JDT cannot prove that the {@code String} elements of {@code args} are
+   * non-null, so the implicit array conversion warns.
+   */
+  public static List<String> argsAsList(String[] args) {
+    final List<String> result = new java.util.ArrayList<>(args.length);
+    for (final @Nullable String arg : args) {
+      result.add(checkResult(arg));
+    }
+    return result;
   }
 
   @SuppressWarnings({ "unchecked" })

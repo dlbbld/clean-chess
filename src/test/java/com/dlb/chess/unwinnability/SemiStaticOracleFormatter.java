@@ -22,7 +22,7 @@ public final class SemiStaticOracleFormatter {
     if (args.length == 0) {
       throw new IllegalArgumentException("Usage: SemiStaticOracleFormatter <fen>");
     }
-    final String fen = Nulls.join(" ", Nulls.listOf(args));
+    final String fen = Nulls.join(" ", Nulls.argsAsList(args));
     System.out.println(HEADER);
     for (final String row : calculateRows(fen)) {
       System.out.println(row);

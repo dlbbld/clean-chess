@@ -1,7 +1,6 @@
 package com.dlb.chess.test.tools;
 
 import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
@@ -39,7 +38,7 @@ public final class FenFromPgn {
       System.exit(2);
       return;
     }
-    final Path pgnPath = Paths.get(args[0]).toAbsolutePath();
+    final Path pgnPath = Nulls.toAbsolutePath(Nulls.pathOf(Nulls.get(args, 0)));
     final Path folder = Nulls.getParent(pgnPath);
     final String fileName = Nulls.toString(Nulls.getFileName(pgnPath));
 

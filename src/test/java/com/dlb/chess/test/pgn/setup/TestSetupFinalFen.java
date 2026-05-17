@@ -59,13 +59,13 @@ class TestSetupFinalFen {
           final String actualFen = board.getFen();
           final String expectedFen = testCase.finalFen();
           if (!actualFen.equals(expectedFen)) {
-            mismatches.add(String.format("%s (%s)%n  expected: %s%n  actual:   %s", testCase.pgnName(), pgnTest,
+            mismatches.add(Nulls.format("%s (%s)%n  expected: %s%n  actual:   %s", testCase.pgnName(), pgnTest,
                 expectedFen, actualFen));
           }
         } catch (final RuntimeException e) {
           // PGN missing on disk, parse error, or illegal move: surface alongside the FEN mismatches so the
           // operator gets the full picture in one pass instead of crashing on the first bad fixture.
-          errors.add(String.format("%s (%s): %s", testCase.pgnName(), pgnTest, e.getMessage()));
+          errors.add(Nulls.format("%s (%s): %s", testCase.pgnName(), pgnTest, e.getMessage()));
         }
         if (totalFixtures % PROGRESS_LOG_INTERVAL == 0 || totalFixtures == totalFixturesToCheck) {
           logger.info("Checked {}/{} final FENs; {} mismatches; {} replay errors. Current: {} ({})", totalFixtures,

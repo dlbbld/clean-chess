@@ -107,8 +107,8 @@ public final class GenerateAmbronaUnwinnabilityOracle {
     final List<String> result = new ArrayList<>();
 
     try (BufferedWriter writer = new BufferedWriter(
-        new OutputStreamWriter(process.getOutputStream(), StandardCharsets.UTF_8));
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream(),
+        new OutputStreamWriter(Nulls.getOutputStream(process), StandardCharsets.UTF_8));
+        BufferedReader reader = new BufferedReader(new InputStreamReader(Nulls.getInputStream(process),
             StandardCharsets.UTF_8))) {
 
       var processed = 0;
@@ -134,7 +134,7 @@ public final class GenerateAmbronaUnwinnabilityOracle {
     final int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new IllegalStateException("Ambrona oracle runner exited with " + exitCode + ": "
-          + readStream(process.getErrorStream()));
+          + readStream(Nulls.getErrorStream(process)));
     }
     return result;
   }
@@ -150,8 +150,8 @@ public final class GenerateAmbronaUnwinnabilityOracle {
     final String windowsPath = path.toAbsolutePath().toString().replace('\\', '/');
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "wslpath", "-a", windowsPath);
     final Process process = processBuilder.start();
-    final String output = readStream(process.getInputStream()).trim();
-    final String error = readStream(process.getErrorStream()).trim();
+    final String output = readStream(Nulls.getInputStream(process)).trim();
+    final String error = readStream(Nulls.getErrorStream(process)).trim();
     final int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new IllegalStateException("wslpath failed with " + exitCode + ": " + error);
@@ -162,8 +162,8 @@ public final class GenerateAmbronaUnwinnabilityOracle {
   private static String readWslDefaultD3ChessRoot() throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc", "printf '%s' \"$HOME/D3-Chess\"");
     final Process process = processBuilder.start();
-    final String output = readStream(process.getInputStream()).trim();
-    final String error = readStream(process.getErrorStream()).trim();
+    final String output = readStream(Nulls.getInputStream(process)).trim();
+    final String error = readStream(Nulls.getErrorStream(process)).trim();
     final int exitCode = process.waitFor();
     if (exitCode != 0) {
       throw new IllegalStateException("Resolving the WSL D3-Chess default path failed with " + exitCode + ": " + error);
@@ -178,7 +178,7 @@ public final class GenerateAmbronaUnwinnabilityOracle {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc", command);
     processBuilder.redirectErrorStream(true);
     final Process process = processBuilder.start();
-    final String output = readStream(process.getInputStream()).trim();
+    final String output = readStream(Nulls.getInputStream(process)).trim();
     final int exitCode = process.waitFor();
     if (!output.isEmpty()) {
       logger.info(output);
@@ -189,8 +189,8 @@ public final class GenerateAmbronaUnwinnabilityOracle {
   }
 
   private static String readStream(InputStream inputStream) {
-    try {
-      return new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+    try (InputStream stream = inputStream) {
+      return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
     } catch (final IOException ioe) {
       throw new FileSystemAccessException("Reading process output failed", ioe);
     }

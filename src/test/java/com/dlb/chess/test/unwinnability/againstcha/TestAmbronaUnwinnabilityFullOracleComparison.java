@@ -109,7 +109,8 @@ class TestAmbronaUnwinnabilityFullOracleComparison {
   }
 
   private static String formatFailureMessage(int checkedPositionCount, List<String> failureList) {
-    final var printedFailureList = failureList.subList(0, Math.min(MAX_PRINTED_FAILURES, failureList.size()));
+    final List<String> printedFailureList = Nulls.subList(failureList, 0,
+        Math.min(MAX_PRINTED_FAILURES, failureList.size()));
     return "Full unwinnability oracle mismatches for " + failureList.size() + " of " + checkedPositionCount
         + " CHA positions:\n" + Nulls.join("\n", printedFailureList);
   }
