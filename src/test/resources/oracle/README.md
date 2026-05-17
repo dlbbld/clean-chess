@@ -1,4 +1,4 @@
-# Ambrona unwinnability oracle
+# Ambrona oracles
 
 `ambrona-unwinnability.tsv` is generated from the final FENs cached in the
 `PgnTestCase` fixtures. The generator calls Miguel Ambrona's D3-Chess C++
@@ -8,6 +8,15 @@ The TSV columns are:
 
 ```text
 fen	fullWhite	fullBlack	quickWhite	quickBlack
+```
+
+`ambrona-mobility.tsv` uses the same final FEN source, but writes one row per
+piece in every distinct position. The `toSquares` column is a comma-separated
+list of squares reached by Ambrona's saturated semistatic movement variable for
+that piece.
+
+```text
+fen	side	pieceType	from	toSquares
 ```
 
 ## One-time Windows setup
@@ -87,6 +96,23 @@ Equivalent system-property form:
 mvn -q org.codehaus.mojo:exec-maven-plugin:3.6.2:java "-Dexec.classpathScope=test" "-Dexec.mainClass=com.dlb.chess.test.generate.GenerateAmbronaUnwinnabilityOracle" "-Dambrona.d3.path=/home/<user>/D3-Chess"
 ```
 
-The generator compiles `tools/ambrona-oracle/cha_oracle.cpp` into `/tmp` inside
+The unwinnability generator compiles `tools/ambrona-oracle/cha_oracle.cpp` into `/tmp` inside
 WSL, streams every distinct final FEN to it, and rewrites
 `src/test/resources/oracle/ambrona-unwinnability.tsv` with LF line endings.
+
+To regenerate the mobility oracle, run:
+
+```powershell
+mvn -q org.codehaus.mojo:exec-maven-plugin:3.6.2:java "-Dexec.classpathScope=test" "-Dexec.mainClass=com.dlb.chess.test.generate.GenerateAmbronaMobilityOracle"
+```
+
+The optional D3-Chess path argument and `ambrona.d3.path` system property work
+the same way as for the unwinnability oracle. The mobility generator compiles
+`tools/ambrona-oracle/mobility_oracle.cpp`.
+
+To compare the generated mobility oracle against the Java mobility
+implementation without turning the mismatch report into a JUnit failure, run:
+
+```powershell
+mvn -q org.codehaus.mojo:exec-maven-plugin:3.6.2:java "-Dexec.classpathScope=test" "-Dexec.mainClass=com.dlb.chess.unwinnability.CompareAmbronaMobilityOracle"
+```
