@@ -201,6 +201,7 @@ The architectural advantage clean-chess has: the two representations are indepen
 - [ ] Production hot paths in `Board` switch to use `BitboardPosition`
 - [ ] `StaticPosition` retained as reference oracle in tests; can be computed from `BitboardPosition` on demand
 - [ ] Zobrist hash (introduced in the DeepSquare release as a string-FEN replacement) promoted to a properly bitboard-aware incremental hash
+- [ ] **Port the unwinnability analyzers to `BitboardPosition`.** `FindHelpMateInterrupt`, `FindHelpmateExhaust`, `UnwinnableQuickAnalyzer`, `UnwinnableFullAnalyzer`, `UnwinnableSemiStatic`, `Mobility`, `Score`, `GoingToCorner` — currently all consume `StaticPosition` / `Board`. They are the hottest production callers (auto-CHA per move) and the main motivation for this release. The semi-static path needs bitboard piece-set queries (`pos.pieces(KNIGHT)`-style); the helpmate search needs fast legal-move generation and `isCheckmate`. Verified bit-exact against the existing `StaticPosition` implementations via the differential-test harness.
 - [ ] Performance baseline: measure `findHelpMate` on representative unwinnability fixtures; target within 5× of `chesslib`
 
 ### Notes
