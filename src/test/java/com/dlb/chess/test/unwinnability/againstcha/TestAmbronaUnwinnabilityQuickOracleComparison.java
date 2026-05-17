@@ -1,4 +1,4 @@
-package com.dlb.chess.test.unwinnability;
+package com.dlb.chess.test.unwinnability.againstcha;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -22,13 +22,12 @@ import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnTestCase;
 import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
-import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
-class TestUnwinnabilityQuick {
+class TestAmbronaUnwinnabilityQuickOracleComparison {
 
-  private static final Logger logger = Nulls.getLogger(TestUnwinnabilityQuick.class);
+  private static final Logger logger = Nulls.getLogger(TestAmbronaUnwinnabilityQuickOracleComparison.class);
   private static final Path ACCEPTED_DIFFERENCE_PATH = Nulls.pathResolve(
       ConfigurationTestConstants.PROJECT_ROOT_FOLDER_PATH,
       "src/test/resources/oracle/ambrona-unwinnability-quick-accepted-differences.tsv");

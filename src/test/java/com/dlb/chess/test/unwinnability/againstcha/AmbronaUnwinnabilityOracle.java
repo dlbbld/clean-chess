@@ -34,7 +34,7 @@ public final class AmbronaUnwinnabilityOracle {
     if (lineList.isEmpty()) {
       throw new ProgrammingMistakeException("The Ambrona unwinnability oracle file is empty");
     }
-    final String expectedHeader = "fen\tfullWhite\tfullBlack\tquickWhite\tquickBlack";
+    final var expectedHeader = "fen\tfullWhite\tfullBlack\tquickWhite\tquickBlack";
     if (!expectedHeader.equals(Nulls.get(lineList, 0))) {
       throw new ProgrammingMistakeException("Unexpected Ambrona unwinnability oracle header");
     }
@@ -50,8 +50,7 @@ public final class AmbronaUnwinnabilityOracle {
       if (result.containsKey(fen)) {
         throw new ProgrammingMistakeException("Duplicate Ambrona unwinnability oracle row for FEN: " + fen);
       }
-      final var verdicts = new AmbronaUnwinnabilityVerdicts(
-          UnwinnabilityFullVerdict.valueOf(Nulls.get(itemArray, 1)),
+      final var verdicts = new AmbronaUnwinnabilityVerdicts(UnwinnabilityFullVerdict.valueOf(Nulls.get(itemArray, 1)),
           UnwinnabilityFullVerdict.valueOf(Nulls.get(itemArray, 2)),
           UnwinnabilityQuickVerdict.valueOf(Nulls.get(itemArray, 3)),
           UnwinnabilityQuickVerdict.valueOf(Nulls.get(itemArray, 4)));
