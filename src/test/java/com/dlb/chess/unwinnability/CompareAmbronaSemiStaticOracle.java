@@ -1,6 +1,5 @@
 package com.dlb.chess.unwinnability;
 
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -9,8 +8,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.IoUtility;
 import com.dlb.chess.test.ConfigurationTestConstants;
+import com.dlb.chess.test.common.utility.FileUtility;
 
 public final class CompareAmbronaSemiStaticOracle {
 
@@ -72,7 +71,7 @@ public final class CompareAmbronaSemiStaticOracle {
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
-    final List<String> lineList = IoUtility.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
+    final List<String> lineList = FileUtility.readFileLines(ORACLE_PATH);
     if (lineList.isEmpty() || !SemiStaticOracleFormatter.HEADER.equals(Nulls.get(lineList, 0))) {
       throw new IllegalStateException("Unexpected semistatic oracle header");
     }
