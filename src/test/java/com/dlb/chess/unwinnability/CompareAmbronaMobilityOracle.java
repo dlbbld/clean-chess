@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.common.utility.IoUtility;
 import com.dlb.chess.test.ConfigurationTestConstants;
 
 public final class CompareAmbronaMobilityOracle {
@@ -62,7 +63,7 @@ public final class CompareAmbronaMobilityOracle {
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
-    final List<String> lineList = Nulls.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
+    final List<String> lineList = IoUtility.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
     if (lineList.isEmpty() || !MobilityOracleFormatter.HEADER.equals(Nulls.get(lineList, 0))) {
       throw new IllegalStateException("Unexpected mobility oracle header");
     }

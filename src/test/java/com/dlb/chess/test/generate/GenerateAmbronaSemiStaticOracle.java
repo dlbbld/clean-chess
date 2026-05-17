@@ -18,6 +18,7 @@ import org.apache.logging.log4j.Logger;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
+import com.dlb.chess.common.utility.IoUtility;
 import com.dlb.chess.test.ConfigurationTestConstants;
 import com.dlb.chess.test.model.PgnTestCase;
 import com.dlb.chess.test.model.PgnTestCaseList;
@@ -104,13 +105,13 @@ public final class GenerateAmbronaSemiStaticOracle {
   private static List<String> runOracle(List<String> fenList) throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc",
         "LD_LIBRARY_PATH=/usr/local/lib " + shellQuote(WSL_RUNNER_PATH));
-    final Process process = Nulls.startProcess(processBuilder);
+    final Process process = IoUtility.startProcess(processBuilder);
     final List<String> result = new ArrayList<>();
 
-    try (InputStream errorStream = Nulls.getErrorStream(process)) {
+    try (InputStream errorStream = IoUtility.getErrorStream(process)) {
       try (BufferedWriter writer = new BufferedWriter(
-          new OutputStreamWriter(Nulls.getOutputStream(process), StandardCharsets.UTF_8));
-          BufferedReader reader = new BufferedReader(new InputStreamReader(Nulls.getInputStream(process),
+          new OutputStreamWriter(IoUtility.getOutputStream(process), StandardCharsets.UTF_8));
+          BufferedReader reader = new BufferedReader(new InputStreamReader(IoUtility.getInputStream(process),
               StandardCharsets.UTF_8))) {
 
         var processed = 0;
@@ -162,8 +163,8 @@ public final class GenerateAmbronaSemiStaticOracle {
     final String windowsPath = Nulls.replace(Nulls.toString(Nulls.toAbsolutePath(path)), '\\', '/');
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "wslpath", "-a", windowsPath);
     processBuilder.redirectErrorStream(true);
-    final Process process = Nulls.startProcess(processBuilder);
-    try (InputStream outputStream = Nulls.getInputStream(process)) {
+    final Process process = IoUtility.startProcess(processBuilder);
+    try (InputStream outputStream = IoUtility.getInputStream(process)) {
       final String output = Nulls.trim(readStream(outputStream));
       final int exitCode = process.waitFor();
       if (exitCode != 0) {
@@ -176,8 +177,8 @@ public final class GenerateAmbronaSemiStaticOracle {
   private static String readWslDefaultD3ChessRoot() throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc", "printf '%s' \"$HOME/D3-Chess\"");
     processBuilder.redirectErrorStream(true);
-    final Process process = Nulls.startProcess(processBuilder);
-    try (InputStream outputStream = Nulls.getInputStream(process)) {
+    final Process process = IoUtility.startProcess(processBuilder);
+    try (InputStream outputStream = IoUtility.getInputStream(process)) {
       final String output = Nulls.trim(readStream(outputStream));
       final int exitCode = process.waitFor();
       if (exitCode != 0) {
@@ -194,8 +195,8 @@ public final class GenerateAmbronaSemiStaticOracle {
   private static void runWslCommand(String command) throws Exception {
     final ProcessBuilder processBuilder = new ProcessBuilder("wsl", "bash", "-lc", command);
     processBuilder.redirectErrorStream(true);
-    final Process process = Nulls.startProcess(processBuilder);
-    try (InputStream outputStream = Nulls.getInputStream(process)) {
+    final Process process = IoUtility.startProcess(processBuilder);
+    try (InputStream outputStream = IoUtility.getInputStream(process)) {
       final String output = Nulls.trim(readStream(outputStream));
       final int exitCode = process.waitFor();
       if (!output.isEmpty()) {

@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.common.utility.IoUtility;
 import com.dlb.chess.test.ConfigurationTestConstants;
 
 public final class CompareAmbronaSemiStaticOracle {
@@ -71,7 +72,7 @@ public final class CompareAmbronaSemiStaticOracle {
   }
 
   private static Map<String, List<String>> readExpectedByFen() throws Exception {
-    final List<String> lineList = Nulls.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
+    final List<String> lineList = IoUtility.readAllLines(ORACLE_PATH, StandardCharsets.UTF_8);
     if (lineList.isEmpty() || !SemiStaticOracleFormatter.HEADER.equals(Nulls.get(lineList, 0))) {
       throw new IllegalStateException("Unexpected semistatic oracle header");
     }
