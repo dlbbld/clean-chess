@@ -2,8 +2,10 @@ package com.dlb.chess.test.model;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.enums.InsufficientMaterial;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.report.CheckmateOrStalemate;
+import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
@@ -49,7 +51,8 @@ public record PgnTestCase(String pgnName, String expectedRepetition, String expe
    * or {@link com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog#findPgnTest(String)} when starting from a bare test case.
    */
   public Board game(PgnTest pgnTest) {
-    return PgnUtility.calculateBoard(pgnTest.getFolderPath(), pgnName(), false);
+    final PgnGame pgnGame = PgnCacheForLenientPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnName());
+    return PgnUtility.calculateBoard(pgnGame, false);
   }
 
 }
