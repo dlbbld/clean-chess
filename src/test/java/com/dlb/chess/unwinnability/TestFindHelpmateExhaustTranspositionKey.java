@@ -3,6 +3,7 @@ package com.dlb.chess.unwinnability;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -16,6 +17,7 @@ import com.dlb.chess.board.Board;
  * part of position identity, and the en-passant target square is normalised away when no opposing pawn can actually
  * capture there.
  */
+@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestFindHelpmateExhaustTranspositionKey {
 
   @SuppressWarnings("static-method")

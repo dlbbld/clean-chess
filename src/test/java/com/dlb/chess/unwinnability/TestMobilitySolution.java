@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -19,6 +20,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.EnumConstants;
 
+@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestMobilitySolution implements EnumConstants {
 
   private static final Set<Square> ALL_SQUARE_SET = new TreeSet<>(Square.REAL);

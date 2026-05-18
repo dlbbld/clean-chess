@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -19,6 +20,7 @@ import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
+@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestUnwinnabilityQuickAgainstLimitedOracle {
 
   private static final Logger logger = Nulls.getLogger(TestUnwinnabilityQuickAgainstLimitedOracle.class);

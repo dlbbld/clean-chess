@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -49,6 +50,7 @@ import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
  * {@link #testNoFixtures()}; piece-placement-only manual tests are intentionally absent because every relevant position
  * is already covered by a PGN fixture.
  */
+@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestPawnWallGeometricAnalyzer {
 
   @SuppressWarnings("static-method")

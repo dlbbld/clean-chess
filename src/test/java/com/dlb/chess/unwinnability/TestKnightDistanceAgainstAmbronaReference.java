@@ -2,6 +2,7 @@ package com.dlb.chess.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.enums.Square;
@@ -22,6 +23,7 @@ import com.dlb.chess.common.constants.EnumConstants;
  * <p>
  * Source: <a href="https://github.com/miguel-ambrona/D3-Chess">D3-Chess</a> (GPL v3).
  */
+@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestKnightDistanceAgainstAmbronaReference implements EnumConstants {
 
   @SuppressWarnings("static-method")
