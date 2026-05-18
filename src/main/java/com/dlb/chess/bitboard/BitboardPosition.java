@@ -1,10 +1,15 @@
 package com.dlb.chess.bitboard;
 
+import java.util.Set;
+import java.util.TreeSet;
+
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
+import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
+import com.dlb.chess.common.model.MoveSpecification;
 
 /**
  * Twelve-bitboard piece-placement representation: one {@code long} per real
@@ -342,6 +347,201 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
       remaining &= ~pieceBit;
     }
     return pinned;
+  }
+
+  /**
+   * Full legal non-castling move generation. Returns the set of legal {@link MoveSpecification}s for {@code side}'s
+   * pieces excluding castling — castling lives on {@link com.dlb.chess.board.Board} together with the castling-
+   * rights state. The {@code enPassantBit} parameter is the single-bit bitboard of the en-passant target square
+   * (or {@code 0L} if no EP is available to {@code side}); the bitboard layer is stateless about whose turn it is.
+   *
+   * <p>
+   * Algorithm: generate the king's legal targets via {@link #legalKingTargets}; if double check, only king moves
+   * are legal. Otherwise compute the check-evasion mask (the squares non-king pieces must land on: the checker
+   * square plus the squares between king and a sliding checker). For each own non-king piece, take its pseudo-legal
+   * targets, intersect with the check-evasion mask and the pin ray (if pinned), and emit
+   * {@link MoveSpecification}s. Pawn promotion expands each rank-1/rank-8 target into four moves; en-passant is
+   * special-cased for the rank-pin edge case where capturing the EP pawn could expose own king to a rook or queen
+   * along the rank.
+   */
+  public Set<MoveSpecification> legalMoves(Side side, long enPassantBit) {
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("legalMoves requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final Set<MoveSpecification> moves = new TreeSet<>();
+
+    final long ownKings = side == Side.WHITE ? whiteKings : blackKings;
+    if (ownKings == 0L) {
+      return moves;
+    }
+    final int kingOrdinal = Long.numberOfTrailingZeros(ownKings);
+    final Square kingSquare = Square.REAL.get(kingOrdinal);
+
+    final long kingTargets = legalKingTargets(side);
+    addTargetsAsMoves(moves, kingSquare, kingTargets);
+
+    final long checkers = attackersTo(kingSquare, side.getOppositeSide());
+    final int checkerCount = Long.bitCount(checkers);
+    if (checkerCount >= 2) {
+      return moves;
+    }
+
+    final long checkEvasionMask;
+    if (checkerCount == 1) {
+      final int checkerOrdinal = Long.numberOfTrailingZeros(checkers);
+      final Piece checker = get(Square.REAL.get(checkerOrdinal));
+      final long betweenMask = isSlider(checker.getPieceType())
+          ? squaresBetween(kingOrdinal, checkerOrdinal) : 0L;
+      checkEvasionMask = checkers | betweenMask;
+    } else {
+      checkEvasionMask = -1L;
+    }
+
+    final long ownPieces = occupied(side);
+    final long ownNonKings = ownPieces & ~ownKings;
+    final long occ = occupied();
+    final long opponentPieces = occupied(side.getOppositeSide());
+
+    long remaining = ownNonKings;
+    while (remaining != 0L) {
+      final int fromOrdinal = Long.numberOfTrailingZeros(remaining);
+      final Square fromSquare = Square.REAL.get(fromOrdinal);
+      final Piece piece = get(fromSquare);
+      final long pinRay = pinRay(fromSquare, side);
+      final long pinFilter = pinRay == 0L ? -1L : pinRay;
+      final long combinedMask = checkEvasionMask & pinFilter;
+
+      switch (piece.getPieceType()) {
+        case KNIGHT -> addTargetsAsMoves(moves, fromSquare,
+            KnightMoves.targets(fromSquare, ownPieces) & combinedMask);
+        case BISHOP -> addTargetsAsMoves(moves, fromSquare,
+            BishopMoves.targets(fromOrdinal, occ, ownPieces) & combinedMask);
+        case ROOK -> addTargetsAsMoves(moves, fromSquare,
+            RookMoves.targets(fromOrdinal, occ, ownPieces) & combinedMask);
+        case QUEEN -> addTargetsAsMoves(moves, fromSquare,
+            QueenMoves.targets(fromOrdinal, occ, ownPieces) & combinedMask);
+        case PAWN -> addPawnMoves(moves, fromSquare, fromOrdinal, side, occ, opponentPieces, enPassantBit,
+            combinedMask, checkers, checkerCount, kingOrdinal, pinFilter);
+        default -> throw new IllegalArgumentException();
+      }
+      remaining &= remaining - 1L;
+    }
+    return moves;
+  }
+
+  private void addPawnMoves(Set<MoveSpecification> moves, Square fromSquare, int fromOrdinal, Side side, long occ,
+      long opponentPieces, long enPassantBit, long combinedMask, long checkers, int checkerCount, int kingOrdinal,
+      long pinFilter) {
+    final long pushTargets = PawnMoves.pushes(fromOrdinal, occ, side) & combinedMask;
+    final long regularCaptureTargets = PawnMoves.captures(fromOrdinal, opponentPieces, 0L, side) & combinedMask;
+
+    long epCaptureTarget = 0L;
+    if (enPassantBit != 0L) {
+      final long pawnDiagonalAttacks = PawnAttacks.attacks(fromSquare, side);
+      if ((pawnDiagonalAttacks & enPassantBit) != 0L) {
+        final long capturedPawnBit = side == Side.WHITE ? (enPassantBit >>> 8) : (enPassantBit << 8);
+        final boolean epEvadesCheck = checkerCount == 0 || (enPassantBit & combinedMask) != 0L
+            || (checkerCount == 1 && capturedPawnBit == checkers);
+        final boolean epOnPinRay = (enPassantBit & pinFilter) != 0L;
+        if (epEvadesCheck && epOnPinRay
+            && !epExposesKing(fromOrdinal, enPassantBit, capturedPawnBit, kingOrdinal, side)) {
+          epCaptureTarget = enPassantBit;
+        }
+      }
+    }
+
+    addPawnTargetsWithPromotion(moves, fromSquare, pushTargets);
+    addPawnTargetsWithPromotion(moves, fromSquare, regularCaptureTargets | epCaptureTarget);
+  }
+
+  private boolean epExposesKing(int fromOrdinal, long enPassantBit, long capturedPawnBit, int kingOrdinal, Side side) {
+    final long fromBit = 1L << fromOrdinal;
+    final long occAfterEp = (occupied() & ~fromBit & ~capturedPawnBit) | enPassantBit;
+
+    final Side opp = side.getOppositeSide();
+    final long oppPawns = (opp == Side.WHITE ? whitePawns : blackPawns) & ~capturedPawnBit;
+    final long oppKnights = opp == Side.WHITE ? whiteKnights : blackKnights;
+    final long oppBishops = opp == Side.WHITE ? whiteBishops : blackBishops;
+    final long oppRooks = opp == Side.WHITE ? whiteRooks : blackRooks;
+    final long oppQueens = opp == Side.WHITE ? whiteQueens : blackQueens;
+    final long oppKings = opp == Side.WHITE ? whiteKings : blackKings;
+    final Square kingSquare = Square.REAL.get(kingOrdinal);
+
+    if ((oppPawns & PawnAttacks.attacks(kingSquare, side)) != 0L) {
+      return true;
+    }
+    if ((oppKnights & KnightAttacks.attacks(kingSquare)) != 0L) {
+      return true;
+    }
+    if (((oppBishops | oppQueens) & BishopAttacks.attacks(kingOrdinal, occAfterEp)) != 0L) {
+      return true;
+    }
+    if (((oppRooks | oppQueens) & RookAttacks.attacks(kingOrdinal, occAfterEp)) != 0L) {
+      return true;
+    }
+    if ((oppKings & KingAttacks.attacks(kingSquare)) != 0L) {
+      return true;
+    }
+    return false;
+  }
+
+  private static void addTargetsAsMoves(Set<MoveSpecification> moves, Square fromSquare, long targets) {
+    long remaining = targets;
+    while (remaining != 0L) {
+      final Square toSquare = Square.REAL.get(Long.numberOfTrailingZeros(remaining));
+      moves.add(new MoveSpecification(fromSquare, toSquare));
+      remaining &= remaining - 1L;
+    }
+  }
+
+  private static void addPawnTargetsWithPromotion(Set<MoveSpecification> moves, Square fromSquare, long targets) {
+    long remaining = targets;
+    while (remaining != 0L) {
+      final int toOrdinal = Long.numberOfTrailingZeros(remaining);
+      final Square toSquare = Square.REAL.get(toOrdinal);
+      final int toRank = toOrdinal / 8;
+      if (toRank == 0 || toRank == 7) {
+        for (final PromotionPieceType promotion : PromotionPieceType.REAL) {
+          moves.add(new MoveSpecification(fromSquare, toSquare, promotion));
+        }
+      } else {
+        moves.add(new MoveSpecification(fromSquare, toSquare));
+      }
+      remaining &= remaining - 1L;
+    }
+  }
+
+  private static boolean isSlider(PieceType pieceType) {
+    return pieceType == PieceType.BISHOP || pieceType == PieceType.ROOK || pieceType == PieceType.QUEEN;
+  }
+
+  private static long squaresBetween(int sq1, int sq2) {
+    final int file1 = sq1 % 8;
+    final int rank1 = sq1 / 8;
+    final int file2 = sq2 % 8;
+    final int rank2 = sq2 / 8;
+    final int fileDiff = file2 - file1;
+    final int rankDiff = rank2 - rank1;
+    if (fileDiff == 0 && rankDiff == 0) {
+      return 0L;
+    }
+    final boolean onFile = fileDiff == 0;
+    final boolean onRank = rankDiff == 0;
+    final boolean onDiagonal = !onFile && !onRank && Math.abs(fileDiff) == Math.abs(rankDiff);
+    if (!onFile && !onRank && !onDiagonal) {
+      return 0L;
+    }
+    final int fileStep = Integer.signum(fileDiff);
+    final int rankStep = Integer.signum(rankDiff);
+    long result = 0L;
+    int file = file1 + fileStep;
+    int rank = rank1 + rankStep;
+    while (file != file2 || rank != rank2) {
+      result |= 1L << (rank * 8 + file);
+      file += fileStep;
+      rank += rankStep;
+    }
+    return result;
   }
 
   private static long inclusiveRayFromKing(int kingOrdinal, int pinnerOrdinal) {
