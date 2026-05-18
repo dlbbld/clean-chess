@@ -50,6 +50,8 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 - ✅ **Step 3.1** — `38dfae2a` — `BishopAttacks.attacks(int, long)` via classical ray loops + differential test (adds `BitboardPosition.occupied()` and the `SlidingAttacksTestOracle` test bridge)
 - ✅ **Step 3.2** — `b81f7c4e` — `RookAttacks.attacks(int, long)` via classical ray loops + differential test
 - ✅ **Step 3.3** — `039d28a5` — `QueenAttacks.attacks(int, long)` = bishop | rook + differential test. Phase 3 complete.
+- ✅ **Codex P2 fix** — `66bee5fa` — `BitboardPosition` compact constructor rejects overlapping piece bitboards
+- ✅ **Codex open Q** — `8fec1bac` — `BitboardPosition.occupied(Side)` + differential test (positions Phase 4 cleanly)
 - ⬜ **Step 4.1** — current — `BitboardPosition.attackedSquares(Side) -> long` (union of all piece attacks) + differential test against `AbstractAttackedSquares.calculateAttackedSquares`
 - ⬜ Steps 4.2 → 9.3 — pending
 
