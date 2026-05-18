@@ -164,6 +164,23 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     return attacks;
   }
 
+  /**
+   * Returns {@code true} if {@code side}'s king is attacked by any of the opposite side's pieces. A position with no
+   * king of the queried side returns {@code false} (no king to be in check) — the reference's
+   * {@code StaticPositionUtility.calculateIsCheck} throws in that case, so callers comparing against the reference
+   * should restrict comparisons to positions where the king of the queried side exists.
+   */
+  public boolean isInCheck(Side side) {
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("isInCheck requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final long ownKings = (side == Side.WHITE) ? whiteKings : blackKings;
+    if (ownKings == 0L) {
+      return false;
+    }
+    return (attackedSquares(side.getOppositeSide()) & ownKings) != 0L;
+  }
+
   private static long bitFor(Square square) {
     if (square == Square.NONE) {
       throw new IllegalArgumentException("The NONE square does not belong to the board");
