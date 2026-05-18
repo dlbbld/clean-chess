@@ -1,6 +1,8 @@
 package com.dlb.chess.bitboard;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.Square;
 
 /**
  * Twelve-bitboard piece-placement representation: one {@code long} per real
@@ -24,4 +26,56 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
 
   public static final BitboardPosition EMPTY_POSITION = BitboardPositionUtility
       .fromStaticPosition(StaticPosition.EMPTY_POSITION);
+
+  public Piece get(Square square) {
+    final long bit = bitFor(square);
+    if ((whitePawns & bit) != 0L) {
+      return Piece.WHITE_PAWN;
+    }
+    if ((whiteRooks & bit) != 0L) {
+      return Piece.WHITE_ROOK;
+    }
+    if ((whiteKnights & bit) != 0L) {
+      return Piece.WHITE_KNIGHT;
+    }
+    if ((whiteBishops & bit) != 0L) {
+      return Piece.WHITE_BISHOP;
+    }
+    if ((whiteQueens & bit) != 0L) {
+      return Piece.WHITE_QUEEN;
+    }
+    if ((whiteKings & bit) != 0L) {
+      return Piece.WHITE_KING;
+    }
+    if ((blackPawns & bit) != 0L) {
+      return Piece.BLACK_PAWN;
+    }
+    if ((blackRooks & bit) != 0L) {
+      return Piece.BLACK_ROOK;
+    }
+    if ((blackKnights & bit) != 0L) {
+      return Piece.BLACK_KNIGHT;
+    }
+    if ((blackBishops & bit) != 0L) {
+      return Piece.BLACK_BISHOP;
+    }
+    if ((blackQueens & bit) != 0L) {
+      return Piece.BLACK_QUEEN;
+    }
+    if ((blackKings & bit) != 0L) {
+      return Piece.BLACK_KING;
+    }
+    return Piece.NONE;
+  }
+
+  public boolean isEmpty(Square square) {
+    return get(square) == Piece.NONE;
+  }
+
+  private static long bitFor(Square square) {
+    if (square == Square.NONE) {
+      throw new IllegalArgumentException("The NONE square does not belong to the board");
+    }
+    return 1L << square.ordinal();
+  }
 }
