@@ -20,4 +20,8 @@ public final class SlidingAttacksTestOracle {
   public static Set<Square> bishopAttacks(StaticPosition staticPosition, Square fromSquare, Side havingMove) {
     return BishopAttackedSquares.calculateBishopAttackedSquares(staticPosition, fromSquare, havingMove);
   }
+
+  public static Set<Square> rookAttacks(StaticPosition staticPosition, Square fromSquare, Side havingMove) {
+    return RookAttackedSquares.calculateRookAttackedSquares(staticPosition, fromSquare, havingMove);
+  }
 }
