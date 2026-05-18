@@ -700,6 +700,94 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     return hash;
   }
 
+  /**
+   * Incremental Zobrist update: returns the XOR delta that converts the piece-placement hash of this position
+   * (before the move) into the piece-placement hash of the position after the move. That is:
+   * <pre>
+   *   long afterHash = beforeHash ^ before.hashDelta(moveSpec, movingSide);
+   * </pre>
+   * is guaranteed equal to {@code before.afterMove(moveSpec, movingSide).zobristPieces()}.
+   *
+   * <p>
+   * Parallel in structure to {@link #afterMove}: identifies the moving piece, captured piece (regular or
+   * en-passant), and destination piece (handles promotion), and XORs the corresponding
+   * {@link ZobristKeys#pieceSquare} values rather than toggling bitboards. For castling, XORs both king's and
+   * rook's from/to keys.
+   */
+  public long hashDelta(MoveSpecification moveSpec, Side movingSide) {
+    if (movingSide != Side.WHITE && movingSide != Side.BLACK) {
+      throw new IllegalArgumentException("hashDelta requires Side.WHITE or Side.BLACK, got " + movingSide);
+    }
+    if (moveSpec.castlingMove() != CastlingMove.NONE) {
+      return castlingHashDelta(moveSpec.castlingMove(), movingSide);
+    }
+    final Square from = moveSpec.fromSquare();
+    final Square to = moveSpec.toSquare();
+    final Piece movingPiece = get(from);
+    final long toBit = 1L << to.ordinal();
+
+    final Piece capturedPiece;
+    final Square capturedSquare;
+    if ((toBit & occupied()) != 0L) {
+      capturedPiece = get(to);
+      capturedSquare = to;
+    } else if (movingPiece.getPieceType() == PieceType.PAWN && from.getFile() != to.getFile()) {
+      final int capturedOrdinal = movingSide == Side.WHITE ? to.ordinal() - 8 : to.ordinal() + 8;
+      capturedSquare = Square.REAL.get(capturedOrdinal);
+      capturedPiece = movingSide == Side.WHITE ? Piece.BLACK_PAWN : Piece.WHITE_PAWN;
+    } else {
+      capturedPiece = Piece.NONE;
+      capturedSquare = Square.NONE;
+    }
+
+    final PromotionPieceType promotion = moveSpec.promotionPieceType();
+    final Piece destPiece = promotion == PromotionPieceType.NONE ? movingPiece
+        : Piece.calculate(movingSide, promotion.getPieceType());
+
+    long delta = ZobristKeys.pieceSquare(movingPiece, from);
+    if (capturedPiece != Piece.NONE) {
+      delta ^= ZobristKeys.pieceSquare(capturedPiece, capturedSquare);
+    }
+    delta ^= ZobristKeys.pieceSquare(destPiece, to);
+    return delta;
+  }
+
+  private static long castlingHashDelta(CastlingMove castlingMove, Side movingSide) {
+    final Square kingFrom;
+    final Square kingTo;
+    final Square rookFrom;
+    final Square rookTo;
+    if (movingSide == Side.WHITE) {
+      if (castlingMove == CastlingMove.KING_SIDE) {
+        kingFrom = Square.E1;
+        kingTo = Square.G1;
+        rookFrom = Square.H1;
+        rookTo = Square.F1;
+      } else {
+        kingFrom = Square.E1;
+        kingTo = Square.C1;
+        rookFrom = Square.A1;
+        rookTo = Square.D1;
+      }
+    } else {
+      if (castlingMove == CastlingMove.KING_SIDE) {
+        kingFrom = Square.E8;
+        kingTo = Square.G8;
+        rookFrom = Square.H8;
+        rookTo = Square.F8;
+      } else {
+        kingFrom = Square.E8;
+        kingTo = Square.C8;
+        rookFrom = Square.A8;
+        rookTo = Square.D8;
+      }
+    }
+    final Piece kingPiece = movingSide == Side.WHITE ? Piece.WHITE_KING : Piece.BLACK_KING;
+    final Piece rookPiece = movingSide == Side.WHITE ? Piece.WHITE_ROOK : Piece.BLACK_ROOK;
+    return ZobristKeys.pieceSquare(kingPiece, kingFrom) ^ ZobristKeys.pieceSquare(kingPiece, kingTo)
+        ^ ZobristKeys.pieceSquare(rookPiece, rookFrom) ^ ZobristKeys.pieceSquare(rookPiece, rookTo);
+  }
+
   private static long zobristForPiece(long bitboard, Piece piece) {
     long hash = 0L;
     long remaining = bitboard;
