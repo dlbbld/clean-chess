@@ -47,8 +47,9 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 - ✅ **Step 2.1** — `acb6cc0d` — `KnightAttacks` precomputed `long[64]` table + differential test (also adds `BitboardPositionUtility.toSquareSet`)
 - ✅ **Step 2.2** — `94485cd6` — `KingAttacks` precomputed `long[64]` table + differential test (castling stays on `Board`)
 - ✅ **Step 2.3** — `cbfa1766` — `PawnAttacks` two `long[64]` tables (per side) + differential test. Phase 2 complete.
-- ⬜ **Step 3.1** — current — `BishopAttacks.attacks(int sq, long occupied) -> long` via classical ray loops + differential test against `BishopAttackedSquares`
-- ⬜ Steps 3.2 → 9.3 — pending
+- ✅ **Step 3.1** — `38dfae2a` — `BishopAttacks.attacks(int, long)` via classical ray loops + differential test (adds `BitboardPosition.occupied()` and the `SlidingAttacksTestOracle` test bridge)
+- ⬜ **Step 3.2** — current — `RookAttacks.attacks(int sq, long occupied) -> long` via classical ray loops + differential test against `RookAttackedSquares`
+- ⬜ Steps 3.3 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
