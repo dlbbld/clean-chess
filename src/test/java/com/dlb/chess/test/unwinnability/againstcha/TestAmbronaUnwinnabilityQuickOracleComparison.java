@@ -40,6 +40,7 @@ class TestAmbronaUnwinnabilityQuickOracleComparison {
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST) {
         switch (testCaseList.pgnTest()) {
+          case BASIC_FORCED:
           case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
           case CHA_LICHESS_QUICK_DEPTH_THREE:
           case CHA_LICHESS_QUICK_DEPTH_FOUR:
@@ -85,16 +86,15 @@ class TestAmbronaUnwinnabilityQuickOracleComparison {
       final var difference = new AcceptedDifference(testCase.pgnName(), intendedWinner, expected, actual,
           testCase.finalFen());
       if (!remainingAcceptedDifferenceSet.remove(difference)) {
-        failureList.add(testCase.pgnName() + "\t" + intendedWinner + "\t" + expected + "\t" + actual + "\t"
-            + testCase.finalFen());
+        failureList.add(
+            testCase.pgnName() + "\t" + intendedWinner + "\t" + expected + "\t" + actual + "\t" + testCase.finalFen());
       }
     }
   }
 
   private static Set<AcceptedDifference> readAcceptedDifferenceSet() {
     final List<String> lineList = FileUtility.readFileLines(ACCEPTED_DIFFERENCE_PATH);
-    if (lineList.isEmpty()
-        || !"pgnName\tside\texpected\tactual\tfen\treason".equals(Nulls.get(lineList, 0))) {
+    if (lineList.isEmpty() || !"pgnName\tside\texpected\tactual\tfen\treason".equals(Nulls.get(lineList, 0))) {
       throw new ProgrammingMistakeException("Unexpected quick unwinnability accepted-differences header");
     }
 

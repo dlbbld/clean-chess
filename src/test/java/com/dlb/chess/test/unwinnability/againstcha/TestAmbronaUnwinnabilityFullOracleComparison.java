@@ -68,22 +68,10 @@ class TestAmbronaUnwinnabilityFullOracleComparison {
   }
 
   private static boolean isComparedChaTest(PgnTest pgnTest) {
-    switch (pgnTest) {
-      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
-      case CHA_LICHESS_QUICK_DEPTH_THREE:
-      case CHA_LICHESS_QUICK_DEPTH_FOUR:
-      case CHA_LICHESS_NOT_QUICK:
-      case CHA_AMBRONA:
-      case CHA_PAWN_WALL_YES:
-      case CHA_PAWN_WALL_NO:
-      case CHA_SHALLOW_TERMINATION:
-      case CHA_HELPMATE_BEYOND_FIVEFOLD:
-      case CHA_HELPMATE_BEYOND_SEVENTY_FIVE:
-        return true;
-        // $CASES-OMITTED$
-      default:
-        return false;
-    }
+    return switch (pgnTest) {
+      case BASIC_FORCED, CHA_LICHESS_QUICK_NOT_DEPTH_THREE, CHA_LICHESS_QUICK_DEPTH_THREE, CHA_LICHESS_QUICK_DEPTH_FOUR, CHA_LICHESS_NOT_QUICK, CHA_AMBRONA, CHA_PAWN_WALL_YES, CHA_PAWN_WALL_NO, CHA_SHALLOW_TERMINATION, CHA_HELPMATE_BEYOND_FIVEFOLD, CHA_HELPMATE_BEYOND_SEVENTY_FIVE -> true;
+      default -> false;
+    };
   }
 
   private static void check(PgnTestCase testCase, Side intendedWinner, UnwinnabilityFullVerdict expected,
