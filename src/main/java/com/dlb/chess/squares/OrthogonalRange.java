@@ -3,7 +3,7 @@ package com.dlb.chess.squares;
 import com.dlb.chess.board.enums.Square;
 import com.google.common.collect.ImmutableList;
 
-public interface OrthogonalRange {
+interface OrthogonalRange {
 
   ImmutableList<Square> squareListNorth();
 

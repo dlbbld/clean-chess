@@ -31,7 +31,7 @@ public abstract class RepetitionUtility {
     final var other = (DynamicPosition) obj;
     return dynamicPosition.castlingRightWhite().equals(other.castlingRightWhite())
         && dynamicPosition.castlingRightBlack().equals(other.castlingRightBlack())
-        && dynamicPosition.isEnPassantCapturePossible() == other.isEnPassantCapturePossible()
+        && dynamicPosition.enPassantCaptureTargetSquare() == other.enPassantCaptureTargetSquare()
         && dynamicPosition.havingMove() == other.havingMove()
         && dynamicPosition.staticPosition().equals(other.staticPosition());
   }

@@ -26,7 +26,7 @@ Records are immutable value objects (the M in MVC). Computational and business l
 
 Allowed on records:
 
-- **Compact-constructor validation and defensive copying.** The "errors at the construction boundary" pattern. `PgnCommentary` is the canonical example: its compact constructor validates the brace/control-character contract of PGN commentary content, so any `PgnCommentary` instance is by construction valid. `PgnFile` defensively copies its list components in the compact constructor.
+- **Compact-constructor validation and defensive copying.** The "errors at the construction boundary" pattern. `PgnCommentary` is the canonical example: its compact constructor validates the brace/control-character contract of PGN commentary content, so any `PgnCommentary` instance is by construction valid. `PgnGame` defensively copies its list components in the compact constructor.
 - **`Comparable` when the ordering is intrinsic to the type's identity.** `Tag` orders by standard-roster position. `MoveSpecification` orders by `(fromSquare, toSquare, castlingMove, promotionPieceType)`. Ordering that's a property of the type itself (not "one possible sort key out of several") fits on the record.
 - **Static factory constants for meaningful empty/initial values.** `PgnCommentary.EMPTY`. These are part of the type's value lattice, not behavior.
 - **Auto-generated `equals` / `hashCode` / `toString`** — the language provides these from the record's components. Don't override.

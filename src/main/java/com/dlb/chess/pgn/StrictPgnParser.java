@@ -45,26 +45,26 @@ public final class StrictPgnParser {
   // Public entry points
   // -------------------------------------------------------------------------------------------------
 
-  public static PgnFile parseText(String pgn) {
+  public static PgnGame parseText(String pgn) {
     return new StrictPgnParser(pgn).parseInternal();
   }
 
-  public static PgnFile parse(Path pgnFilePath) {
+  public static PgnGame parse(Path pgnPath) {
     // Read raw bytes â€” line-based reconstruction would hide whether the source's trailing newline is actually
     // present.
-    return parseText(PgnFileReader.readPgnFile(pgnFilePath));
+    return parseText(PgnReader.readPgn(pgnPath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static PgnGame parse(Path pgnFolderPath, String pgnName) {
+    return parse(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static PgnFile parse(String pgnFilePath) {
-    return parse(Nulls.pathOf(pgnFilePath));
+  public static PgnGame parse(String pgnPath) {
+    return parse(Nulls.pathOf(pgnPath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
-  public static PgnFile parse(List<String> fileLines) {
+  public static PgnGame parse(List<String> fileLines) {
     return parseText(joinLines(fileLines));
   }
 
@@ -76,17 +76,17 @@ public final class StrictPgnParser {
     return Nulls.toString(builder);
   }
 
-  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static StrictPgnParserValidationResult validate(Path pgnFolderPath, String pgnName) {
+    return validate(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static StrictPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(Nulls.pathOf(pgnFilePath));
+  public static StrictPgnParserValidationResult validate(String pgnPath) {
+    return validate(Nulls.pathOf(pgnPath));
   }
 
-  public static StrictPgnParserValidationResult validate(Path pgnFilePath) {
+  public static StrictPgnParserValidationResult validate(Path pgnPath) {
     try {
-      parse(pgnFilePath);
+      parse(pgnPath);
       return new StrictPgnParserValidationResult(StrictPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK");
     } catch (final StrictPgnParserValidationException e) {
       final String message = BasicUtility.getMessage(e);
@@ -128,7 +128,7 @@ public final class StrictPgnParser {
   // Top-level parsing
   // -------------------------------------------------------------------------------------------------
 
-  private PgnFile parseInternal() {
+  private PgnGame parseInternal() {
     StrictFileStructurePreScan.validate(source);
 
     final List<Tag> tagList = parseTagSection();
@@ -144,7 +144,7 @@ public final class StrictPgnParser {
 
     validateBoardPerLastMove(startFen, movetext.halfMoveList());
 
-    return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+    return new PgnGame(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
         Nulls.copyOfList(movetext.halfMoveList()), resultTagValue);
   }
 
@@ -269,7 +269,8 @@ public final class StrictPgnParser {
   private static ResultTagValue validateResultTagValue(List<Tag> tagList) {
     if (!TagUtility.hasResult(tagList)) {
       throw new StrictPgnParserValidationException(StrictPgnParserValidationProblem.TAG_RESULT_MISSING,
-          SanValidationProblem.NONE, "The " + StandardTag.RESULT.getName()
+          SanValidationProblem.NONE,
+          "The " + StandardTag.RESULT.getName()
               + " tag is required. PGN spec section 8.1.1 archival storage requires the full seven tag roster, but the"
               + " strict parser only enforces the semantic essentials: a Result tag (whose value must match the"
               + " termination marker) and the SetUp/FEN coupling. Other roster tags are archival-storage concerns"
@@ -618,7 +619,12 @@ public final class StrictPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   private static void validateBoardPerLastMove(Fen startFen, List<PgnHalfMove> halfMoveList) {
-    final Board board = new Board(startFen);
+    // Strict parsing enforces PGN syntax + move legality + the cheap FIDE terminations (mate/stalemate/5-fold/75-move/
+    // insufficient material). It does NOT enforce DEAD_POSITION_UNWINNABLE_QUICK — that detection runs an analyzer
+    // heuristic, and refusing to parse a recorded PGN because of a heuristic classification on an intermediate
+    // position would make the parser unusable for real games. Production-runtime FIDE 5.2.2 enforcement lives on
+    // Board.move(...) via the detectDeadPositionUnwinnable constructor flag.
+    final Board board = new Board(startFen, false);
     for (final PgnHalfMove halfMove : halfMoveList) {
       final Side side = board.getHavingMove();
       final var fullMoveNumber = board.getFullMoveNumberForNextHalfMove();

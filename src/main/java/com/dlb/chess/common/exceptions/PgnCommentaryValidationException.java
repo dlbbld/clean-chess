@@ -7,7 +7,7 @@ package com.dlb.chess.common.exceptions;
  * <p>
  * Surfaces at the point of {@link com.dlb.chess.pgn.PgnCommentary} construction, which is invoked by:
  * <ul>
- * <li>programmatic API callers building a {@code PgnFile} or {@code PgnHalfMove} directly,</li>
+ * <li>programmatic API callers building a {@code PgnGame} or {@code PgnHalfMove} directly,</li>
  * <li>{@code StrictPgnParser} on commentary content extracted between {@code {} and {@code }},</li>
  * <li>{@code LenientPgnParser} after applying its tab/newline/CR-to-space substitution, if remaining control characters
  * are present.</li>

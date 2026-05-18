@@ -5,9 +5,9 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateLibraryCarlosInsufficientMaterialTestCases {
@@ -18,17 +18,17 @@ public class GenerateLibraryCarlosInsufficientMaterialTestCases {
 
   private static void generateTestCase() throws Exception {
 
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getTestList(
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getTestList(
         PgnTest.BASIC_INSUFFICIENT_MATERIAL_BOTH, PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_WHITE,
         PgnTest.BASIC_INSUFFICIENT_MATERIAL_ONLY_BLACK, PgnTest.BASIC_INSUFFICIENT_MATERIAL_NONE)) {
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
 
-        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+        final Report report = Reporter.calculateReport(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
 
         final InsufficientMaterial insufficientMaterial = report.insufficientMaterial();
         final String fen = report.fen();
 
-        final String testCaseTitel = calculateTestCaseTitel(testCase.pgnFileName());
+        final String testCaseTitel = calculateTestCaseTitel(testCase.pgnName());
         System.out.println("//" + testCaseTitel);
         System.out.println("board.loadFromFen(\"" + fen + "\");");
 

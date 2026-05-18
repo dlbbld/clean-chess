@@ -10,12 +10,12 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.LenientPgnParser;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForLenientPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 class TestPgnImportAgainstExport {
 
@@ -27,21 +27,21 @@ class TestPgnImportAgainstExport {
     // true (default) → curated export-roundtrip smoke subset (~20 files).
     // false → full ALL_EXCEPT_LONGEST_POSSIBLE corpus for a pre-release / regression sweep.
     final var source = RestrictTestConstants.IS_RESTRICT_PGN_WRITER_TEST
-        ? CreatePgnTestCases.getExportRoundtripSmokeList()
-        : CreatePgnTestCases.getRestrictedTestListList();
-    for (final PgnFileTestCaseList testCaseList : source) {
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
-        final String pgnFileName = testCase.pgnFileName();
+        ? PgnTestCaseCatalog.getExportRoundtripSmokeList()
+        : PgnTestCaseCatalog.getRestrictedTestListList();
+    for (final PgnTestCaseList testCaseList : source) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
+        final String pgnName = testCase.pgnName();
 
-        logger.info(pgnFileName);
+        logger.info(pgnName);
 
-        final PgnFile pgnFileFromFileSystem = PgnCacheForLenientPgnParserTestCases
-            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnFileName);
+        final PgnGame pgnGameFromFileSystem = PgnCacheForLenientPgnParserTestCases
+            .getPgn(testCaseList.pgnTest().getFolderPath(), pgnName);
 
-        final List<String> export = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
-        final PgnFile pgnFileFromReadingExport = LenientPgnParser.parse(export);
+        final List<String> export = PgnCreate.createPgnLines(pgnGameFromFileSystem);
+        final PgnGame pgnGameFromReadingExport = LenientPgnParser.parse(export);
 
-        assertEquals(pgnFileFromFileSystem, pgnFileFromReadingExport);
+        assertEquals(pgnGameFromFileSystem, pgnGameFromReadingExport);
       }
     }
 

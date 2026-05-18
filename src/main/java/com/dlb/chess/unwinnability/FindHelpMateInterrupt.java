@@ -13,7 +13,7 @@ import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.UciMove;
 
-class FindHelpMateInterrupt extends AbstractFindHelpmate {
+class FindHelpMateInterrupt {
 
   private static final boolean IS_DEBUG = false;
 
@@ -30,10 +30,7 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
     final FindHelpMateInterruptResult result = calculateHelpmate(board, c, 0, mateList);
 
     return switch (result) {
-      case TRUE -> {
-        checkHelpmate(board.getFen(), mateList);
-        yield FindHelpmateResult.YES;
-      }
+      case TRUE -> FindHelpmateResult.YES;
       case FALSE -> FindHelpmateResult.NO;
       case INTERRUPTED -> FindHelpmateResult.UNKNOWN;
       default -> throw new IllegalArgumentException();
@@ -47,10 +44,13 @@ class FindHelpMateInterrupt extends AbstractFindHelpmate {
       return FindHelpMateInterruptResult.TRUE;
     }
 
-    if (currentDepth < D && !board.isInsufficientMaterial(c) && !board.isFivefoldRepetition()
-        && !board.isSeventyFiveMove()) {
+    // Per the paper / Ambrona issue thread: 75-move and 5-fold repetition do not apply when adjudicating
+    // timeouts, so the helpmate search must continue past them. Termination conditions here are the
+    // paper's Figure 5 line 2 (intended winner has just the king / Lemma 5 / Lemma 6 / stalemate /
+    // self-checkmate) plus the depth bound.
+    if (currentDepth < D && !board.isInsufficientMaterial(c)) {
 
-      for (final LegalMove legalMove : board.getLegalMoveSet()) {
+      for (final LegalMove legalMove : board.getLegalMoves()) {
         board.move(legalMove.moveSpecification());
         if (IS_DEBUG) {
           final UciMove uciMove = UciMoveUtility.convertMoveSpecificationToUci(legalMove.havingMove(),

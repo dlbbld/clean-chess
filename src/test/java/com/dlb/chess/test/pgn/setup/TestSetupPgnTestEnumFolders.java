@@ -24,7 +24,7 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
  * <p>
  * The check is one-directional: every enum points to a real folder. The reverse direction (every folder under
  * {@code src/test/resources/pgn} maps to some enum) would conflate this with the "no orphan files" invariant covered by
- * {@link TestSetupPgnFileRegistration}.
+ * {@link TestSetupPgnRegistration}.
  */
 class TestSetupPgnTestEnumFolders {
 

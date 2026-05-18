@@ -17,7 +17,7 @@ class TestSanValidatePieceExists {
   void testWhiteNeither() {
 
     {
-      final Board board = new Board("k7/1q6/8/8/8/8/6Q1/7K w - - 0 100");
+      final Board board = new Board("k7/1q6/8/8/8/8/6Q1/7K w - - 0 100", false);
 
       checkExceptionNeither("Ra1", board);
       checkExceptionNeither("Nb1", board);
@@ -25,7 +25,7 @@ class TestSanValidatePieceExists {
     }
 
     {
-      final Board board = new Board("k7/1r6/8/8/8/8/6R1/7K w - - 0 100");
+      final Board board = new Board("k7/1r6/8/8/8/8/6R1/7K w - - 0 100", false);
 
       checkExceptionNeither("Qd1", board);
     }
@@ -36,7 +36,7 @@ class TestSanValidatePieceExists {
   void testBlackNeither() {
 
     {
-      final Board board = new Board("k7/1q6/8/8/8/8/6Q1/7K b - - 0 100");
+      final Board board = new Board("k7/1q6/8/8/8/8/6Q1/7K b - - 0 100", false);
 
       checkExceptionNeither("Rh8", board);
       checkExceptionNeither("Ng8", board);
@@ -44,7 +44,7 @@ class TestSanValidatePieceExists {
     }
 
     {
-      final Board board = new Board("k7/1r6/8/8/8/8/6R1/7K b - - 0 100");
+      final Board board = new Board("k7/1r6/8/8/8/8/6R1/7K b - - 0 100", false);
 
       checkExceptionNeither("Qd8", board);
     }
@@ -59,14 +59,10 @@ class TestSanValidatePieceExists {
   void testWhiteFile() {
 
     {
-      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100", false);
 
       checkExceptionFile("Raa1", board);
       checkExceptionFile("Nab1", board);
-
-      // TODO below gets illegal movement but should give the no piece exists in future
-      // piece check on board before movement check!!!
-      // checkExceptionFile("Bcc1", board);
 
       checkExceptionFile("Bac1", board);
       checkExceptionFile("Qad1", board);
@@ -78,13 +74,9 @@ class TestSanValidatePieceExists {
   void testBlackFile() {
 
     {
-      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100", false);
 
       checkExceptionFile("Rhd8", board);
-
-      // TODO below gets illegal movement but should give the no piece exists in future
-      // piece check on board before movement check!!!
-      // checkExceptionFile("Nbg8", board);
 
       checkExceptionFile("Nhg8", board);
       checkExceptionFile("Bhf8", board);
@@ -102,13 +94,9 @@ class TestSanValidatePieceExists {
   void testWhiteRank() {
 
     {
-      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100", false);
 
       checkExceptionRank("R1a1", board);
-
-      // TODO below gets illegal movement but should give the no piece exists in future
-      // piece check on board before movement check!!!
-      // checkExceptionRank("N1b1", board);
 
       checkExceptionRank("N2b1", board);
       checkExceptionRank("B3c1", board);
@@ -121,14 +109,10 @@ class TestSanValidatePieceExists {
   void testBlackRank() {
 
     {
-      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100", false);
 
       checkExceptionRank("R8d8", board);
       checkExceptionRank("N7g8", board);
-
-      // TODO below gets illegal movement but should give the no piece exists in future
-      // piece check on board before movement check!!!
-      // checkExceptionRank("B8f8", board);
 
       checkExceptionRank("B6f8", board);
       checkExceptionRank("Q8f8", board);
@@ -145,7 +129,7 @@ class TestSanValidatePieceExists {
   void testWhiteSquare() {
 
     {
-      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K w - - 0 100", false);
 
       checkExceptionSquare("Rb1a1", board);
       checkExceptionSquare("Na3b1", board);
@@ -159,7 +143,7 @@ class TestSanValidatePieceExists {
   void testBlackSquare() {
 
     {
-      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100");
+      final Board board = new Board("k7/rq6/n7/b7/7B/7N/6QR/7K b - - 0 100", false);
 
       checkExceptionSquare("Rf8e8", board);
       checkExceptionSquare("Nh6g8", board);

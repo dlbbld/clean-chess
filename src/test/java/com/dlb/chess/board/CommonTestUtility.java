@@ -92,9 +92,9 @@ public abstract class CommonTestUtility implements EnumConstants {
       assertEquals(boardFirst.getDynamicPosition(), boardSecond.getDynamicPosition());
 
       assertEquals(boardFirst.getHalfMoveList(), boardSecond.getHalfMoveList());
-      assertEquals(boardFirst.getPossibleMoveSpecificationSet(), boardSecond.getPossibleMoveSpecificationSet());
+      assertEquals(boardFirst.getPossibleMoveSpecificationList(), boardSecond.getPossibleMoveSpecificationList());
 
-      assertEquals(boardFirst.getLegalMoveSet(), boardSecond.getLegalMoveSet());
+      assertEquals(boardFirst.getLegalMoves(), boardSecond.getLegalMoves());
       assertEquals(boardFirst.getPerformedMoveSpecificationList(), boardSecond.getPerformedMoveSpecificationList());
       // in super
       // assertEquals(boardFirst.getLegalMovesRepresentation(), boardSecond.getLegalMovesRepresentation());
@@ -177,8 +177,8 @@ public abstract class CommonTestUtility implements EnumConstants {
       assertEquals(boardFirst.getDynamicPositionList(), boardSecond.getDynamicPositionList());
       assertEquals(boardFirst.getDynamicPosition(), boardSecond.getDynamicPosition());
       assertEquals(boardFirst.getHalfMoveList(), boardSecond.getHalfMoveList());
-      assertEquals(boardFirst.getPossibleMoveSpecificationSet(), boardSecond.getPossibleMoveSpecificationSet());
-      assertEquals(boardFirst.getLegalMoveSet(), boardSecond.getLegalMoveSet());
+      assertEquals(boardFirst.getPossibleMoveSpecificationList(), boardSecond.getPossibleMoveSpecificationList());
+      assertEquals(boardFirst.getLegalMoves(), boardSecond.getLegalMoves());
       assertEquals(boardFirst.getPerformedMoveSpecificationList(), boardSecond.getPerformedMoveSpecificationList());
       assertEquals(boardFirst.getLegalMovesSan(), boardSecond.getLegalMovesSan());
     }

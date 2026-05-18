@@ -3,36 +3,36 @@ package com.dlb.chess.test.unwinnability.lichess.pgn;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.TagUtility;
-import com.dlb.chess.test.winnable.WinnableAnalyzer;
-import com.dlb.chess.test.winnable.enums.Winnable;
+import com.dlb.chess.test.unwinnability.oracle.LimitedUnwinnabilityOracle;
+import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 
 public abstract class AbstractLichessCheck {
 
-  static boolean calculateIsTimeForfeitCandidate(PgnFile pgnFile) {
-    final String terminationValue = TagUtility.calculateTagValue(pgnFile, "Termination");
+  static boolean calculateIsTimeForfeitCandidate(PgnGame pgnGame) {
+    final String terminationValue = TagUtility.calculateTagValue(pgnGame, "Termination");
     if (!"Time forfeit".equals(terminationValue)) {
       return false;
     }
-    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(pgnFile);
+    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(pgnGame);
     return resultTagValue == ResultTagValue.WHITE_WON || resultTagValue == ResultTagValue.BLACK_WON;
   }
 
-  static boolean calculateIsIncorrectResult(PgnFile pgnFile) {
+  static boolean calculateIsIncorrectResult(PgnGame pgnGame) {
 
-    final Board boardPerLastMove = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
-    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(pgnFile);
+    final Board boardPerLastMove = PgnUtility.calculateBoard(pgnGame, false);
+    final ResultTagValue resultTagValue = TagUtility.readResultTagValue(pgnGame);
 
     if (boardPerLastMove.getHavingMove() == Side.WHITE && resultTagValue == ResultTagValue.WHITE_WON
         || boardPerLastMove.getHavingMove() == Side.BLACK && resultTagValue == ResultTagValue.BLACK_WON) {
       throw new ProgrammingMistakeException("Should not happen");
     }
 
-    final Winnable winnable = WinnableAnalyzer.calculateWinnable(boardPerLastMove,
+    final LimitedUnwinnabilityVerdict verdict = LimitedUnwinnabilityOracle.calculateUnwinnability(boardPerLastMove,
         boardPerLastMove.getHavingMove().getOppositeSide());
-    return winnable == Winnable.NO;
+    return verdict == LimitedUnwinnabilityVerdict.UNWINNABLE;
   }
 }

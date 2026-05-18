@@ -1,5 +1,7 @@
 package com.dlb.chess.san;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,7 +21,7 @@ import com.dlb.chess.common.constants.CastlingConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.MoveSpecification;
-import com.dlb.chess.common.utility.BasicUtility;
+import com.dlb.chess.common.utility.ListUtility;
 import com.dlb.chess.common.utility.SetUtility;
 import com.dlb.chess.common.utility.StaticPositionUtility;
 import com.dlb.chess.enums.KingSafetyCheck;
@@ -119,23 +121,23 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     }
   }
 
-  public static Set<LegalMove> calculateLegalMovesCandidates(Board board, Side havingMove, SanParse sanParse) {
+  public static List<LegalMove> calculateLegalMovesCandidates(Board board, Side havingMove, SanParse sanParse) {
     final var sanFormat = sanParse.sanFormat();
     final var sanConversion = sanParse.sanConversion();
 
     // for castling we need to filter the castling moves
     if (sanFormat.isKingCastlingMove()) {
-      return filterCastlingMove(board.getLegalMoveSet());
+      return filterCastlingMove(board.getLegalMoves());
     }
 
     final PieceType pieceType = sanConversion.movingPieceType();
     final Piece piece = PieceType.calculate(havingMove, pieceType);
 
-    final Set<LegalMove> legalMoveSetForMovingPiece = MoveToSan.calculateLegalMoveSetForMovingPiece(piece,
-        board.getLegalMoveSet());
+    final List<LegalMove> legalMovesForMovingPiece = MoveToSan.calculateLegalMovesForMovingPiece(piece,
+        board.getLegalMoves());
     // for non castling moves we need to filter by the to square (which is always set for non castling)
     final Square toSquare = sanConversion.toSquare();
-    final Set<LegalMove> legalMovesCandidates = filterLegalMovesCandidates(legalMoveSetForMovingPiece, toSquare);
+    final List<LegalMove> legalMovesCandidates = filterLegalMovesCandidates(legalMovesForMovingPiece, toSquare);
 
     // for pawn moves we must filter additionally by the from file!!
     if (sanFormat == SanFormat.PAWN_CAPTURING_NON_PROMOTION || sanFormat == SanFormat.PAWN_CAPTURING_PROMOTION) {
@@ -144,8 +146,8 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     return legalMovesCandidates;
   }
 
-  private static Set<LegalMove> filterCastlingMove(Set<LegalMove> allLegalMoves) {
-    final Set<LegalMove> filteredLegalMoves = new TreeSet<>();
+  private static List<LegalMove> filterCastlingMove(List<LegalMove> allLegalMoves) {
+    final List<LegalMove> filteredLegalMoves = new ArrayList<>();
     for (final LegalMove legalMove : allLegalMoves) {
       if (legalMove.kind() == LegalMoveKind.CASTLING) {
         filteredLegalMoves.add(legalMove);
@@ -155,24 +157,24 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   public static LegalMove calculateOnlyPossibleLegalMove(SanFormat sanFormat, SanConversion sanConversion,
-      Set<LegalMove> legalMovesForSanValidation) {
+      List<LegalMove> legalMovesForSanValidation) {
 
-    final Set<LegalMove> filtered0 = legalMovesForSanValidation;
+    final List<LegalMove> filtered0 = legalMovesForSanValidation;
 
-    final Set<LegalMove> filtered1 = filterLegalMovesCandidatesForFrom(sanFormat, sanConversion, filtered0);
+    final List<LegalMove> filtered1 = filterLegalMovesCandidatesForFrom(sanFormat, sanConversion, filtered0);
 
-    final Set<LegalMove> filtered2 = filterLegalMovesCandidatesForPromotion(sanFormat, sanConversion, filtered1);
+    final List<LegalMove> filtered2 = filterLegalMovesCandidatesForPromotion(sanFormat, sanConversion, filtered1);
 
-    final Set<LegalMove> filtered3 = filterLegalMovesCandidatesForCastling(sanFormat, filtered2);
+    final List<LegalMove> filtered3 = filterLegalMovesCandidatesForCastling(sanFormat, filtered2);
 
     if (filtered3.size() != 1) {
       throw new ProgrammingMistakeException(
           "At this point it is expected that filtering the legal moves against the SAN result in exactly one legal move");
     }
-    return BasicUtility.calculateOnlyElement(filtered3);
+    return ListUtility.getOnly(filtered3);
   }
 
-  public static void validateAgainstLegalMoves(Board board, Side havingMove, Set<LegalMove> legalMovesCandidates,
+  public static void validateAgainstLegalMoves(Board board, Side havingMove, List<LegalMove> legalMovesCandidates,
       SanFormat sanFormat, SanConversion sanConversion) {
 
     final StaticPosition staticPosition = board.getStaticPosition();
@@ -217,7 +219,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   private static void validateAgainstLegalMovesForKingNonCastling(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, Square toSquare) {
+      List<LegalMove> legalMovesCandidates, Square toSquare) {
     if (!legalMovesCandidates.isEmpty()) {
       return;
     }
@@ -268,7 +270,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   private static void validateAgainstLegalMovesForPawn(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      List<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
       Square toSquare, Square enPassantCaptureTargetSquare) {
     if (!legalMovesCandidates.isEmpty()) {
       return;
@@ -314,7 +316,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   private static void validateAgainstLegalMovesForPieceNeither(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, PieceType pieceType, Square toSquare) {
+      List<LegalMove> legalMovesCandidates, PieceType pieceType, Square toSquare) {
     if (legalMovesCandidates.isEmpty()) {
       final Set<PseudoLegalMove> pseudoLegalMoves = calculatePseudoLegalMovesForPieceNeither(staticPosition, havingMove,
           pieceType, toSquare);
@@ -499,7 +501,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   private static void validateAgainstLegalMovesForPieceFile(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      List<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
       Square toSquare) {
     final File fromFile = sanConversion.fromFile();
     final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
@@ -572,7 +574,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   private static void validateAgainstLegalMovesForPieceRank(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      List<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
       Square toSquare) {
     final Rank fromRank = sanConversion.fromRank();
     final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
@@ -658,7 +660,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
   }
 
   private static void validateAgainstLegalMovesForPieceSquare(StaticPosition staticPosition, Side havingMove,
-      Set<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
+      List<LegalMove> legalMovesCandidates, PieceType pieceType, SanFormat sanFormat, SanConversion sanConversion,
       Square toSquare) {
     final Square fromSquare = calculateFromSquare(sanConversion);
     final Set<Square> pieceCandidates = calculatePieceCandidateSquareSet(staticPosition, havingMove, pieceType,
@@ -753,8 +755,8 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     return result;
   }
 
-  private static Set<LegalMove> filterLegalMovesCandidatesForFrom(SanFormat sanFormat, SanConversion sanConversion,
-      Set<LegalMove> legalMoveSet) {
+  private static List<LegalMove> filterLegalMovesCandidatesForFrom(SanFormat sanFormat, SanConversion sanConversion,
+      List<LegalMove> legalMoveSet) {
 
     switch (sanFormat) {
       case KING_CASTLING_QUEEN_SIDE:
@@ -762,13 +764,13 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
       case KING_NON_CASTLING_CAPTURING:
       case KING_NON_CASTLING_NON_CAPTURING:
         // no from restriction
-        return new TreeSet<>(legalMoveSet);
+        return new ArrayList<>(legalMoveSet);
       // $CASES-OMITTED$
       default:
         break;
     }
 
-    final Set<LegalMove> legalMovesForFrom = new TreeSet<>();
+    final List<LegalMove> legalMovesForFrom = new ArrayList<>();
 
     // always set for non castling
     final File sanFromFile = sanConversion.fromFile();
@@ -830,9 +832,9 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     return legalMovesForFrom;
   }
 
-  private static Set<LegalMove> filterLegalMovesCandidatesForPromotion(SanFormat sanFormat, SanConversion sanConversion,
-      Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> legalMovesForPromotion = new TreeSet<>();
+  private static List<LegalMove> filterLegalMovesCandidatesForPromotion(SanFormat sanFormat,
+      SanConversion sanConversion, List<LegalMove> legalMoveSet) {
+    final List<LegalMove> legalMovesForPromotion = new ArrayList<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       switch (sanFormat) {
         case KING_CASTLING_KING_SIDE:
@@ -864,9 +866,9 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     return legalMovesForPromotion;
   }
 
-  private static Set<LegalMove> filterLegalMovesCandidatesForCastling(SanFormat sanFormat,
-      Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> legalMovesForCastling = new TreeSet<>();
+  private static List<LegalMove> filterLegalMovesCandidatesForCastling(SanFormat sanFormat,
+      List<LegalMove> legalMoveSet) {
+    final List<LegalMove> legalMovesForCastling = new ArrayList<>();
     for (final LegalMove moveCandidate : legalMoveSet) {
       switch (sanFormat) {
         case KING_CASTLING_KING_SIDE:
@@ -902,7 +904,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     return legalMovesForCastling;
   }
 
-  private static File calculateOnlyPossibleFile(Set<LegalMove> legalMovesForSanValidation,
+  private static File calculateOnlyPossibleFile(List<LegalMove> legalMovesForSanValidation,
       SanConversion sanConversion) {
     var countMatches = 0;
     for (final LegalMove legalMove : legalMovesForSanValidation) {
@@ -924,7 +926,7 @@ abstract class SanValidateLegalMoves extends AbstractSan implements EnumConstant
     throw new ProgrammingMistakeException("The program in mistake failed to determine the file");
   }
 
-  private static boolean isContained(Set<LegalMove> legalMoves, Side havingMove, SanFormat sanFormat) {
+  private static boolean isContained(List<LegalMove> legalMoves, Side havingMove, SanFormat sanFormat) {
     return legalMoves.contains(calculateCastlingMove(havingMove, sanFormat));
   }
 

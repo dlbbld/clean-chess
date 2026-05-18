@@ -2,33 +2,27 @@ package com.dlb.chess.test.generate;
 
 import java.nio.file.Path;
 
-import com.dlb.chess.board.Board;
-import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.report.CheckmateOrStalemate;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
-import com.dlb.chess.test.model.PgnFileTestCase;
+import com.dlb.chess.test.model.PgnTestCase;
 import com.dlb.chess.test.report.representation.NoProgressRepresentation;
 import com.dlb.chess.test.report.representation.RepetitionRepresentation;
-import com.dlb.chess.unwinnability.UnwinnableFull;
-import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
-import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public abstract class AbstractGenerateTestCaseForPgn {
 
-  static String generate(Path pgnFolderPath, String pgnFileName) throws Exception {
+  static String generate(Path pgnFolderPath, String pgnName) throws Exception {
 
-    final Report report = Reporter.calculateReport(pgnFolderPath, pgnFileName);
+    final Report report = Reporter.calculateReport(pgnFolderPath, pgnName);
 
     final StringBuilder result = new StringBuilder();
-    result.append("list.add(new ").append(PgnFileTestCase.class.getSimpleName()).append("(");
+    result.append("list.add(new ").append(PgnTestCase.class.getSimpleName()).append("(");
 
     // begin values
     result.append("\"");
-    result.append(pgnFileName);
+    result.append(pgnName);
     result.append("\"");
     result.append(", ");
 
@@ -67,19 +61,6 @@ public abstract class AbstractGenerateTestCaseForPgn {
     result.append(".");
     result.append(insufficientMaterial.name());
     result.append(", ");
-
-    final Board finalBoard = report.board();
-    final UnwinnableFull unwinnableFullWhite = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.WHITE)
-        .unwinnableFull();
-    final UnwinnableFull unwinnableFullBlack = UnwinnableFullAnalyzer.unwinnableFull(finalBoard, Side.BLACK)
-        .unwinnableFull();
-    final UnwinnableQuick unwinnableQuickWhite = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.WHITE);
-    final UnwinnableQuick unwinnableQuickBlack = UnwinnableQuickAnalyzer.unwinnableQuick(finalBoard, Side.BLACK);
-
-    result.append(UnwinnableFull.class.getSimpleName()).append(".").append(unwinnableFullWhite.name()).append(", ");
-    result.append(UnwinnableFull.class.getSimpleName()).append(".").append(unwinnableFullBlack.name()).append(", ");
-    result.append(UnwinnableQuick.class.getSimpleName()).append(".").append(unwinnableQuickWhite.name()).append(", ");
-    result.append(UnwinnableQuick.class.getSimpleName()).append(".").append(unwinnableQuickBlack.name()).append(", ");
 
     final var fen = report.fen();
 

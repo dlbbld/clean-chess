@@ -4,6 +4,36 @@ Releases from 3.3 onward. Earlier history is in git tags only.
 
 ## [Unreleased]
 
+## [8.0.0] - 2026-05-17
+
+The **DeepSquare moment**. clean-chess closes FIDE 5.2.2 dead-position gap to high extend (auto-CHA unwinnability quick per move) and is now cross-validated against the D3-Chess (Ambrona FUN22) reference oracle at three levels. Higher coverage with unwinnability full in evaluation for later release.
+
+### Notable
+- **Auto-CHA per move.** `DEAD_POSITION_UNWINNABLE_QUICK` is the sixth FIDE-automatic termination. The validation pipeline — both `ValidateNewMove` and `StrictSanParser` — rejects moves attempted on a dead position with `GAME_ALREADY_ENDED`, the thrown exception carrying the originating `GameStatus`. Consumers that previously had to query unwinnability themselves and stop the game manually can delete that code.
+- **Ambrona oracle cross-validation.** D3-Chess oracles imported at three levels — `mobility`, `semi-static`, `unwinnability-full` — and run as JUnit comparisons against clean-chess. Three TSV accepted-differences tables document the small, justified deviations; the suite fails on any silent disagreement. The largest test asset of the release.
+- **CHA algorithms paper-aligned.** `UnwinnableQuickAnalyzer`, `UnwinnableSemiStatic`, `Mobility`, and `FindHelpMateInterrupt` realigned with FUN22 / D3-Chess. `FindHelpMateInterrupt` now implements Figure 5 search with a transposition table + Figure 12 score-based depth adjustment; the helpmate search ignores 75-move / fivefold per the paper.
+- **Pawn-wall geometric classifier overhauled.** Sound tri-state verdict (`YES` / `NO` / `UNKNOWN`), all-pawns-involved soundness gate, BFS king-walk oracle, corpus split into `yes/` and `no/` subfolders, cross-checked against `UnwinnableQuick`.
+- **Helpmate transposition key.** `FindHelpmateExhaust`'s visited-position store keys on `DynamicPosition` (with normalised en-passant) instead of full-FEN strings — no per-node FEN serialisation, exact equality.
+- **`Board.copyCurrentPositionWithoutHistory(boolean)`.** Clean snapshot API for the helpmate search. Halfmove clock reset to 0, move history dropped — the new position is insensitive to 75-move and fivefold per the CHA paper. Replaces the previous detection-suppression hack.
+- **Game-ended rejection tests cover all six terminations symmetrically** in both pipelines (`TestValidateNewMoveGameEnded` and `TestSanValidationGameEnded`) — including two scenarios for the new dead-position-quick row: born dead from FEN and played into the wall.
+- **Basic-checkmate CHA test matrix.** K+R, K+Q, K+2B (opposite colours), K+R+B vs K — must-capture-draw / mate-in-4-plies / mate-in-10-plies / kings-at-opposite-edges per material.
+- **Test-corpus parse and FEN caches.** `PgnCacheForLenientPgnParserTestCases` and `FenCacheForTestCases` cache the parsed `PgnGame` and parsed `Fen` per corpus fixture for the test-JVM lifetime; `PgnTestCase.game()` and `finalPosition()` route through them.
+- **Empty PGN input rejection.** Both `LenientPgnParser` and `StrictPgnParser` reject zero-byte and whitespace-only input as `FILE_EMPTY` — previously parsed silently to an initial-position game with zero moves.
+
+### Breaking
+- `GameStatus.INSUFFICIENT_MATERIAL_BOTH` renamed to `DEAD_POSITION_INSUFFICIENT_MATERIAL`; per-side variants renamed to `INSUFFICIENT_MATERIAL_WHITE_ONLY` / `INSUFFICIENT_MATERIAL_BLACK_ONLY`.
+- New `GameStatus.DEAD_POSITION_UNWINNABLE_QUICK`; `GameStatus.isAutomaticTermination()` returns `true` for it. Existing consumers that played past such a position will now receive `InvalidMoveException` / `SanValidationException` with `GAME_ALREADY_ENDED`.
+- `Board(String fen)` and `Board()` default to dead-position auto-detection enabled. Tests and bulk PGN replayers that pass through positions the quick analyzer would classify as dead must construct with the explicit `Board(fen, false)` form. Both PGN parsers already do this for you.
+- `Board.copyCurrentPositionWithoutHistory(boolean)` replaces the previous detection-suppression API used by the helpmate search.
+- Test-side rename `PgnFileTestCase` → `PgnTestCase`; PGN test paths and class names rename `pgnFile` segment → `pgn`; `position()` / `game(PgnTest)` paths now named `finalPosition()` / `game(PgnTest)` on `PgnTestCase` (cheap vs expensive choice now visible at every call site).
+
+### Migration
+For typical use (read a PGN, play moves, query unwinnability): no source change. Dead-position auto-termination now happens automatically; delete any manual `if (UnwinnabilityQuick.unwinnable(...)) stop()` logic at the call site.
+
+If you replay positions through `Board` where the CHA quick analyzer would classify the intermediate as dead, construct with `new Board(fen, false)` to suppress auto-detection.
+
+If your code matches on `GameStatus.INSUFFICIENT_MATERIAL_BOTH`, rename to `DEAD_POSITION_INSUFFICIENT_MATERIAL`. If you branch on "dead position" generally, also branch on `DEAD_POSITION_UNWINNABLE_QUICK`.
+
 ## [7.0.0] - 2026-05-14
 
 ### Notable

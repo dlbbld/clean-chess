@@ -18,11 +18,11 @@ import com.dlb.chess.fen.model.Fen;
 import com.google.common.collect.ImmutableList;
 
 /**
- * One inline fixture per {@link ForgivenFenItemCode} value plus end-to-end and propagation cases. Each fixture
- * is a minimal FEN whose normalisation triggers exactly the named code; the lenient parser must accept the
- * fixture and surface that code (only). The {@code testCanonicalInput*} case asserts the absence of any
- * forgiven items on already-canonical input; the {@code testAdvancedInvalid*} case asserts that a semantically
- * invalid position (king missing) still fails — the lenient layer only forgives syntactic deviations.
+ * One inline fixture per {@link ForgivenFenItemCode} value plus end-to-end and propagation cases. Each fixture is a
+ * minimal FEN whose normalisation triggers exactly the named code; the lenient parser must accept the fixture and
+ * surface that code (only). The {@code testCanonicalInput*} case asserts the absence of any forgiven items on
+ * already-canonical input; the {@code testAdvancedInvalid*} case asserts that a semantically invalid position (king
+ * missing) still fails — the lenient layer only forgives syntactic deviations.
  */
 @SuppressWarnings("static-method")
 class TestLenientFenParser {
@@ -142,8 +142,8 @@ class TestLenientFenParser {
     final String deviating = "8/8/8/8/8/8/8/4K2k w - - 15 1";
     final LenientFenParserValidationResult result = LenientFenParser.validateText(deviating);
     assertTrue(result.isValid(), () -> "expected valid; got: " + result.message());
-    assertTrue(containsCode(result.forgivenItems(),
-        ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER));
+    assertTrue(
+        containsCode(result.forgivenItems(), ForgivenFenItemCode.HALF_MOVE_CLOCK_INCONSISTENT_WITH_FULL_MOVE_NUMBER));
     assertEquals(20, fenOf(result).fullMoveNumber());
     assertEquals(15, fenOf(result).halfMoveClock());
   }
@@ -210,17 +210,15 @@ class TestLenientFenParser {
   // -------------------------------------------------------------------------------------------------
 
   /**
-   * Extracts the {@link Fen} from a successful validation result, asserting non-null. Gives the JDT null-flow
-   * analysis the narrowed type it needs at the use site (class-level {@code @SuppressWarnings("null")} covers
-   * "Null type safety" warnings but does not always propagate into "Potential null pointer access" errors
-   * inside method bodies).
+   * Extracts the {@link Fen} from a successful validation result, asserting non-null. Gives the JDT null-flow analysis
+   * the narrowed type it needs at the use site (class-level {@code @SuppressWarnings("null")} covers "Null type safety"
+   * warnings but does not always propagate into "Potential null pointer access" errors inside method bodies).
    */
   private static Fen fenOf(LenientFenParserValidationResult result) {
     final Fen fen = result.fen();
     if (fen == null) {
-      throw new AssertionError(
-          "Expected a non-null Fen on the lenient FEN validation result; problem=" + result.problem()
-              + ", message=" + result.message());
+      throw new AssertionError("Expected a non-null Fen on the lenient FEN validation result; problem="
+          + result.problem() + ", message=" + result.message());
     }
     return fen;
   }

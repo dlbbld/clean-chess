@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.Nulls;
 
 public abstract class BasicUtility {
@@ -61,5 +62,13 @@ public abstract class BasicUtility {
   @SuppressWarnings("null")
   public static String getMessage(Throwable throwable) {
     return String.valueOf(throwable.getMessage());
+  }
+
+  public static String calculateSquareList(Set<Square> squareSet) {
+    final List<String> squareList = new ArrayList<>();
+    for (final Square square : squareSet) {
+      squareList.add(square.getName());
+    }
+    return calculateCommaSeparatedList(squareList);
   }
 }

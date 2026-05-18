@@ -15,12 +15,11 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserException {
   private static final Path PGN_TEST_FOLDER_PATH = Nulls
-      .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/notSan");
+      .pathResolve(PgnTestConstants.STRICT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/other");
 
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    checkException("01_empty_file.pgn", StrictPgnParserValidationProblem.FILE_EMPTY);
     checkException("02_starts_with_empty_line.pgn", StrictPgnParserValidationProblem.FILE_EMPTY_LINE_CANNOT_START_WITH);
     checkException("03_does_not_end_with_empty_line.pgn",
         StrictPgnParserValidationProblem.FILE_EMPTY_LINE_MUST_END_WITH);
@@ -89,10 +88,10 @@ class TestStrictPgnParserNotSanException extends AbstractTestStrictPgnParserExce
 
   }
 
-  private static void checkException(String pgnFileName, StrictPgnParserValidationProblem expected) {
+  private static void checkException(String pgnName, StrictPgnParserValidationProblem expected) {
     var isException = false;
     try {
-      StrictPgnParser.parse(PGN_TEST_FOLDER_PATH, pgnFileName);
+      StrictPgnParser.parse(PGN_TEST_FOLDER_PATH, pgnName);
     } catch (final StrictPgnParserValidationException e) {
       isException = true;
       assertEquals(expected, e.getStrictPgnParserValidationProblem());

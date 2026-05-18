@@ -20,22 +20,22 @@ import com.dlb.chess.pgn.LenientPgnParserValidationException;
 import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
-import com.dlb.chess.pgn.PgnFileUtility;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.pgn.PgnUtility;
 import com.dlb.chess.pgn.PgnWriter;
-import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.pgn.StrictPgnParser;
 import com.dlb.chess.pgn.StrictPgnParserValidationException;
 import com.dlb.chess.pgn.StrictPgnParserValidationProblem;
 import com.dlb.chess.pgn.StrictPgnParserValidationResult;
 import com.dlb.chess.pgn.Tag;
+import com.dlb.chess.pgn.WriteMode;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.san.SanValidationProblem;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
-import com.dlb.chess.unwinnability.UnwinnableFull;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 class TestReadMe {
 
@@ -106,16 +106,16 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void unwinnabilityExamplesReturnExpectedResults() {
-    assertUnwinnability("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50", Side.BLACK, UnwinnableQuick.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE);
-    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK, UnwinnableQuick.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE);
-    assertUnwinnability("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51", Side.WHITE, UnwinnableQuick.UNWINNABLE,
-        UnwinnableFull.UNWINNABLE);
+    assertUnwinnability("8/8/4k3/3R4/2K5/8/8/8 w - - 0 50", Side.BLACK, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE);
+    assertUnwinnability("8/8/3k4/1p2p1p1/pP1pP1P1/P2P4/1K6/8 b - - 32 62", Side.BLACK,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
+    assertUnwinnability("5r1k/6P1/7K/5q2/8/8/8/8 b - - 0 51", Side.WHITE, UnwinnabilityQuickVerdict.UNWINNABLE,
+        UnwinnabilityFullVerdict.UNWINNABLE);
     assertUnwinnability("q4r2/pR3pkp/1p2p1p1/4P3/6P1/1P3Q2/1Pr2PK1/3R4 b - - 3 29", Side.WHITE,
-        UnwinnableQuick.POSSIBLY_WINNABLE, UnwinnableFull.WINNABLE);
-    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE, UnwinnableQuick.POSSIBLY_WINNABLE,
-        UnwinnableFull.UNWINNABLE);
+        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.WINNABLE);
+    assertUnwinnability("1k6/1P5p/BP3p2/1P6/8/8/5PKP/8 b - - 0 41", Side.WHITE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
   @Test
@@ -132,7 +132,7 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void boardExampleEndsInCheckmate() {
-    final Board board = new Board();
+    final Board board = new Board(false);
 
     board.moveStrict("e4");
     board.movesStrict("e5", "Bc4");
@@ -149,18 +149,18 @@ class TestReadMe {
 
   @Test
   @SuppressWarnings("static-method")
-  void pgnFileCanBeWrittenAndParsed(@TempDir Path tempDir) {
+  void pgnCanBeWrittenAndParsed(@TempDir Path tempDir) {
     final Board sourceBoard = createOpeningExampleBoard();
-    final PgnFile pgnFile = PgnCreate.createPgnFile(sourceBoard);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(sourceBoard);
     final Path filePath = Nulls.pathResolve(tempDir, "myFile.pgn");
 
-    // Archival mode for the write: createPgnFile(Board) carries no tags by design (no caller-provided input to
+    // Archival mode for the write: createPgnGame(Board) carries no tags by design (no caller-provided input to
     // preserve), so a SEMANTIC write would produce a tag-less PGN that strict parsing rejects. Round-tripping
     // through strict parsing is the demonstration this test exists for, so the producer side asks for archival.
-    PgnWriter.writePgnFile(pgnFile, filePath, WriteMode.ARCHIVAL);
+    PgnWriter.writePgn(pgnGame, filePath, WriteMode.ARCHIVAL);
 
-    final Board lenientBoard = PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parse(filePath));
-    final Board strictBoard = PgnFileUtility.calculateBoardPerLastMove(StrictPgnParser.parse(filePath));
+    final Board lenientBoard = PgnUtility.calculateBoard(LenientPgnParser.parse(filePath), false);
+    final Board strictBoard = PgnUtility.calculateBoard(StrictPgnParser.parse(filePath), false);
 
     assertFalse(lenientBoard.isCheckmate());
     assertFalse(strictBoard.isThreefoldRepetition());
@@ -179,12 +179,12 @@ class TestReadMe {
           3. Bc4 Bc5
                 """;
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     board.moveStrict("a3");
 
-    assertEquals("Spring Classic", tagValue(pgnFile, "Event"));
-    assertEquals(6, pgnFile.halfMoveList().size());
+    assertEquals("Spring Classic", tagValue(pgnGame, "Event"));
+    assertEquals(6, pgnGame.halfMoveList().size());
   }
 
   @Test
@@ -200,11 +200,11 @@ class TestReadMe {
                 3. Bc4 Bc5
         """;
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
     // Archival mode produces a strict-spec-compliant export from the deficient lenient input: fills the missing
     // STR placeholders, synthesises a Result tag, emits the termination marker. The README example is exactly
     // the lenient-input + archival-output flow.
-    final String exported = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
+    final String exported = PgnCreate.createPgnString(pgnGame, WriteMode.ARCHIVAL);
 
     assertTrue(exported.contains("[Event \"Spring Classic\"]"));
     assertTrue(exported.contains("[White \"John Doe\"]"));
@@ -249,11 +249,11 @@ class TestReadMe {
 
         """;
 
-    final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnFileUtility.calculateBoardPerLastMove(pgnFile);
+    final PgnGame pgnGame = StrictPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     board.moveStrict("a3");
 
-    assertEquals(6, pgnFile.halfMoveList().size());
+    assertEquals(6, pgnGame.halfMoveList().size());
   }
 
   @Test
@@ -313,14 +313,14 @@ class TestReadMe {
   @Test
   @SuppressWarnings("static-method")
   void pgnCreationProducesParserValidExport() {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(createOpeningExampleBoard());
+    final PgnGame pgnGame = PgnCreate.createPgnGame(createOpeningExampleBoard());
     // Archival mode is the contract a Board-to-PGN consumer wants when round-tripping through strict parsing:
-    // semantic mode would produce a tag-less PGN (createPgnFile(Board) carries no tags by design), which strict
+    // semantic mode would produce a tag-less PGN (createPgnGame(Board) carries no tags by design), which strict
     // parsing rejects for the missing Result tag.
-    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile, WriteMode.ARCHIVAL);
+    final String pgnString = PgnCreate.createPgnString(pgnGame, WriteMode.ARCHIVAL);
 
-    assertTrue(LenientPgnParser.validateText(pgnFileString).isValid());
-    assertTrue(StrictPgnParser.validateText(pgnFileString).isValid());
+    assertTrue(LenientPgnParser.validateText(pgnString).isValid());
+    assertTrue(StrictPgnParser.validateText(pgnString).isValid());
   }
 
   @Test
@@ -415,30 +415,30 @@ class TestReadMe {
   }
 
   private static Board calculateBoard(String pgn) {
-    return PgnFileUtility.calculateBoardPerLastMove(LenientPgnParser.parseText(pgn));
+    return PgnUtility.calculateBoard(LenientPgnParser.parseText(pgn), false);
   }
 
   private static Board createOpeningExampleBoard() {
-    final Board board = new Board();
+    final Board board = new Board(false);
     board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
     return board;
   }
 
-  private static void assertUnwinnability(String fen, Side side, UnwinnableQuick expectedQuick,
-      UnwinnableFull expectedFull) {
-    final Board board = new Board(fen);
+  private static void assertUnwinnability(String fen, Side side, UnwinnabilityQuickVerdict expectedQuick,
+      UnwinnabilityFullVerdict expectedFull) {
+    final Board board = new Board(fen, false);
     assertEquals(expectedQuick, board.isUnwinnableQuick(side));
     assertEquals(expectedFull, board.isUnwinnableFull(side));
   }
 
   private static void assertDeadPosition(String fen, DeadPositionQuick expectedQuick, DeadPositionFull expectedFull) {
-    final Board board = new Board(fen);
+    final Board board = new Board(fen, false);
     assertEquals(expectedQuick, board.isDeadPositionQuick());
     assertEquals(expectedFull, board.isDeadPositionFull());
   }
 
-  private static String tagValue(PgnFile pgnFile, String name) {
-    for (final Tag tag : pgnFile.tagList()) {
+  private static String tagValue(PgnGame pgnGame, String name) {
+    for (final Tag tag : pgnGame.tagList()) {
       if (tag.name().equals(name)) {
         return tag.value();
       }

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.pgn.PgnCreate;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
@@ -27,15 +27,15 @@ class TestPgnExportLineLength {
   @SuppressWarnings("static-method")
   @Test
   void test() {
-    final List<String> pgnFileNameList = calculatePgnFileNameList();
-    assertFalse(pgnFileNameList.isEmpty(), "The PGN export line-length test folder must contain PGN files");
+    final List<String> pgnNameList = calculatePgnNameList();
+    assertFalse(pgnNameList.isEmpty(), "The PGN export line-length test folder must contain PGN files");
 
-    for (final String pgnFileName : pgnFileNameList) {
-      checkFile(pgnFileName);
+    for (final String pgnName : pgnNameList) {
+      checkFile(pgnName);
     }
   }
 
-  private static List<String> calculatePgnFileNameList() {
+  private static List<String> calculatePgnNameList() {
     final List<String> result = new ArrayList<>();
 
     for (final String fileName : FileUtility.readFileNameList(TEST_FOLDER_PATH)) {
@@ -47,14 +47,14 @@ class TestPgnExportLineLength {
     return result;
   }
 
-  private static void checkFile(String pgnFileName) {
+  private static void checkFile(String pgnName) {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
-    final List<String> fileLinesExpectedFromFileSystem = FileUtility.readFileLines(TEST_FOLDER_PATH, pgnFileName);
+    final List<String> fileLinesExpectedFromFileSystem = FileUtility.readFileLines(TEST_FOLDER_PATH, pgnName);
 
-    final PgnFile pgnFileFromFileSystem = PgnCacheForStrictPgnParserTestCases.getPgn(TEST_FOLDER_PATH, pgnFileName);
-    final List<String> fileLinesActualFromPgn = PgnCreate.createPgnFileLines(pgnFileFromFileSystem);
+    final PgnGame pgnGameFromFileSystem = PgnCacheForStrictPgnParserTestCases.getPgn(TEST_FOLDER_PATH, pgnName);
+    final List<String> fileLinesActualFromPgn = PgnCreate.createPgnLines(pgnGameFromFileSystem);
     assertEquals(fileLinesExpectedFromFileSystem, fileLinesActualFromPgn);
   }
 }

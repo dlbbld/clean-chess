@@ -3,6 +3,7 @@ package com.dlb.chess.board;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -22,13 +23,13 @@ import com.dlb.chess.common.utility.BasicChessUtility;
 import com.dlb.chess.exceptions.InvalidMoveException;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.squares.AbstractPotentialToSquares;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 class TestLegalMovesAgainstCreatedUsingValidation {
 
@@ -39,7 +40,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
   void test() {
     // the move generation from validation for testing is about ten times slower than the used on
     // so we only perform a spot checks on the PGN^s
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_LEGAL_MOVE_VALIDATION_AGAINST_BOTTOM_UP_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_CHECK_WHITE:
@@ -53,22 +54,22 @@ class TestLegalMovesAgainstCreatedUsingValidation {
             continue;
         }
       }
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
-        checkLegalMoves(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+      for (final PgnTestCase testCase : testCaseList.list()) {
+        checkLegalMoves(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
       }
     }
   }
 
-  private static void checkLegalMoves(Path folderPath, String pgnFileName) {
+  private static void checkLegalMoves(Path folderPath, String pgnName) {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnName);
 
-    final Board board = new Board(pgnFile.startFen());
+    final Board board = new Board(pgnGame.startFen(), false);
     checkLegalMoves(board);
 
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       board.moveStrict(halfMove.san());
       checkLegalMoves(board);
     }
@@ -86,7 +87,7 @@ class TestLegalMovesAgainstCreatedUsingValidation {
       return;
     }
 
-    final Set<LegalMove> legalMovesActual = board.getLegalMoveSet();
+    final List<LegalMove> legalMovesActual = board.getLegalMoves();
 
     final Set<MoveSpecification> moveSpecificationsBottomUp = toMoveSpecifications(legalMovesActual);
 
@@ -173,9 +174,9 @@ class TestLegalMovesAgainstCreatedUsingValidation {
     return listForSquare;
   }
 
-  private static Set<MoveSpecification> toMoveSpecifications(Set<LegalMove> legalMoveSet) {
+  private static Set<MoveSpecification> toMoveSpecifications(List<LegalMove> legalMoves) {
     final Set<MoveSpecification> result = new TreeSet<>();
-    for (final LegalMove legalMove : legalMoveSet) {
+    for (final LegalMove legalMove : legalMoves) {
       result.add(legalMove.moveSpecification());
     }
     return result;

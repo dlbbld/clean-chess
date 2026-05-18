@@ -14,11 +14,12 @@ import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.ClaimAhead;
 import com.dlb.chess.common.model.HalfMove;
-import com.dlb.chess.common.utility.GeneralUtility;
+import com.dlb.chess.common.utility.BoardUtility;
 import com.dlb.chess.common.utility.RepetitionUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.pgn.PgnUtility;
 
 /**
  * Generates game-level reports â€” threefold-repetition listings (including missed-claim-ahead opportunities),
@@ -52,13 +53,13 @@ public final class Reporter {
   }
 
   public static void printReport(String pgnString) {
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
-    final Board board = GeneralUtility.calculateBoard(pgnFile);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgnString);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     printReport(board);
   }
 
-  public static void printReport(Path folderPath, String pgnFileName) {
-    final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+  public static void printReport(Path folderPath, String pgnName) {
+    final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
     printReport(board);
   }
 
@@ -71,8 +72,8 @@ public final class Reporter {
    * {@code "\n"}. Use this when the consumer is not stdout â€” web responses, file writes, GUI displays, etc.
    */
   public static String calculateReportText(String pgnString) {
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgnString);
-    final Board board = GeneralUtility.calculateBoard(pgnFile);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgnString);
+    final Board board = PgnUtility.calculateBoard(pgnGame, false);
     return calculateReportText(board);
   }
 
@@ -80,8 +81,8 @@ public final class Reporter {
    * Returns the same human-readable report as {@link #printReport(Path, String)} but as a single string, lines joined
    * by {@code "\n"}.
    */
-  public static String calculateReportText(Path folderPath, String pgnFileName) {
-    final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+  public static String calculateReportText(Path folderPath, String pgnName) {
+    final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
     return calculateReportText(board);
   }
 
@@ -139,9 +140,9 @@ public final class Reporter {
     return output;
   }
 
-  public static Report calculateReport(Path folderPath, String pgnFileName) throws Exception {
+  public static Report calculateReport(Path folderPath, String pgnName) throws Exception {
 
-    final Board board = GeneralUtility.calculateBoard(folderPath, pgnFileName);
+    final Board board = PgnUtility.calculateBoard(folderPath, pgnName, false);
     return calculateReport(board);
   }
 
@@ -169,7 +170,7 @@ public final class Reporter {
 
     final var maxNoProgressSequence = calculateMaxNoProgressSequence(board);
 
-    final var checkmateOrStalemate = GeneralUtility.calculateLastPositionEvaluation(board);
+    final var checkmateOrStalemate = BoardUtility.calculateEvaluation(board);
     final InsufficientMaterial insufficientMaterial = board.calculateInsufficientMaterial();
 
     final String fen = board.getFen();

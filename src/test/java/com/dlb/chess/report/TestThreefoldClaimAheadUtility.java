@@ -9,11 +9,11 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.model.ClaimAhead;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.pgn.LenientPgnParser;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
+import com.dlb.chess.pgn.PgnUtility;
 
 class TestThreefoldClaimAheadUtility {
 
@@ -25,21 +25,21 @@ class TestThreefoldClaimAheadUtility {
 
     {
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility
-          .calculateThreefoldClaimAhead(new Board());
+          .calculateThreefoldClaimAhead(new Board(false));
 
       assertEquals(expectedEmptyListList, actualListList);
     }
 
     {
       final List<List<ClaimAhead>> actual = ThreefoldClaimAheadUtility
-          .calculateThreefoldClaimAhead(new Board(FenConstants.FEN_AFTER_E4_STR));
+          .calculateThreefoldClaimAhead(new Board(FenConstants.FEN_AFTER_E4_STR, false));
 
       assertEquals(expectedEmptyListList, actual);
     }
 
     {
-      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3");
-      final Board board = GeneralUtility.calculateBoard(pgnFile);
+      final PgnGame pgnGame = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3");
+      final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
 
@@ -47,8 +47,8 @@ class TestThreefoldClaimAheadUtility {
     }
 
     {
-      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6");
-      final Board board = GeneralUtility.calculateBoard(pgnFile);
+      final PgnGame pgnGame = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6");
+      final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
 
@@ -57,8 +57,8 @@ class TestThreefoldClaimAheadUtility {
 
     // White can claim ahead first
     {
-      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8");
-      final Board board = GeneralUtility.calculateBoard(pgnFile);
+      final PgnGame pgnGame = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8");
+      final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
 
@@ -76,8 +76,8 @@ class TestThreefoldClaimAheadUtility {
 
     // Black can claim ahead first
     {
-      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1");
-      final Board board = GeneralUtility.calculateBoard(pgnFile);
+      final PgnGame pgnGame = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1");
+      final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
 
@@ -95,8 +95,8 @@ class TestThreefoldClaimAheadUtility {
 
     // White can claim ahead first, then Black can claim ahead
     {
-      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1 Nb8");
-      final Board board = GeneralUtility.calculateBoard(pgnFile);
+      final PgnGame pgnGame = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng1 Nb8");
+      final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
 
@@ -122,8 +122,8 @@ class TestThreefoldClaimAheadUtility {
 
     // Black can claim ahead first, then White can claim ahead
     {
-      final PgnFile pgnFile = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8 Nf3");
-      final Board board = GeneralUtility.calculateBoard(pgnFile);
+      final PgnGame pgnGame = LenientPgnParser.parseText("e4 e5 Nf3 Nc6 Ng1 Nb8 Nf3 Nc6 Ng5 Nb8 Nf3");
+      final Board board = PgnUtility.calculateBoard(pgnGame, false);
 
       final List<List<ClaimAhead>> actualListList = ThreefoldClaimAheadUtility.calculateThreefoldClaimAhead(board);
 

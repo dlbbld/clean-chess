@@ -8,10 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicCheckmateBlack extends AbstractTestBasic {
@@ -19,37 +18,37 @@ class TestBasicCheckmateBlack extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicCheckmateBlack.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_black_checkmate_rook_direct_adjacent.pgn");
-    pgnFileNameList.add("02_black_checkmate_rook_direct_range.pgn");
-    pgnFileNameList.add("03_black_checkmate_rook_discover.pgn");
-    pgnFileNameList.add("04_black_checkmate_knight_direct.pgn");
-    pgnFileNameList.add("05_black_checkmate_knight_discover_orthogonal.pgn");
-    pgnFileNameList.add("06_black_checkmate_knight_discover_diagonal.pgn");
-    pgnFileNameList.add("07_black_checkmate_bishop_direct_adjacent.pgn");
-    pgnFileNameList.add("08_black_checkmate_bishop_direct_range.pgn");
-    pgnFileNameList.add("09_black_checkmate_bishop_discover.pgn");
-    pgnFileNameList.add("10_black_checkmate_queen_direct_orthogonal_adjacent.pgn");
-    pgnFileNameList.add("11_black_checkmate_queen_direct_orthogonal_range.pgn");
-    pgnFileNameList.add("12_black_checkmate_queen_direct_diagonal_adjacent.pgn");
-    pgnFileNameList.add("13_black_checkmate_queen_direct_diagonal_range.pgn");
-    pgnFileNameList.add("14_black_checkmate_king_discover_orthogonal.pgn");
-    pgnFileNameList.add("15_black_checkmate_king_discover_diagonal.pgn");
+    pgnNameList.add("01_black_checkmate_rook_direct_adjacent.pgn");
+    pgnNameList.add("02_black_checkmate_rook_direct_range.pgn");
+    pgnNameList.add("03_black_checkmate_rook_discover.pgn");
+    pgnNameList.add("04_black_checkmate_knight_direct.pgn");
+    pgnNameList.add("05_black_checkmate_knight_discover_orthogonal.pgn");
+    pgnNameList.add("06_black_checkmate_knight_discover_diagonal.pgn");
+    pgnNameList.add("07_black_checkmate_bishop_direct_adjacent.pgn");
+    pgnNameList.add("08_black_checkmate_bishop_direct_range.pgn");
+    pgnNameList.add("09_black_checkmate_bishop_discover.pgn");
+    pgnNameList.add("10_black_checkmate_queen_direct_orthogonal_adjacent.pgn");
+    pgnNameList.add("11_black_checkmate_queen_direct_orthogonal_range.pgn");
+    pgnNameList.add("12_black_checkmate_queen_direct_diagonal_adjacent.pgn");
+    pgnNameList.add("13_black_checkmate_queen_direct_diagonal_range.pgn");
+    pgnNameList.add("14_black_checkmate_king_discover_orthogonal.pgn");
+    pgnNameList.add("15_black_checkmate_king_discover_diagonal.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_CHECKMATE_BLACK);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_CHECKMATE_BLACK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CHECKMATE_BLACK);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_CHECKMATE_BLACK);
+    for (final PgnTestCase testCase : testCaseList.list()) {
+      final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_black_checkmate_rook_direct_adjacent.pgn" -> checkNonCaptureCheckmate(D2, D8, BLACK_ROOK, board);
         case "02_black_checkmate_rook_direct_range.pgn" -> checkNonCaptureCheckmate(G3, G2, BLACK_ROOK, board);
         case "03_black_checkmate_rook_discover.pgn" -> checkNonCaptureCheckmate(B6, B7, BLACK_ROOK, board);

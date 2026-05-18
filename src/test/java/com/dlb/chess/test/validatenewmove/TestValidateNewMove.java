@@ -26,26 +26,26 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   @Test
   void testMoveSpecFromSquareEmpty() {
-    check(new Board(), new MoveSpecification(E3, E4), MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
+    check(new Board(false), new MoveSpecification(E3, E4), MoveCheck.MOVE_SPEC_FROM_SQUARE_EMPTY);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testMoveSpecFromSquareOccupiedByOpponent() {
-    check(new Board(), new MoveSpecification(E7, E5), MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
+    check(new Board(false), new MoveSpecification(E7, E5), MoveCheck.MOVE_SPEC_FROM_SQUARE_OCCUPIED_BY_OPPONENT);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testMoveSpecNonPawnPromotionPieceSet() {
-    check(new Board(), new MoveSpecification(B1, C3, PromotionPieceType.QUEEN),
+    check(new Board(false), new MoveSpecification(B1, C3, PromotionPieceType.QUEEN),
         MoveCheck.MOVE_SPEC_NON_PAWN_PROMOTION_PIECE_SET);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testMoveSpecPawnNonPromotionPromotionPiece() {
-    check(new Board(), new MoveSpecification(E2, E4, PromotionPieceType.QUEEN),
+    check(new Board(false), new MoveSpecification(E2, E4, PromotionPieceType.QUEEN),
         MoveCheck.MOVE_SPEC_PAWN_NON_PROMOTION_PROMOTION_PIECE);
   }
 
@@ -61,13 +61,13 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   @Test
   void testMovementNotPossible() {
-    check(new Board(), new MoveSpecification(B1, B4), MoveCheck.MOVEMENT_NOT_POSSIBLE);
+    check(new Board(false), new MoveSpecification(B1, B4), MoveCheck.MOVEMENT_NOT_POSSIBLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testMovementToSquareOccupiedByOwnPiece() {
-    check(new Board(), new MoveSpecification(A1, A2), MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
+    check(new Board(false), new MoveSpecification(A1, A2), MoveCheck.MOVEMENT_TO_SQUARE_OCCUPIED_BY_OWN_PIECE);
   }
 
   @SuppressWarnings("static-method")
@@ -117,7 +117,7 @@ class TestValidateNewMove extends AbstractTestValidateNewMove {
   @SuppressWarnings("static-method")
   @Test
   void testKingCapturesGuardedPiece() {
-    // Black pawn on h7 ensures the position is not in INSUFFICIENT_MATERIAL_BOTH (which the
+    // Black pawn on h7 ensures the position is not in DEAD_POSITION_INSUFFICIENT_MATERIAL (which the
     // library otherwise reports for K + same-colour-bishop pair vs K) so the strict-pipeline
     // GAME_ALREADY_ENDED check does not pre-empt this test.
     check("4k3/7p/8/b7/8/8/3b4/4K3 w - - 0 1", new MoveSpecification(E1, D2), MoveCheck.KING_CAPTURES_GUARDED_PIECE);

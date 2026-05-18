@@ -5,10 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicCheckmateVariousWhite extends AbstractTestBasic {
@@ -18,10 +17,10 @@ class TestBasicCheckmateVariousWhite extends AbstractTestBasic {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CHECKMATE_VARIOUS_WHITE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
-      logger.info(testCase.pgnFileName());
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_CHECKMATE_VARIOUS_WHITE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
+      logger.info(testCase.pgnName());
+      final Board board = testCase.finalPosition();
       checkCheckmate(board);
     }
   }

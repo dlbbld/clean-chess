@@ -12,7 +12,7 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StandardTag;
 import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.common.utility.FileUtility;
@@ -58,24 +58,24 @@ public abstract class GeneratePgnInformationUtility {
       @SuppressWarnings("null") @NonNull final String fileName = file.getName();
       logger.info("Processing " + fileName);
 
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(inputFolderPath, fileName);
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(inputFolderPath, fileName);
       final StringBuilder newLine = new StringBuilder();
 
       newLine.append(fileName).append(";");
 
-      newLine.append(calculateWhiteLastName(pgnFile)).append(";");
-      newLine.append(calculateBlackLastName(pgnFile)).append(";");
+      newLine.append(calculateWhiteLastName(pgnGame)).append(";");
+      newLine.append(calculateBlackLastName(pgnGame)).append(";");
 
-      final String date = TagUtility.calculateTagValue(pgnFile, StandardTag.DATE);
+      final String date = TagUtility.calculateTagValue(pgnGame, StandardTag.DATE);
       newLine.append(date).append(";");
 
-      final String site = TagUtility.calculateTagValue(pgnFile, StandardTag.SITE);
+      final String site = TagUtility.calculateTagValue(pgnGame, StandardTag.SITE);
       newLine.append(site).append(";");
 
-      final String event = TagUtility.calculateTagValue(pgnFile, "Event");
+      final String event = TagUtility.calculateTagValue(pgnGame, "Event");
       newLine.append(event).append(";");
 
-      final String result = TagUtility.calculateTagValue(pgnFile, StandardTag.RESULT);
+      final String result = TagUtility.calculateTagValue(pgnGame, StandardTag.RESULT);
       newLine.append(result);
 
       lineList.add(Nulls.toString(newLine));
@@ -85,13 +85,13 @@ public abstract class GeneratePgnInformationUtility {
     FileUtility.writeFile(outputFolderPath, outputFileName, lineList);
   }
 
-  private static String calculateWhiteLastName(PgnFile pgnFile) {
-    final String playerInformation = TagUtility.calculateTagValue(pgnFile, StandardTag.WHITE);
+  private static String calculateWhiteLastName(PgnGame pgnGame) {
+    final String playerInformation = TagUtility.calculateTagValue(pgnGame, StandardTag.WHITE);
     return calculateLastNameFromChessBasePlayerInformation(playerInformation);
   }
 
-  private static String calculateBlackLastName(PgnFile pgnFile) {
-    final String playerInformation = TagUtility.calculateTagValue(pgnFile, StandardTag.BLACK);
+  private static String calculateBlackLastName(PgnGame pgnGame) {
+    final String playerInformation = TagUtility.calculateTagValue(pgnGame, StandardTag.BLACK);
     return calculateLastNameFromChessBasePlayerInformation(playerInformation);
   }
 

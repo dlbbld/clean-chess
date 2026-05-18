@@ -20,34 +20,34 @@ import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.PgnHalfMove;
 
 /**
- * PGN serialisation entry points. The library defaults to {@link WriteMode#SEMANTIC} — emits the parse model
- * as-given without inventing content. {@link WriteMode#ARCHIVAL} runs the model through
- * {@link PgnArchivalNormalization} first to produce a PGN spec section 8.1.1-conformant artifact.
+ * PGN serialisation entry points. The library defaults to {@link WriteMode#SEMANTIC} — emits the parse model as-given
+ * without inventing content. {@link WriteMode#ARCHIVAL} runs the model through {@link PgnArchivalNormalization} first
+ * to produce a PGN spec section 8.1.1-conformant artifact.
  */
 public class PgnCreate {
 
   /** PGN export-format guideline: lines should not exceed 79 characters. */
   public static final int MAX_LINE_LENGTH = 79;
 
-  public static String createPgnFileString(Board board) {
-    return createPgnFileString(createPgnFile(board));
+  public static String createPgnString(Board board) {
+    return createPgnString(createPgnGame(board));
   }
 
-  public static String createPgnFileString(PgnFile pgnFile) {
-    return createPgnFileString(pgnFile, WriteMode.SEMANTIC);
+  public static String createPgnString(PgnGame pgnGame) {
+    return createPgnString(pgnGame, WriteMode.SEMANTIC);
   }
 
-  public static String createPgnFileString(PgnFile pgnFile, WriteMode writeMode) {
-    return appendEmptyLine(BasicUtility.convertToString(createPgnFileLines(pgnFile, writeMode)));
+  public static String createPgnString(PgnGame pgnGame, WriteMode writeMode) {
+    return appendEmptyLine(BasicUtility.convertToString(createPgnLines(pgnGame, writeMode)));
   }
 
-  public static List<String> createPgnFileLines(PgnFile pgnFile) {
-    return createPgnFileLines(pgnFile, WriteMode.SEMANTIC);
+  public static List<String> createPgnLines(PgnGame pgnGame) {
+    return createPgnLines(pgnGame, WriteMode.SEMANTIC);
   }
 
-  public static List<String> createPgnFileLines(PgnFile pgnFile, WriteMode writeMode) {
-    final PgnFile effective = writeMode == WriteMode.ARCHIVAL ? PgnArchivalNormalization.apply(pgnFile) : pgnFile;
-    return calculatePgnFileFileLines(effective.tagList(), effective.pregameCommentary(), effective.startFen(),
+  public static List<String> createPgnLines(PgnGame pgnGame, WriteMode writeMode) {
+    final PgnGame effective = writeMode == WriteMode.ARCHIVAL ? PgnArchivalNormalization.apply(pgnGame) : pgnGame;
+    return calculateFileLines(effective.tagList(), effective.pregameCommentary(), effective.startFen(),
         effective.halfMoveList(), effective.terminationMarker());
   }
 
@@ -55,7 +55,7 @@ public class PgnCreate {
     return text + "\n";
   }
 
-  private static List<String> calculatePgnFileFileLines(List<Tag> tagList, PgnCommentary pregameCommentary,
+  private static List<String> calculateFileLines(List<Tag> tagList, PgnCommentary pregameCommentary,
       Fen startFen, List<PgnHalfMove> halfMoveList, @Nullable ResultTagValue terminationMarker) {
 
     final List<String> fileLines = new ArrayList<>();
@@ -83,7 +83,7 @@ public class PgnCreate {
       movetextIncludingPreGameCommentary = "{" + pregameCommentaryValue + "}" + " " + moves + terminationSuffix;
     }
 
-    // Lenient parses can produce a PgnFile with no pregame commentary, no half-moves, and no termination marker
+    // Lenient parses can produce a PgnGame with no pregame commentary, no half-moves, and no termination marker
     // (a tags-only PGN). The movetext string is then empty; PgnLineWrapper rejects empty input, so skip the
     // wrap call and leave the movetext section blank. The output stays structurally well-formed (tag section,
     // separator, trailing blank) and re-parses cleanly under the lenient parser.
@@ -122,8 +122,8 @@ public class PgnCreate {
         case NONE -> throw new IllegalArgumentException();
         default -> throw new IllegalArgumentException();
       };
-      case FIVE_FOLD_REPETITION_RULE, INSUFFICIENT_MATERIAL_BOTH -> ResultTagValue.DRAW;
-      case INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY, INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY, ONGOING -> ResultTagValue.ONGOING;
+      case FIVE_FOLD_REPETITION_RULE, DEAD_POSITION_INSUFFICIENT_MATERIAL, DEAD_POSITION_UNWINNABLE_QUICK -> ResultTagValue.DRAW;
+      case INSUFFICIENT_MATERIAL_WHITE_ONLY, INSUFFICIENT_MATERIAL_BLACK_ONLY, ONGOING -> ResultTagValue.ONGOING;
       case SEVENTY_FIVE_MOVE_RULE, STALEMATE -> ResultTagValue.DRAW;
       default -> throw new IllegalArgumentException();
     };
@@ -140,9 +140,9 @@ public class PgnCreate {
   /**
    * Inverse of the tokeniser's tag-string unescape (see {@code PgnTokenizer.readTagValueString}). PGN spec section
    * 8.1.2 defines two escapes inside a string token: a backslash represents a literal backslash and a backslash
-   * followed by a quote represents a literal quote. Other characters do not require escaping. Order matters —
-   * backslash must be doubled before quotes are escaped, otherwise the backslash introduced by quote-escaping
-   * would itself be re-escaped.
+   * followed by a quote represents a literal quote. Other characters do not require escaping. Order matters — backslash
+   * must be doubled before quotes are escaped, otherwise the backslash introduced by quote-escaping would itself be
+   * re-escaped.
    */
   private static String escapeTagValue(String value) {
     return Nulls.replace(Nulls.replace(value, "\\", "\\\\"), "\"", "\\\"");
@@ -196,25 +196,25 @@ public class PgnCreate {
   }
 
   /**
-   * Creates a PgnFile from a Board with a caller-supplied tag list. The tag list is preserved verbatim (no
-   * fabrication, no sort). The termination marker is derived from the board's game-status — semantic-mode export
-   * will emit it as the movetext trailer; archival-mode export will also synthesise a Result tag from it.
+   * Creates a PgnGame from a Board with a caller-supplied tag list. The tag list is preserved verbatim (no fabrication,
+   * no sort). The termination marker is derived from the board's game-status — semantic-mode export will emit it as the
+   * movetext trailer; archival-mode export will also synthesise a Result tag from it.
    */
-  public static PgnFile createPgnFile(Board board, List<Tag> tagList) {
+  public static PgnGame createPgnGame(Board board, List<Tag> tagList) {
 
     final List<PgnHalfMove> halfMoveList = calculatePgnHalfMoveList(board.getHalfMoveList());
 
-    return new PgnFile(Nulls.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
+    return new PgnGame(Nulls.copyOfList(tagList), board.getInitialFen(), PgnCommentary.EMPTY,
         Nulls.copyOfList(halfMoveList), calculateResultTagValue(board));
   }
 
   /**
-   * Creates a PgnFile from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty
-   * when the board started from the initial position, or just SetUp+FEN when from a non-initial position. STR
-   * fabrication does not happen here — callers who want a spec section 8.1.1-conformant artifact pass
-   * {@link WriteMode#ARCHIVAL} to {@link PgnWriter} or {@link #createPgnFileString(PgnFile, WriteMode)}.
+   * Creates a PgnGame from a Board with no caller-supplied tags. The tag list is the minimal honest shape: empty when
+   * the board started from the initial position, or just SetUp+FEN when from a non-initial position. STR fabrication
+   * does not happen here — callers who want a spec section 8.1.1-conformant artifact pass {@link WriteMode#ARCHIVAL} to
+   * {@link PgnWriter} or {@link #createPgnString(PgnGame, WriteMode)}.
    */
-  public static PgnFile createPgnFile(Board board) {
+  public static PgnGame createPgnGame(Board board) {
 
     final List<Tag> tagList = new ArrayList<>();
 
@@ -223,7 +223,7 @@ public class PgnCreate {
       tagList.add(new Tag(StandardTag.FEN.getName(), board.getInitialFen().fen()));
     }
 
-    return createPgnFile(board, tagList);
+    return createPgnGame(board, tagList);
   }
 
 }

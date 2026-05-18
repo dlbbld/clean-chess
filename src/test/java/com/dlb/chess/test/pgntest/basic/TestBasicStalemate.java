@@ -8,10 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicStalemate extends AbstractTestBasic {
@@ -21,11 +20,11 @@ class TestBasicStalemate extends AbstractTestBasic {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_STALEMATE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_STALEMATE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
+      final Board board = testCase.finalPosition();
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
       assertFalse(board.isCheck());
       assertFalse(board.isCheckmate());

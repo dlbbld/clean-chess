@@ -14,7 +14,6 @@ import org.eclipse.jdt.annotation.NonNull;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.utility.BasicUtility;
-import com.dlb.chess.common.utility.GeneralUtility;
 
 class MobilitySolution {
 
@@ -111,7 +110,7 @@ class MobilitySolution {
       }
       final var pieceDescription = new StringBuilder();
       pieceDescription.append(piecePlacement.toString());
-      final String squareList = GeneralUtility.calculateSquareList(reachable);
+      final String squareList = BasicUtility.calculateSquareList(reachable);
       pieceDescription.append(": ");
       pieceDescription.append(squareList);
       @SuppressWarnings("null") @NonNull final String string = pieceDescription.toString();

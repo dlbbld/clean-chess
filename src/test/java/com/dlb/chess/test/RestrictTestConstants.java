@@ -33,8 +33,10 @@ public abstract class RestrictTestConstants {
   public static final boolean IS_RESTRICT_PGN_EXPORT_IDEMPOTENCY_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_WRITER_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_STARTING_POSITION_NONE_AGAINST_INITIAL_FEN_TEST = true && IS_RESTRICT_PGN;
-  public static final boolean IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_WINNABILITY_TEST = true && IS_RESTRICT_PGN;
+  public static final boolean IS_RESTRICT_PGN_UNWINNABILITY_QUICK_AGAINST_LIMITED_ORACLE_TEST = true && IS_RESTRICT_PGN;
   public static final boolean IS_RESTRICT_PGN_REPORT_TEST = true && IS_RESTRICT_PGN;
+  public static final boolean IS_RESTRICT_UNWINNABLE_FULL_FOR_LICHESS_HELPMATE_TEST = true && IS_RESTRICT_PGN;
+  public static final boolean IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST = true && IS_RESTRICT_PGN;
 
   public static final PgnTestInclusion PGN_TEST_INCLUSION = IS_FULL ? PgnTestInclusion.ALL
       : PgnTestInclusion.ALL_EXCEPT_LONGEST_POSSIBLE;
@@ -42,9 +44,9 @@ public abstract class RestrictTestConstants {
   // Long running tests — excluded entirely via JUnit assumeFalse. Driven by the master switch.
   public static final boolean IS_EXCLUDE_LONG_RUNNING_SAN_VALIDATE_FORMAT_FAILURE_ORACLE_COMPLEMENT_TEST = !IS_FULL;
 
-  // TestUnwinnabilityFull.testPgnFileExpected analyzes one heavy PGN (~10 seconds). Only useful
+  // TestUnwinnabilityFull.testPgnExpected analyzes one heavy PGN (~10 seconds). Only useful
   // when changes touch the unwinnability-full analyzer.
-  public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_FILE_EXPECTED_TEST = !IS_FULL;
+  public static final boolean IS_EXCLUDE_LONG_RUNNING_UNWINNABILITY_FULL_PGN_EXPECTED_TEST = !IS_FULL;
 
   // TestPgnCorpusNotPlaysBeyondAudit walks the whole corpus (~1300 PGN files) and parses each
   // through the strict parser to confirm none plays beyond a FIDE-automatic termination. Takes

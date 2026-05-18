@@ -12,7 +12,7 @@ import com.dlb.chess.board.CommonTestUtility;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestStrictPgnParserFromCustomPosition {
@@ -60,17 +60,17 @@ class TestStrictPgnParserFromCustomPosition {
   }
 
   private static void checkGame(String pgn, String... hardCodedCompleteSanList) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, pgn);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(PGN_TEST_FOLDER_PATH, pgn);
 
-    assertNotEquals(FenConstants.FEN_INITIAL, pgnFile.startFen());
+    assertNotEquals(FenConstants.FEN_INITIAL, pgnGame.startFen());
 
-    final Board boardFromFen = new Board(pgnFile.startFen());
+    final Board boardFromFen = new Board(pgnGame.startFen(), false);
 
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       boardFromFen.moveStrict(halfMove.san());
     }
 
-    final Board boardFromFirstMove = new Board();
+    final Board boardFromFirstMove = new Board(false);
     for (final String san : hardCodedCompleteSanList) {
       @SuppressWarnings("null") @NonNull final String nonNullSan = san;
       boardFromFirstMove.moveStrict(nonNullSan);

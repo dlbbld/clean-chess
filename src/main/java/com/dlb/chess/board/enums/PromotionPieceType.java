@@ -11,7 +11,9 @@ public enum PromotionPieceType {
   NONE(PieceType.NONE);
 
   @SuppressWarnings("null")
-  public static final ImmutableList<PromotionPieceType> REAL = ImmutableList.of(ROOK, KNIGHT, BISHOP, QUEEN);
+  // Move-ordering rule (Q, R, B, N) - see PromotionPieceTypeUtility for the rationale.
+  // Enum declaration above keeps the static catalog order (P, R, N, B, Q, K) shared with PieceType.
+  public static final ImmutableList<PromotionPieceType> REAL = ImmutableList.of(QUEEN, ROOK, BISHOP, KNIGHT);
 
   private final PieceType pieceType;
 

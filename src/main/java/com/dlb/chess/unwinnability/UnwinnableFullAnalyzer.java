@@ -1,10 +1,14 @@
 package com.dlb.chess.unwinnability;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.common.model.DynamicPosition;
+import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 
 //Figure 9 Main routine for deciding chess unwinnability. It is based on our semi-static
@@ -18,28 +22,32 @@ public class UnwinnableFullAnalyzer {
   private static final int MAX_DEPTH = 100;
   private static final int GLOBAL_NODES_BOUND = 500000;
 
-  public static UnwinnableFullAnalysis unwinnableFull(Board board, Side winner) {
+  /**
+   * Runs the algorithm on a fresh detection-off board built from the caller's FEN. The caller's board is not mutated,
+   * and the analyzer's internal {@code board.move(...)} calls don't trigger the dead-position auto-detect (which itself
+   * runs the quick analyzer). Repetition history from the caller's game is lost on the fresh board.
+   */
+  public static UnwinnabilityFullAnalysis unwinnableFull(Board input, Side winner) {
+    final Board board = copyCurrentPositionForFullSearch(input);
     return unwinnableFull(board, winner, false, new MobilitySolution());
   }
 
   // Inputs: position, intended winner
   // Output: Unwinnable or Winnable (definite solution to the chess unwinnability problem)
-  private static UnwinnableFullAnalysis unwinnableFull(Board board, Side winner, boolean isHasMobilitySolution,
+  private static UnwinnabilityFullAnalysis unwinnableFull(Board board, Side winner, boolean isHasMobilitySolution,
       MobilitySolution calculatedMobilitySolution) {
 
     // add optimization from code
     // if position is advanced cannot use the provided mobility solution if any
     var isCanUseMobilitySolution = true;
-    var isForcedMove = board.getLegalMoveSet().size() == 1;
-    // to avoid endless loops in positions with each side having one repeating forced move
-    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
+    var isForcedMove = board.getLegalMoves().size() == 1;
     var totalForcedMoves = 0;
-    while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
+    final Set<DynamicPosition> forcedPositionSet = new HashSet<>();
+    while (isForcedMove && forcedPositionSet.add(board.getDynamicPosition())) {
       isCanUseMobilitySolution = false;
-      final LegalMove onlyLegalMove = Nulls.getFirst(new ArrayList<>(board.getLegalMoveSet()));
+      final LegalMove onlyLegalMove = Nulls.getFirst(board.getLegalMoves());
       board.move(onlyLegalMove.moveSpecification());
-      isForcedMove = board.getLegalMoveSet().size() == 1;
-      isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
+      isForcedMove = board.getLegalMoves().size() == 1;
       totalForcedMoves++;
     }
 
@@ -52,7 +60,7 @@ public class UnwinnableFullAnalyzer {
     }
     if (UnwinnableSemiStatic.unwinnableSemiStatic(board, winner, mobilitySolution)) {
       undoForcedMoves(board, totalForcedMoves);
-      return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+      return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNWINNABLE, new ArrayList<>());
     }
 
     // we must instantiate the class here to share the transposition table between calls
@@ -68,19 +76,19 @@ public class UnwinnableFullAnalyzer {
       globalNodeCount += helpmateAnalysis.localNodesCount();
 
       if (globalNodeCount > GLOBAL_NODES_BOUND) {
-        return new UnwinnableFullAnalysis(UnwinnableFull.UNDETERMINED, new ArrayList<>());
+        return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNDETERMINED, new ArrayList<>());
       }
 
       switch (helpmateAnalysis.findHelpmateResult()) {
         case YES:
           // 4: if bd = true then return Winnable
           undoForcedMoves(board, totalForcedMoves);
-          return new UnwinnableFullAnalysis(UnwinnableFull.WINNABLE, helpmateAnalysis.mateLine());
+          return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.WINNABLE, helpmateAnalysis.mateLine());
         case NO:
           // 5: else if the search was not interrupted (in step 4 of Figure 5) then
           // 6: return Unwinnable
           undoForcedMoves(board, totalForcedMoves);
-          return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+          return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNWINNABLE, new ArrayList<>());
         case UNKNOWN:
           // the algorithm continues with next depth
           break;
@@ -90,7 +98,7 @@ public class UnwinnableFullAnalyzer {
     }
 
     undoForcedMoves(board, totalForcedMoves);
-    return new UnwinnableFullAnalysis(UnwinnableFull.UNWINNABLE, new ArrayList<>());
+    return new UnwinnabilityFullAnalysis(UnwinnabilityFullVerdict.UNWINNABLE, new ArrayList<>());
   }
 
   private static void undoForcedMoves(Board board, int totalForcedMoves) {
@@ -98,4 +106,12 @@ public class UnwinnableFullAnalyzer {
       board.unmove();
     }
   }
+
+  private static Board copyCurrentPositionForFullSearch(Board input) {
+    final Fen fen = new Fen(input.getFen(), input.getStaticPosition(), input.getHavingMove(),
+        input.getCastlingRightWhite(), input.getCastlingRightBlack(), input.getEnPassantCaptureTargetSquare(), 0,
+        input.getFullMoveNumberForNextHalfMove());
+    return new Board(fen, false);
+  }
+
 }

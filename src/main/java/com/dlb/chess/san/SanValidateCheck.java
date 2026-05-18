@@ -8,7 +8,7 @@ abstract class SanValidateCheck extends AbstractSan {
 
   public static void validateSanTerminalMarker(Board board, SanTerminalMarker sanSanTerminalMarker,
       MoveSpecification moveSpecification) {
-    final SanTerminalMarker boardSanTerminalMarker = calculateBoardSanTerminalMarker(board, moveSpecification);
+    final SanTerminalMarker boardSanTerminalMarker = calculateSanTerminalMarker(board, moveSpecification);
 
     switch (sanSanTerminalMarker) {
       case CHECKMATE:
@@ -57,7 +57,7 @@ abstract class SanValidateCheck extends AbstractSan {
     }
   }
 
-  private static SanTerminalMarker calculateBoardSanTerminalMarker(Board board, MoveSpecification moveSpecification) {
+  private static SanTerminalMarker calculateSanTerminalMarker(Board board, MoveSpecification moveSpecification) {
     board.move(moveSpecification);
 
     SanTerminalMarker sanTerminalMarker;

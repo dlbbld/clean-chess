@@ -16,12 +16,12 @@ abstract class ThreefoldClaimAheadUtility {
   private static List<List<ClaimAhead>> calculateThreefoldClaimAhead(List<LegalMove> legalMoveList, Fen initialFen) {
 
     final List<List<ClaimAhead>> resultListList = new ArrayList<>();
-    final Board board = new Board(initialFen);
+    final Board board = new Board(initialFen, false);
 
     for (final LegalMove legalMove : legalMoveList) {
       final List<ClaimAhead> resultList = new ArrayList<>();
       board.move(legalMove.moveSpecification());
-      for (final LegalMove legalMoveCheckAhead : board.getLegalMoveSet()) {
+      for (final LegalMove legalMoveCheckAhead : board.getLegalMoves()) {
         board.move(legalMoveCheckAhead.moveSpecification());
         if (board.isThreefoldRepetition()) {
           resultList.add(new ClaimAhead(legalMoveCheckAhead, board.getFullMoveNumber(), board.getSan()));

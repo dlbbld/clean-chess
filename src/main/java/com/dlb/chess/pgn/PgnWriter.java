@@ -11,38 +11,38 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 
 /**
- * Serialises a {@link PgnFile} (or a {@link Board}) to a PGN file on disk. All overloads default to
+ * Serialises a {@link PgnGame} (or a {@link Board}) to a PGN file on disk. All overloads default to
  * {@link WriteMode#SEMANTIC} — honest preservation of what the parse model contains. Callers who need a PGN spec
  * section 8.1.1-conformant artifact pass {@link WriteMode#ARCHIVAL} explicitly.
  */
 public class PgnWriter {
 
   // -------------------------------------------------------------------------------------------------
-  // PgnFile entry points — semantic default, explicit-mode overloads
+  // PgnGame entry points — semantic default, explicit-mode overloads
   // -------------------------------------------------------------------------------------------------
 
-  public static void writePgnFile(PgnFile pgnFile, String pgnFilePath) {
-    writePgnFile(pgnFile, Nulls.pathOf(pgnFilePath));
+  public static void writePgn(PgnGame pgnGame, String pgnPath) {
+    writePgn(pgnGame, Nulls.pathOf(pgnPath));
   }
 
-  public static void writePgnFile(PgnFile pgnFile, String pgnFilePath, WriteMode writeMode) {
-    writePgnFile(pgnFile, Nulls.pathOf(pgnFilePath), writeMode);
+  public static void writePgn(PgnGame pgnGame, String pgnPath, WriteMode writeMode) {
+    writePgn(pgnGame, Nulls.pathOf(pgnPath), writeMode);
   }
 
-  public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName) {
-    writePgnFile(pgnFile, Nulls.pathResolve(folderPath, pgnFileName));
+  public static void writePgn(PgnGame pgnGame, Path folderPath, String pgnName) {
+    writePgn(pgnGame, Nulls.pathResolve(folderPath, pgnName));
   }
 
-  public static void writePgnFile(PgnFile pgnFile, Path folderPath, String pgnFileName, WriteMode writeMode) {
-    writePgnFile(pgnFile, Nulls.pathResolve(folderPath, pgnFileName), writeMode);
+  public static void writePgn(PgnGame pgnGame, Path folderPath, String pgnName, WriteMode writeMode) {
+    writePgn(pgnGame, Nulls.pathResolve(folderPath, pgnName), writeMode);
   }
 
-  public static void writePgnFile(PgnFile pgnFile, Path filePath) {
-    writePgnFile(pgnFile, filePath, WriteMode.SEMANTIC);
+  public static void writePgn(PgnGame pgnGame, Path filePath) {
+    writePgn(pgnGame, filePath, WriteMode.SEMANTIC);
   }
 
-  public static void writePgnFile(PgnFile pgnFile, Path filePath, WriteMode writeMode) {
-    final List<String> fileLines = PgnCreate.createPgnFileLines(pgnFile, writeMode);
+  public static void writePgn(PgnGame pgnGame, Path filePath, WriteMode writeMode) {
+    final List<String> fileLines = PgnCreate.createPgnLines(pgnGame, writeMode);
     writeLinesReplacing(filePath, fileLines);
   }
 
@@ -50,23 +50,23 @@ public class PgnWriter {
   // Board entry points — semantic default, explicit-mode overloads
   // -------------------------------------------------------------------------------------------------
 
-  public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName) {
-    writePgnFile(board, tagList, folderPath, pgnFileName, WriteMode.SEMANTIC);
+  public static void writePgn(Board board, List<Tag> tagList, Path folderPath, String pgnName) {
+    writePgn(board, tagList, folderPath, pgnName, WriteMode.SEMANTIC);
   }
 
-  public static void writePgnFile(Board board, List<Tag> tagList, Path folderPath, String pgnFileName,
+  public static void writePgn(Board board, List<Tag> tagList, Path folderPath, String pgnName,
       WriteMode writeMode) {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board, tagList);
-    writePgnFile(pgnFile, folderPath, pgnFileName, writeMode);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board, tagList);
+    writePgn(pgnGame, folderPath, pgnName, writeMode);
   }
 
-  public static void writePgnFile(Board board, Path folderPath, String pgnFileName) {
-    writePgnFile(board, folderPath, pgnFileName, WriteMode.SEMANTIC);
+  public static void writePgn(Board board, Path folderPath, String pgnName) {
+    writePgn(board, folderPath, pgnName, WriteMode.SEMANTIC);
   }
 
-  public static void writePgnFile(Board board, Path folderPath, String pgnFileName, WriteMode writeMode) {
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-    writePgnFile(pgnFile, folderPath, pgnFileName, writeMode);
+  public static void writePgn(Board board, Path folderPath, String pgnName, WriteMode writeMode) {
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
+    writePgn(pgnGame, folderPath, pgnName, writeMode);
   }
 
   // -------------------------------------------------------------------------------------------------

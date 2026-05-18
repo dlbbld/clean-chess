@@ -10,10 +10,9 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PromotionPieceType;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicPromotionSquareWhite extends AbstractTestBasic {
@@ -21,44 +20,44 @@ class TestBasicPromotionSquareWhite extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicPromotionSquareWhite.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_promotion_square_straight_a8.pgn");
-    pgnFileNameList.add("02_white_promotion_square_straight_b8.pgn");
-    pgnFileNameList.add("03_white_promotion_square_straight_c8.pgn");
-    pgnFileNameList.add("04_white_promotion_square_straight_d8.pgn");
-    pgnFileNameList.add("05_white_promotion_square_straight_e8.pgn");
-    pgnFileNameList.add("06_white_promotion_square_straight_f8.pgn");
-    pgnFileNameList.add("07_white_promotion_square_straight_g8.pgn");
-    pgnFileNameList.add("08_white_promotion_square_straight_h8.pgn");
-    pgnFileNameList.add("09_white_promotion_square_right_a8.pgn");
-    pgnFileNameList.add("10_white_promotion_square_right_b8.pgn");
-    pgnFileNameList.add("11_white_promotion_square_right_c8.pgn");
-    pgnFileNameList.add("12_white_promotion_square_right_d8.pgn");
-    pgnFileNameList.add("13_white_promotion_square_right_e8.pgn");
-    pgnFileNameList.add("14_white_promotion_square_right_f8.pgn");
-    pgnFileNameList.add("15_white_promotion_square_right_g8.pgn");
-    pgnFileNameList.add("16_white_promotion_square_left_b8.pgn");
-    pgnFileNameList.add("17_white_promotion_square_left_c8.pgn");
-    pgnFileNameList.add("18_white_promotion_square_left_d8.pgn");
-    pgnFileNameList.add("19_white_promotion_square_left_e8.pgn");
-    pgnFileNameList.add("20_white_promotion_square_left_f8.pgn");
-    pgnFileNameList.add("21_white_promotion_square_left_g8.pgn");
-    pgnFileNameList.add("22_white_promotion_square_left_h8.pgn");
+    pgnNameList.add("01_white_promotion_square_straight_a8.pgn");
+    pgnNameList.add("02_white_promotion_square_straight_b8.pgn");
+    pgnNameList.add("03_white_promotion_square_straight_c8.pgn");
+    pgnNameList.add("04_white_promotion_square_straight_d8.pgn");
+    pgnNameList.add("05_white_promotion_square_straight_e8.pgn");
+    pgnNameList.add("06_white_promotion_square_straight_f8.pgn");
+    pgnNameList.add("07_white_promotion_square_straight_g8.pgn");
+    pgnNameList.add("08_white_promotion_square_straight_h8.pgn");
+    pgnNameList.add("09_white_promotion_square_right_a8.pgn");
+    pgnNameList.add("10_white_promotion_square_right_b8.pgn");
+    pgnNameList.add("11_white_promotion_square_right_c8.pgn");
+    pgnNameList.add("12_white_promotion_square_right_d8.pgn");
+    pgnNameList.add("13_white_promotion_square_right_e8.pgn");
+    pgnNameList.add("14_white_promotion_square_right_f8.pgn");
+    pgnNameList.add("15_white_promotion_square_right_g8.pgn");
+    pgnNameList.add("16_white_promotion_square_left_b8.pgn");
+    pgnNameList.add("17_white_promotion_square_left_c8.pgn");
+    pgnNameList.add("18_white_promotion_square_left_d8.pgn");
+    pgnNameList.add("19_white_promotion_square_left_e8.pgn");
+    pgnNameList.add("20_white_promotion_square_left_f8.pgn");
+    pgnNameList.add("21_white_promotion_square_left_g8.pgn");
+    pgnNameList.add("22_white_promotion_square_left_h8.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_PROMOTION_SQUARE_WHITE);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_PROMOTION_SQUARE_WHITE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_PROMOTION_SQUARE_WHITE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_PROMOTION_SQUARE_WHITE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
+      final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_white_promotion_square_straight_a8.pgn" -> checkPromotion(WHITE, A7, A8, Piece.NONE,
             PromotionPieceType.QUEEN, board);
         case "02_white_promotion_square_straight_b8.pgn" -> checkPromotion(WHITE, B7, B8, Piece.NONE,

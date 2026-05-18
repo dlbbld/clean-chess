@@ -9,12 +9,12 @@ import com.dlb.chess.board.LibraryCarlosBoard;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.constants.FenConstants;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 class TestBoardAgainstEachOther {
 
@@ -26,8 +26,8 @@ class TestBoardAgainstEachOther {
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
+      for (final PgnTestCase testCase : testCaseList.list()) {
         // takes 50 minutes with all test cases
         if (RestrictTestConstants.IS_RESTRICT_PGN_BOARD_API_AGAINST_EACH_OTHER_TEST) {
           switch (testCaseList.pgnTest()) {
@@ -43,24 +43,24 @@ class TestBoardAgainstEachOther {
           }
         }
 
-        final String pgnFileName = testCase.pgnFileName();
-        logger.info(pgnFileName);
+        final String pgnName = testCase.pgnName();
+        logger.info(pgnName);
 
-        final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
-            pgnFileName);
+        final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(testCaseList.pgnTest().getFolderPath(),
+            pgnName);
 
-        if (pgnFile.startFen() != FenConstants.FEN_INITIAL) {
+        if (pgnGame.startFen() != FenConstants.FEN_INITIAL) {
           // API Carlos does not generate correct SAN when starting from position
-          logger.warn("Skipping PGN as starting from non-initital position:" + pgnFileName);
+          logger.warn("Skipping PGN as starting from non-initital position:" + pgnName);
           continue;
         }
 
-        final Board board = new Board();
+        final Board board = new Board(false);
         final LibraryCarlosBoard carlosBoard = new LibraryCarlosBoard();
 
-        for (final PgnHalfMove pgnFileHalfMove : pgnFile.halfMoveList()) {
+        for (final PgnHalfMove pgnHalfMove : pgnGame.halfMoveList()) {
 
-          final String san = pgnFileHalfMove.san();
+          final String san = pgnHalfMove.san();
           board.moveStrict(san);
           carlosBoard.moveStrict(san);
 

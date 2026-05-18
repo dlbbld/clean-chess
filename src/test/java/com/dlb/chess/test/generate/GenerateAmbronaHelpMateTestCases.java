@@ -19,7 +19,7 @@ import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.common.ucimove.utility.UciMoveValidationUtility;
 import com.dlb.chess.model.UciMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.PgnWriter;
 import com.dlb.chess.pgn.ResultTagValue;
 import com.dlb.chess.pgn.StandardTag;
@@ -27,10 +27,10 @@ import com.dlb.chess.pgn.Tag;
 import com.dlb.chess.report.Report;
 import com.dlb.chess.report.Reporter;
 import com.dlb.chess.test.common.utility.PgnExtensionUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public class GenerateAmbronaHelpMateTestCases {
@@ -53,14 +53,14 @@ public class GenerateAmbronaHelpMateTestCases {
     final Map<String, String> havingHelpMate = new TreeMap<>();
     populateHelpMateUci(havingHelpMate);
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.CHA_LICHESS_QUICK_NOT_DEPTH_THREE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
       final Path folderPath = testCaseList.pgnTest().getFolderPath();
-      final var report = Reporter.calculateReport(folderPath, testCase.pgnFileName());
+      final var report = Reporter.calculateReport(folderPath, testCase.pgnName());
       if (IS_CREATE_UCI_REQUIRED) {
-        printMovesAsUci(testCase.pgnFileName(), report);
+        printMovesAsUci(testCase.pgnName(), report);
       }
-      writeGameAsContinued(havingHelpMate, folderPath, testCase.pgnFileName(), report);
+      writeGameAsContinued(havingHelpMate, folderPath, testCase.pgnName(), report);
     }
   }
 
@@ -86,12 +86,12 @@ public class GenerateAmbronaHelpMateTestCases {
 
   }
 
-  private static void writeGameAsContinued(Map<String, String> havingHelpMate, Path folderExisting, String pgnFileName,
+  private static void writeGameAsContinued(Map<String, String> havingHelpMate, Path folderExisting, String pgnName,
       Report report) {
 
-    if (havingHelpMate.containsKey(pgnFileName)) {
+    if (havingHelpMate.containsKey(pgnName)) {
 
-      final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderExisting, pgnFileName);
+      final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderExisting, pgnName);
 
       final Side helpMatingSide = report.havingMove();
       final var newResultTagValue = switch (helpMatingSide) {
@@ -100,19 +100,19 @@ public class GenerateAmbronaHelpMateTestCases {
         case NONE -> throw new IllegalArgumentException();
       };
 
-      final List<Tag> newTagList = new ArrayList<>(pgnFile.tagList());
+      final List<Tag> newTagList = new ArrayList<>(pgnGame.tagList());
 
       updateTag(newTagList, StandardTag.RESULT.getName(), newResultTagValue.getValue());
       updateTag(newTagList, "Termination", "Adjudication");
 
       // play the existing moves
-      final Board board = new Board();
+      final Board board = new Board(false);
       for (final HalfMove halfMove : report.halfMoveList()) {
         board.move(halfMove.moveSpecification());
       }
 
       // play the helpmating moves
-      @SuppressWarnings("null") final var uciListAsText = havingHelpMate.get(pgnFileName);
+      @SuppressWarnings("null") final var uciListAsText = havingHelpMate.get(pgnName);
       @SuppressWarnings("null") final @NonNull String[] uciMoveStrList = uciListAsText.split(" ");
       for (@NonNull final String uciMoveStr : uciMoveStrList) {
         final UciMove uciMove = UciMoveValidationUtility.lookup(uciMoveStr);
@@ -121,15 +121,15 @@ public class GenerateAmbronaHelpMateTestCases {
       }
 
       // write the file
-      final String pgnFileNameCreate = calculatePgnNameCreate(pgnFileName);
-      PgnWriter.writePgnFile(board, newTagList, OUTPUT_FOLDER_PATH, pgnFileNameCreate);
-      logger.info("Wrote " + pgnFileNameCreate);
+      final String pgnNameCreate = calculatePgnNameCreate(pgnName);
+      PgnWriter.writePgn(board, newTagList, OUTPUT_FOLDER_PATH, pgnNameCreate);
+      logger.info("Wrote " + pgnNameCreate);
     }
   }
 
-  private static String calculatePgnNameCreate(String pgnFileName) {
-    final String pgnFileNameWithoutExtension = PgnExtensionUtility.removePgnFileExtension(pgnFileName);
-    return PgnExtensionUtility.addPgnFileExtension(pgnFileNameWithoutExtension + "_helpmate");
+  private static String calculatePgnNameCreate(String pgnName) {
+    final String pgnNameWithoutExtension = PgnExtensionUtility.removePgnExtension(pgnName);
+    return PgnExtensionUtility.addPgnExtension(pgnNameWithoutExtension + "_helpmate");
   }
 
   // we print out the below and add it to the map below manually, so we can use it in the code

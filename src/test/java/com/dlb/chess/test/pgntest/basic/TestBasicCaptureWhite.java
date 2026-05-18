@@ -8,10 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicCaptureWhite extends AbstractTestBasic {
@@ -19,47 +18,47 @@ class TestBasicCaptureWhite extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicCaptureWhite.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_capture_rook_rook.pgn");
-    pgnFileNameList.add("02_white_capture_rook_knight.pgn");
-    pgnFileNameList.add("03_white_capture_rook_bishop.pgn");
-    pgnFileNameList.add("04_white_capture_rook_queen.pgn");
-    pgnFileNameList.add("05_white_capture_rook_pawn.pgn");
-    pgnFileNameList.add("06_white_capture_knight_rook.pgn");
-    pgnFileNameList.add("07_white_capture_knight_knight.pgn");
-    pgnFileNameList.add("08_white_capture_knight_bishop.pgn");
-    pgnFileNameList.add("09_white_capture_knight_queen.pgn");
-    pgnFileNameList.add("10_white_capture_knight_pawn.pgn");
-    pgnFileNameList.add("11_white_capture_bishop_rook.pgn");
-    pgnFileNameList.add("12_white_capture_bishop_knight.pgn");
-    pgnFileNameList.add("13_white_capture_bishop_bishop.pgn");
-    pgnFileNameList.add("14_white_capture_bishop_queen.pgn");
-    pgnFileNameList.add("15_white_capture_bishop_pawn.pgn");
-    pgnFileNameList.add("16_white_capture_queen_rook.pgn");
-    pgnFileNameList.add("17_white_capture_queen_knight.pgn");
-    pgnFileNameList.add("18_white_capture_queen_bishop.pgn");
-    pgnFileNameList.add("19_white_capture_queen_queen.pgn");
-    pgnFileNameList.add("20_white_capture_queen_pawn.pgn");
-    pgnFileNameList.add("21_white_capture_king_rook.pgn");
-    pgnFileNameList.add("22_white_capture_king_knight.pgn");
-    pgnFileNameList.add("23_white_capture_king_bishop.pgn");
-    pgnFileNameList.add("24_white_capture_king_queen.pgn");
-    pgnFileNameList.add("25_white_capture_king_pawn.pgn");
+    pgnNameList.add("01_white_capture_rook_rook.pgn");
+    pgnNameList.add("02_white_capture_rook_knight.pgn");
+    pgnNameList.add("03_white_capture_rook_bishop.pgn");
+    pgnNameList.add("04_white_capture_rook_queen.pgn");
+    pgnNameList.add("05_white_capture_rook_pawn.pgn");
+    pgnNameList.add("06_white_capture_knight_rook.pgn");
+    pgnNameList.add("07_white_capture_knight_knight.pgn");
+    pgnNameList.add("08_white_capture_knight_bishop.pgn");
+    pgnNameList.add("09_white_capture_knight_queen.pgn");
+    pgnNameList.add("10_white_capture_knight_pawn.pgn");
+    pgnNameList.add("11_white_capture_bishop_rook.pgn");
+    pgnNameList.add("12_white_capture_bishop_knight.pgn");
+    pgnNameList.add("13_white_capture_bishop_bishop.pgn");
+    pgnNameList.add("14_white_capture_bishop_queen.pgn");
+    pgnNameList.add("15_white_capture_bishop_pawn.pgn");
+    pgnNameList.add("16_white_capture_queen_rook.pgn");
+    pgnNameList.add("17_white_capture_queen_knight.pgn");
+    pgnNameList.add("18_white_capture_queen_bishop.pgn");
+    pgnNameList.add("19_white_capture_queen_queen.pgn");
+    pgnNameList.add("20_white_capture_queen_pawn.pgn");
+    pgnNameList.add("21_white_capture_king_rook.pgn");
+    pgnNameList.add("22_white_capture_king_knight.pgn");
+    pgnNameList.add("23_white_capture_king_bishop.pgn");
+    pgnNameList.add("24_white_capture_king_queen.pgn");
+    pgnNameList.add("25_white_capture_king_pawn.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_CAPTURE_WHITE);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_CAPTURE_WHITE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_CAPTURE_WHITE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_CAPTURE_WHITE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
+      final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_white_capture_rook_rook.pgn" -> checkCapture(B3, B6, WHITE_ROOK, BLACK_ROOK, board);
         case "02_white_capture_rook_knight.pgn" -> checkCapture(E3, E5, WHITE_ROOK, BLACK_KNIGHT, board);
         case "03_white_capture_rook_bishop.pgn" -> checkCapture(H3, A3, WHITE_ROOK, BLACK_BISHOP, board);

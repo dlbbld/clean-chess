@@ -200,7 +200,7 @@ final class LenientSanRecover {
     final Piece movingPiece = PieceType.calculate(havingMove, pieceType);
 
     @Nullable LegalMove match = null;
-    for (final LegalMove lm : board.getLegalMoveSet()) {
+    for (final LegalMove lm : board.getLegalMoves()) {
       if (lm.movingPiece() == movingPiece && lm.moveSpecification().fromSquare().getRank() == fromRank
           && lm.moveSpecification().toSquare() == toSquare) {
         if (match != null) {

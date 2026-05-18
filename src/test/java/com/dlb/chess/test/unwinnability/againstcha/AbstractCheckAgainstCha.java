@@ -10,9 +10,9 @@ import com.dlb.chess.common.exceptions.FenAdvancedValidationException;
 import com.dlb.chess.fen.FenParserAdvanced;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.test.unwinnability.againstcha.model.UnwinnabilityRawRead;
 import com.dlb.chess.test.unwinnability.enums.UnwinnabilityMode;
@@ -48,7 +48,7 @@ public abstract class AbstractCheckAgainstCha {
       final UnwinnabilityMode chaMode = UnwinnabilityMode.calculate(chaModeStr);
 
       final var winnerStr = Nulls.get(fileLineItemList, 3);
-      final Side winner = switch (winnerStr) {
+      final var winner = switch (winnerStr) {
         case "w" -> Side.WHITE;
         case "b" -> Side.BLACK;
         default -> throw new IllegalArgumentException("Illegal winning side of \"" + winnerStr + "\" was found");
@@ -68,11 +68,33 @@ public abstract class AbstractCheckAgainstCha {
   static void createFenList() throws Exception {
 
     for (final PgnTest pgnTest : PgnTest.values()) {
-      final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
-        System.out.println(testCase.fen() + ";noLichessGameId");
+      final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+      for (final PgnTestCase testCase : testCaseList.list()) {
+        System.out.println(testCase.finalFen() + ";noLichessGameId");
       }
     }
   }
 
+  static boolean isUseTestForCha(PgnTest pgnTest) {
+    switch (pgnTest) {
+      case BASIC_FORCED:
+      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
+      case CHA_LICHESS_QUICK_DEPTH_THREE:
+      case CHA_LICHESS_QUICK_DEPTH_FOUR:
+      case CHA_LICHESS_NOT_QUICK:
+      case CHA_AMBRONA:
+      case CHA_PAWN_WALL_YES:
+      case CHA_PAWN_WALL_NO:
+      case CHA_SHALLOW_TERMINATION:
+      case CHA_HELPMATE_BEYOND_FIVEFOLD:
+      case CHA_HELPMATE_BEYOND_SEVENTY_FIVE:
+      case CHA_BASIC_MATE_DRAW:
+      case CHA_BASIC_MATE_HELPMATE_04:
+      case CHA_BASIC_MATE_HELPMATE_10:
+      case CHA_BASIC_MATE_HELPMATE_AROUND_MAX:
+        return true;
+      default:
+        return false;
+    }
+  }
 }

@@ -12,11 +12,11 @@ import com.dlb.chess.pgn.LenientPgnParserValidationProblem;
 import com.dlb.chess.pgn.LenientPgnParserValidationResult;
 
 /**
- * The lenient PGN parser routes the FEN tag through {@code LenientFenParser}. When that fails — either because
- * the FEN tag value cannot be normalised to a parseable FEN at all (the unrecoverable case), or because the
- * normalised FEN fails strict semantic validation (a position with a missing king, an impossible double-check,
- * an illegal en-passant target, etc.) — the failure is surfaced as a typed {@link
- * LenientPgnParserValidationProblem#FEN_TAG_INVALID}, not the generic {@code UNKNOWN_ERROR}.
+ * The lenient PGN parser routes the FEN tag through {@code LenientFenParser}. When that fails — either because the FEN
+ * tag value cannot be normalised to a parseable FEN at all (the unrecoverable case), or because the normalised FEN
+ * fails strict semantic validation (a position with a missing king, an impossible double-check, an illegal en-passant
+ * target, etc.) — the failure is surfaced as a typed {@link LenientPgnParserValidationProblem#FEN_TAG_INVALID}, not the
+ * generic {@code UNKNOWN_ERROR}.
  */
 @SuppressWarnings("static-method")
 class TestLenientPgnParserFenTag {
@@ -38,7 +38,7 @@ class TestLenientPgnParserFenTag {
     final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     assertFalse(result.isValid());
     assertEquals(LenientPgnParserValidationProblem.FEN_TAG_INVALID, result.problemParser());
-    assertNull(result.pgnFile());
+    assertNull(result.pgnGame());
     assertTrue(result.message().contains("FEN tag is invalid"));
   }
 
@@ -58,7 +58,7 @@ class TestLenientPgnParserFenTag {
     final LenientPgnParserValidationResult result = LenientPgnParser.validateText(pgn);
     assertFalse(result.isValid());
     assertEquals(LenientPgnParserValidationProblem.FEN_TAG_INVALID, result.problemParser());
-    assertNull(result.pgnFile());
+    assertNull(result.pgnGame());
   }
 
   @Test

@@ -40,7 +40,7 @@ Requires JDK 17 or later at runtime. Available via the [JitPack](https://jitpack
 <dependency>
   <groupId>com.github.dlbbld</groupId>
   <artifactId>clean-chess</artifactId>
-  <version>7.0.0</version>
+  <version>8.0.0</version>
 </dependency>
 ```
 
@@ -56,7 +56,7 @@ repositories {
 ```groovy
 dependencies {
     ...
-    implementation 'com.github.dlbbld:clean-chess:7.0.0'
+    implementation 'com.github.dlbbld:clean-chess:8.0.0'
     ...
 }
 ```
@@ -376,8 +376,8 @@ In addition to structural tolerances (whitespace, missing tags, optional termina
           3. Bc4 Bc5
                 """;
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnGame);
     board.moveStrict("a3");
 
 ```
@@ -397,8 +397,8 @@ The parser does a bit more than a standard parser should do. It converts the imp
                 3. Bc4 Bc5
         """;
 
-    final PgnFile pgnFile = LenientPgnParser.parseText(pgn);
-    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    final PgnGame pgnGame = LenientPgnParser.parseText(pgn);
+    System.out.println(PgnCreate.createPgnString(pgnGame));
     // [Event "Spring Classic"]
     // [Site "?"]
     // [Date "?"]
@@ -459,10 +459,10 @@ When parsing fails, error messages are designed to be as descriptive as possible
           3. Bc4 Bc5
                 """;
 
-    final PgnFile pgnFile;
+    final PgnGame pgnGame;
     try {
-      pgnFile = LenientPgnParser.parseText(pgn);
-      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+      pgnGame = LenientPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnGame).isCheck()); // not reached
     } catch (final LenientPgnParserValidationException e) {
       System.out.println(e.getMessage());
       // The validation for 2. Nf4 failed. Reason: The move specification is invalid because there is no knight which
@@ -474,8 +474,8 @@ When parsing fails, error messages are designed to be as descriptive as possible
 #### File parsing
 
 ```java
-    final PgnFile pgnFile = LenientPgnParser.parse("C:\\temp\\myFile.pgn");
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final PgnGame pgnGame = LenientPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnGame);
     System.out.println(board.isCheckmate());
 ```
 
@@ -497,8 +497,8 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
         1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5 *
         """;
 
-    final PgnFile pgnFile = StrictPgnParser.parseText(pgn);
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final PgnGame pgnGame = StrictPgnParser.parseText(pgn);
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnGame);
     board.moveStrict("a3");
 ```
     
@@ -511,10 +511,10 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
         1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
         """;
 
-    final PgnFile pgnFile;
+    final PgnGame pgnGame;
     try {
-      pgnFile = StrictPgnParser.parseText(pgn);
-      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+      pgnGame = StrictPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnGame).isCheck()); // not reached
     } catch (final StrictPgnParserValidationException e) {
       System.out.println(e.getMessage());
       // The left square bracket [ must be followed by the tag name, but a space was found.
@@ -531,10 +531,10 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
         1. e4 e5 2. Nf3 Nf6 3. Bc4 Bc5
         """;
 
-    final PgnFile pgnFile;
+    final PgnGame pgnGame;
     try {
-      pgnFile = StrictPgnParser.parseText(pgn);
-      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnFile).isCheck()); // not reached
+      pgnGame = StrictPgnParser.parseText(pgn);
+      System.out.println(PgnUtility.calculateBoardPerLastMove(pgnGame).isCheck()); // not reached
     } catch (final StrictPgnParserValidationException e) {
       System.out.println(e.getMessage());
       // Not all tags from the seven tag roster (Event, Site, Date, Round, White, Black, Result) are set. The first not
@@ -546,8 +546,8 @@ The strict PGN parser does not allow inconsistencies as the lenient PGN parser. 
 #### File parsing
 
 ```java
-    final PgnFile pgnFile = StrictPgnParser.parse("C:\\temp\\myFile.pgn");
-    final Board board = PgnUtility.calculateBoardPerLastMove(pgnFile);
+    final PgnGame pgnGame = StrictPgnParser.parse("C:\\temp\\myFile.pgn");
+    final Board board = PgnUtility.calculateBoardPerLastMove(pgnGame);
     System.out.println(board.isThreefoldRepetition());
 ```
       
@@ -561,8 +561,8 @@ You can create the PGN for a game played in the library or export an imported PG
     final Board board = new Board();
     board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-    System.out.println(PgnCreate.createPgnFileString(pgnFile));
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
+    System.out.println(PgnCreate.createPgnString(pgnGame));
     // [Event "?"]
     // [Site "?"]
     // [Date "<today>"]
@@ -583,11 +583,11 @@ The PGN is created in the unique export format as defined by the PGN specificati
     final Board board = new Board();
     board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
 
-    final String pgnFileString = PgnCreate.createPgnFileString(pgnFile);
-    System.out.println(LenientPgnParser.validateText(pgnFileString).isValid()); // true
-    System.out.println(StrictPgnParser.validateText(pgnFileString).isValid()); // true
+    final String pgnString = PgnCreate.createPgnString(pgnGame);
+    System.out.println(LenientPgnParser.validateText(pgnString).isValid()); // true
+    System.out.println(StrictPgnParser.validateText(pgnString).isValid()); // true
 ```
 
 ## PGN export
@@ -598,8 +598,8 @@ A PGN can be written to the file system as below.
     final Board board = new Board();
     board.movesStrict("e4", "e5", "Nf3", "Nf6", "Bc4", "Bc5");
 
-    final PgnFile pgnFile = PgnCreate.createPgnFile(board);
-    PgnWriter.writePgnFile(pgnFile, "C:\\temp\\myFile.pgn");
+    final PgnGame pgnGame = PgnCreate.createPgnGame(board);
+    PgnWriter.writePgn(pgnGame, "C:\\temp\\myFile.pgn");
 ```
     
 ## PGN validation

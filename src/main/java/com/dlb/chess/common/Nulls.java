@@ -156,9 +156,8 @@ public class Nulls {
     return checkResult(list[index]);
   }
 
-  @SuppressWarnings("null")
   public static Path pathOf(final String filePath) {
-    return Path.of(filePath); // not null by API
+    return checkResult(Path.of(filePath)); // not null by API
   }
 
   @NonNull
@@ -188,12 +187,16 @@ public class Nulls {
 
   @SuppressWarnings("null")
   public static <E, F> Set<Map.Entry<E, F>> entrySet(Map<E, F> map) {
-    return map.entrySet();
+    return checkResult(map.entrySet());
   }
 
-  @SuppressWarnings("null")
   public static <E, F> Set<E> keySet(Map<E, F> map) {
-    return map.keySet();
+    return checkResult(map.keySet());
+  }
+
+  @NonNull
+  public static <E, F> F getOrDefault(Map<E, F> map, E key, F defaultValue) {
+    return checkResult(map.getOrDefault(key, defaultValue));
   }
 
   public static <E extends Enum<E>> EnumSet<E> newEnumSet(Iterable<E> iterable, Class<E> elementType) {
@@ -225,28 +228,60 @@ public class Nulls {
     return checkResult(Arrays.asList(a));
   }
 
-  @SuppressWarnings("null")
   public static Path pathResolve(final Path directoryPath, final String filePath) {
-    return directoryPath.resolve(filePath);
+    return checkResult(directoryPath.resolve(filePath));
   }
 
-  @SuppressWarnings("null")
   public static Path pathRelativize(final Path directoryPath, final Path other) {
-    return directoryPath.relativize(other);
+    return checkResult(directoryPath.relativize(other));
   }
 
   public static Path getFileName(Path path) {
     return checkResult(path.getFileName());
   }
 
-  @SuppressWarnings({ "null", "unchecked" })
-  public static <E> Set<E> setOf(E... items) {
-    return Set.of(items);
+  public static Path getParent(Path path) {
+    return checkResult(path.getParent());
   }
 
-  @SuppressWarnings({ "null", "unchecked" })
+  public static Path toAbsolutePath(Path path) {
+    return checkResult(path.toAbsolutePath());
+  }
+
+  public static String format(String format, Object... args) {
+    return checkResult(String.format(format, args));
+  }
+
+  public static <E> List<E> subList(List<E> list, int fromIndex, int toIndex) {
+    return checkResult(list.subList(fromIndex, toIndex));
+  }
+
+  /**
+   * Wraps a {@code main(String[] args)} array as a properly-annotated {@code @NonNull List<@NonNull String>}, runtime-
+   * checking each element. Bypasses the varargs nullness-inference trap that fires when {@code Nulls.listOf(args)} is
+   * used: with @NonNullByDefault active, JDT cannot prove that the {@code String} elements of {@code args} are
+   * non-null, so the implicit array conversion warns.
+   */
+  public static List<String> argsAsList(String[] args) {
+    final List<String> result = new java.util.ArrayList<>(args.length);
+    for (final @Nullable String arg : args) {
+      result.add(checkResult(arg));
+    }
+    return result;
+  }
+
+  @SuppressWarnings({ "unchecked" })
+  public static <E> Set<E> setOf(E... items) {
+    return checkResult(Set.of(items));
+  }
+
+  @SuppressWarnings({ "unchecked" })
   public static <E> List<E> listOf(E... items) {
-    return List.of(items);
+    return checkResult(List.of(items));
+  }
+
+  public static <E extends Enum<E>> EnumSet<E> noneOf(Class<E> enumClass) {
+    return checkResult(EnumSet.noneOf(enumClass));
   }
 
 }

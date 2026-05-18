@@ -1,7 +1,7 @@
 package com.dlb.chess.san;
 
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.dlb.chess.board.enums.File;
 import com.dlb.chess.board.enums.Rank;
@@ -17,28 +17,28 @@ abstract class AbstractSan {
     return Square.calculate(sanConversion.fromFile(), sanConversion.fromRank());
   }
 
-  static Set<LegalMove> filterLegalMovesCandidates(Set<LegalMove> legalMoveSet, Square toSquare) {
-    final Set<LegalMove> legalMovesForToQuare = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  static List<LegalMove> filterLegalMovesCandidates(List<LegalMove> legalMoves, Square toSquare) {
+    final List<LegalMove> legalMovesForToSquare = new ArrayList<>();
+    for (final LegalMove moveCandidate : legalMoves) {
       if (moveCandidate.moveSpecification().toSquare() == toSquare) {
-        legalMovesForToQuare.add(moveCandidate);
+        legalMovesForToSquare.add(moveCandidate);
       }
     }
-    return legalMovesForToQuare;
+    return legalMovesForToSquare;
   }
 
-  static Set<LegalMove> calculateLegalMovesCandidates(Set<LegalMove> legalMoveSet, File fromFile) {
-    final Set<LegalMove> legalMovesForToQuare = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  static List<LegalMove> calculateLegalMovesCandidates(List<LegalMove> legalMoves, File fromFile) {
+    final List<LegalMove> legalMovesForFromFile = new ArrayList<>();
+    for (final LegalMove moveCandidate : legalMoves) {
       if (moveCandidate.moveSpecification().fromSquare().getFile() == fromFile) {
-        legalMovesForToQuare.add(moveCandidate);
+        legalMovesForFromFile.add(moveCandidate);
       }
     }
-    return legalMovesForToQuare;
+    return legalMovesForFromFile;
   }
 
-  static boolean calculateHasOtherFilesHavingLegalMoves(File file, Set<LegalMove> legalMoveSet) {
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  static boolean calculateHasOtherFilesHavingLegalMoves(File file, List<LegalMove> legalMoves) {
+    for (final LegalMove moveCandidate : legalMoves) {
       final File candidateFromFile = moveCandidate.moveSpecification().fromSquare().getFile();
       if (candidateFromFile != file) {
         return true;
@@ -47,68 +47,68 @@ abstract class AbstractSan {
     return false;
   }
 
-  static int calculateNumberOfLegalMovesFromFile(File file, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromFile(file, legalMoveSet).size();
+  static int calculateNumberOfLegalMovesFromFile(File file, List<LegalMove> legalMoves) {
+    return calculateLegalMovesFromFile(file, legalMoves).size();
   }
 
-  private static Set<LegalMove> calculateLegalMovesFromFile(File file, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  private static List<LegalMove> calculateLegalMovesFromFile(File file, List<LegalMove> legalMoves) {
+    final List<LegalMove> filtered = new ArrayList<>();
+    for (final LegalMove moveCandidate : legalMoves) {
       final File candidateFromFile = moveCandidate.moveSpecification().fromSquare().getFile();
       if (candidateFromFile == file) {
-        filteredSet.add(moveCandidate);
+        filtered.add(moveCandidate);
       }
     }
-    return filteredSet;
+    return filtered;
   }
 
-  static int calculateNumberOfLegalMovesFromOtherFiles(File file, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromOtherFiles(file, legalMoveSet).size();
+  static int calculateNumberOfLegalMovesFromOtherFiles(File file, List<LegalMove> legalMoves) {
+    return calculateLegalMovesFromOtherFiles(file, legalMoves).size();
   }
 
-  private static Set<LegalMove> calculateLegalMovesFromOtherFiles(File file, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  private static List<LegalMove> calculateLegalMovesFromOtherFiles(File file, List<LegalMove> legalMoves) {
+    final List<LegalMove> filtered = new ArrayList<>();
+    for (final LegalMove moveCandidate : legalMoves) {
       final File candidateFromFile = moveCandidate.moveSpecification().fromSquare().getFile();
       if (candidateFromFile != file) {
-        filteredSet.add(moveCandidate);
+        filtered.add(moveCandidate);
       }
     }
-    return filteredSet;
+    return filtered;
   }
 
-  static int calculateNumberOfLegalMovesFromRank(Rank rank, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromRank(rank, legalMoveSet).size();
+  static int calculateNumberOfLegalMovesFromRank(Rank rank, List<LegalMove> legalMoves) {
+    return calculateLegalMovesFromRank(rank, legalMoves).size();
   }
 
-  private static Set<LegalMove> calculateLegalMovesFromRank(Rank rank, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  private static List<LegalMove> calculateLegalMovesFromRank(Rank rank, List<LegalMove> legalMoves) {
+    final List<LegalMove> filtered = new ArrayList<>();
+    for (final LegalMove moveCandidate : legalMoves) {
       final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
       if (candidateFromRank == rank) {
-        filteredSet.add(moveCandidate);
+        filtered.add(moveCandidate);
       }
     }
-    return filteredSet;
+    return filtered;
   }
 
-  static int calculateNumberOfLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
-    return calculateLegalMovesFromSquare(square, legalMoveSet).size();
+  static int calculateNumberOfLegalMovesFromSquare(Square square, List<LegalMove> legalMoves) {
+    return calculateLegalMovesFromSquare(square, legalMoves).size();
   }
 
-  private static Set<LegalMove> calculateLegalMovesFromSquare(Square square, Set<LegalMove> legalMoveSet) {
-    final Set<LegalMove> filteredSet = new TreeSet<>();
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  private static List<LegalMove> calculateLegalMovesFromSquare(Square square, List<LegalMove> legalMoves) {
+    final List<LegalMove> filtered = new ArrayList<>();
+    for (final LegalMove moveCandidate : legalMoves) {
       final Square candidateFromSquare = moveCandidate.moveSpecification().fromSquare();
       if (candidateFromSquare == square) {
-        filteredSet.add(moveCandidate);
+        filtered.add(moveCandidate);
       }
     }
-    return filteredSet;
+    return filtered;
   }
 
-  static boolean calculateHasOtherRanksHavingLegalMoves(Rank rank, Set<LegalMove> legalMoveSet) {
-    for (final LegalMove moveCandidate : legalMoveSet) {
+  static boolean calculateHasOtherRanksHavingLegalMoves(Rank rank, List<LegalMove> legalMoves) {
+    for (final LegalMove moveCandidate : legalMoves) {
       final Rank candidateFromRank = moveCandidate.moveSpecification().fromSquare().getRank();
       if (candidateFromRank != rank) {
         return true;

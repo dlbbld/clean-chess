@@ -17,10 +17,10 @@ class TestPgnWriterErrorHandling {
 
   @SuppressWarnings("static-method")
   @Test
-  void testWritePgnFilePropagatesFileSystemAccessException(@TempDir Path tempFolder) {
+  void testWritePgnPropagatesFileSystemAccessException(@TempDir Path tempFolder) {
     final Path filePath = Nulls.pathResolve(tempFolder, "missing/game.pgn");
-    final var pgnFile = PgnCreate.createPgnFile(new Board());
+    final var pgnGame = PgnCreate.createPgnGame(new Board(false));
 
-    assertThrows(FileSystemAccessException.class, () -> PgnWriter.writePgnFile(pgnFile, filePath));
+    assertThrows(FileSystemAccessException.class, () -> PgnWriter.writePgn(pgnGame, filePath));
   }
 }

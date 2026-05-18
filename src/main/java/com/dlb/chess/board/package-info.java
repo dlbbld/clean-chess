@@ -14,15 +14,19 @@
  * </ul>
  *
  * <p>
- * The five FIDE-automatic terminations (queryable via
+ * The six FIDE-automatic terminations (queryable via
  * {@link com.dlb.chess.common.utility.BasicChessUtility#calculateGameStatus}) are:
  *
  * <ul>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#CHECKMATE} (FIDE 5.1.1)</li>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#STALEMATE} (FIDE 5.2.1)</li>
- * <li>{@link com.dlb.chess.common.enums.GameStatus#INSUFFICIENT_MATERIAL_BOTH} — mutual insufficient material, FIDE
- * 5.2.2 dead position (the single-side {@code INSUFFICIENT_MATERIAL_*_ONLY} variants are diagnostic states, NOT
- * terminations)</li>
+ * <li>{@link com.dlb.chess.common.enums.GameStatus#DEAD_POSITION_INSUFFICIENT_MATERIAL} — FIDE 5.2.2 dead position by
+ * mutual insufficient material (the single-side {@code INSUFFICIENT_MATERIAL_*_ONLY} variants are diagnostic states,
+ * NOT terminations)</li>
+ * <li>{@link com.dlb.chess.common.enums.GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} — FIDE 5.2.2 dead position by
+ * Ambrona's quick unwinnability analyzer (both sides unwinnable). Detected only when the
+ * {@code detectDeadPositionUnwinnable} board constructor flag is set; otherwise the predicate evaluates to
+ * {@code false} and the game continues</li>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#FIVE_FOLD_REPETITION_RULE} (FIDE 9.6.1)</li>
  * <li>{@link com.dlb.chess.common.enums.GameStatus#SEVENTY_FIVE_MOVE_RULE} (FIDE 9.6.2)</li>
  * </ul>

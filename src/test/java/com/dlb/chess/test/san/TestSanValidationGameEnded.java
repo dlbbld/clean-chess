@@ -15,10 +15,15 @@ import com.dlb.chess.san.StrictSanParser;
 /**
  * Surface-level tests for the strict-pipeline game-end pre-check in {@link StrictSanParser#parseText}: one scenario per
  * FIDE-automatic termination ({@link GameStatus#CHECKMATE}, {@link GameStatus#STALEMATE},
- * {@link GameStatus#INSUFFICIENT_MATERIAL_BOTH}, {@link GameStatus#FIVE_FOLD_REPETITION_RULE},
- * {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any SAN attempted on a terminal-state board is
- * rejected with {@link SanValidationProblem#GAME_ALREADY_ENDED} and that the thrown {@link SanValidationException}
- * carries the originating {@link GameStatus} as payload.
+ * {@link GameStatus#DEAD_POSITION_INSUFFICIENT_MATERIAL}, {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK},
+ * {@link GameStatus#FIVE_FOLD_REPETITION_RULE}, {@link GameStatus#SEVENTY_FIVE_MOVE_RULE}). Each verifies that any SAN
+ * attempted on a terminal-state board is rejected with {@link SanValidationProblem#GAME_ALREADY_ENDED} and that the
+ * thrown {@link SanValidationException} carries the originating {@link GameStatus} as payload.
+ *
+ * <p>
+ * For {@code DEAD_POSITION_UNWINNABLE_QUICK} two scenarios are exercised: a board born dead from a pawn-wall FEN, and
+ * a board that becomes dead as a consequence of the locking pawn move. The "born dead" tests for this status must
+ * construct the board with {@code Board(fen, true)} so the CHA quick analyzer runs.
  *
  * <p>
  * The companion {@code TestValidateNewMoveGameEnded} mirrors this set against the MoveSpecification pipeline.
@@ -29,35 +34,54 @@ class TestSanValidationGameEnded {
   @Test
   void testGameEndedByCheckmate() {
     // Fool's mate.
-    final Board board = new Board("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3");
+    final Board board = new Board("rnb1kbnr/pppp1ppp/8/4p3/6Pq/5P2/PPPPP2P/RNBQKBNR w KQkq - 1 3", false);
     check("Ke2", board, GameStatus.CHECKMATE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByStalemate() {
-    final Board board = new Board("7k/8/6Q1/8/8/8/8/K7 b - - 0 1");
+    final Board board = new Board("7k/8/6Q1/8/8/8/8/K7 b - - 0 1", false);
     check("Kg8", board, GameStatus.STALEMATE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByInsufficientMaterialBoth() {
-    final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1");
-    check("Ke2", board, GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+    final Board board = new Board("4k3/8/8/8/8/8/8/4K3 w - - 0 1", false);
+    check("Ke2", board, GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testGameEndedByDeadPositionUnwinnableQuickBornDead() {
+    // Pawn-wall fortress (horizontal_1 from the CHA pawn-wall corpus); auto-detection enabled so
+    // the CHA quick analyzer runs.
+    final Board board = new Board("4k3/8/8/p1p1p1p1/P1P1P1P1/8/8/4K3 w - - 0 50", true);
+    check("Kd1", board, GameStatus.DEAD_POSITION_UNWINNABLE_QUICK);
+  }
+
+  @SuppressWarnings("static-method")
+  @Test
+  void testGameEndedByDeadPositionUnwinnableQuickPlayedInto() {
+    // Predecessor: pawn wall with white h-pawn still on h2. h3 completes the lock; the next move
+    // attempted via the SAN pipeline must be rejected.
+    final Board board = new Board("4k3/8/8/p1p1p1p1/PpPpPpPp/1P1P1P2/7P/4K3 w - - 0 49", true);
+    board.moveStrict("h3");
+    check("Kd8", board, GameStatus.DEAD_POSITION_UNWINNABLE_QUICK);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedBySeventyFiveMoveRule() {
-    final Board board = new Board("4k3/8/4P3/8/8/8/2N1B3/3KQ2R w - - 150 76");
+    final Board board = new Board("4k3/8/4P3/8/8/8/2N1B3/3KQ2R w - - 150 76", false);
     check("Kd2", board, GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testGameEndedByFivefoldRepetition() {
-    final Board board = new Board();
+    final Board board = new Board(false);
     board.movesStrict("Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6", "Ng1", "Ng8", "Nf3", "Nf6",
         "Ng1", "Ng8");
     check("e4", board, GameStatus.FIVE_FOLD_REPETITION_RULE);

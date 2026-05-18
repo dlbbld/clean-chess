@@ -13,7 +13,6 @@ import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.messages.Message;
 import com.dlb.chess.model.LegalMove;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * Public entry point for the lenient SAN pipeline. Accepts inputs that the strict pipeline rejects, when those inputs
@@ -89,7 +88,7 @@ public final class LenientSanParser {
   // --- Helpers ---
 
   private static String computeCanonicalSan(MoveSpecification moveSpecification, Board board) {
-    final ImmutableSet<LegalMove> legalMovesBefore = board.getLegalMoveSet();
+    final ImmutableList<LegalMove> legalMovesBefore = board.getLegalMoves();
     @Nullable LegalMove matching = null;
     for (final LegalMove candidate : legalMovesBefore) {
       if (candidate.moveSpecification().equals(moveSpecification)) {

@@ -29,10 +29,10 @@ class TestStrictPgnParserSanException extends AbstractTestStrictPgnParserExcepti
 
   }
 
-  private static void checkException(String pgnFileName, SanValidationProblem expected) {
+  private static void checkException(String pgnName, SanValidationProblem expected) {
     var isException = false;
     try {
-      StrictPgnParser.parse(PGN_TEST_FOLDER_PATH, pgnFileName);
+      StrictPgnParser.parse(PGN_TEST_FOLDER_PATH, pgnName);
     } catch (final StrictPgnParserValidationException e) {
       isException = true;
       assertEquals(StrictPgnParserValidationProblem.SAN, e.getStrictPgnParserValidationProblem());

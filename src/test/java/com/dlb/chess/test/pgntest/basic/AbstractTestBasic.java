@@ -19,9 +19,9 @@ import com.dlb.chess.model.LegalMove;
 import com.dlb.chess.model.LegalMoveKind;
 import com.dlb.chess.test.common.exceptions.SetupException;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 public abstract class AbstractTestBasic implements EnumConstants {
@@ -31,49 +31,49 @@ public abstract class AbstractTestBasic implements EnumConstants {
   // 1b) for each file in the expected value hardcoded file list there is a file in the JUnit hardcoded file list
   // 2a) for each file in the JUnit hardcoded file list there is a file in the test folder
   // 2b) for each file in the test folder there is an entry in the JUnit hardcoded file list
-  protected static void checkTestFolder(List<String> junitHardcodedPgnFileNameList, PgnTest pgnTest) {
+  protected static void checkTestFolder(List<String> junitHardcodedPgnNameList, PgnTest pgnTest) {
 
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(pgnTest);
-    final List<String> expectedValueHardcodedFileList = calculatePgnFileNameList(testCaseList.list());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
+    final List<String> expectedValueHardcodedFileList = calculatePgnNameList(testCaseList.list());
 
     // 1a)
-    for (final String pgnFileName : junitHardcodedPgnFileNameList) {
-      if (!expectedValueHardcodedFileList.contains(pgnFileName)) {
-        throw new SetupException("The JUnit hardcoded file \"" + pgnFileName
+    for (final String pgnName : junitHardcodedPgnNameList) {
+      if (!expectedValueHardcodedFileList.contains(pgnName)) {
+        throw new SetupException("The JUnit hardcoded file \"" + pgnName
             + "\" has no corresponding entry in the expected value hardcoded file list");
       }
     }
 
     // 1b)
-    for (final String pgnFileName : expectedValueHardcodedFileList) {
-      if (!junitHardcodedPgnFileNameList.contains(pgnFileName)) {
-        throw new SetupException("The expected value hardcoded file \"" + pgnFileName
+    for (final String pgnName : expectedValueHardcodedFileList) {
+      if (!junitHardcodedPgnNameList.contains(pgnName)) {
+        throw new SetupException("The expected value hardcoded file \"" + pgnName
             + "\" has no corresponding entry in the JUnit hardcoded list");
       }
     }
 
     // 2a)
-    for (final String pgnFileName : junitHardcodedPgnFileNameList) {
-      if (!FileUtility.exists(pgnTest.getFolderPath(), pgnFileName)) {
-        throw new SetupException("The JUnit hardcoded file \"" + pgnFileName + "\" does not exist in the test folder");
+    for (final String pgnName : junitHardcodedPgnNameList) {
+      if (!FileUtility.exists(pgnTest.getFolderPath(), pgnName)) {
+        throw new SetupException("The JUnit hardcoded file \"" + pgnName + "\" does not exist in the test folder");
       }
     }
 
     // 2b)
-    final List<String> testFolderPgnFileNameList = FileUtility.readFileNameList(pgnTest.getFolderPath());
-    for (final String pgnFileName : testFolderPgnFileNameList) {
-      if (!junitHardcodedPgnFileNameList.contains(pgnFileName)) {
+    final List<String> testFolderPgnNameList = FileUtility.readFileNameList(pgnTest.getFolderPath());
+    for (final String pgnName : testFolderPgnNameList) {
+      if (!junitHardcodedPgnNameList.contains(pgnName)) {
         throw new SetupException(
-            "The test directory file \"" + pgnFileName + "\" does not exist in the JUnit hardcoded file list");
+            "The test directory file \"" + pgnName + "\" does not exist in the JUnit hardcoded file list");
       }
     }
 
   }
 
-  private static List<String> calculatePgnFileNameList(List<PgnFileTestCase> testCaseList) {
+  private static List<String> calculatePgnNameList(List<PgnTestCase> testCaseList) {
     final List<String> result = new ArrayList<>();
-    for (final PgnFileTestCase testCase : testCaseList) {
-      result.add(testCase.pgnFileName());
+    for (final PgnTestCase testCase : testCaseList) {
+      result.add(testCase.pgnName());
     }
     return result;
   }

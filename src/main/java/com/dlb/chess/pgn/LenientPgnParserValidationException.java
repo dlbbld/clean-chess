@@ -32,8 +32,8 @@ public class LenientPgnParserValidationException extends UsageException {
   private final @NonNull ImmutableList<@NonNull ForgivenItem> sanForgivenItemsAccumulated;
 
   /**
-   * Tag-level forgiven items accumulated before the failure point. Tag-level forgiveness happens after tag parsing
-   * and before movetext replay, so this list is empty for any failure that originated in the tag section itself, and
+   * Tag-level forgiven items accumulated before the failure point. Tag-level forgiveness happens after tag parsing and
+   * before movetext replay, so this list is empty for any failure that originated in the tag section itself, and
    * fully-populated for any failure that originated downstream (in the movetext).
    */
   private final @NonNull ImmutableList<@NonNull ForgivenTagItem> tagForgivenItemsAccumulated;

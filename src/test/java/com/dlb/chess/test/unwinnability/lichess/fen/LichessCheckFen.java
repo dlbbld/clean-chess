@@ -11,7 +11,8 @@ import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.fen.FenSideSymbol;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.test.unwinnability.identifier.UnwinnabilityQuickVerdictIdentifier;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
 public class LichessCheckFen extends AbstractLichessCheckFen {
@@ -68,10 +69,10 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
       final var lichessGameId = line.substring(sepPos + 1);
 
       if (isStartAnalysis) {
-        final Board board = new Board(fen);
+        final Board board = new Board(fen, false);
         final Side testingSide = board.getHavingMove().getOppositeSide();
         final var beforeMilliSeconds = System.currentTimeMillis();
-        final UnwinnableQuick unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, testingSide);
+        final UnwinnabilityQuickVerdict unwinnableQuick = UnwinnableQuickAnalyzer.unwinnableQuick(board, testingSide);
         final var durationMilliSeconds = System.currentTimeMillis() - beforeMilliSeconds;
 
         final StringBuilder outputLine = new StringBuilder();
@@ -79,7 +80,7 @@ public class LichessCheckFen extends AbstractLichessCheckFen {
         outputLine.append(lichessGameId).append(";");
         outputLine.append("quick").append(";");
         outputLine.append(FenSideSymbol.calculate(testingSide).sideLetter()).append(";");
-        outputLine.append(unwinnableQuick.getIdentifier()).append(";");
+        outputLine.append(UnwinnabilityQuickVerdictIdentifier.getIdentifier(unwinnableQuick)).append(";");
         outputLine.append(durationMilliSeconds);
 
         final String outputLineStr = Nulls.toString(outputLine);

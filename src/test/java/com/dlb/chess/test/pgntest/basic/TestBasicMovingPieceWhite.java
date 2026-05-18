@@ -8,11 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.common.utility.GeneralUtility;
 import com.dlb.chess.model.LegalMoveKind;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 class TestBasicMovingPieceWhite extends AbstractTestBasic {
@@ -20,28 +19,28 @@ class TestBasicMovingPieceWhite extends AbstractTestBasic {
   private static final Logger logger = Nulls.getLogger(TestBasicMovingPieceWhite.class);
 
   static {
-    final List<String> pgnFileNameList = new ArrayList<>();
+    final List<String> pgnNameList = new ArrayList<>();
 
-    pgnFileNameList.add("01_white_moving_piece_rook.pgn");
-    pgnFileNameList.add("02_white_moving_piece_knight.pgn");
-    pgnFileNameList.add("03_white_moving_piece_bishop.pgn");
-    pgnFileNameList.add("04_white_moving_piece_queen.pgn");
-    pgnFileNameList.add("05_white_moving_piece_king.pgn");
-    pgnFileNameList.add("06_white_moving_piece_pawn.pgn");
+    pgnNameList.add("01_white_moving_piece_rook.pgn");
+    pgnNameList.add("02_white_moving_piece_knight.pgn");
+    pgnNameList.add("03_white_moving_piece_bishop.pgn");
+    pgnNameList.add("04_white_moving_piece_queen.pgn");
+    pgnNameList.add("05_white_moving_piece_king.pgn");
+    pgnNameList.add("06_white_moving_piece_pawn.pgn");
 
-    checkTestFolder(pgnFileNameList, PgnTest.BASIC_MOVING_PIECE_WHITE);
+    checkTestFolder(pgnNameList, PgnTest.BASIC_MOVING_PIECE_WHITE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test() throws Exception {
-    final PgnFileTestCaseList testCaseList = CreatePgnTestCases.getTestList(PgnTest.BASIC_MOVING_PIECE_WHITE);
-    for (final PgnFileTestCase testCase : testCaseList.list()) {
-      final Board board = GeneralUtility.calculateBoard(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+    final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(PgnTest.BASIC_MOVING_PIECE_WHITE);
+    for (final PgnTestCase testCase : testCaseList.list()) {
+      final Board board = testCase.game(testCaseList.pgnTest());
 
-      logger.info(testCase.pgnFileName());
+      logger.info(testCase.pgnName());
 
-      switch (testCase.pgnFileName()) {
+      switch (testCase.pgnName()) {
         case "01_white_moving_piece_rook.pgn" -> checkMovingPiece(A1, A2, WHITE_ROOK, board);
         case "02_white_moving_piece_knight.pgn" -> checkMovingPiece(B1, C3, WHITE_KNIGHT, board);
         case "03_white_moving_piece_bishop.pgn" -> checkMovingPiece(C1, B2, WHITE_BISHOP, board);

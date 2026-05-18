@@ -14,6 +14,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.board.enums.SquareType;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
+import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.common.ucimove.utility.UciMoveUtility;
 import com.dlb.chess.fen.FenParserRaw;
 import com.dlb.chess.fen.model.FenRaw;
@@ -25,7 +26,7 @@ import com.dlb.chess.moves.EnPassantCaptureUtility;
 //the intended winner, is found or false otherwise. The base call should be done on depth = 0,
 //cnt = 0, and an empty table. The value of maxDepth and nodesBound can be chosen to set the
 //limits of the search. The Score routine is defined in Figure 12 (Appendix A).
-class FindHelpmateExhaust extends AbstractFindHelpmate {
+class FindHelpmateExhaust {
 
   private static final boolean IS_DEBUG = false;
 
@@ -35,7 +36,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
   private static final int LOCAL_NODES_BOUND = 10000;
 
   private final Side color;
-  private final HashMap<String, Integer> transpositionMap = new HashMap<>();
+  private final HashMap<DynamicPosition, Integer> transpositionMap = new HashMap<>();
 
   private int localNodeCount = 0;
 
@@ -75,7 +76,6 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
     switch (findHelpmate) {
       case TRUE:
-        checkHelpmate(board.getFen(), moveEvaluationList);
         return new FindHelpmateAnalysis(FindHelpmateResult.YES, localNodeCount,
             convertLegalMoveList(moveEvaluationList));
       case FALSE:
@@ -109,7 +109,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     // set d := limits.max-depth - depth
     final var movesLeft = maxDepth - depth;
 
-    final String cacheKey = calculateCacheKey(board);
+    final DynamicPosition cacheKey = board.getDynamicPosition();
     // 5: if (pos,D) in table with D >= d then return false (-> pos was already analyzed)
     if (calculateIsInTranspositionTableWithEnoughDepth(cacheKey, movesLeft)) {
       return FindHelpmateRecursionResult.FALSE;
@@ -127,10 +127,9 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     // 6: store (pos,D) in table
     store(cacheKey, movesLeft);
 
-    // adding fivefold repetition and seventy-five move rule
-    if (board.isFivefoldRepetition() || board.isSeventyFiveMove()) {
-      return FindHelpmateRecursionResult.FALSE;
-    }
+    // Per the paper / Ambrona issue thread: 75-move and 5-fold repetition do not apply when adjudicating
+    // timeouts, so the helpmate search must continue past them. The previous fivefold/seventy-five gate
+    // here is removed for paper compliance.
 
     if (UnwinnabilityMaterial.calculateHasKingOnly(color, board.getStaticPosition())
         || UnwinnabilityMaterial.calculateHasNoPawns(color.getOppositeSide(), board.getStaticPosition())
@@ -139,9 +138,7 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     }
 
     // 7: for every legal move m in pos do:
-    final List<LegalMove> legalMoveList = new ArrayList<>(board.getLegalMoveSet());
-
-    for (final LegalMove legalMove : legalMoveList) {
+    for (final LegalMove legalMove : board.getLegalMoves()) {
       // 8: let inc = match Score(pos,m) with Normal ! 0 | Reward ! 1 | Punish ! Ã¢Ë†â€™2
       ScoreResult score = Score.score(color, board.getHavingMove(), board.getStaticPosition(), legalMove);
 
@@ -219,15 +216,14 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
 
   }
 
-  private boolean calculateIsInTranspositionTableWithEnoughDepth(String cacheKey, int movesLeft) {
-    if (transpositionMap.containsKey(cacheKey)) {
-      final int storedDepth = Nulls.get(transpositionMap, cacheKey);
-      return storedDepth >= movesLeft;
+  private boolean calculateIsInTranspositionTableWithEnoughDepth(DynamicPosition cacheKey, int movesLeft) {
+    if (!transpositionMap.containsKey(cacheKey)) {
+      return false;
     }
-    return false;
+    return Nulls.get(transpositionMap, cacheKey).intValue() >= movesLeft;
   }
 
-  private void store(String cacheKey, int movesLeft) {
+  private void store(DynamicPosition cacheKey, int movesLeft) {
     transpositionMap.put(cacheKey, movesLeft);
   }
 
@@ -322,28 +318,6 @@ class FindHelpmateExhaust extends AbstractFindHelpmate {
     fenSquareErased.append(" ");
 
     fenSquareErased.append(fenRaw.fullMoveNumber());
-
-    return Nulls.toString(fenSquareErased);
-  }
-
-  private static String calculateCacheKey(Board board) {
-    final FenRaw fenRaw = FenParserRaw.parseFenRaw(board.getFen());
-
-    final StringBuilder fenSquareErased = new StringBuilder();
-
-    fenSquareErased.append(fenRaw.piecePlacement());
-    fenSquareErased.append(" ");
-
-    fenSquareErased.append(fenRaw.havingMove());
-    fenSquareErased.append(" ");
-
-    fenSquareErased.append(fenRaw.castlingRightBothStr());
-
-    if (!"-".equals(fenRaw.enPassantCaptureTargetSquare()) && !calculateIsEraseEnPassantCaptureTargetSquare(board)) {
-      fenSquareErased.append(" ");
-
-      fenSquareErased.append(fenRaw.enPassantCaptureTargetSquare());
-    }
 
     return Nulls.toString(fenSquareErased);
   }

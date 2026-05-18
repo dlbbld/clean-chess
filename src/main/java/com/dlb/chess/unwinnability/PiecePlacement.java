@@ -11,7 +11,10 @@ record PiecePlacement(PieceType pieceType, Side side, Square squareOriginal) imp
     if (this.side != o.side) {
       return this.side.compareTo(o.side);
     }
-    return this.squareOriginal.compareTo(o.squareOriginal);
+    if (this.squareOriginal != o.squareOriginal) {
+      return this.squareOriginal.compareTo(o.squareOriginal);
+    }
+    return this.pieceType.compareTo(o.pieceType);
   }
 
   @Override

@@ -53,13 +53,16 @@ public abstract class BasicChessUtility {
       return GameStatus.SEVENTY_FIVE_MOVE_RULE;
     }
     if (board.isInsufficientMaterial()) {
-      return GameStatus.INSUFFICIENT_MATERIAL_BOTH;
+      return GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL;
     }
-    if (board.isInsufficientMaterial(board.getHavingMove().getOppositeSide())) {
-      return GameStatus.INSUFFICIENT_MATERIAL_MADE_THE_MOVE_ONLY;
+    if (board.isDeadPositionUnwinnableQuick()) {
+      return GameStatus.DEAD_POSITION_UNWINNABLE_QUICK;
     }
-    if (board.isInsufficientMaterial(board.getHavingMove())) {
-      return GameStatus.INSUFFICIENT_MATERIAL_NOT_MADE_THE_MOVE_ONLY;
+    if (board.isInsufficientMaterial(Side.WHITE)) {
+      return GameStatus.INSUFFICIENT_MATERIAL_WHITE_ONLY;
+    }
+    if (board.isInsufficientMaterial(Side.BLACK)) {
+      return GameStatus.INSUFFICIENT_MATERIAL_BLACK_ONLY;
     }
     return GameStatus.ONGOING;
   }

@@ -16,12 +16,12 @@ import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.constants.EnumConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 public class GenerateChaTestCases implements EnumConstants {
 
@@ -43,30 +43,30 @@ public class GenerateChaTestCases implements EnumConstants {
     try (Writer w = new OutputStreamWriter(new FileOutputStream(file, true), StandardCharsets.UTF_8.name());
         PrintWriter pw = new PrintWriter(w)) {
 
-      for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+      for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
         final Path folderPath = testCaseList.pgnTest().getFolderPath();
         logger.info("Processing folder " + folderPath);
 
-        for (final PgnFileTestCase testCase : testCaseList.list()) {
+        for (final PgnTestCase testCase : testCaseList.list()) {
           // if (!testList.getFolder().equals(PgnTest.BASIC_CHECKMATE)) {
           // continue;
           // }
-          logger.info("Processing game " + testCase.pgnFileName());
+          logger.info("Processing game " + testCase.pgnName());
 
-          final String pgnFileName = testCase.pgnFileName();
+          final String pgnName = testCase.pgnName();
 
-          final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+          final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnName);
 
-          final Board board = new Board(pgnFile.startFen());
+          final Board board = new Board(pgnGame.startFen(), false);
 
           var halfMoveCounter = 0;
-          pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
+          pw.println(calculateLine(board, folderPath, pgnName, halfMoveCounter));
 
-          for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+          for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
             halfMoveCounter++;
             board.moveStrict(halfMove.san());
 
-            pw.println(calculateLine(board, folderPath, pgnFileName, halfMoveCounter));
+            pw.println(calculateLine(board, folderPath, pgnName, halfMoveCounter));
 
           }
 

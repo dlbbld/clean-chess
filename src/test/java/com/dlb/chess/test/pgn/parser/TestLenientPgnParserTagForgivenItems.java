@@ -14,8 +14,8 @@ import com.google.common.collect.ImmutableList;
 
 /**
  * The lenient PGN parser preserves the input as given and surfaces tolerated deviations on
- * {@code LenientPgnParserValidationResult.tagForgivenItems()}. One inline fixture per
- * {@link ForgivenTagItemCode} value, asserting both presence and the expected tagName/detail metadata.
+ * {@code LenientPgnParserValidationResult.tagForgivenItems()}. One inline fixture per {@link ForgivenTagItemCode}
+ * value, asserting both presence and the expected tagName/detail metadata.
  */
 @SuppressWarnings("static-method")
 class TestLenientPgnParserTagForgivenItems {
@@ -180,6 +180,7 @@ class TestLenientPgnParserTagForgivenItems {
       String detail) {
     final boolean present = items.stream()
         .anyMatch(i -> i.code() == code && i.tagName().equals(tagName) && i.detail().equals(detail));
-    assertTrue(present, () -> "Expected item " + code + "[tagName=" + tagName + ", detail=" + detail + "] in: " + items);
+    assertTrue(present,
+        () -> "Expected item " + code + "[tagName=" + tagName + ", detail=" + detail + "] in: " + items);
   }
 }

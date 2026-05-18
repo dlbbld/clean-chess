@@ -3,6 +3,13 @@ package com.dlb.chess.pgn;
 public enum LenientPgnParserValidationProblem {
   UNKNOWN_ERROR,
   OK,
+  /**
+   * The PGN input is empty — zero bytes, only the UTF-8 BOM, or whitespace-only (spaces, tabs, newlines in any
+   * combination). Even the lenient parser refuses to fabricate a game out of no signal. Symmetric with
+   * {@link StrictPgnParserValidationProblem#FILE_EMPTY}. Callers who genuinely want the initial position have
+   * {@code new Board()}.
+   */
+  FILE_EMPTY,
   TAG_REAPPEAR,
   TAG_FORMAT_INVALID,
   TAG_NAME_NOT_UNIQUE,
@@ -18,9 +25,9 @@ public enum LenientPgnParserValidationProblem {
   EXCEPTION_CAUGHT_FROM_STRICT_VALIDATION,
   SAN,
   /**
-   * The PGN's FEN tag value cannot be parsed even by the lenient FEN parser, or the resulting position fails
-   * strict semantic validation (missing king, impossible double-check, etc.). The PGN's structure is otherwise
-   * fine; the failure is in the position encoded by the FEN tag.
+   * The PGN's FEN tag value cannot be parsed even by the lenient FEN parser, or the resulting position fails strict
+   * semantic validation (missing king, impossible double-check, etc.). The PGN's structure is otherwise fine; the
+   * failure is in the position encoded by the FEN tag.
    */
   FEN_TAG_INVALID
 }

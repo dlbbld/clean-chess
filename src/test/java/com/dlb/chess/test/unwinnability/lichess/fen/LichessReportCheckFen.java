@@ -14,7 +14,8 @@ import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.test.common.utility.FileUtility;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
+import com.dlb.chess.test.unwinnability.identifier.UnwinnabilityQuickVerdictIdentifier;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
 public class LichessReportCheckFen extends AbstractLichessCheckFen {
 
@@ -107,7 +108,8 @@ public class LichessReportCheckFen extends AbstractLichessCheckFen {
         }
         break;
       case "undetermined":
-        if (!mineResult.equals(UnwinnableQuick.POSSIBLY_WINNABLE.getIdentifier())) {
+        if (!mineResult
+            .equals(UnwinnabilityQuickVerdictIdentifier.getIdentifier(UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE))) {
           return true;
         }
         break;

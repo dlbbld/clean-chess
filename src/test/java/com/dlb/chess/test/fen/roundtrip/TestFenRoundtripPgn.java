@@ -10,12 +10,12 @@ import com.dlb.chess.board.Board;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.model.MoveSpecification;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.RestrictTestConstants;
-import com.dlb.chess.test.model.PgnFileTestCase;
-import com.dlb.chess.test.model.PgnFileTestCaseList;
+import com.dlb.chess.test.model.PgnTestCase;
+import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
-import com.dlb.chess.test.pgn.setup.CreatePgnTestCases;
+import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
 
 class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
 
@@ -23,9 +23,9 @@ class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
 
   @SuppressWarnings("static-method")
   @Test
-  void testPgnFiles() throws Exception {
+  void testPgnSample() throws Exception {
 
-    for (final PgnFileTestCaseList testCaseList : CreatePgnTestCases.getRestrictedTestListList()) {
+    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_PGN_FEN_PARSER_ALL_TEST) {
         switch (testCaseList.pgnTest()) {
           case BASIC_CHECK_WHITE:
@@ -39,24 +39,24 @@ class TestFenRoundtripPgn extends AbstractTestFenRoundtrip {
             continue;
         }
       }
-      for (final PgnFileTestCase testCase : testCaseList.list()) {
-        checkFenRoundtrip(testCaseList.pgnTest().getFolderPath(), testCase.pgnFileName());
+      for (final PgnTestCase testCase : testCaseList.list()) {
+        checkFenRoundtrip(testCaseList.pgnTest().getFolderPath(), testCase.pgnName());
       }
     }
   }
 
-  private static void checkFenRoundtrip(Path folderPath, String pgnFileName) throws Exception {
+  private static void checkFenRoundtrip(Path folderPath, String pgnName) throws Exception {
 
-    logger.info(pgnFileName);
+    logger.info(pgnName);
 
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnFileName);
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(folderPath, pgnName);
 
-    final Board board = new Board(pgnFile.startFen());
-    for (final PgnHalfMove halfMove : pgnFile.halfMoveList()) {
+    final Board board = new Board(pgnGame.startFen(), false);
+    for (final PgnHalfMove halfMove : pgnGame.halfMoveList()) {
       board.moveStrict(halfMove.san());
     }
     final List<MoveSpecification> moveList = board.getPerformedMoveSpecificationList();
-    checFenRoundtrip(pgnFile.startFen().fen(), moveList);
+    checFenRoundtrip(pgnGame.startFen().fen(), moveList);
   }
 
 }

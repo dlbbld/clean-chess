@@ -10,7 +10,7 @@ import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ConfigurationConstants;
 import com.dlb.chess.common.exceptions.FileSystemAccessException;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.TagUtility;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 
@@ -47,13 +47,13 @@ public class LichessCheckSinglePgn extends AbstractLichessCheck {
       if (totalProcessed % 100 == 0) {
         logger.printf(Level.INFO, "Processing total %i", totalProcessed);
       }
-      final PgnFile pgnFile;
+      final PgnGame pgnGame;
 
       try {
-        pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pngOutFolderPath, Nulls.getName(file));
-        if (calculateIsTimeForfeitCandidate(pgnFile)) {
-          if (calculateIsIncorrectResult(pgnFile)) {
-            final String siteValue = TagUtility.calculateTagValue(pgnFile, "Site");
+        pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pngOutFolderPath, Nulls.getName(file));
+        if (calculateIsTimeForfeitCandidate(pgnGame)) {
+          if (calculateIsIncorrectResult(pgnGame)) {
+            final String siteValue = TagUtility.calculateTagValue(pgnGame, "Site");
             logger.printf(Level.INFO, "Time forfeit - incorrect result;%s;%s", file.getName(), siteValue);
           } else {
             // logger.info("Time forfeit - possibly correct result - " + file.getName());

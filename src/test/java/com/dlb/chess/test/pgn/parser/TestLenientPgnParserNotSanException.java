@@ -11,7 +11,7 @@ import com.dlb.chess.test.pgntest.constants.PgnTestConstants;
 
 class TestLenientPgnParserNotSanException extends AbstractTestLenientPgnParserException {
   private static final Path PGN_TEST_FOLDER_PATH = Nulls
-      .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/notSan");
+      .pathResolve(PgnTestConstants.LENIENT_PGN_PARSER_TEST_ROOT_FOLDER_PATH, "exception/other");
 
   @SuppressWarnings("static-method")
   @Test
@@ -31,10 +31,9 @@ class TestLenientPgnParserNotSanException extends AbstractTestLenientPgnParserEx
     checkException("09_tag_setup_tag_value_invalid.pgn", LenientPgnParserValidationProblem.TAG_SET_UP_VALUE_INVALID);
     checkException("10_tag_setup_tag_zero_but_fen_provided.pgn",
         LenientPgnParserValidationProblem.TAG_SET_UP_VALUE_ZERO_BUT_FEN_PROVIDED);
-
   }
 
-  private static void checkException(String pgnFileName, LenientPgnParserValidationProblem expected) {
-    checkException(PGN_TEST_FOLDER_PATH, pgnFileName, expected, SanValidationProblem.NONE);
+  private static void checkException(String pgnName, LenientPgnParserValidationProblem expected) {
+    checkException(PGN_TEST_FOLDER_PATH, pgnName, expected, SanValidationProblem.NONE);
   }
 }

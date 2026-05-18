@@ -21,10 +21,10 @@ public final class MultiplePgnSplitUtility {
   private MultiplePgnSplitUtility() {
   }
 
-  public static void createSinglePgnFilesFromPgnMultipleFile(Path multiplePgnFilePath, Path outputFolderPath) {
+  public static void createSinglePgnFromPgnMultipleFile(Path multiplePgnPath, Path outputFolderPath) {
     FileUtility.deleteFilesInDirectory(outputFolderPath);
 
-    logger.printf(Level.INFO, "Processing file %s", multiplePgnFilePath);
+    logger.printf(Level.INFO, "Processing file %s", multiplePgnPath);
 
     var writtenFileCounter = 0;
     var chess960Counter = 0;
@@ -34,9 +34,9 @@ public final class MultiplePgnSplitUtility {
     var isFen = false;
     List<String> currentFileLines = new ArrayList<>();
 
-    final var file = multiplePgnFilePath.toFile();
+    final var file = multiplePgnPath.toFile();
     if (!file.isFile()) {
-      throw new IllegalArgumentException("\"" + multiplePgnFilePath + "\" is not a file");
+      throw new IllegalArgumentException("\"" + multiplePgnPath + "\" is not a file");
     }
     try (final Scanner myReader = new Scanner(file, StandardCharsets.UTF_8)) {
       while (myReader.hasNextLine()) {
@@ -58,9 +58,9 @@ public final class MultiplePgnSplitUtility {
 
             currentFileLines.add("");
 
-            final String pgnFileName = PgnExtensionUtility.addPgnFileExtension(padNumber(writtenFileCounter, -1));
+            final String pgnName = PgnExtensionUtility.addPgnExtension(padNumber(writtenFileCounter, -1));
 
-            FileUtility.writeFile(outputFolderPath, pgnFileName, currentFileLines);
+            FileUtility.writeFile(outputFolderPath, pgnName, currentFileLines);
           } else {
             chess960Counter++;
           }

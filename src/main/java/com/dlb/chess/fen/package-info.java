@@ -4,8 +4,8 @@
  * contract table.
  *
  * <ul>
- * <li>{@link com.dlb.chess.fen.FenParserRaw} — basic structural parsing. One regex: six non-empty
- * space-separated fields. No semantic interpretation.</li>
+ * <li>{@link com.dlb.chess.fen.FenParserRaw} — basic structural parsing. One regex: six non-empty space-separated
+ * fields. No semantic interpretation.</li>
  * <li>{@link com.dlb.chess.fen.FenParserAdvanced} — basic parsing plus advanced structural and rule-consistency
  * validation. Beyond field syntax it enforces:
  * <ul>
@@ -24,13 +24,13 @@
  * This is the variant {@link com.dlb.chess.board.Board#Board(String)} uses. It does not prove full game reachability —
  * a position passing these checks may still be unreachable from the initial position through any legal sequence;
  * structural and rule-consistency plausibility is the bar.</li>
- * <li>{@link com.dlb.chess.fen.LenientFenParser} — purely syntactic-tolerance pre-pass. Normalises whitespace,
- * casing, missing trailing counters, non-canonical castling order, non-ASCII dashes, and trailing garbage; also
- * recovers from the strict halfmove-clock-vs-fullmove-number inconsistency by auto-correcting the fullmove number
- * up to the minimum consistent value. After normalisation, delegates to {@code FenParserAdvanced} — strict
- * semantic invariants are unchanged. Every transform that fires surfaces as a typed
- * {@link com.dlb.chess.fen.ForgivenFenItem} on the {@link com.dlb.chess.fen.LenientFenParserValidationResult}.
- * Reached from {@link com.dlb.chess.board.Board#fromFenLenient(String)}.</li>
+ * <li>{@link com.dlb.chess.fen.LenientFenParser} — purely syntactic-tolerance pre-pass. Normalises whitespace, casing,
+ * missing trailing counters, non-canonical castling order, non-ASCII dashes, and trailing garbage; also recovers from
+ * the strict halfmove-clock-vs-fullmove-number inconsistency by auto-correcting the fullmove number up to the minimum
+ * consistent value. After normalisation, delegates to {@code FenParserAdvanced} — strict semantic invariants are
+ * unchanged. Every transform that fires surfaces as a typed {@link com.dlb.chess.fen.ForgivenFenItem} on the
+ * {@link com.dlb.chess.fen.LenientFenParserValidationResult}. Reached from
+ * {@link com.dlb.chess.board.Board#fromFenLenient(String)}.</li>
  * </ul>
  *
  * <p>

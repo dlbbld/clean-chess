@@ -52,24 +52,24 @@ public final class LenientPgnParser {
   // Public entry points
   // -------------------------------------------------------------------------------------------------
 
-  public static PgnFile parseText(String pgn) {
+  public static PgnGame parseText(String pgn) {
     return new LenientPgnParser(pgn).parseInternal();
   }
 
-  public static PgnFile parse(Path pgnFilePath) {
-    return parseText(PgnFileReader.readPgnFile(pgnFilePath));
+  public static PgnGame parse(Path pgnPath) {
+    return parseText(PgnReader.readPgn(pgnPath));
   }
 
-  public static PgnFile parse(Path pgnFolderPath, String pgnFileName) {
-    return parse(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static PgnGame parse(Path pgnFolderPath, String pgnName) {
+    return parse(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static PgnFile parse(String pgnFilePath) {
-    return parse(Nulls.pathOf(pgnFilePath));
+  public static PgnGame parse(String pgnPath) {
+    return parse(Nulls.pathOf(pgnPath));
   }
 
   /** Parses lines produced by a line-based reader (each entry is one line without its terminator). */
-  public static PgnFile parse(List<String> fileLines) {
+  public static PgnGame parse(List<String> fileLines) {
     return parseText(joinLines(fileLines));
   }
 
@@ -81,18 +81,18 @@ public final class LenientPgnParser {
     return Nulls.toString(builder);
   }
 
-  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnFileName) {
-    return validate(Nulls.pathResolve(pgnFolderPath, pgnFileName));
+  public static LenientPgnParserValidationResult validate(Path pgnFolderPath, String pgnName) {
+    return validate(Nulls.pathResolve(pgnFolderPath, pgnName));
   }
 
-  public static LenientPgnParserValidationResult validate(String pgnFilePath) {
-    return validate(Nulls.pathOf(pgnFilePath));
+  public static LenientPgnParserValidationResult validate(String pgnPath) {
+    return validate(Nulls.pathOf(pgnPath));
   }
 
-  public static LenientPgnParserValidationResult validate(Path pgnFilePath) {
+  public static LenientPgnParserValidationResult validate(Path pgnPath) {
     final LenientPgnParser parser;
     try {
-      parser = new LenientPgnParser(PgnFileReader.readPgnFile(pgnFilePath));
+      parser = new LenientPgnParser(PgnReader.readPgn(pgnPath));
     } catch (final RuntimeException e) {
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.UNKNOWN_ERROR,
           SanValidationProblem.NONE, unexpectedValidationErrorMessage(e), null, ForgivenItem.EMPTY_LIST,
@@ -103,7 +103,7 @@ public final class LenientPgnParser {
 
   /**
    * Like {@link #parseText(String)} but returns a structured result instead of throwing. The result also carries the
-   * parsed {@link PgnFile} (on success) and the list of SAN-level deviations the lenient layer forgave during movetext
+   * parsed {@link PgnGame} (on success) and the list of SAN-level deviations the lenient layer forgave during movetext
    * replay.
    */
   public static LenientPgnParserValidationResult validateText(String pgn) {
@@ -112,9 +112,9 @@ public final class LenientPgnParser {
 
   private static LenientPgnParserValidationResult runValidation(LenientPgnParser parser) {
     try {
-      final PgnFile pgnFile = parser.parseInternal();
+      final PgnGame pgnGame = parser.parseInternal();
       return new LenientPgnParserValidationResult(LenientPgnParserValidationProblem.OK, SanValidationProblem.NONE, "OK",
-          pgnFile, Nulls.copyOfList(parser.sanForgivenItemsAccumulator),
+          pgnGame, Nulls.copyOfList(parser.sanForgivenItemsAccumulator),
           Nulls.copyOfList(parser.tagForgivenItemsAccumulator));
     } catch (final LenientPgnParserValidationException e) {
       final String message = BasicUtility.getMessage(e);
@@ -154,7 +154,16 @@ public final class LenientPgnParser {
   // Top-level parsing
   // -------------------------------------------------------------------------------------------------
 
-  private PgnFile parseInternal() {
+  private PgnGame parseInternal() {
+    // Empty-input rejection. Lenient leniency is about recovering signal from imperfect PGN text — it does not
+    // fabricate a game out of zero input. "Empty" here includes whitespace-only (spaces, tabs, newlines) on top
+    // of strictly zero-length: a file containing nothing but whitespace carries no signal either. Callers who
+    // really want the initial position have {@code new Board()}.
+    if (source.isBlank()) {
+      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.FILE_EMPTY,
+          SanValidationProblem.NONE, "The PGN is empty.");
+    }
+
     skipInsignificantWhitespace();
 
     final List<Tag> tagList = parseTagSection();
@@ -183,7 +192,7 @@ public final class LenientPgnParser {
 
     final List<PgnHalfMove> canonicalHalfMoveList = replayBoardCanonicalizing(startFen, movetext.halfMoveList());
 
-    return new PgnFile(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
+    return new PgnGame(Nulls.copyOfList(tagList), startFen, movetext.pregameCommentary(),
         Nulls.copyOfList(canonicalHalfMoveList), movetext.terminationResult());
   }
 
@@ -610,7 +619,7 @@ public final class LenientPgnParser {
   /**
    * Validates that the Result tag value (if present) matches the movetext termination marker (if present). This is the
    * only result-related cross-check the lenient parser performs; both signals are preserved independently on the parse
-   * model (Result tag on the tag list, termination marker on {@link PgnFile#terminationMarker}).
+   * model (Result tag on the tag list, termination marker on {@link PgnGame#terminationMarker}).
    */
   private static void validateResultConsistency(List<Tag> tagList, @Nullable ResultTagValue terminationResult) {
     if (!TagUtility.hasResult(tagList) || terminationResult == null) {
@@ -618,8 +627,8 @@ public final class LenientPgnParser {
     }
     final ResultTagValue fromTag = ResultTagValue.calculate(TagUtility.readResult(tagList));
     if (terminationResult != fromTag) {
-      throw new LenientPgnParserValidationException(
-          LenientPgnParserValidationProblem.TAG_RESULT_BOTH_SET_BUT_DIFFERENT, SanValidationProblem.NONE,
+      throw new LenientPgnParserValidationException(LenientPgnParserValidationProblem.TAG_RESULT_BOTH_SET_BUT_DIFFERENT,
+          SanValidationProblem.NONE,
           "The result in the result tag and in the movetext must be the same. The result \"" + fromTag.getValue()
               + "\" was specified in the result tag, the result \"" + terminationResult.getValue()
               + "\" was specified in the movetext");
@@ -631,8 +640,8 @@ public final class LenientPgnParser {
   // -------------------------------------------------------------------------------------------------
 
   /**
-   * One {@link ForgivenTagItemCode#STR_TAG_MISSING} item per missing Seven Tag Roster entry, excluding Result
-   * (Result has dedicated codes that also account for the termination-marker interaction).
+   * One {@link ForgivenTagItemCode#STR_TAG_MISSING} item per missing Seven Tag Roster entry, excluding Result (Result
+   * has dedicated codes that also account for the termination-marker interaction).
    */
   private void recordMissingStrTagItems(List<Tag> tagList) {
     for (final StandardTag standardTag : TagUtility.SEVEN_TAG_ROSTER_TAG_LIST) {
@@ -647,8 +656,8 @@ public final class LenientPgnParser {
   }
 
   /**
-   * Result tag and termination-marker interaction. Emits {@code RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT}
-   * when only the marker was given (with the marker value on {@code detail}), or
+   * Result tag and termination-marker interaction. Emits {@code RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT} when
+   * only the marker was given (with the marker value on {@code detail}), or
    * {@code RESULT_TAG_AND_TERMINATION_MARKER_BOTH_MISSING} when neither was given. When the Result tag is present,
    * nothing is recorded — the value is already in the tag list (and {@link #validateResultConsistency} has already
    * cross-checked it against the marker if both are present).
@@ -658,9 +667,9 @@ public final class LenientPgnParser {
       return;
     }
     if (terminationResult != null) {
-      tagForgivenItemsAccumulator.add(new ForgivenTagItem(
-          ForgivenTagItemCode.RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT, StandardTag.RESULT.getName(),
-          terminationResult.getValue()));
+      tagForgivenItemsAccumulator
+          .add(new ForgivenTagItem(ForgivenTagItemCode.RESULT_TAG_MISSING_BUT_TERMINATION_MARKER_PRESENT,
+              StandardTag.RESULT.getName(), terminationResult.getValue()));
     } else {
       tagForgivenItemsAccumulator.add(new ForgivenTagItem(
           ForgivenTagItemCode.RESULT_TAG_AND_TERMINATION_MARKER_BOTH_MISSING, StandardTag.RESULT.getName(), ""));
@@ -670,10 +679,10 @@ public final class LenientPgnParser {
   /**
    * SetUp/FEN coupling and redundancy. Three deviations possible:
    * <ul>
-   *   <li>FEN present, SetUp absent: {@code SETUP_TAG_MISSING_BUT_FEN_PRESENT}.</li>
-   *   <li>SetUp present, FEN absent: {@code SETUP_TAG_PRESENT_BUT_FEN_MISSING}.</li>
-   *   <li>FEN present and describes the initial position (redundant signal):
-   *       {@code REDUNDANT_FEN_AND_SETUP_FOR_INITIAL_POSITION}.</li>
+   * <li>FEN present, SetUp absent: {@code SETUP_TAG_MISSING_BUT_FEN_PRESENT}.</li>
+   * <li>SetUp present, FEN absent: {@code SETUP_TAG_PRESENT_BUT_FEN_MISSING}.</li>
+   * <li>FEN present and describes the initial position (redundant signal):
+   * {@code REDUNDANT_FEN_AND_SETUP_FOR_INITIAL_POSITION}.</li>
    * </ul>
    * The first two cases are exclusive of each other. The third can fire alongside neither, since it requires FEN
    * presence — when it fires, the SetUp tag may or may not be present (both shapes are equally redundant).
@@ -682,18 +691,15 @@ public final class LenientPgnParser {
     final boolean hasFen = TagUtility.hasFen(tagList);
     final boolean hasSetUp = TagUtility.hasSetUp(tagList);
     if (hasFen && !hasSetUp) {
-      tagForgivenItemsAccumulator
-          .add(new ForgivenTagItem(ForgivenTagItemCode.SETUP_TAG_MISSING_BUT_FEN_PRESENT, StandardTag.SET_UP.getName(),
-              ""));
+      tagForgivenItemsAccumulator.add(
+          new ForgivenTagItem(ForgivenTagItemCode.SETUP_TAG_MISSING_BUT_FEN_PRESENT, StandardTag.SET_UP.getName(), ""));
     } else if (!hasFen && hasSetUp) {
-      tagForgivenItemsAccumulator
-          .add(new ForgivenTagItem(ForgivenTagItemCode.SETUP_TAG_PRESENT_BUT_FEN_MISSING, StandardTag.FEN.getName(),
-              ""));
+      tagForgivenItemsAccumulator.add(
+          new ForgivenTagItem(ForgivenTagItemCode.SETUP_TAG_PRESENT_BUT_FEN_MISSING, StandardTag.FEN.getName(), ""));
     }
     if (hasFen && startFen.equals(FenConstants.FEN_INITIAL)) {
-      tagForgivenItemsAccumulator
-          .add(new ForgivenTagItem(ForgivenTagItemCode.REDUNDANT_FEN_AND_SETUP_FOR_INITIAL_POSITION,
-              StandardTag.FEN.getName(), ""));
+      tagForgivenItemsAccumulator.add(new ForgivenTagItem(
+          ForgivenTagItemCode.REDUNDANT_FEN_AND_SETUP_FOR_INITIAL_POSITION, StandardTag.FEN.getName(), ""));
     }
   }
 
@@ -730,7 +736,7 @@ public final class LenientPgnParser {
   /**
    * Replays each half-move on a fresh board via {@link Board#moveLenient}, accumulates SAN-level forgiven items into
    * the parser-instance accumulator, and returns a copy of the half-move list with the canonical SAN substituted (so
-   * the resulting {@link PgnFile} compares equal to a strict-parsed file built from the same canonical moves).
+   * the resulting {@link PgnGame} compares equal to a strict-parsed file built from the same canonical moves).
    * Move-suffix annotations and commentaries are carried through unchanged.
    *
    * <p>
@@ -739,7 +745,11 @@ public final class LenientPgnParser {
    * The {@link com.dlb.chess.common.enums.GameStatus} from a {@code GAME_ALREADY_ENDED} reject is propagated unchanged.
    */
   private List<PgnHalfMove> replayBoardCanonicalizing(Fen startFen, List<PgnHalfMove> halfMoveList) {
-    final Board board = new Board(startFen);
+    // PGN parser's internal board: disable dead-position-unwinnable-quick auto-detection. Real-world PGNs from
+    // engines, sites, and historical sources routinely play past a position the quick analyzer classifies as dead
+    // (FIDE 5.2.2 isn't uniformly enforced by software). The parser must round-trip whatever moves are recorded;
+    // dead-position termination is the consumer's responsibility once the Board is materialised.
+    final Board board = new Board(startFen, false);
     final List<PgnHalfMove> canonicalList = new ArrayList<>(halfMoveList.size());
     for (final PgnHalfMove halfMove : halfMoveList) {
       final Side side = board.getHavingMove();

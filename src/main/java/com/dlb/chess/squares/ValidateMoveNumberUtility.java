@@ -7,7 +7,7 @@ import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
 
-public abstract class ValidateMoveNumberUtility {
+abstract class ValidateMoveNumberUtility {
 
   public static <E extends OrthogonalRange> void validateOrthogonalMoveNumber(ImmutableMap<Square, E> mapOfListList,
       int numberOfExpectedMoves) {

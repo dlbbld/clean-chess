@@ -68,8 +68,15 @@ class Mobility {
       mobility.put(piecePlacement, piecePlacement.squareOriginal(), VariableState.ONE);
     }
 
+    var whiteMovements = 0;
+    var blackMovements = 0;
+    var whiteExtraKingSquare = calculateKingSquare(piecePlacementList, Side.WHITE);
+    var blackExtraKingSquare = calculateKingSquare(piecePlacementList, Side.BLACK);
+    var round = 0;
     var isNewVariablesAreSetToOne = true;
     while (isNewVariablesAreSetToOne) {
+      round++;
+      var isFirstRoundCaptureDeferred = false;
       final var totalVariableCountSetToOneBefore = calculateTotalVariableCountSetToOne(mobility, clearability,
           reachability);
       // 3: for every variable V in X_arrow that is still set to 0 do
@@ -121,27 +128,53 @@ class Mobility {
       }
 
       // Update mobility
-      for (final MobilitySolutionVariable candidateMobility : mobility.calculateEntriesWithValueZero()) {
+      for (final PiecePlacement candidatePiecePlacement : piecePlacementList) {
         // Move. If a piece can move to square s, it must pass first by a predecessor of s:
         // all pieces except pawns
-        final var candidatePiecePlacement = candidateMobility.piecePlacement();
-        final PieceType candidatePieceType = candidateMobility.piecePlacement().pieceType();
-        final var candidateToSquare = candidateMobility.toSquare();
-
-        if (candidatePieceType == PieceType.PAWN) {
-          if (!calculateIsPawnMoveConditionOk(candidateMobility, mobility, clearability, reachability)) {
+        for (final Square candidateToSquare : Square.REAL) {
+          if (mobility.get(candidatePiecePlacement, candidateToSquare) == VariableState.ONE) {
             continue;
           }
-        } else if (!calculateIsNonPawnMoveConditionOk(candidateMobility, mobility)) {
-          continue;
-        }
+          final var candidateMobility = new MobilitySolutionVariable(candidatePiecePlacement, candidateToSquare);
+          final PieceType candidatePieceType = candidatePiecePlacement.pieceType();
 
-        if (!calculateIsKingNotMovingIntoCheckConditionOk(candidateMobility, mobility, clearability)
-            || !calculateIsNotMovingOntoOwnPieceConditionOk(candidateMobility, mobility, clearability)) {
-          continue;
-        }
+          if (candidatePieceType == PieceType.PAWN) {
+            if (!calculateIsPawnMoveConditionOk(candidateMobility, mobility, clearability, reachability)) {
+              continue;
+            }
+          } else if (!calculateIsNonPawnMoveConditionOk(candidateMobility, mobility)) {
+            continue;
+          }
 
-        mobility.put(candidatePiecePlacement, candidateToSquare, VariableState.ONE);
+          if (!calculateIsKingNotMovingIntoCheckConditionOk(candidateMobility, mobility, clearability)
+              || !calculateIsNotMovingOntoOwnPieceConditionOk(candidateMobility, mobility, clearability)) {
+            continue;
+          }
+
+          if (candidatePiecePlacement.side() == Side.WHITE) {
+            whiteMovements++;
+            if (candidatePieceType == PieceType.KING) {
+              whiteExtraKingSquare = candidateToSquare;
+            }
+          } else {
+            blackMovements++;
+            if (candidatePieceType == PieceType.KING) {
+              blackExtraKingSquare = candidateToSquare;
+            }
+          }
+
+          if (calculateIsKingBlockedByExtraKingSquare(candidatePiecePlacement, candidateToSquare, whiteMovements,
+              blackMovements, whiteExtraKingSquare, blackExtraKingSquare, piecePlacementList)) {
+            continue;
+          }
+
+          if (round <= 1 && !board.getStaticPosition().isEmpty(candidateToSquare)) {
+            isFirstRoundCaptureDeferred = true;
+            continue;
+          }
+
+          mobility.put(candidatePiecePlacement, candidateToSquare, VariableState.ONE);
+        }
       }
 
       // 5: repeat steps 3 and 4 until no new variables are set to 1
@@ -150,7 +183,8 @@ class Mobility {
       if (totalVariableCountSetToOneBefore > totalVariableCountSetToOneAfter) {
         throw new ProgrammingMistakeException("Variable state was incorrectly set");
       }
-      isNewVariablesAreSetToOne = totalVariableCountSetToOneAfter > totalVariableCountSetToOneBefore;
+      isNewVariablesAreSetToOne = totalVariableCountSetToOneAfter > totalVariableCountSetToOneBefore
+          || isFirstRoundCaptureDeferred;
     }
     if (IS_DEBUG) {
       debug(clearability, reachability, mobility);
@@ -214,6 +248,39 @@ class Mobility {
   private static int calculateTotalVariableCountSetToOne(MobilitySolution mps, Clearability cp, Reachability rcs) {
     return cp.calculateVariableCountSetToOne() + rcs.calculateVariableCountSetToOne()
         + mps.calculateVariableCountSetToOne();
+  }
+
+  private static Square calculateKingSquare(List<PiecePlacement> piecePlacementList, Side side) {
+    for (final PiecePlacement piecePlacement : piecePlacementList) {
+      if (piecePlacement.side() == side && piecePlacement.pieceType() == PieceType.KING) {
+        return piecePlacement.squareOriginal();
+      }
+    }
+    throw new ProgrammingMistakeException("King not in the list");
+  }
+
+  private static boolean calculateIsKingBlockedByExtraKingSquare(PiecePlacement candidatePiecePlacement,
+      Square candidateToSquare, int whiteMovements, int blackMovements, Square whiteExtraKingSquare,
+      Square blackExtraKingSquare, List<PiecePlacement> piecePlacementList) {
+    if (candidatePiecePlacement.pieceType() != PieceType.KING) {
+      return false;
+    }
+
+    final Side side = candidatePiecePlacement.side();
+    if (side == Side.WHITE && blackMovements > 1 || side == Side.BLACK && whiteMovements > 1) {
+      return false;
+    }
+
+    final Square opponentKingSquare = calculateKingSquare(piecePlacementList, side.getOppositeSide());
+    final Square opponentExtraKingSquare = side == Side.WHITE ? blackExtraKingSquare : whiteExtraKingSquare;
+    return calculateIsKingDistanceAtMostOne(candidateToSquare, opponentKingSquare)
+        || calculateIsKingDistanceAtMostOne(candidateToSquare, opponentExtraKingSquare);
+  }
+
+  private static boolean calculateIsKingDistanceAtMostOne(Square squareA, Square squareB) {
+    final int fileDistance = Math.abs(squareA.getFile().getNumber() - squareB.getFile().getNumber());
+    final int rankDistance = Math.abs(squareA.getRank().getNumber() - squareB.getRank().getNumber());
+    return fileDistance <= 1 && rankDistance <= 1;
   }
 
   private static boolean calculateIsPawnMoveConditionOk(MobilitySolutionVariable candidateMobility,

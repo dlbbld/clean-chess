@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import com.dlb.chess.board.Board;
 import com.dlb.chess.common.utility.BasicUtility;
 import com.dlb.chess.model.PgnHalfMove;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.test.pgn.parser.PgnCacheForStrictPgnParserTestCases;
 import com.dlb.chess.test.pgntest.enums.PgnTest;
 
@@ -24,7 +24,7 @@ class TestLegalMovesForGames {
   @Test
   void testGame1() {
     // 2_0_1_spassky_fischer_1972_seventeenth
-    final Board board = new Board();
+    final Board board = new Board(false);
     checkInitial(board);
 
     checkLegalMoves(board, "e4", "Na6, Nc6, Nf6, Nh6, a5, a6, b5, b6, c5, c6, d5, d6, e5, e6, f5, f6, g5, g6, h5, h6");
@@ -209,7 +209,7 @@ class TestLegalMovesForGames {
   @Test
   void testGame2() {
     // 2_4_1_alekhine_lasker_1914
-    final var board = new Board();
+    final var board = new Board(false);
     checkInitial(board);
 
     checkLegalMoves(board, "e4", "Na6, Nc6, Nf6, Nh6, a5, a6, b5, b6, c5, c6, d5, d6, e5, e6, f5, f6, g5, g6, h5, h6");
@@ -279,7 +279,7 @@ class TestLegalMovesForGames {
   @Test
   void testGame3() {
     // 1_filipowicz_smederevac_1966
-    final var board = new Board();
+    final var board = new Board(false);
     checkInitial(board);
 
     checkLegalMoves(board, "e4", "Na6, Nc6, Nf6, Nh6, a5, a6, b5, b6, c5, c6, d5, d6, e5, e6, f5, f6, g5, g6, h5, h6");
@@ -567,7 +567,7 @@ class TestLegalMovesForGames {
   @Test
   void testGame4() {
     // 2_2_karpov_kasparov_1991
-    final var board = new Board();
+    final var board = new Board(false);
     checkInitial(board);
 
     checkLegalMoves(board, "d4", "Na6, Nc6, Nf6, Nh6, a5, a6, b5, b6, c5, c6, d5, d6, e5, e6, f5, f6, g5, g6, h5, h6");
@@ -975,16 +975,18 @@ class TestLegalMovesForGames {
   }
 
   private static void checkInitial(Board board) {
-    assertEquals(parseSanSet(INITIAL_LEGAL_MOVES), board.getLegalMovesSan());
+    assertEquals(parseSanSet(INITIAL_LEGAL_MOVES), new TreeSet<>(board.getLegalMovesSan()));
   }
 
   private static void checkLegalMoves(Board board, String san, String expected) {
     board.moveStrict(san);
-    assertEquals(parseSanSet(expected), board.getLegalMovesSan());
+    assertEquals(parseSanSet(expected), new TreeSet<>(board.getLegalMovesSan()));
   }
 
-  // Legal-move generation has no defined order; comparing comma-separated strings would couple the
-  // test to generation-order detail. Parse the hardcoded fixture into a Set and compare set-to-set.
+  // The fixtures are written in SAN-alphabetic order for readability, which is independent of the
+  // move-generation order now defined by Board#getLegalMoves. This test verifies legal-move
+  // membership only - the order contract is exercised by other tests. Wrap actual in a TreeSet so
+  // both sides compare under the same ordering.
   @SuppressWarnings("null")
   private static Set<String> parseSanSet(String commaSeparated) {
     if (commaSeparated.isEmpty()) {
@@ -999,10 +1001,10 @@ class TestLegalMovesForGames {
     generateGame(PgnTest.WIKIPEDIA_FIFTY_MOVE, "2_2_karpov_kasparov_1991.pgn");
   }
 
-  private static void generateGame(PgnTest pgnTest, String pgnFileName) {
-    final PgnFile pgnFile = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnFileName);
-    final var board = new Board();
-    for (final PgnHalfMove move : pgnFile.halfMoveList()) {
+  private static void generateGame(PgnTest pgnTest, String pgnName) {
+    final PgnGame pgnGame = PgnCacheForStrictPgnParserTestCases.getPgn(pgnTest.getFolderPath(), pgnName);
+    final var board = new Board(false);
+    for (final PgnHalfMove move : pgnGame.halfMoveList()) {
       board.moveStrict(move.san());
       final String san = board.getSan();
       final String legalMoveList = BasicUtility.calculateCommaSeparatedList(new ArrayList<>(board.getLegalMovesSan()));

@@ -2,6 +2,7 @@ package com.dlb.chess.common.model;
 
 import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.PromotionPieceType;
+import com.dlb.chess.board.enums.PromotionPieceTypeUtility;
 import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 
@@ -67,7 +68,7 @@ public record MoveSpecification(Square fromSquare, Square toSquare, CastlingMove
     }
 
     if (this.promotionPieceType() != move.promotionPieceType()) {
-      return this.promotionPieceType().compareTo(move.promotionPieceType());
+      return PromotionPieceTypeUtility.compareForMoveOrdering(this.promotionPieceType(), move.promotionPieceType());
     }
 
     // code cannot come here

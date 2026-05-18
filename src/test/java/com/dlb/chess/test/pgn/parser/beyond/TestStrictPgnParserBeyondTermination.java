@@ -53,14 +53,14 @@ class TestStrictPgnParserBeyondTermination {
   @Test
   void test05PlayBeyondInsufficientMaterialWithWhiteMove() {
     assertRejectedWith("05_play_beyond_insufficient_material_with_white_move.pgn",
-        GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+        GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void test06PlayBeyondInsufficientMaterialWithBlackMove() {
     assertRejectedWith("06_play_beyond_insufficient_material_with_black_move.pgn",
-        GameStatus.INSUFFICIENT_MATERIAL_BOTH);
+        GameStatus.DEAD_POSITION_INSUFFICIENT_MATERIAL);
   }
 
   @SuppressWarnings("static-method")
@@ -87,9 +87,9 @@ class TestStrictPgnParserBeyondTermination {
     assertRejectedWith("10_play_beyond_seventy_five_move_rule_with_black_move.pgn", GameStatus.SEVENTY_FIVE_MOVE_RULE);
   }
 
-  private static void assertRejectedWith(String pgnFileName, GameStatus expectedStatus) {
+  private static void assertRejectedWith(String pgnName, GameStatus expectedStatus) {
     final StrictPgnParserValidationException e = assertThrows(StrictPgnParserValidationException.class,
-        () -> StrictPgnParser.parse(BEYOND_FOLDER, pgnFileName));
+        () -> StrictPgnParser.parse(BEYOND_FOLDER, pgnName));
 
     assertEquals(StrictPgnParserValidationProblem.SAN, e.getStrictPgnParserValidationProblem());
     assertEquals(SanValidationProblem.GAME_ALREADY_ENDED, e.getSanValidationProblem());

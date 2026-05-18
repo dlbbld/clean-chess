@@ -8,35 +8,35 @@ import java.util.Map;
 import org.eclipse.jdt.annotation.NonNull;
 
 import com.dlb.chess.common.Nulls;
-import com.dlb.chess.pgn.PgnFile;
+import com.dlb.chess.pgn.PgnGame;
 import com.dlb.chess.pgn.StrictPgnParser;
 
 public class PgnCacheForStrictPgnParserTestCases {
-  private static final Map<String, PgnFile> PGN_CACHE = new HashMap<>();
+  private static final Map<String, PgnGame> PGN_CACHE = new HashMap<>();
 
-  public static PgnFile getPgn(Path pgnFolderPath, String pgnFileName) {
+  public static PgnGame getPgn(Path pgnFolderPath, String pgnName) {
     // Validate the folder path
     if (!Files.isDirectory(pgnFolderPath)) {
       throw new IllegalArgumentException("Invalid folder path: " + pgnFolderPath);
     }
 
     // Construct the full path to the PGN file
-    final var pgnFilePath = Nulls.pathResolve(pgnFolderPath, pgnFileName);
+    final var pgnPath = Nulls.pathResolve(pgnFolderPath, pgnName);
 
     // Convert to a canonical String for cache lookups
-    @SuppressWarnings("null") final @NonNull String key = pgnFilePath.toAbsolutePath().toString();
+    @SuppressWarnings("null") final @NonNull String key = pgnPath.toAbsolutePath().toString();
 
     // Check the cache
     if (PGN_CACHE.containsKey(key)) {
-      @SuppressWarnings("null") final PgnFile pgnFile = PGN_CACHE.get(key);
-      return pgnFile;
+      @SuppressWarnings("null") final PgnGame pgnGame = PGN_CACHE.get(key);
+      return pgnGame;
     }
 
     // Not in cache; read it from disk and store
-    final PgnFile pgnFile = StrictPgnParser.parse(pgnFolderPath, pgnFileName);
-    PGN_CACHE.put(key, pgnFile);
+    final PgnGame pgnGame = StrictPgnParser.parse(pgnFolderPath, pgnName);
+    PGN_CACHE.put(key, pgnGame);
 
-    return pgnFile;
+    return pgnGame;
   }
 
 }

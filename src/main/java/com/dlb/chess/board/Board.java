@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.TreeSet;
 
 import org.eclipse.jdt.annotation.Nullable;
 
@@ -18,6 +17,7 @@ import com.dlb.chess.board.enums.Square;
 import com.dlb.chess.common.Nulls;
 import com.dlb.chess.common.constants.ChessConstants;
 import com.dlb.chess.common.constants.DynamicPositionConstants;
+import com.dlb.chess.common.enums.GameStatus;
 import com.dlb.chess.common.enums.InsufficientMaterial;
 import com.dlb.chess.common.exceptions.ProgrammingMistakeException;
 import com.dlb.chess.common.model.DynamicPosition;
@@ -50,12 +50,11 @@ import com.dlb.chess.san.StrictSanParserValidationResult;
 import com.dlb.chess.squares.AbstractAttackedSquares;
 import com.dlb.chess.unwinnability.DeadPositionFull;
 import com.dlb.chess.unwinnability.DeadPositionQuick;
-import com.dlb.chess.unwinnability.UnwinnableFull;
+import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
+import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableFullAnalyzer;
-import com.dlb.chess.unwinnability.UnwinnableQuick;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableSet;
 
 /**
  * The library's central type â€” a chess <em>game</em>, not merely a position. A {@code Board} carries the position
@@ -113,7 +112,7 @@ public class Board {
 
   private final Fen initialFen;
   private final List<LegalMove> performedLegalMoveList;
-  private final List<ImmutableSet<LegalMove>> legalMoveSetList;
+  private final List<ImmutableList<LegalMove>> legalMoveListPerPly;
   private final List<Boolean> isCheckList;
   private final List<Boolean> isCheckmateList;
   private final List<Boolean> isStalemateList;
@@ -129,9 +128,45 @@ public class Board {
   private final List<CastlingRightLoss> blackQueenSideLossList;
 
   /**
-   * Constructs a {@code Board} at the position carried by the given pre-parsed {@link Fen}.
+   * Constructor flag: auto-detect {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} after every move. {@code true} is
+   * the FIDE-compliant default. {@code false} skips the expensive analyzer-driven check; mechanical
+   * insufficient-material detection is unaffected.
+   *
+   * <p>
+   * {@code transient} so reflective equality treats boards with different detection flags as equal — the flag governs
+   * detection behaviour, not position state.
+   */
+  private final transient boolean isDetectDeadPositionUnwinnable;
+
+  /**
+   * Per-ply boolean: did the quick analyzer find both sides UNWINNABLE at this ply? Computed eagerly during
+   * {@link #performMoveWithoutValidation} (and the constructor) and read by {@link #isDeadPositionUnwinnableQuick()}.
+   * Same list-per-ply pattern as {@link #isCheckmateList}.
+   */
+  private final List<Boolean> isDeadPositionUnwinnableQuickList;
+
+  /**
+   * Constructs a {@code Board} at the position carried by the given pre-parsed {@link Fen}, with dead-position
+   * unwinnable-quick detection enabled (FIDE-compliant default — game terminates automatically when both sides reach a
+   * position the quick unwinnability analyzer classifies as unwinnable).
    */
   public Board(Fen initialFen) {
+    this(initialFen, true);
+  }
+
+  /**
+   * Constructs a {@code Board} at the position carried by the given pre-parsed {@link Fen}, with explicit control of
+   * the {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} auto-detection. Pass {@code false} to skip the expensive
+   * per-move analyzer-driven check; mechanical insufficient-material detection (cheap, exact) always runs regardless.
+   *
+   * @param detectDeadPositionUnwinnable {@code true} for FIDE-compliant behaviour (default); {@code false} for callers
+   *                                     that have their own dead-position pipeline or for test corpora that replay
+   *                                     large numbers of games and can't afford the per-move analyzer cost
+   */
+  public Board(Fen initialFen, boolean detectDeadPositionUnwinnable) {
+
+    this.isDetectDeadPositionUnwinnable = detectDeadPositionUnwinnable;
+    this.isDeadPositionUnwinnableQuickList = new ArrayList<>();
 
     // using the static fen in case saves a bit of memory
     Fen initialFenUse;
@@ -146,16 +181,20 @@ public class Board {
     final Side initialHavingMove = initialFenUse.havingMove();
     final CastlingRight initialCastlingRight = CastlingUtility.getCastlingRight(initialFenUse, initialHavingMove);
     final var initialEnPassantCaptureTargetSquare = initialFenUse.enPassantCaptureTargetSquare();
-    final var initialIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(
-        initialEnPassantCaptureTargetSquare, initialHavingMove, initialStaticPosition);
+    // Normalize: keep the target square on DynamicPosition only when an opposing pawn can actually capture there.
+    // The raw FEN-spec square is preserved on Board (see getEnPassantCaptureTargetSquare()) for FEN export.
+    final var initialNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
+        initialEnPassantCaptureTargetSquare, initialHavingMove, initialStaticPosition)
+            ? initialEnPassantCaptureTargetSquare
+            : Square.NONE;
 
     this.initialFen = initialFenUse;
 
     this.performedLegalMoveList = new ArrayList<>();
-    this.legalMoveSetList = new ArrayList<>();
-    final ImmutableSet<LegalMove> legalMoveSet = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition,
+    this.legalMoveListPerPly = new ArrayList<>();
+    final ImmutableList<LegalMove> legalMoves = AbstractLegalMoves.calculateLegalMoves(initialStaticPosition,
         initialHavingMove, initialCastlingRight, initialEnPassantCaptureTargetSquare);
-    this.legalMoveSetList.add(legalMoveSet);
+    this.legalMoveListPerPly.add(legalMoves);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(initialStaticPosition,
         initialHavingMove.getOppositeSide());
@@ -168,11 +207,11 @@ public class Board {
     this.isCheckList.add(isCheck);
 
     this.isCheckmateList = new ArrayList<>();
-    final var isCheckmate = isCheck && legalMoveSet.isEmpty();
+    final var isCheckmate = isCheck && legalMoves.isEmpty();
     this.isCheckmateList.add(isCheckmate);
 
     this.isStalemateList = new ArrayList<>();
-    final var isStalemate = !isCheck && legalMoveSet.isEmpty();
+    final var isStalemate = !isCheck && legalMoves.isEmpty();
     this.isStalemateList.add(isStalemate);
 
     this.dynamicPositionList = new ArrayList<>();
@@ -184,7 +223,7 @@ public class Board {
       this.dynamicPositionList.add(DynamicPositionConstants.INITIAL);
     } else {
       this.dynamicPositionList.add(new DynamicPosition(initialHavingMove, initialStaticPosition,
-          initialIsEnPassantCapturePossible, initialCastlingRightWhite, initialCastlingRightBlack));
+          initialNormalizedEnPassantCaptureTargetSquare, initialCastlingRightWhite, initialCastlingRightBlack));
     }
     this.halfMoveClockList = new ArrayList<>();
     this.halfMoveClockList.add(initialFenUse.halfMoveClock());
@@ -214,13 +253,25 @@ public class Board {
         || initialCastlingRightBlack == CastlingRight.QUEEN_SIDE ? CastlingRightLoss.NOT_LOST
             : CastlingRightLoss.UNKNOWN_FEN_IMPORT);
 
+    // Eager initial-position dead-position-unwinnable-quick value. Must be after all other state is initialised
+    // since the analyzer reads the board via the regular API.
+    this.isDeadPositionUnwinnableQuickList.add(computeDeadPositionUnwinnableQuick());
   }
 
   /**
-   * Constructs a {@code Board} at the standard initial position.
+   * Constructs a {@code Board} at the standard initial position with dead-position-unwinnable-quick auto-detection
+   * enabled (FIDE-compliant default).
    */
   public Board() {
-    this(FenConstants.FEN_INITIAL);
+    this(FenConstants.FEN_INITIAL, true);
+  }
+
+  /**
+   * Constructs a {@code Board} at the standard initial position with explicit control of the
+   * {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} auto-detection. See {@link #Board(Fen, boolean)}.
+   */
+  public Board(boolean detectDeadPositionUnwinnable) {
+    this(FenConstants.FEN_INITIAL, detectDeadPositionUnwinnable);
   }
 
   /**
@@ -231,16 +282,38 @@ public class Board {
    * package documentation for the full contract.
    */
   public Board(String fen) {
-    this(FenParserAdvanced.parseFenAdvanced(fen));
+    this(FenParserAdvanced.parseFenAdvanced(fen), true);
+  }
+
+  /**
+   * Constructs a {@code Board} from a FEN string with explicit control of the
+   * {@link GameStatus#DEAD_POSITION_UNWINNABLE_QUICK} auto-detection. See {@link #Board(Fen, boolean)} for the meaning
+   * of the flag.
+   */
+  public Board(String fen, boolean detectDeadPositionUnwinnable) {
+    this(FenParserAdvanced.parseFenAdvanced(fen), detectDeadPositionUnwinnable);
+  }
+
+  /**
+   * Creates a new board whose initial position is this board's current position, without carrying over the move
+   * history.
+   *
+   * <p>
+   * Auto-detection of {@code DEAD_POSITION_UNWINNABLE_QUICK} follows the {@code detectDeadPositionUnwinnable} flag.
+   */
+  public Board copyCurrentPositionWithoutHistory(boolean detectDeadPositionUnwinnable) {
+    final Fen currentPosition = new Fen(getFen(), getStaticPosition(), getHavingMove(), getCastlingRightWhite(),
+        getCastlingRightBlack(), getEnPassantCaptureTargetSquare(), 0, getFullMoveNumberForNextHalfMove());
+    return new Board(currentPosition, detectDeadPositionUnwinnable);
   }
 
   /**
    * Constructs a {@code Board} from a FEN string via {@link LenientFenParser}. The lenient layer applies a
    * syntactic-tolerance pass (whitespace, casing, missing halfmove/fullmove counters, non-canonical castling order,
-   * non-ASCII dashes, trailing garbage) before delegating to {@link FenParserAdvanced}. Strict semantic invariants
-   * are unchanged: a FEN with a missing king, a pawn on rank 1, an impossible double-check, or castling rights that
-   * contradict the piece placement still fails. Callers who need to see the list of tolerated deviations should
-   * invoke {@link LenientFenParser#validateText(String)} directly.
+   * non-ASCII dashes, trailing garbage) before delegating to {@link FenParserAdvanced}. Strict semantic invariants are
+   * unchanged: a FEN with a missing king, a pawn on rank 1, an impossible double-check, or castling rights that
+   * contradict the piece placement still fails. Callers who need to see the list of tolerated deviations should invoke
+   * {@link LenientFenParser#validateText(String)} directly.
    *
    * @throws com.dlb.chess.fen.LenientFenParserValidationException when the input cannot be recovered or fails the
    *                                                               strict semantic checks
@@ -342,8 +415,10 @@ public class Board {
         afterHavingMove);
     final var afterEnPassantCaptureTargetSquare = EnPassantCaptureUtility
         .calculateEnPassantCaptureTargetSquare(moveToPerform);
-    final var afterIsEnPassantCapturePossible = calculateIsEnPassantCapturePossible(afterEnPassantCaptureTargetSquare,
-        afterHavingMove, afterStaticPosition);
+    // Normalize for DynamicPosition; see initial-position construction site for the rationale.
+    final var afterNormalizedEnPassantCaptureTargetSquare = calculateIsEnPassantCapturePossible(
+        afterEnPassantCaptureTargetSquare, afterHavingMove, afterStaticPosition) ? afterEnPassantCaptureTargetSquare
+            : Square.NONE;
 
     // update castling loss reasons
     this.whiteKingSideLossList.add(CastlingUtility.calculateCastlingRightLoss(moveToPerform,
@@ -359,9 +434,9 @@ public class Board {
     this.performedLegalMoveList.add(moveToPerform);
 
     // now we have a depencency on instruction execution: the move must be performed before calling the legal moves
-    final ImmutableSet<LegalMove> legalMoveSetAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
+    final ImmutableList<LegalMove> legalMovesAfterMove = AbstractLegalMoves.calculateLegalMoves(afterStaticPosition,
         afterHavingMove, afterCastlingRightHavingMove, afterEnPassantCaptureTargetSquare);
-    this.legalMoveSetList.add(legalMoveSetAfterMove);
+    this.legalMoveListPerPly.add(legalMovesAfterMove);
 
     final Set<Square> attackedSquareSet = AbstractAttackedSquares.calculateAttackedSquares(afterStaticPosition,
         afterHavingMove.getOppositeSide());
@@ -371,14 +446,14 @@ public class Board {
     final var isCheck = attackedSquareSet.contains(kingSquareHavingMove);
     this.isCheckList.add(isCheck);
 
-    final var isCheckmate = isCheck && legalMoveSetAfterMove.isEmpty();
+    final var isCheckmate = isCheck && legalMovesAfterMove.isEmpty();
     this.isCheckmateList.add(isCheckmate);
 
-    final var isStalemate = !isCheck && legalMoveSetAfterMove.isEmpty();
+    final var isStalemate = !isCheck && legalMovesAfterMove.isEmpty();
     this.isStalemateList.add(isStalemate);
 
     final var newDynamicPosition = new DynamicPosition(afterHavingMove, afterStaticPosition,
-        afterIsEnPassantCapturePossible, afterCastlingRightBoth.castlingRightWhite(),
+        afterNormalizedEnPassantCaptureTargetSquare, afterCastlingRightBoth.castlingRightWhite(),
         afterCastlingRightBoth.castlingRightBlack());
     this.dynamicPositionList.add(newDynamicPosition);
 
@@ -391,17 +466,19 @@ public class Board {
         dynamicPositionList, newDynamicPosition);
     this.repetitionCountList.add(newRepetitionCount);
 
-    final ImmutableSet<LegalMove> legalMoveSetBeforeLastHalfMoveSet = Nulls.get(legalMoveSetList,
-        legalMoveSetList.size() - 2);
+    final ImmutableList<LegalMove> legalMovesBeforeLastHalfMove = Nulls.get(legalMoveListPerPly,
+        legalMoveListPerPly.size() - 2);
 
     final SanTerminalMarker sanTerminalMarker = SanTerminalMarker.calculate(isCheck, isCheckmate);
 
-    this.sanList
-        .add(MoveToSan.calculateSanLastMove(moveToPerform, legalMoveSetBeforeLastHalfMoveSet, sanTerminalMarker));
+    this.sanList.add(MoveToSan.calculateSanLastMove(moveToPerform, legalMovesBeforeLastHalfMove, sanTerminalMarker));
     this.lanList.add(MoveToLan.calculateLanLastMove(moveToPerform, sanTerminalMarker));
 
     final HalfMove halfMove = buildHalfMove(moveSpecification);
     this.halfMoveList.add(halfMove);
+
+    // Eager per-ply dead-position-unwinnable-quick value (false when detection disabled or recursion-suppressed).
+    this.isDeadPositionUnwinnableQuickList.add(computeDeadPositionUnwinnableQuick());
 
     return true;
 
@@ -448,7 +525,7 @@ public class Board {
     }
 
     this.performedLegalMoveList.remove(performedLegalMoveList.size() - 1);
-    this.legalMoveSetList.remove(legalMoveSetList.size() - 1);
+    this.legalMoveListPerPly.remove(legalMoveListPerPly.size() - 1);
 
     this.isCheckList.remove(isCheckList.size() - 1);
     this.isCheckmateList.remove(isCheckmateList.size() - 1);
@@ -468,6 +545,8 @@ public class Board {
     this.blackKingSideLossList.remove(blackKingSideLossList.size() - 1);
     this.blackQueenSideLossList.remove(blackQueenSideLossList.size() - 1);
 
+    this.isDeadPositionUnwinnableQuickList.remove(isDeadPositionUnwinnableQuickList.size() - 1);
+
   }
 
   public LegalMove getLastMove() {
@@ -477,8 +556,8 @@ public class Board {
     return Nulls.getLast(this.performedLegalMoveList);
   }
 
-  public ImmutableSet<LegalMove> getLegalMoveSet() {
-    return Nulls.getLast(legalMoveSetList);
+  public ImmutableList<LegalMove> getLegalMoves() {
+    return Nulls.getLast(legalMoveListPerPly);
   }
 
   public ImmutableList<MoveSpecification> getPerformedMoveSpecificationList() {
@@ -514,7 +593,7 @@ public class Board {
   public boolean canClaimFiftyMoveRuleWithOwnMove() {
     final var halfMoveCounterNow = this.getHalfMoveClock();
     if (halfMoveCounterNow >= 99) {
-      for (final LegalMove legalMove : getLegalMoveSet()) {
+      for (final LegalMove legalMove : getLegalMoves()) {
         // we must not perform the move to check, which is crucial for performance reasons
         if (!BasicChessUtility.calculateIsResetHalfMoveClock(legalMove)) {
           return true;
@@ -525,7 +604,7 @@ public class Board {
   }
 
   public boolean canClaimThreefoldRepetitionRuleWithOwnMove() {
-    for (final LegalMove legalMove : getLegalMoveSet()) {
+    for (final LegalMove legalMove : getLegalMoves()) {
       // we must not check moves creating a position that never occurred so far
       if (!BasicChessUtility.calculateIsResetHalfMoveClock(legalMove)) {
         this.move(legalMove.moveSpecification());
@@ -565,7 +644,7 @@ public class Board {
 
   public String getFen() {
     if (isFirstMove()) {
-      return getInitialFen().fen();
+      return initialFen.fen();
     }
     return FenBoard.calculateFen(this);
   }
@@ -713,7 +792,7 @@ public class Board {
   }
 
   public boolean isEnPassantCapturePossible() {
-    return Nulls.getLast(dynamicPositionList).isEnPassantCapturePossible();
+    return Nulls.getLast(dynamicPositionList).enPassantCaptureTargetSquare() != Square.NONE;
   }
 
   private static boolean calculateIsEnPassantCapturePossible(Square enPassantCaptureTargetSquare, Side havingMove,
@@ -768,12 +847,12 @@ public class Board {
     return Nulls.getLast(dynamicPositionList);
   }
 
-  public ImmutableSet<MoveSpecification> getPossibleMoveSpecificationSet() {
-    final Set<MoveSpecification> result = new TreeSet<>();
-    for (final LegalMove legalMove : this.getLegalMoveSet()) {
+  public ImmutableList<MoveSpecification> getPossibleMoveSpecificationList() {
+    final List<MoveSpecification> result = new ArrayList<>();
+    for (final LegalMove legalMove : this.getLegalMoves()) {
       result.add(legalMove.moveSpecification());
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
   @Override
@@ -803,7 +882,7 @@ public class Board {
   @Override
   public int hashCode() {
     return Objects.hash(dynamicPositionList, halfMoveClockList, halfMoveList, initialFen, isCheckList, isCheckmateList,
-        isStalemateList, lanList, legalMoveSetList, performedLegalMoveList, repetitionCountList, sanList);
+        isStalemateList, lanList, legalMoveListPerPly, performedLegalMoveList, repetitionCountList, sanList);
   }
 
   @Override
@@ -820,7 +899,7 @@ public class Board {
         && Objects.equals(halfMoveList, other.halfMoveList) && Objects.equals(initialFen, other.initialFen)
         && Objects.equals(isCheckList, other.isCheckList) && Objects.equals(isCheckmateList, other.isCheckmateList)
         && Objects.equals(isStalemateList, other.isStalemateList) && Objects.equals(lanList, other.lanList)
-        && Objects.equals(legalMoveSetList, other.legalMoveSetList)
+        && Objects.equals(legalMoveListPerPly, other.legalMoveListPerPly)
         && Objects.equals(performedLegalMoveList, other.performedLegalMoveList)
         && Objects.equals(repetitionCountList, other.repetitionCountList) && Objects.equals(sanList, other.sanList);
   }
@@ -899,38 +978,75 @@ public class Board {
   }
 
   public DeadPositionQuick isDeadPositionQuick() {
-    final UnwinnableQuick unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
-    final UnwinnableQuick unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
-    if (unwinnableWhite == UnwinnableQuick.UNWINNABLE && unwinnableBlack == UnwinnableQuick.UNWINNABLE) {
+    final UnwinnabilityQuickVerdict unwinnableWhite = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE);
+    final UnwinnabilityQuickVerdict unwinnableBlack = UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK);
+    if (unwinnableWhite == UnwinnabilityQuickVerdict.UNWINNABLE
+        && unwinnableBlack == UnwinnabilityQuickVerdict.UNWINNABLE) {
       return DeadPositionQuick.DEAD_POSITION;
     }
-    if (unwinnableWhite == UnwinnableQuick.WINNABLE && unwinnableBlack == UnwinnableQuick.WINNABLE) {
+    if (unwinnableWhite == UnwinnabilityQuickVerdict.WINNABLE
+        && unwinnableBlack == UnwinnabilityQuickVerdict.WINNABLE) {
       return DeadPositionQuick.NON_DEAD_POSITION;
     }
     return DeadPositionQuick.POSSIBLY_NON_DEAD_POSITION;
   }
 
+  /**
+   * Per-ply: did the quick analyzer find both sides UNWINNABLE at the current position? Read against the eager per-ply
+   * value; returns {@code false} when detection is disabled.
+   */
+  public boolean isDeadPositionUnwinnableQuick() {
+    if (!isDetectDeadPositionUnwinnable) {
+      return false;
+    }
+    return Nulls.getLast(isDeadPositionUnwinnableQuickList);
+  }
+
+  /**
+   * FIDE 5.2.2 dead position: either both sides insufficient material (cheap, exact) or both sides UNWINNABLE per the
+   * quick analyzer ({@link #isDeadPositionUnwinnableQuick}). The cheap predicate short-circuits the expensive one.
+   */
+  public boolean isDeadPosition() {
+    return isInsufficientMaterial() || isDeadPositionUnwinnableQuick();
+  }
+
+  /**
+   * Eager compute, called once per ply from the constructor and {@link #performMoveWithoutValidation}. Returns
+   * {@code false} when detection is disabled; otherwise delegates to the quick analyzer, which isolates itself by
+   * running on its own fresh detection-off board (no recursion concern).
+   */
+  private boolean computeDeadPositionUnwinnableQuick() {
+    if (!isDetectDeadPositionUnwinnable) {
+      return false;
+    }
+    if (UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.WHITE) != UnwinnabilityQuickVerdict.UNWINNABLE) {
+      return false;
+    }
+    return UnwinnableQuickAnalyzer.unwinnableQuick(this, Side.BLACK) == UnwinnabilityQuickVerdict.UNWINNABLE;
+  }
+
   public DeadPositionFull isDeadPositionFull() {
-    final UnwinnableFull unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).unwinnableFull();
-    if (unwinnableWhite == UnwinnableFull.WINNABLE) {
+    final UnwinnabilityFullVerdict unwinnableWhite = UnwinnableFullAnalyzer.unwinnableFull(this, Side.WHITE).verdict();
+    if (unwinnableWhite == UnwinnabilityFullVerdict.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    final UnwinnableFull unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).unwinnableFull();
-    if (unwinnableBlack == UnwinnableFull.WINNABLE) {
+    final UnwinnabilityFullVerdict unwinnableBlack = UnwinnableFullAnalyzer.unwinnableFull(this, Side.BLACK).verdict();
+    if (unwinnableBlack == UnwinnabilityFullVerdict.WINNABLE) {
       return DeadPositionFull.NON_DEAD_POSITION;
     }
-    if (unwinnableWhite == UnwinnableFull.UNWINNABLE && unwinnableBlack == UnwinnableFull.UNWINNABLE) {
+    if (unwinnableWhite == UnwinnabilityFullVerdict.UNWINNABLE
+        && unwinnableBlack == UnwinnabilityFullVerdict.UNWINNABLE) {
       return DeadPositionFull.DEAD_POSITION;
     }
     return DeadPositionFull.UNDETERMINED;
   }
 
-  public UnwinnableQuick isUnwinnableQuick(Side side) {
+  public UnwinnabilityQuickVerdict isUnwinnableQuick(Side side) {
     return UnwinnableQuickAnalyzer.unwinnableQuick(this, side);
   }
 
-  public UnwinnableFull isUnwinnableFull(Side side) {
-    return UnwinnableFullAnalyzer.unwinnableFull(this, side).unwinnableFull();
+  public UnwinnabilityFullVerdict isUnwinnableFull(Side side) {
+    return UnwinnableFullAnalyzer.unwinnableFull(this, side).verdict();
   }
 
   public CastlingRight getCastlingRight(Side havingMove) {
@@ -942,24 +1058,24 @@ public class Board {
     };
   }
 
-  public ImmutableSet<String> getLegalMovesSan() {
-    final Set<String> result = new TreeSet<>();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+  public ImmutableList<String> getLegalMovesSan() {
+    final List<String> result = new ArrayList<>();
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationList()) {
       this.move(moveSpecification);
       result.add(getSan());
       this.unmove();
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
-  public ImmutableSet<String> getLegalMovesUci() {
-    final Set<String> result = new TreeSet<>();
+  public ImmutableList<String> getLegalMovesUci() {
+    final List<String> result = new ArrayList<>();
     final Side havingMove = getHavingMove();
-    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationSet()) {
+    for (final MoveSpecification moveSpecification : getPossibleMoveSpecificationList()) {
       final String uci = UciMoveUtility.convertMoveSpecificationToUci(havingMove, moveSpecification).text();
       result.add(uci);
     }
-    return Nulls.copyOfSet(result);
+    return Nulls.copyOfList(result);
   }
 
   private HalfMove buildHalfMove(MoveSpecification moveSpecification) {
