@@ -4,7 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -20,7 +19,6 @@ import com.dlb.chess.unwinnability.UnwinnabilityFullVerdict;
  * Exercises {@link ForcedLineOracle} against the BASIC_FORCED corpus: positions where the unique-legal-move chain from
  * the root leads to a terminal status (checkmate / stalemate / insufficient material).
  */
-@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestForcedLineOracle {
 
   @SuppressWarnings("static-method")

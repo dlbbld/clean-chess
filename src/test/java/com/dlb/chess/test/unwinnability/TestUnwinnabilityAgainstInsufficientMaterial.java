@@ -2,7 +2,6 @@ package com.dlb.chess.test.unwinnability;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -30,7 +29,6 @@ import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
  * randomly-generated games that end in K-vs-K-style insufficient material add no coverage beyond what the {@code
  * BASIC_INSUFFICIENT_MATERIAL_*} fixtures provide.
  */
-@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestUnwinnabilityAgainstInsufficientMaterial {
 
   @SuppressWarnings("static-method")

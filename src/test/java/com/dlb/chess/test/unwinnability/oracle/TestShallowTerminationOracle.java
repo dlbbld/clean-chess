@@ -6,7 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.List;
 
 import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import com.dlb.chess.board.Board;
@@ -19,7 +18,6 @@ import com.dlb.chess.test.unwinnability.againstcha.AmbronaUnwinnabilityOracle;
 import com.dlb.chess.test.unwinnability.oracle.enums.LimitedUnwinnabilityVerdict;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 
-@Disabled("Suspended for the bitboard backend release; re-enabled in Phase 9.")
 class TestShallowTerminationOracle {
 
   private static final Logger logger = Nulls.getLogger(TestShallowTerminationOracle.class);
