@@ -72,6 +72,11 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     return get(square) == Piece.NONE;
   }
 
+  public long occupied() {
+    return whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKings | blackPawns | blackRooks
+        | blackKnights | blackBishops | blackQueens | blackKings;
+  }
+
   private static long bitFor(Square square) {
     if (square == Square.NONE) {
       throw new IllegalArgumentException("The NONE square does not belong to the board");
