@@ -6,9 +6,7 @@ Order within each section is the source of truth. Completed tasks move to **Done
 
 ## The story when releases are done
 
-The story when the sequence completes: *clean-chess started as a correctness-first reference implementation, built from the FIDE rules without consulting existing libraries. It found correctness bugs in python-chess and ScalaChess along the way. Once the rules were stable, a bitboard backend was added and verified bit-exact against the original reference layer. Then cross-validation against python-chess was reactivated as primary, with `chesslib` retained as a second witness. Only then published to Maven Central.*
-
-The story when the sequence completes: *clean-chess started as a correctness-first reference implementation, built from the FIDE rules without consulting existing libraries. It found correctness bugs in python-chess and ScalaChess along the way. Once the rules were stable, a bitboard backend was added alongside the reference layer and verified bit-exact against it. Production then switched to the bitboard path; the reference layer was relocated into the test tree and remains as the permanent differential-test oracle. Cross-validation against python-chess was reactivated as primary, with `chesslib` retained as a second witness. Only then published to Maven Central.*
+*clean-chess started as a correctness-first reference implementation, built from the FIDE rules without consulting existing libraries. It found correctness bugs in python-chess and ScalaChess along the way. Once the rules were stable, a bitboard backend was added alongside the reference layer and verified bit-exact against it. Production then switched to the bitboard path; the reference layer was relocated into the test tree and remains as the permanent differential-test oracle. Cross-validation against python-chess was reactivated as primary, with `chesslib` retained as a second witness. Only then published to Maven Central.*
 
 ---
 
@@ -38,9 +36,14 @@ This rule overrides any task in any release section below. Tasks that conflict w
 
 ## Current Bitboard release — Implementation plan
 
-I have enough context. Let me check one more thing — how tests are routinely disabled in this repo — so the plan uses the same mechanism.
+Commit-sized steps suitable for Codex review. Each step is one PR-style commit on `use_bitboard_for_rich_board`, with the differential test attached to the step that needs it. Sliding attacks use classical ray loops in this release (magics deferred to the switchover release where they actually pay off); make-move is immutable-only here (mutable make/unmake belongs to the lean-analyzer release).
 
-Here's a step-by-step plan. I've reworked the tasks.md "Bitboard backend" section into smaller commit-sized steps and changed two things from that plan: **sliding attacks via classical ray loops first, magics deferred**; and **immutable `afterMove` first, mutable make/unmake deferred to the lean-analyzer release.** Both keep this release small and verifiable.
+### Status
+
+- ✅ **Phase 0** — `13e56fbe` — unwinnability tests disabled
+- ✅ **Step 1.1** — `2c671f16` — `BitboardPosition` record + package skeleton
+- ⬜ **Step 1.2** — current
+- ⬜ Steps 1.3 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
@@ -70,9 +73,9 @@ Single commit. Verify the suite still passes and is meaningfully faster.
 
 ### Phase 1 — Foundation
 
-**Step 1.1** — Create package `com.dlb.chess.bitboard` with `package-info.java` (`@NonNullByDefault`). Add `BitboardPosition` record with 12 `long` fields (one per non-NONE `Piece`). Constants: `INITIAL_POSITION`, `EMPTY_POSITION`. No methods yet beyond what records auto-generate.
+**Step 1.1** — Create package `com.dlb.chess.bitboard` with `package-info.java` (`@NonNullByDefault`). Add `BitboardPosition` record with 12 `long` fields (one per real `Piece` value, field order matches `Piece.REAL`). No methods or constants yet beyond what records auto-generate. *(`INITIAL_POSITION` / `EMPTY_POSITION` constants moved to Step 1.2 where they become trivial one-liners off `fromStaticPosition`.)*
 
-**Step 1.2** — `BitboardPosition.fromStaticPosition(StaticPosition)` + `toStaticPosition()`. First differential test class `TestBitboardPositionRoundTrip`: for every `PgnTestCase.finalPosition()` in the corpus, assert `BitboardPosition.fromStaticPosition(sp).toStaticPosition().equals(sp)`. This is the spine — every later step rides on this being green.
+**Step 1.2** — `BitboardPosition.fromStaticPosition(StaticPosition)` + `toStaticPosition()`. Add `INITIAL_POSITION` and `EMPTY_POSITION` constants, computed off `fromStaticPosition(StaticPosition.INITIAL_POSITION)` and `fromStaticPosition(StaticPosition.EMPTY_POSITION)`. First differential test class `TestBitboardPositionRoundTrip`: for every `PgnTestCase.finalPosition()` in the corpus, assert `BitboardPosition.fromStaticPosition(sp).toStaticPosition().equals(sp)`. This is the spine — every later step rides on this being green.
 
 **Step 1.3** — `BitboardPosition.get(Square) -> Piece` and `isEmpty(Square)`. Differential test: corpus × all 64 squares, both representations agree.
 
@@ -186,26 +189,7 @@ The architectural advantage clean-chess has: the two representations are indepen
 
 After this release the `StaticPosition` path remains in `src/main/` and continues to be the production code path. It moves to `src/test/` only in the dedicated switchover release that follows, and only if the differential-test harness has stayed green throughout.
 
-### Action items — design phase (settle first)
-
-- [ ] Relationship between `BitboardPosition` and `StaticPosition`: independent siblings (sync on every move) vs bitboard primary + `StaticPosition` as derived view. Lean: bitboard primary, `StaticPosition` computed on demand for human-readable purposes / introspection
-- [ ] Magic-bitboard tables for sliding pieces (rook, bishop, queen): standard magic numbers vs PEXT (BMI2). Java + portability concern → magic
-- [ ] Differential-test harness shape: every existing test runs both representations under an assertion, or a dedicated equivalence test that walks all production positions?
-- [ ] Incremental make/unmake on bitboards vs full recomputation per move
-
-### Action items — implementation (additive only, no production switchover)
-
-- [ ] New package `com.dlb.chess.bitboard` with `BitboardPosition` and supporting bitboard utilities
-- [ ] Piece-on-square query
-- [ ] Knight attack table; pawn attack tables (per side); king attack table
-- [ ] Sliding-piece attacks (rook, bishop, queen) — classical ray loops on bitboards in this release; magic-bitboard acceleration deferred to the switchover release where it actually pays off
-- [ ] Attacked-squares computation, check detection, `attackersTo` query
-- [ ] Pseudo-legal then legal move generation on bitboards (including pin detection)
-- [ ] Immutable `afterMove` on `BitboardPosition` (mutable make/unmake deferred to the switchover/tree-search release)
-- [ ] Zobrist hash, computed on `BitboardPosition`; incremental update inside `afterMove`
-- [ ] **Differential-test harness covering every primitive above against the existing `StaticPosition`-based code, on the full PGN/FEN corpus.** This is the spine — every step lands with its differential test attached.
-
-The harness, not a perf number, is the deliverable of this release. The bitboard path being a verified parallel implementation is the contract that unlocks the next release.
+The action items for this release are expressed as commit-sized Steps in *Current Bitboard release — Implementation plan* above. The harness, not a perf number, is the deliverable of this release. The bitboard path being a verified parallel implementation is the contract that unlocks the switchover release.
 
 ### Explicitly NOT in this release (see Project invariant)
 
