@@ -2,6 +2,7 @@ package com.dlb.chess.bitboard;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 
 /**
@@ -93,6 +94,15 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
   public long occupied() {
     return whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKings | blackPawns | blackRooks
         | blackKnights | blackBishops | blackQueens | blackKings;
+  }
+
+  public long occupied(Side side) {
+    return switch (side) {
+      case WHITE -> whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKings;
+      case BLACK -> blackPawns | blackRooks | blackKnights | blackBishops | blackQueens | blackKings;
+      case NONE -> throw new IllegalArgumentException("Side.NONE has no occupancy");
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static long bitFor(Square square) {
