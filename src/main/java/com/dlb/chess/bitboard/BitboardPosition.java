@@ -678,6 +678,38 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     };
   }
 
+  /**
+   * Piece-placement Zobrist hash: XOR of {@link ZobristKeys#pieceSquare} for every (piece, square) pair currently
+   * on the board. Side-to-move, castling rights, and en-passant target are intentionally NOT mixed in — those state
+   * pieces live on {@code Board} / {@code DynamicPosition} and their Zobrist contributions belong there.
+   */
+  public long zobristPieces() {
+    long hash = 0L;
+    hash ^= zobristForPiece(whitePawns, Piece.WHITE_PAWN);
+    hash ^= zobristForPiece(whiteRooks, Piece.WHITE_ROOK);
+    hash ^= zobristForPiece(whiteKnights, Piece.WHITE_KNIGHT);
+    hash ^= zobristForPiece(whiteBishops, Piece.WHITE_BISHOP);
+    hash ^= zobristForPiece(whiteQueens, Piece.WHITE_QUEEN);
+    hash ^= zobristForPiece(whiteKings, Piece.WHITE_KING);
+    hash ^= zobristForPiece(blackPawns, Piece.BLACK_PAWN);
+    hash ^= zobristForPiece(blackRooks, Piece.BLACK_ROOK);
+    hash ^= zobristForPiece(blackKnights, Piece.BLACK_KNIGHT);
+    hash ^= zobristForPiece(blackBishops, Piece.BLACK_BISHOP);
+    hash ^= zobristForPiece(blackQueens, Piece.BLACK_QUEEN);
+    hash ^= zobristForPiece(blackKings, Piece.BLACK_KING);
+    return hash;
+  }
+
+  private static long zobristForPiece(long bitboard, Piece piece) {
+    long hash = 0L;
+    long remaining = bitboard;
+    while (remaining != 0L) {
+      hash ^= ZobristKeys.pieceSquare(piece, Square.REAL.get(Long.numberOfTrailingZeros(remaining)));
+      remaining &= remaining - 1L;
+    }
+    return hash;
+  }
+
   private static long inclusiveRayFromKing(int kingOrdinal, int pinnerOrdinal) {
     final int kingFile = kingOrdinal % 8;
     final int kingRank = kingOrdinal / 8;
