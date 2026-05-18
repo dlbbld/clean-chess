@@ -4,16 +4,41 @@ Order within each section is the source of truth. Completed tasks move to **Done
 
 ---
 
+## Project invariant — the `StaticPosition` reference implementation is never lost
+
+The mailbox `StaticPosition` representation and every piece of the rich board implementation built on top of it — attack queries (`AbstractAttackedSquares` and the per-piece-type classes under `com.dlb.chess.squares`), legal-move generation (`AbstractLegalMoves` and per-piece classes under `com.dlb.chess.moves`), `StaticPositionUtility`, insufficient-material detection, repetition logic, the `Board`-level FIDE-rules machinery, the SAN/LAN encoding paths that consume `StaticPosition` — represents several years of correctness-first work, hand-derived independently from the FIDE rules. **This implementation is the project's correctness ground truth. It is not deleted. Ever.**
+
+### What this means concretely across the bitboard migration
+
+1. **The bitboard release is purely additive.** `BitboardPosition` is built alongside `StaticPosition`. Throughout that entire release every existing `StaticPosition`-based code path stays compilable, callable, and tested. Production hot paths are NOT switched in this release.
+2. **Every bitboard primitive is differential-tested bit-exact** against the corresponding `StaticPosition`-based code, on the full PGN/FEN corpus. Disagreement is a correctness signal; the bitboard side is the one that must yield.
+3. **Switchover (the release after the bitboard release) is gated** on the differential-test harness being green across the full corpus.
+4. **At switchover, the `StaticPosition` subtree moves from `src/main/java/` to `src/test/java/`.** Not deleted. Relocated. The classes that move together include at minimum: `StaticPosition`, `StaticPositionUtility`, the `com.dlb.chess.squares.*` family, the `com.dlb.chess.moves.*` family (those that consume `StaticPosition`), and any utility classes whose only consumers are this subtree. After the move, no `src/main/` code references any of them.
+5. **A permanent differential-test layer is maintained** driving the relocated `StaticPosition` oracle against `BitboardPosition`, on every test fixture, for every primitive — piece queries, attacks, legal moves, make-move, check, insufficient-material, repetition equivalents. The two representations continue to agree on every test position, forever.
+
+### Non-negotiable precondition
+
+**If at any point it becomes clear that the migration cannot reach the end-state of "`StaticPosition` lives in `src/test/` as the perpetual oracle, with a full differential-test layer driving the bitboard against it," the migration does not happen.** Performance is not bought at the cost of deleting the reference implementation. The slow-and-right phase stays available as the witness — whether under `src/main/` (today) or under `src/test/` (after switchover).
+
+### Why this matters
+
+clean-chess's identity is "correctness-first reference implementation, derived independently of every other chess library." The `StaticPosition` path is that identity expressed in code. It is what enables the bitboard release to be verifiable in the first place. Two independently-derived representations agreeing is information-theoretically stronger than one fast representation alone. The project keeps both, permanently.
+
+This rule overrides any task in any release section below. Tasks that conflict with it are wrong as stated and must be reframed.
+
+---
+
 ## Release sequence
 
-The next four releases, in order:
+The next releases, in order:
 
 1. **DeepSquare moment** — Auto-CHA per-move + Zobrist transposition key + pawn-wall sound classifier + foundational refactors. Completes the FIDE-rules correctness story. Still on the `StaticPosition` reference implementation; performance acceptable for live game analysis.
-2. **Bitboard backend** — performance overhaul. New `BitboardPosition` alongside the existing `StaticPosition`, verified bit-exact via differential testing. Move generation, attacks, check detection switch to bitboards; `StaticPosition` retained as the reference oracle. Required before Maven Central — public users expect engine-class performance.
-3. **python-chess primary cross-validation + PGN/FEN test coverage expansion** — reactivate the python-chess test path (currently dormant: `GeneratePythonTestCases.java` exists but is not consumed). Make python-chess the main move-test reference; keep `chesslib` as a second witness. Expand PGN/FEN import-export coverage — the area `chesslib` cannot exercise (non-initial-position PGN via the `FEN`/`SetUp` tags).
-4. **Maven Central publication** — the public release. Gated on all three preceding releases.
+2. **Bitboard backend (additive)** — new `BitboardPosition` built alongside the existing `StaticPosition`, verified bit-exact via a differential-test harness on the full corpus. Pure background work: no production hot path is switched, nothing is deleted or relocated. The deliverable is the verified parallel implementation plus the harness.
+3. **Switchover** — production hot paths in `Board` and the unwinnability analyzers switch to `BitboardPosition`. The `StaticPosition` subtree relocates from `src/main/` to `src/test/` and becomes the permanent differential-test oracle. Magic bitboards, mutable make/unmake, and the lean analyzer board (the actual `findHelpMate` perf fix) land here. Gated on the previous release's harness being green.
+4. **python-chess primary cross-validation + PGN/FEN test coverage expansion** — reactivate the python-chess test path (currently dormant: `GeneratePythonTestCases.java` exists but is not consumed). Make python-chess the main move-test reference; keep `chesslib` as a second witness. Expand PGN/FEN import-export coverage — the area `chesslib` cannot exercise (non-initial-position PGN via the `FEN`/`SetUp` tags).
+5. **Maven Central publication** — the public release. Gated on all preceding releases.
 
-The story when the sequence completes: *clean-chess started as a correctness-first reference implementation, built from the FIDE rules without consulting existing libraries. It found correctness bugs in python-chess and ScalaChess along the way. Once the rules were stable, a bitboard backend was added and verified bit-exact against the original reference layer. Then cross-validation against python-chess was reactivated as primary, with `chesslib` retained as a second witness. Only then published to Maven Central.*
+The story when the sequence completes: *clean-chess started as a correctness-first reference implementation, built from the FIDE rules without consulting existing libraries. It found correctness bugs in python-chess and ScalaChess along the way. Once the rules were stable, a bitboard backend was added alongside the reference layer and verified bit-exact against it. Production then switched to the bitboard path; the reference layer was relocated into the test tree and remains as the permanent differential-test oracle. Cross-validation against python-chess was reactivated as primary, with `chesslib` retained as a second witness. Only then published to Maven Central.*
 
 ---
 
@@ -174,11 +199,15 @@ The two paths look different at the call site today and don't advertise themselv
 
 The performance overhaul. Same library, faster — same answers verified bit-exact against the existing `StaticPosition` reference. Ships before Maven Central because the public-facing library needs acceptable performance: users expect engine-class speed, not reference-implementation-class speed. People reach for Carlos's `chesslib` over alternatives because it has bitboards.
 
+**Governing rule for this release: see _Project invariant — the `StaticPosition` reference implementation is never lost_ at the top of this file.** This release is purely additive. No production hot path is switched to `BitboardPosition` here. No `StaticPosition`-based class is deleted, deprecated, or relocated here. The switchover and the relocation of `StaticPosition` into `src/test/` are a **separate later release**, gated on the differential-test harness being green across the full corpus.
+
 ### Approach — differential testing
 
 The existing `StaticPosition` (square-array, slow-and-right) becomes the test oracle for a new `BitboardPosition` (bitboard, fast). Both representations live alongside; every test position runs through both and results must agree bit-exact. This is the classic differential-testing pattern (SQLite's TH3, LLVM's optimization-level cross-checks).
 
 The architectural advantage clean-chess has: the two representations are independently derived from the FIDE rules, not from a common ancestor — so when they disagree, that's a real signal. Most chess engines added bitboards without a pre-existing reference; clean-chess's slow-and-right phase becomes the gift that pays back here.
+
+After this release the `StaticPosition` path remains in `src/main/` and continues to be the production code path. It moves to `src/test/` only in the dedicated switchover release that follows, and only if the differential-test harness has stayed green throughout.
 
 ### Action items — design phase (settle first)
 
@@ -187,33 +216,49 @@ The architectural advantage clean-chess has: the two representations are indepen
 - [ ] Differential-test harness shape: every existing test runs both representations under an assertion, or a dedicated equivalence test that walks all production positions?
 - [ ] Incremental make/unmake on bitboards vs full recomputation per move
 
-### Action items — implementation
+### Action items — implementation (additive only, no production switchover)
 
 - [ ] New package `com.dlb.chess.bitboard` with `BitboardPosition` and supporting bitboard utilities
 - [ ] Piece-on-square query
-- [ ] Knight attack table; pawn attack tables (per side)
-- [ ] Magic bitboards for sliding pieces (rook, bishop, queen)
-- [ ] King attacks
-- [ ] Attacked-squares computation
-- [ ] Legal-move generation on bitboards
-- [ ] Pin detection / check detection
-- [ ] Incremental make/unmake support
-- [ ] Production hot paths in `Board` switch to use `BitboardPosition`
-- [ ] `StaticPosition` retained as reference oracle in tests; can be computed from `BitboardPosition` on demand
-- [ ] Zobrist hash (introduced in the DeepSquare release as a string-FEN replacement) promoted to a properly bitboard-aware incremental hash
-- [ ] **Port the unwinnability analyzers to `BitboardPosition`.** `FindHelpMateInterrupt`, `FindHelpmateExhaust`, `UnwinnableQuickAnalyzer`, `UnwinnableFullAnalyzer`, `UnwinnableSemiStatic`, `Mobility`, `Score`, `GoingToCorner` — currently all consume `StaticPosition` / `Board`. They are the hottest production callers (auto-CHA per move) and the main motivation for this release. The semi-static path needs bitboard piece-set queries (`pos.pieces(KNIGHT)`-style); the helpmate search needs fast legal-move generation and `isCheckmate`. Verified bit-exact against the existing `StaticPosition` implementations via the differential-test harness.
-- [ ] Performance baseline: measure `findHelpMate` on representative unwinnability fixtures; target within 5× of `chesslib`
+- [ ] Knight attack table; pawn attack tables (per side); king attack table
+- [ ] Sliding-piece attacks (rook, bishop, queen) — classical ray loops on bitboards in this release; magic-bitboard acceleration deferred to the switchover release where it actually pays off
+- [ ] Attacked-squares computation, check detection, `attackersTo` query
+- [ ] Pseudo-legal then legal move generation on bitboards (including pin detection)
+- [ ] Immutable `afterMove` on `BitboardPosition` (mutable make/unmake deferred to the switchover/tree-search release)
+- [ ] Zobrist hash, computed on `BitboardPosition`; incremental update inside `afterMove`
+- [ ] **Differential-test harness covering every primitive above against the existing `StaticPosition`-based code, on the full PGN/FEN corpus.** This is the spine — every step lands with its differential test attached.
+
+The harness, not a perf number, is the deliverable of this release. The bitboard path being a verified parallel implementation is the contract that unlocks the next release.
+
+### Explicitly NOT in this release (see Project invariant)
+
+- Switching any production hot path in `Board` to consume `BitboardPosition`.
+- Porting the unwinnability analyzers (`FindHelpMateInterrupt`, `FindHelpmateExhaust`, `UnwinnableQuickAnalyzer`, `UnwinnableFullAnalyzer`, `UnwinnableSemiStatic`, `Mobility`, `Score`, `GoingToCorner`) to `BitboardPosition`.
+- Relocating `StaticPosition` or any of its consumers from `src/main/` to `src/test/`.
+- Magic bitboards.
+- Mutable make/unmake / lean analyzer board for tree search.
+
+All of the above belong to the dedicated switchover release that follows, and only proceed once the differential-test harness has stayed green across the full corpus.
 
 ### Notes
 
-- Auto-CHA per-move (in the DeepSquare release) uses `isUnwinnableQuick`, which is already cheap — no bitboard dependency there. The performance pain that motivates this release is `findHelpMate` (full unwinnability search).
-- The DeepSquare-release Zobrist task partially addresses `findHelpMate` performance without bitboards (FEN-string visited set → `long` key). This release takes it the rest of the way.
+- Auto-CHA per-move (in the DeepSquare release) uses `isUnwinnableQuick`, which is already cheap — no bitboard dependency there. The performance pain that motivates this overall arc is `findHelpMate` (full unwinnability search), but that perf win lands in the switchover release, not this one.
+- The DeepSquare-release Zobrist task partially addressed `findHelpMate` performance without bitboards (FEN-string visited set → structured record key). The properly-bitboard-aware incremental Zobrist hash lands in this release; the actual swap of `findHelpmate`'s visited-position map to that key is part of the switchover release.
 
 ---
 
-## Deep square moment follow-up release - bitboard for tree search
+## Switchover release — production hot paths use `BitboardPosition`; `StaticPosition` relocates to `src/test/`
 
-- [ ] Implement a bitboard suited for tree search (the existing board is rich and not designed for such operations, for example the unmove is partially slow, as it maintains a lot of lists).
+This release **only proceeds if the differential-test harness from the bitboard release has stayed green across the full corpus.** Per the Project invariant at the top of this file: this release switches the production path, and at the same time moves the `StaticPosition` subtree from `src/main/` to `src/test/` — relocated, not deleted, and remains as the permanent differential-test oracle from that point on.
+
+- [ ] Switch production hot paths in `Board` to consume `BitboardPosition`. Public API shape unchanged where possible
+- [ ] Port the unwinnability analyzers (`FindHelpMateInterrupt`, `FindHelpmateExhaust`, `UnwinnableQuickAnalyzer`, `UnwinnableFullAnalyzer`, `UnwinnableSemiStatic`, `Mobility`, `Score`, `GoingToCorner`) to `BitboardPosition`
+- [ ] Magic bitboards for sliding pieces, if the profiler at this stage shows the classical ray loops are a bottleneck on the now-hot bitboard path
+- [ ] Mutable make/unmake variant on `BitboardPosition`, for tree search inside the helpmate analyzer
+- [ ] Lean analyzer-side board (no per-ply history, no SAN/LAN/disambiguation lists, no repetition map) usable by `FindHelpmateExhaust`. This is the actual `findHelpMate` perf fix
+- [ ] **Relocate the `StaticPosition` subtree from `src/main/java/` to `src/test/java/`.** Classes that move together: `StaticPosition`, `StaticPositionUtility`, the `com.dlb.chess.squares.*` family (consumers of `StaticPosition`), the `com.dlb.chess.moves.*` family (consumers of `StaticPosition`), and any utilities whose only remaining callers are in this subtree. After this step no `src/main/` code references any of these.
+- [ ] Permanent differential-test layer formalised: every primitive on `BitboardPosition` is asserted against the relocated `StaticPosition` oracle for every fixture in the corpus, for every supported release going forward. This is project policy from this point on, not a one-off check
+- [ ] Performance baseline: measure `findHelpMate` on representative unwinnability fixtures; target within 5× of `chesslib`
 
 ## Future release — python-chess primary cross-validation + PGN/FEN test coverage expansion
 
