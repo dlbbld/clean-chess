@@ -1,7 +1,10 @@
 package com.dlb.chess.bitboard;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
@@ -92,5 +95,23 @@ public final class BitboardPositionUtility {
       updates.add(new UpdateSquare(Square.REAL.get(squareOrdinal), piece));
       remaining &= remaining - 1L;
     }
+  }
+
+  /**
+   * Decode a bitboard to the set of {@link Square}s whose bits are set. Used by the differential-test harness to
+   * compare a {@code long}-shaped attack/move set against a {@code Set<Square>}-shaped reference. The returned set
+   * iterates squares in ordinal order.
+   */
+  public static Set<Square> toSquareSet(long bitboard) {
+    if (bitboard == 0L) {
+      return Collections.emptySet();
+    }
+    final Set<Square> squares = new TreeSet<>();
+    long remaining = bitboard;
+    while (remaining != 0L) {
+      squares.add(Square.REAL.get(Long.numberOfTrailingZeros(remaining)));
+      remaining &= remaining - 1L;
+    }
+    return squares;
   }
 }
