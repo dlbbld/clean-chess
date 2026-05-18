@@ -2,6 +2,7 @@ package com.dlb.chess.bitboard;
 
 import com.dlb.chess.board.StaticPosition;
 import com.dlb.chess.board.enums.Piece;
+import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.board.enums.Square;
 
@@ -237,6 +238,129 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
       remaining &= remaining - 1L;
     }
     return legalTargets;
+  }
+
+  /**
+   * Pin ray for the piece on {@code pinnedSquare} relative to {@code side}'s king: the squares from king (exclusive)
+   * to pinner (inclusive) along the line through {@code pinnedSquare}. Returns {@code 0L} if the piece is not
+   * pinned. The pinned piece's legal-move filter is {@code pseudoLegal & pinRay(pinnedSquare, side)} — the piece may
+   * move along the pin line (capturing the pinner is allowed; vacating the line is not).
+   *
+   * <p>
+   * Pinning requires: pinned piece on a file / rank / diagonal with own king, no other piece between king and the
+   * pinned piece, and the first piece beyond the pinned piece (in the same direction) is an opposite-side slider
+   * whose move type matches the direction (bishop / queen on a diagonal; rook / queen on a file or rank). Standard
+   * chess one-king-per-side assumed; with no own king of {@code side}, returns {@code 0L}.
+   */
+  public long pinRay(Square pinnedSquare, Side side) {
+    if (pinnedSquare == Square.NONE) {
+      throw new IllegalArgumentException("The NONE square does not belong to the board");
+    }
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("pinRay requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final long ownKings = side == Side.WHITE ? whiteKings : blackKings;
+    if (ownKings == 0L) {
+      return 0L;
+    }
+    final int kingOrdinal = Long.numberOfTrailingZeros(ownKings);
+    final int pinnedOrdinal = pinnedSquare.ordinal();
+    final int kingFile = kingOrdinal % 8;
+    final int kingRank = kingOrdinal / 8;
+    final int pinnedFile = pinnedOrdinal % 8;
+    final int pinnedRank = pinnedOrdinal / 8;
+    final int fileDiff = pinnedFile - kingFile;
+    final int rankDiff = pinnedRank - kingRank;
+    if (fileDiff == 0 && rankDiff == 0) {
+      return 0L;
+    }
+    final boolean onFile = fileDiff == 0;
+    final boolean onRank = rankDiff == 0;
+    final boolean onDiagonal = !onFile && !onRank && Math.abs(fileDiff) == Math.abs(rankDiff);
+    if (!onFile && !onRank && !onDiagonal) {
+      return 0L;
+    }
+
+    final int fileStep = Integer.signum(fileDiff);
+    final int rankStep = Integer.signum(rankDiff);
+    final long occ = occupied();
+
+    int file = kingFile + fileStep;
+    int rank = kingRank + rankStep;
+    while (file != pinnedFile || rank != pinnedRank) {
+      if ((occ & (1L << (rank * 8 + file))) != 0L) {
+        return 0L;
+      }
+      file += fileStep;
+      rank += rankStep;
+    }
+
+    file = pinnedFile + fileStep;
+    rank = pinnedRank + rankStep;
+    while (file >= 0 && file < 8 && rank >= 0 && rank < 8) {
+      final int beyondOrdinal = rank * 8 + file;
+      if ((occ & (1L << beyondOrdinal)) != 0L) {
+        final Piece beyondPiece = get(Square.REAL.get(beyondOrdinal));
+        if (beyondPiece.getSide() == side) {
+          return 0L;
+        }
+        final PieceType beyondPieceType = beyondPiece.getPieceType();
+        final boolean diagonalMover = beyondPieceType == PieceType.BISHOP || beyondPieceType == PieceType.QUEEN;
+        final boolean orthogonalMover = beyondPieceType == PieceType.ROOK || beyondPieceType == PieceType.QUEEN;
+        if ((onDiagonal && diagonalMover) || ((onFile || onRank) && orthogonalMover)) {
+          return inclusiveRayFromKing(kingOrdinal, beyondOrdinal);
+        }
+        return 0L;
+      }
+      file += fileStep;
+      rank += rankStep;
+    }
+    return 0L;
+  }
+
+  /**
+   * Bitboard of own pieces of {@code side} that are pinned to their king. A piece is pinned iff
+   * {@link #pinRay(Square, Side)} returns a non-zero ray for that square.
+   */
+  public long pinnedPieces(Side side) {
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("pinnedPieces requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final long ownKings = side == Side.WHITE ? whiteKings : blackKings;
+    if (ownKings == 0L) {
+      return 0L;
+    }
+    final long ownNonKings = occupied(side) & ~ownKings;
+    long pinned = 0L;
+    long remaining = ownNonKings;
+    while (remaining != 0L) {
+      final long pieceBit = Long.lowestOneBit(remaining);
+      final Square pieceSquare = Square.REAL.get(Long.numberOfTrailingZeros(pieceBit));
+      if (pinRay(pieceSquare, side) != 0L) {
+        pinned |= pieceBit;
+      }
+      remaining &= ~pieceBit;
+    }
+    return pinned;
+  }
+
+  private static long inclusiveRayFromKing(int kingOrdinal, int pinnerOrdinal) {
+    final int kingFile = kingOrdinal % 8;
+    final int kingRank = kingOrdinal / 8;
+    final int pinnerFile = pinnerOrdinal % 8;
+    final int pinnerRank = pinnerOrdinal / 8;
+    final int fileStep = Integer.signum(pinnerFile - kingFile);
+    final int rankStep = Integer.signum(pinnerRank - kingRank);
+    long result = 0L;
+    int file = kingFile + fileStep;
+    int rank = kingRank + rankStep;
+    while (file != pinnerFile || rank != pinnerRank) {
+      result |= 1L << (rank * 8 + file);
+      file += fileStep;
+      rank += rankStep;
+    }
+    result |= 1L << pinnerOrdinal;
+    return result;
   }
 
   public long attackersTo(Square square, Side side) {
