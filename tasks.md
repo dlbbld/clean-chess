@@ -52,8 +52,12 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 - ✅ **Step 3.3** — `039d28a5` — `QueenAttacks.attacks(int, long)` = bishop | rook + differential test. Phase 3 complete.
 - ✅ **Codex P2 fix** — `66bee5fa` — `BitboardPosition` compact constructor rejects overlapping piece bitboards
 - ✅ **Codex open Q** — `8fec1bac` — `BitboardPosition.occupied(Side)` + differential test (positions Phase 4 cleanly)
-- ⬜ **Step 4.1** — current — `BitboardPosition.attackedSquares(Side) -> long` (union of all piece attacks) + differential test against `AbstractAttackedSquares.calculateAttackedSquares`
-- ⬜ Steps 4.2 → 9.3 — pending
+- ✅ **Step 4.1** — `fb73f2da` — `BitboardPosition.attackedSquares(Side)` + differential test against `AbstractAttackedSquares.calculateAttackedSquares`
+- ✅ **Step 4.2** — `a0ff8af7` — `BitboardPosition.isInCheck(Side)` + differential test against `StaticPositionUtility.calculateIsCheck`
+- ✅ **PawnAttacks geometric** — `ca75a3e0` — expand `PawnAttacks` to all 64 from-squares (enables the reverse-attack identity at the back ranks)
+- ✅ **Step 4.3** — `ff678853` — `BitboardPosition.attackersTo(Square, Side)` + differential test. Phase 4 complete.
+- ⬜ **Step 5.1** — current — pseudo-legal move generation for knight, bishop, rook, queen, king (non-castling), plus a `StaticPositionPseudoLegalOracle` test helper, with differential tests
+- ⬜ Steps 5.2 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
