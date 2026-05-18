@@ -4,6 +4,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import com.dlb.chess.board.StaticPosition;
+import com.dlb.chess.board.enums.CastlingMove;
 import com.dlb.chess.board.enums.Piece;
 import com.dlb.chess.board.enums.PieceType;
 import com.dlb.chess.board.enums.PromotionPieceType;
@@ -542,6 +543,139 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
       rank += rankStep;
     }
     return result;
+  }
+
+  /**
+   * Immutable make-move: returns the {@code BitboardPosition} that results from applying {@code moveSpec} to this
+   * position with {@code movingSide} as the moving side. Handles regular moves, captures, en-passant capture,
+   * promotions (the destination piece becomes {@code moveSpec.promotionPieceType()} fixed to {@code movingSide}),
+   * and the piece-movement part of castling (king and rook both move).
+   *
+   * <p>
+   * Castling rights, en-passant target square, side-to-move, and the halfmove / fullmove counters are intentionally
+   * NOT updated here — they live on {@link com.dlb.chess.board.Board} / {@link com.dlb.chess.board.DynamicPosition}.
+   * This is the piece-placement-only equivalent of
+   * {@code StaticPositionUtility.createPositionAfterMove}.
+   *
+   * <p>
+   * The bitboard layer is intentionally stateless about whose turn it is. Callers pass {@code movingSide} explicitly
+   * — for castling, this determines which king/rook pair moves; for non-castling moves, it determines the
+   * promotion piece's side and the direction of en-passant capture.
+   */
+  public BitboardPosition afterMove(MoveSpecification moveSpec, Side movingSide) {
+    if (movingSide != Side.WHITE && movingSide != Side.BLACK) {
+      throw new IllegalArgumentException("afterMove requires Side.WHITE or Side.BLACK, got " + movingSide);
+    }
+    if (moveSpec.castlingMove() != CastlingMove.NONE) {
+      return afterCastling(moveSpec.castlingMove(), movingSide);
+    }
+    final Square from = moveSpec.fromSquare();
+    final Square to = moveSpec.toSquare();
+    final Piece movingPiece = get(from);
+    final long fromBit = 1L << from.ordinal();
+    final long toBit = 1L << to.ordinal();
+
+    final Piece capturedPiece;
+    final long capturedBit;
+    if ((toBit & occupied()) != 0L) {
+      capturedPiece = get(to);
+      capturedBit = toBit;
+    } else if (movingPiece.getPieceType() == PieceType.PAWN && from.getFile() != to.getFile()) {
+      // En-passant: captured pawn sits on the same rank as the capturing pawn, file matching `to`.
+      final int capturedOrdinal = movingSide == Side.WHITE ? to.ordinal() - 8 : to.ordinal() + 8;
+      capturedBit = 1L << capturedOrdinal;
+      capturedPiece = movingSide == Side.WHITE ? Piece.BLACK_PAWN : Piece.WHITE_PAWN;
+    } else {
+      capturedPiece = Piece.NONE;
+      capturedBit = 0L;
+    }
+
+    final PromotionPieceType promotion = moveSpec.promotionPieceType();
+    final Piece destPiece = promotion == PromotionPieceType.NONE ? movingPiece
+        : Piece.calculate(movingSide, promotion.getPieceType());
+
+    final long[] pieces = currentPieceBitboards();
+    toggleBit(pieces, movingPiece, fromBit);
+    toggleBit(pieces, capturedPiece, capturedBit);
+    toggleBit(pieces, destPiece, toBit);
+    return fromPieceBitboards(pieces);
+  }
+
+  private BitboardPosition afterCastling(CastlingMove castlingMove, Side movingSide) {
+    final int kingFromOrdinal;
+    final int kingToOrdinal;
+    final int rookFromOrdinal;
+    final int rookToOrdinal;
+    if (movingSide == Side.WHITE) {
+      if (castlingMove == CastlingMove.KING_SIDE) {
+        kingFromOrdinal = Square.E1.ordinal();
+        kingToOrdinal = Square.G1.ordinal();
+        rookFromOrdinal = Square.H1.ordinal();
+        rookToOrdinal = Square.F1.ordinal();
+      } else {
+        kingFromOrdinal = Square.E1.ordinal();
+        kingToOrdinal = Square.C1.ordinal();
+        rookFromOrdinal = Square.A1.ordinal();
+        rookToOrdinal = Square.D1.ordinal();
+      }
+    } else {
+      if (castlingMove == CastlingMove.KING_SIDE) {
+        kingFromOrdinal = Square.E8.ordinal();
+        kingToOrdinal = Square.G8.ordinal();
+        rookFromOrdinal = Square.H8.ordinal();
+        rookToOrdinal = Square.F8.ordinal();
+      } else {
+        kingFromOrdinal = Square.E8.ordinal();
+        kingToOrdinal = Square.C8.ordinal();
+        rookFromOrdinal = Square.A8.ordinal();
+        rookToOrdinal = Square.D8.ordinal();
+      }
+    }
+    final Piece kingPiece = movingSide == Side.WHITE ? Piece.WHITE_KING : Piece.BLACK_KING;
+    final Piece rookPiece = movingSide == Side.WHITE ? Piece.WHITE_ROOK : Piece.BLACK_ROOK;
+
+    final long[] pieces = currentPieceBitboards();
+    toggleBit(pieces, kingPiece, 1L << kingFromOrdinal);
+    toggleBit(pieces, kingPiece, 1L << kingToOrdinal);
+    toggleBit(pieces, rookPiece, 1L << rookFromOrdinal);
+    toggleBit(pieces, rookPiece, 1L << rookToOrdinal);
+    return fromPieceBitboards(pieces);
+  }
+
+  private long[] currentPieceBitboards() {
+    return new long[] { whitePawns, whiteRooks, whiteKnights, whiteBishops, whiteQueens, whiteKings, blackPawns,
+        blackRooks, blackKnights, blackBishops, blackQueens, blackKings };
+  }
+
+  private static BitboardPosition fromPieceBitboards(long[] pieces) {
+    return new BitboardPosition(pieces[0], pieces[1], pieces[2], pieces[3], pieces[4], pieces[5], pieces[6], pieces[7],
+        pieces[8], pieces[9], pieces[10], pieces[11]);
+  }
+
+  private static void toggleBit(long[] pieces, Piece piece, long bit) {
+    final int index = pieceIndex(piece);
+    if (index >= 0) {
+      pieces[index] ^= bit;
+    }
+  }
+
+  private static int pieceIndex(Piece piece) {
+    return switch (piece) {
+      case WHITE_PAWN -> 0;
+      case WHITE_ROOK -> 1;
+      case WHITE_KNIGHT -> 2;
+      case WHITE_BISHOP -> 3;
+      case WHITE_QUEEN -> 4;
+      case WHITE_KING -> 5;
+      case BLACK_PAWN -> 6;
+      case BLACK_ROOK -> 7;
+      case BLACK_KNIGHT -> 8;
+      case BLACK_BISHOP -> 9;
+      case BLACK_QUEEN -> 10;
+      case BLACK_KING -> 11;
+      case NONE -> -1;
+      default -> throw new IllegalArgumentException();
+    };
   }
 
   private static long inclusiveRayFromKing(int kingOrdinal, int pinnerOrdinal) {
