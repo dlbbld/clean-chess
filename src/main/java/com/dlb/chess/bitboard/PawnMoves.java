@@ -1,15 +1,26 @@
 package com.dlb.chess.bitboard;
 
 import com.dlb.chess.board.enums.Side;
+import com.dlb.chess.board.enums.Square;
 
 /**
- * Pseudo-legal pawn target squares — pushes only at this stage. Single-push lands one rank forward iff that square
- * is empty; double-push lands two ranks forward iff the pawn is on its starting rank and both intermediate and
- * target squares are empty. Promotion targets are included (the bitboard does not distinguish — promotion is the
- * caller's concern). Captures (diagonal, including en-passant) come in {@code PawnCaptures} (Phase 5.3).
+ * Pseudo-legal pawn target squares.
  *
  * <p>
- * Side parameter is required: a "pawn" with no side has no defined forward direction.
+ * {@link #pushes} returns single + double forward pushes (no captures). Single push lands one rank forward iff that
+ * square is empty; double push lands two ranks forward iff the pawn is on its starting rank and both intermediate and
+ * target squares are empty. Promotion targets are included in the push bitboard — the caller distinguishes promotion
+ * at the move-generation layer.
+ *
+ * <p>
+ * {@link #captures} returns regular diagonal captures plus en-passant. Regular captures are the diagonal-forward
+ * squares occupied by opponent pieces; en-passant capture is recognised when the {@code enPassantBit} (single-bit
+ * bitboard of the en-passant target square, or {@code 0L} for "no en-passant available for this side") matches the
+ * pawn's diagonal-forward attack pattern. The bitboard layer is stateless about whose turn it is — the caller passes
+ * {@code 0L} for {@code enPassantBit} when the EP opportunity does not apply to {@code side}.
+ *
+ * <p>
+ * Side parameter is required for both methods: a "pawn" with no side has no defined forward direction.
  */
 public final class PawnMoves {
 
@@ -46,5 +57,16 @@ public final class PawnMoves {
     }
 
     return result;
+  }
+
+  public static long captures(int squareOrdinal, long opponentPieces, long enPassantBit, Side side) {
+    if (squareOrdinal < 0 || squareOrdinal >= 64) {
+      throw new IllegalArgumentException("squareOrdinal out of range: " + squareOrdinal);
+    }
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("captures requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final long diagonalAttacks = PawnAttacks.attacks(Square.REAL.get(squareOrdinal), side);
+    return (diagonalAttacks & opponentPieces) | (diagonalAttacks & enPassantBit);
   }
 }
