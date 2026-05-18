@@ -111,6 +111,20 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
    * {@code AbstractAttackedSquares.calculateAttackedSquares}.
    */
   public long attackedSquares(Side side) {
+    return attackedSquares(side, occupied());
+  }
+
+  /**
+   * Same as {@link #attackedSquares(Side)} but computed against a caller-supplied occupancy mask rather than the
+   * record's own {@link #occupied()}. Used by king-safety calculations in legal-move generation, which need to ask
+   * "what would the opponent attack if my king were not on the board" so a slider's ray correctly projects through
+   * the king's current square onto squares the king might move to.
+   *
+   * <p>
+   * Only sliding-piece attacks (bishop, rook, queen) consult {@code occupiedOverride}; non-sliders (knight, king,
+   * pawn) ignore it. Callers wanting "no king" semantics should pass {@code occupied() ^ kingBits}.
+   */
+  public long attackedSquares(Side side, long occupiedOverride) {
     if (side != Side.WHITE && side != Side.BLACK) {
       throw new IllegalArgumentException("attackedSquares requires Side.WHITE or Side.BLACK, got " + side);
     }
@@ -121,7 +135,6 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     final long rooks = white ? whiteRooks : blackRooks;
     final long queens = white ? whiteQueens : blackQueens;
     final long kings = white ? whiteKings : blackKings;
-    final long occ = occupied();
 
     long attacks = 0L;
 
@@ -139,19 +152,19 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
 
     remaining = bishops;
     while (remaining != 0L) {
-      attacks |= BishopAttacks.attacks(Long.numberOfTrailingZeros(remaining), occ);
+      attacks |= BishopAttacks.attacks(Long.numberOfTrailingZeros(remaining), occupiedOverride);
       remaining &= remaining - 1L;
     }
 
     remaining = rooks;
     while (remaining != 0L) {
-      attacks |= RookAttacks.attacks(Long.numberOfTrailingZeros(remaining), occ);
+      attacks |= RookAttacks.attacks(Long.numberOfTrailingZeros(remaining), occupiedOverride);
       remaining &= remaining - 1L;
     }
 
     remaining = queens;
     while (remaining != 0L) {
-      attacks |= QueenAttacks.attacks(Long.numberOfTrailingZeros(remaining), occ);
+      attacks |= QueenAttacks.attacks(Long.numberOfTrailingZeros(remaining), occupiedOverride);
       remaining &= remaining - 1L;
     }
 
@@ -191,6 +204,41 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
    * Used in Phase 6 for pin detection. No direct production counterpart; the differential test derives the reference
    * by enumerating own pieces and asking each whether its attack set contains the target.
    */
+  /**
+   * Bitboard of legal non-castling king target squares for {@code side}. A target is legal iff (a) it is a
+   * pseudo-legal target — surrounding square not occupied by own piece — and (b) it is not attacked by the opposite
+   * side after the king vacates its current square. The "king vacates" part is essential: a slider that the king
+   * was blocking would, post-move, project its ray through the king's old square onto squares the king might try
+   * to move to (the XRAY case). The implementation removes own kings from the occupied mask before computing
+   * opponent attacks.
+   *
+   * <p>
+   * Captures of opponent pieces are included when the captured piece's square is not defended by another opponent
+   * piece. Standard chess assumes one king per side; the implementation tolerates multiple kings (taking the union
+   * of legal targets from each) for the differential test's robustness.
+   */
+  public long legalKingTargets(Side side) {
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("legalKingTargets requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final long ownKings = side == Side.WHITE ? whiteKings : blackKings;
+    if (ownKings == 0L) {
+      return 0L;
+    }
+    final long ownPieces = occupied(side);
+    final long occupiedWithoutOwnKings = occupied() ^ ownKings;
+    final long opponentAttacks = attackedSquares(side.getOppositeSide(), occupiedWithoutOwnKings);
+
+    long legalTargets = 0L;
+    long remaining = ownKings;
+    while (remaining != 0L) {
+      final Square kingSquare = Square.REAL.get(Long.numberOfTrailingZeros(remaining));
+      legalTargets |= KingMoves.targets(kingSquare, ownPieces) & ~opponentAttacks;
+      remaining &= remaining - 1L;
+    }
+    return legalTargets;
+  }
+
   public long attackersTo(Square square, Side side) {
     if (square == Square.NONE) {
       throw new IllegalArgumentException("The NONE square does not belong to the board");
