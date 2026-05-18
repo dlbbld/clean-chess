@@ -60,8 +60,9 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 - ✅ **Step 5.2** — `7fdeb435` — `PawnMoves.pushes` (single + double + promotion) + differential test
 - ✅ **Step 5.3** — `920ebce0` — `PawnMoves.captures` (regular + en-passant) + differential test. Phase 5 complete.
 - ✅ **Step 6.1** — `b2d4cf5b` — `BitboardPosition.legalKingTargets(Side)` (XRAY-aware king-safety filter) + differential test against `KingNonCastlingLegalMoves`. Adds `attackedSquares(Side, long occupiedOverride)` overload and the `LegalMovesTestOracle` test bridge.
-- ⬜ **Step 6.2** — current — pin detection (xray rook/bishop rays through the friendly king to identify pinned own pieces and their pin-rays) + differential test
-- ⬜ Steps 6.3 → 9.3 — pending
+- ✅ **Step 6.2** — `745251a0` — `BitboardPosition.pinRay(Square, Side)` and `pinnedPieces(Side)` + differential test against a "remove and re-check enemy slider attackers" reference oracle
+- ⬜ **Step 6.3** — current — full legal-move generation: closes the loop with a corpus-wide differential test of the bitboard `Set<LegalMove>` against `AbstractLegalMoves.calculate(Board)` for every fixture × every legal halfmove. Castling stays on `Board`, not the bitboard layer.
+- ⬜ Steps 7.1 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
