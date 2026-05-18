@@ -105,6 +105,65 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     };
   }
 
+  /**
+   * Union of all squares attacked / defended by {@code side}'s pieces, in the same "isAllowOwnPiece = true" sense
+   * the reference uses: includes squares occupied by own pieces (those are defended). Differential-tested against
+   * {@code AbstractAttackedSquares.calculateAttackedSquares}.
+   */
+  public long attackedSquares(Side side) {
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("attackedSquares requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final boolean white = side == Side.WHITE;
+    final long pawns = white ? whitePawns : blackPawns;
+    final long knights = white ? whiteKnights : blackKnights;
+    final long bishops = white ? whiteBishops : blackBishops;
+    final long rooks = white ? whiteRooks : blackRooks;
+    final long queens = white ? whiteQueens : blackQueens;
+    final long kings = white ? whiteKings : blackKings;
+    final long occ = occupied();
+
+    long attacks = 0L;
+
+    long remaining = pawns;
+    while (remaining != 0L) {
+      attacks |= PawnAttacks.attacks(Square.REAL.get(Long.numberOfTrailingZeros(remaining)), side);
+      remaining &= remaining - 1L;
+    }
+
+    remaining = knights;
+    while (remaining != 0L) {
+      attacks |= KnightAttacks.attacks(Square.REAL.get(Long.numberOfTrailingZeros(remaining)));
+      remaining &= remaining - 1L;
+    }
+
+    remaining = bishops;
+    while (remaining != 0L) {
+      attacks |= BishopAttacks.attacks(Long.numberOfTrailingZeros(remaining), occ);
+      remaining &= remaining - 1L;
+    }
+
+    remaining = rooks;
+    while (remaining != 0L) {
+      attacks |= RookAttacks.attacks(Long.numberOfTrailingZeros(remaining), occ);
+      remaining &= remaining - 1L;
+    }
+
+    remaining = queens;
+    while (remaining != 0L) {
+      attacks |= QueenAttacks.attacks(Long.numberOfTrailingZeros(remaining), occ);
+      remaining &= remaining - 1L;
+    }
+
+    remaining = kings;
+    while (remaining != 0L) {
+      attacks |= KingAttacks.attacks(Square.REAL.get(Long.numberOfTrailingZeros(remaining)));
+      remaining &= remaining - 1L;
+    }
+
+    return attacks;
+  }
+
   private static long bitFor(Square square) {
     if (square == Square.NONE) {
       throw new IllegalArgumentException("The NONE square does not belong to the board");
