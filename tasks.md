@@ -42,8 +42,10 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 
 - ✅ **Phase 0** — `13e56fbe` — unwinnability tests disabled
 - ✅ **Step 1.1** — `2c671f16` — `BitboardPosition` record + package skeleton
-- ⬜ **Step 1.2** — current
-- ⬜ Steps 1.3 → 9.3 — pending
+- ✅ **Step 1.2** — `fb4132d1` — `BitboardPosition` ⇄ `StaticPosition` conversion + round-trip differential test
+- ✅ **Step 1.3** — `4427957d` — `BitboardPosition.get(Square)` / `isEmpty(Square)` + differential piece-query test
+- ⬜ **Step 2.1** — current — `KnightAttacks` precomputed `long[64]` table + differential test against `KnightAttackedSquares`
+- ⬜ Steps 2.2 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
