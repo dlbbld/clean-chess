@@ -1,10 +1,13 @@
 package com.dlb.chess.unwinnability;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.enums.Side;
 import com.dlb.chess.common.Nulls;
+import com.dlb.chess.common.model.DynamicPosition;
 import com.dlb.chess.fen.model.Fen;
 import com.dlb.chess.model.LegalMove;
 
@@ -38,15 +41,13 @@ public class UnwinnableFullAnalyzer {
     // if position is advanced cannot use the provided mobility solution if any
     var isCanUseMobilitySolution = true;
     var isForcedMove = board.getLegalMoves().size() == 1;
-    // to avoid endless loops in positions with each side having one repeating forced move
-    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
     var totalForcedMoves = 0;
-    while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
+    final Set<DynamicPosition> forcedPositionSet = new HashSet<>();
+    while (isForcedMove && forcedPositionSet.add(board.getDynamicPosition())) {
       isCanUseMobilitySolution = false;
       final LegalMove onlyLegalMove = Nulls.getFirst(board.getLegalMoves());
       board.move(onlyLegalMove.moveSpecification());
       isForcedMove = board.getLegalMoves().size() == 1;
-      isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
       totalForcedMoves++;
     }
 

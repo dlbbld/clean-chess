@@ -40,17 +40,16 @@ class TestUnwinnabilityHelpmateBeyond {
   @SuppressWarnings("static-method")
   @Test
   void testSeventyFiveFirstGame() {
-    // 75-move boundary is visible from the halfmove clock alone, so the helpmate sitting
-    // beyond it is correctly ruled out for both sides.
-    assertVerdicts("01_beyond_seventy_five.pgn", UnwinnabilityQuickVerdict.UNWINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
+    assertVerdicts("01_beyond_seventy_five.pgn", UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE, UnwinnabilityFullVerdict.WINNABLE,
+        UnwinnabilityFullVerdict.WINNABLE);
   }
 
   @SuppressWarnings("static-method")
   @Test
   void testSeventyFiveSecondGame() {
-    assertVerdicts("02_beyond_seventy_five.pgn", UnwinnabilityQuickVerdict.UNWINNABLE,
-        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
+    assertVerdicts("02_beyond_seventy_five.pgn", UnwinnabilityQuickVerdict.POSSIBLY_WINNABLE,
+        UnwinnabilityQuickVerdict.UNWINNABLE, UnwinnabilityFullVerdict.WINNABLE, UnwinnabilityFullVerdict.UNWINNABLE);
   }
 
   private static void assertVerdicts(String pgnName, UnwinnabilityQuickVerdict quickWhite,

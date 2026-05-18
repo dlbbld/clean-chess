@@ -1,7 +1,9 @@
 package com.dlb.chess.unwinnability;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.dlb.chess.board.Board;
 import com.dlb.chess.board.StaticPosition;
@@ -38,10 +40,10 @@ public class UnwinnableQuickAnalyzer {
     // 1: advance the position as long as there is only one legal move
     // if position is advanced cannot use the provided mobility solution if any
     var isCanUseMobilitySolution = true;
-    var isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
     var isForcedMove = true;
     var countHalfmoves = 0;
-    while (isForcedMove && !isFivefoldOrSeventyFiveMove) {
+    final Set<DynamicPosition> forcedPositionSet = new HashSet<>();
+    while (isForcedMove && forcedPositionSet.add(board.getDynamicPosition())) {
       isCanUseMobilitySolution = false;
       if (board.isCheckmate()) {
         // crucial, store the side before undoing moves, as it can change with undoing moves!!
@@ -68,7 +70,6 @@ public class UnwinnableQuickAnalyzer {
       if (isForcedMove) {
         final LegalMove legalMove = Nulls.getFirst(board.getLegalMoves());
         board.move(legalMove.moveSpecification());
-        isFivefoldOrSeventyFiveMove = board.isFivefoldRepetition() || board.isSeventyFiveMove();
         countHalfmoves++;
       }
     }
