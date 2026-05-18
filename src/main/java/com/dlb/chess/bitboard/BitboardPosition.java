@@ -1,5 +1,7 @@
 package com.dlb.chess.bitboard;
 
+import com.dlb.chess.board.StaticPosition;
+
 /**
  * Twelve-bitboard piece-placement representation: one {@code long} per real
  * {@link com.dlb.chess.board.enums.Piece} value, each bit indexed by
@@ -16,4 +18,10 @@ package com.dlb.chess.bitboard;
 public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnights, long whiteBishops, long whiteQueens,
     long whiteKings, long blackPawns, long blackRooks, long blackKnights, long blackBishops, long blackQueens,
     long blackKings) {
+
+  public static final BitboardPosition INITIAL_POSITION = BitboardPositionUtility
+      .fromStaticPosition(StaticPosition.INITIAL_POSITION);
+
+  public static final BitboardPosition EMPTY_POSITION = BitboardPositionUtility
+      .fromStaticPosition(StaticPosition.EMPTY_POSITION);
 }
