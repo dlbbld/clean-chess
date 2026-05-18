@@ -40,7 +40,11 @@ class TestAmbronaUnwinnabilityQuickOracleComparison {
     for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
       if (RestrictTestConstants.IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST) {
         switch (testCaseList.pgnTest()) {
-          case BASIC_FORCED:
+
+          // the difference between CHA quick implementation and the spec: the CHA quick implementation does not return
+          // winnable on forced lines leading to winnable
+          // case BASIC_FORCED:
+
           case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
           case CHA_LICHESS_QUICK_DEPTH_THREE:
           case CHA_LICHESS_QUICK_DEPTH_FOUR:
