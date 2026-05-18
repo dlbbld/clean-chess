@@ -42,12 +42,13 @@ class TestAmbronaUnwinnabilityFullOracleComparison {
     var checkedPositionCount = 0;
 
     for (final PgnTest pgnTest : PgnTest.values()) {
-      if (!isComparedChaTest(pgnTest)) {
+      if (!AbstractCheckAgainstCha.isUseTestForCha(pgnTest)) {
         continue;
       }
 
       final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
       for (final PgnTestCase testCase : testCaseList.list()) {
+        logger.info(testCase.pgnName());
         checkedPositionCount++;
         check(testCase, Side.WHITE, AmbronaUnwinnabilityOracle.get(testCase.finalFen()).fullWhite(), failureList,
             remainingAcceptedDifferenceSet);
@@ -65,13 +66,6 @@ class TestAmbronaUnwinnabilityFullOracleComparison {
       failureList.add("Accepted difference was not observed: " + acceptedDifference);
     }
     assertTrue(failureList.isEmpty(), formatFailureMessage(checkedPositionCount, failureList));
-  }
-
-  private static boolean isComparedChaTest(PgnTest pgnTest) {
-    return switch (pgnTest) {
-      case BASIC_FORCED, CHA_LICHESS_QUICK_NOT_DEPTH_THREE, CHA_LICHESS_QUICK_DEPTH_THREE, CHA_LICHESS_QUICK_DEPTH_FOUR, CHA_LICHESS_NOT_QUICK, CHA_AMBRONA, CHA_PAWN_WALL_YES, CHA_PAWN_WALL_NO, CHA_SHALLOW_TERMINATION, CHA_HELPMATE_BEYOND_FIVEFOLD, CHA_HELPMATE_BEYOND_SEVENTY_FIVE -> true;
-      default -> false;
-    };
   }
 
   private static void check(PgnTestCase testCase, Side intendedWinner, UnwinnabilityFullVerdict expected,

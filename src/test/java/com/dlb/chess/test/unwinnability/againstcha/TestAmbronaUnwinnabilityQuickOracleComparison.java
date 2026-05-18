@@ -22,6 +22,7 @@ import com.dlb.chess.test.common.utility.FileUtility;
 import com.dlb.chess.test.model.PgnTestCase;
 import com.dlb.chess.test.model.PgnTestCaseList;
 import com.dlb.chess.test.pgn.setup.PgnTestCaseCatalog;
+import com.dlb.chess.test.pgntest.enums.PgnTest;
 import com.dlb.chess.unwinnability.UnwinnabilityQuickVerdict;
 import com.dlb.chess.unwinnability.UnwinnableQuickAnalyzer;
 
@@ -37,31 +38,27 @@ class TestAmbronaUnwinnabilityQuickOracleComparison {
   void test() {
     final Set<AcceptedDifference> remainingAcceptedDifferenceSet = readAcceptedDifferenceSet();
     final List<String> failureList = new ArrayList<>();
-    for (final PgnTestCaseList testCaseList : PgnTestCaseCatalog.getRestrictedTestListList()) {
-      if (RestrictTestConstants.IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST) {
-        switch (testCaseList.pgnTest()) {
 
-          // the difference between CHA quick implementation and the spec: the CHA quick implementation does not return
-          // winnable on forced lines leading to winnable
-          // case BASIC_FORCED:
-
-          case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
-          case CHA_LICHESS_QUICK_DEPTH_THREE:
-          case CHA_LICHESS_QUICK_DEPTH_FOUR:
-          case CHA_LICHESS_NOT_QUICK:
-          case CHA_AMBRONA:
-          case CHA_PAWN_WALL_YES:
-          case CHA_PAWN_WALL_NO:
-          case CHA_SHALLOW_TERMINATION:
-          case CHA_HELPMATE_BEYOND_FIVEFOLD:
-          case CHA_HELPMATE_BEYOND_SEVENTY_FIVE:
-            break;
-          // $CASES-OMITTED$
-          default:
-            continue;
-        }
+    for (final PgnTest pgnTest : PgnTest.values()) {
+      if (!AbstractCheckAgainstCha.isUseTestForCha(pgnTest)) {
+        continue;
       }
+
+      if (RestrictTestConstants.IS_RESTRICT_UNWINNABILITY_QUICK_AGAINST_AMBRONA_ORACLE_TEST
+          && !AbstractCheckAgainstCha.isUseTestForCha(pgnTest)) {
+        continue;
+      }
+
+      // the difference between CHA quick implementation and the spec: the CHA quick implementation does not return
+      // winnable on forced lines leading to winnable
+      // case BASIC_FORCED:
+      if (pgnTest == PgnTest.BASIC_FORCED) {
+        continue;
+      }
+
+      final PgnTestCaseList testCaseList = PgnTestCaseCatalog.getTestList(pgnTest);
       for (final PgnTestCase testCase : testCaseList.list()) {
+        logger.info(testCase.pgnName());
         final Board board = testCase.finalPosition();
         logger.info(testCase.pgnName());
 
@@ -74,7 +71,6 @@ class TestAmbronaUnwinnabilityQuickOracleComparison {
             Side.BLACK);
         check(testCase, Side.BLACK, AmbronaUnwinnabilityOracle.get(testCase.finalFen()).quickBlack(),
             unwinnableQuickBlack, failureList, remainingAcceptedDifferenceSet);
-
       }
     }
     for (final AcceptedDifference acceptedDifference : remainingAcceptedDifferenceSet) {

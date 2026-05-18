@@ -48,7 +48,7 @@ public abstract class AbstractCheckAgainstCha {
       final UnwinnabilityMode chaMode = UnwinnabilityMode.calculate(chaModeStr);
 
       final var winnerStr = Nulls.get(fileLineItemList, 3);
-      final Side winner = switch (winnerStr) {
+      final var winner = switch (winnerStr) {
         case "w" -> Side.WHITE;
         case "b" -> Side.BLACK;
         default -> throw new IllegalArgumentException("Illegal winning side of \"" + winnerStr + "\" was found");
@@ -75,4 +75,26 @@ public abstract class AbstractCheckAgainstCha {
     }
   }
 
+  static boolean isUseTestForCha(PgnTest pgnTest) {
+    switch (pgnTest) {
+      case BASIC_FORCED:
+      case CHA_LICHESS_QUICK_NOT_DEPTH_THREE:
+      case CHA_LICHESS_QUICK_DEPTH_THREE:
+      case CHA_LICHESS_QUICK_DEPTH_FOUR:
+      case CHA_LICHESS_NOT_QUICK:
+      case CHA_AMBRONA:
+      case CHA_PAWN_WALL_YES:
+      case CHA_PAWN_WALL_NO:
+      case CHA_SHALLOW_TERMINATION:
+      case CHA_HELPMATE_BEYOND_FIVEFOLD:
+      case CHA_HELPMATE_BEYOND_SEVENTY_FIVE:
+      case CHA_BASIC_MATE_DRAW:
+      case CHA_BASIC_MATE_HELPMATE_04:
+      case CHA_BASIC_MATE_HELPMATE_10:
+      case CHA_BASIC_MATE_HELPMATE_AROUND_MAX:
+        return true;
+      default:
+        return false;
+    }
+  }
 }
