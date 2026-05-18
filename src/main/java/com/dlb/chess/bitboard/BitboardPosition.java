@@ -181,6 +181,44 @@ public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnigh
     return (attackedSquares(side.getOppositeSide()) & ownKings) != 0L;
   }
 
+  /**
+   * Bitboard of {@code side}'s pieces that attack {@code square}. Uses the "reverse attack" identity: a piece of
+   * colour C attacks X iff X is in that piece's attack set. By the symmetry of all non-pawn piece-type attacks, that
+   * is equivalent to "the piece sits on a square in the attack set of X" — and pawns are handled by querying the
+   * opposite-colour pawn attack set from X (a white pawn at S attacks X iff a black pawn at X would attack S).
+   *
+   * <p>
+   * Used in Phase 6 for pin detection. No direct production counterpart; the differential test derives the reference
+   * by enumerating own pieces and asking each whether its attack set contains the target.
+   */
+  public long attackersTo(Square square, Side side) {
+    if (square == Square.NONE) {
+      throw new IllegalArgumentException("The NONE square does not belong to the board");
+    }
+    if (side != Side.WHITE && side != Side.BLACK) {
+      throw new IllegalArgumentException("attackersTo requires Side.WHITE or Side.BLACK, got " + side);
+    }
+    final int squareOrdinal = square.ordinal();
+    final long occ = occupied();
+
+    final boolean white = side == Side.WHITE;
+    final long pawns = white ? whitePawns : blackPawns;
+    final long knights = white ? whiteKnights : blackKnights;
+    final long bishops = white ? whiteBishops : blackBishops;
+    final long rooks = white ? whiteRooks : blackRooks;
+    final long queens = white ? whiteQueens : blackQueens;
+    final long kings = white ? whiteKings : blackKings;
+
+    long attackers = 0L;
+    attackers |= pawns & PawnAttacks.attacks(square, side.getOppositeSide());
+    attackers |= knights & KnightAttacks.attacks(square);
+    attackers |= bishops & BishopAttacks.attacks(squareOrdinal, occ);
+    attackers |= rooks & RookAttacks.attacks(squareOrdinal, occ);
+    attackers |= queens & QueenAttacks.attacks(squareOrdinal, occ);
+    attackers |= kings & KingAttacks.attacks(square);
+    return attackers;
+  }
+
   private static long bitFor(Square square) {
     if (square == Square.NONE) {
       throw new IllegalArgumentException("The NONE square does not belong to the board");
