@@ -21,8 +21,10 @@ import com.dlb.chess.test.pgntest.enums.PgnTest;
 
 /**
  * Differential test for {@link PawnAttacks}: per side, the precomputed bitboard table must agree with the existing
- * {@link PawnDiagonalSquares}-backed reference for every from-square. Both representations follow the same
- * pawns-only-on-rank-2-to-7 convention, so ranks 1 and 8 return empty sets / {@code 0L} on both sides.
+ * {@link PawnDiagonalSquares}-backed reference for every legal pawn from-square (ranks 2-7). The bitboard table is
+ * geometric across all 64 squares — including ranks 1 and 8, where {@code PawnDiagonalSquares} returns an empty set
+ * by its "pawns only legally exist on ranks 2-7" convention. That intentional divergence enables the reverse-attack
+ * identity used by {@link com.dlb.chess.bitboard.BitboardPosition#attackersTo} for targets on the back ranks.
  */
 class TestPawnAttacks {
 
@@ -30,6 +32,9 @@ class TestPawnAttacks {
   @Test
   void directAgainstReferenceWhite() {
     for (final Square fromSquare : Square.REAL) {
+      if (!isLegalPawnFromSquare(fromSquare)) {
+        continue;
+      }
       final Set<Square> bitboardAttacks = BitboardPositionUtility
           .toSquareSet(PawnAttacks.attacks(fromSquare, Side.WHITE));
       final Set<Square> referenceAttacks = PawnDiagonalSquares.getPawnDiagonalSquares(Side.WHITE, fromSquare);
@@ -41,11 +46,19 @@ class TestPawnAttacks {
   @Test
   void directAgainstReferenceBlack() {
     for (final Square fromSquare : Square.REAL) {
+      if (!isLegalPawnFromSquare(fromSquare)) {
+        continue;
+      }
       final Set<Square> bitboardAttacks = BitboardPositionUtility
           .toSquareSet(PawnAttacks.attacks(fromSquare, Side.BLACK));
       final Set<Square> referenceAttacks = PawnDiagonalSquares.getPawnDiagonalSquares(Side.BLACK, fromSquare);
       assertEquals(referenceAttacks, bitboardAttacks, "black pawn attacks from " + fromSquare.getName());
     }
+  }
+
+  private static boolean isLegalPawnFromSquare(Square square) {
+    final int rank0Indexed = square.ordinal() / 8;
+    return rank0Indexed >= 1 && rank0Indexed <= 6;
   }
 
   @SuppressWarnings("static-method")
