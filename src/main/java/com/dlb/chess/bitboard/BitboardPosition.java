@@ -12,6 +12,12 @@ import com.dlb.chess.board.enums.Square;
  * {@link com.dlb.chess.board.enums.Piece#REAL} enum order.
  *
  * <p>
+ * <b>Construction invariant:</b> the twelve piece bitboards are pairwise disjoint — no square may carry two pieces.
+ * The compact constructor enforces this, so any reachable {@code BitboardPosition} is guaranteed consistent under
+ * every query method. Attempting to construct one with overlapping bitboards is rejected with
+ * {@link IllegalArgumentException}.
+ *
+ * <p>
  * Built alongside {@link com.dlb.chess.board.StaticPosition} and verified bit-exact against it via differential
  * testing across the full PGN/FEN corpus. See {@code tasks.md} and the package-level Javadoc for the governing
  * invariant: the bitboard backend release is purely additive; the {@code StaticPosition} reference implementation
@@ -20,6 +26,18 @@ import com.dlb.chess.board.enums.Square;
 public record BitboardPosition(long whitePawns, long whiteRooks, long whiteKnights, long whiteBishops, long whiteQueens,
     long whiteKings, long blackPawns, long blackRooks, long blackKnights, long blackBishops, long blackQueens,
     long blackKings) {
+
+  public BitboardPosition {
+    final long union = whitePawns | whiteRooks | whiteKnights | whiteBishops | whiteQueens | whiteKings | blackPawns
+        | blackRooks | blackKnights | blackBishops | blackQueens | blackKings;
+    final int sumOfBitCounts = Long.bitCount(whitePawns) + Long.bitCount(whiteRooks) + Long.bitCount(whiteKnights)
+        + Long.bitCount(whiteBishops) + Long.bitCount(whiteQueens) + Long.bitCount(whiteKings)
+        + Long.bitCount(blackPawns) + Long.bitCount(blackRooks) + Long.bitCount(blackKnights)
+        + Long.bitCount(blackBishops) + Long.bitCount(blackQueens) + Long.bitCount(blackKings);
+    if (sumOfBitCounts != Long.bitCount(union)) {
+      throw new IllegalArgumentException("Piece bitboards must be pairwise disjoint (no square may carry two pieces)");
+    }
+  }
 
   public static final BitboardPosition INITIAL_POSITION = BitboardPositionUtility
       .fromStaticPosition(StaticPosition.INITIAL_POSITION);
