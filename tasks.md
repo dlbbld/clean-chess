@@ -56,8 +56,11 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 - ✅ **Step 4.2** — `a0ff8af7` — `BitboardPosition.isInCheck(Side)` + differential test against `StaticPositionUtility.calculateIsCheck`
 - ✅ **PawnAttacks geometric** — `ca75a3e0` — expand `PawnAttacks` to all 64 from-squares (enables the reverse-attack identity at the back ranks)
 - ✅ **Step 4.3** — `ff678853` — `BitboardPosition.attackersTo(Square, Side)` + differential test. Phase 4 complete.
-- ⬜ **Step 5.1** — current — pseudo-legal move generation for knight, bishop, rook, queen, king (non-castling), plus a `StaticPositionPseudoLegalOracle` test helper, with differential tests
-- ⬜ Steps 5.2 → 9.3 — pending
+- ✅ **Step 5.1** — `b1f73147` — per-piece pseudo-legal target generators (`KnightMoves`, `KingMoves`, `BishopMoves`, `RookMoves`, `QueenMoves`) + differential test
+- ✅ **Step 5.2** — `7fdeb435` — `PawnMoves.pushes` (single + double + promotion) + differential test
+- ✅ **Step 5.3** — `920ebce0` — `PawnMoves.captures` (regular + en-passant) + differential test. Phase 5 complete.
+- ⬜ **Step 6.1** — current — legal king moves (filter pseudo-legal king targets by opponent's attacked squares) + differential test against `KingNonCastlingLegalMoves`
+- ⬜ Steps 6.2 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
