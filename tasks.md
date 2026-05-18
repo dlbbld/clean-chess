@@ -61,8 +61,9 @@ Commit-sized steps suitable for Codex review. Each step is one PR-style commit o
 - ✅ **Step 5.3** — `920ebce0` — `PawnMoves.captures` (regular + en-passant) + differential test. Phase 5 complete.
 - ✅ **Step 6.1** — `b2d4cf5b` — `BitboardPosition.legalKingTargets(Side)` (XRAY-aware king-safety filter) + differential test against `KingNonCastlingLegalMoves`. Adds `attackedSquares(Side, long occupiedOverride)` overload and the `LegalMovesTestOracle` test bridge.
 - ✅ **Step 6.2** — `745251a0` — `BitboardPosition.pinRay(Square, Side)` and `pinnedPieces(Side)` + differential test against a "remove and re-check enemy slider attackers" reference oracle
-- ⬜ **Step 6.3** — current — full legal-move generation: closes the loop with a corpus-wide differential test of the bitboard `Set<LegalMove>` against `AbstractLegalMoves.calculate(Board)` for every fixture × every legal halfmove. Castling stays on `Board`, not the bitboard layer.
-- ⬜ Steps 7.1 → 9.3 — pending
+- ✅ **Step 6.3** — `71c87937` — `BitboardPosition.legalMoves(Side, long enPassantBit)` + **spine differential test** against `Board.getLegalMoves()` (castling-filtered) for every fixture × side-to-move. Phase 6 complete. The bitboard layer is now a verified parallel implementation through legal moves.
+- ⬜ **Step 7.1** — current — immutable `BitboardPosition.afterMove(MoveSpecification) -> BitboardPosition` + differential test against `StaticPositionUtility.createPositionAfterMove`. Includes the piece-movement part of castling (rook + king both move).
+- ⬜ Steps 8.1 → 9.3 — pending
 
 ### Cross-cutting decisions (settled upfront)
 
